@@ -53,6 +53,32 @@ export enum DischargeDestination {
   DECEASED = 'deceased',
 }
 
+// Execute discharge endpoint uses Prisma enums (uppercase values).
+export enum DischargeTransactionType {
+  ROUTINE = 'ROUTINE',
+  AGAINST_MEDICAL_ADVICE = 'AGAINST_MEDICAL_ADVICE',
+  TRANSFER_ACUTE_CARE = 'TRANSFER_ACUTE_CARE',
+  TRANSFER_SNF = 'TRANSFER_SNF',
+  TRANSFER_REHABILITATION = 'TRANSFER_REHABILITATION',
+  EXPIRED = 'EXPIRED',
+  ELOPED = 'ELOPED',
+  LEFT_WITHOUT_BEING_SEEN = 'LEFT_WITHOUT_BEING_SEEN',
+}
+
+// Execute discharge endpoint uses Prisma enums (uppercase values).
+export enum DischargeTransactionDestination {
+  HOME = 'HOME',
+  HOME_WITH_HOME_HEALTH = 'HOME_WITH_HOME_HEALTH',
+  SKILLED_NURSING_FACILITY = 'SKILLED_NURSING_FACILITY',
+  ACUTE_CARE_HOSPITAL = 'ACUTE_CARE_HOSPITAL',
+  REHABILITATION_FACILITY = 'REHABILITATION_FACILITY',
+  HOSPICE_HOME = 'HOSPICE_HOME',
+  HOSPICE_FACILITY = 'HOSPICE_FACILITY',
+  PSYCHIATRIC_FACILITY = 'PSYCHIATRIC_FACILITY',
+  DECEASED = 'DECEASED',
+  OTHER = 'OTHER',
+}
+
 export enum DischargeTransactionStatus {
   PLANNING = 'PLANNING',
   READY = 'READY',
@@ -141,8 +167,8 @@ export interface ApproveDischargeInput {
 }
 
 export interface ExecuteDischargeInput {
-  dischargeType: DischargeType;
-  dischargeDestination: DischargeDestination;
+  dischargeType: DischargeTransactionType;
+  dischargeDestination: DischargeTransactionDestination;
   dischargeDisposition?: string;
   dischargeSummaryId?: string;
   finalDiagnosis?: unknown;
@@ -168,8 +194,8 @@ export interface DischargeTransaction {
   readyRemarks?: string | null;
   approvalRemarks?: string | null;
   cancellationReason?: string | null;
-  dischargeType?: DischargeType | string | null;
-  dischargeDestination?: DischargeDestination | string | null;
+  dischargeType?: DischargeTransactionType | DischargeType | string | null;
+  dischargeDestination?: DischargeTransactionDestination | DischargeDestination | string | null;
   dischargeDisposition?: string | null;
   dischargeSummaryId?: string | null;
   followUpInstructions?: string | null;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { CalendarDays, CheckCircle2, ClipboardList, Search, XCircle } from 'lucide-react';
@@ -41,8 +41,10 @@ const dischargeStatusTone = (status?: string) => {
   return { label: 'Unknown', className: 'bg-slate-200 text-slate-700' };
 };
 
-export default function InpatientDischargesPage({ params }: { params: { locale: string } }) {
+export default function InpatientDischargesPage() {
   const router = useRouter();
+  const params = useParams();
+  const locale = typeof params?.locale === 'string' ? params.locale : 'en';
   const toast = useToast();
   const wardId = 'all';
   const [searchQuery, setSearchQuery] = useState('');
@@ -153,7 +155,7 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
           <h1 className="text-3xl font-bold">Discharges</h1>
           <p className="mt-1 text-muted-foreground">Plan, track, and execute inpatient discharges.</p>
         </div>
-        <Button onClick={() => router.push(`/${params.locale}/inpatient/discharges/new`)}>
+        <Button onClick={() => router.push(`/${locale}/inpatient/discharges/new`)}>
           <ClipboardList className="mr-2 h-4 w-4" />
           New Discharge
         </Button>
@@ -296,7 +298,7 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
                             size="sm"
                             variant="outline"
                             onClick={() =>
-                              router.push(`/${params.locale}/inpatient/discharges/${admission?.id}`)
+                              router.push(`/${locale}/inpatient/discharges/${admission?.id}`)
                             }
                           >
                             View

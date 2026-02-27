@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -63,15 +63,19 @@ export default function DashboardPage() {
       : 'INR';
   const resolvedLocale = currencyLocaleMap[resolvedCurrency] ?? 'en-IN';
 
-  // Fetch real metrics from Report Builder
-  const { data: metrics, isLoading, refetch } = useDashboardMetrics(resolvedCurrency);
+  // Fetch real metrics from Report Builder (cached)
+  const { data: metrics, isLoading, refetch, fromCache } = useDashboardMetrics(resolvedCurrency);
 
-  // Use state for lastRefreshed to avoid hydration mismatch (server/client time difference)
-  const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
-
-  useEffect(() => {
-    setLastRefreshed(new Date());
-  }, []);
+  // Format the cached timestamp for display
+  const cachedTimeDisplay = useMemo(() => {
+    if (!metrics.cachedAt) return null;
+    try {
+      const cachedDate = new Date(metrics.cachedAt);
+      return cachedDate.toLocaleTimeString();
+    } catch {
+      return null;
+    }
+  }, [metrics.cachedAt]);
 
   // AI Pulse Metrics - derived from real data
   const aiPulseMetrics = useMemo(() => {
@@ -229,7 +233,7 @@ export default function DashboardPage() {
                 Refresh
               </Button>
               <Badge variant="secondary" className="text-primary">
-                Live insights{lastRefreshed ? ` · ${lastRefreshed.toLocaleTimeString()}` : ''}
+                {fromCache ? 'Cached' : 'Live'} · {cachedTimeDisplay || 'Loading...'}
               </Badge>
             </div>
           </div>

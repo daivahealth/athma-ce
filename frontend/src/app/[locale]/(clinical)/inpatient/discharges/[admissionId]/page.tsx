@@ -20,7 +20,11 @@ import {
   useInitiateDischarge,
   useMarkDischargeReady,
 } from '@/modules/clinical/hooks/use-inpatient';
-import { DischargeDestination, DischargeType, DischargeTransactionStatus } from '@/modules/clinical/types/inpatient';
+import {
+  DischargeTransactionDestination,
+  DischargeTransactionStatus,
+  DischargeTransactionType,
+} from '@/modules/clinical/types/inpatient';
 
 const formatDateTime = (value?: string | null) => {
   if (!value) return '—';
@@ -51,6 +55,12 @@ const statusTone = (status?: string) => {
   }
   return { label: 'Not started', className: 'bg-slate-200 text-slate-700' };
 };
+
+const toOptionLabel = (value: string) =>
+  value
+    .split('_')
+    .map((part) => part.charAt(0) + part.slice(1).toLowerCase())
+    .join(' ');
 
 export default function DischargeDetailPage() {
   const params = useParams();
@@ -128,8 +138,12 @@ export default function DischargeDetailPage() {
   const [internalNotes, setInternalNotes] = useState('');
   const [readyRemarks, setReadyRemarks] = useState('');
   const [approvalRemarks, setApprovalRemarks] = useState('');
-  const [dischargeType, setDischargeType] = useState<DischargeType>(DischargeType.ROUTINE);
-  const [dischargeDestination, setDischargeDestination] = useState<DischargeDestination>(DischargeDestination.HOME);
+  const [dischargeType, setDischargeType] = useState<DischargeTransactionType>(
+    DischargeTransactionType.ROUTINE
+  );
+  const [dischargeDestination, setDischargeDestination] = useState<DischargeTransactionDestination>(
+    DischargeTransactionDestination.HOME
+  );
   const [dischargeSummaryId, setDischargeSummaryId] = useState('');
   const [followUpInstructions, setFollowUpInstructions] = useState('');
   const [cancellationReason, setCancellationReason] = useState('');
@@ -444,14 +458,17 @@ export default function DischargeDetailPage() {
               <CardContent className="space-y-3">
                 <div className="space-y-2">
                   <Label>Discharge type *</Label>
-                  <Select value={dischargeType} onValueChange={(value) => setDischargeType(value as DischargeType)}>
+                  <Select
+                    value={dischargeType}
+                    onValueChange={(value) => setDischargeType(value as DischargeTransactionType)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select discharge type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.values(DischargeType).map((value) => (
+                      {Object.values(DischargeTransactionType).map((value) => (
                         <SelectItem key={value} value={value}>
-                          {value.replace(/_/g, ' ')}
+                          {toOptionLabel(value)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -461,15 +478,17 @@ export default function DischargeDetailPage() {
                   <Label>Discharge destination *</Label>
                   <Select
                     value={dischargeDestination}
-                    onValueChange={(value) => setDischargeDestination(value as DischargeDestination)}
+                    onValueChange={(value) =>
+                      setDischargeDestination(value as DischargeTransactionDestination)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select destination" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.values(DischargeDestination).map((value) => (
+                      {Object.values(DischargeTransactionDestination).map((value) => (
                         <SelectItem key={value} value={value}>
-                          {value.replace(/_/g, ' ')}
+                          {toOptionLabel(value)}
                         </SelectItem>
                       ))}
                     </SelectContent>
