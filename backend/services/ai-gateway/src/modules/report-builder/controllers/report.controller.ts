@@ -9,6 +9,7 @@ import {
   Get,
   Body,
   Res,
+  Query,
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
@@ -25,6 +26,11 @@ import { SqlCompilerService } from '../services/sql-compiler.service';
 import { QueryExecutorService } from '../services/query-executor.service';
 import { ExportService } from '../services/export.service';
 import { CatalogService } from '../services/catalog.service';
+import { DashboardCacheService } from '../services/dashboard-cache.service';
+import {
+  DashboardMetricsResponseDto,
+  DashboardRefreshResponseDto,
+} from '../types/dashboard-cache.types';
 import {
   GenerateReportDto,
   ValidateQueryDto,
@@ -53,6 +59,7 @@ export class ReportController {
     private queryExecutorService: QueryExecutorService,
     private exportService: ExportService,
     private catalogService: CatalogService,
+    private dashboardCacheService: DashboardCacheService,
   ) {}
 
   @Post('generate')
@@ -284,6 +291,82 @@ export class ReportController {
           description: 'Sum of all unpaid invoice balances',
         },
       ],
+    };
+  }
+
+  // ============================================================================
+  // DASHBOARD METRICS (CACHED)
+  // ============================================================================
+
+  @Get('dashboard/metrics')
+  @ApiOperation({
+    summary: 'Get cached dashboard metrics',
+    description:
+      'Returns pre-computed dashboard metrics from Redis cache. If cache is empty, fetches from database and caches the result.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Dashboard metrics retrieved successfully',
+  })
+  async getDashboardMetrics(
+    @Query('currency') currency: string = 'INR',
+    @Context() context: TenantRequestContext,
+  ): Promise<DashboardMetricsResponseDto> {
+    const startTime = Date.now();
+
+    const result = await this.dashboardCacheService.getMetrics(
+      context.tenantId,
+      currency,
+    );
+
+    logger.info(
+      {
+        tenantId: context.tenantId,
+        currency,
+        fromCache: result.fromCache,
+        durationMs: Date.now() - startTime,
+      },
+      'Dashboard metrics retrieved',
+    );
+
+    return {
+      metrics: result.data,
+      fromCache: result.fromCache,
+      ttlSeconds: result.ttlSeconds,
+    };
+  }
+
+  @Post('dashboard/refresh')
+  @ApiOperation({
+    summary: 'Manually refresh dashboard metrics cache',
+    description:
+      'Forces a refresh of the dashboard metrics cache for the current tenant',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Dashboard cache refreshed successfully',
+  })
+  async refreshDashboardMetrics(
+    @Query('currency') currency: string = 'INR',
+    @Context() context: TenantRequestContext,
+  ): Promise<DashboardRefreshResponseDto> {
+    const startTime = Date.now();
+
+    await this.dashboardCacheService.refreshCache(context.tenantId, currency);
+
+    logger.info(
+      {
+        tenantId: context.tenantId,
+        currency,
+        durationMs: Date.now() - startTime,
+      },
+      'Dashboard cache manually refreshed',
+    );
+
+    return {
+      success: true,
+      message: 'Dashboard metrics cache refreshed successfully',
+      refreshedAt: new Date().toISOString(),
     };
   }
 }

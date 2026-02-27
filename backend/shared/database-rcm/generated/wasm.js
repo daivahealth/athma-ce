@@ -873,6 +873,177 @@ exports.Prisma.DebitNoteLineScalarFieldEnum = {
   lineAmount: 'lineAmount'
 };
 
+exports.Prisma.MembershipPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  planCode: 'planCode',
+  planName: 'planName',
+  description: 'description',
+  tier: 'tier',
+  category: 'category',
+  basePrice: 'basePrice',
+  currency: 'currency',
+  billingCycle: 'billingCycle',
+  monthlyPrice: 'monthlyPrice',
+  quarterlyPrice: 'quarterlyPrice',
+  semiAnnualPrice: 'semiAnnualPrice',
+  annualPrice: 'annualPrice',
+  enrollmentFee: 'enrollmentFee',
+  reactivationFee: 'reactivationFee',
+  annualDiscountPercent: 'annualDiscountPercent',
+  benefitsSummary: 'benefitsSummary',
+  minCommitmentMonths: 'minCommitmentMonths',
+  maxMembers: 'maxMembers',
+  ageMin: 'ageMin',
+  ageMax: 'ageMax',
+  requiresAssessment: 'requiresAssessment',
+  isActive: 'isActive',
+  isPublic: 'isPublic',
+  displayOrder: 'displayOrder',
+  highlightFeatures: 'highlightFeatures',
+  availableFacilities: 'availableFacilities',
+  termsAndConditions: 'termsAndConditions',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.PlanBenefitScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  planId: 'planId',
+  benefitType: 'benefitType',
+  benefitName: 'benefitName',
+  description: 'description',
+  quantityIncluded: 'quantityIncluded',
+  usageResetOnRenewal: 'usageResetOnRenewal',
+  discountPercent: 'discountPercent',
+  maxDiscountAmount: 'maxDiscountAmount',
+  applicableTo: 'applicableTo',
+  billingItemId: 'billingItemId',
+  displayOrder: 'displayOrder',
+  isHighlighted: 'isHighlighted',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MemberSubscriptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  mrn: 'mrn',
+  patientDisplayName: 'patientDisplayName',
+  planId: 'planId',
+  billingCycle: 'billingCycle',
+  subscriptionNumber: 'subscriptionNumber',
+  status: 'status',
+  enrolledAt: 'enrolledAt',
+  activatedAt: 'activatedAt',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  nextBillingDate: 'nextBillingDate',
+  cancelledAt: 'cancelledAt',
+  cancelledBy: 'cancelledBy',
+  cancellationReason: 'cancellationReason',
+  cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+  recurringAmount: 'recurringAmount',
+  currency: 'currency',
+  enrollmentFeeCharged: 'enrollmentFeeCharged',
+  paymentMethod: 'paymentMethod',
+  paymentReference: 'paymentReference',
+  autoRenew: 'autoRenew',
+  primarySubscriptionId: 'primarySubscriptionId',
+  isDependent: 'isDependent',
+  referredBy: 'referredBy',
+  linkedProgramEnrollmentId: 'linkedProgramEnrollmentId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.BenefitUsageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  subscriptionId: 'subscriptionId',
+  benefitId: 'benefitId',
+  usedAt: 'usedAt',
+  quantity: 'quantity',
+  encounterId: 'encounterId',
+  chargeId: 'chargeId',
+  invoiceId: 'invoiceId',
+  regularPrice: 'regularPrice',
+  memberPrice: 'memberPrice',
+  discountAmount: 'discountAmount',
+  billingPeriodStart: 'billingPeriodStart',
+  billingPeriodEnd: 'billingPeriodEnd',
+  usedQuantityBefore: 'usedQuantityBefore',
+  usedQuantityAfter: 'usedQuantityAfter',
+  remainingQuantity: 'remainingQuantity',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.SubscriptionInvoiceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  subscriptionId: 'subscriptionId',
+  patientId: 'patientId',
+  patientDisplayName: 'patientDisplayName',
+  invoiceNumber: 'invoiceNumber',
+  invoiceDate: 'invoiceDate',
+  dueDate: 'dueDate',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  invoiceType: 'invoiceType',
+  subtotal: 'subtotal',
+  taxAmount: 'taxAmount',
+  discountAmount: 'discountAmount',
+  totalAmount: 'totalAmount',
+  currency: 'currency',
+  status: 'status',
+  amountPaid: 'amountPaid',
+  balanceDue: 'balanceDue',
+  paidAt: 'paidAt',
+  paymentMethod: 'paymentMethod',
+  paymentReference: 'paymentReference',
+  standardInvoiceId: 'standardInvoiceId',
+  receiptId: 'receiptId',
+  paymentAttempts: 'paymentAttempts',
+  lastPaymentAttempt: 'lastPaymentAttempt',
+  nextRetryDate: 'nextRetryDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.SubscriptionBillingEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  subscriptionId: 'subscriptionId',
+  eventType: 'eventType',
+  eventTime: 'eventTime',
+  eventData: 'eventData',
+  previousState: 'previousState',
+  newState: 'newState',
+  amount: 'amount',
+  currency: 'currency',
+  invoiceId: 'invoiceId',
+  paymentReference: 'paymentReference',
+  errorCode: 'errorCode',
+  errorMessage: 'errorMessage',
+  performedBy: 'performedBy',
+  performedByType: 'performedByType',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -948,6 +1119,63 @@ exports.DebitNoteStatus = exports.$Enums.DebitNoteStatus = {
   voided: 'voided'
 };
 
+exports.MembershipTier = exports.$Enums.MembershipTier = {
+  BASIC: 'BASIC',
+  STANDARD: 'STANDARD',
+  PREMIUM: 'PREMIUM',
+  PLATINUM: 'PLATINUM',
+  VIP: 'VIP'
+};
+
+exports.BillingCycle = exports.$Enums.BillingCycle = {
+  MONTHLY: 'MONTHLY',
+  QUARTERLY: 'QUARTERLY',
+  SEMI_ANNUAL: 'SEMI_ANNUAL',
+  ANNUAL: 'ANNUAL'
+};
+
+exports.BenefitType = exports.$Enums.BenefitType = {
+  CONSULTATION: 'CONSULTATION',
+  ASSESSMENT: 'ASSESSMENT',
+  LAB_TEST: 'LAB_TEST',
+  TREATMENT: 'TREATMENT',
+  PROGRAM_ACCESS: 'PROGRAM_ACCESS',
+  DISCOUNT: 'DISCOUNT',
+  FACILITY_ACCESS: 'FACILITY_ACCESS',
+  PRIORITY_BOOKING: 'PRIORITY_BOOKING',
+  COACHING: 'COACHING',
+  NUTRITION: 'NUTRITION',
+  PHYSIOTHERAPY: 'PHYSIOTHERAPY',
+  OTHER: 'OTHER'
+};
+
+exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  PAST_DUE: 'PAST_DUE',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+  SUSPENDED: 'SUSPENDED'
+};
+
+exports.BillingEventType = exports.$Enums.BillingEventType = {
+  SUBSCRIPTION_CREATED: 'SUBSCRIPTION_CREATED',
+  SUBSCRIPTION_ACTIVATED: 'SUBSCRIPTION_ACTIVATED',
+  SUBSCRIPTION_RENEWED: 'SUBSCRIPTION_RENEWED',
+  SUBSCRIPTION_PAUSED: 'SUBSCRIPTION_PAUSED',
+  SUBSCRIPTION_RESUMED: 'SUBSCRIPTION_RESUMED',
+  SUBSCRIPTION_CANCELLED: 'SUBSCRIPTION_CANCELLED',
+  SUBSCRIPTION_EXPIRED: 'SUBSCRIPTION_EXPIRED',
+  PAYMENT_PROCESSED: 'PAYMENT_PROCESSED',
+  PAYMENT_FAILED: 'PAYMENT_FAILED',
+  REFUND_ISSUED: 'REFUND_ISSUED',
+  PLAN_UPGRADED: 'PLAN_UPGRADED',
+  PLAN_DOWNGRADED: 'PLAN_DOWNGRADED',
+  BENEFIT_USED: 'BENEFIT_USED',
+  BENEFIT_RESET: 'BENEFIT_RESET'
+};
+
 exports.Prisma.ModelName = {
   Payer: 'Payer',
   Policy: 'Policy',
@@ -987,7 +1215,13 @@ exports.Prisma.ModelName = {
   CreditNote: 'CreditNote',
   CreditNoteLine: 'CreditNoteLine',
   DebitNote: 'DebitNote',
-  DebitNoteLine: 'DebitNoteLine'
+  DebitNoteLine: 'DebitNoteLine',
+  MembershipPlan: 'MembershipPlan',
+  PlanBenefit: 'PlanBenefit',
+  MemberSubscription: 'MemberSubscription',
+  BenefitUsage: 'BenefitUsage',
+  SubscriptionInvoice: 'SubscriptionInvoice',
+  SubscriptionBillingEvent: 'SubscriptionBillingEvent'
 };
 
 /**

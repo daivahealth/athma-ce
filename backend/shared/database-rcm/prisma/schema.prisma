@@ -1576,6 +1576,13 @@ model MembershipPlan {
   displayOrder          Int            @default(0) @map("display_order")
   highlightFeatures     Json?          @map("highlight_features") @db.JsonB // Key features to display
 
+  // Facility availability
+  availableFacilities   String[]       @default([]) @map("available_facilities") @db.Uuid
+
+  // Terms and additional info
+  termsAndConditions    String?        @map("terms_and_conditions") @db.Text
+  metadata              Json?          @map("metadata") @db.JsonB
+
   // Audit
   createdAt             DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt             DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -1619,6 +1626,9 @@ model PlanBenefit {
   // Display
   displayOrder          Int         @default(0) @map("display_order")
   isHighlighted         Boolean     @default(false) @map("is_highlighted")
+
+  // Additional metadata
+  metadata              Json?       @map("metadata") @db.JsonB
 
   // Audit
   createdAt             DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)

@@ -17,27 +17,34 @@ import { MembershipTier, BillingCycle, BenefitType } from './membership-plan.dto
 // ============================================
 
 export enum SubscriptionStatus {
-  PENDING = 'pending',
-  ACTIVE = 'active',
-  PAUSED = 'paused',
-  PAST_DUE = 'past_due',
-  CANCELLED = 'cancelled',
-  EXPIRED = 'expired',
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  PAUSED = 'PAUSED',
+  PAST_DUE = 'PAST_DUE',
+  CANCELLED = 'CANCELLED',
+  EXPIRED = 'EXPIRED',
+  SUSPENDED = 'SUSPENDED',
 }
 
 export enum BillingEventType {
-  SUBSCRIPTION_CREATED = 'subscription_created',
-  PAYMENT_RECEIVED = 'payment_received',
-  PAYMENT_FAILED = 'payment_failed',
-  SUBSCRIPTION_RENEWED = 'subscription_renewed',
-  SUBSCRIPTION_UPGRADED = 'subscription_upgraded',
-  SUBSCRIPTION_DOWNGRADED = 'subscription_downgraded',
-  SUBSCRIPTION_PAUSED = 'subscription_paused',
-  SUBSCRIPTION_RESUMED = 'subscription_resumed',
-  SUBSCRIPTION_CANCELLED = 'subscription_cancelled',
-  SUBSCRIPTION_EXPIRED = 'subscription_expired',
-  BENEFIT_USED = 'benefit_used',
-  REFUND_ISSUED = 'refund_issued',
+  SUBSCRIPTION_CREATED = 'SUBSCRIPTION_CREATED',
+  SUBSCRIPTION_ACTIVATED = 'SUBSCRIPTION_ACTIVATED',
+  SUBSCRIPTION_RENEWED = 'SUBSCRIPTION_RENEWED',
+  SUBSCRIPTION_PAUSED = 'SUBSCRIPTION_PAUSED',
+  SUBSCRIPTION_RESUMED = 'SUBSCRIPTION_RESUMED',
+  SUBSCRIPTION_CANCELLED = 'SUBSCRIPTION_CANCELLED',
+  SUBSCRIPTION_EXPIRED = 'SUBSCRIPTION_EXPIRED',
+  PAYMENT_PROCESSED = 'PAYMENT_PROCESSED',
+  PAYMENT_FAILED = 'PAYMENT_FAILED',
+  REFUND_ISSUED = 'REFUND_ISSUED',
+  PLAN_UPGRADED = 'PLAN_UPGRADED',
+  PLAN_DOWNGRADED = 'PLAN_DOWNGRADED',
+  BENEFIT_USED = 'BENEFIT_USED',
+  BENEFIT_RESET = 'BENEFIT_RESET',
+  // Keep these for backwards compatibility in service layer
+  PAYMENT_RECEIVED = 'PAYMENT_PROCESSED',
+  SUBSCRIPTION_UPGRADED = 'PLAN_UPGRADED',
+  SUBSCRIPTION_DOWNGRADED = 'PLAN_DOWNGRADED',
 }
 
 // ============================================

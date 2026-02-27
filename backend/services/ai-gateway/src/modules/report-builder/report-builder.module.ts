@@ -5,6 +5,8 @@ import { SqlCompilerService } from './services/sql-compiler.service';
 import { QueryExecutorService } from './services/query-executor.service';
 import { ExportService } from './services/export.service';
 import { CatalogService } from './services/catalog.service';
+import { DashboardCacheService } from './services/dashboard-cache.service';
+import { DashboardCacheJob } from './jobs/dashboard-cache.job';
 
 @Module({
   controllers: [ReportController],
@@ -14,7 +16,9 @@ import { CatalogService } from './services/catalog.service';
     QueryExecutorService,
     ExportService,
     CatalogService,
+    DashboardCacheService,
+    DashboardCacheJob,
   ],
-  exports: [CatalogService],
+  exports: [CatalogService, DashboardCacheService],
 })
 export class ReportBuilderModule {}

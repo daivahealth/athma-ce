@@ -52,12 +52,12 @@ export class MembershipPlanController {
     @Query('isPublic') isPublic?: string,
     @Query('facilityId') facilityId?: string,
   ) {
-    return this.planService.findAll(tenantId, {
-      tier,
-      isActive: isActive === undefined ? undefined : isActive === 'true',
-      isPublic: isPublic === undefined ? undefined : isPublic === 'true',
-      facilityId,
-    });
+    const options: { tier?: MembershipTier; isActive?: boolean; isPublic?: boolean; facilityId?: string } = {};
+    if (tier !== undefined) options.tier = tier;
+    if (isActive !== undefined) options.isActive = isActive === 'true';
+    if (isPublic !== undefined) options.isPublic = isPublic === 'true';
+    if (facilityId !== undefined) options.facilityId = facilityId;
+    return this.planService.findAll(tenantId, options);
   }
 
   @Get('public')

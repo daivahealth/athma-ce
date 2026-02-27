@@ -208,6 +208,36 @@ export type DebitNote = $Result.DefaultSelection<Prisma.$DebitNotePayload>
  * 
  */
 export type DebitNoteLine = $Result.DefaultSelection<Prisma.$DebitNoteLinePayload>
+/**
+ * Model MembershipPlan
+ * Membership plan definition
+ */
+export type MembershipPlan = $Result.DefaultSelection<Prisma.$MembershipPlanPayload>
+/**
+ * Model PlanBenefit
+ * Benefits included in a membership plan
+ */
+export type PlanBenefit = $Result.DefaultSelection<Prisma.$PlanBenefitPayload>
+/**
+ * Model MemberSubscription
+ * Patient membership subscription
+ */
+export type MemberSubscription = $Result.DefaultSelection<Prisma.$MemberSubscriptionPayload>
+/**
+ * Model BenefitUsage
+ * Benefit usage tracking
+ */
+export type BenefitUsage = $Result.DefaultSelection<Prisma.$BenefitUsagePayload>
+/**
+ * Model SubscriptionInvoice
+ * Subscription invoice for recurring billing
+ */
+export type SubscriptionInvoice = $Result.DefaultSelection<Prisma.$SubscriptionInvoicePayload>
+/**
+ * Model SubscriptionBillingEvent
+ * Subscription billing event audit trail
+ */
+export type SubscriptionBillingEvent = $Result.DefaultSelection<Prisma.$SubscriptionBillingEventPayload>
 
 /**
  * Enums
@@ -276,6 +306,78 @@ export const DebitNoteStatus: {
 
 export type DebitNoteStatus = (typeof DebitNoteStatus)[keyof typeof DebitNoteStatus]
 
+
+export const MembershipTier: {
+  BASIC: 'BASIC',
+  STANDARD: 'STANDARD',
+  PREMIUM: 'PREMIUM',
+  PLATINUM: 'PLATINUM',
+  VIP: 'VIP'
+};
+
+export type MembershipTier = (typeof MembershipTier)[keyof typeof MembershipTier]
+
+
+export const BillingCycle: {
+  MONTHLY: 'MONTHLY',
+  QUARTERLY: 'QUARTERLY',
+  SEMI_ANNUAL: 'SEMI_ANNUAL',
+  ANNUAL: 'ANNUAL'
+};
+
+export type BillingCycle = (typeof BillingCycle)[keyof typeof BillingCycle]
+
+
+export const BenefitType: {
+  CONSULTATION: 'CONSULTATION',
+  ASSESSMENT: 'ASSESSMENT',
+  LAB_TEST: 'LAB_TEST',
+  TREATMENT: 'TREATMENT',
+  PROGRAM_ACCESS: 'PROGRAM_ACCESS',
+  DISCOUNT: 'DISCOUNT',
+  FACILITY_ACCESS: 'FACILITY_ACCESS',
+  PRIORITY_BOOKING: 'PRIORITY_BOOKING',
+  COACHING: 'COACHING',
+  NUTRITION: 'NUTRITION',
+  PHYSIOTHERAPY: 'PHYSIOTHERAPY',
+  OTHER: 'OTHER'
+};
+
+export type BenefitType = (typeof BenefitType)[keyof typeof BenefitType]
+
+
+export const SubscriptionStatus: {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  PAST_DUE: 'PAST_DUE',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+  SUSPENDED: 'SUSPENDED'
+};
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const BillingEventType: {
+  SUBSCRIPTION_CREATED: 'SUBSCRIPTION_CREATED',
+  SUBSCRIPTION_ACTIVATED: 'SUBSCRIPTION_ACTIVATED',
+  SUBSCRIPTION_RENEWED: 'SUBSCRIPTION_RENEWED',
+  SUBSCRIPTION_PAUSED: 'SUBSCRIPTION_PAUSED',
+  SUBSCRIPTION_RESUMED: 'SUBSCRIPTION_RESUMED',
+  SUBSCRIPTION_CANCELLED: 'SUBSCRIPTION_CANCELLED',
+  SUBSCRIPTION_EXPIRED: 'SUBSCRIPTION_EXPIRED',
+  PAYMENT_PROCESSED: 'PAYMENT_PROCESSED',
+  PAYMENT_FAILED: 'PAYMENT_FAILED',
+  REFUND_ISSUED: 'REFUND_ISSUED',
+  PLAN_UPGRADED: 'PLAN_UPGRADED',
+  PLAN_DOWNGRADED: 'PLAN_DOWNGRADED',
+  BENEFIT_USED: 'BENEFIT_USED',
+  BENEFIT_RESET: 'BENEFIT_RESET'
+};
+
+export type BillingEventType = (typeof BillingEventType)[keyof typeof BillingEventType]
+
 }
 
 export type LedgerEntryType = $Enums.LedgerEntryType
@@ -301,6 +403,26 @@ export const CreditNoteStatus: typeof $Enums.CreditNoteStatus
 export type DebitNoteStatus = $Enums.DebitNoteStatus
 
 export const DebitNoteStatus: typeof $Enums.DebitNoteStatus
+
+export type MembershipTier = $Enums.MembershipTier
+
+export const MembershipTier: typeof $Enums.MembershipTier
+
+export type BillingCycle = $Enums.BillingCycle
+
+export const BillingCycle: typeof $Enums.BillingCycle
+
+export type BenefitType = $Enums.BenefitType
+
+export const BenefitType: typeof $Enums.BenefitType
+
+export type SubscriptionStatus = $Enums.SubscriptionStatus
+
+export const SubscriptionStatus: typeof $Enums.SubscriptionStatus
+
+export type BillingEventType = $Enums.BillingEventType
+
+export const BillingEventType: typeof $Enums.BillingEventType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -814,6 +936,66 @@ export class PrismaClient<
     * ```
     */
   get debitNoteLine(): Prisma.DebitNoteLineDelegate<ExtArgs>;
+
+  /**
+   * `prisma.membershipPlan`: Exposes CRUD operations for the **MembershipPlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MembershipPlans
+    * const membershipPlans = await prisma.membershipPlan.findMany()
+    * ```
+    */
+  get membershipPlan(): Prisma.MembershipPlanDelegate<ExtArgs>;
+
+  /**
+   * `prisma.planBenefit`: Exposes CRUD operations for the **PlanBenefit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PlanBenefits
+    * const planBenefits = await prisma.planBenefit.findMany()
+    * ```
+    */
+  get planBenefit(): Prisma.PlanBenefitDelegate<ExtArgs>;
+
+  /**
+   * `prisma.memberSubscription`: Exposes CRUD operations for the **MemberSubscription** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MemberSubscriptions
+    * const memberSubscriptions = await prisma.memberSubscription.findMany()
+    * ```
+    */
+  get memberSubscription(): Prisma.MemberSubscriptionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.benefitUsage`: Exposes CRUD operations for the **BenefitUsage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BenefitUsages
+    * const benefitUsages = await prisma.benefitUsage.findMany()
+    * ```
+    */
+  get benefitUsage(): Prisma.BenefitUsageDelegate<ExtArgs>;
+
+  /**
+   * `prisma.subscriptionInvoice`: Exposes CRUD operations for the **SubscriptionInvoice** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SubscriptionInvoices
+    * const subscriptionInvoices = await prisma.subscriptionInvoice.findMany()
+    * ```
+    */
+  get subscriptionInvoice(): Prisma.SubscriptionInvoiceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.subscriptionBillingEvent`: Exposes CRUD operations for the **SubscriptionBillingEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SubscriptionBillingEvents
+    * const subscriptionBillingEvents = await prisma.subscriptionBillingEvent.findMany()
+    * ```
+    */
+  get subscriptionBillingEvent(): Prisma.SubscriptionBillingEventDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1293,7 +1475,13 @@ export namespace Prisma {
     CreditNote: 'CreditNote',
     CreditNoteLine: 'CreditNoteLine',
     DebitNote: 'DebitNote',
-    DebitNoteLine: 'DebitNoteLine'
+    DebitNoteLine: 'DebitNoteLine',
+    MembershipPlan: 'MembershipPlan',
+    PlanBenefit: 'PlanBenefit',
+    MemberSubscription: 'MemberSubscription',
+    BenefitUsage: 'BenefitUsage',
+    SubscriptionInvoice: 'SubscriptionInvoice',
+    SubscriptionBillingEvent: 'SubscriptionBillingEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1309,7 +1497,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog" | "catalogItemMapping" | "catalogMappingAudit" | "eligibilityRequest" | "preAuthRequest" | "claimBatch" | "remittance" | "remittanceLine" | "patientLedgerEntry" | "patientBalance" | "refund" | "refundAllocation" | "refundAuditLog" | "creditNote" | "creditNoteLine" | "debitNote" | "debitNoteLine"
+      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog" | "catalogItemMapping" | "catalogMappingAudit" | "eligibilityRequest" | "preAuthRequest" | "claimBatch" | "remittance" | "remittanceLine" | "patientLedgerEntry" | "patientBalance" | "refund" | "refundAllocation" | "refundAuditLog" | "creditNote" | "creditNoteLine" | "debitNote" | "debitNoteLine" | "membershipPlan" | "planBenefit" | "memberSubscription" | "benefitUsage" | "subscriptionInvoice" | "subscriptionBillingEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4043,6 +4231,426 @@ export namespace Prisma {
           }
         }
       }
+      MembershipPlan: {
+        payload: Prisma.$MembershipPlanPayload<ExtArgs>
+        fields: Prisma.MembershipPlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MembershipPlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MembershipPlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>
+          }
+          findFirst: {
+            args: Prisma.MembershipPlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MembershipPlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>
+          }
+          findMany: {
+            args: Prisma.MembershipPlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>[]
+          }
+          create: {
+            args: Prisma.MembershipPlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>
+          }
+          createMany: {
+            args: Prisma.MembershipPlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MembershipPlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>[]
+          }
+          delete: {
+            args: Prisma.MembershipPlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>
+          }
+          update: {
+            args: Prisma.MembershipPlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.MembershipPlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MembershipPlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MembershipPlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipPlanPayload>
+          }
+          aggregate: {
+            args: Prisma.MembershipPlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMembershipPlan>
+          }
+          groupBy: {
+            args: Prisma.MembershipPlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MembershipPlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MembershipPlanCountArgs<ExtArgs>
+            result: $Utils.Optional<MembershipPlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      PlanBenefit: {
+        payload: Prisma.$PlanBenefitPayload<ExtArgs>
+        fields: Prisma.PlanBenefitFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlanBenefitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlanBenefitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>
+          }
+          findFirst: {
+            args: Prisma.PlanBenefitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlanBenefitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>
+          }
+          findMany: {
+            args: Prisma.PlanBenefitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>[]
+          }
+          create: {
+            args: Prisma.PlanBenefitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>
+          }
+          createMany: {
+            args: Prisma.PlanBenefitCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlanBenefitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>[]
+          }
+          delete: {
+            args: Prisma.PlanBenefitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>
+          }
+          update: {
+            args: Prisma.PlanBenefitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlanBenefitDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlanBenefitUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PlanBenefitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanBenefitPayload>
+          }
+          aggregate: {
+            args: Prisma.PlanBenefitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlanBenefit>
+          }
+          groupBy: {
+            args: Prisma.PlanBenefitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlanBenefitGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlanBenefitCountArgs<ExtArgs>
+            result: $Utils.Optional<PlanBenefitCountAggregateOutputType> | number
+          }
+        }
+      }
+      MemberSubscription: {
+        payload: Prisma.$MemberSubscriptionPayload<ExtArgs>
+        fields: Prisma.MemberSubscriptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MemberSubscriptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MemberSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>
+          }
+          findFirst: {
+            args: Prisma.MemberSubscriptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MemberSubscriptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>
+          }
+          findMany: {
+            args: Prisma.MemberSubscriptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>[]
+          }
+          create: {
+            args: Prisma.MemberSubscriptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>
+          }
+          createMany: {
+            args: Prisma.MemberSubscriptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MemberSubscriptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>[]
+          }
+          delete: {
+            args: Prisma.MemberSubscriptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>
+          }
+          update: {
+            args: Prisma.MemberSubscriptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.MemberSubscriptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MemberSubscriptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MemberSubscriptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MemberSubscriptionPayload>
+          }
+          aggregate: {
+            args: Prisma.MemberSubscriptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMemberSubscription>
+          }
+          groupBy: {
+            args: Prisma.MemberSubscriptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MemberSubscriptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MemberSubscriptionCountArgs<ExtArgs>
+            result: $Utils.Optional<MemberSubscriptionCountAggregateOutputType> | number
+          }
+        }
+      }
+      BenefitUsage: {
+        payload: Prisma.$BenefitUsagePayload<ExtArgs>
+        fields: Prisma.BenefitUsageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BenefitUsageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BenefitUsageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>
+          }
+          findFirst: {
+            args: Prisma.BenefitUsageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BenefitUsageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>
+          }
+          findMany: {
+            args: Prisma.BenefitUsageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>[]
+          }
+          create: {
+            args: Prisma.BenefitUsageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>
+          }
+          createMany: {
+            args: Prisma.BenefitUsageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BenefitUsageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>[]
+          }
+          delete: {
+            args: Prisma.BenefitUsageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>
+          }
+          update: {
+            args: Prisma.BenefitUsageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>
+          }
+          deleteMany: {
+            args: Prisma.BenefitUsageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BenefitUsageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BenefitUsageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BenefitUsagePayload>
+          }
+          aggregate: {
+            args: Prisma.BenefitUsageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBenefitUsage>
+          }
+          groupBy: {
+            args: Prisma.BenefitUsageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BenefitUsageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BenefitUsageCountArgs<ExtArgs>
+            result: $Utils.Optional<BenefitUsageCountAggregateOutputType> | number
+          }
+        }
+      }
+      SubscriptionInvoice: {
+        payload: Prisma.$SubscriptionInvoicePayload<ExtArgs>
+        fields: Prisma.SubscriptionInvoiceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SubscriptionInvoiceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SubscriptionInvoiceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>
+          }
+          findFirst: {
+            args: Prisma.SubscriptionInvoiceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SubscriptionInvoiceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>
+          }
+          findMany: {
+            args: Prisma.SubscriptionInvoiceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>[]
+          }
+          create: {
+            args: Prisma.SubscriptionInvoiceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>
+          }
+          createMany: {
+            args: Prisma.SubscriptionInvoiceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SubscriptionInvoiceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>[]
+          }
+          delete: {
+            args: Prisma.SubscriptionInvoiceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>
+          }
+          update: {
+            args: Prisma.SubscriptionInvoiceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>
+          }
+          deleteMany: {
+            args: Prisma.SubscriptionInvoiceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SubscriptionInvoiceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SubscriptionInvoiceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionInvoicePayload>
+          }
+          aggregate: {
+            args: Prisma.SubscriptionInvoiceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSubscriptionInvoice>
+          }
+          groupBy: {
+            args: Prisma.SubscriptionInvoiceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionInvoiceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SubscriptionInvoiceCountArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionInvoiceCountAggregateOutputType> | number
+          }
+        }
+      }
+      SubscriptionBillingEvent: {
+        payload: Prisma.$SubscriptionBillingEventPayload<ExtArgs>
+        fields: Prisma.SubscriptionBillingEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SubscriptionBillingEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SubscriptionBillingEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>
+          }
+          findFirst: {
+            args: Prisma.SubscriptionBillingEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SubscriptionBillingEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>
+          }
+          findMany: {
+            args: Prisma.SubscriptionBillingEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>[]
+          }
+          create: {
+            args: Prisma.SubscriptionBillingEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>
+          }
+          createMany: {
+            args: Prisma.SubscriptionBillingEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SubscriptionBillingEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>[]
+          }
+          delete: {
+            args: Prisma.SubscriptionBillingEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>
+          }
+          update: {
+            args: Prisma.SubscriptionBillingEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.SubscriptionBillingEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SubscriptionBillingEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SubscriptionBillingEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionBillingEventPayload>
+          }
+          aggregate: {
+            args: Prisma.SubscriptionBillingEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSubscriptionBillingEvent>
+          }
+          groupBy: {
+            args: Prisma.SubscriptionBillingEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionBillingEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SubscriptionBillingEventCountArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionBillingEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5090,6 +5698,135 @@ export namespace Prisma {
    */
   export type DebitNoteCountOutputTypeCountLinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DebitNoteLineWhereInput
+  }
+
+
+  /**
+   * Count Type MembershipPlanCountOutputType
+   */
+
+  export type MembershipPlanCountOutputType = {
+    benefits: number
+    subscriptions: number
+  }
+
+  export type MembershipPlanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    benefits?: boolean | MembershipPlanCountOutputTypeCountBenefitsArgs
+    subscriptions?: boolean | MembershipPlanCountOutputTypeCountSubscriptionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MembershipPlanCountOutputType without action
+   */
+  export type MembershipPlanCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlanCountOutputType
+     */
+    select?: MembershipPlanCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MembershipPlanCountOutputType without action
+   */
+  export type MembershipPlanCountOutputTypeCountBenefitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlanBenefitWhereInput
+  }
+
+  /**
+   * MembershipPlanCountOutputType without action
+   */
+  export type MembershipPlanCountOutputTypeCountSubscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MemberSubscriptionWhereInput
+  }
+
+
+  /**
+   * Count Type PlanBenefitCountOutputType
+   */
+
+  export type PlanBenefitCountOutputType = {
+    usages: number
+  }
+
+  export type PlanBenefitCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usages?: boolean | PlanBenefitCountOutputTypeCountUsagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PlanBenefitCountOutputType without action
+   */
+  export type PlanBenefitCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefitCountOutputType
+     */
+    select?: PlanBenefitCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PlanBenefitCountOutputType without action
+   */
+  export type PlanBenefitCountOutputTypeCountUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BenefitUsageWhereInput
+  }
+
+
+  /**
+   * Count Type MemberSubscriptionCountOutputType
+   */
+
+  export type MemberSubscriptionCountOutputType = {
+    dependentSubscriptions: number
+    benefitUsages: number
+    invoices: number
+    billingEvents: number
+  }
+
+  export type MemberSubscriptionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dependentSubscriptions?: boolean | MemberSubscriptionCountOutputTypeCountDependentSubscriptionsArgs
+    benefitUsages?: boolean | MemberSubscriptionCountOutputTypeCountBenefitUsagesArgs
+    invoices?: boolean | MemberSubscriptionCountOutputTypeCountInvoicesArgs
+    billingEvents?: boolean | MemberSubscriptionCountOutputTypeCountBillingEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MemberSubscriptionCountOutputType without action
+   */
+  export type MemberSubscriptionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscriptionCountOutputType
+     */
+    select?: MemberSubscriptionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MemberSubscriptionCountOutputType without action
+   */
+  export type MemberSubscriptionCountOutputTypeCountDependentSubscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MemberSubscriptionWhereInput
+  }
+
+  /**
+   * MemberSubscriptionCountOutputType without action
+   */
+  export type MemberSubscriptionCountOutputTypeCountBenefitUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BenefitUsageWhereInput
+  }
+
+  /**
+   * MemberSubscriptionCountOutputType without action
+   */
+  export type MemberSubscriptionCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubscriptionInvoiceWhereInput
+  }
+
+  /**
+   * MemberSubscriptionCountOutputType without action
+   */
+  export type MemberSubscriptionCountOutputTypeCountBillingEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubscriptionBillingEventWhereInput
   }
 
 
@@ -49292,6 +50029,7554 @@ export namespace Prisma {
 
 
   /**
+   * Model MembershipPlan
+   */
+
+  export type AggregateMembershipPlan = {
+    _count: MembershipPlanCountAggregateOutputType | null
+    _avg: MembershipPlanAvgAggregateOutputType | null
+    _sum: MembershipPlanSumAggregateOutputType | null
+    _min: MembershipPlanMinAggregateOutputType | null
+    _max: MembershipPlanMaxAggregateOutputType | null
+  }
+
+  export type MembershipPlanAvgAggregateOutputType = {
+    basePrice: Decimal | null
+    monthlyPrice: Decimal | null
+    quarterlyPrice: Decimal | null
+    semiAnnualPrice: Decimal | null
+    annualPrice: Decimal | null
+    enrollmentFee: Decimal | null
+    reactivationFee: Decimal | null
+    annualDiscountPercent: Decimal | null
+    minCommitmentMonths: number | null
+    maxMembers: number | null
+    ageMin: number | null
+    ageMax: number | null
+    displayOrder: number | null
+  }
+
+  export type MembershipPlanSumAggregateOutputType = {
+    basePrice: Decimal | null
+    monthlyPrice: Decimal | null
+    quarterlyPrice: Decimal | null
+    semiAnnualPrice: Decimal | null
+    annualPrice: Decimal | null
+    enrollmentFee: Decimal | null
+    reactivationFee: Decimal | null
+    annualDiscountPercent: Decimal | null
+    minCommitmentMonths: number | null
+    maxMembers: number | null
+    ageMin: number | null
+    ageMax: number | null
+    displayOrder: number | null
+  }
+
+  export type MembershipPlanMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    planCode: string | null
+    planName: string | null
+    description: string | null
+    tier: $Enums.MembershipTier | null
+    category: string | null
+    basePrice: Decimal | null
+    currency: string | null
+    billingCycle: $Enums.BillingCycle | null
+    monthlyPrice: Decimal | null
+    quarterlyPrice: Decimal | null
+    semiAnnualPrice: Decimal | null
+    annualPrice: Decimal | null
+    enrollmentFee: Decimal | null
+    reactivationFee: Decimal | null
+    annualDiscountPercent: Decimal | null
+    benefitsSummary: string | null
+    minCommitmentMonths: number | null
+    maxMembers: number | null
+    ageMin: number | null
+    ageMax: number | null
+    requiresAssessment: boolean | null
+    isActive: boolean | null
+    isPublic: boolean | null
+    displayOrder: number | null
+    termsAndConditions: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type MembershipPlanMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    planCode: string | null
+    planName: string | null
+    description: string | null
+    tier: $Enums.MembershipTier | null
+    category: string | null
+    basePrice: Decimal | null
+    currency: string | null
+    billingCycle: $Enums.BillingCycle | null
+    monthlyPrice: Decimal | null
+    quarterlyPrice: Decimal | null
+    semiAnnualPrice: Decimal | null
+    annualPrice: Decimal | null
+    enrollmentFee: Decimal | null
+    reactivationFee: Decimal | null
+    annualDiscountPercent: Decimal | null
+    benefitsSummary: string | null
+    minCommitmentMonths: number | null
+    maxMembers: number | null
+    ageMin: number | null
+    ageMax: number | null
+    requiresAssessment: boolean | null
+    isActive: boolean | null
+    isPublic: boolean | null
+    displayOrder: number | null
+    termsAndConditions: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type MembershipPlanCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    planCode: number
+    planName: number
+    description: number
+    tier: number
+    category: number
+    basePrice: number
+    currency: number
+    billingCycle: number
+    monthlyPrice: number
+    quarterlyPrice: number
+    semiAnnualPrice: number
+    annualPrice: number
+    enrollmentFee: number
+    reactivationFee: number
+    annualDiscountPercent: number
+    benefitsSummary: number
+    minCommitmentMonths: number
+    maxMembers: number
+    ageMin: number
+    ageMax: number
+    requiresAssessment: number
+    isActive: number
+    isPublic: number
+    displayOrder: number
+    highlightFeatures: number
+    availableFacilities: number
+    termsAndConditions: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type MembershipPlanAvgAggregateInputType = {
+    basePrice?: true
+    monthlyPrice?: true
+    quarterlyPrice?: true
+    semiAnnualPrice?: true
+    annualPrice?: true
+    enrollmentFee?: true
+    reactivationFee?: true
+    annualDiscountPercent?: true
+    minCommitmentMonths?: true
+    maxMembers?: true
+    ageMin?: true
+    ageMax?: true
+    displayOrder?: true
+  }
+
+  export type MembershipPlanSumAggregateInputType = {
+    basePrice?: true
+    monthlyPrice?: true
+    quarterlyPrice?: true
+    semiAnnualPrice?: true
+    annualPrice?: true
+    enrollmentFee?: true
+    reactivationFee?: true
+    annualDiscountPercent?: true
+    minCommitmentMonths?: true
+    maxMembers?: true
+    ageMin?: true
+    ageMax?: true
+    displayOrder?: true
+  }
+
+  export type MembershipPlanMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planCode?: true
+    planName?: true
+    description?: true
+    tier?: true
+    category?: true
+    basePrice?: true
+    currency?: true
+    billingCycle?: true
+    monthlyPrice?: true
+    quarterlyPrice?: true
+    semiAnnualPrice?: true
+    annualPrice?: true
+    enrollmentFee?: true
+    reactivationFee?: true
+    annualDiscountPercent?: true
+    benefitsSummary?: true
+    minCommitmentMonths?: true
+    maxMembers?: true
+    ageMin?: true
+    ageMax?: true
+    requiresAssessment?: true
+    isActive?: true
+    isPublic?: true
+    displayOrder?: true
+    termsAndConditions?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type MembershipPlanMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planCode?: true
+    planName?: true
+    description?: true
+    tier?: true
+    category?: true
+    basePrice?: true
+    currency?: true
+    billingCycle?: true
+    monthlyPrice?: true
+    quarterlyPrice?: true
+    semiAnnualPrice?: true
+    annualPrice?: true
+    enrollmentFee?: true
+    reactivationFee?: true
+    annualDiscountPercent?: true
+    benefitsSummary?: true
+    minCommitmentMonths?: true
+    maxMembers?: true
+    ageMin?: true
+    ageMax?: true
+    requiresAssessment?: true
+    isActive?: true
+    isPublic?: true
+    displayOrder?: true
+    termsAndConditions?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type MembershipPlanCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planCode?: true
+    planName?: true
+    description?: true
+    tier?: true
+    category?: true
+    basePrice?: true
+    currency?: true
+    billingCycle?: true
+    monthlyPrice?: true
+    quarterlyPrice?: true
+    semiAnnualPrice?: true
+    annualPrice?: true
+    enrollmentFee?: true
+    reactivationFee?: true
+    annualDiscountPercent?: true
+    benefitsSummary?: true
+    minCommitmentMonths?: true
+    maxMembers?: true
+    ageMin?: true
+    ageMax?: true
+    requiresAssessment?: true
+    isActive?: true
+    isPublic?: true
+    displayOrder?: true
+    highlightFeatures?: true
+    availableFacilities?: true
+    termsAndConditions?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type MembershipPlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MembershipPlan to aggregate.
+     */
+    where?: MembershipPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipPlans to fetch.
+     */
+    orderBy?: MembershipPlanOrderByWithRelationInput | MembershipPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MembershipPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MembershipPlans
+    **/
+    _count?: true | MembershipPlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MembershipPlanAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MembershipPlanSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MembershipPlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MembershipPlanMaxAggregateInputType
+  }
+
+  export type GetMembershipPlanAggregateType<T extends MembershipPlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateMembershipPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMembershipPlan[P]>
+      : GetScalarType<T[P], AggregateMembershipPlan[P]>
+  }
+
+
+
+
+  export type MembershipPlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MembershipPlanWhereInput
+    orderBy?: MembershipPlanOrderByWithAggregationInput | MembershipPlanOrderByWithAggregationInput[]
+    by: MembershipPlanScalarFieldEnum[] | MembershipPlanScalarFieldEnum
+    having?: MembershipPlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MembershipPlanCountAggregateInputType | true
+    _avg?: MembershipPlanAvgAggregateInputType
+    _sum?: MembershipPlanSumAggregateInputType
+    _min?: MembershipPlanMinAggregateInputType
+    _max?: MembershipPlanMaxAggregateInputType
+  }
+
+  export type MembershipPlanGroupByOutputType = {
+    id: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description: string | null
+    tier: $Enums.MembershipTier
+    category: string | null
+    basePrice: Decimal
+    currency: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice: Decimal | null
+    quarterlyPrice: Decimal | null
+    semiAnnualPrice: Decimal | null
+    annualPrice: Decimal | null
+    enrollmentFee: Decimal
+    reactivationFee: Decimal
+    annualDiscountPercent: Decimal | null
+    benefitsSummary: string | null
+    minCommitmentMonths: number
+    maxMembers: number | null
+    ageMin: number | null
+    ageMax: number | null
+    requiresAssessment: boolean
+    isActive: boolean
+    isPublic: boolean
+    displayOrder: number
+    highlightFeatures: JsonValue | null
+    availableFacilities: string[]
+    termsAndConditions: string | null
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string
+    _count: MembershipPlanCountAggregateOutputType | null
+    _avg: MembershipPlanAvgAggregateOutputType | null
+    _sum: MembershipPlanSumAggregateOutputType | null
+    _min: MembershipPlanMinAggregateOutputType | null
+    _max: MembershipPlanMaxAggregateOutputType | null
+  }
+
+  type GetMembershipPlanGroupByPayload<T extends MembershipPlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MembershipPlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MembershipPlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MembershipPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], MembershipPlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MembershipPlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    planCode?: boolean
+    planName?: boolean
+    description?: boolean
+    tier?: boolean
+    category?: boolean
+    basePrice?: boolean
+    currency?: boolean
+    billingCycle?: boolean
+    monthlyPrice?: boolean
+    quarterlyPrice?: boolean
+    semiAnnualPrice?: boolean
+    annualPrice?: boolean
+    enrollmentFee?: boolean
+    reactivationFee?: boolean
+    annualDiscountPercent?: boolean
+    benefitsSummary?: boolean
+    minCommitmentMonths?: boolean
+    maxMembers?: boolean
+    ageMin?: boolean
+    ageMax?: boolean
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: boolean
+    highlightFeatures?: boolean
+    availableFacilities?: boolean
+    termsAndConditions?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    benefits?: boolean | MembershipPlan$benefitsArgs<ExtArgs>
+    subscriptions?: boolean | MembershipPlan$subscriptionsArgs<ExtArgs>
+    _count?: boolean | MembershipPlanCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["membershipPlan"]>
+
+  export type MembershipPlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    planCode?: boolean
+    planName?: boolean
+    description?: boolean
+    tier?: boolean
+    category?: boolean
+    basePrice?: boolean
+    currency?: boolean
+    billingCycle?: boolean
+    monthlyPrice?: boolean
+    quarterlyPrice?: boolean
+    semiAnnualPrice?: boolean
+    annualPrice?: boolean
+    enrollmentFee?: boolean
+    reactivationFee?: boolean
+    annualDiscountPercent?: boolean
+    benefitsSummary?: boolean
+    minCommitmentMonths?: boolean
+    maxMembers?: boolean
+    ageMin?: boolean
+    ageMax?: boolean
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: boolean
+    highlightFeatures?: boolean
+    availableFacilities?: boolean
+    termsAndConditions?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }, ExtArgs["result"]["membershipPlan"]>
+
+  export type MembershipPlanSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    planCode?: boolean
+    planName?: boolean
+    description?: boolean
+    tier?: boolean
+    category?: boolean
+    basePrice?: boolean
+    currency?: boolean
+    billingCycle?: boolean
+    monthlyPrice?: boolean
+    quarterlyPrice?: boolean
+    semiAnnualPrice?: boolean
+    annualPrice?: boolean
+    enrollmentFee?: boolean
+    reactivationFee?: boolean
+    annualDiscountPercent?: boolean
+    benefitsSummary?: boolean
+    minCommitmentMonths?: boolean
+    maxMembers?: boolean
+    ageMin?: boolean
+    ageMax?: boolean
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: boolean
+    highlightFeatures?: boolean
+    availableFacilities?: boolean
+    termsAndConditions?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type MembershipPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    benefits?: boolean | MembershipPlan$benefitsArgs<ExtArgs>
+    subscriptions?: boolean | MembershipPlan$subscriptionsArgs<ExtArgs>
+    _count?: boolean | MembershipPlanCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MembershipPlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $MembershipPlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MembershipPlan"
+    objects: {
+      benefits: Prisma.$PlanBenefitPayload<ExtArgs>[]
+      subscriptions: Prisma.$MemberSubscriptionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      planCode: string
+      planName: string
+      description: string | null
+      tier: $Enums.MembershipTier
+      category: string | null
+      basePrice: Prisma.Decimal
+      currency: string
+      billingCycle: $Enums.BillingCycle
+      monthlyPrice: Prisma.Decimal | null
+      quarterlyPrice: Prisma.Decimal | null
+      semiAnnualPrice: Prisma.Decimal | null
+      annualPrice: Prisma.Decimal | null
+      enrollmentFee: Prisma.Decimal
+      reactivationFee: Prisma.Decimal
+      annualDiscountPercent: Prisma.Decimal | null
+      benefitsSummary: string | null
+      minCommitmentMonths: number
+      maxMembers: number | null
+      ageMin: number | null
+      ageMax: number | null
+      requiresAssessment: boolean
+      isActive: boolean
+      isPublic: boolean
+      displayOrder: number
+      highlightFeatures: Prisma.JsonValue | null
+      availableFacilities: string[]
+      termsAndConditions: string | null
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string
+    }, ExtArgs["result"]["membershipPlan"]>
+    composites: {}
+  }
+
+  type MembershipPlanGetPayload<S extends boolean | null | undefined | MembershipPlanDefaultArgs> = $Result.GetResult<Prisma.$MembershipPlanPayload, S>
+
+  type MembershipPlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MembershipPlanFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MembershipPlanCountAggregateInputType | true
+    }
+
+  export interface MembershipPlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MembershipPlan'], meta: { name: 'MembershipPlan' } }
+    /**
+     * Find zero or one MembershipPlan that matches the filter.
+     * @param {MembershipPlanFindUniqueArgs} args - Arguments to find a MembershipPlan
+     * @example
+     * // Get one MembershipPlan
+     * const membershipPlan = await prisma.membershipPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MembershipPlanFindUniqueArgs>(args: SelectSubset<T, MembershipPlanFindUniqueArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MembershipPlan that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MembershipPlanFindUniqueOrThrowArgs} args - Arguments to find a MembershipPlan
+     * @example
+     * // Get one MembershipPlan
+     * const membershipPlan = await prisma.membershipPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MembershipPlanFindUniqueOrThrowArgs>(args: SelectSubset<T, MembershipPlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MembershipPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipPlanFindFirstArgs} args - Arguments to find a MembershipPlan
+     * @example
+     * // Get one MembershipPlan
+     * const membershipPlan = await prisma.membershipPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MembershipPlanFindFirstArgs>(args?: SelectSubset<T, MembershipPlanFindFirstArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MembershipPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipPlanFindFirstOrThrowArgs} args - Arguments to find a MembershipPlan
+     * @example
+     * // Get one MembershipPlan
+     * const membershipPlan = await prisma.membershipPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MembershipPlanFindFirstOrThrowArgs>(args?: SelectSubset<T, MembershipPlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MembershipPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MembershipPlans
+     * const membershipPlans = await prisma.membershipPlan.findMany()
+     * 
+     * // Get first 10 MembershipPlans
+     * const membershipPlans = await prisma.membershipPlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const membershipPlanWithIdOnly = await prisma.membershipPlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MembershipPlanFindManyArgs>(args?: SelectSubset<T, MembershipPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MembershipPlan.
+     * @param {MembershipPlanCreateArgs} args - Arguments to create a MembershipPlan.
+     * @example
+     * // Create one MembershipPlan
+     * const MembershipPlan = await prisma.membershipPlan.create({
+     *   data: {
+     *     // ... data to create a MembershipPlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends MembershipPlanCreateArgs>(args: SelectSubset<T, MembershipPlanCreateArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MembershipPlans.
+     * @param {MembershipPlanCreateManyArgs} args - Arguments to create many MembershipPlans.
+     * @example
+     * // Create many MembershipPlans
+     * const membershipPlan = await prisma.membershipPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MembershipPlanCreateManyArgs>(args?: SelectSubset<T, MembershipPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MembershipPlans and returns the data saved in the database.
+     * @param {MembershipPlanCreateManyAndReturnArgs} args - Arguments to create many MembershipPlans.
+     * @example
+     * // Create many MembershipPlans
+     * const membershipPlan = await prisma.membershipPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MembershipPlans and only return the `id`
+     * const membershipPlanWithIdOnly = await prisma.membershipPlan.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MembershipPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, MembershipPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MembershipPlan.
+     * @param {MembershipPlanDeleteArgs} args - Arguments to delete one MembershipPlan.
+     * @example
+     * // Delete one MembershipPlan
+     * const MembershipPlan = await prisma.membershipPlan.delete({
+     *   where: {
+     *     // ... filter to delete one MembershipPlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MembershipPlanDeleteArgs>(args: SelectSubset<T, MembershipPlanDeleteArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MembershipPlan.
+     * @param {MembershipPlanUpdateArgs} args - Arguments to update one MembershipPlan.
+     * @example
+     * // Update one MembershipPlan
+     * const membershipPlan = await prisma.membershipPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MembershipPlanUpdateArgs>(args: SelectSubset<T, MembershipPlanUpdateArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MembershipPlans.
+     * @param {MembershipPlanDeleteManyArgs} args - Arguments to filter MembershipPlans to delete.
+     * @example
+     * // Delete a few MembershipPlans
+     * const { count } = await prisma.membershipPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MembershipPlanDeleteManyArgs>(args?: SelectSubset<T, MembershipPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MembershipPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MembershipPlans
+     * const membershipPlan = await prisma.membershipPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MembershipPlanUpdateManyArgs>(args: SelectSubset<T, MembershipPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MembershipPlan.
+     * @param {MembershipPlanUpsertArgs} args - Arguments to update or create a MembershipPlan.
+     * @example
+     * // Update or create a MembershipPlan
+     * const membershipPlan = await prisma.membershipPlan.upsert({
+     *   create: {
+     *     // ... data to create a MembershipPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MembershipPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MembershipPlanUpsertArgs>(args: SelectSubset<T, MembershipPlanUpsertArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MembershipPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipPlanCountArgs} args - Arguments to filter MembershipPlans to count.
+     * @example
+     * // Count the number of MembershipPlans
+     * const count = await prisma.membershipPlan.count({
+     *   where: {
+     *     // ... the filter for the MembershipPlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends MembershipPlanCountArgs>(
+      args?: Subset<T, MembershipPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MembershipPlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MembershipPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MembershipPlanAggregateArgs>(args: Subset<T, MembershipPlanAggregateArgs>): Prisma.PrismaPromise<GetMembershipPlanAggregateType<T>>
+
+    /**
+     * Group by MembershipPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MembershipPlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MembershipPlanGroupByArgs['orderBy'] }
+        : { orderBy?: MembershipPlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MembershipPlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMembershipPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MembershipPlan model
+   */
+  readonly fields: MembershipPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MembershipPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MembershipPlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    benefits<T extends MembershipPlan$benefitsArgs<ExtArgs> = {}>(args?: Subset<T, MembershipPlan$benefitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findMany"> | Null>
+    subscriptions<T extends MembershipPlan$subscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, MembershipPlan$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MembershipPlan model
+   */ 
+  interface MembershipPlanFieldRefs {
+    readonly id: FieldRef<"MembershipPlan", 'String'>
+    readonly tenantId: FieldRef<"MembershipPlan", 'String'>
+    readonly planCode: FieldRef<"MembershipPlan", 'String'>
+    readonly planName: FieldRef<"MembershipPlan", 'String'>
+    readonly description: FieldRef<"MembershipPlan", 'String'>
+    readonly tier: FieldRef<"MembershipPlan", 'MembershipTier'>
+    readonly category: FieldRef<"MembershipPlan", 'String'>
+    readonly basePrice: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly currency: FieldRef<"MembershipPlan", 'String'>
+    readonly billingCycle: FieldRef<"MembershipPlan", 'BillingCycle'>
+    readonly monthlyPrice: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly quarterlyPrice: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly semiAnnualPrice: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly annualPrice: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly enrollmentFee: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly reactivationFee: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly annualDiscountPercent: FieldRef<"MembershipPlan", 'Decimal'>
+    readonly benefitsSummary: FieldRef<"MembershipPlan", 'String'>
+    readonly minCommitmentMonths: FieldRef<"MembershipPlan", 'Int'>
+    readonly maxMembers: FieldRef<"MembershipPlan", 'Int'>
+    readonly ageMin: FieldRef<"MembershipPlan", 'Int'>
+    readonly ageMax: FieldRef<"MembershipPlan", 'Int'>
+    readonly requiresAssessment: FieldRef<"MembershipPlan", 'Boolean'>
+    readonly isActive: FieldRef<"MembershipPlan", 'Boolean'>
+    readonly isPublic: FieldRef<"MembershipPlan", 'Boolean'>
+    readonly displayOrder: FieldRef<"MembershipPlan", 'Int'>
+    readonly highlightFeatures: FieldRef<"MembershipPlan", 'Json'>
+    readonly availableFacilities: FieldRef<"MembershipPlan", 'String[]'>
+    readonly termsAndConditions: FieldRef<"MembershipPlan", 'String'>
+    readonly metadata: FieldRef<"MembershipPlan", 'Json'>
+    readonly createdAt: FieldRef<"MembershipPlan", 'DateTime'>
+    readonly updatedAt: FieldRef<"MembershipPlan", 'DateTime'>
+    readonly createdBy: FieldRef<"MembershipPlan", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MembershipPlan findUnique
+   */
+  export type MembershipPlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipPlan to fetch.
+     */
+    where: MembershipPlanWhereUniqueInput
+  }
+
+  /**
+   * MembershipPlan findUniqueOrThrow
+   */
+  export type MembershipPlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipPlan to fetch.
+     */
+    where: MembershipPlanWhereUniqueInput
+  }
+
+  /**
+   * MembershipPlan findFirst
+   */
+  export type MembershipPlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipPlan to fetch.
+     */
+    where?: MembershipPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipPlans to fetch.
+     */
+    orderBy?: MembershipPlanOrderByWithRelationInput | MembershipPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MembershipPlans.
+     */
+    cursor?: MembershipPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MembershipPlans.
+     */
+    distinct?: MembershipPlanScalarFieldEnum | MembershipPlanScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipPlan findFirstOrThrow
+   */
+  export type MembershipPlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipPlan to fetch.
+     */
+    where?: MembershipPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipPlans to fetch.
+     */
+    orderBy?: MembershipPlanOrderByWithRelationInput | MembershipPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MembershipPlans.
+     */
+    cursor?: MembershipPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MembershipPlans.
+     */
+    distinct?: MembershipPlanScalarFieldEnum | MembershipPlanScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipPlan findMany
+   */
+  export type MembershipPlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipPlans to fetch.
+     */
+    where?: MembershipPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipPlans to fetch.
+     */
+    orderBy?: MembershipPlanOrderByWithRelationInput | MembershipPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MembershipPlans.
+     */
+    cursor?: MembershipPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipPlans.
+     */
+    skip?: number
+    distinct?: MembershipPlanScalarFieldEnum | MembershipPlanScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipPlan create
+   */
+  export type MembershipPlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MembershipPlan.
+     */
+    data: XOR<MembershipPlanCreateInput, MembershipPlanUncheckedCreateInput>
+  }
+
+  /**
+   * MembershipPlan createMany
+   */
+  export type MembershipPlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MembershipPlans.
+     */
+    data: MembershipPlanCreateManyInput | MembershipPlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MembershipPlan createManyAndReturn
+   */
+  export type MembershipPlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MembershipPlans.
+     */
+    data: MembershipPlanCreateManyInput | MembershipPlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MembershipPlan update
+   */
+  export type MembershipPlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MembershipPlan.
+     */
+    data: XOR<MembershipPlanUpdateInput, MembershipPlanUncheckedUpdateInput>
+    /**
+     * Choose, which MembershipPlan to update.
+     */
+    where: MembershipPlanWhereUniqueInput
+  }
+
+  /**
+   * MembershipPlan updateMany
+   */
+  export type MembershipPlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MembershipPlans.
+     */
+    data: XOR<MembershipPlanUpdateManyMutationInput, MembershipPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which MembershipPlans to update
+     */
+    where?: MembershipPlanWhereInput
+  }
+
+  /**
+   * MembershipPlan upsert
+   */
+  export type MembershipPlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MembershipPlan to update in case it exists.
+     */
+    where: MembershipPlanWhereUniqueInput
+    /**
+     * In case the MembershipPlan found by the `where` argument doesn't exist, create a new MembershipPlan with this data.
+     */
+    create: XOR<MembershipPlanCreateInput, MembershipPlanUncheckedCreateInput>
+    /**
+     * In case the MembershipPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MembershipPlanUpdateInput, MembershipPlanUncheckedUpdateInput>
+  }
+
+  /**
+   * MembershipPlan delete
+   */
+  export type MembershipPlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+    /**
+     * Filter which MembershipPlan to delete.
+     */
+    where: MembershipPlanWhereUniqueInput
+  }
+
+  /**
+   * MembershipPlan deleteMany
+   */
+  export type MembershipPlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MembershipPlans to delete
+     */
+    where?: MembershipPlanWhereInput
+  }
+
+  /**
+   * MembershipPlan.benefits
+   */
+  export type MembershipPlan$benefitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    where?: PlanBenefitWhereInput
+    orderBy?: PlanBenefitOrderByWithRelationInput | PlanBenefitOrderByWithRelationInput[]
+    cursor?: PlanBenefitWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlanBenefitScalarFieldEnum | PlanBenefitScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipPlan.subscriptions
+   */
+  export type MembershipPlan$subscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    where?: MemberSubscriptionWhereInput
+    orderBy?: MemberSubscriptionOrderByWithRelationInput | MemberSubscriptionOrderByWithRelationInput[]
+    cursor?: MemberSubscriptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MemberSubscriptionScalarFieldEnum | MemberSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipPlan without action
+   */
+  export type MembershipPlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipPlan
+     */
+    select?: MembershipPlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipPlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PlanBenefit
+   */
+
+  export type AggregatePlanBenefit = {
+    _count: PlanBenefitCountAggregateOutputType | null
+    _avg: PlanBenefitAvgAggregateOutputType | null
+    _sum: PlanBenefitSumAggregateOutputType | null
+    _min: PlanBenefitMinAggregateOutputType | null
+    _max: PlanBenefitMaxAggregateOutputType | null
+  }
+
+  export type PlanBenefitAvgAggregateOutputType = {
+    quantityIncluded: number | null
+    discountPercent: Decimal | null
+    maxDiscountAmount: Decimal | null
+    displayOrder: number | null
+  }
+
+  export type PlanBenefitSumAggregateOutputType = {
+    quantityIncluded: number | null
+    discountPercent: Decimal | null
+    maxDiscountAmount: Decimal | null
+    displayOrder: number | null
+  }
+
+  export type PlanBenefitMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    planId: string | null
+    benefitType: $Enums.BenefitType | null
+    benefitName: string | null
+    description: string | null
+    quantityIncluded: number | null
+    usageResetOnRenewal: boolean | null
+    discountPercent: Decimal | null
+    maxDiscountAmount: Decimal | null
+    billingItemId: string | null
+    displayOrder: number | null
+    isHighlighted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanBenefitMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    planId: string | null
+    benefitType: $Enums.BenefitType | null
+    benefitName: string | null
+    description: string | null
+    quantityIncluded: number | null
+    usageResetOnRenewal: boolean | null
+    discountPercent: Decimal | null
+    maxDiscountAmount: Decimal | null
+    billingItemId: string | null
+    displayOrder: number | null
+    isHighlighted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanBenefitCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    planId: number
+    benefitType: number
+    benefitName: number
+    description: number
+    quantityIncluded: number
+    usageResetOnRenewal: number
+    discountPercent: number
+    maxDiscountAmount: number
+    applicableTo: number
+    billingItemId: number
+    displayOrder: number
+    isHighlighted: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PlanBenefitAvgAggregateInputType = {
+    quantityIncluded?: true
+    discountPercent?: true
+    maxDiscountAmount?: true
+    displayOrder?: true
+  }
+
+  export type PlanBenefitSumAggregateInputType = {
+    quantityIncluded?: true
+    discountPercent?: true
+    maxDiscountAmount?: true
+    displayOrder?: true
+  }
+
+  export type PlanBenefitMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planId?: true
+    benefitType?: true
+    benefitName?: true
+    description?: true
+    quantityIncluded?: true
+    usageResetOnRenewal?: true
+    discountPercent?: true
+    maxDiscountAmount?: true
+    billingItemId?: true
+    displayOrder?: true
+    isHighlighted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanBenefitMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planId?: true
+    benefitType?: true
+    benefitName?: true
+    description?: true
+    quantityIncluded?: true
+    usageResetOnRenewal?: true
+    discountPercent?: true
+    maxDiscountAmount?: true
+    billingItemId?: true
+    displayOrder?: true
+    isHighlighted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanBenefitCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planId?: true
+    benefitType?: true
+    benefitName?: true
+    description?: true
+    quantityIncluded?: true
+    usageResetOnRenewal?: true
+    discountPercent?: true
+    maxDiscountAmount?: true
+    applicableTo?: true
+    billingItemId?: true
+    displayOrder?: true
+    isHighlighted?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PlanBenefitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlanBenefit to aggregate.
+     */
+    where?: PlanBenefitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanBenefits to fetch.
+     */
+    orderBy?: PlanBenefitOrderByWithRelationInput | PlanBenefitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlanBenefitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanBenefits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanBenefits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PlanBenefits
+    **/
+    _count?: true | PlanBenefitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlanBenefitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlanBenefitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlanBenefitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlanBenefitMaxAggregateInputType
+  }
+
+  export type GetPlanBenefitAggregateType<T extends PlanBenefitAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlanBenefit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlanBenefit[P]>
+      : GetScalarType<T[P], AggregatePlanBenefit[P]>
+  }
+
+
+
+
+  export type PlanBenefitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlanBenefitWhereInput
+    orderBy?: PlanBenefitOrderByWithAggregationInput | PlanBenefitOrderByWithAggregationInput[]
+    by: PlanBenefitScalarFieldEnum[] | PlanBenefitScalarFieldEnum
+    having?: PlanBenefitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlanBenefitCountAggregateInputType | true
+    _avg?: PlanBenefitAvgAggregateInputType
+    _sum?: PlanBenefitSumAggregateInputType
+    _min?: PlanBenefitMinAggregateInputType
+    _max?: PlanBenefitMaxAggregateInputType
+  }
+
+  export type PlanBenefitGroupByOutputType = {
+    id: string
+    tenantId: string
+    planId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description: string | null
+    quantityIncluded: number | null
+    usageResetOnRenewal: boolean
+    discountPercent: Decimal | null
+    maxDiscountAmount: Decimal | null
+    applicableTo: JsonValue | null
+    billingItemId: string | null
+    displayOrder: number
+    isHighlighted: boolean
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PlanBenefitCountAggregateOutputType | null
+    _avg: PlanBenefitAvgAggregateOutputType | null
+    _sum: PlanBenefitSumAggregateOutputType | null
+    _min: PlanBenefitMinAggregateOutputType | null
+    _max: PlanBenefitMaxAggregateOutputType | null
+  }
+
+  type GetPlanBenefitGroupByPayload<T extends PlanBenefitGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlanBenefitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlanBenefitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlanBenefitGroupByOutputType[P]>
+            : GetScalarType<T[P], PlanBenefitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlanBenefitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    planId?: boolean
+    benefitType?: boolean
+    benefitName?: boolean
+    description?: boolean
+    quantityIncluded?: boolean
+    usageResetOnRenewal?: boolean
+    discountPercent?: boolean
+    maxDiscountAmount?: boolean
+    applicableTo?: boolean
+    billingItemId?: boolean
+    displayOrder?: boolean
+    isHighlighted?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    usages?: boolean | PlanBenefit$usagesArgs<ExtArgs>
+    _count?: boolean | PlanBenefitCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["planBenefit"]>
+
+  export type PlanBenefitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    planId?: boolean
+    benefitType?: boolean
+    benefitName?: boolean
+    description?: boolean
+    quantityIncluded?: boolean
+    usageResetOnRenewal?: boolean
+    discountPercent?: boolean
+    maxDiscountAmount?: boolean
+    applicableTo?: boolean
+    billingItemId?: boolean
+    displayOrder?: boolean
+    isHighlighted?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["planBenefit"]>
+
+  export type PlanBenefitSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    planId?: boolean
+    benefitType?: boolean
+    benefitName?: boolean
+    description?: boolean
+    quantityIncluded?: boolean
+    usageResetOnRenewal?: boolean
+    discountPercent?: boolean
+    maxDiscountAmount?: boolean
+    applicableTo?: boolean
+    billingItemId?: boolean
+    displayOrder?: boolean
+    isHighlighted?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PlanBenefitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    usages?: boolean | PlanBenefit$usagesArgs<ExtArgs>
+    _count?: boolean | PlanBenefitCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PlanBenefitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+  }
+
+  export type $PlanBenefitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PlanBenefit"
+    objects: {
+      plan: Prisma.$MembershipPlanPayload<ExtArgs>
+      usages: Prisma.$BenefitUsagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      planId: string
+      benefitType: $Enums.BenefitType
+      benefitName: string
+      description: string | null
+      quantityIncluded: number | null
+      usageResetOnRenewal: boolean
+      discountPercent: Prisma.Decimal | null
+      maxDiscountAmount: Prisma.Decimal | null
+      applicableTo: Prisma.JsonValue | null
+      billingItemId: string | null
+      displayOrder: number
+      isHighlighted: boolean
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["planBenefit"]>
+    composites: {}
+  }
+
+  type PlanBenefitGetPayload<S extends boolean | null | undefined | PlanBenefitDefaultArgs> = $Result.GetResult<Prisma.$PlanBenefitPayload, S>
+
+  type PlanBenefitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PlanBenefitFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PlanBenefitCountAggregateInputType | true
+    }
+
+  export interface PlanBenefitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlanBenefit'], meta: { name: 'PlanBenefit' } }
+    /**
+     * Find zero or one PlanBenefit that matches the filter.
+     * @param {PlanBenefitFindUniqueArgs} args - Arguments to find a PlanBenefit
+     * @example
+     * // Get one PlanBenefit
+     * const planBenefit = await prisma.planBenefit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlanBenefitFindUniqueArgs>(args: SelectSubset<T, PlanBenefitFindUniqueArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PlanBenefit that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PlanBenefitFindUniqueOrThrowArgs} args - Arguments to find a PlanBenefit
+     * @example
+     * // Get one PlanBenefit
+     * const planBenefit = await prisma.planBenefit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlanBenefitFindUniqueOrThrowArgs>(args: SelectSubset<T, PlanBenefitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PlanBenefit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanBenefitFindFirstArgs} args - Arguments to find a PlanBenefit
+     * @example
+     * // Get one PlanBenefit
+     * const planBenefit = await prisma.planBenefit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlanBenefitFindFirstArgs>(args?: SelectSubset<T, PlanBenefitFindFirstArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PlanBenefit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanBenefitFindFirstOrThrowArgs} args - Arguments to find a PlanBenefit
+     * @example
+     * // Get one PlanBenefit
+     * const planBenefit = await prisma.planBenefit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlanBenefitFindFirstOrThrowArgs>(args?: SelectSubset<T, PlanBenefitFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PlanBenefits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanBenefitFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PlanBenefits
+     * const planBenefits = await prisma.planBenefit.findMany()
+     * 
+     * // Get first 10 PlanBenefits
+     * const planBenefits = await prisma.planBenefit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const planBenefitWithIdOnly = await prisma.planBenefit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlanBenefitFindManyArgs>(args?: SelectSubset<T, PlanBenefitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PlanBenefit.
+     * @param {PlanBenefitCreateArgs} args - Arguments to create a PlanBenefit.
+     * @example
+     * // Create one PlanBenefit
+     * const PlanBenefit = await prisma.planBenefit.create({
+     *   data: {
+     *     // ... data to create a PlanBenefit
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlanBenefitCreateArgs>(args: SelectSubset<T, PlanBenefitCreateArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PlanBenefits.
+     * @param {PlanBenefitCreateManyArgs} args - Arguments to create many PlanBenefits.
+     * @example
+     * // Create many PlanBenefits
+     * const planBenefit = await prisma.planBenefit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlanBenefitCreateManyArgs>(args?: SelectSubset<T, PlanBenefitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PlanBenefits and returns the data saved in the database.
+     * @param {PlanBenefitCreateManyAndReturnArgs} args - Arguments to create many PlanBenefits.
+     * @example
+     * // Create many PlanBenefits
+     * const planBenefit = await prisma.planBenefit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PlanBenefits and only return the `id`
+     * const planBenefitWithIdOnly = await prisma.planBenefit.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlanBenefitCreateManyAndReturnArgs>(args?: SelectSubset<T, PlanBenefitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PlanBenefit.
+     * @param {PlanBenefitDeleteArgs} args - Arguments to delete one PlanBenefit.
+     * @example
+     * // Delete one PlanBenefit
+     * const PlanBenefit = await prisma.planBenefit.delete({
+     *   where: {
+     *     // ... filter to delete one PlanBenefit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlanBenefitDeleteArgs>(args: SelectSubset<T, PlanBenefitDeleteArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PlanBenefit.
+     * @param {PlanBenefitUpdateArgs} args - Arguments to update one PlanBenefit.
+     * @example
+     * // Update one PlanBenefit
+     * const planBenefit = await prisma.planBenefit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlanBenefitUpdateArgs>(args: SelectSubset<T, PlanBenefitUpdateArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PlanBenefits.
+     * @param {PlanBenefitDeleteManyArgs} args - Arguments to filter PlanBenefits to delete.
+     * @example
+     * // Delete a few PlanBenefits
+     * const { count } = await prisma.planBenefit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlanBenefitDeleteManyArgs>(args?: SelectSubset<T, PlanBenefitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlanBenefits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanBenefitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PlanBenefits
+     * const planBenefit = await prisma.planBenefit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlanBenefitUpdateManyArgs>(args: SelectSubset<T, PlanBenefitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PlanBenefit.
+     * @param {PlanBenefitUpsertArgs} args - Arguments to update or create a PlanBenefit.
+     * @example
+     * // Update or create a PlanBenefit
+     * const planBenefit = await prisma.planBenefit.upsert({
+     *   create: {
+     *     // ... data to create a PlanBenefit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PlanBenefit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlanBenefitUpsertArgs>(args: SelectSubset<T, PlanBenefitUpsertArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PlanBenefits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanBenefitCountArgs} args - Arguments to filter PlanBenefits to count.
+     * @example
+     * // Count the number of PlanBenefits
+     * const count = await prisma.planBenefit.count({
+     *   where: {
+     *     // ... the filter for the PlanBenefits we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlanBenefitCountArgs>(
+      args?: Subset<T, PlanBenefitCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlanBenefitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PlanBenefit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanBenefitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlanBenefitAggregateArgs>(args: Subset<T, PlanBenefitAggregateArgs>): Prisma.PrismaPromise<GetPlanBenefitAggregateType<T>>
+
+    /**
+     * Group by PlanBenefit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanBenefitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlanBenefitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlanBenefitGroupByArgs['orderBy'] }
+        : { orderBy?: PlanBenefitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlanBenefitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlanBenefitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PlanBenefit model
+   */
+  readonly fields: PlanBenefitFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PlanBenefit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlanBenefitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    plan<T extends MembershipPlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MembershipPlanDefaultArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    usages<T extends PlanBenefit$usagesArgs<ExtArgs> = {}>(args?: Subset<T, PlanBenefit$usagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PlanBenefit model
+   */ 
+  interface PlanBenefitFieldRefs {
+    readonly id: FieldRef<"PlanBenefit", 'String'>
+    readonly tenantId: FieldRef<"PlanBenefit", 'String'>
+    readonly planId: FieldRef<"PlanBenefit", 'String'>
+    readonly benefitType: FieldRef<"PlanBenefit", 'BenefitType'>
+    readonly benefitName: FieldRef<"PlanBenefit", 'String'>
+    readonly description: FieldRef<"PlanBenefit", 'String'>
+    readonly quantityIncluded: FieldRef<"PlanBenefit", 'Int'>
+    readonly usageResetOnRenewal: FieldRef<"PlanBenefit", 'Boolean'>
+    readonly discountPercent: FieldRef<"PlanBenefit", 'Decimal'>
+    readonly maxDiscountAmount: FieldRef<"PlanBenefit", 'Decimal'>
+    readonly applicableTo: FieldRef<"PlanBenefit", 'Json'>
+    readonly billingItemId: FieldRef<"PlanBenefit", 'String'>
+    readonly displayOrder: FieldRef<"PlanBenefit", 'Int'>
+    readonly isHighlighted: FieldRef<"PlanBenefit", 'Boolean'>
+    readonly metadata: FieldRef<"PlanBenefit", 'Json'>
+    readonly createdAt: FieldRef<"PlanBenefit", 'DateTime'>
+    readonly updatedAt: FieldRef<"PlanBenefit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PlanBenefit findUnique
+   */
+  export type PlanBenefitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanBenefit to fetch.
+     */
+    where: PlanBenefitWhereUniqueInput
+  }
+
+  /**
+   * PlanBenefit findUniqueOrThrow
+   */
+  export type PlanBenefitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanBenefit to fetch.
+     */
+    where: PlanBenefitWhereUniqueInput
+  }
+
+  /**
+   * PlanBenefit findFirst
+   */
+  export type PlanBenefitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanBenefit to fetch.
+     */
+    where?: PlanBenefitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanBenefits to fetch.
+     */
+    orderBy?: PlanBenefitOrderByWithRelationInput | PlanBenefitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlanBenefits.
+     */
+    cursor?: PlanBenefitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanBenefits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanBenefits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlanBenefits.
+     */
+    distinct?: PlanBenefitScalarFieldEnum | PlanBenefitScalarFieldEnum[]
+  }
+
+  /**
+   * PlanBenefit findFirstOrThrow
+   */
+  export type PlanBenefitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanBenefit to fetch.
+     */
+    where?: PlanBenefitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanBenefits to fetch.
+     */
+    orderBy?: PlanBenefitOrderByWithRelationInput | PlanBenefitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlanBenefits.
+     */
+    cursor?: PlanBenefitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanBenefits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanBenefits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlanBenefits.
+     */
+    distinct?: PlanBenefitScalarFieldEnum | PlanBenefitScalarFieldEnum[]
+  }
+
+  /**
+   * PlanBenefit findMany
+   */
+  export type PlanBenefitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanBenefits to fetch.
+     */
+    where?: PlanBenefitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanBenefits to fetch.
+     */
+    orderBy?: PlanBenefitOrderByWithRelationInput | PlanBenefitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PlanBenefits.
+     */
+    cursor?: PlanBenefitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanBenefits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanBenefits.
+     */
+    skip?: number
+    distinct?: PlanBenefitScalarFieldEnum | PlanBenefitScalarFieldEnum[]
+  }
+
+  /**
+   * PlanBenefit create
+   */
+  export type PlanBenefitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PlanBenefit.
+     */
+    data: XOR<PlanBenefitCreateInput, PlanBenefitUncheckedCreateInput>
+  }
+
+  /**
+   * PlanBenefit createMany
+   */
+  export type PlanBenefitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PlanBenefits.
+     */
+    data: PlanBenefitCreateManyInput | PlanBenefitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlanBenefit createManyAndReturn
+   */
+  export type PlanBenefitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PlanBenefits.
+     */
+    data: PlanBenefitCreateManyInput | PlanBenefitCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PlanBenefit update
+   */
+  export type PlanBenefitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PlanBenefit.
+     */
+    data: XOR<PlanBenefitUpdateInput, PlanBenefitUncheckedUpdateInput>
+    /**
+     * Choose, which PlanBenefit to update.
+     */
+    where: PlanBenefitWhereUniqueInput
+  }
+
+  /**
+   * PlanBenefit updateMany
+   */
+  export type PlanBenefitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PlanBenefits.
+     */
+    data: XOR<PlanBenefitUpdateManyMutationInput, PlanBenefitUncheckedUpdateManyInput>
+    /**
+     * Filter which PlanBenefits to update
+     */
+    where?: PlanBenefitWhereInput
+  }
+
+  /**
+   * PlanBenefit upsert
+   */
+  export type PlanBenefitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PlanBenefit to update in case it exists.
+     */
+    where: PlanBenefitWhereUniqueInput
+    /**
+     * In case the PlanBenefit found by the `where` argument doesn't exist, create a new PlanBenefit with this data.
+     */
+    create: XOR<PlanBenefitCreateInput, PlanBenefitUncheckedCreateInput>
+    /**
+     * In case the PlanBenefit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlanBenefitUpdateInput, PlanBenefitUncheckedUpdateInput>
+  }
+
+  /**
+   * PlanBenefit delete
+   */
+  export type PlanBenefitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+    /**
+     * Filter which PlanBenefit to delete.
+     */
+    where: PlanBenefitWhereUniqueInput
+  }
+
+  /**
+   * PlanBenefit deleteMany
+   */
+  export type PlanBenefitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlanBenefits to delete
+     */
+    where?: PlanBenefitWhereInput
+  }
+
+  /**
+   * PlanBenefit.usages
+   */
+  export type PlanBenefit$usagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    where?: BenefitUsageWhereInput
+    orderBy?: BenefitUsageOrderByWithRelationInput | BenefitUsageOrderByWithRelationInput[]
+    cursor?: BenefitUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BenefitUsageScalarFieldEnum | BenefitUsageScalarFieldEnum[]
+  }
+
+  /**
+   * PlanBenefit without action
+   */
+  export type PlanBenefitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanBenefit
+     */
+    select?: PlanBenefitSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanBenefitInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MemberSubscription
+   */
+
+  export type AggregateMemberSubscription = {
+    _count: MemberSubscriptionCountAggregateOutputType | null
+    _avg: MemberSubscriptionAvgAggregateOutputType | null
+    _sum: MemberSubscriptionSumAggregateOutputType | null
+    _min: MemberSubscriptionMinAggregateOutputType | null
+    _max: MemberSubscriptionMaxAggregateOutputType | null
+  }
+
+  export type MemberSubscriptionAvgAggregateOutputType = {
+    recurringAmount: Decimal | null
+    enrollmentFeeCharged: Decimal | null
+  }
+
+  export type MemberSubscriptionSumAggregateOutputType = {
+    recurringAmount: Decimal | null
+    enrollmentFeeCharged: Decimal | null
+  }
+
+  export type MemberSubscriptionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    planId: string | null
+    billingCycle: $Enums.BillingCycle | null
+    subscriptionNumber: string | null
+    status: $Enums.SubscriptionStatus | null
+    enrolledAt: Date | null
+    activatedAt: Date | null
+    startDate: Date | null
+    endDate: Date | null
+    currentPeriodStart: Date | null
+    currentPeriodEnd: Date | null
+    nextBillingDate: Date | null
+    cancelledAt: Date | null
+    cancelledBy: string | null
+    cancellationReason: string | null
+    cancelAtPeriodEnd: boolean | null
+    recurringAmount: Decimal | null
+    currency: string | null
+    enrollmentFeeCharged: Decimal | null
+    paymentMethod: string | null
+    paymentReference: string | null
+    autoRenew: boolean | null
+    primarySubscriptionId: string | null
+    isDependent: boolean | null
+    referredBy: string | null
+    linkedProgramEnrollmentId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type MemberSubscriptionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    planId: string | null
+    billingCycle: $Enums.BillingCycle | null
+    subscriptionNumber: string | null
+    status: $Enums.SubscriptionStatus | null
+    enrolledAt: Date | null
+    activatedAt: Date | null
+    startDate: Date | null
+    endDate: Date | null
+    currentPeriodStart: Date | null
+    currentPeriodEnd: Date | null
+    nextBillingDate: Date | null
+    cancelledAt: Date | null
+    cancelledBy: string | null
+    cancellationReason: string | null
+    cancelAtPeriodEnd: boolean | null
+    recurringAmount: Decimal | null
+    currency: string | null
+    enrollmentFeeCharged: Decimal | null
+    paymentMethod: string | null
+    paymentReference: string | null
+    autoRenew: boolean | null
+    primarySubscriptionId: string | null
+    isDependent: boolean | null
+    referredBy: string | null
+    linkedProgramEnrollmentId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type MemberSubscriptionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    mrn: number
+    patientDisplayName: number
+    planId: number
+    billingCycle: number
+    subscriptionNumber: number
+    status: number
+    enrolledAt: number
+    activatedAt: number
+    startDate: number
+    endDate: number
+    currentPeriodStart: number
+    currentPeriodEnd: number
+    nextBillingDate: number
+    cancelledAt: number
+    cancelledBy: number
+    cancellationReason: number
+    cancelAtPeriodEnd: number
+    recurringAmount: number
+    currency: number
+    enrollmentFeeCharged: number
+    paymentMethod: number
+    paymentReference: number
+    autoRenew: number
+    primarySubscriptionId: number
+    isDependent: number
+    referredBy: number
+    linkedProgramEnrollmentId: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type MemberSubscriptionAvgAggregateInputType = {
+    recurringAmount?: true
+    enrollmentFeeCharged?: true
+  }
+
+  export type MemberSubscriptionSumAggregateInputType = {
+    recurringAmount?: true
+    enrollmentFeeCharged?: true
+  }
+
+  export type MemberSubscriptionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    mrn?: true
+    patientDisplayName?: true
+    planId?: true
+    billingCycle?: true
+    subscriptionNumber?: true
+    status?: true
+    enrolledAt?: true
+    activatedAt?: true
+    startDate?: true
+    endDate?: true
+    currentPeriodStart?: true
+    currentPeriodEnd?: true
+    nextBillingDate?: true
+    cancelledAt?: true
+    cancelledBy?: true
+    cancellationReason?: true
+    cancelAtPeriodEnd?: true
+    recurringAmount?: true
+    currency?: true
+    enrollmentFeeCharged?: true
+    paymentMethod?: true
+    paymentReference?: true
+    autoRenew?: true
+    primarySubscriptionId?: true
+    isDependent?: true
+    referredBy?: true
+    linkedProgramEnrollmentId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type MemberSubscriptionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    mrn?: true
+    patientDisplayName?: true
+    planId?: true
+    billingCycle?: true
+    subscriptionNumber?: true
+    status?: true
+    enrolledAt?: true
+    activatedAt?: true
+    startDate?: true
+    endDate?: true
+    currentPeriodStart?: true
+    currentPeriodEnd?: true
+    nextBillingDate?: true
+    cancelledAt?: true
+    cancelledBy?: true
+    cancellationReason?: true
+    cancelAtPeriodEnd?: true
+    recurringAmount?: true
+    currency?: true
+    enrollmentFeeCharged?: true
+    paymentMethod?: true
+    paymentReference?: true
+    autoRenew?: true
+    primarySubscriptionId?: true
+    isDependent?: true
+    referredBy?: true
+    linkedProgramEnrollmentId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type MemberSubscriptionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    mrn?: true
+    patientDisplayName?: true
+    planId?: true
+    billingCycle?: true
+    subscriptionNumber?: true
+    status?: true
+    enrolledAt?: true
+    activatedAt?: true
+    startDate?: true
+    endDate?: true
+    currentPeriodStart?: true
+    currentPeriodEnd?: true
+    nextBillingDate?: true
+    cancelledAt?: true
+    cancelledBy?: true
+    cancellationReason?: true
+    cancelAtPeriodEnd?: true
+    recurringAmount?: true
+    currency?: true
+    enrollmentFeeCharged?: true
+    paymentMethod?: true
+    paymentReference?: true
+    autoRenew?: true
+    primarySubscriptionId?: true
+    isDependent?: true
+    referredBy?: true
+    linkedProgramEnrollmentId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type MemberSubscriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MemberSubscription to aggregate.
+     */
+    where?: MemberSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MemberSubscriptions to fetch.
+     */
+    orderBy?: MemberSubscriptionOrderByWithRelationInput | MemberSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MemberSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MemberSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MemberSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MemberSubscriptions
+    **/
+    _count?: true | MemberSubscriptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MemberSubscriptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MemberSubscriptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MemberSubscriptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MemberSubscriptionMaxAggregateInputType
+  }
+
+  export type GetMemberSubscriptionAggregateType<T extends MemberSubscriptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMemberSubscription]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMemberSubscription[P]>
+      : GetScalarType<T[P], AggregateMemberSubscription[P]>
+  }
+
+
+
+
+  export type MemberSubscriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MemberSubscriptionWhereInput
+    orderBy?: MemberSubscriptionOrderByWithAggregationInput | MemberSubscriptionOrderByWithAggregationInput[]
+    by: MemberSubscriptionScalarFieldEnum[] | MemberSubscriptionScalarFieldEnum
+    having?: MemberSubscriptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MemberSubscriptionCountAggregateInputType | true
+    _avg?: MemberSubscriptionAvgAggregateInputType
+    _sum?: MemberSubscriptionSumAggregateInputType
+    _min?: MemberSubscriptionMinAggregateInputType
+    _max?: MemberSubscriptionMaxAggregateInputType
+  }
+
+  export type MemberSubscriptionGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    mrn: string | null
+    patientDisplayName: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status: $Enums.SubscriptionStatus
+    enrolledAt: Date
+    activatedAt: Date | null
+    startDate: Date
+    endDate: Date | null
+    currentPeriodStart: Date
+    currentPeriodEnd: Date
+    nextBillingDate: Date | null
+    cancelledAt: Date | null
+    cancelledBy: string | null
+    cancellationReason: string | null
+    cancelAtPeriodEnd: boolean
+    recurringAmount: Decimal
+    currency: string
+    enrollmentFeeCharged: Decimal
+    paymentMethod: string | null
+    paymentReference: string | null
+    autoRenew: boolean
+    primarySubscriptionId: string | null
+    isDependent: boolean
+    referredBy: string | null
+    linkedProgramEnrollmentId: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string
+    _count: MemberSubscriptionCountAggregateOutputType | null
+    _avg: MemberSubscriptionAvgAggregateOutputType | null
+    _sum: MemberSubscriptionSumAggregateOutputType | null
+    _min: MemberSubscriptionMinAggregateOutputType | null
+    _max: MemberSubscriptionMaxAggregateOutputType | null
+  }
+
+  type GetMemberSubscriptionGroupByPayload<T extends MemberSubscriptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MemberSubscriptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MemberSubscriptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MemberSubscriptionGroupByOutputType[P]>
+            : GetScalarType<T[P], MemberSubscriptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MemberSubscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    planId?: boolean
+    billingCycle?: boolean
+    subscriptionNumber?: boolean
+    status?: boolean
+    enrolledAt?: boolean
+    activatedAt?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    currentPeriodStart?: boolean
+    currentPeriodEnd?: boolean
+    nextBillingDate?: boolean
+    cancelledAt?: boolean
+    cancelledBy?: boolean
+    cancellationReason?: boolean
+    cancelAtPeriodEnd?: boolean
+    recurringAmount?: boolean
+    currency?: boolean
+    enrollmentFeeCharged?: boolean
+    paymentMethod?: boolean
+    paymentReference?: boolean
+    autoRenew?: boolean
+    primarySubscriptionId?: boolean
+    isDependent?: boolean
+    referredBy?: boolean
+    linkedProgramEnrollmentId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    primarySubscription?: boolean | MemberSubscription$primarySubscriptionArgs<ExtArgs>
+    dependentSubscriptions?: boolean | MemberSubscription$dependentSubscriptionsArgs<ExtArgs>
+    benefitUsages?: boolean | MemberSubscription$benefitUsagesArgs<ExtArgs>
+    invoices?: boolean | MemberSubscription$invoicesArgs<ExtArgs>
+    billingEvents?: boolean | MemberSubscription$billingEventsArgs<ExtArgs>
+    _count?: boolean | MemberSubscriptionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["memberSubscription"]>
+
+  export type MemberSubscriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    planId?: boolean
+    billingCycle?: boolean
+    subscriptionNumber?: boolean
+    status?: boolean
+    enrolledAt?: boolean
+    activatedAt?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    currentPeriodStart?: boolean
+    currentPeriodEnd?: boolean
+    nextBillingDate?: boolean
+    cancelledAt?: boolean
+    cancelledBy?: boolean
+    cancellationReason?: boolean
+    cancelAtPeriodEnd?: boolean
+    recurringAmount?: boolean
+    currency?: boolean
+    enrollmentFeeCharged?: boolean
+    paymentMethod?: boolean
+    paymentReference?: boolean
+    autoRenew?: boolean
+    primarySubscriptionId?: boolean
+    isDependent?: boolean
+    referredBy?: boolean
+    linkedProgramEnrollmentId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    primarySubscription?: boolean | MemberSubscription$primarySubscriptionArgs<ExtArgs>
+  }, ExtArgs["result"]["memberSubscription"]>
+
+  export type MemberSubscriptionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    planId?: boolean
+    billingCycle?: boolean
+    subscriptionNumber?: boolean
+    status?: boolean
+    enrolledAt?: boolean
+    activatedAt?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    currentPeriodStart?: boolean
+    currentPeriodEnd?: boolean
+    nextBillingDate?: boolean
+    cancelledAt?: boolean
+    cancelledBy?: boolean
+    cancellationReason?: boolean
+    cancelAtPeriodEnd?: boolean
+    recurringAmount?: boolean
+    currency?: boolean
+    enrollmentFeeCharged?: boolean
+    paymentMethod?: boolean
+    paymentReference?: boolean
+    autoRenew?: boolean
+    primarySubscriptionId?: boolean
+    isDependent?: boolean
+    referredBy?: boolean
+    linkedProgramEnrollmentId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type MemberSubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    primarySubscription?: boolean | MemberSubscription$primarySubscriptionArgs<ExtArgs>
+    dependentSubscriptions?: boolean | MemberSubscription$dependentSubscriptionsArgs<ExtArgs>
+    benefitUsages?: boolean | MemberSubscription$benefitUsagesArgs<ExtArgs>
+    invoices?: boolean | MemberSubscription$invoicesArgs<ExtArgs>
+    billingEvents?: boolean | MemberSubscription$billingEventsArgs<ExtArgs>
+    _count?: boolean | MemberSubscriptionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MemberSubscriptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    primarySubscription?: boolean | MemberSubscription$primarySubscriptionArgs<ExtArgs>
+  }
+
+  export type $MemberSubscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MemberSubscription"
+    objects: {
+      plan: Prisma.$MembershipPlanPayload<ExtArgs>
+      primarySubscription: Prisma.$MemberSubscriptionPayload<ExtArgs> | null
+      dependentSubscriptions: Prisma.$MemberSubscriptionPayload<ExtArgs>[]
+      benefitUsages: Prisma.$BenefitUsagePayload<ExtArgs>[]
+      invoices: Prisma.$SubscriptionInvoicePayload<ExtArgs>[]
+      billingEvents: Prisma.$SubscriptionBillingEventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      mrn: string | null
+      patientDisplayName: string | null
+      planId: string
+      billingCycle: $Enums.BillingCycle
+      subscriptionNumber: string
+      status: $Enums.SubscriptionStatus
+      enrolledAt: Date
+      activatedAt: Date | null
+      startDate: Date
+      endDate: Date | null
+      currentPeriodStart: Date
+      currentPeriodEnd: Date
+      nextBillingDate: Date | null
+      cancelledAt: Date | null
+      cancelledBy: string | null
+      cancellationReason: string | null
+      cancelAtPeriodEnd: boolean
+      recurringAmount: Prisma.Decimal
+      currency: string
+      enrollmentFeeCharged: Prisma.Decimal
+      paymentMethod: string | null
+      paymentReference: string | null
+      autoRenew: boolean
+      primarySubscriptionId: string | null
+      isDependent: boolean
+      referredBy: string | null
+      linkedProgramEnrollmentId: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string
+    }, ExtArgs["result"]["memberSubscription"]>
+    composites: {}
+  }
+
+  type MemberSubscriptionGetPayload<S extends boolean | null | undefined | MemberSubscriptionDefaultArgs> = $Result.GetResult<Prisma.$MemberSubscriptionPayload, S>
+
+  type MemberSubscriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MemberSubscriptionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MemberSubscriptionCountAggregateInputType | true
+    }
+
+  export interface MemberSubscriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MemberSubscription'], meta: { name: 'MemberSubscription' } }
+    /**
+     * Find zero or one MemberSubscription that matches the filter.
+     * @param {MemberSubscriptionFindUniqueArgs} args - Arguments to find a MemberSubscription
+     * @example
+     * // Get one MemberSubscription
+     * const memberSubscription = await prisma.memberSubscription.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MemberSubscriptionFindUniqueArgs>(args: SelectSubset<T, MemberSubscriptionFindUniqueArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MemberSubscription that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MemberSubscriptionFindUniqueOrThrowArgs} args - Arguments to find a MemberSubscription
+     * @example
+     * // Get one MemberSubscription
+     * const memberSubscription = await prisma.memberSubscription.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MemberSubscriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, MemberSubscriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MemberSubscription that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MemberSubscriptionFindFirstArgs} args - Arguments to find a MemberSubscription
+     * @example
+     * // Get one MemberSubscription
+     * const memberSubscription = await prisma.memberSubscription.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MemberSubscriptionFindFirstArgs>(args?: SelectSubset<T, MemberSubscriptionFindFirstArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MemberSubscription that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MemberSubscriptionFindFirstOrThrowArgs} args - Arguments to find a MemberSubscription
+     * @example
+     * // Get one MemberSubscription
+     * const memberSubscription = await prisma.memberSubscription.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MemberSubscriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, MemberSubscriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MemberSubscriptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MemberSubscriptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MemberSubscriptions
+     * const memberSubscriptions = await prisma.memberSubscription.findMany()
+     * 
+     * // Get first 10 MemberSubscriptions
+     * const memberSubscriptions = await prisma.memberSubscription.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const memberSubscriptionWithIdOnly = await prisma.memberSubscription.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MemberSubscriptionFindManyArgs>(args?: SelectSubset<T, MemberSubscriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MemberSubscription.
+     * @param {MemberSubscriptionCreateArgs} args - Arguments to create a MemberSubscription.
+     * @example
+     * // Create one MemberSubscription
+     * const MemberSubscription = await prisma.memberSubscription.create({
+     *   data: {
+     *     // ... data to create a MemberSubscription
+     *   }
+     * })
+     * 
+     */
+    create<T extends MemberSubscriptionCreateArgs>(args: SelectSubset<T, MemberSubscriptionCreateArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MemberSubscriptions.
+     * @param {MemberSubscriptionCreateManyArgs} args - Arguments to create many MemberSubscriptions.
+     * @example
+     * // Create many MemberSubscriptions
+     * const memberSubscription = await prisma.memberSubscription.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MemberSubscriptionCreateManyArgs>(args?: SelectSubset<T, MemberSubscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MemberSubscriptions and returns the data saved in the database.
+     * @param {MemberSubscriptionCreateManyAndReturnArgs} args - Arguments to create many MemberSubscriptions.
+     * @example
+     * // Create many MemberSubscriptions
+     * const memberSubscription = await prisma.memberSubscription.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MemberSubscriptions and only return the `id`
+     * const memberSubscriptionWithIdOnly = await prisma.memberSubscription.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MemberSubscriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, MemberSubscriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MemberSubscription.
+     * @param {MemberSubscriptionDeleteArgs} args - Arguments to delete one MemberSubscription.
+     * @example
+     * // Delete one MemberSubscription
+     * const MemberSubscription = await prisma.memberSubscription.delete({
+     *   where: {
+     *     // ... filter to delete one MemberSubscription
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MemberSubscriptionDeleteArgs>(args: SelectSubset<T, MemberSubscriptionDeleteArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MemberSubscription.
+     * @param {MemberSubscriptionUpdateArgs} args - Arguments to update one MemberSubscription.
+     * @example
+     * // Update one MemberSubscription
+     * const memberSubscription = await prisma.memberSubscription.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MemberSubscriptionUpdateArgs>(args: SelectSubset<T, MemberSubscriptionUpdateArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MemberSubscriptions.
+     * @param {MemberSubscriptionDeleteManyArgs} args - Arguments to filter MemberSubscriptions to delete.
+     * @example
+     * // Delete a few MemberSubscriptions
+     * const { count } = await prisma.memberSubscription.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MemberSubscriptionDeleteManyArgs>(args?: SelectSubset<T, MemberSubscriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MemberSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MemberSubscriptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MemberSubscriptions
+     * const memberSubscription = await prisma.memberSubscription.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MemberSubscriptionUpdateManyArgs>(args: SelectSubset<T, MemberSubscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MemberSubscription.
+     * @param {MemberSubscriptionUpsertArgs} args - Arguments to update or create a MemberSubscription.
+     * @example
+     * // Update or create a MemberSubscription
+     * const memberSubscription = await prisma.memberSubscription.upsert({
+     *   create: {
+     *     // ... data to create a MemberSubscription
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MemberSubscription we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MemberSubscriptionUpsertArgs>(args: SelectSubset<T, MemberSubscriptionUpsertArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MemberSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MemberSubscriptionCountArgs} args - Arguments to filter MemberSubscriptions to count.
+     * @example
+     * // Count the number of MemberSubscriptions
+     * const count = await prisma.memberSubscription.count({
+     *   where: {
+     *     // ... the filter for the MemberSubscriptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends MemberSubscriptionCountArgs>(
+      args?: Subset<T, MemberSubscriptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MemberSubscriptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MemberSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MemberSubscriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MemberSubscriptionAggregateArgs>(args: Subset<T, MemberSubscriptionAggregateArgs>): Prisma.PrismaPromise<GetMemberSubscriptionAggregateType<T>>
+
+    /**
+     * Group by MemberSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MemberSubscriptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MemberSubscriptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MemberSubscriptionGroupByArgs['orderBy'] }
+        : { orderBy?: MemberSubscriptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MemberSubscriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMemberSubscriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MemberSubscription model
+   */
+  readonly fields: MemberSubscriptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MemberSubscription.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MemberSubscriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    plan<T extends MembershipPlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MembershipPlanDefaultArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    primarySubscription<T extends MemberSubscription$primarySubscriptionArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscription$primarySubscriptionArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    dependentSubscriptions<T extends MemberSubscription$dependentSubscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscription$dependentSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findMany"> | Null>
+    benefitUsages<T extends MemberSubscription$benefitUsagesArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscription$benefitUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "findMany"> | Null>
+    invoices<T extends MemberSubscription$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscription$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "findMany"> | Null>
+    billingEvents<T extends MemberSubscription$billingEventsArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscription$billingEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MemberSubscription model
+   */ 
+  interface MemberSubscriptionFieldRefs {
+    readonly id: FieldRef<"MemberSubscription", 'String'>
+    readonly tenantId: FieldRef<"MemberSubscription", 'String'>
+    readonly patientId: FieldRef<"MemberSubscription", 'String'>
+    readonly mrn: FieldRef<"MemberSubscription", 'String'>
+    readonly patientDisplayName: FieldRef<"MemberSubscription", 'String'>
+    readonly planId: FieldRef<"MemberSubscription", 'String'>
+    readonly billingCycle: FieldRef<"MemberSubscription", 'BillingCycle'>
+    readonly subscriptionNumber: FieldRef<"MemberSubscription", 'String'>
+    readonly status: FieldRef<"MemberSubscription", 'SubscriptionStatus'>
+    readonly enrolledAt: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly activatedAt: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly startDate: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly endDate: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly currentPeriodStart: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly currentPeriodEnd: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly nextBillingDate: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly cancelledAt: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly cancelledBy: FieldRef<"MemberSubscription", 'String'>
+    readonly cancellationReason: FieldRef<"MemberSubscription", 'String'>
+    readonly cancelAtPeriodEnd: FieldRef<"MemberSubscription", 'Boolean'>
+    readonly recurringAmount: FieldRef<"MemberSubscription", 'Decimal'>
+    readonly currency: FieldRef<"MemberSubscription", 'String'>
+    readonly enrollmentFeeCharged: FieldRef<"MemberSubscription", 'Decimal'>
+    readonly paymentMethod: FieldRef<"MemberSubscription", 'String'>
+    readonly paymentReference: FieldRef<"MemberSubscription", 'String'>
+    readonly autoRenew: FieldRef<"MemberSubscription", 'Boolean'>
+    readonly primarySubscriptionId: FieldRef<"MemberSubscription", 'String'>
+    readonly isDependent: FieldRef<"MemberSubscription", 'Boolean'>
+    readonly referredBy: FieldRef<"MemberSubscription", 'String'>
+    readonly linkedProgramEnrollmentId: FieldRef<"MemberSubscription", 'String'>
+    readonly notes: FieldRef<"MemberSubscription", 'String'>
+    readonly createdAt: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly updatedAt: FieldRef<"MemberSubscription", 'DateTime'>
+    readonly createdBy: FieldRef<"MemberSubscription", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MemberSubscription findUnique
+   */
+  export type MemberSubscriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MemberSubscription to fetch.
+     */
+    where: MemberSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * MemberSubscription findUniqueOrThrow
+   */
+  export type MemberSubscriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MemberSubscription to fetch.
+     */
+    where: MemberSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * MemberSubscription findFirst
+   */
+  export type MemberSubscriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MemberSubscription to fetch.
+     */
+    where?: MemberSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MemberSubscriptions to fetch.
+     */
+    orderBy?: MemberSubscriptionOrderByWithRelationInput | MemberSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MemberSubscriptions.
+     */
+    cursor?: MemberSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MemberSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MemberSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MemberSubscriptions.
+     */
+    distinct?: MemberSubscriptionScalarFieldEnum | MemberSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * MemberSubscription findFirstOrThrow
+   */
+  export type MemberSubscriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MemberSubscription to fetch.
+     */
+    where?: MemberSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MemberSubscriptions to fetch.
+     */
+    orderBy?: MemberSubscriptionOrderByWithRelationInput | MemberSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MemberSubscriptions.
+     */
+    cursor?: MemberSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MemberSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MemberSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MemberSubscriptions.
+     */
+    distinct?: MemberSubscriptionScalarFieldEnum | MemberSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * MemberSubscription findMany
+   */
+  export type MemberSubscriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MemberSubscriptions to fetch.
+     */
+    where?: MemberSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MemberSubscriptions to fetch.
+     */
+    orderBy?: MemberSubscriptionOrderByWithRelationInput | MemberSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MemberSubscriptions.
+     */
+    cursor?: MemberSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MemberSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MemberSubscriptions.
+     */
+    skip?: number
+    distinct?: MemberSubscriptionScalarFieldEnum | MemberSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * MemberSubscription create
+   */
+  export type MemberSubscriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MemberSubscription.
+     */
+    data: XOR<MemberSubscriptionCreateInput, MemberSubscriptionUncheckedCreateInput>
+  }
+
+  /**
+   * MemberSubscription createMany
+   */
+  export type MemberSubscriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MemberSubscriptions.
+     */
+    data: MemberSubscriptionCreateManyInput | MemberSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MemberSubscription createManyAndReturn
+   */
+  export type MemberSubscriptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MemberSubscriptions.
+     */
+    data: MemberSubscriptionCreateManyInput | MemberSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MemberSubscription update
+   */
+  export type MemberSubscriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MemberSubscription.
+     */
+    data: XOR<MemberSubscriptionUpdateInput, MemberSubscriptionUncheckedUpdateInput>
+    /**
+     * Choose, which MemberSubscription to update.
+     */
+    where: MemberSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * MemberSubscription updateMany
+   */
+  export type MemberSubscriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MemberSubscriptions.
+     */
+    data: XOR<MemberSubscriptionUpdateManyMutationInput, MemberSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which MemberSubscriptions to update
+     */
+    where?: MemberSubscriptionWhereInput
+  }
+
+  /**
+   * MemberSubscription upsert
+   */
+  export type MemberSubscriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MemberSubscription to update in case it exists.
+     */
+    where: MemberSubscriptionWhereUniqueInput
+    /**
+     * In case the MemberSubscription found by the `where` argument doesn't exist, create a new MemberSubscription with this data.
+     */
+    create: XOR<MemberSubscriptionCreateInput, MemberSubscriptionUncheckedCreateInput>
+    /**
+     * In case the MemberSubscription was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MemberSubscriptionUpdateInput, MemberSubscriptionUncheckedUpdateInput>
+  }
+
+  /**
+   * MemberSubscription delete
+   */
+  export type MemberSubscriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter which MemberSubscription to delete.
+     */
+    where: MemberSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * MemberSubscription deleteMany
+   */
+  export type MemberSubscriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MemberSubscriptions to delete
+     */
+    where?: MemberSubscriptionWhereInput
+  }
+
+  /**
+   * MemberSubscription.primarySubscription
+   */
+  export type MemberSubscription$primarySubscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    where?: MemberSubscriptionWhereInput
+  }
+
+  /**
+   * MemberSubscription.dependentSubscriptions
+   */
+  export type MemberSubscription$dependentSubscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+    where?: MemberSubscriptionWhereInput
+    orderBy?: MemberSubscriptionOrderByWithRelationInput | MemberSubscriptionOrderByWithRelationInput[]
+    cursor?: MemberSubscriptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MemberSubscriptionScalarFieldEnum | MemberSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * MemberSubscription.benefitUsages
+   */
+  export type MemberSubscription$benefitUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    where?: BenefitUsageWhereInput
+    orderBy?: BenefitUsageOrderByWithRelationInput | BenefitUsageOrderByWithRelationInput[]
+    cursor?: BenefitUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BenefitUsageScalarFieldEnum | BenefitUsageScalarFieldEnum[]
+  }
+
+  /**
+   * MemberSubscription.invoices
+   */
+  export type MemberSubscription$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    where?: SubscriptionInvoiceWhereInput
+    orderBy?: SubscriptionInvoiceOrderByWithRelationInput | SubscriptionInvoiceOrderByWithRelationInput[]
+    cursor?: SubscriptionInvoiceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SubscriptionInvoiceScalarFieldEnum | SubscriptionInvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * MemberSubscription.billingEvents
+   */
+  export type MemberSubscription$billingEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    where?: SubscriptionBillingEventWhereInput
+    orderBy?: SubscriptionBillingEventOrderByWithRelationInput | SubscriptionBillingEventOrderByWithRelationInput[]
+    cursor?: SubscriptionBillingEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SubscriptionBillingEventScalarFieldEnum | SubscriptionBillingEventScalarFieldEnum[]
+  }
+
+  /**
+   * MemberSubscription without action
+   */
+  export type MemberSubscriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberSubscription
+     */
+    select?: MemberSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberSubscriptionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BenefitUsage
+   */
+
+  export type AggregateBenefitUsage = {
+    _count: BenefitUsageCountAggregateOutputType | null
+    _avg: BenefitUsageAvgAggregateOutputType | null
+    _sum: BenefitUsageSumAggregateOutputType | null
+    _min: BenefitUsageMinAggregateOutputType | null
+    _max: BenefitUsageMaxAggregateOutputType | null
+  }
+
+  export type BenefitUsageAvgAggregateOutputType = {
+    quantity: number | null
+    regularPrice: Decimal | null
+    memberPrice: Decimal | null
+    discountAmount: Decimal | null
+    usedQuantityBefore: number | null
+    usedQuantityAfter: number | null
+    remainingQuantity: number | null
+  }
+
+  export type BenefitUsageSumAggregateOutputType = {
+    quantity: number | null
+    regularPrice: Decimal | null
+    memberPrice: Decimal | null
+    discountAmount: Decimal | null
+    usedQuantityBefore: number | null
+    usedQuantityAfter: number | null
+    remainingQuantity: number | null
+  }
+
+  export type BenefitUsageMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    subscriptionId: string | null
+    benefitId: string | null
+    usedAt: Date | null
+    quantity: number | null
+    encounterId: string | null
+    chargeId: string | null
+    invoiceId: string | null
+    regularPrice: Decimal | null
+    memberPrice: Decimal | null
+    discountAmount: Decimal | null
+    billingPeriodStart: Date | null
+    billingPeriodEnd: Date | null
+    usedQuantityBefore: number | null
+    usedQuantityAfter: number | null
+    remainingQuantity: number | null
+    notes: string | null
+    createdAt: Date | null
+    createdBy: string | null
+  }
+
+  export type BenefitUsageMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    subscriptionId: string | null
+    benefitId: string | null
+    usedAt: Date | null
+    quantity: number | null
+    encounterId: string | null
+    chargeId: string | null
+    invoiceId: string | null
+    regularPrice: Decimal | null
+    memberPrice: Decimal | null
+    discountAmount: Decimal | null
+    billingPeriodStart: Date | null
+    billingPeriodEnd: Date | null
+    usedQuantityBefore: number | null
+    usedQuantityAfter: number | null
+    remainingQuantity: number | null
+    notes: string | null
+    createdAt: Date | null
+    createdBy: string | null
+  }
+
+  export type BenefitUsageCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    subscriptionId: number
+    benefitId: number
+    usedAt: number
+    quantity: number
+    encounterId: number
+    chargeId: number
+    invoiceId: number
+    regularPrice: number
+    memberPrice: number
+    discountAmount: number
+    billingPeriodStart: number
+    billingPeriodEnd: number
+    usedQuantityBefore: number
+    usedQuantityAfter: number
+    remainingQuantity: number
+    notes: number
+    createdAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type BenefitUsageAvgAggregateInputType = {
+    quantity?: true
+    regularPrice?: true
+    memberPrice?: true
+    discountAmount?: true
+    usedQuantityBefore?: true
+    usedQuantityAfter?: true
+    remainingQuantity?: true
+  }
+
+  export type BenefitUsageSumAggregateInputType = {
+    quantity?: true
+    regularPrice?: true
+    memberPrice?: true
+    discountAmount?: true
+    usedQuantityBefore?: true
+    usedQuantityAfter?: true
+    remainingQuantity?: true
+  }
+
+  export type BenefitUsageMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    benefitId?: true
+    usedAt?: true
+    quantity?: true
+    encounterId?: true
+    chargeId?: true
+    invoiceId?: true
+    regularPrice?: true
+    memberPrice?: true
+    discountAmount?: true
+    billingPeriodStart?: true
+    billingPeriodEnd?: true
+    usedQuantityBefore?: true
+    usedQuantityAfter?: true
+    remainingQuantity?: true
+    notes?: true
+    createdAt?: true
+    createdBy?: true
+  }
+
+  export type BenefitUsageMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    benefitId?: true
+    usedAt?: true
+    quantity?: true
+    encounterId?: true
+    chargeId?: true
+    invoiceId?: true
+    regularPrice?: true
+    memberPrice?: true
+    discountAmount?: true
+    billingPeriodStart?: true
+    billingPeriodEnd?: true
+    usedQuantityBefore?: true
+    usedQuantityAfter?: true
+    remainingQuantity?: true
+    notes?: true
+    createdAt?: true
+    createdBy?: true
+  }
+
+  export type BenefitUsageCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    benefitId?: true
+    usedAt?: true
+    quantity?: true
+    encounterId?: true
+    chargeId?: true
+    invoiceId?: true
+    regularPrice?: true
+    memberPrice?: true
+    discountAmount?: true
+    billingPeriodStart?: true
+    billingPeriodEnd?: true
+    usedQuantityBefore?: true
+    usedQuantityAfter?: true
+    remainingQuantity?: true
+    notes?: true
+    createdAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type BenefitUsageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BenefitUsage to aggregate.
+     */
+    where?: BenefitUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BenefitUsages to fetch.
+     */
+    orderBy?: BenefitUsageOrderByWithRelationInput | BenefitUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BenefitUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BenefitUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BenefitUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BenefitUsages
+    **/
+    _count?: true | BenefitUsageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BenefitUsageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BenefitUsageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BenefitUsageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BenefitUsageMaxAggregateInputType
+  }
+
+  export type GetBenefitUsageAggregateType<T extends BenefitUsageAggregateArgs> = {
+        [P in keyof T & keyof AggregateBenefitUsage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBenefitUsage[P]>
+      : GetScalarType<T[P], AggregateBenefitUsage[P]>
+  }
+
+
+
+
+  export type BenefitUsageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BenefitUsageWhereInput
+    orderBy?: BenefitUsageOrderByWithAggregationInput | BenefitUsageOrderByWithAggregationInput[]
+    by: BenefitUsageScalarFieldEnum[] | BenefitUsageScalarFieldEnum
+    having?: BenefitUsageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BenefitUsageCountAggregateInputType | true
+    _avg?: BenefitUsageAvgAggregateInputType
+    _sum?: BenefitUsageSumAggregateInputType
+    _min?: BenefitUsageMinAggregateInputType
+    _max?: BenefitUsageMaxAggregateInputType
+  }
+
+  export type BenefitUsageGroupByOutputType = {
+    id: string
+    tenantId: string
+    subscriptionId: string
+    benefitId: string
+    usedAt: Date
+    quantity: number
+    encounterId: string | null
+    chargeId: string | null
+    invoiceId: string | null
+    regularPrice: Decimal | null
+    memberPrice: Decimal | null
+    discountAmount: Decimal | null
+    billingPeriodStart: Date
+    billingPeriodEnd: Date
+    usedQuantityBefore: number
+    usedQuantityAfter: number
+    remainingQuantity: number | null
+    notes: string | null
+    createdAt: Date
+    createdBy: string
+    _count: BenefitUsageCountAggregateOutputType | null
+    _avg: BenefitUsageAvgAggregateOutputType | null
+    _sum: BenefitUsageSumAggregateOutputType | null
+    _min: BenefitUsageMinAggregateOutputType | null
+    _max: BenefitUsageMaxAggregateOutputType | null
+  }
+
+  type GetBenefitUsageGroupByPayload<T extends BenefitUsageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BenefitUsageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BenefitUsageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BenefitUsageGroupByOutputType[P]>
+            : GetScalarType<T[P], BenefitUsageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BenefitUsageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    benefitId?: boolean
+    usedAt?: boolean
+    quantity?: boolean
+    encounterId?: boolean
+    chargeId?: boolean
+    invoiceId?: boolean
+    regularPrice?: boolean
+    memberPrice?: boolean
+    discountAmount?: boolean
+    billingPeriodStart?: boolean
+    billingPeriodEnd?: boolean
+    usedQuantityBefore?: boolean
+    usedQuantityAfter?: boolean
+    remainingQuantity?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+    benefit?: boolean | PlanBenefitDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["benefitUsage"]>
+
+  export type BenefitUsageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    benefitId?: boolean
+    usedAt?: boolean
+    quantity?: boolean
+    encounterId?: boolean
+    chargeId?: boolean
+    invoiceId?: boolean
+    regularPrice?: boolean
+    memberPrice?: boolean
+    discountAmount?: boolean
+    billingPeriodStart?: boolean
+    billingPeriodEnd?: boolean
+    usedQuantityBefore?: boolean
+    usedQuantityAfter?: boolean
+    remainingQuantity?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+    benefit?: boolean | PlanBenefitDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["benefitUsage"]>
+
+  export type BenefitUsageSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    benefitId?: boolean
+    usedAt?: boolean
+    quantity?: boolean
+    encounterId?: boolean
+    chargeId?: boolean
+    invoiceId?: boolean
+    regularPrice?: boolean
+    memberPrice?: boolean
+    discountAmount?: boolean
+    billingPeriodStart?: boolean
+    billingPeriodEnd?: boolean
+    usedQuantityBefore?: boolean
+    usedQuantityAfter?: boolean
+    remainingQuantity?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type BenefitUsageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+    benefit?: boolean | PlanBenefitDefaultArgs<ExtArgs>
+  }
+  export type BenefitUsageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+    benefit?: boolean | PlanBenefitDefaultArgs<ExtArgs>
+  }
+
+  export type $BenefitUsagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BenefitUsage"
+    objects: {
+      subscription: Prisma.$MemberSubscriptionPayload<ExtArgs>
+      benefit: Prisma.$PlanBenefitPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      subscriptionId: string
+      benefitId: string
+      usedAt: Date
+      quantity: number
+      encounterId: string | null
+      chargeId: string | null
+      invoiceId: string | null
+      regularPrice: Prisma.Decimal | null
+      memberPrice: Prisma.Decimal | null
+      discountAmount: Prisma.Decimal | null
+      billingPeriodStart: Date
+      billingPeriodEnd: Date
+      usedQuantityBefore: number
+      usedQuantityAfter: number
+      remainingQuantity: number | null
+      notes: string | null
+      createdAt: Date
+      createdBy: string
+    }, ExtArgs["result"]["benefitUsage"]>
+    composites: {}
+  }
+
+  type BenefitUsageGetPayload<S extends boolean | null | undefined | BenefitUsageDefaultArgs> = $Result.GetResult<Prisma.$BenefitUsagePayload, S>
+
+  type BenefitUsageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BenefitUsageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BenefitUsageCountAggregateInputType | true
+    }
+
+  export interface BenefitUsageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BenefitUsage'], meta: { name: 'BenefitUsage' } }
+    /**
+     * Find zero or one BenefitUsage that matches the filter.
+     * @param {BenefitUsageFindUniqueArgs} args - Arguments to find a BenefitUsage
+     * @example
+     * // Get one BenefitUsage
+     * const benefitUsage = await prisma.benefitUsage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BenefitUsageFindUniqueArgs>(args: SelectSubset<T, BenefitUsageFindUniqueArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one BenefitUsage that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {BenefitUsageFindUniqueOrThrowArgs} args - Arguments to find a BenefitUsage
+     * @example
+     * // Get one BenefitUsage
+     * const benefitUsage = await prisma.benefitUsage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BenefitUsageFindUniqueOrThrowArgs>(args: SelectSubset<T, BenefitUsageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first BenefitUsage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BenefitUsageFindFirstArgs} args - Arguments to find a BenefitUsage
+     * @example
+     * // Get one BenefitUsage
+     * const benefitUsage = await prisma.benefitUsage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BenefitUsageFindFirstArgs>(args?: SelectSubset<T, BenefitUsageFindFirstArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first BenefitUsage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BenefitUsageFindFirstOrThrowArgs} args - Arguments to find a BenefitUsage
+     * @example
+     * // Get one BenefitUsage
+     * const benefitUsage = await prisma.benefitUsage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BenefitUsageFindFirstOrThrowArgs>(args?: SelectSubset<T, BenefitUsageFindFirstOrThrowArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more BenefitUsages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BenefitUsageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BenefitUsages
+     * const benefitUsages = await prisma.benefitUsage.findMany()
+     * 
+     * // Get first 10 BenefitUsages
+     * const benefitUsages = await prisma.benefitUsage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const benefitUsageWithIdOnly = await prisma.benefitUsage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BenefitUsageFindManyArgs>(args?: SelectSubset<T, BenefitUsageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a BenefitUsage.
+     * @param {BenefitUsageCreateArgs} args - Arguments to create a BenefitUsage.
+     * @example
+     * // Create one BenefitUsage
+     * const BenefitUsage = await prisma.benefitUsage.create({
+     *   data: {
+     *     // ... data to create a BenefitUsage
+     *   }
+     * })
+     * 
+     */
+    create<T extends BenefitUsageCreateArgs>(args: SelectSubset<T, BenefitUsageCreateArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many BenefitUsages.
+     * @param {BenefitUsageCreateManyArgs} args - Arguments to create many BenefitUsages.
+     * @example
+     * // Create many BenefitUsages
+     * const benefitUsage = await prisma.benefitUsage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BenefitUsageCreateManyArgs>(args?: SelectSubset<T, BenefitUsageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BenefitUsages and returns the data saved in the database.
+     * @param {BenefitUsageCreateManyAndReturnArgs} args - Arguments to create many BenefitUsages.
+     * @example
+     * // Create many BenefitUsages
+     * const benefitUsage = await prisma.benefitUsage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BenefitUsages and only return the `id`
+     * const benefitUsageWithIdOnly = await prisma.benefitUsage.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BenefitUsageCreateManyAndReturnArgs>(args?: SelectSubset<T, BenefitUsageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a BenefitUsage.
+     * @param {BenefitUsageDeleteArgs} args - Arguments to delete one BenefitUsage.
+     * @example
+     * // Delete one BenefitUsage
+     * const BenefitUsage = await prisma.benefitUsage.delete({
+     *   where: {
+     *     // ... filter to delete one BenefitUsage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BenefitUsageDeleteArgs>(args: SelectSubset<T, BenefitUsageDeleteArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one BenefitUsage.
+     * @param {BenefitUsageUpdateArgs} args - Arguments to update one BenefitUsage.
+     * @example
+     * // Update one BenefitUsage
+     * const benefitUsage = await prisma.benefitUsage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BenefitUsageUpdateArgs>(args: SelectSubset<T, BenefitUsageUpdateArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more BenefitUsages.
+     * @param {BenefitUsageDeleteManyArgs} args - Arguments to filter BenefitUsages to delete.
+     * @example
+     * // Delete a few BenefitUsages
+     * const { count } = await prisma.benefitUsage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BenefitUsageDeleteManyArgs>(args?: SelectSubset<T, BenefitUsageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BenefitUsages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BenefitUsageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BenefitUsages
+     * const benefitUsage = await prisma.benefitUsage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BenefitUsageUpdateManyArgs>(args: SelectSubset<T, BenefitUsageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BenefitUsage.
+     * @param {BenefitUsageUpsertArgs} args - Arguments to update or create a BenefitUsage.
+     * @example
+     * // Update or create a BenefitUsage
+     * const benefitUsage = await prisma.benefitUsage.upsert({
+     *   create: {
+     *     // ... data to create a BenefitUsage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BenefitUsage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BenefitUsageUpsertArgs>(args: SelectSubset<T, BenefitUsageUpsertArgs<ExtArgs>>): Prisma__BenefitUsageClient<$Result.GetResult<Prisma.$BenefitUsagePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of BenefitUsages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BenefitUsageCountArgs} args - Arguments to filter BenefitUsages to count.
+     * @example
+     * // Count the number of BenefitUsages
+     * const count = await prisma.benefitUsage.count({
+     *   where: {
+     *     // ... the filter for the BenefitUsages we want to count
+     *   }
+     * })
+    **/
+    count<T extends BenefitUsageCountArgs>(
+      args?: Subset<T, BenefitUsageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BenefitUsageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BenefitUsage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BenefitUsageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BenefitUsageAggregateArgs>(args: Subset<T, BenefitUsageAggregateArgs>): Prisma.PrismaPromise<GetBenefitUsageAggregateType<T>>
+
+    /**
+     * Group by BenefitUsage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BenefitUsageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BenefitUsageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BenefitUsageGroupByArgs['orderBy'] }
+        : { orderBy?: BenefitUsageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BenefitUsageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBenefitUsageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BenefitUsage model
+   */
+  readonly fields: BenefitUsageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BenefitUsage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BenefitUsageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    subscription<T extends MemberSubscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscriptionDefaultArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    benefit<T extends PlanBenefitDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlanBenefitDefaultArgs<ExtArgs>>): Prisma__PlanBenefitClient<$Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BenefitUsage model
+   */ 
+  interface BenefitUsageFieldRefs {
+    readonly id: FieldRef<"BenefitUsage", 'String'>
+    readonly tenantId: FieldRef<"BenefitUsage", 'String'>
+    readonly subscriptionId: FieldRef<"BenefitUsage", 'String'>
+    readonly benefitId: FieldRef<"BenefitUsage", 'String'>
+    readonly usedAt: FieldRef<"BenefitUsage", 'DateTime'>
+    readonly quantity: FieldRef<"BenefitUsage", 'Int'>
+    readonly encounterId: FieldRef<"BenefitUsage", 'String'>
+    readonly chargeId: FieldRef<"BenefitUsage", 'String'>
+    readonly invoiceId: FieldRef<"BenefitUsage", 'String'>
+    readonly regularPrice: FieldRef<"BenefitUsage", 'Decimal'>
+    readonly memberPrice: FieldRef<"BenefitUsage", 'Decimal'>
+    readonly discountAmount: FieldRef<"BenefitUsage", 'Decimal'>
+    readonly billingPeriodStart: FieldRef<"BenefitUsage", 'DateTime'>
+    readonly billingPeriodEnd: FieldRef<"BenefitUsage", 'DateTime'>
+    readonly usedQuantityBefore: FieldRef<"BenefitUsage", 'Int'>
+    readonly usedQuantityAfter: FieldRef<"BenefitUsage", 'Int'>
+    readonly remainingQuantity: FieldRef<"BenefitUsage", 'Int'>
+    readonly notes: FieldRef<"BenefitUsage", 'String'>
+    readonly createdAt: FieldRef<"BenefitUsage", 'DateTime'>
+    readonly createdBy: FieldRef<"BenefitUsage", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BenefitUsage findUnique
+   */
+  export type BenefitUsageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which BenefitUsage to fetch.
+     */
+    where: BenefitUsageWhereUniqueInput
+  }
+
+  /**
+   * BenefitUsage findUniqueOrThrow
+   */
+  export type BenefitUsageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which BenefitUsage to fetch.
+     */
+    where: BenefitUsageWhereUniqueInput
+  }
+
+  /**
+   * BenefitUsage findFirst
+   */
+  export type BenefitUsageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which BenefitUsage to fetch.
+     */
+    where?: BenefitUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BenefitUsages to fetch.
+     */
+    orderBy?: BenefitUsageOrderByWithRelationInput | BenefitUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BenefitUsages.
+     */
+    cursor?: BenefitUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BenefitUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BenefitUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BenefitUsages.
+     */
+    distinct?: BenefitUsageScalarFieldEnum | BenefitUsageScalarFieldEnum[]
+  }
+
+  /**
+   * BenefitUsage findFirstOrThrow
+   */
+  export type BenefitUsageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which BenefitUsage to fetch.
+     */
+    where?: BenefitUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BenefitUsages to fetch.
+     */
+    orderBy?: BenefitUsageOrderByWithRelationInput | BenefitUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BenefitUsages.
+     */
+    cursor?: BenefitUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BenefitUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BenefitUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BenefitUsages.
+     */
+    distinct?: BenefitUsageScalarFieldEnum | BenefitUsageScalarFieldEnum[]
+  }
+
+  /**
+   * BenefitUsage findMany
+   */
+  export type BenefitUsageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which BenefitUsages to fetch.
+     */
+    where?: BenefitUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BenefitUsages to fetch.
+     */
+    orderBy?: BenefitUsageOrderByWithRelationInput | BenefitUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BenefitUsages.
+     */
+    cursor?: BenefitUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BenefitUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BenefitUsages.
+     */
+    skip?: number
+    distinct?: BenefitUsageScalarFieldEnum | BenefitUsageScalarFieldEnum[]
+  }
+
+  /**
+   * BenefitUsage create
+   */
+  export type BenefitUsageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BenefitUsage.
+     */
+    data: XOR<BenefitUsageCreateInput, BenefitUsageUncheckedCreateInput>
+  }
+
+  /**
+   * BenefitUsage createMany
+   */
+  export type BenefitUsageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BenefitUsages.
+     */
+    data: BenefitUsageCreateManyInput | BenefitUsageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BenefitUsage createManyAndReturn
+   */
+  export type BenefitUsageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many BenefitUsages.
+     */
+    data: BenefitUsageCreateManyInput | BenefitUsageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BenefitUsage update
+   */
+  export type BenefitUsageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BenefitUsage.
+     */
+    data: XOR<BenefitUsageUpdateInput, BenefitUsageUncheckedUpdateInput>
+    /**
+     * Choose, which BenefitUsage to update.
+     */
+    where: BenefitUsageWhereUniqueInput
+  }
+
+  /**
+   * BenefitUsage updateMany
+   */
+  export type BenefitUsageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BenefitUsages.
+     */
+    data: XOR<BenefitUsageUpdateManyMutationInput, BenefitUsageUncheckedUpdateManyInput>
+    /**
+     * Filter which BenefitUsages to update
+     */
+    where?: BenefitUsageWhereInput
+  }
+
+  /**
+   * BenefitUsage upsert
+   */
+  export type BenefitUsageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BenefitUsage to update in case it exists.
+     */
+    where: BenefitUsageWhereUniqueInput
+    /**
+     * In case the BenefitUsage found by the `where` argument doesn't exist, create a new BenefitUsage with this data.
+     */
+    create: XOR<BenefitUsageCreateInput, BenefitUsageUncheckedCreateInput>
+    /**
+     * In case the BenefitUsage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BenefitUsageUpdateInput, BenefitUsageUncheckedUpdateInput>
+  }
+
+  /**
+   * BenefitUsage delete
+   */
+  export type BenefitUsageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+    /**
+     * Filter which BenefitUsage to delete.
+     */
+    where: BenefitUsageWhereUniqueInput
+  }
+
+  /**
+   * BenefitUsage deleteMany
+   */
+  export type BenefitUsageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BenefitUsages to delete
+     */
+    where?: BenefitUsageWhereInput
+  }
+
+  /**
+   * BenefitUsage without action
+   */
+  export type BenefitUsageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BenefitUsage
+     */
+    select?: BenefitUsageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BenefitUsageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SubscriptionInvoice
+   */
+
+  export type AggregateSubscriptionInvoice = {
+    _count: SubscriptionInvoiceCountAggregateOutputType | null
+    _avg: SubscriptionInvoiceAvgAggregateOutputType | null
+    _sum: SubscriptionInvoiceSumAggregateOutputType | null
+    _min: SubscriptionInvoiceMinAggregateOutputType | null
+    _max: SubscriptionInvoiceMaxAggregateOutputType | null
+  }
+
+  export type SubscriptionInvoiceAvgAggregateOutputType = {
+    subtotal: Decimal | null
+    taxAmount: Decimal | null
+    discountAmount: Decimal | null
+    totalAmount: Decimal | null
+    amountPaid: Decimal | null
+    balanceDue: Decimal | null
+    paymentAttempts: number | null
+  }
+
+  export type SubscriptionInvoiceSumAggregateOutputType = {
+    subtotal: Decimal | null
+    taxAmount: Decimal | null
+    discountAmount: Decimal | null
+    totalAmount: Decimal | null
+    amountPaid: Decimal | null
+    balanceDue: Decimal | null
+    paymentAttempts: number | null
+  }
+
+  export type SubscriptionInvoiceMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    subscriptionId: string | null
+    patientId: string | null
+    patientDisplayName: string | null
+    invoiceNumber: string | null
+    invoiceDate: Date | null
+    dueDate: Date | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    invoiceType: string | null
+    subtotal: Decimal | null
+    taxAmount: Decimal | null
+    discountAmount: Decimal | null
+    totalAmount: Decimal | null
+    currency: string | null
+    status: string | null
+    amountPaid: Decimal | null
+    balanceDue: Decimal | null
+    paidAt: Date | null
+    paymentMethod: string | null
+    paymentReference: string | null
+    standardInvoiceId: string | null
+    receiptId: string | null
+    paymentAttempts: number | null
+    lastPaymentAttempt: Date | null
+    nextRetryDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type SubscriptionInvoiceMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    subscriptionId: string | null
+    patientId: string | null
+    patientDisplayName: string | null
+    invoiceNumber: string | null
+    invoiceDate: Date | null
+    dueDate: Date | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    invoiceType: string | null
+    subtotal: Decimal | null
+    taxAmount: Decimal | null
+    discountAmount: Decimal | null
+    totalAmount: Decimal | null
+    currency: string | null
+    status: string | null
+    amountPaid: Decimal | null
+    balanceDue: Decimal | null
+    paidAt: Date | null
+    paymentMethod: string | null
+    paymentReference: string | null
+    standardInvoiceId: string | null
+    receiptId: string | null
+    paymentAttempts: number | null
+    lastPaymentAttempt: Date | null
+    nextRetryDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type SubscriptionInvoiceCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    subscriptionId: number
+    patientId: number
+    patientDisplayName: number
+    invoiceNumber: number
+    invoiceDate: number
+    dueDate: number
+    periodStart: number
+    periodEnd: number
+    invoiceType: number
+    subtotal: number
+    taxAmount: number
+    discountAmount: number
+    totalAmount: number
+    currency: number
+    status: number
+    amountPaid: number
+    balanceDue: number
+    paidAt: number
+    paymentMethod: number
+    paymentReference: number
+    standardInvoiceId: number
+    receiptId: number
+    paymentAttempts: number
+    lastPaymentAttempt: number
+    nextRetryDate: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type SubscriptionInvoiceAvgAggregateInputType = {
+    subtotal?: true
+    taxAmount?: true
+    discountAmount?: true
+    totalAmount?: true
+    amountPaid?: true
+    balanceDue?: true
+    paymentAttempts?: true
+  }
+
+  export type SubscriptionInvoiceSumAggregateInputType = {
+    subtotal?: true
+    taxAmount?: true
+    discountAmount?: true
+    totalAmount?: true
+    amountPaid?: true
+    balanceDue?: true
+    paymentAttempts?: true
+  }
+
+  export type SubscriptionInvoiceMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    patientId?: true
+    patientDisplayName?: true
+    invoiceNumber?: true
+    invoiceDate?: true
+    dueDate?: true
+    periodStart?: true
+    periodEnd?: true
+    invoiceType?: true
+    subtotal?: true
+    taxAmount?: true
+    discountAmount?: true
+    totalAmount?: true
+    currency?: true
+    status?: true
+    amountPaid?: true
+    balanceDue?: true
+    paidAt?: true
+    paymentMethod?: true
+    paymentReference?: true
+    standardInvoiceId?: true
+    receiptId?: true
+    paymentAttempts?: true
+    lastPaymentAttempt?: true
+    nextRetryDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type SubscriptionInvoiceMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    patientId?: true
+    patientDisplayName?: true
+    invoiceNumber?: true
+    invoiceDate?: true
+    dueDate?: true
+    periodStart?: true
+    periodEnd?: true
+    invoiceType?: true
+    subtotal?: true
+    taxAmount?: true
+    discountAmount?: true
+    totalAmount?: true
+    currency?: true
+    status?: true
+    amountPaid?: true
+    balanceDue?: true
+    paidAt?: true
+    paymentMethod?: true
+    paymentReference?: true
+    standardInvoiceId?: true
+    receiptId?: true
+    paymentAttempts?: true
+    lastPaymentAttempt?: true
+    nextRetryDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type SubscriptionInvoiceCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    patientId?: true
+    patientDisplayName?: true
+    invoiceNumber?: true
+    invoiceDate?: true
+    dueDate?: true
+    periodStart?: true
+    periodEnd?: true
+    invoiceType?: true
+    subtotal?: true
+    taxAmount?: true
+    discountAmount?: true
+    totalAmount?: true
+    currency?: true
+    status?: true
+    amountPaid?: true
+    balanceDue?: true
+    paidAt?: true
+    paymentMethod?: true
+    paymentReference?: true
+    standardInvoiceId?: true
+    receiptId?: true
+    paymentAttempts?: true
+    lastPaymentAttempt?: true
+    nextRetryDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type SubscriptionInvoiceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionInvoice to aggregate.
+     */
+    where?: SubscriptionInvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionInvoices to fetch.
+     */
+    orderBy?: SubscriptionInvoiceOrderByWithRelationInput | SubscriptionInvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SubscriptionInvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionInvoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionInvoices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SubscriptionInvoices
+    **/
+    _count?: true | SubscriptionInvoiceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SubscriptionInvoiceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubscriptionInvoiceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SubscriptionInvoiceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SubscriptionInvoiceMaxAggregateInputType
+  }
+
+  export type GetSubscriptionInvoiceAggregateType<T extends SubscriptionInvoiceAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubscriptionInvoice]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubscriptionInvoice[P]>
+      : GetScalarType<T[P], AggregateSubscriptionInvoice[P]>
+  }
+
+
+
+
+  export type SubscriptionInvoiceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubscriptionInvoiceWhereInput
+    orderBy?: SubscriptionInvoiceOrderByWithAggregationInput | SubscriptionInvoiceOrderByWithAggregationInput[]
+    by: SubscriptionInvoiceScalarFieldEnum[] | SubscriptionInvoiceScalarFieldEnum
+    having?: SubscriptionInvoiceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SubscriptionInvoiceCountAggregateInputType | true
+    _avg?: SubscriptionInvoiceAvgAggregateInputType
+    _sum?: SubscriptionInvoiceSumAggregateInputType
+    _min?: SubscriptionInvoiceMinAggregateInputType
+    _max?: SubscriptionInvoiceMaxAggregateInputType
+  }
+
+  export type SubscriptionInvoiceGroupByOutputType = {
+    id: string
+    tenantId: string
+    subscriptionId: string
+    patientId: string
+    patientDisplayName: string | null
+    invoiceNumber: string
+    invoiceDate: Date
+    dueDate: Date
+    periodStart: Date
+    periodEnd: Date
+    invoiceType: string
+    subtotal: Decimal
+    taxAmount: Decimal
+    discountAmount: Decimal
+    totalAmount: Decimal
+    currency: string
+    status: string
+    amountPaid: Decimal
+    balanceDue: Decimal
+    paidAt: Date | null
+    paymentMethod: string | null
+    paymentReference: string | null
+    standardInvoiceId: string | null
+    receiptId: string | null
+    paymentAttempts: number
+    lastPaymentAttempt: Date | null
+    nextRetryDate: Date | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string
+    _count: SubscriptionInvoiceCountAggregateOutputType | null
+    _avg: SubscriptionInvoiceAvgAggregateOutputType | null
+    _sum: SubscriptionInvoiceSumAggregateOutputType | null
+    _min: SubscriptionInvoiceMinAggregateOutputType | null
+    _max: SubscriptionInvoiceMaxAggregateOutputType | null
+  }
+
+  type GetSubscriptionInvoiceGroupByPayload<T extends SubscriptionInvoiceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SubscriptionInvoiceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SubscriptionInvoiceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SubscriptionInvoiceGroupByOutputType[P]>
+            : GetScalarType<T[P], SubscriptionInvoiceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SubscriptionInvoiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    patientId?: boolean
+    patientDisplayName?: boolean
+    invoiceNumber?: boolean
+    invoiceDate?: boolean
+    dueDate?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    invoiceType?: boolean
+    subtotal?: boolean
+    taxAmount?: boolean
+    discountAmount?: boolean
+    totalAmount?: boolean
+    currency?: boolean
+    status?: boolean
+    amountPaid?: boolean
+    balanceDue?: boolean
+    paidAt?: boolean
+    paymentMethod?: boolean
+    paymentReference?: boolean
+    standardInvoiceId?: boolean
+    receiptId?: boolean
+    paymentAttempts?: boolean
+    lastPaymentAttempt?: boolean
+    nextRetryDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subscriptionInvoice"]>
+
+  export type SubscriptionInvoiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    patientId?: boolean
+    patientDisplayName?: boolean
+    invoiceNumber?: boolean
+    invoiceDate?: boolean
+    dueDate?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    invoiceType?: boolean
+    subtotal?: boolean
+    taxAmount?: boolean
+    discountAmount?: boolean
+    totalAmount?: boolean
+    currency?: boolean
+    status?: boolean
+    amountPaid?: boolean
+    balanceDue?: boolean
+    paidAt?: boolean
+    paymentMethod?: boolean
+    paymentReference?: boolean
+    standardInvoiceId?: boolean
+    receiptId?: boolean
+    paymentAttempts?: boolean
+    lastPaymentAttempt?: boolean
+    nextRetryDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subscriptionInvoice"]>
+
+  export type SubscriptionInvoiceSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    patientId?: boolean
+    patientDisplayName?: boolean
+    invoiceNumber?: boolean
+    invoiceDate?: boolean
+    dueDate?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    invoiceType?: boolean
+    subtotal?: boolean
+    taxAmount?: boolean
+    discountAmount?: boolean
+    totalAmount?: boolean
+    currency?: boolean
+    status?: boolean
+    amountPaid?: boolean
+    balanceDue?: boolean
+    paidAt?: boolean
+    paymentMethod?: boolean
+    paymentReference?: boolean
+    standardInvoiceId?: boolean
+    receiptId?: boolean
+    paymentAttempts?: boolean
+    lastPaymentAttempt?: boolean
+    nextRetryDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type SubscriptionInvoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }
+  export type SubscriptionInvoiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }
+
+  export type $SubscriptionInvoicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SubscriptionInvoice"
+    objects: {
+      subscription: Prisma.$MemberSubscriptionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      subscriptionId: string
+      patientId: string
+      patientDisplayName: string | null
+      invoiceNumber: string
+      invoiceDate: Date
+      dueDate: Date
+      periodStart: Date
+      periodEnd: Date
+      invoiceType: string
+      subtotal: Prisma.Decimal
+      taxAmount: Prisma.Decimal
+      discountAmount: Prisma.Decimal
+      totalAmount: Prisma.Decimal
+      currency: string
+      status: string
+      amountPaid: Prisma.Decimal
+      balanceDue: Prisma.Decimal
+      paidAt: Date | null
+      paymentMethod: string | null
+      paymentReference: string | null
+      standardInvoiceId: string | null
+      receiptId: string | null
+      paymentAttempts: number
+      lastPaymentAttempt: Date | null
+      nextRetryDate: Date | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string
+    }, ExtArgs["result"]["subscriptionInvoice"]>
+    composites: {}
+  }
+
+  type SubscriptionInvoiceGetPayload<S extends boolean | null | undefined | SubscriptionInvoiceDefaultArgs> = $Result.GetResult<Prisma.$SubscriptionInvoicePayload, S>
+
+  type SubscriptionInvoiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SubscriptionInvoiceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SubscriptionInvoiceCountAggregateInputType | true
+    }
+
+  export interface SubscriptionInvoiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubscriptionInvoice'], meta: { name: 'SubscriptionInvoice' } }
+    /**
+     * Find zero or one SubscriptionInvoice that matches the filter.
+     * @param {SubscriptionInvoiceFindUniqueArgs} args - Arguments to find a SubscriptionInvoice
+     * @example
+     * // Get one SubscriptionInvoice
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SubscriptionInvoiceFindUniqueArgs>(args: SelectSubset<T, SubscriptionInvoiceFindUniqueArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SubscriptionInvoice that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SubscriptionInvoiceFindUniqueOrThrowArgs} args - Arguments to find a SubscriptionInvoice
+     * @example
+     * // Get one SubscriptionInvoice
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SubscriptionInvoiceFindUniqueOrThrowArgs>(args: SelectSubset<T, SubscriptionInvoiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SubscriptionInvoice that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionInvoiceFindFirstArgs} args - Arguments to find a SubscriptionInvoice
+     * @example
+     * // Get one SubscriptionInvoice
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SubscriptionInvoiceFindFirstArgs>(args?: SelectSubset<T, SubscriptionInvoiceFindFirstArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SubscriptionInvoice that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionInvoiceFindFirstOrThrowArgs} args - Arguments to find a SubscriptionInvoice
+     * @example
+     * // Get one SubscriptionInvoice
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SubscriptionInvoiceFindFirstOrThrowArgs>(args?: SelectSubset<T, SubscriptionInvoiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SubscriptionInvoices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionInvoiceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SubscriptionInvoices
+     * const subscriptionInvoices = await prisma.subscriptionInvoice.findMany()
+     * 
+     * // Get first 10 SubscriptionInvoices
+     * const subscriptionInvoices = await prisma.subscriptionInvoice.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const subscriptionInvoiceWithIdOnly = await prisma.subscriptionInvoice.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SubscriptionInvoiceFindManyArgs>(args?: SelectSubset<T, SubscriptionInvoiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SubscriptionInvoice.
+     * @param {SubscriptionInvoiceCreateArgs} args - Arguments to create a SubscriptionInvoice.
+     * @example
+     * // Create one SubscriptionInvoice
+     * const SubscriptionInvoice = await prisma.subscriptionInvoice.create({
+     *   data: {
+     *     // ... data to create a SubscriptionInvoice
+     *   }
+     * })
+     * 
+     */
+    create<T extends SubscriptionInvoiceCreateArgs>(args: SelectSubset<T, SubscriptionInvoiceCreateArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SubscriptionInvoices.
+     * @param {SubscriptionInvoiceCreateManyArgs} args - Arguments to create many SubscriptionInvoices.
+     * @example
+     * // Create many SubscriptionInvoices
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SubscriptionInvoiceCreateManyArgs>(args?: SelectSubset<T, SubscriptionInvoiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SubscriptionInvoices and returns the data saved in the database.
+     * @param {SubscriptionInvoiceCreateManyAndReturnArgs} args - Arguments to create many SubscriptionInvoices.
+     * @example
+     * // Create many SubscriptionInvoices
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SubscriptionInvoices and only return the `id`
+     * const subscriptionInvoiceWithIdOnly = await prisma.subscriptionInvoice.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubscriptionInvoiceCreateManyAndReturnArgs>(args?: SelectSubset<T, SubscriptionInvoiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SubscriptionInvoice.
+     * @param {SubscriptionInvoiceDeleteArgs} args - Arguments to delete one SubscriptionInvoice.
+     * @example
+     * // Delete one SubscriptionInvoice
+     * const SubscriptionInvoice = await prisma.subscriptionInvoice.delete({
+     *   where: {
+     *     // ... filter to delete one SubscriptionInvoice
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SubscriptionInvoiceDeleteArgs>(args: SelectSubset<T, SubscriptionInvoiceDeleteArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SubscriptionInvoice.
+     * @param {SubscriptionInvoiceUpdateArgs} args - Arguments to update one SubscriptionInvoice.
+     * @example
+     * // Update one SubscriptionInvoice
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SubscriptionInvoiceUpdateArgs>(args: SelectSubset<T, SubscriptionInvoiceUpdateArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SubscriptionInvoices.
+     * @param {SubscriptionInvoiceDeleteManyArgs} args - Arguments to filter SubscriptionInvoices to delete.
+     * @example
+     * // Delete a few SubscriptionInvoices
+     * const { count } = await prisma.subscriptionInvoice.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SubscriptionInvoiceDeleteManyArgs>(args?: SelectSubset<T, SubscriptionInvoiceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubscriptionInvoices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionInvoiceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SubscriptionInvoices
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SubscriptionInvoiceUpdateManyArgs>(args: SelectSubset<T, SubscriptionInvoiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SubscriptionInvoice.
+     * @param {SubscriptionInvoiceUpsertArgs} args - Arguments to update or create a SubscriptionInvoice.
+     * @example
+     * // Update or create a SubscriptionInvoice
+     * const subscriptionInvoice = await prisma.subscriptionInvoice.upsert({
+     *   create: {
+     *     // ... data to create a SubscriptionInvoice
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SubscriptionInvoice we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SubscriptionInvoiceUpsertArgs>(args: SelectSubset<T, SubscriptionInvoiceUpsertArgs<ExtArgs>>): Prisma__SubscriptionInvoiceClient<$Result.GetResult<Prisma.$SubscriptionInvoicePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SubscriptionInvoices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionInvoiceCountArgs} args - Arguments to filter SubscriptionInvoices to count.
+     * @example
+     * // Count the number of SubscriptionInvoices
+     * const count = await prisma.subscriptionInvoice.count({
+     *   where: {
+     *     // ... the filter for the SubscriptionInvoices we want to count
+     *   }
+     * })
+    **/
+    count<T extends SubscriptionInvoiceCountArgs>(
+      args?: Subset<T, SubscriptionInvoiceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SubscriptionInvoiceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SubscriptionInvoice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionInvoiceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SubscriptionInvoiceAggregateArgs>(args: Subset<T, SubscriptionInvoiceAggregateArgs>): Prisma.PrismaPromise<GetSubscriptionInvoiceAggregateType<T>>
+
+    /**
+     * Group by SubscriptionInvoice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionInvoiceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SubscriptionInvoiceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubscriptionInvoiceGroupByArgs['orderBy'] }
+        : { orderBy?: SubscriptionInvoiceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SubscriptionInvoiceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubscriptionInvoiceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SubscriptionInvoice model
+   */
+  readonly fields: SubscriptionInvoiceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SubscriptionInvoice.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SubscriptionInvoiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    subscription<T extends MemberSubscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscriptionDefaultArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SubscriptionInvoice model
+   */ 
+  interface SubscriptionInvoiceFieldRefs {
+    readonly id: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly tenantId: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly subscriptionId: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly patientId: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly patientDisplayName: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly invoiceNumber: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly invoiceDate: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly dueDate: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly periodStart: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly periodEnd: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly invoiceType: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly subtotal: FieldRef<"SubscriptionInvoice", 'Decimal'>
+    readonly taxAmount: FieldRef<"SubscriptionInvoice", 'Decimal'>
+    readonly discountAmount: FieldRef<"SubscriptionInvoice", 'Decimal'>
+    readonly totalAmount: FieldRef<"SubscriptionInvoice", 'Decimal'>
+    readonly currency: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly status: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly amountPaid: FieldRef<"SubscriptionInvoice", 'Decimal'>
+    readonly balanceDue: FieldRef<"SubscriptionInvoice", 'Decimal'>
+    readonly paidAt: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly paymentMethod: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly paymentReference: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly standardInvoiceId: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly receiptId: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly paymentAttempts: FieldRef<"SubscriptionInvoice", 'Int'>
+    readonly lastPaymentAttempt: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly nextRetryDate: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly notes: FieldRef<"SubscriptionInvoice", 'String'>
+    readonly createdAt: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly updatedAt: FieldRef<"SubscriptionInvoice", 'DateTime'>
+    readonly createdBy: FieldRef<"SubscriptionInvoice", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SubscriptionInvoice findUnique
+   */
+  export type SubscriptionInvoiceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionInvoice to fetch.
+     */
+    where: SubscriptionInvoiceWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionInvoice findUniqueOrThrow
+   */
+  export type SubscriptionInvoiceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionInvoice to fetch.
+     */
+    where: SubscriptionInvoiceWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionInvoice findFirst
+   */
+  export type SubscriptionInvoiceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionInvoice to fetch.
+     */
+    where?: SubscriptionInvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionInvoices to fetch.
+     */
+    orderBy?: SubscriptionInvoiceOrderByWithRelationInput | SubscriptionInvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionInvoices.
+     */
+    cursor?: SubscriptionInvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionInvoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionInvoices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionInvoices.
+     */
+    distinct?: SubscriptionInvoiceScalarFieldEnum | SubscriptionInvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionInvoice findFirstOrThrow
+   */
+  export type SubscriptionInvoiceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionInvoice to fetch.
+     */
+    where?: SubscriptionInvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionInvoices to fetch.
+     */
+    orderBy?: SubscriptionInvoiceOrderByWithRelationInput | SubscriptionInvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionInvoices.
+     */
+    cursor?: SubscriptionInvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionInvoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionInvoices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionInvoices.
+     */
+    distinct?: SubscriptionInvoiceScalarFieldEnum | SubscriptionInvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionInvoice findMany
+   */
+  export type SubscriptionInvoiceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionInvoices to fetch.
+     */
+    where?: SubscriptionInvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionInvoices to fetch.
+     */
+    orderBy?: SubscriptionInvoiceOrderByWithRelationInput | SubscriptionInvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SubscriptionInvoices.
+     */
+    cursor?: SubscriptionInvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionInvoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionInvoices.
+     */
+    skip?: number
+    distinct?: SubscriptionInvoiceScalarFieldEnum | SubscriptionInvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionInvoice create
+   */
+  export type SubscriptionInvoiceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SubscriptionInvoice.
+     */
+    data: XOR<SubscriptionInvoiceCreateInput, SubscriptionInvoiceUncheckedCreateInput>
+  }
+
+  /**
+   * SubscriptionInvoice createMany
+   */
+  export type SubscriptionInvoiceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SubscriptionInvoices.
+     */
+    data: SubscriptionInvoiceCreateManyInput | SubscriptionInvoiceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SubscriptionInvoice createManyAndReturn
+   */
+  export type SubscriptionInvoiceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SubscriptionInvoices.
+     */
+    data: SubscriptionInvoiceCreateManyInput | SubscriptionInvoiceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SubscriptionInvoice update
+   */
+  export type SubscriptionInvoiceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SubscriptionInvoice.
+     */
+    data: XOR<SubscriptionInvoiceUpdateInput, SubscriptionInvoiceUncheckedUpdateInput>
+    /**
+     * Choose, which SubscriptionInvoice to update.
+     */
+    where: SubscriptionInvoiceWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionInvoice updateMany
+   */
+  export type SubscriptionInvoiceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SubscriptionInvoices.
+     */
+    data: XOR<SubscriptionInvoiceUpdateManyMutationInput, SubscriptionInvoiceUncheckedUpdateManyInput>
+    /**
+     * Filter which SubscriptionInvoices to update
+     */
+    where?: SubscriptionInvoiceWhereInput
+  }
+
+  /**
+   * SubscriptionInvoice upsert
+   */
+  export type SubscriptionInvoiceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SubscriptionInvoice to update in case it exists.
+     */
+    where: SubscriptionInvoiceWhereUniqueInput
+    /**
+     * In case the SubscriptionInvoice found by the `where` argument doesn't exist, create a new SubscriptionInvoice with this data.
+     */
+    create: XOR<SubscriptionInvoiceCreateInput, SubscriptionInvoiceUncheckedCreateInput>
+    /**
+     * In case the SubscriptionInvoice was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SubscriptionInvoiceUpdateInput, SubscriptionInvoiceUncheckedUpdateInput>
+  }
+
+  /**
+   * SubscriptionInvoice delete
+   */
+  export type SubscriptionInvoiceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+    /**
+     * Filter which SubscriptionInvoice to delete.
+     */
+    where: SubscriptionInvoiceWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionInvoice deleteMany
+   */
+  export type SubscriptionInvoiceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionInvoices to delete
+     */
+    where?: SubscriptionInvoiceWhereInput
+  }
+
+  /**
+   * SubscriptionInvoice without action
+   */
+  export type SubscriptionInvoiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionInvoice
+     */
+    select?: SubscriptionInvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionInvoiceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SubscriptionBillingEvent
+   */
+
+  export type AggregateSubscriptionBillingEvent = {
+    _count: SubscriptionBillingEventCountAggregateOutputType | null
+    _avg: SubscriptionBillingEventAvgAggregateOutputType | null
+    _sum: SubscriptionBillingEventSumAggregateOutputType | null
+    _min: SubscriptionBillingEventMinAggregateOutputType | null
+    _max: SubscriptionBillingEventMaxAggregateOutputType | null
+  }
+
+  export type SubscriptionBillingEventAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type SubscriptionBillingEventSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type SubscriptionBillingEventMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    subscriptionId: string | null
+    eventType: $Enums.BillingEventType | null
+    eventTime: Date | null
+    amount: Decimal | null
+    currency: string | null
+    invoiceId: string | null
+    paymentReference: string | null
+    errorCode: string | null
+    errorMessage: string | null
+    performedBy: string | null
+    performedByType: string | null
+    ipAddress: string | null
+    userAgent: string | null
+  }
+
+  export type SubscriptionBillingEventMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    subscriptionId: string | null
+    eventType: $Enums.BillingEventType | null
+    eventTime: Date | null
+    amount: Decimal | null
+    currency: string | null
+    invoiceId: string | null
+    paymentReference: string | null
+    errorCode: string | null
+    errorMessage: string | null
+    performedBy: string | null
+    performedByType: string | null
+    ipAddress: string | null
+    userAgent: string | null
+  }
+
+  export type SubscriptionBillingEventCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    subscriptionId: number
+    eventType: number
+    eventTime: number
+    eventData: number
+    previousState: number
+    newState: number
+    amount: number
+    currency: number
+    invoiceId: number
+    paymentReference: number
+    errorCode: number
+    errorMessage: number
+    performedBy: number
+    performedByType: number
+    ipAddress: number
+    userAgent: number
+    _all: number
+  }
+
+
+  export type SubscriptionBillingEventAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type SubscriptionBillingEventSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type SubscriptionBillingEventMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    eventType?: true
+    eventTime?: true
+    amount?: true
+    currency?: true
+    invoiceId?: true
+    paymentReference?: true
+    errorCode?: true
+    errorMessage?: true
+    performedBy?: true
+    performedByType?: true
+    ipAddress?: true
+    userAgent?: true
+  }
+
+  export type SubscriptionBillingEventMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    eventType?: true
+    eventTime?: true
+    amount?: true
+    currency?: true
+    invoiceId?: true
+    paymentReference?: true
+    errorCode?: true
+    errorMessage?: true
+    performedBy?: true
+    performedByType?: true
+    ipAddress?: true
+    userAgent?: true
+  }
+
+  export type SubscriptionBillingEventCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    subscriptionId?: true
+    eventType?: true
+    eventTime?: true
+    eventData?: true
+    previousState?: true
+    newState?: true
+    amount?: true
+    currency?: true
+    invoiceId?: true
+    paymentReference?: true
+    errorCode?: true
+    errorMessage?: true
+    performedBy?: true
+    performedByType?: true
+    ipAddress?: true
+    userAgent?: true
+    _all?: true
+  }
+
+  export type SubscriptionBillingEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionBillingEvent to aggregate.
+     */
+    where?: SubscriptionBillingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionBillingEvents to fetch.
+     */
+    orderBy?: SubscriptionBillingEventOrderByWithRelationInput | SubscriptionBillingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SubscriptionBillingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionBillingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionBillingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SubscriptionBillingEvents
+    **/
+    _count?: true | SubscriptionBillingEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SubscriptionBillingEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubscriptionBillingEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SubscriptionBillingEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SubscriptionBillingEventMaxAggregateInputType
+  }
+
+  export type GetSubscriptionBillingEventAggregateType<T extends SubscriptionBillingEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubscriptionBillingEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubscriptionBillingEvent[P]>
+      : GetScalarType<T[P], AggregateSubscriptionBillingEvent[P]>
+  }
+
+
+
+
+  export type SubscriptionBillingEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubscriptionBillingEventWhereInput
+    orderBy?: SubscriptionBillingEventOrderByWithAggregationInput | SubscriptionBillingEventOrderByWithAggregationInput[]
+    by: SubscriptionBillingEventScalarFieldEnum[] | SubscriptionBillingEventScalarFieldEnum
+    having?: SubscriptionBillingEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SubscriptionBillingEventCountAggregateInputType | true
+    _avg?: SubscriptionBillingEventAvgAggregateInputType
+    _sum?: SubscriptionBillingEventSumAggregateInputType
+    _min?: SubscriptionBillingEventMinAggregateInputType
+    _max?: SubscriptionBillingEventMaxAggregateInputType
+  }
+
+  export type SubscriptionBillingEventGroupByOutputType = {
+    id: string
+    tenantId: string
+    subscriptionId: string
+    eventType: $Enums.BillingEventType
+    eventTime: Date
+    eventData: JsonValue | null
+    previousState: JsonValue | null
+    newState: JsonValue | null
+    amount: Decimal | null
+    currency: string | null
+    invoiceId: string | null
+    paymentReference: string | null
+    errorCode: string | null
+    errorMessage: string | null
+    performedBy: string | null
+    performedByType: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    _count: SubscriptionBillingEventCountAggregateOutputType | null
+    _avg: SubscriptionBillingEventAvgAggregateOutputType | null
+    _sum: SubscriptionBillingEventSumAggregateOutputType | null
+    _min: SubscriptionBillingEventMinAggregateOutputType | null
+    _max: SubscriptionBillingEventMaxAggregateOutputType | null
+  }
+
+  type GetSubscriptionBillingEventGroupByPayload<T extends SubscriptionBillingEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SubscriptionBillingEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SubscriptionBillingEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SubscriptionBillingEventGroupByOutputType[P]>
+            : GetScalarType<T[P], SubscriptionBillingEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SubscriptionBillingEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    eventType?: boolean
+    eventTime?: boolean
+    eventData?: boolean
+    previousState?: boolean
+    newState?: boolean
+    amount?: boolean
+    currency?: boolean
+    invoiceId?: boolean
+    paymentReference?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    performedBy?: boolean
+    performedByType?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subscriptionBillingEvent"]>
+
+  export type SubscriptionBillingEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    eventType?: boolean
+    eventTime?: boolean
+    eventData?: boolean
+    previousState?: boolean
+    newState?: boolean
+    amount?: boolean
+    currency?: boolean
+    invoiceId?: boolean
+    paymentReference?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    performedBy?: boolean
+    performedByType?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subscriptionBillingEvent"]>
+
+  export type SubscriptionBillingEventSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    subscriptionId?: boolean
+    eventType?: boolean
+    eventTime?: boolean
+    eventData?: boolean
+    previousState?: boolean
+    newState?: boolean
+    amount?: boolean
+    currency?: boolean
+    invoiceId?: boolean
+    paymentReference?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    performedBy?: boolean
+    performedByType?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+  }
+
+  export type SubscriptionBillingEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }
+  export type SubscriptionBillingEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | MemberSubscriptionDefaultArgs<ExtArgs>
+  }
+
+  export type $SubscriptionBillingEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SubscriptionBillingEvent"
+    objects: {
+      subscription: Prisma.$MemberSubscriptionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      subscriptionId: string
+      eventType: $Enums.BillingEventType
+      eventTime: Date
+      eventData: Prisma.JsonValue | null
+      previousState: Prisma.JsonValue | null
+      newState: Prisma.JsonValue | null
+      amount: Prisma.Decimal | null
+      currency: string | null
+      invoiceId: string | null
+      paymentReference: string | null
+      errorCode: string | null
+      errorMessage: string | null
+      performedBy: string | null
+      performedByType: string | null
+      ipAddress: string | null
+      userAgent: string | null
+    }, ExtArgs["result"]["subscriptionBillingEvent"]>
+    composites: {}
+  }
+
+  type SubscriptionBillingEventGetPayload<S extends boolean | null | undefined | SubscriptionBillingEventDefaultArgs> = $Result.GetResult<Prisma.$SubscriptionBillingEventPayload, S>
+
+  type SubscriptionBillingEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SubscriptionBillingEventFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SubscriptionBillingEventCountAggregateInputType | true
+    }
+
+  export interface SubscriptionBillingEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubscriptionBillingEvent'], meta: { name: 'SubscriptionBillingEvent' } }
+    /**
+     * Find zero or one SubscriptionBillingEvent that matches the filter.
+     * @param {SubscriptionBillingEventFindUniqueArgs} args - Arguments to find a SubscriptionBillingEvent
+     * @example
+     * // Get one SubscriptionBillingEvent
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SubscriptionBillingEventFindUniqueArgs>(args: SelectSubset<T, SubscriptionBillingEventFindUniqueArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SubscriptionBillingEvent that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SubscriptionBillingEventFindUniqueOrThrowArgs} args - Arguments to find a SubscriptionBillingEvent
+     * @example
+     * // Get one SubscriptionBillingEvent
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SubscriptionBillingEventFindUniqueOrThrowArgs>(args: SelectSubset<T, SubscriptionBillingEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SubscriptionBillingEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionBillingEventFindFirstArgs} args - Arguments to find a SubscriptionBillingEvent
+     * @example
+     * // Get one SubscriptionBillingEvent
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SubscriptionBillingEventFindFirstArgs>(args?: SelectSubset<T, SubscriptionBillingEventFindFirstArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SubscriptionBillingEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionBillingEventFindFirstOrThrowArgs} args - Arguments to find a SubscriptionBillingEvent
+     * @example
+     * // Get one SubscriptionBillingEvent
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SubscriptionBillingEventFindFirstOrThrowArgs>(args?: SelectSubset<T, SubscriptionBillingEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SubscriptionBillingEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionBillingEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SubscriptionBillingEvents
+     * const subscriptionBillingEvents = await prisma.subscriptionBillingEvent.findMany()
+     * 
+     * // Get first 10 SubscriptionBillingEvents
+     * const subscriptionBillingEvents = await prisma.subscriptionBillingEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const subscriptionBillingEventWithIdOnly = await prisma.subscriptionBillingEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SubscriptionBillingEventFindManyArgs>(args?: SelectSubset<T, SubscriptionBillingEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SubscriptionBillingEvent.
+     * @param {SubscriptionBillingEventCreateArgs} args - Arguments to create a SubscriptionBillingEvent.
+     * @example
+     * // Create one SubscriptionBillingEvent
+     * const SubscriptionBillingEvent = await prisma.subscriptionBillingEvent.create({
+     *   data: {
+     *     // ... data to create a SubscriptionBillingEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends SubscriptionBillingEventCreateArgs>(args: SelectSubset<T, SubscriptionBillingEventCreateArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SubscriptionBillingEvents.
+     * @param {SubscriptionBillingEventCreateManyArgs} args - Arguments to create many SubscriptionBillingEvents.
+     * @example
+     * // Create many SubscriptionBillingEvents
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SubscriptionBillingEventCreateManyArgs>(args?: SelectSubset<T, SubscriptionBillingEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SubscriptionBillingEvents and returns the data saved in the database.
+     * @param {SubscriptionBillingEventCreateManyAndReturnArgs} args - Arguments to create many SubscriptionBillingEvents.
+     * @example
+     * // Create many SubscriptionBillingEvents
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SubscriptionBillingEvents and only return the `id`
+     * const subscriptionBillingEventWithIdOnly = await prisma.subscriptionBillingEvent.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubscriptionBillingEventCreateManyAndReturnArgs>(args?: SelectSubset<T, SubscriptionBillingEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SubscriptionBillingEvent.
+     * @param {SubscriptionBillingEventDeleteArgs} args - Arguments to delete one SubscriptionBillingEvent.
+     * @example
+     * // Delete one SubscriptionBillingEvent
+     * const SubscriptionBillingEvent = await prisma.subscriptionBillingEvent.delete({
+     *   where: {
+     *     // ... filter to delete one SubscriptionBillingEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SubscriptionBillingEventDeleteArgs>(args: SelectSubset<T, SubscriptionBillingEventDeleteArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SubscriptionBillingEvent.
+     * @param {SubscriptionBillingEventUpdateArgs} args - Arguments to update one SubscriptionBillingEvent.
+     * @example
+     * // Update one SubscriptionBillingEvent
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SubscriptionBillingEventUpdateArgs>(args: SelectSubset<T, SubscriptionBillingEventUpdateArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SubscriptionBillingEvents.
+     * @param {SubscriptionBillingEventDeleteManyArgs} args - Arguments to filter SubscriptionBillingEvents to delete.
+     * @example
+     * // Delete a few SubscriptionBillingEvents
+     * const { count } = await prisma.subscriptionBillingEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SubscriptionBillingEventDeleteManyArgs>(args?: SelectSubset<T, SubscriptionBillingEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubscriptionBillingEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionBillingEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SubscriptionBillingEvents
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SubscriptionBillingEventUpdateManyArgs>(args: SelectSubset<T, SubscriptionBillingEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SubscriptionBillingEvent.
+     * @param {SubscriptionBillingEventUpsertArgs} args - Arguments to update or create a SubscriptionBillingEvent.
+     * @example
+     * // Update or create a SubscriptionBillingEvent
+     * const subscriptionBillingEvent = await prisma.subscriptionBillingEvent.upsert({
+     *   create: {
+     *     // ... data to create a SubscriptionBillingEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SubscriptionBillingEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SubscriptionBillingEventUpsertArgs>(args: SelectSubset<T, SubscriptionBillingEventUpsertArgs<ExtArgs>>): Prisma__SubscriptionBillingEventClient<$Result.GetResult<Prisma.$SubscriptionBillingEventPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SubscriptionBillingEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionBillingEventCountArgs} args - Arguments to filter SubscriptionBillingEvents to count.
+     * @example
+     * // Count the number of SubscriptionBillingEvents
+     * const count = await prisma.subscriptionBillingEvent.count({
+     *   where: {
+     *     // ... the filter for the SubscriptionBillingEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends SubscriptionBillingEventCountArgs>(
+      args?: Subset<T, SubscriptionBillingEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SubscriptionBillingEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SubscriptionBillingEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionBillingEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SubscriptionBillingEventAggregateArgs>(args: Subset<T, SubscriptionBillingEventAggregateArgs>): Prisma.PrismaPromise<GetSubscriptionBillingEventAggregateType<T>>
+
+    /**
+     * Group by SubscriptionBillingEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionBillingEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SubscriptionBillingEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubscriptionBillingEventGroupByArgs['orderBy'] }
+        : { orderBy?: SubscriptionBillingEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SubscriptionBillingEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubscriptionBillingEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SubscriptionBillingEvent model
+   */
+  readonly fields: SubscriptionBillingEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SubscriptionBillingEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SubscriptionBillingEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    subscription<T extends MemberSubscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberSubscriptionDefaultArgs<ExtArgs>>): Prisma__MemberSubscriptionClient<$Result.GetResult<Prisma.$MemberSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SubscriptionBillingEvent model
+   */ 
+  interface SubscriptionBillingEventFieldRefs {
+    readonly id: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly tenantId: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly subscriptionId: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly eventType: FieldRef<"SubscriptionBillingEvent", 'BillingEventType'>
+    readonly eventTime: FieldRef<"SubscriptionBillingEvent", 'DateTime'>
+    readonly eventData: FieldRef<"SubscriptionBillingEvent", 'Json'>
+    readonly previousState: FieldRef<"SubscriptionBillingEvent", 'Json'>
+    readonly newState: FieldRef<"SubscriptionBillingEvent", 'Json'>
+    readonly amount: FieldRef<"SubscriptionBillingEvent", 'Decimal'>
+    readonly currency: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly invoiceId: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly paymentReference: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly errorCode: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly errorMessage: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly performedBy: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly performedByType: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly ipAddress: FieldRef<"SubscriptionBillingEvent", 'String'>
+    readonly userAgent: FieldRef<"SubscriptionBillingEvent", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SubscriptionBillingEvent findUnique
+   */
+  export type SubscriptionBillingEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionBillingEvent to fetch.
+     */
+    where: SubscriptionBillingEventWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionBillingEvent findUniqueOrThrow
+   */
+  export type SubscriptionBillingEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionBillingEvent to fetch.
+     */
+    where: SubscriptionBillingEventWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionBillingEvent findFirst
+   */
+  export type SubscriptionBillingEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionBillingEvent to fetch.
+     */
+    where?: SubscriptionBillingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionBillingEvents to fetch.
+     */
+    orderBy?: SubscriptionBillingEventOrderByWithRelationInput | SubscriptionBillingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionBillingEvents.
+     */
+    cursor?: SubscriptionBillingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionBillingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionBillingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionBillingEvents.
+     */
+    distinct?: SubscriptionBillingEventScalarFieldEnum | SubscriptionBillingEventScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionBillingEvent findFirstOrThrow
+   */
+  export type SubscriptionBillingEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionBillingEvent to fetch.
+     */
+    where?: SubscriptionBillingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionBillingEvents to fetch.
+     */
+    orderBy?: SubscriptionBillingEventOrderByWithRelationInput | SubscriptionBillingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionBillingEvents.
+     */
+    cursor?: SubscriptionBillingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionBillingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionBillingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionBillingEvents.
+     */
+    distinct?: SubscriptionBillingEventScalarFieldEnum | SubscriptionBillingEventScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionBillingEvent findMany
+   */
+  export type SubscriptionBillingEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionBillingEvents to fetch.
+     */
+    where?: SubscriptionBillingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionBillingEvents to fetch.
+     */
+    orderBy?: SubscriptionBillingEventOrderByWithRelationInput | SubscriptionBillingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SubscriptionBillingEvents.
+     */
+    cursor?: SubscriptionBillingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionBillingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionBillingEvents.
+     */
+    skip?: number
+    distinct?: SubscriptionBillingEventScalarFieldEnum | SubscriptionBillingEventScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionBillingEvent create
+   */
+  export type SubscriptionBillingEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SubscriptionBillingEvent.
+     */
+    data: XOR<SubscriptionBillingEventCreateInput, SubscriptionBillingEventUncheckedCreateInput>
+  }
+
+  /**
+   * SubscriptionBillingEvent createMany
+   */
+  export type SubscriptionBillingEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SubscriptionBillingEvents.
+     */
+    data: SubscriptionBillingEventCreateManyInput | SubscriptionBillingEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SubscriptionBillingEvent createManyAndReturn
+   */
+  export type SubscriptionBillingEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SubscriptionBillingEvents.
+     */
+    data: SubscriptionBillingEventCreateManyInput | SubscriptionBillingEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SubscriptionBillingEvent update
+   */
+  export type SubscriptionBillingEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SubscriptionBillingEvent.
+     */
+    data: XOR<SubscriptionBillingEventUpdateInput, SubscriptionBillingEventUncheckedUpdateInput>
+    /**
+     * Choose, which SubscriptionBillingEvent to update.
+     */
+    where: SubscriptionBillingEventWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionBillingEvent updateMany
+   */
+  export type SubscriptionBillingEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SubscriptionBillingEvents.
+     */
+    data: XOR<SubscriptionBillingEventUpdateManyMutationInput, SubscriptionBillingEventUncheckedUpdateManyInput>
+    /**
+     * Filter which SubscriptionBillingEvents to update
+     */
+    where?: SubscriptionBillingEventWhereInput
+  }
+
+  /**
+   * SubscriptionBillingEvent upsert
+   */
+  export type SubscriptionBillingEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SubscriptionBillingEvent to update in case it exists.
+     */
+    where: SubscriptionBillingEventWhereUniqueInput
+    /**
+     * In case the SubscriptionBillingEvent found by the `where` argument doesn't exist, create a new SubscriptionBillingEvent with this data.
+     */
+    create: XOR<SubscriptionBillingEventCreateInput, SubscriptionBillingEventUncheckedCreateInput>
+    /**
+     * In case the SubscriptionBillingEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SubscriptionBillingEventUpdateInput, SubscriptionBillingEventUncheckedUpdateInput>
+  }
+
+  /**
+   * SubscriptionBillingEvent delete
+   */
+  export type SubscriptionBillingEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+    /**
+     * Filter which SubscriptionBillingEvent to delete.
+     */
+    where: SubscriptionBillingEventWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionBillingEvent deleteMany
+   */
+  export type SubscriptionBillingEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionBillingEvents to delete
+     */
+    where?: SubscriptionBillingEventWhereInput
+  }
+
+  /**
+   * SubscriptionBillingEvent without action
+   */
+  export type SubscriptionBillingEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionBillingEvent
+     */
+    select?: SubscriptionBillingEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionBillingEventInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -50173,6 +58458,195 @@ export namespace Prisma {
   export type DebitNoteLineScalarFieldEnum = (typeof DebitNoteLineScalarFieldEnum)[keyof typeof DebitNoteLineScalarFieldEnum]
 
 
+  export const MembershipPlanScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    planCode: 'planCode',
+    planName: 'planName',
+    description: 'description',
+    tier: 'tier',
+    category: 'category',
+    basePrice: 'basePrice',
+    currency: 'currency',
+    billingCycle: 'billingCycle',
+    monthlyPrice: 'monthlyPrice',
+    quarterlyPrice: 'quarterlyPrice',
+    semiAnnualPrice: 'semiAnnualPrice',
+    annualPrice: 'annualPrice',
+    enrollmentFee: 'enrollmentFee',
+    reactivationFee: 'reactivationFee',
+    annualDiscountPercent: 'annualDiscountPercent',
+    benefitsSummary: 'benefitsSummary',
+    minCommitmentMonths: 'minCommitmentMonths',
+    maxMembers: 'maxMembers',
+    ageMin: 'ageMin',
+    ageMax: 'ageMax',
+    requiresAssessment: 'requiresAssessment',
+    isActive: 'isActive',
+    isPublic: 'isPublic',
+    displayOrder: 'displayOrder',
+    highlightFeatures: 'highlightFeatures',
+    availableFacilities: 'availableFacilities',
+    termsAndConditions: 'termsAndConditions',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type MembershipPlanScalarFieldEnum = (typeof MembershipPlanScalarFieldEnum)[keyof typeof MembershipPlanScalarFieldEnum]
+
+
+  export const PlanBenefitScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    planId: 'planId',
+    benefitType: 'benefitType',
+    benefitName: 'benefitName',
+    description: 'description',
+    quantityIncluded: 'quantityIncluded',
+    usageResetOnRenewal: 'usageResetOnRenewal',
+    discountPercent: 'discountPercent',
+    maxDiscountAmount: 'maxDiscountAmount',
+    applicableTo: 'applicableTo',
+    billingItemId: 'billingItemId',
+    displayOrder: 'displayOrder',
+    isHighlighted: 'isHighlighted',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PlanBenefitScalarFieldEnum = (typeof PlanBenefitScalarFieldEnum)[keyof typeof PlanBenefitScalarFieldEnum]
+
+
+  export const MemberSubscriptionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    mrn: 'mrn',
+    patientDisplayName: 'patientDisplayName',
+    planId: 'planId',
+    billingCycle: 'billingCycle',
+    subscriptionNumber: 'subscriptionNumber',
+    status: 'status',
+    enrolledAt: 'enrolledAt',
+    activatedAt: 'activatedAt',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    currentPeriodStart: 'currentPeriodStart',
+    currentPeriodEnd: 'currentPeriodEnd',
+    nextBillingDate: 'nextBillingDate',
+    cancelledAt: 'cancelledAt',
+    cancelledBy: 'cancelledBy',
+    cancellationReason: 'cancellationReason',
+    cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+    recurringAmount: 'recurringAmount',
+    currency: 'currency',
+    enrollmentFeeCharged: 'enrollmentFeeCharged',
+    paymentMethod: 'paymentMethod',
+    paymentReference: 'paymentReference',
+    autoRenew: 'autoRenew',
+    primarySubscriptionId: 'primarySubscriptionId',
+    isDependent: 'isDependent',
+    referredBy: 'referredBy',
+    linkedProgramEnrollmentId: 'linkedProgramEnrollmentId',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type MemberSubscriptionScalarFieldEnum = (typeof MemberSubscriptionScalarFieldEnum)[keyof typeof MemberSubscriptionScalarFieldEnum]
+
+
+  export const BenefitUsageScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    subscriptionId: 'subscriptionId',
+    benefitId: 'benefitId',
+    usedAt: 'usedAt',
+    quantity: 'quantity',
+    encounterId: 'encounterId',
+    chargeId: 'chargeId',
+    invoiceId: 'invoiceId',
+    regularPrice: 'regularPrice',
+    memberPrice: 'memberPrice',
+    discountAmount: 'discountAmount',
+    billingPeriodStart: 'billingPeriodStart',
+    billingPeriodEnd: 'billingPeriodEnd',
+    usedQuantityBefore: 'usedQuantityBefore',
+    usedQuantityAfter: 'usedQuantityAfter',
+    remainingQuantity: 'remainingQuantity',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy'
+  };
+
+  export type BenefitUsageScalarFieldEnum = (typeof BenefitUsageScalarFieldEnum)[keyof typeof BenefitUsageScalarFieldEnum]
+
+
+  export const SubscriptionInvoiceScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    subscriptionId: 'subscriptionId',
+    patientId: 'patientId',
+    patientDisplayName: 'patientDisplayName',
+    invoiceNumber: 'invoiceNumber',
+    invoiceDate: 'invoiceDate',
+    dueDate: 'dueDate',
+    periodStart: 'periodStart',
+    periodEnd: 'periodEnd',
+    invoiceType: 'invoiceType',
+    subtotal: 'subtotal',
+    taxAmount: 'taxAmount',
+    discountAmount: 'discountAmount',
+    totalAmount: 'totalAmount',
+    currency: 'currency',
+    status: 'status',
+    amountPaid: 'amountPaid',
+    balanceDue: 'balanceDue',
+    paidAt: 'paidAt',
+    paymentMethod: 'paymentMethod',
+    paymentReference: 'paymentReference',
+    standardInvoiceId: 'standardInvoiceId',
+    receiptId: 'receiptId',
+    paymentAttempts: 'paymentAttempts',
+    lastPaymentAttempt: 'lastPaymentAttempt',
+    nextRetryDate: 'nextRetryDate',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type SubscriptionInvoiceScalarFieldEnum = (typeof SubscriptionInvoiceScalarFieldEnum)[keyof typeof SubscriptionInvoiceScalarFieldEnum]
+
+
+  export const SubscriptionBillingEventScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    subscriptionId: 'subscriptionId',
+    eventType: 'eventType',
+    eventTime: 'eventTime',
+    eventData: 'eventData',
+    previousState: 'previousState',
+    newState: 'newState',
+    amount: 'amount',
+    currency: 'currency',
+    invoiceId: 'invoiceId',
+    paymentReference: 'paymentReference',
+    errorCode: 'errorCode',
+    errorMessage: 'errorMessage',
+    performedBy: 'performedBy',
+    performedByType: 'performedByType',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent'
+  };
+
+  export type SubscriptionBillingEventScalarFieldEnum = (typeof SubscriptionBillingEventScalarFieldEnum)[keyof typeof SubscriptionBillingEventScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -50377,6 +58851,76 @@ export namespace Prisma {
    * Reference to a field of type 'DebitNoteStatus[]'
    */
   export type ListEnumDebitNoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DebitNoteStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MembershipTier'
+   */
+  export type EnumMembershipTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipTier'>
+    
+
+
+  /**
+   * Reference to a field of type 'MembershipTier[]'
+   */
+  export type ListEnumMembershipTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipTier[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BillingCycle'
+   */
+  export type EnumBillingCycleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingCycle'>
+    
+
+
+  /**
+   * Reference to a field of type 'BillingCycle[]'
+   */
+  export type ListEnumBillingCycleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingCycle[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BenefitType'
+   */
+  export type EnumBenefitTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BenefitType'>
+    
+
+
+  /**
+   * Reference to a field of type 'BenefitType[]'
+   */
+  export type ListEnumBenefitTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BenefitType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SubscriptionStatus'
+   */
+  export type EnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SubscriptionStatus[]'
+   */
+  export type ListEnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BillingEventType'
+   */
+  export type EnumBillingEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingEventType'>
+    
+
+
+  /**
+   * Reference to a field of type 'BillingEventType[]'
+   */
+  export type ListEnumBillingEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingEventType[]'>
     
 
 
@@ -54983,6 +63527,990 @@ export namespace Prisma {
     quantity?: DecimalNullableWithAggregatesFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
     unitPrice?: DecimalNullableWithAggregatesFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
     lineAmount?: DecimalWithAggregatesFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type MembershipPlanWhereInput = {
+    AND?: MembershipPlanWhereInput | MembershipPlanWhereInput[]
+    OR?: MembershipPlanWhereInput[]
+    NOT?: MembershipPlanWhereInput | MembershipPlanWhereInput[]
+    id?: UuidFilter<"MembershipPlan"> | string
+    tenantId?: UuidFilter<"MembershipPlan"> | string
+    planCode?: StringFilter<"MembershipPlan"> | string
+    planName?: StringFilter<"MembershipPlan"> | string
+    description?: StringNullableFilter<"MembershipPlan"> | string | null
+    tier?: EnumMembershipTierFilter<"MembershipPlan"> | $Enums.MembershipTier
+    category?: StringNullableFilter<"MembershipPlan"> | string | null
+    basePrice?: DecimalFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"MembershipPlan"> | string
+    billingCycle?: EnumBillingCycleFilter<"MembershipPlan"> | $Enums.BillingCycle
+    monthlyPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: StringNullableFilter<"MembershipPlan"> | string | null
+    minCommitmentMonths?: IntFilter<"MembershipPlan"> | number
+    maxMembers?: IntNullableFilter<"MembershipPlan"> | number | null
+    ageMin?: IntNullableFilter<"MembershipPlan"> | number | null
+    ageMax?: IntNullableFilter<"MembershipPlan"> | number | null
+    requiresAssessment?: BoolFilter<"MembershipPlan"> | boolean
+    isActive?: BoolFilter<"MembershipPlan"> | boolean
+    isPublic?: BoolFilter<"MembershipPlan"> | boolean
+    displayOrder?: IntFilter<"MembershipPlan"> | number
+    highlightFeatures?: JsonNullableFilter<"MembershipPlan">
+    availableFacilities?: StringNullableListFilter<"MembershipPlan">
+    termsAndConditions?: StringNullableFilter<"MembershipPlan"> | string | null
+    metadata?: JsonNullableFilter<"MembershipPlan">
+    createdAt?: DateTimeFilter<"MembershipPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"MembershipPlan"> | Date | string
+    createdBy?: UuidFilter<"MembershipPlan"> | string
+    benefits?: PlanBenefitListRelationFilter
+    subscriptions?: MemberSubscriptionListRelationFilter
+  }
+
+  export type MembershipPlanOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planCode?: SortOrder
+    planName?: SortOrder
+    description?: SortOrderInput | SortOrder
+    tier?: SortOrder
+    category?: SortOrderInput | SortOrder
+    basePrice?: SortOrder
+    currency?: SortOrder
+    billingCycle?: SortOrder
+    monthlyPrice?: SortOrderInput | SortOrder
+    quarterlyPrice?: SortOrderInput | SortOrder
+    semiAnnualPrice?: SortOrderInput | SortOrder
+    annualPrice?: SortOrderInput | SortOrder
+    enrollmentFee?: SortOrder
+    reactivationFee?: SortOrder
+    annualDiscountPercent?: SortOrderInput | SortOrder
+    benefitsSummary?: SortOrderInput | SortOrder
+    minCommitmentMonths?: SortOrder
+    maxMembers?: SortOrderInput | SortOrder
+    ageMin?: SortOrderInput | SortOrder
+    ageMax?: SortOrderInput | SortOrder
+    requiresAssessment?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    displayOrder?: SortOrder
+    highlightFeatures?: SortOrderInput | SortOrder
+    availableFacilities?: SortOrder
+    termsAndConditions?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    benefits?: PlanBenefitOrderByRelationAggregateInput
+    subscriptions?: MemberSubscriptionOrderByRelationAggregateInput
+  }
+
+  export type MembershipPlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_planCode?: MembershipPlanTenantIdPlanCodeCompoundUniqueInput
+    AND?: MembershipPlanWhereInput | MembershipPlanWhereInput[]
+    OR?: MembershipPlanWhereInput[]
+    NOT?: MembershipPlanWhereInput | MembershipPlanWhereInput[]
+    tenantId?: UuidFilter<"MembershipPlan"> | string
+    planCode?: StringFilter<"MembershipPlan"> | string
+    planName?: StringFilter<"MembershipPlan"> | string
+    description?: StringNullableFilter<"MembershipPlan"> | string | null
+    tier?: EnumMembershipTierFilter<"MembershipPlan"> | $Enums.MembershipTier
+    category?: StringNullableFilter<"MembershipPlan"> | string | null
+    basePrice?: DecimalFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"MembershipPlan"> | string
+    billingCycle?: EnumBillingCycleFilter<"MembershipPlan"> | $Enums.BillingCycle
+    monthlyPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: DecimalNullableFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: StringNullableFilter<"MembershipPlan"> | string | null
+    minCommitmentMonths?: IntFilter<"MembershipPlan"> | number
+    maxMembers?: IntNullableFilter<"MembershipPlan"> | number | null
+    ageMin?: IntNullableFilter<"MembershipPlan"> | number | null
+    ageMax?: IntNullableFilter<"MembershipPlan"> | number | null
+    requiresAssessment?: BoolFilter<"MembershipPlan"> | boolean
+    isActive?: BoolFilter<"MembershipPlan"> | boolean
+    isPublic?: BoolFilter<"MembershipPlan"> | boolean
+    displayOrder?: IntFilter<"MembershipPlan"> | number
+    highlightFeatures?: JsonNullableFilter<"MembershipPlan">
+    availableFacilities?: StringNullableListFilter<"MembershipPlan">
+    termsAndConditions?: StringNullableFilter<"MembershipPlan"> | string | null
+    metadata?: JsonNullableFilter<"MembershipPlan">
+    createdAt?: DateTimeFilter<"MembershipPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"MembershipPlan"> | Date | string
+    createdBy?: UuidFilter<"MembershipPlan"> | string
+    benefits?: PlanBenefitListRelationFilter
+    subscriptions?: MemberSubscriptionListRelationFilter
+  }, "id" | "tenantId_planCode">
+
+  export type MembershipPlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planCode?: SortOrder
+    planName?: SortOrder
+    description?: SortOrderInput | SortOrder
+    tier?: SortOrder
+    category?: SortOrderInput | SortOrder
+    basePrice?: SortOrder
+    currency?: SortOrder
+    billingCycle?: SortOrder
+    monthlyPrice?: SortOrderInput | SortOrder
+    quarterlyPrice?: SortOrderInput | SortOrder
+    semiAnnualPrice?: SortOrderInput | SortOrder
+    annualPrice?: SortOrderInput | SortOrder
+    enrollmentFee?: SortOrder
+    reactivationFee?: SortOrder
+    annualDiscountPercent?: SortOrderInput | SortOrder
+    benefitsSummary?: SortOrderInput | SortOrder
+    minCommitmentMonths?: SortOrder
+    maxMembers?: SortOrderInput | SortOrder
+    ageMin?: SortOrderInput | SortOrder
+    ageMax?: SortOrderInput | SortOrder
+    requiresAssessment?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    displayOrder?: SortOrder
+    highlightFeatures?: SortOrderInput | SortOrder
+    availableFacilities?: SortOrder
+    termsAndConditions?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    _count?: MembershipPlanCountOrderByAggregateInput
+    _avg?: MembershipPlanAvgOrderByAggregateInput
+    _max?: MembershipPlanMaxOrderByAggregateInput
+    _min?: MembershipPlanMinOrderByAggregateInput
+    _sum?: MembershipPlanSumOrderByAggregateInput
+  }
+
+  export type MembershipPlanScalarWhereWithAggregatesInput = {
+    AND?: MembershipPlanScalarWhereWithAggregatesInput | MembershipPlanScalarWhereWithAggregatesInput[]
+    OR?: MembershipPlanScalarWhereWithAggregatesInput[]
+    NOT?: MembershipPlanScalarWhereWithAggregatesInput | MembershipPlanScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"MembershipPlan"> | string
+    tenantId?: UuidWithAggregatesFilter<"MembershipPlan"> | string
+    planCode?: StringWithAggregatesFilter<"MembershipPlan"> | string
+    planName?: StringWithAggregatesFilter<"MembershipPlan"> | string
+    description?: StringNullableWithAggregatesFilter<"MembershipPlan"> | string | null
+    tier?: EnumMembershipTierWithAggregatesFilter<"MembershipPlan"> | $Enums.MembershipTier
+    category?: StringNullableWithAggregatesFilter<"MembershipPlan"> | string | null
+    basePrice?: DecimalWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    currency?: StringWithAggregatesFilter<"MembershipPlan"> | string
+    billingCycle?: EnumBillingCycleWithAggregatesFilter<"MembershipPlan"> | $Enums.BillingCycle
+    monthlyPrice?: DecimalNullableWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: DecimalNullableWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: DecimalNullableWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: DecimalNullableWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: DecimalNullableWithAggregatesFilter<"MembershipPlan"> | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: StringNullableWithAggregatesFilter<"MembershipPlan"> | string | null
+    minCommitmentMonths?: IntWithAggregatesFilter<"MembershipPlan"> | number
+    maxMembers?: IntNullableWithAggregatesFilter<"MembershipPlan"> | number | null
+    ageMin?: IntNullableWithAggregatesFilter<"MembershipPlan"> | number | null
+    ageMax?: IntNullableWithAggregatesFilter<"MembershipPlan"> | number | null
+    requiresAssessment?: BoolWithAggregatesFilter<"MembershipPlan"> | boolean
+    isActive?: BoolWithAggregatesFilter<"MembershipPlan"> | boolean
+    isPublic?: BoolWithAggregatesFilter<"MembershipPlan"> | boolean
+    displayOrder?: IntWithAggregatesFilter<"MembershipPlan"> | number
+    highlightFeatures?: JsonNullableWithAggregatesFilter<"MembershipPlan">
+    availableFacilities?: StringNullableListFilter<"MembershipPlan">
+    termsAndConditions?: StringNullableWithAggregatesFilter<"MembershipPlan"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"MembershipPlan">
+    createdAt?: DateTimeWithAggregatesFilter<"MembershipPlan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MembershipPlan"> | Date | string
+    createdBy?: UuidWithAggregatesFilter<"MembershipPlan"> | string
+  }
+
+  export type PlanBenefitWhereInput = {
+    AND?: PlanBenefitWhereInput | PlanBenefitWhereInput[]
+    OR?: PlanBenefitWhereInput[]
+    NOT?: PlanBenefitWhereInput | PlanBenefitWhereInput[]
+    id?: UuidFilter<"PlanBenefit"> | string
+    tenantId?: UuidFilter<"PlanBenefit"> | string
+    planId?: UuidFilter<"PlanBenefit"> | string
+    benefitType?: EnumBenefitTypeFilter<"PlanBenefit"> | $Enums.BenefitType
+    benefitName?: StringFilter<"PlanBenefit"> | string
+    description?: StringNullableFilter<"PlanBenefit"> | string | null
+    quantityIncluded?: IntNullableFilter<"PlanBenefit"> | number | null
+    usageResetOnRenewal?: BoolFilter<"PlanBenefit"> | boolean
+    discountPercent?: DecimalNullableFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: DecimalNullableFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: JsonNullableFilter<"PlanBenefit">
+    billingItemId?: UuidNullableFilter<"PlanBenefit"> | string | null
+    displayOrder?: IntFilter<"PlanBenefit"> | number
+    isHighlighted?: BoolFilter<"PlanBenefit"> | boolean
+    metadata?: JsonNullableFilter<"PlanBenefit">
+    createdAt?: DateTimeFilter<"PlanBenefit"> | Date | string
+    updatedAt?: DateTimeFilter<"PlanBenefit"> | Date | string
+    plan?: XOR<MembershipPlanRelationFilter, MembershipPlanWhereInput>
+    usages?: BenefitUsageListRelationFilter
+  }
+
+  export type PlanBenefitOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    benefitType?: SortOrder
+    benefitName?: SortOrder
+    description?: SortOrderInput | SortOrder
+    quantityIncluded?: SortOrderInput | SortOrder
+    usageResetOnRenewal?: SortOrder
+    discountPercent?: SortOrderInput | SortOrder
+    maxDiscountAmount?: SortOrderInput | SortOrder
+    applicableTo?: SortOrderInput | SortOrder
+    billingItemId?: SortOrderInput | SortOrder
+    displayOrder?: SortOrder
+    isHighlighted?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    plan?: MembershipPlanOrderByWithRelationInput
+    usages?: BenefitUsageOrderByRelationAggregateInput
+  }
+
+  export type PlanBenefitWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PlanBenefitWhereInput | PlanBenefitWhereInput[]
+    OR?: PlanBenefitWhereInput[]
+    NOT?: PlanBenefitWhereInput | PlanBenefitWhereInput[]
+    tenantId?: UuidFilter<"PlanBenefit"> | string
+    planId?: UuidFilter<"PlanBenefit"> | string
+    benefitType?: EnumBenefitTypeFilter<"PlanBenefit"> | $Enums.BenefitType
+    benefitName?: StringFilter<"PlanBenefit"> | string
+    description?: StringNullableFilter<"PlanBenefit"> | string | null
+    quantityIncluded?: IntNullableFilter<"PlanBenefit"> | number | null
+    usageResetOnRenewal?: BoolFilter<"PlanBenefit"> | boolean
+    discountPercent?: DecimalNullableFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: DecimalNullableFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: JsonNullableFilter<"PlanBenefit">
+    billingItemId?: UuidNullableFilter<"PlanBenefit"> | string | null
+    displayOrder?: IntFilter<"PlanBenefit"> | number
+    isHighlighted?: BoolFilter<"PlanBenefit"> | boolean
+    metadata?: JsonNullableFilter<"PlanBenefit">
+    createdAt?: DateTimeFilter<"PlanBenefit"> | Date | string
+    updatedAt?: DateTimeFilter<"PlanBenefit"> | Date | string
+    plan?: XOR<MembershipPlanRelationFilter, MembershipPlanWhereInput>
+    usages?: BenefitUsageListRelationFilter
+  }, "id">
+
+  export type PlanBenefitOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    benefitType?: SortOrder
+    benefitName?: SortOrder
+    description?: SortOrderInput | SortOrder
+    quantityIncluded?: SortOrderInput | SortOrder
+    usageResetOnRenewal?: SortOrder
+    discountPercent?: SortOrderInput | SortOrder
+    maxDiscountAmount?: SortOrderInput | SortOrder
+    applicableTo?: SortOrderInput | SortOrder
+    billingItemId?: SortOrderInput | SortOrder
+    displayOrder?: SortOrder
+    isHighlighted?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PlanBenefitCountOrderByAggregateInput
+    _avg?: PlanBenefitAvgOrderByAggregateInput
+    _max?: PlanBenefitMaxOrderByAggregateInput
+    _min?: PlanBenefitMinOrderByAggregateInput
+    _sum?: PlanBenefitSumOrderByAggregateInput
+  }
+
+  export type PlanBenefitScalarWhereWithAggregatesInput = {
+    AND?: PlanBenefitScalarWhereWithAggregatesInput | PlanBenefitScalarWhereWithAggregatesInput[]
+    OR?: PlanBenefitScalarWhereWithAggregatesInput[]
+    NOT?: PlanBenefitScalarWhereWithAggregatesInput | PlanBenefitScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PlanBenefit"> | string
+    tenantId?: UuidWithAggregatesFilter<"PlanBenefit"> | string
+    planId?: UuidWithAggregatesFilter<"PlanBenefit"> | string
+    benefitType?: EnumBenefitTypeWithAggregatesFilter<"PlanBenefit"> | $Enums.BenefitType
+    benefitName?: StringWithAggregatesFilter<"PlanBenefit"> | string
+    description?: StringNullableWithAggregatesFilter<"PlanBenefit"> | string | null
+    quantityIncluded?: IntNullableWithAggregatesFilter<"PlanBenefit"> | number | null
+    usageResetOnRenewal?: BoolWithAggregatesFilter<"PlanBenefit"> | boolean
+    discountPercent?: DecimalNullableWithAggregatesFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: DecimalNullableWithAggregatesFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: JsonNullableWithAggregatesFilter<"PlanBenefit">
+    billingItemId?: UuidNullableWithAggregatesFilter<"PlanBenefit"> | string | null
+    displayOrder?: IntWithAggregatesFilter<"PlanBenefit"> | number
+    isHighlighted?: BoolWithAggregatesFilter<"PlanBenefit"> | boolean
+    metadata?: JsonNullableWithAggregatesFilter<"PlanBenefit">
+    createdAt?: DateTimeWithAggregatesFilter<"PlanBenefit"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PlanBenefit"> | Date | string
+  }
+
+  export type MemberSubscriptionWhereInput = {
+    AND?: MemberSubscriptionWhereInput | MemberSubscriptionWhereInput[]
+    OR?: MemberSubscriptionWhereInput[]
+    NOT?: MemberSubscriptionWhereInput | MemberSubscriptionWhereInput[]
+    id?: UuidFilter<"MemberSubscription"> | string
+    tenantId?: UuidFilter<"MemberSubscription"> | string
+    patientId?: UuidFilter<"MemberSubscription"> | string
+    mrn?: StringNullableFilter<"MemberSubscription"> | string | null
+    patientDisplayName?: StringNullableFilter<"MemberSubscription"> | string | null
+    planId?: UuidFilter<"MemberSubscription"> | string
+    billingCycle?: EnumBillingCycleFilter<"MemberSubscription"> | $Enums.BillingCycle
+    subscriptionNumber?: StringFilter<"MemberSubscription"> | string
+    status?: EnumSubscriptionStatusFilter<"MemberSubscription"> | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    activatedAt?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    startDate?: DateTimeFilter<"MemberSubscription"> | Date | string
+    endDate?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    currentPeriodStart?: DateTimeFilter<"MemberSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeFilter<"MemberSubscription"> | Date | string
+    nextBillingDate?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    cancelledBy?: UuidNullableFilter<"MemberSubscription"> | string | null
+    cancellationReason?: StringNullableFilter<"MemberSubscription"> | string | null
+    cancelAtPeriodEnd?: BoolFilter<"MemberSubscription"> | boolean
+    recurringAmount?: DecimalFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"MemberSubscription"> | string
+    enrollmentFeeCharged?: DecimalFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableFilter<"MemberSubscription"> | string | null
+    paymentReference?: StringNullableFilter<"MemberSubscription"> | string | null
+    autoRenew?: BoolFilter<"MemberSubscription"> | boolean
+    primarySubscriptionId?: UuidNullableFilter<"MemberSubscription"> | string | null
+    isDependent?: BoolFilter<"MemberSubscription"> | boolean
+    referredBy?: UuidNullableFilter<"MemberSubscription"> | string | null
+    linkedProgramEnrollmentId?: UuidNullableFilter<"MemberSubscription"> | string | null
+    notes?: StringNullableFilter<"MemberSubscription"> | string | null
+    createdAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    createdBy?: UuidFilter<"MemberSubscription"> | string
+    plan?: XOR<MembershipPlanRelationFilter, MembershipPlanWhereInput>
+    primarySubscription?: XOR<MemberSubscriptionNullableRelationFilter, MemberSubscriptionWhereInput> | null
+    dependentSubscriptions?: MemberSubscriptionListRelationFilter
+    benefitUsages?: BenefitUsageListRelationFilter
+    invoices?: SubscriptionInvoiceListRelationFilter
+    billingEvents?: SubscriptionBillingEventListRelationFilter
+  }
+
+  export type MemberSubscriptionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    planId?: SortOrder
+    billingCycle?: SortOrder
+    subscriptionNumber?: SortOrder
+    status?: SortOrder
+    enrolledAt?: SortOrder
+    activatedAt?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    nextBillingDate?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
+    cancelledBy?: SortOrderInput | SortOrder
+    cancellationReason?: SortOrderInput | SortOrder
+    cancelAtPeriodEnd?: SortOrder
+    recurringAmount?: SortOrder
+    currency?: SortOrder
+    enrollmentFeeCharged?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    autoRenew?: SortOrder
+    primarySubscriptionId?: SortOrderInput | SortOrder
+    isDependent?: SortOrder
+    referredBy?: SortOrderInput | SortOrder
+    linkedProgramEnrollmentId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    plan?: MembershipPlanOrderByWithRelationInput
+    primarySubscription?: MemberSubscriptionOrderByWithRelationInput
+    dependentSubscriptions?: MemberSubscriptionOrderByRelationAggregateInput
+    benefitUsages?: BenefitUsageOrderByRelationAggregateInput
+    invoices?: SubscriptionInvoiceOrderByRelationAggregateInput
+    billingEvents?: SubscriptionBillingEventOrderByRelationAggregateInput
+  }
+
+  export type MemberSubscriptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_subscriptionNumber?: MemberSubscriptionTenantIdSubscriptionNumberCompoundUniqueInput
+    AND?: MemberSubscriptionWhereInput | MemberSubscriptionWhereInput[]
+    OR?: MemberSubscriptionWhereInput[]
+    NOT?: MemberSubscriptionWhereInput | MemberSubscriptionWhereInput[]
+    tenantId?: UuidFilter<"MemberSubscription"> | string
+    patientId?: UuidFilter<"MemberSubscription"> | string
+    mrn?: StringNullableFilter<"MemberSubscription"> | string | null
+    patientDisplayName?: StringNullableFilter<"MemberSubscription"> | string | null
+    planId?: UuidFilter<"MemberSubscription"> | string
+    billingCycle?: EnumBillingCycleFilter<"MemberSubscription"> | $Enums.BillingCycle
+    subscriptionNumber?: StringFilter<"MemberSubscription"> | string
+    status?: EnumSubscriptionStatusFilter<"MemberSubscription"> | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    activatedAt?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    startDate?: DateTimeFilter<"MemberSubscription"> | Date | string
+    endDate?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    currentPeriodStart?: DateTimeFilter<"MemberSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeFilter<"MemberSubscription"> | Date | string
+    nextBillingDate?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    cancelledBy?: UuidNullableFilter<"MemberSubscription"> | string | null
+    cancellationReason?: StringNullableFilter<"MemberSubscription"> | string | null
+    cancelAtPeriodEnd?: BoolFilter<"MemberSubscription"> | boolean
+    recurringAmount?: DecimalFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"MemberSubscription"> | string
+    enrollmentFeeCharged?: DecimalFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableFilter<"MemberSubscription"> | string | null
+    paymentReference?: StringNullableFilter<"MemberSubscription"> | string | null
+    autoRenew?: BoolFilter<"MemberSubscription"> | boolean
+    primarySubscriptionId?: UuidNullableFilter<"MemberSubscription"> | string | null
+    isDependent?: BoolFilter<"MemberSubscription"> | boolean
+    referredBy?: UuidNullableFilter<"MemberSubscription"> | string | null
+    linkedProgramEnrollmentId?: UuidNullableFilter<"MemberSubscription"> | string | null
+    notes?: StringNullableFilter<"MemberSubscription"> | string | null
+    createdAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    createdBy?: UuidFilter<"MemberSubscription"> | string
+    plan?: XOR<MembershipPlanRelationFilter, MembershipPlanWhereInput>
+    primarySubscription?: XOR<MemberSubscriptionNullableRelationFilter, MemberSubscriptionWhereInput> | null
+    dependentSubscriptions?: MemberSubscriptionListRelationFilter
+    benefitUsages?: BenefitUsageListRelationFilter
+    invoices?: SubscriptionInvoiceListRelationFilter
+    billingEvents?: SubscriptionBillingEventListRelationFilter
+  }, "id" | "tenantId_subscriptionNumber">
+
+  export type MemberSubscriptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    planId?: SortOrder
+    billingCycle?: SortOrder
+    subscriptionNumber?: SortOrder
+    status?: SortOrder
+    enrolledAt?: SortOrder
+    activatedAt?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    nextBillingDate?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
+    cancelledBy?: SortOrderInput | SortOrder
+    cancellationReason?: SortOrderInput | SortOrder
+    cancelAtPeriodEnd?: SortOrder
+    recurringAmount?: SortOrder
+    currency?: SortOrder
+    enrollmentFeeCharged?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    autoRenew?: SortOrder
+    primarySubscriptionId?: SortOrderInput | SortOrder
+    isDependent?: SortOrder
+    referredBy?: SortOrderInput | SortOrder
+    linkedProgramEnrollmentId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    _count?: MemberSubscriptionCountOrderByAggregateInput
+    _avg?: MemberSubscriptionAvgOrderByAggregateInput
+    _max?: MemberSubscriptionMaxOrderByAggregateInput
+    _min?: MemberSubscriptionMinOrderByAggregateInput
+    _sum?: MemberSubscriptionSumOrderByAggregateInput
+  }
+
+  export type MemberSubscriptionScalarWhereWithAggregatesInput = {
+    AND?: MemberSubscriptionScalarWhereWithAggregatesInput | MemberSubscriptionScalarWhereWithAggregatesInput[]
+    OR?: MemberSubscriptionScalarWhereWithAggregatesInput[]
+    NOT?: MemberSubscriptionScalarWhereWithAggregatesInput | MemberSubscriptionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"MemberSubscription"> | string
+    tenantId?: UuidWithAggregatesFilter<"MemberSubscription"> | string
+    patientId?: UuidWithAggregatesFilter<"MemberSubscription"> | string
+    mrn?: StringNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    patientDisplayName?: StringNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    planId?: UuidWithAggregatesFilter<"MemberSubscription"> | string
+    billingCycle?: EnumBillingCycleWithAggregatesFilter<"MemberSubscription"> | $Enums.BillingCycle
+    subscriptionNumber?: StringWithAggregatesFilter<"MemberSubscription"> | string
+    status?: EnumSubscriptionStatusWithAggregatesFilter<"MemberSubscription"> | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeWithAggregatesFilter<"MemberSubscription"> | Date | string
+    activatedAt?: DateTimeNullableWithAggregatesFilter<"MemberSubscription"> | Date | string | null
+    startDate?: DateTimeWithAggregatesFilter<"MemberSubscription"> | Date | string
+    endDate?: DateTimeNullableWithAggregatesFilter<"MemberSubscription"> | Date | string | null
+    currentPeriodStart?: DateTimeWithAggregatesFilter<"MemberSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeWithAggregatesFilter<"MemberSubscription"> | Date | string
+    nextBillingDate?: DateTimeNullableWithAggregatesFilter<"MemberSubscription"> | Date | string | null
+    cancelledAt?: DateTimeNullableWithAggregatesFilter<"MemberSubscription"> | Date | string | null
+    cancelledBy?: UuidNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    cancellationReason?: StringNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    cancelAtPeriodEnd?: BoolWithAggregatesFilter<"MemberSubscription"> | boolean
+    recurringAmount?: DecimalWithAggregatesFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    currency?: StringWithAggregatesFilter<"MemberSubscription"> | string
+    enrollmentFeeCharged?: DecimalWithAggregatesFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    paymentReference?: StringNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    autoRenew?: BoolWithAggregatesFilter<"MemberSubscription"> | boolean
+    primarySubscriptionId?: UuidNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    isDependent?: BoolWithAggregatesFilter<"MemberSubscription"> | boolean
+    referredBy?: UuidNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    linkedProgramEnrollmentId?: UuidNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"MemberSubscription"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MemberSubscription"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MemberSubscription"> | Date | string
+    createdBy?: UuidWithAggregatesFilter<"MemberSubscription"> | string
+  }
+
+  export type BenefitUsageWhereInput = {
+    AND?: BenefitUsageWhereInput | BenefitUsageWhereInput[]
+    OR?: BenefitUsageWhereInput[]
+    NOT?: BenefitUsageWhereInput | BenefitUsageWhereInput[]
+    id?: UuidFilter<"BenefitUsage"> | string
+    tenantId?: UuidFilter<"BenefitUsage"> | string
+    subscriptionId?: UuidFilter<"BenefitUsage"> | string
+    benefitId?: UuidFilter<"BenefitUsage"> | string
+    usedAt?: DateTimeFilter<"BenefitUsage"> | Date | string
+    quantity?: IntFilter<"BenefitUsage"> | number
+    encounterId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    chargeId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    invoiceId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    regularPrice?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFilter<"BenefitUsage"> | Date | string
+    billingPeriodEnd?: DateTimeFilter<"BenefitUsage"> | Date | string
+    usedQuantityBefore?: IntFilter<"BenefitUsage"> | number
+    usedQuantityAfter?: IntFilter<"BenefitUsage"> | number
+    remainingQuantity?: IntNullableFilter<"BenefitUsage"> | number | null
+    notes?: StringNullableFilter<"BenefitUsage"> | string | null
+    createdAt?: DateTimeFilter<"BenefitUsage"> | Date | string
+    createdBy?: UuidFilter<"BenefitUsage"> | string
+    subscription?: XOR<MemberSubscriptionRelationFilter, MemberSubscriptionWhereInput>
+    benefit?: XOR<PlanBenefitRelationFilter, PlanBenefitWhereInput>
+  }
+
+  export type BenefitUsageOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    benefitId?: SortOrder
+    usedAt?: SortOrder
+    quantity?: SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    chargeId?: SortOrderInput | SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    regularPrice?: SortOrderInput | SortOrder
+    memberPrice?: SortOrderInput | SortOrder
+    discountAmount?: SortOrderInput | SortOrder
+    billingPeriodStart?: SortOrder
+    billingPeriodEnd?: SortOrder
+    usedQuantityBefore?: SortOrder
+    usedQuantityAfter?: SortOrder
+    remainingQuantity?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    subscription?: MemberSubscriptionOrderByWithRelationInput
+    benefit?: PlanBenefitOrderByWithRelationInput
+  }
+
+  export type BenefitUsageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BenefitUsageWhereInput | BenefitUsageWhereInput[]
+    OR?: BenefitUsageWhereInput[]
+    NOT?: BenefitUsageWhereInput | BenefitUsageWhereInput[]
+    tenantId?: UuidFilter<"BenefitUsage"> | string
+    subscriptionId?: UuidFilter<"BenefitUsage"> | string
+    benefitId?: UuidFilter<"BenefitUsage"> | string
+    usedAt?: DateTimeFilter<"BenefitUsage"> | Date | string
+    quantity?: IntFilter<"BenefitUsage"> | number
+    encounterId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    chargeId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    invoiceId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    regularPrice?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFilter<"BenefitUsage"> | Date | string
+    billingPeriodEnd?: DateTimeFilter<"BenefitUsage"> | Date | string
+    usedQuantityBefore?: IntFilter<"BenefitUsage"> | number
+    usedQuantityAfter?: IntFilter<"BenefitUsage"> | number
+    remainingQuantity?: IntNullableFilter<"BenefitUsage"> | number | null
+    notes?: StringNullableFilter<"BenefitUsage"> | string | null
+    createdAt?: DateTimeFilter<"BenefitUsage"> | Date | string
+    createdBy?: UuidFilter<"BenefitUsage"> | string
+    subscription?: XOR<MemberSubscriptionRelationFilter, MemberSubscriptionWhereInput>
+    benefit?: XOR<PlanBenefitRelationFilter, PlanBenefitWhereInput>
+  }, "id">
+
+  export type BenefitUsageOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    benefitId?: SortOrder
+    usedAt?: SortOrder
+    quantity?: SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    chargeId?: SortOrderInput | SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    regularPrice?: SortOrderInput | SortOrder
+    memberPrice?: SortOrderInput | SortOrder
+    discountAmount?: SortOrderInput | SortOrder
+    billingPeriodStart?: SortOrder
+    billingPeriodEnd?: SortOrder
+    usedQuantityBefore?: SortOrder
+    usedQuantityAfter?: SortOrder
+    remainingQuantity?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    _count?: BenefitUsageCountOrderByAggregateInput
+    _avg?: BenefitUsageAvgOrderByAggregateInput
+    _max?: BenefitUsageMaxOrderByAggregateInput
+    _min?: BenefitUsageMinOrderByAggregateInput
+    _sum?: BenefitUsageSumOrderByAggregateInput
+  }
+
+  export type BenefitUsageScalarWhereWithAggregatesInput = {
+    AND?: BenefitUsageScalarWhereWithAggregatesInput | BenefitUsageScalarWhereWithAggregatesInput[]
+    OR?: BenefitUsageScalarWhereWithAggregatesInput[]
+    NOT?: BenefitUsageScalarWhereWithAggregatesInput | BenefitUsageScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"BenefitUsage"> | string
+    tenantId?: UuidWithAggregatesFilter<"BenefitUsage"> | string
+    subscriptionId?: UuidWithAggregatesFilter<"BenefitUsage"> | string
+    benefitId?: UuidWithAggregatesFilter<"BenefitUsage"> | string
+    usedAt?: DateTimeWithAggregatesFilter<"BenefitUsage"> | Date | string
+    quantity?: IntWithAggregatesFilter<"BenefitUsage"> | number
+    encounterId?: UuidNullableWithAggregatesFilter<"BenefitUsage"> | string | null
+    chargeId?: UuidNullableWithAggregatesFilter<"BenefitUsage"> | string | null
+    invoiceId?: UuidNullableWithAggregatesFilter<"BenefitUsage"> | string | null
+    regularPrice?: DecimalNullableWithAggregatesFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: DecimalNullableWithAggregatesFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: DecimalNullableWithAggregatesFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeWithAggregatesFilter<"BenefitUsage"> | Date | string
+    billingPeriodEnd?: DateTimeWithAggregatesFilter<"BenefitUsage"> | Date | string
+    usedQuantityBefore?: IntWithAggregatesFilter<"BenefitUsage"> | number
+    usedQuantityAfter?: IntWithAggregatesFilter<"BenefitUsage"> | number
+    remainingQuantity?: IntNullableWithAggregatesFilter<"BenefitUsage"> | number | null
+    notes?: StringNullableWithAggregatesFilter<"BenefitUsage"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BenefitUsage"> | Date | string
+    createdBy?: UuidWithAggregatesFilter<"BenefitUsage"> | string
+  }
+
+  export type SubscriptionInvoiceWhereInput = {
+    AND?: SubscriptionInvoiceWhereInput | SubscriptionInvoiceWhereInput[]
+    OR?: SubscriptionInvoiceWhereInput[]
+    NOT?: SubscriptionInvoiceWhereInput | SubscriptionInvoiceWhereInput[]
+    id?: UuidFilter<"SubscriptionInvoice"> | string
+    tenantId?: UuidFilter<"SubscriptionInvoice"> | string
+    subscriptionId?: UuidFilter<"SubscriptionInvoice"> | string
+    patientId?: UuidFilter<"SubscriptionInvoice"> | string
+    patientDisplayName?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    invoiceNumber?: StringFilter<"SubscriptionInvoice"> | string
+    invoiceDate?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    dueDate?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    periodStart?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    periodEnd?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    invoiceType?: StringFilter<"SubscriptionInvoice"> | string
+    subtotal?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"SubscriptionInvoice"> | string
+    status?: StringFilter<"SubscriptionInvoice"> | string
+    amountPaid?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    paidAt?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    paymentMethod?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    paymentReference?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    standardInvoiceId?: UuidNullableFilter<"SubscriptionInvoice"> | string | null
+    receiptId?: UuidNullableFilter<"SubscriptionInvoice"> | string | null
+    paymentAttempts?: IntFilter<"SubscriptionInvoice"> | number
+    lastPaymentAttempt?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    nextRetryDate?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    notes?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    createdAt?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    updatedAt?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    createdBy?: UuidFilter<"SubscriptionInvoice"> | string
+    subscription?: XOR<MemberSubscriptionRelationFilter, MemberSubscriptionWhereInput>
+  }
+
+  export type SubscriptionInvoiceOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    patientId?: SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    invoiceNumber?: SortOrder
+    invoiceDate?: SortOrder
+    dueDate?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    invoiceType?: SortOrder
+    subtotal?: SortOrder
+    taxAmount?: SortOrder
+    discountAmount?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    amountPaid?: SortOrder
+    balanceDue?: SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    standardInvoiceId?: SortOrderInput | SortOrder
+    receiptId?: SortOrderInput | SortOrder
+    paymentAttempts?: SortOrder
+    lastPaymentAttempt?: SortOrderInput | SortOrder
+    nextRetryDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    subscription?: MemberSubscriptionOrderByWithRelationInput
+  }
+
+  export type SubscriptionInvoiceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_invoiceNumber?: SubscriptionInvoiceTenantIdInvoiceNumberCompoundUniqueInput
+    AND?: SubscriptionInvoiceWhereInput | SubscriptionInvoiceWhereInput[]
+    OR?: SubscriptionInvoiceWhereInput[]
+    NOT?: SubscriptionInvoiceWhereInput | SubscriptionInvoiceWhereInput[]
+    tenantId?: UuidFilter<"SubscriptionInvoice"> | string
+    subscriptionId?: UuidFilter<"SubscriptionInvoice"> | string
+    patientId?: UuidFilter<"SubscriptionInvoice"> | string
+    patientDisplayName?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    invoiceNumber?: StringFilter<"SubscriptionInvoice"> | string
+    invoiceDate?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    dueDate?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    periodStart?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    periodEnd?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    invoiceType?: StringFilter<"SubscriptionInvoice"> | string
+    subtotal?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"SubscriptionInvoice"> | string
+    status?: StringFilter<"SubscriptionInvoice"> | string
+    amountPaid?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    paidAt?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    paymentMethod?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    paymentReference?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    standardInvoiceId?: UuidNullableFilter<"SubscriptionInvoice"> | string | null
+    receiptId?: UuidNullableFilter<"SubscriptionInvoice"> | string | null
+    paymentAttempts?: IntFilter<"SubscriptionInvoice"> | number
+    lastPaymentAttempt?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    nextRetryDate?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    notes?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    createdAt?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    updatedAt?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    createdBy?: UuidFilter<"SubscriptionInvoice"> | string
+    subscription?: XOR<MemberSubscriptionRelationFilter, MemberSubscriptionWhereInput>
+  }, "id" | "tenantId_invoiceNumber">
+
+  export type SubscriptionInvoiceOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    patientId?: SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    invoiceNumber?: SortOrder
+    invoiceDate?: SortOrder
+    dueDate?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    invoiceType?: SortOrder
+    subtotal?: SortOrder
+    taxAmount?: SortOrder
+    discountAmount?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    amountPaid?: SortOrder
+    balanceDue?: SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    standardInvoiceId?: SortOrderInput | SortOrder
+    receiptId?: SortOrderInput | SortOrder
+    paymentAttempts?: SortOrder
+    lastPaymentAttempt?: SortOrderInput | SortOrder
+    nextRetryDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    _count?: SubscriptionInvoiceCountOrderByAggregateInput
+    _avg?: SubscriptionInvoiceAvgOrderByAggregateInput
+    _max?: SubscriptionInvoiceMaxOrderByAggregateInput
+    _min?: SubscriptionInvoiceMinOrderByAggregateInput
+    _sum?: SubscriptionInvoiceSumOrderByAggregateInput
+  }
+
+  export type SubscriptionInvoiceScalarWhereWithAggregatesInput = {
+    AND?: SubscriptionInvoiceScalarWhereWithAggregatesInput | SubscriptionInvoiceScalarWhereWithAggregatesInput[]
+    OR?: SubscriptionInvoiceScalarWhereWithAggregatesInput[]
+    NOT?: SubscriptionInvoiceScalarWhereWithAggregatesInput | SubscriptionInvoiceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SubscriptionInvoice"> | string
+    tenantId?: UuidWithAggregatesFilter<"SubscriptionInvoice"> | string
+    subscriptionId?: UuidWithAggregatesFilter<"SubscriptionInvoice"> | string
+    patientId?: UuidWithAggregatesFilter<"SubscriptionInvoice"> | string
+    patientDisplayName?: StringNullableWithAggregatesFilter<"SubscriptionInvoice"> | string | null
+    invoiceNumber?: StringWithAggregatesFilter<"SubscriptionInvoice"> | string
+    invoiceDate?: DateTimeWithAggregatesFilter<"SubscriptionInvoice"> | Date | string
+    dueDate?: DateTimeWithAggregatesFilter<"SubscriptionInvoice"> | Date | string
+    periodStart?: DateTimeWithAggregatesFilter<"SubscriptionInvoice"> | Date | string
+    periodEnd?: DateTimeWithAggregatesFilter<"SubscriptionInvoice"> | Date | string
+    invoiceType?: StringWithAggregatesFilter<"SubscriptionInvoice"> | string
+    subtotal?: DecimalWithAggregatesFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalWithAggregatesFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalWithAggregatesFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalWithAggregatesFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    currency?: StringWithAggregatesFilter<"SubscriptionInvoice"> | string
+    status?: StringWithAggregatesFilter<"SubscriptionInvoice"> | string
+    amountPaid?: DecimalWithAggregatesFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalWithAggregatesFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    paidAt?: DateTimeNullableWithAggregatesFilter<"SubscriptionInvoice"> | Date | string | null
+    paymentMethod?: StringNullableWithAggregatesFilter<"SubscriptionInvoice"> | string | null
+    paymentReference?: StringNullableWithAggregatesFilter<"SubscriptionInvoice"> | string | null
+    standardInvoiceId?: UuidNullableWithAggregatesFilter<"SubscriptionInvoice"> | string | null
+    receiptId?: UuidNullableWithAggregatesFilter<"SubscriptionInvoice"> | string | null
+    paymentAttempts?: IntWithAggregatesFilter<"SubscriptionInvoice"> | number
+    lastPaymentAttempt?: DateTimeNullableWithAggregatesFilter<"SubscriptionInvoice"> | Date | string | null
+    nextRetryDate?: DateTimeNullableWithAggregatesFilter<"SubscriptionInvoice"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"SubscriptionInvoice"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SubscriptionInvoice"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SubscriptionInvoice"> | Date | string
+    createdBy?: UuidWithAggregatesFilter<"SubscriptionInvoice"> | string
+  }
+
+  export type SubscriptionBillingEventWhereInput = {
+    AND?: SubscriptionBillingEventWhereInput | SubscriptionBillingEventWhereInput[]
+    OR?: SubscriptionBillingEventWhereInput[]
+    NOT?: SubscriptionBillingEventWhereInput | SubscriptionBillingEventWhereInput[]
+    id?: UuidFilter<"SubscriptionBillingEvent"> | string
+    tenantId?: UuidFilter<"SubscriptionBillingEvent"> | string
+    subscriptionId?: UuidFilter<"SubscriptionBillingEvent"> | string
+    eventType?: EnumBillingEventTypeFilter<"SubscriptionBillingEvent"> | $Enums.BillingEventType
+    eventTime?: DateTimeFilter<"SubscriptionBillingEvent"> | Date | string
+    eventData?: JsonNullableFilter<"SubscriptionBillingEvent">
+    previousState?: JsonNullableFilter<"SubscriptionBillingEvent">
+    newState?: JsonNullableFilter<"SubscriptionBillingEvent">
+    amount?: DecimalNullableFilter<"SubscriptionBillingEvent"> | Decimal | DecimalJsLike | number | string | null
+    currency?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    invoiceId?: UuidNullableFilter<"SubscriptionBillingEvent"> | string | null
+    paymentReference?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    errorCode?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    errorMessage?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    performedBy?: UuidNullableFilter<"SubscriptionBillingEvent"> | string | null
+    performedByType?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    ipAddress?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    userAgent?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    subscription?: XOR<MemberSubscriptionRelationFilter, MemberSubscriptionWhereInput>
+  }
+
+  export type SubscriptionBillingEventOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    eventType?: SortOrder
+    eventTime?: SortOrder
+    eventData?: SortOrderInput | SortOrder
+    previousState?: SortOrderInput | SortOrder
+    newState?: SortOrderInput | SortOrder
+    amount?: SortOrderInput | SortOrder
+    currency?: SortOrderInput | SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    errorCode?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    performedBy?: SortOrderInput | SortOrder
+    performedByType?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    subscription?: MemberSubscriptionOrderByWithRelationInput
+  }
+
+  export type SubscriptionBillingEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SubscriptionBillingEventWhereInput | SubscriptionBillingEventWhereInput[]
+    OR?: SubscriptionBillingEventWhereInput[]
+    NOT?: SubscriptionBillingEventWhereInput | SubscriptionBillingEventWhereInput[]
+    tenantId?: UuidFilter<"SubscriptionBillingEvent"> | string
+    subscriptionId?: UuidFilter<"SubscriptionBillingEvent"> | string
+    eventType?: EnumBillingEventTypeFilter<"SubscriptionBillingEvent"> | $Enums.BillingEventType
+    eventTime?: DateTimeFilter<"SubscriptionBillingEvent"> | Date | string
+    eventData?: JsonNullableFilter<"SubscriptionBillingEvent">
+    previousState?: JsonNullableFilter<"SubscriptionBillingEvent">
+    newState?: JsonNullableFilter<"SubscriptionBillingEvent">
+    amount?: DecimalNullableFilter<"SubscriptionBillingEvent"> | Decimal | DecimalJsLike | number | string | null
+    currency?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    invoiceId?: UuidNullableFilter<"SubscriptionBillingEvent"> | string | null
+    paymentReference?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    errorCode?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    errorMessage?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    performedBy?: UuidNullableFilter<"SubscriptionBillingEvent"> | string | null
+    performedByType?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    ipAddress?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    userAgent?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    subscription?: XOR<MemberSubscriptionRelationFilter, MemberSubscriptionWhereInput>
+  }, "id">
+
+  export type SubscriptionBillingEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    eventType?: SortOrder
+    eventTime?: SortOrder
+    eventData?: SortOrderInput | SortOrder
+    previousState?: SortOrderInput | SortOrder
+    newState?: SortOrderInput | SortOrder
+    amount?: SortOrderInput | SortOrder
+    currency?: SortOrderInput | SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    errorCode?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    performedBy?: SortOrderInput | SortOrder
+    performedByType?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    _count?: SubscriptionBillingEventCountOrderByAggregateInput
+    _avg?: SubscriptionBillingEventAvgOrderByAggregateInput
+    _max?: SubscriptionBillingEventMaxOrderByAggregateInput
+    _min?: SubscriptionBillingEventMinOrderByAggregateInput
+    _sum?: SubscriptionBillingEventSumOrderByAggregateInput
+  }
+
+  export type SubscriptionBillingEventScalarWhereWithAggregatesInput = {
+    AND?: SubscriptionBillingEventScalarWhereWithAggregatesInput | SubscriptionBillingEventScalarWhereWithAggregatesInput[]
+    OR?: SubscriptionBillingEventScalarWhereWithAggregatesInput[]
+    NOT?: SubscriptionBillingEventScalarWhereWithAggregatesInput | SubscriptionBillingEventScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SubscriptionBillingEvent"> | string
+    tenantId?: UuidWithAggregatesFilter<"SubscriptionBillingEvent"> | string
+    subscriptionId?: UuidWithAggregatesFilter<"SubscriptionBillingEvent"> | string
+    eventType?: EnumBillingEventTypeWithAggregatesFilter<"SubscriptionBillingEvent"> | $Enums.BillingEventType
+    eventTime?: DateTimeWithAggregatesFilter<"SubscriptionBillingEvent"> | Date | string
+    eventData?: JsonNullableWithAggregatesFilter<"SubscriptionBillingEvent">
+    previousState?: JsonNullableWithAggregatesFilter<"SubscriptionBillingEvent">
+    newState?: JsonNullableWithAggregatesFilter<"SubscriptionBillingEvent">
+    amount?: DecimalNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | Decimal | DecimalJsLike | number | string | null
+    currency?: StringNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    invoiceId?: UuidNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    paymentReference?: StringNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    errorCode?: StringNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    errorMessage?: StringNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    performedBy?: UuidNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    performedByType?: StringNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    ipAddress?: StringNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"SubscriptionBillingEvent"> | string | null
   }
 
   export type PayerCreateInput = {
@@ -60386,6 +69914,1224 @@ export namespace Prisma {
     lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
+  export type MembershipPlanCreateInput = {
+    id?: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description?: string | null
+    tier: $Enums.MembershipTier
+    category?: string | null
+    basePrice: Decimal | DecimalJsLike | number | string
+    currency?: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice?: Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: Decimal | DecimalJsLike | number | string | null
+    annualPrice?: Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: Decimal | DecimalJsLike | number | string
+    reactivationFee?: Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: string | null
+    minCommitmentMonths?: number
+    maxMembers?: number | null
+    ageMin?: number | null
+    ageMax?: number | null
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanCreateavailableFacilitiesInput | string[]
+    termsAndConditions?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    benefits?: PlanBenefitCreateNestedManyWithoutPlanInput
+    subscriptions?: MemberSubscriptionCreateNestedManyWithoutPlanInput
+  }
+
+  export type MembershipPlanUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description?: string | null
+    tier: $Enums.MembershipTier
+    category?: string | null
+    basePrice: Decimal | DecimalJsLike | number | string
+    currency?: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice?: Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: Decimal | DecimalJsLike | number | string | null
+    annualPrice?: Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: Decimal | DecimalJsLike | number | string
+    reactivationFee?: Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: string | null
+    minCommitmentMonths?: number
+    maxMembers?: number | null
+    ageMin?: number | null
+    ageMax?: number | null
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanCreateavailableFacilitiesInput | string[]
+    termsAndConditions?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    benefits?: PlanBenefitUncheckedCreateNestedManyWithoutPlanInput
+    subscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type MembershipPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    benefits?: PlanBenefitUpdateManyWithoutPlanNestedInput
+    subscriptions?: MemberSubscriptionUpdateManyWithoutPlanNestedInput
+  }
+
+  export type MembershipPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    benefits?: PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput
+    subscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type MembershipPlanCreateManyInput = {
+    id?: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description?: string | null
+    tier: $Enums.MembershipTier
+    category?: string | null
+    basePrice: Decimal | DecimalJsLike | number | string
+    currency?: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice?: Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: Decimal | DecimalJsLike | number | string | null
+    annualPrice?: Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: Decimal | DecimalJsLike | number | string
+    reactivationFee?: Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: string | null
+    minCommitmentMonths?: number
+    maxMembers?: number | null
+    ageMin?: number | null
+    ageMax?: number | null
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanCreateavailableFacilitiesInput | string[]
+    termsAndConditions?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type MembershipPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type MembershipPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PlanBenefitCreateInput = {
+    id?: string
+    tenantId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plan: MembershipPlanCreateNestedOneWithoutBenefitsInput
+    usages?: BenefitUsageCreateNestedManyWithoutBenefitInput
+  }
+
+  export type PlanBenefitUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    planId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    usages?: BenefitUsageUncheckedCreateNestedManyWithoutBenefitInput
+  }
+
+  export type PlanBenefitUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutBenefitsNestedInput
+    usages?: BenefitUsageUpdateManyWithoutBenefitNestedInput
+  }
+
+  export type PlanBenefitUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usages?: BenefitUsageUncheckedUpdateManyWithoutBenefitNestedInput
+  }
+
+  export type PlanBenefitCreateManyInput = {
+    id?: string
+    tenantId: string
+    planId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanBenefitUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlanBenefitUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberSubscriptionCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    plan: MembershipPlanCreateNestedOneWithoutSubscriptionsInput
+    primarySubscription?: MemberSubscriptionCreateNestedOneWithoutDependentSubscriptionsInput
+    dependentSubscriptions?: MemberSubscriptionCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    dependentSubscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageUncheckedCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceUncheckedCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+    primarySubscription?: MemberSubscriptionUpdateOneWithoutDependentSubscriptionsNestedInput
+    dependentSubscriptions?: MemberSubscriptionUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    dependentSubscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUncheckedUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type MemberSubscriptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type MemberSubscriptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BenefitUsageCreateInput = {
+    id?: string
+    tenantId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+    subscription: MemberSubscriptionCreateNestedOneWithoutBenefitUsagesInput
+    benefit: PlanBenefitCreateNestedOneWithoutUsagesInput
+  }
+
+  export type BenefitUsageUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    benefitId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type BenefitUsageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    subscription?: MemberSubscriptionUpdateOneRequiredWithoutBenefitUsagesNestedInput
+    benefit?: PlanBenefitUpdateOneRequiredWithoutUsagesNestedInput
+  }
+
+  export type BenefitUsageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    benefitId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BenefitUsageCreateManyInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    benefitId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type BenefitUsageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BenefitUsageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    benefitId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionInvoiceCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate: Date | string
+    periodStart: Date | string
+    periodEnd: Date | string
+    invoiceType?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    taxAmount?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    status?: string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    standardInvoiceId?: string | null
+    receiptId?: string | null
+    paymentAttempts?: number
+    lastPaymentAttempt?: Date | string | null
+    nextRetryDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    subscription: MemberSubscriptionCreateNestedOneWithoutInvoicesInput
+  }
+
+  export type SubscriptionInvoiceUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    patientId: string
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate: Date | string
+    periodStart: Date | string
+    periodEnd: Date | string
+    invoiceType?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    taxAmount?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    status?: string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    standardInvoiceId?: string | null
+    receiptId?: string | null
+    paymentAttempts?: number
+    lastPaymentAttempt?: Date | string | null
+    nextRetryDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type SubscriptionInvoiceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceType?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    standardInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentAttempts?: IntFieldUpdateOperationsInput | number
+    lastPaymentAttempt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRetryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    subscription?: MemberSubscriptionUpdateOneRequiredWithoutInvoicesNestedInput
+  }
+
+  export type SubscriptionInvoiceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceType?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    standardInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentAttempts?: IntFieldUpdateOperationsInput | number
+    lastPaymentAttempt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRetryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionInvoiceCreateManyInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    patientId: string
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate: Date | string
+    periodStart: Date | string
+    periodEnd: Date | string
+    invoiceType?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    taxAmount?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    status?: string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    standardInvoiceId?: string | null
+    receiptId?: string | null
+    paymentAttempts?: number
+    lastPaymentAttempt?: Date | string | null
+    nextRetryDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type SubscriptionInvoiceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceType?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    standardInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentAttempts?: IntFieldUpdateOperationsInput | number
+    lastPaymentAttempt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRetryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionInvoiceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceType?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    standardInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentAttempts?: IntFieldUpdateOperationsInput | number
+    lastPaymentAttempt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRetryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionBillingEventCreateInput = {
+    id?: string
+    tenantId: string
+    eventType: $Enums.BillingEventType
+    eventTime?: Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    invoiceId?: string | null
+    paymentReference?: string | null
+    errorCode?: string | null
+    errorMessage?: string | null
+    performedBy?: string | null
+    performedByType?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    subscription: MemberSubscriptionCreateNestedOneWithoutBillingEventsInput
+  }
+
+  export type SubscriptionBillingEventUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    eventType: $Enums.BillingEventType
+    eventTime?: Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    invoiceId?: string | null
+    paymentReference?: string | null
+    errorCode?: string | null
+    errorMessage?: string | null
+    performedBy?: string | null
+    performedByType?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type SubscriptionBillingEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumBillingEventTypeFieldUpdateOperationsInput | $Enums.BillingEventType
+    eventTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedByType?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription?: MemberSubscriptionUpdateOneRequiredWithoutBillingEventsNestedInput
+  }
+
+  export type SubscriptionBillingEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumBillingEventTypeFieldUpdateOperationsInput | $Enums.BillingEventType
+    eventTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedByType?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubscriptionBillingEventCreateManyInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    eventType: $Enums.BillingEventType
+    eventTime?: Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    invoiceId?: string | null
+    paymentReference?: string | null
+    errorCode?: string | null
+    errorMessage?: string | null
+    performedBy?: string | null
+    performedByType?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type SubscriptionBillingEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumBillingEventTypeFieldUpdateOperationsInput | $Enums.BillingEventType
+    eventTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedByType?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubscriptionBillingEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumBillingEventTypeFieldUpdateOperationsInput | $Enums.BillingEventType
+    eventTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedByType?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -63974,6 +74720,777 @@ export namespace Prisma {
     lineAmount?: SortOrder
   }
 
+  export type EnumMembershipTierFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipTier | EnumMembershipTierFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipTierFilter<$PrismaModel> | $Enums.MembershipTier
+  }
+
+  export type EnumBillingCycleFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingCycle | EnumBillingCycleFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingCycleFilter<$PrismaModel> | $Enums.BillingCycle
+  }
+
+  export type PlanBenefitListRelationFilter = {
+    every?: PlanBenefitWhereInput
+    some?: PlanBenefitWhereInput
+    none?: PlanBenefitWhereInput
+  }
+
+  export type MemberSubscriptionListRelationFilter = {
+    every?: MemberSubscriptionWhereInput
+    some?: MemberSubscriptionWhereInput
+    none?: MemberSubscriptionWhereInput
+  }
+
+  export type PlanBenefitOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MemberSubscriptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MembershipPlanTenantIdPlanCodeCompoundUniqueInput = {
+    tenantId: string
+    planCode: string
+  }
+
+  export type MembershipPlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planCode?: SortOrder
+    planName?: SortOrder
+    description?: SortOrder
+    tier?: SortOrder
+    category?: SortOrder
+    basePrice?: SortOrder
+    currency?: SortOrder
+    billingCycle?: SortOrder
+    monthlyPrice?: SortOrder
+    quarterlyPrice?: SortOrder
+    semiAnnualPrice?: SortOrder
+    annualPrice?: SortOrder
+    enrollmentFee?: SortOrder
+    reactivationFee?: SortOrder
+    annualDiscountPercent?: SortOrder
+    benefitsSummary?: SortOrder
+    minCommitmentMonths?: SortOrder
+    maxMembers?: SortOrder
+    ageMin?: SortOrder
+    ageMax?: SortOrder
+    requiresAssessment?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    displayOrder?: SortOrder
+    highlightFeatures?: SortOrder
+    availableFacilities?: SortOrder
+    termsAndConditions?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type MembershipPlanAvgOrderByAggregateInput = {
+    basePrice?: SortOrder
+    monthlyPrice?: SortOrder
+    quarterlyPrice?: SortOrder
+    semiAnnualPrice?: SortOrder
+    annualPrice?: SortOrder
+    enrollmentFee?: SortOrder
+    reactivationFee?: SortOrder
+    annualDiscountPercent?: SortOrder
+    minCommitmentMonths?: SortOrder
+    maxMembers?: SortOrder
+    ageMin?: SortOrder
+    ageMax?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type MembershipPlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planCode?: SortOrder
+    planName?: SortOrder
+    description?: SortOrder
+    tier?: SortOrder
+    category?: SortOrder
+    basePrice?: SortOrder
+    currency?: SortOrder
+    billingCycle?: SortOrder
+    monthlyPrice?: SortOrder
+    quarterlyPrice?: SortOrder
+    semiAnnualPrice?: SortOrder
+    annualPrice?: SortOrder
+    enrollmentFee?: SortOrder
+    reactivationFee?: SortOrder
+    annualDiscountPercent?: SortOrder
+    benefitsSummary?: SortOrder
+    minCommitmentMonths?: SortOrder
+    maxMembers?: SortOrder
+    ageMin?: SortOrder
+    ageMax?: SortOrder
+    requiresAssessment?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    displayOrder?: SortOrder
+    termsAndConditions?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type MembershipPlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planCode?: SortOrder
+    planName?: SortOrder
+    description?: SortOrder
+    tier?: SortOrder
+    category?: SortOrder
+    basePrice?: SortOrder
+    currency?: SortOrder
+    billingCycle?: SortOrder
+    monthlyPrice?: SortOrder
+    quarterlyPrice?: SortOrder
+    semiAnnualPrice?: SortOrder
+    annualPrice?: SortOrder
+    enrollmentFee?: SortOrder
+    reactivationFee?: SortOrder
+    annualDiscountPercent?: SortOrder
+    benefitsSummary?: SortOrder
+    minCommitmentMonths?: SortOrder
+    maxMembers?: SortOrder
+    ageMin?: SortOrder
+    ageMax?: SortOrder
+    requiresAssessment?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    displayOrder?: SortOrder
+    termsAndConditions?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type MembershipPlanSumOrderByAggregateInput = {
+    basePrice?: SortOrder
+    monthlyPrice?: SortOrder
+    quarterlyPrice?: SortOrder
+    semiAnnualPrice?: SortOrder
+    annualPrice?: SortOrder
+    enrollmentFee?: SortOrder
+    reactivationFee?: SortOrder
+    annualDiscountPercent?: SortOrder
+    minCommitmentMonths?: SortOrder
+    maxMembers?: SortOrder
+    ageMin?: SortOrder
+    ageMax?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type EnumMembershipTierWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipTier | EnumMembershipTierFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipTierWithAggregatesFilter<$PrismaModel> | $Enums.MembershipTier
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMembershipTierFilter<$PrismaModel>
+    _max?: NestedEnumMembershipTierFilter<$PrismaModel>
+  }
+
+  export type EnumBillingCycleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingCycle | EnumBillingCycleFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingCycleWithAggregatesFilter<$PrismaModel> | $Enums.BillingCycle
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBillingCycleFilter<$PrismaModel>
+    _max?: NestedEnumBillingCycleFilter<$PrismaModel>
+  }
+
+  export type EnumBenefitTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BenefitType | EnumBenefitTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBenefitTypeFilter<$PrismaModel> | $Enums.BenefitType
+  }
+
+  export type MembershipPlanRelationFilter = {
+    is?: MembershipPlanWhereInput
+    isNot?: MembershipPlanWhereInput
+  }
+
+  export type BenefitUsageListRelationFilter = {
+    every?: BenefitUsageWhereInput
+    some?: BenefitUsageWhereInput
+    none?: BenefitUsageWhereInput
+  }
+
+  export type BenefitUsageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PlanBenefitCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    benefitType?: SortOrder
+    benefitName?: SortOrder
+    description?: SortOrder
+    quantityIncluded?: SortOrder
+    usageResetOnRenewal?: SortOrder
+    discountPercent?: SortOrder
+    maxDiscountAmount?: SortOrder
+    applicableTo?: SortOrder
+    billingItemId?: SortOrder
+    displayOrder?: SortOrder
+    isHighlighted?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanBenefitAvgOrderByAggregateInput = {
+    quantityIncluded?: SortOrder
+    discountPercent?: SortOrder
+    maxDiscountAmount?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type PlanBenefitMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    benefitType?: SortOrder
+    benefitName?: SortOrder
+    description?: SortOrder
+    quantityIncluded?: SortOrder
+    usageResetOnRenewal?: SortOrder
+    discountPercent?: SortOrder
+    maxDiscountAmount?: SortOrder
+    billingItemId?: SortOrder
+    displayOrder?: SortOrder
+    isHighlighted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanBenefitMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    benefitType?: SortOrder
+    benefitName?: SortOrder
+    description?: SortOrder
+    quantityIncluded?: SortOrder
+    usageResetOnRenewal?: SortOrder
+    discountPercent?: SortOrder
+    maxDiscountAmount?: SortOrder
+    billingItemId?: SortOrder
+    displayOrder?: SortOrder
+    isHighlighted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanBenefitSumOrderByAggregateInput = {
+    quantityIncluded?: SortOrder
+    discountPercent?: SortOrder
+    maxDiscountAmount?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type EnumBenefitTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BenefitType | EnumBenefitTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBenefitTypeWithAggregatesFilter<$PrismaModel> | $Enums.BenefitType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBenefitTypeFilter<$PrismaModel>
+    _max?: NestedEnumBenefitTypeFilter<$PrismaModel>
+  }
+
+  export type EnumSubscriptionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusFilter<$PrismaModel> | $Enums.SubscriptionStatus
+  }
+
+  export type MemberSubscriptionNullableRelationFilter = {
+    is?: MemberSubscriptionWhereInput | null
+    isNot?: MemberSubscriptionWhereInput | null
+  }
+
+  export type SubscriptionInvoiceListRelationFilter = {
+    every?: SubscriptionInvoiceWhereInput
+    some?: SubscriptionInvoiceWhereInput
+    none?: SubscriptionInvoiceWhereInput
+  }
+
+  export type SubscriptionBillingEventListRelationFilter = {
+    every?: SubscriptionBillingEventWhereInput
+    some?: SubscriptionBillingEventWhereInput
+    none?: SubscriptionBillingEventWhereInput
+  }
+
+  export type SubscriptionInvoiceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SubscriptionBillingEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MemberSubscriptionTenantIdSubscriptionNumberCompoundUniqueInput = {
+    tenantId: string
+    subscriptionNumber: string
+  }
+
+  export type MemberSubscriptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    planId?: SortOrder
+    billingCycle?: SortOrder
+    subscriptionNumber?: SortOrder
+    status?: SortOrder
+    enrolledAt?: SortOrder
+    activatedAt?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    nextBillingDate?: SortOrder
+    cancelledAt?: SortOrder
+    cancelledBy?: SortOrder
+    cancellationReason?: SortOrder
+    cancelAtPeriodEnd?: SortOrder
+    recurringAmount?: SortOrder
+    currency?: SortOrder
+    enrollmentFeeCharged?: SortOrder
+    paymentMethod?: SortOrder
+    paymentReference?: SortOrder
+    autoRenew?: SortOrder
+    primarySubscriptionId?: SortOrder
+    isDependent?: SortOrder
+    referredBy?: SortOrder
+    linkedProgramEnrollmentId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type MemberSubscriptionAvgOrderByAggregateInput = {
+    recurringAmount?: SortOrder
+    enrollmentFeeCharged?: SortOrder
+  }
+
+  export type MemberSubscriptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    planId?: SortOrder
+    billingCycle?: SortOrder
+    subscriptionNumber?: SortOrder
+    status?: SortOrder
+    enrolledAt?: SortOrder
+    activatedAt?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    nextBillingDate?: SortOrder
+    cancelledAt?: SortOrder
+    cancelledBy?: SortOrder
+    cancellationReason?: SortOrder
+    cancelAtPeriodEnd?: SortOrder
+    recurringAmount?: SortOrder
+    currency?: SortOrder
+    enrollmentFeeCharged?: SortOrder
+    paymentMethod?: SortOrder
+    paymentReference?: SortOrder
+    autoRenew?: SortOrder
+    primarySubscriptionId?: SortOrder
+    isDependent?: SortOrder
+    referredBy?: SortOrder
+    linkedProgramEnrollmentId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type MemberSubscriptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    planId?: SortOrder
+    billingCycle?: SortOrder
+    subscriptionNumber?: SortOrder
+    status?: SortOrder
+    enrolledAt?: SortOrder
+    activatedAt?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    nextBillingDate?: SortOrder
+    cancelledAt?: SortOrder
+    cancelledBy?: SortOrder
+    cancellationReason?: SortOrder
+    cancelAtPeriodEnd?: SortOrder
+    recurringAmount?: SortOrder
+    currency?: SortOrder
+    enrollmentFeeCharged?: SortOrder
+    paymentMethod?: SortOrder
+    paymentReference?: SortOrder
+    autoRenew?: SortOrder
+    primarySubscriptionId?: SortOrder
+    isDependent?: SortOrder
+    referredBy?: SortOrder
+    linkedProgramEnrollmentId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type MemberSubscriptionSumOrderByAggregateInput = {
+    recurringAmount?: SortOrder
+    enrollmentFeeCharged?: SortOrder
+  }
+
+  export type EnumSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SubscriptionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+  }
+
+  export type MemberSubscriptionRelationFilter = {
+    is?: MemberSubscriptionWhereInput
+    isNot?: MemberSubscriptionWhereInput
+  }
+
+  export type PlanBenefitRelationFilter = {
+    is?: PlanBenefitWhereInput
+    isNot?: PlanBenefitWhereInput
+  }
+
+  export type BenefitUsageCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    benefitId?: SortOrder
+    usedAt?: SortOrder
+    quantity?: SortOrder
+    encounterId?: SortOrder
+    chargeId?: SortOrder
+    invoiceId?: SortOrder
+    regularPrice?: SortOrder
+    memberPrice?: SortOrder
+    discountAmount?: SortOrder
+    billingPeriodStart?: SortOrder
+    billingPeriodEnd?: SortOrder
+    usedQuantityBefore?: SortOrder
+    usedQuantityAfter?: SortOrder
+    remainingQuantity?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type BenefitUsageAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    regularPrice?: SortOrder
+    memberPrice?: SortOrder
+    discountAmount?: SortOrder
+    usedQuantityBefore?: SortOrder
+    usedQuantityAfter?: SortOrder
+    remainingQuantity?: SortOrder
+  }
+
+  export type BenefitUsageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    benefitId?: SortOrder
+    usedAt?: SortOrder
+    quantity?: SortOrder
+    encounterId?: SortOrder
+    chargeId?: SortOrder
+    invoiceId?: SortOrder
+    regularPrice?: SortOrder
+    memberPrice?: SortOrder
+    discountAmount?: SortOrder
+    billingPeriodStart?: SortOrder
+    billingPeriodEnd?: SortOrder
+    usedQuantityBefore?: SortOrder
+    usedQuantityAfter?: SortOrder
+    remainingQuantity?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type BenefitUsageMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    benefitId?: SortOrder
+    usedAt?: SortOrder
+    quantity?: SortOrder
+    encounterId?: SortOrder
+    chargeId?: SortOrder
+    invoiceId?: SortOrder
+    regularPrice?: SortOrder
+    memberPrice?: SortOrder
+    discountAmount?: SortOrder
+    billingPeriodStart?: SortOrder
+    billingPeriodEnd?: SortOrder
+    usedQuantityBefore?: SortOrder
+    usedQuantityAfter?: SortOrder
+    remainingQuantity?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type BenefitUsageSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    regularPrice?: SortOrder
+    memberPrice?: SortOrder
+    discountAmount?: SortOrder
+    usedQuantityBefore?: SortOrder
+    usedQuantityAfter?: SortOrder
+    remainingQuantity?: SortOrder
+  }
+
+  export type SubscriptionInvoiceTenantIdInvoiceNumberCompoundUniqueInput = {
+    tenantId: string
+    invoiceNumber: string
+  }
+
+  export type SubscriptionInvoiceCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    patientId?: SortOrder
+    patientDisplayName?: SortOrder
+    invoiceNumber?: SortOrder
+    invoiceDate?: SortOrder
+    dueDate?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    invoiceType?: SortOrder
+    subtotal?: SortOrder
+    taxAmount?: SortOrder
+    discountAmount?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    amountPaid?: SortOrder
+    balanceDue?: SortOrder
+    paidAt?: SortOrder
+    paymentMethod?: SortOrder
+    paymentReference?: SortOrder
+    standardInvoiceId?: SortOrder
+    receiptId?: SortOrder
+    paymentAttempts?: SortOrder
+    lastPaymentAttempt?: SortOrder
+    nextRetryDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type SubscriptionInvoiceAvgOrderByAggregateInput = {
+    subtotal?: SortOrder
+    taxAmount?: SortOrder
+    discountAmount?: SortOrder
+    totalAmount?: SortOrder
+    amountPaid?: SortOrder
+    balanceDue?: SortOrder
+    paymentAttempts?: SortOrder
+  }
+
+  export type SubscriptionInvoiceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    patientId?: SortOrder
+    patientDisplayName?: SortOrder
+    invoiceNumber?: SortOrder
+    invoiceDate?: SortOrder
+    dueDate?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    invoiceType?: SortOrder
+    subtotal?: SortOrder
+    taxAmount?: SortOrder
+    discountAmount?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    amountPaid?: SortOrder
+    balanceDue?: SortOrder
+    paidAt?: SortOrder
+    paymentMethod?: SortOrder
+    paymentReference?: SortOrder
+    standardInvoiceId?: SortOrder
+    receiptId?: SortOrder
+    paymentAttempts?: SortOrder
+    lastPaymentAttempt?: SortOrder
+    nextRetryDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type SubscriptionInvoiceMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    patientId?: SortOrder
+    patientDisplayName?: SortOrder
+    invoiceNumber?: SortOrder
+    invoiceDate?: SortOrder
+    dueDate?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    invoiceType?: SortOrder
+    subtotal?: SortOrder
+    taxAmount?: SortOrder
+    discountAmount?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    amountPaid?: SortOrder
+    balanceDue?: SortOrder
+    paidAt?: SortOrder
+    paymentMethod?: SortOrder
+    paymentReference?: SortOrder
+    standardInvoiceId?: SortOrder
+    receiptId?: SortOrder
+    paymentAttempts?: SortOrder
+    lastPaymentAttempt?: SortOrder
+    nextRetryDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type SubscriptionInvoiceSumOrderByAggregateInput = {
+    subtotal?: SortOrder
+    taxAmount?: SortOrder
+    discountAmount?: SortOrder
+    totalAmount?: SortOrder
+    amountPaid?: SortOrder
+    balanceDue?: SortOrder
+    paymentAttempts?: SortOrder
+  }
+
+  export type EnumBillingEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingEventType | EnumBillingEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingEventTypeFilter<$PrismaModel> | $Enums.BillingEventType
+  }
+
+  export type SubscriptionBillingEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    eventType?: SortOrder
+    eventTime?: SortOrder
+    eventData?: SortOrder
+    previousState?: SortOrder
+    newState?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    invoiceId?: SortOrder
+    paymentReference?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    performedBy?: SortOrder
+    performedByType?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type SubscriptionBillingEventAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type SubscriptionBillingEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    eventType?: SortOrder
+    eventTime?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    invoiceId?: SortOrder
+    paymentReference?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    performedBy?: SortOrder
+    performedByType?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type SubscriptionBillingEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    subscriptionId?: SortOrder
+    eventType?: SortOrder
+    eventTime?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    invoiceId?: SortOrder
+    paymentReference?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    performedBy?: SortOrder
+    performedByType?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type SubscriptionBillingEventSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type EnumBillingEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingEventType | EnumBillingEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.BillingEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBillingEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumBillingEventTypeFilter<$PrismaModel>
+  }
+
   export type PolicyCreateNestedManyWithoutPayerInput = {
     create?: XOR<PolicyCreateWithoutPayerInput, PolicyUncheckedCreateWithoutPayerInput> | PolicyCreateWithoutPayerInput[] | PolicyUncheckedCreateWithoutPayerInput[]
     connectOrCreate?: PolicyCreateOrConnectWithoutPayerInput | PolicyCreateOrConnectWithoutPayerInput[]
@@ -66847,6 +78364,429 @@ export namespace Prisma {
     update?: XOR<XOR<DebitNoteUpdateToOneWithWhereWithoutLinesInput, DebitNoteUpdateWithoutLinesInput>, DebitNoteUncheckedUpdateWithoutLinesInput>
   }
 
+  export type MembershipPlanCreateavailableFacilitiesInput = {
+    set: string[]
+  }
+
+  export type PlanBenefitCreateNestedManyWithoutPlanInput = {
+    create?: XOR<PlanBenefitCreateWithoutPlanInput, PlanBenefitUncheckedCreateWithoutPlanInput> | PlanBenefitCreateWithoutPlanInput[] | PlanBenefitUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PlanBenefitCreateOrConnectWithoutPlanInput | PlanBenefitCreateOrConnectWithoutPlanInput[]
+    createMany?: PlanBenefitCreateManyPlanInputEnvelope
+    connect?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+  }
+
+  export type MemberSubscriptionCreateNestedManyWithoutPlanInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPlanInput, MemberSubscriptionUncheckedCreateWithoutPlanInput> | MemberSubscriptionCreateWithoutPlanInput[] | MemberSubscriptionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPlanInput | MemberSubscriptionCreateOrConnectWithoutPlanInput[]
+    createMany?: MemberSubscriptionCreateManyPlanInputEnvelope
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+  }
+
+  export type PlanBenefitUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<PlanBenefitCreateWithoutPlanInput, PlanBenefitUncheckedCreateWithoutPlanInput> | PlanBenefitCreateWithoutPlanInput[] | PlanBenefitUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PlanBenefitCreateOrConnectWithoutPlanInput | PlanBenefitCreateOrConnectWithoutPlanInput[]
+    createMany?: PlanBenefitCreateManyPlanInputEnvelope
+    connect?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+  }
+
+  export type MemberSubscriptionUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPlanInput, MemberSubscriptionUncheckedCreateWithoutPlanInput> | MemberSubscriptionCreateWithoutPlanInput[] | MemberSubscriptionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPlanInput | MemberSubscriptionCreateOrConnectWithoutPlanInput[]
+    createMany?: MemberSubscriptionCreateManyPlanInputEnvelope
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+  }
+
+  export type EnumMembershipTierFieldUpdateOperationsInput = {
+    set?: $Enums.MembershipTier
+  }
+
+  export type EnumBillingCycleFieldUpdateOperationsInput = {
+    set?: $Enums.BillingCycle
+  }
+
+  export type MembershipPlanUpdateavailableFacilitiesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type PlanBenefitUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<PlanBenefitCreateWithoutPlanInput, PlanBenefitUncheckedCreateWithoutPlanInput> | PlanBenefitCreateWithoutPlanInput[] | PlanBenefitUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PlanBenefitCreateOrConnectWithoutPlanInput | PlanBenefitCreateOrConnectWithoutPlanInput[]
+    upsert?: PlanBenefitUpsertWithWhereUniqueWithoutPlanInput | PlanBenefitUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: PlanBenefitCreateManyPlanInputEnvelope
+    set?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    disconnect?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    delete?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    connect?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    update?: PlanBenefitUpdateWithWhereUniqueWithoutPlanInput | PlanBenefitUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: PlanBenefitUpdateManyWithWhereWithoutPlanInput | PlanBenefitUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: PlanBenefitScalarWhereInput | PlanBenefitScalarWhereInput[]
+  }
+
+  export type MemberSubscriptionUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPlanInput, MemberSubscriptionUncheckedCreateWithoutPlanInput> | MemberSubscriptionCreateWithoutPlanInput[] | MemberSubscriptionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPlanInput | MemberSubscriptionCreateOrConnectWithoutPlanInput[]
+    upsert?: MemberSubscriptionUpsertWithWhereUniqueWithoutPlanInput | MemberSubscriptionUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: MemberSubscriptionCreateManyPlanInputEnvelope
+    set?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    disconnect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    delete?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    update?: MemberSubscriptionUpdateWithWhereUniqueWithoutPlanInput | MemberSubscriptionUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: MemberSubscriptionUpdateManyWithWhereWithoutPlanInput | MemberSubscriptionUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: MemberSubscriptionScalarWhereInput | MemberSubscriptionScalarWhereInput[]
+  }
+
+  export type PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<PlanBenefitCreateWithoutPlanInput, PlanBenefitUncheckedCreateWithoutPlanInput> | PlanBenefitCreateWithoutPlanInput[] | PlanBenefitUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PlanBenefitCreateOrConnectWithoutPlanInput | PlanBenefitCreateOrConnectWithoutPlanInput[]
+    upsert?: PlanBenefitUpsertWithWhereUniqueWithoutPlanInput | PlanBenefitUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: PlanBenefitCreateManyPlanInputEnvelope
+    set?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    disconnect?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    delete?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    connect?: PlanBenefitWhereUniqueInput | PlanBenefitWhereUniqueInput[]
+    update?: PlanBenefitUpdateWithWhereUniqueWithoutPlanInput | PlanBenefitUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: PlanBenefitUpdateManyWithWhereWithoutPlanInput | PlanBenefitUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: PlanBenefitScalarWhereInput | PlanBenefitScalarWhereInput[]
+  }
+
+  export type MemberSubscriptionUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPlanInput, MemberSubscriptionUncheckedCreateWithoutPlanInput> | MemberSubscriptionCreateWithoutPlanInput[] | MemberSubscriptionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPlanInput | MemberSubscriptionCreateOrConnectWithoutPlanInput[]
+    upsert?: MemberSubscriptionUpsertWithWhereUniqueWithoutPlanInput | MemberSubscriptionUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: MemberSubscriptionCreateManyPlanInputEnvelope
+    set?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    disconnect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    delete?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    update?: MemberSubscriptionUpdateWithWhereUniqueWithoutPlanInput | MemberSubscriptionUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: MemberSubscriptionUpdateManyWithWhereWithoutPlanInput | MemberSubscriptionUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: MemberSubscriptionScalarWhereInput | MemberSubscriptionScalarWhereInput[]
+  }
+
+  export type MembershipPlanCreateNestedOneWithoutBenefitsInput = {
+    create?: XOR<MembershipPlanCreateWithoutBenefitsInput, MembershipPlanUncheckedCreateWithoutBenefitsInput>
+    connectOrCreate?: MembershipPlanCreateOrConnectWithoutBenefitsInput
+    connect?: MembershipPlanWhereUniqueInput
+  }
+
+  export type BenefitUsageCreateNestedManyWithoutBenefitInput = {
+    create?: XOR<BenefitUsageCreateWithoutBenefitInput, BenefitUsageUncheckedCreateWithoutBenefitInput> | BenefitUsageCreateWithoutBenefitInput[] | BenefitUsageUncheckedCreateWithoutBenefitInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutBenefitInput | BenefitUsageCreateOrConnectWithoutBenefitInput[]
+    createMany?: BenefitUsageCreateManyBenefitInputEnvelope
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+  }
+
+  export type BenefitUsageUncheckedCreateNestedManyWithoutBenefitInput = {
+    create?: XOR<BenefitUsageCreateWithoutBenefitInput, BenefitUsageUncheckedCreateWithoutBenefitInput> | BenefitUsageCreateWithoutBenefitInput[] | BenefitUsageUncheckedCreateWithoutBenefitInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutBenefitInput | BenefitUsageCreateOrConnectWithoutBenefitInput[]
+    createMany?: BenefitUsageCreateManyBenefitInputEnvelope
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+  }
+
+  export type EnumBenefitTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BenefitType
+  }
+
+  export type MembershipPlanUpdateOneRequiredWithoutBenefitsNestedInput = {
+    create?: XOR<MembershipPlanCreateWithoutBenefitsInput, MembershipPlanUncheckedCreateWithoutBenefitsInput>
+    connectOrCreate?: MembershipPlanCreateOrConnectWithoutBenefitsInput
+    upsert?: MembershipPlanUpsertWithoutBenefitsInput
+    connect?: MembershipPlanWhereUniqueInput
+    update?: XOR<XOR<MembershipPlanUpdateToOneWithWhereWithoutBenefitsInput, MembershipPlanUpdateWithoutBenefitsInput>, MembershipPlanUncheckedUpdateWithoutBenefitsInput>
+  }
+
+  export type BenefitUsageUpdateManyWithoutBenefitNestedInput = {
+    create?: XOR<BenefitUsageCreateWithoutBenefitInput, BenefitUsageUncheckedCreateWithoutBenefitInput> | BenefitUsageCreateWithoutBenefitInput[] | BenefitUsageUncheckedCreateWithoutBenefitInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutBenefitInput | BenefitUsageCreateOrConnectWithoutBenefitInput[]
+    upsert?: BenefitUsageUpsertWithWhereUniqueWithoutBenefitInput | BenefitUsageUpsertWithWhereUniqueWithoutBenefitInput[]
+    createMany?: BenefitUsageCreateManyBenefitInputEnvelope
+    set?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    disconnect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    delete?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    update?: BenefitUsageUpdateWithWhereUniqueWithoutBenefitInput | BenefitUsageUpdateWithWhereUniqueWithoutBenefitInput[]
+    updateMany?: BenefitUsageUpdateManyWithWhereWithoutBenefitInput | BenefitUsageUpdateManyWithWhereWithoutBenefitInput[]
+    deleteMany?: BenefitUsageScalarWhereInput | BenefitUsageScalarWhereInput[]
+  }
+
+  export type BenefitUsageUncheckedUpdateManyWithoutBenefitNestedInput = {
+    create?: XOR<BenefitUsageCreateWithoutBenefitInput, BenefitUsageUncheckedCreateWithoutBenefitInput> | BenefitUsageCreateWithoutBenefitInput[] | BenefitUsageUncheckedCreateWithoutBenefitInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutBenefitInput | BenefitUsageCreateOrConnectWithoutBenefitInput[]
+    upsert?: BenefitUsageUpsertWithWhereUniqueWithoutBenefitInput | BenefitUsageUpsertWithWhereUniqueWithoutBenefitInput[]
+    createMany?: BenefitUsageCreateManyBenefitInputEnvelope
+    set?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    disconnect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    delete?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    update?: BenefitUsageUpdateWithWhereUniqueWithoutBenefitInput | BenefitUsageUpdateWithWhereUniqueWithoutBenefitInput[]
+    updateMany?: BenefitUsageUpdateManyWithWhereWithoutBenefitInput | BenefitUsageUpdateManyWithWhereWithoutBenefitInput[]
+    deleteMany?: BenefitUsageScalarWhereInput | BenefitUsageScalarWhereInput[]
+  }
+
+  export type MembershipPlanCreateNestedOneWithoutSubscriptionsInput = {
+    create?: XOR<MembershipPlanCreateWithoutSubscriptionsInput, MembershipPlanUncheckedCreateWithoutSubscriptionsInput>
+    connectOrCreate?: MembershipPlanCreateOrConnectWithoutSubscriptionsInput
+    connect?: MembershipPlanWhereUniqueInput
+  }
+
+  export type MemberSubscriptionCreateNestedOneWithoutDependentSubscriptionsInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutDependentSubscriptionsInput, MemberSubscriptionUncheckedCreateWithoutDependentSubscriptionsInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutDependentSubscriptionsInput
+    connect?: MemberSubscriptionWhereUniqueInput
+  }
+
+  export type MemberSubscriptionCreateNestedManyWithoutPrimarySubscriptionInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput> | MemberSubscriptionCreateWithoutPrimarySubscriptionInput[] | MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput | MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput[]
+    createMany?: MemberSubscriptionCreateManyPrimarySubscriptionInputEnvelope
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+  }
+
+  export type BenefitUsageCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<BenefitUsageCreateWithoutSubscriptionInput, BenefitUsageUncheckedCreateWithoutSubscriptionInput> | BenefitUsageCreateWithoutSubscriptionInput[] | BenefitUsageUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutSubscriptionInput | BenefitUsageCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: BenefitUsageCreateManySubscriptionInputEnvelope
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+  }
+
+  export type SubscriptionInvoiceCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<SubscriptionInvoiceCreateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput> | SubscriptionInvoiceCreateWithoutSubscriptionInput[] | SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput | SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: SubscriptionInvoiceCreateManySubscriptionInputEnvelope
+    connect?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+  }
+
+  export type SubscriptionBillingEventCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<SubscriptionBillingEventCreateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput> | SubscriptionBillingEventCreateWithoutSubscriptionInput[] | SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput | SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: SubscriptionBillingEventCreateManySubscriptionInputEnvelope
+    connect?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+  }
+
+  export type MemberSubscriptionUncheckedCreateNestedManyWithoutPrimarySubscriptionInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput> | MemberSubscriptionCreateWithoutPrimarySubscriptionInput[] | MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput | MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput[]
+    createMany?: MemberSubscriptionCreateManyPrimarySubscriptionInputEnvelope
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+  }
+
+  export type BenefitUsageUncheckedCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<BenefitUsageCreateWithoutSubscriptionInput, BenefitUsageUncheckedCreateWithoutSubscriptionInput> | BenefitUsageCreateWithoutSubscriptionInput[] | BenefitUsageUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutSubscriptionInput | BenefitUsageCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: BenefitUsageCreateManySubscriptionInputEnvelope
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+  }
+
+  export type SubscriptionInvoiceUncheckedCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<SubscriptionInvoiceCreateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput> | SubscriptionInvoiceCreateWithoutSubscriptionInput[] | SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput | SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: SubscriptionInvoiceCreateManySubscriptionInputEnvelope
+    connect?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+  }
+
+  export type SubscriptionBillingEventUncheckedCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<SubscriptionBillingEventCreateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput> | SubscriptionBillingEventCreateWithoutSubscriptionInput[] | SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput | SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: SubscriptionBillingEventCreateManySubscriptionInputEnvelope
+    connect?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+  }
+
+  export type EnumSubscriptionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SubscriptionStatus
+  }
+
+  export type MembershipPlanUpdateOneRequiredWithoutSubscriptionsNestedInput = {
+    create?: XOR<MembershipPlanCreateWithoutSubscriptionsInput, MembershipPlanUncheckedCreateWithoutSubscriptionsInput>
+    connectOrCreate?: MembershipPlanCreateOrConnectWithoutSubscriptionsInput
+    upsert?: MembershipPlanUpsertWithoutSubscriptionsInput
+    connect?: MembershipPlanWhereUniqueInput
+    update?: XOR<XOR<MembershipPlanUpdateToOneWithWhereWithoutSubscriptionsInput, MembershipPlanUpdateWithoutSubscriptionsInput>, MembershipPlanUncheckedUpdateWithoutSubscriptionsInput>
+  }
+
+  export type MemberSubscriptionUpdateOneWithoutDependentSubscriptionsNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutDependentSubscriptionsInput, MemberSubscriptionUncheckedCreateWithoutDependentSubscriptionsInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutDependentSubscriptionsInput
+    upsert?: MemberSubscriptionUpsertWithoutDependentSubscriptionsInput
+    disconnect?: MemberSubscriptionWhereInput | boolean
+    delete?: MemberSubscriptionWhereInput | boolean
+    connect?: MemberSubscriptionWhereUniqueInput
+    update?: XOR<XOR<MemberSubscriptionUpdateToOneWithWhereWithoutDependentSubscriptionsInput, MemberSubscriptionUpdateWithoutDependentSubscriptionsInput>, MemberSubscriptionUncheckedUpdateWithoutDependentSubscriptionsInput>
+  }
+
+  export type MemberSubscriptionUpdateManyWithoutPrimarySubscriptionNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput> | MemberSubscriptionCreateWithoutPrimarySubscriptionInput[] | MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput | MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput[]
+    upsert?: MemberSubscriptionUpsertWithWhereUniqueWithoutPrimarySubscriptionInput | MemberSubscriptionUpsertWithWhereUniqueWithoutPrimarySubscriptionInput[]
+    createMany?: MemberSubscriptionCreateManyPrimarySubscriptionInputEnvelope
+    set?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    disconnect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    delete?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    update?: MemberSubscriptionUpdateWithWhereUniqueWithoutPrimarySubscriptionInput | MemberSubscriptionUpdateWithWhereUniqueWithoutPrimarySubscriptionInput[]
+    updateMany?: MemberSubscriptionUpdateManyWithWhereWithoutPrimarySubscriptionInput | MemberSubscriptionUpdateManyWithWhereWithoutPrimarySubscriptionInput[]
+    deleteMany?: MemberSubscriptionScalarWhereInput | MemberSubscriptionScalarWhereInput[]
+  }
+
+  export type BenefitUsageUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<BenefitUsageCreateWithoutSubscriptionInput, BenefitUsageUncheckedCreateWithoutSubscriptionInput> | BenefitUsageCreateWithoutSubscriptionInput[] | BenefitUsageUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutSubscriptionInput | BenefitUsageCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: BenefitUsageUpsertWithWhereUniqueWithoutSubscriptionInput | BenefitUsageUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: BenefitUsageCreateManySubscriptionInputEnvelope
+    set?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    disconnect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    delete?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    update?: BenefitUsageUpdateWithWhereUniqueWithoutSubscriptionInput | BenefitUsageUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: BenefitUsageUpdateManyWithWhereWithoutSubscriptionInput | BenefitUsageUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: BenefitUsageScalarWhereInput | BenefitUsageScalarWhereInput[]
+  }
+
+  export type SubscriptionInvoiceUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<SubscriptionInvoiceCreateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput> | SubscriptionInvoiceCreateWithoutSubscriptionInput[] | SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput | SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: SubscriptionInvoiceUpsertWithWhereUniqueWithoutSubscriptionInput | SubscriptionInvoiceUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: SubscriptionInvoiceCreateManySubscriptionInputEnvelope
+    set?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    disconnect?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    delete?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    connect?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    update?: SubscriptionInvoiceUpdateWithWhereUniqueWithoutSubscriptionInput | SubscriptionInvoiceUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: SubscriptionInvoiceUpdateManyWithWhereWithoutSubscriptionInput | SubscriptionInvoiceUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: SubscriptionInvoiceScalarWhereInput | SubscriptionInvoiceScalarWhereInput[]
+  }
+
+  export type SubscriptionBillingEventUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<SubscriptionBillingEventCreateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput> | SubscriptionBillingEventCreateWithoutSubscriptionInput[] | SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput | SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: SubscriptionBillingEventUpsertWithWhereUniqueWithoutSubscriptionInput | SubscriptionBillingEventUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: SubscriptionBillingEventCreateManySubscriptionInputEnvelope
+    set?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    disconnect?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    delete?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    connect?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    update?: SubscriptionBillingEventUpdateWithWhereUniqueWithoutSubscriptionInput | SubscriptionBillingEventUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: SubscriptionBillingEventUpdateManyWithWhereWithoutSubscriptionInput | SubscriptionBillingEventUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: SubscriptionBillingEventScalarWhereInput | SubscriptionBillingEventScalarWhereInput[]
+  }
+
+  export type MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput> | MemberSubscriptionCreateWithoutPrimarySubscriptionInput[] | MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput[]
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput | MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput[]
+    upsert?: MemberSubscriptionUpsertWithWhereUniqueWithoutPrimarySubscriptionInput | MemberSubscriptionUpsertWithWhereUniqueWithoutPrimarySubscriptionInput[]
+    createMany?: MemberSubscriptionCreateManyPrimarySubscriptionInputEnvelope
+    set?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    disconnect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    delete?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    connect?: MemberSubscriptionWhereUniqueInput | MemberSubscriptionWhereUniqueInput[]
+    update?: MemberSubscriptionUpdateWithWhereUniqueWithoutPrimarySubscriptionInput | MemberSubscriptionUpdateWithWhereUniqueWithoutPrimarySubscriptionInput[]
+    updateMany?: MemberSubscriptionUpdateManyWithWhereWithoutPrimarySubscriptionInput | MemberSubscriptionUpdateManyWithWhereWithoutPrimarySubscriptionInput[]
+    deleteMany?: MemberSubscriptionScalarWhereInput | MemberSubscriptionScalarWhereInput[]
+  }
+
+  export type BenefitUsageUncheckedUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<BenefitUsageCreateWithoutSubscriptionInput, BenefitUsageUncheckedCreateWithoutSubscriptionInput> | BenefitUsageCreateWithoutSubscriptionInput[] | BenefitUsageUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: BenefitUsageCreateOrConnectWithoutSubscriptionInput | BenefitUsageCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: BenefitUsageUpsertWithWhereUniqueWithoutSubscriptionInput | BenefitUsageUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: BenefitUsageCreateManySubscriptionInputEnvelope
+    set?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    disconnect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    delete?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    connect?: BenefitUsageWhereUniqueInput | BenefitUsageWhereUniqueInput[]
+    update?: BenefitUsageUpdateWithWhereUniqueWithoutSubscriptionInput | BenefitUsageUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: BenefitUsageUpdateManyWithWhereWithoutSubscriptionInput | BenefitUsageUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: BenefitUsageScalarWhereInput | BenefitUsageScalarWhereInput[]
+  }
+
+  export type SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<SubscriptionInvoiceCreateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput> | SubscriptionInvoiceCreateWithoutSubscriptionInput[] | SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput | SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: SubscriptionInvoiceUpsertWithWhereUniqueWithoutSubscriptionInput | SubscriptionInvoiceUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: SubscriptionInvoiceCreateManySubscriptionInputEnvelope
+    set?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    disconnect?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    delete?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    connect?: SubscriptionInvoiceWhereUniqueInput | SubscriptionInvoiceWhereUniqueInput[]
+    update?: SubscriptionInvoiceUpdateWithWhereUniqueWithoutSubscriptionInput | SubscriptionInvoiceUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: SubscriptionInvoiceUpdateManyWithWhereWithoutSubscriptionInput | SubscriptionInvoiceUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: SubscriptionInvoiceScalarWhereInput | SubscriptionInvoiceScalarWhereInput[]
+  }
+
+  export type SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<SubscriptionBillingEventCreateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput> | SubscriptionBillingEventCreateWithoutSubscriptionInput[] | SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput | SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: SubscriptionBillingEventUpsertWithWhereUniqueWithoutSubscriptionInput | SubscriptionBillingEventUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: SubscriptionBillingEventCreateManySubscriptionInputEnvelope
+    set?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    disconnect?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    delete?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    connect?: SubscriptionBillingEventWhereUniqueInput | SubscriptionBillingEventWhereUniqueInput[]
+    update?: SubscriptionBillingEventUpdateWithWhereUniqueWithoutSubscriptionInput | SubscriptionBillingEventUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: SubscriptionBillingEventUpdateManyWithWhereWithoutSubscriptionInput | SubscriptionBillingEventUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: SubscriptionBillingEventScalarWhereInput | SubscriptionBillingEventScalarWhereInput[]
+  }
+
+  export type MemberSubscriptionCreateNestedOneWithoutBenefitUsagesInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutBenefitUsagesInput, MemberSubscriptionUncheckedCreateWithoutBenefitUsagesInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutBenefitUsagesInput
+    connect?: MemberSubscriptionWhereUniqueInput
+  }
+
+  export type PlanBenefitCreateNestedOneWithoutUsagesInput = {
+    create?: XOR<PlanBenefitCreateWithoutUsagesInput, PlanBenefitUncheckedCreateWithoutUsagesInput>
+    connectOrCreate?: PlanBenefitCreateOrConnectWithoutUsagesInput
+    connect?: PlanBenefitWhereUniqueInput
+  }
+
+  export type MemberSubscriptionUpdateOneRequiredWithoutBenefitUsagesNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutBenefitUsagesInput, MemberSubscriptionUncheckedCreateWithoutBenefitUsagesInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutBenefitUsagesInput
+    upsert?: MemberSubscriptionUpsertWithoutBenefitUsagesInput
+    connect?: MemberSubscriptionWhereUniqueInput
+    update?: XOR<XOR<MemberSubscriptionUpdateToOneWithWhereWithoutBenefitUsagesInput, MemberSubscriptionUpdateWithoutBenefitUsagesInput>, MemberSubscriptionUncheckedUpdateWithoutBenefitUsagesInput>
+  }
+
+  export type PlanBenefitUpdateOneRequiredWithoutUsagesNestedInput = {
+    create?: XOR<PlanBenefitCreateWithoutUsagesInput, PlanBenefitUncheckedCreateWithoutUsagesInput>
+    connectOrCreate?: PlanBenefitCreateOrConnectWithoutUsagesInput
+    upsert?: PlanBenefitUpsertWithoutUsagesInput
+    connect?: PlanBenefitWhereUniqueInput
+    update?: XOR<XOR<PlanBenefitUpdateToOneWithWhereWithoutUsagesInput, PlanBenefitUpdateWithoutUsagesInput>, PlanBenefitUncheckedUpdateWithoutUsagesInput>
+  }
+
+  export type MemberSubscriptionCreateNestedOneWithoutInvoicesInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutInvoicesInput, MemberSubscriptionUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutInvoicesInput
+    connect?: MemberSubscriptionWhereUniqueInput
+  }
+
+  export type MemberSubscriptionUpdateOneRequiredWithoutInvoicesNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutInvoicesInput, MemberSubscriptionUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutInvoicesInput
+    upsert?: MemberSubscriptionUpsertWithoutInvoicesInput
+    connect?: MemberSubscriptionWhereUniqueInput
+    update?: XOR<XOR<MemberSubscriptionUpdateToOneWithWhereWithoutInvoicesInput, MemberSubscriptionUpdateWithoutInvoicesInput>, MemberSubscriptionUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type MemberSubscriptionCreateNestedOneWithoutBillingEventsInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutBillingEventsInput, MemberSubscriptionUncheckedCreateWithoutBillingEventsInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutBillingEventsInput
+    connect?: MemberSubscriptionWhereUniqueInput
+  }
+
+  export type EnumBillingEventTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BillingEventType
+  }
+
+  export type MemberSubscriptionUpdateOneRequiredWithoutBillingEventsNestedInput = {
+    create?: XOR<MemberSubscriptionCreateWithoutBillingEventsInput, MemberSubscriptionUncheckedCreateWithoutBillingEventsInput>
+    connectOrCreate?: MemberSubscriptionCreateOrConnectWithoutBillingEventsInput
+    upsert?: MemberSubscriptionUpsertWithoutBillingEventsInput
+    connect?: MemberSubscriptionWhereUniqueInput
+    update?: XOR<XOR<MemberSubscriptionUpdateToOneWithWhereWithoutBillingEventsInput, MemberSubscriptionUpdateWithoutBillingEventsInput>, MemberSubscriptionUncheckedUpdateWithoutBillingEventsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -67309,6 +79249,91 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDebitNoteStatusFilter<$PrismaModel>
     _max?: NestedEnumDebitNoteStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMembershipTierFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipTier | EnumMembershipTierFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipTierFilter<$PrismaModel> | $Enums.MembershipTier
+  }
+
+  export type NestedEnumBillingCycleFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingCycle | EnumBillingCycleFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingCycleFilter<$PrismaModel> | $Enums.BillingCycle
+  }
+
+  export type NestedEnumMembershipTierWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipTier | EnumMembershipTierFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipTier[] | ListEnumMembershipTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipTierWithAggregatesFilter<$PrismaModel> | $Enums.MembershipTier
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMembershipTierFilter<$PrismaModel>
+    _max?: NestedEnumMembershipTierFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBillingCycleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingCycle | EnumBillingCycleFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingCycle[] | ListEnumBillingCycleFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingCycleWithAggregatesFilter<$PrismaModel> | $Enums.BillingCycle
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBillingCycleFilter<$PrismaModel>
+    _max?: NestedEnumBillingCycleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBenefitTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BenefitType | EnumBenefitTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBenefitTypeFilter<$PrismaModel> | $Enums.BenefitType
+  }
+
+  export type NestedEnumBenefitTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BenefitType | EnumBenefitTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BenefitType[] | ListEnumBenefitTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBenefitTypeWithAggregatesFilter<$PrismaModel> | $Enums.BenefitType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBenefitTypeFilter<$PrismaModel>
+    _max?: NestedEnumBenefitTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSubscriptionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusFilter<$PrismaModel> | $Enums.SubscriptionStatus
+  }
+
+  export type NestedEnumSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SubscriptionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBillingEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingEventType | EnumBillingEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingEventTypeFilter<$PrismaModel> | $Enums.BillingEventType
+  }
+
+  export type NestedEnumBillingEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingEventType | EnumBillingEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BillingEventType[] | ListEnumBillingEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBillingEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.BillingEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBillingEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumBillingEventTypeFilter<$PrismaModel>
   }
 
   export type PolicyCreateWithoutPayerInput = {
@@ -76224,6 +88249,1860 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlanBenefitCreateWithoutPlanInput = {
+    id?: string
+    tenantId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    usages?: BenefitUsageCreateNestedManyWithoutBenefitInput
+  }
+
+  export type PlanBenefitUncheckedCreateWithoutPlanInput = {
+    id?: string
+    tenantId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    usages?: BenefitUsageUncheckedCreateNestedManyWithoutBenefitInput
+  }
+
+  export type PlanBenefitCreateOrConnectWithoutPlanInput = {
+    where: PlanBenefitWhereUniqueInput
+    create: XOR<PlanBenefitCreateWithoutPlanInput, PlanBenefitUncheckedCreateWithoutPlanInput>
+  }
+
+  export type PlanBenefitCreateManyPlanInputEnvelope = {
+    data: PlanBenefitCreateManyPlanInput | PlanBenefitCreateManyPlanInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MemberSubscriptionCreateWithoutPlanInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    primarySubscription?: MemberSubscriptionCreateNestedOneWithoutDependentSubscriptionsInput
+    dependentSubscriptions?: MemberSubscriptionCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUncheckedCreateWithoutPlanInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    dependentSubscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageUncheckedCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceUncheckedCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionCreateOrConnectWithoutPlanInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    create: XOR<MemberSubscriptionCreateWithoutPlanInput, MemberSubscriptionUncheckedCreateWithoutPlanInput>
+  }
+
+  export type MemberSubscriptionCreateManyPlanInputEnvelope = {
+    data: MemberSubscriptionCreateManyPlanInput | MemberSubscriptionCreateManyPlanInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PlanBenefitUpsertWithWhereUniqueWithoutPlanInput = {
+    where: PlanBenefitWhereUniqueInput
+    update: XOR<PlanBenefitUpdateWithoutPlanInput, PlanBenefitUncheckedUpdateWithoutPlanInput>
+    create: XOR<PlanBenefitCreateWithoutPlanInput, PlanBenefitUncheckedCreateWithoutPlanInput>
+  }
+
+  export type PlanBenefitUpdateWithWhereUniqueWithoutPlanInput = {
+    where: PlanBenefitWhereUniqueInput
+    data: XOR<PlanBenefitUpdateWithoutPlanInput, PlanBenefitUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type PlanBenefitUpdateManyWithWhereWithoutPlanInput = {
+    where: PlanBenefitScalarWhereInput
+    data: XOR<PlanBenefitUpdateManyMutationInput, PlanBenefitUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type PlanBenefitScalarWhereInput = {
+    AND?: PlanBenefitScalarWhereInput | PlanBenefitScalarWhereInput[]
+    OR?: PlanBenefitScalarWhereInput[]
+    NOT?: PlanBenefitScalarWhereInput | PlanBenefitScalarWhereInput[]
+    id?: UuidFilter<"PlanBenefit"> | string
+    tenantId?: UuidFilter<"PlanBenefit"> | string
+    planId?: UuidFilter<"PlanBenefit"> | string
+    benefitType?: EnumBenefitTypeFilter<"PlanBenefit"> | $Enums.BenefitType
+    benefitName?: StringFilter<"PlanBenefit"> | string
+    description?: StringNullableFilter<"PlanBenefit"> | string | null
+    quantityIncluded?: IntNullableFilter<"PlanBenefit"> | number | null
+    usageResetOnRenewal?: BoolFilter<"PlanBenefit"> | boolean
+    discountPercent?: DecimalNullableFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: DecimalNullableFilter<"PlanBenefit"> | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: JsonNullableFilter<"PlanBenefit">
+    billingItemId?: UuidNullableFilter<"PlanBenefit"> | string | null
+    displayOrder?: IntFilter<"PlanBenefit"> | number
+    isHighlighted?: BoolFilter<"PlanBenefit"> | boolean
+    metadata?: JsonNullableFilter<"PlanBenefit">
+    createdAt?: DateTimeFilter<"PlanBenefit"> | Date | string
+    updatedAt?: DateTimeFilter<"PlanBenefit"> | Date | string
+  }
+
+  export type MemberSubscriptionUpsertWithWhereUniqueWithoutPlanInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    update: XOR<MemberSubscriptionUpdateWithoutPlanInput, MemberSubscriptionUncheckedUpdateWithoutPlanInput>
+    create: XOR<MemberSubscriptionCreateWithoutPlanInput, MemberSubscriptionUncheckedCreateWithoutPlanInput>
+  }
+
+  export type MemberSubscriptionUpdateWithWhereUniqueWithoutPlanInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    data: XOR<MemberSubscriptionUpdateWithoutPlanInput, MemberSubscriptionUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type MemberSubscriptionUpdateManyWithWhereWithoutPlanInput = {
+    where: MemberSubscriptionScalarWhereInput
+    data: XOR<MemberSubscriptionUpdateManyMutationInput, MemberSubscriptionUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type MemberSubscriptionScalarWhereInput = {
+    AND?: MemberSubscriptionScalarWhereInput | MemberSubscriptionScalarWhereInput[]
+    OR?: MemberSubscriptionScalarWhereInput[]
+    NOT?: MemberSubscriptionScalarWhereInput | MemberSubscriptionScalarWhereInput[]
+    id?: UuidFilter<"MemberSubscription"> | string
+    tenantId?: UuidFilter<"MemberSubscription"> | string
+    patientId?: UuidFilter<"MemberSubscription"> | string
+    mrn?: StringNullableFilter<"MemberSubscription"> | string | null
+    patientDisplayName?: StringNullableFilter<"MemberSubscription"> | string | null
+    planId?: UuidFilter<"MemberSubscription"> | string
+    billingCycle?: EnumBillingCycleFilter<"MemberSubscription"> | $Enums.BillingCycle
+    subscriptionNumber?: StringFilter<"MemberSubscription"> | string
+    status?: EnumSubscriptionStatusFilter<"MemberSubscription"> | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    activatedAt?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    startDate?: DateTimeFilter<"MemberSubscription"> | Date | string
+    endDate?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    currentPeriodStart?: DateTimeFilter<"MemberSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeFilter<"MemberSubscription"> | Date | string
+    nextBillingDate?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"MemberSubscription"> | Date | string | null
+    cancelledBy?: UuidNullableFilter<"MemberSubscription"> | string | null
+    cancellationReason?: StringNullableFilter<"MemberSubscription"> | string | null
+    cancelAtPeriodEnd?: BoolFilter<"MemberSubscription"> | boolean
+    recurringAmount?: DecimalFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"MemberSubscription"> | string
+    enrollmentFeeCharged?: DecimalFilter<"MemberSubscription"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableFilter<"MemberSubscription"> | string | null
+    paymentReference?: StringNullableFilter<"MemberSubscription"> | string | null
+    autoRenew?: BoolFilter<"MemberSubscription"> | boolean
+    primarySubscriptionId?: UuidNullableFilter<"MemberSubscription"> | string | null
+    isDependent?: BoolFilter<"MemberSubscription"> | boolean
+    referredBy?: UuidNullableFilter<"MemberSubscription"> | string | null
+    linkedProgramEnrollmentId?: UuidNullableFilter<"MemberSubscription"> | string | null
+    notes?: StringNullableFilter<"MemberSubscription"> | string | null
+    createdAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"MemberSubscription"> | Date | string
+    createdBy?: UuidFilter<"MemberSubscription"> | string
+  }
+
+  export type MembershipPlanCreateWithoutBenefitsInput = {
+    id?: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description?: string | null
+    tier: $Enums.MembershipTier
+    category?: string | null
+    basePrice: Decimal | DecimalJsLike | number | string
+    currency?: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice?: Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: Decimal | DecimalJsLike | number | string | null
+    annualPrice?: Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: Decimal | DecimalJsLike | number | string
+    reactivationFee?: Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: string | null
+    minCommitmentMonths?: number
+    maxMembers?: number | null
+    ageMin?: number | null
+    ageMax?: number | null
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanCreateavailableFacilitiesInput | string[]
+    termsAndConditions?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    subscriptions?: MemberSubscriptionCreateNestedManyWithoutPlanInput
+  }
+
+  export type MembershipPlanUncheckedCreateWithoutBenefitsInput = {
+    id?: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description?: string | null
+    tier: $Enums.MembershipTier
+    category?: string | null
+    basePrice: Decimal | DecimalJsLike | number | string
+    currency?: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice?: Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: Decimal | DecimalJsLike | number | string | null
+    annualPrice?: Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: Decimal | DecimalJsLike | number | string
+    reactivationFee?: Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: string | null
+    minCommitmentMonths?: number
+    maxMembers?: number | null
+    ageMin?: number | null
+    ageMax?: number | null
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanCreateavailableFacilitiesInput | string[]
+    termsAndConditions?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    subscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type MembershipPlanCreateOrConnectWithoutBenefitsInput = {
+    where: MembershipPlanWhereUniqueInput
+    create: XOR<MembershipPlanCreateWithoutBenefitsInput, MembershipPlanUncheckedCreateWithoutBenefitsInput>
+  }
+
+  export type BenefitUsageCreateWithoutBenefitInput = {
+    id?: string
+    tenantId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+    subscription: MemberSubscriptionCreateNestedOneWithoutBenefitUsagesInput
+  }
+
+  export type BenefitUsageUncheckedCreateWithoutBenefitInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type BenefitUsageCreateOrConnectWithoutBenefitInput = {
+    where: BenefitUsageWhereUniqueInput
+    create: XOR<BenefitUsageCreateWithoutBenefitInput, BenefitUsageUncheckedCreateWithoutBenefitInput>
+  }
+
+  export type BenefitUsageCreateManyBenefitInputEnvelope = {
+    data: BenefitUsageCreateManyBenefitInput | BenefitUsageCreateManyBenefitInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MembershipPlanUpsertWithoutBenefitsInput = {
+    update: XOR<MembershipPlanUpdateWithoutBenefitsInput, MembershipPlanUncheckedUpdateWithoutBenefitsInput>
+    create: XOR<MembershipPlanCreateWithoutBenefitsInput, MembershipPlanUncheckedCreateWithoutBenefitsInput>
+    where?: MembershipPlanWhereInput
+  }
+
+  export type MembershipPlanUpdateToOneWithWhereWithoutBenefitsInput = {
+    where?: MembershipPlanWhereInput
+    data: XOR<MembershipPlanUpdateWithoutBenefitsInput, MembershipPlanUncheckedUpdateWithoutBenefitsInput>
+  }
+
+  export type MembershipPlanUpdateWithoutBenefitsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    subscriptions?: MemberSubscriptionUpdateManyWithoutPlanNestedInput
+  }
+
+  export type MembershipPlanUncheckedUpdateWithoutBenefitsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    subscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type BenefitUsageUpsertWithWhereUniqueWithoutBenefitInput = {
+    where: BenefitUsageWhereUniqueInput
+    update: XOR<BenefitUsageUpdateWithoutBenefitInput, BenefitUsageUncheckedUpdateWithoutBenefitInput>
+    create: XOR<BenefitUsageCreateWithoutBenefitInput, BenefitUsageUncheckedCreateWithoutBenefitInput>
+  }
+
+  export type BenefitUsageUpdateWithWhereUniqueWithoutBenefitInput = {
+    where: BenefitUsageWhereUniqueInput
+    data: XOR<BenefitUsageUpdateWithoutBenefitInput, BenefitUsageUncheckedUpdateWithoutBenefitInput>
+  }
+
+  export type BenefitUsageUpdateManyWithWhereWithoutBenefitInput = {
+    where: BenefitUsageScalarWhereInput
+    data: XOR<BenefitUsageUpdateManyMutationInput, BenefitUsageUncheckedUpdateManyWithoutBenefitInput>
+  }
+
+  export type BenefitUsageScalarWhereInput = {
+    AND?: BenefitUsageScalarWhereInput | BenefitUsageScalarWhereInput[]
+    OR?: BenefitUsageScalarWhereInput[]
+    NOT?: BenefitUsageScalarWhereInput | BenefitUsageScalarWhereInput[]
+    id?: UuidFilter<"BenefitUsage"> | string
+    tenantId?: UuidFilter<"BenefitUsage"> | string
+    subscriptionId?: UuidFilter<"BenefitUsage"> | string
+    benefitId?: UuidFilter<"BenefitUsage"> | string
+    usedAt?: DateTimeFilter<"BenefitUsage"> | Date | string
+    quantity?: IntFilter<"BenefitUsage"> | number
+    encounterId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    chargeId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    invoiceId?: UuidNullableFilter<"BenefitUsage"> | string | null
+    regularPrice?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: DecimalNullableFilter<"BenefitUsage"> | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFilter<"BenefitUsage"> | Date | string
+    billingPeriodEnd?: DateTimeFilter<"BenefitUsage"> | Date | string
+    usedQuantityBefore?: IntFilter<"BenefitUsage"> | number
+    usedQuantityAfter?: IntFilter<"BenefitUsage"> | number
+    remainingQuantity?: IntNullableFilter<"BenefitUsage"> | number | null
+    notes?: StringNullableFilter<"BenefitUsage"> | string | null
+    createdAt?: DateTimeFilter<"BenefitUsage"> | Date | string
+    createdBy?: UuidFilter<"BenefitUsage"> | string
+  }
+
+  export type MembershipPlanCreateWithoutSubscriptionsInput = {
+    id?: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description?: string | null
+    tier: $Enums.MembershipTier
+    category?: string | null
+    basePrice: Decimal | DecimalJsLike | number | string
+    currency?: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice?: Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: Decimal | DecimalJsLike | number | string | null
+    annualPrice?: Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: Decimal | DecimalJsLike | number | string
+    reactivationFee?: Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: string | null
+    minCommitmentMonths?: number
+    maxMembers?: number | null
+    ageMin?: number | null
+    ageMax?: number | null
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanCreateavailableFacilitiesInput | string[]
+    termsAndConditions?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    benefits?: PlanBenefitCreateNestedManyWithoutPlanInput
+  }
+
+  export type MembershipPlanUncheckedCreateWithoutSubscriptionsInput = {
+    id?: string
+    tenantId: string
+    planCode: string
+    planName: string
+    description?: string | null
+    tier: $Enums.MembershipTier
+    category?: string | null
+    basePrice: Decimal | DecimalJsLike | number | string
+    currency?: string
+    billingCycle: $Enums.BillingCycle
+    monthlyPrice?: Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: Decimal | DecimalJsLike | number | string | null
+    annualPrice?: Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: Decimal | DecimalJsLike | number | string
+    reactivationFee?: Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: string | null
+    minCommitmentMonths?: number
+    maxMembers?: number | null
+    ageMin?: number | null
+    ageMax?: number | null
+    requiresAssessment?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    displayOrder?: number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanCreateavailableFacilitiesInput | string[]
+    termsAndConditions?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    benefits?: PlanBenefitUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type MembershipPlanCreateOrConnectWithoutSubscriptionsInput = {
+    where: MembershipPlanWhereUniqueInput
+    create: XOR<MembershipPlanCreateWithoutSubscriptionsInput, MembershipPlanUncheckedCreateWithoutSubscriptionsInput>
+  }
+
+  export type MemberSubscriptionCreateWithoutDependentSubscriptionsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    plan: MembershipPlanCreateNestedOneWithoutSubscriptionsInput
+    primarySubscription?: MemberSubscriptionCreateNestedOneWithoutDependentSubscriptionsInput
+    benefitUsages?: BenefitUsageCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUncheckedCreateWithoutDependentSubscriptionsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    benefitUsages?: BenefitUsageUncheckedCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceUncheckedCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionCreateOrConnectWithoutDependentSubscriptionsInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    create: XOR<MemberSubscriptionCreateWithoutDependentSubscriptionsInput, MemberSubscriptionUncheckedCreateWithoutDependentSubscriptionsInput>
+  }
+
+  export type MemberSubscriptionCreateWithoutPrimarySubscriptionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    plan: MembershipPlanCreateNestedOneWithoutSubscriptionsInput
+    dependentSubscriptions?: MemberSubscriptionCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    dependentSubscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageUncheckedCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceUncheckedCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionCreateOrConnectWithoutPrimarySubscriptionInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    create: XOR<MemberSubscriptionCreateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput>
+  }
+
+  export type MemberSubscriptionCreateManyPrimarySubscriptionInputEnvelope = {
+    data: MemberSubscriptionCreateManyPrimarySubscriptionInput | MemberSubscriptionCreateManyPrimarySubscriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BenefitUsageCreateWithoutSubscriptionInput = {
+    id?: string
+    tenantId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+    benefit: PlanBenefitCreateNestedOneWithoutUsagesInput
+  }
+
+  export type BenefitUsageUncheckedCreateWithoutSubscriptionInput = {
+    id?: string
+    tenantId: string
+    benefitId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type BenefitUsageCreateOrConnectWithoutSubscriptionInput = {
+    where: BenefitUsageWhereUniqueInput
+    create: XOR<BenefitUsageCreateWithoutSubscriptionInput, BenefitUsageUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type BenefitUsageCreateManySubscriptionInputEnvelope = {
+    data: BenefitUsageCreateManySubscriptionInput | BenefitUsageCreateManySubscriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SubscriptionInvoiceCreateWithoutSubscriptionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate: Date | string
+    periodStart: Date | string
+    periodEnd: Date | string
+    invoiceType?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    taxAmount?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    status?: string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    standardInvoiceId?: string | null
+    receiptId?: string | null
+    paymentAttempts?: number
+    lastPaymentAttempt?: Date | string | null
+    nextRetryDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate: Date | string
+    periodStart: Date | string
+    periodEnd: Date | string
+    invoiceType?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    taxAmount?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    status?: string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    standardInvoiceId?: string | null
+    receiptId?: string | null
+    paymentAttempts?: number
+    lastPaymentAttempt?: Date | string | null
+    nextRetryDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type SubscriptionInvoiceCreateOrConnectWithoutSubscriptionInput = {
+    where: SubscriptionInvoiceWhereUniqueInput
+    create: XOR<SubscriptionInvoiceCreateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionInvoiceCreateManySubscriptionInputEnvelope = {
+    data: SubscriptionInvoiceCreateManySubscriptionInput | SubscriptionInvoiceCreateManySubscriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SubscriptionBillingEventCreateWithoutSubscriptionInput = {
+    id?: string
+    tenantId: string
+    eventType: $Enums.BillingEventType
+    eventTime?: Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    invoiceId?: string | null
+    paymentReference?: string | null
+    errorCode?: string | null
+    errorMessage?: string | null
+    performedBy?: string | null
+    performedByType?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput = {
+    id?: string
+    tenantId: string
+    eventType: $Enums.BillingEventType
+    eventTime?: Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    invoiceId?: string | null
+    paymentReference?: string | null
+    errorCode?: string | null
+    errorMessage?: string | null
+    performedBy?: string | null
+    performedByType?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type SubscriptionBillingEventCreateOrConnectWithoutSubscriptionInput = {
+    where: SubscriptionBillingEventWhereUniqueInput
+    create: XOR<SubscriptionBillingEventCreateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionBillingEventCreateManySubscriptionInputEnvelope = {
+    data: SubscriptionBillingEventCreateManySubscriptionInput | SubscriptionBillingEventCreateManySubscriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MembershipPlanUpsertWithoutSubscriptionsInput = {
+    update: XOR<MembershipPlanUpdateWithoutSubscriptionsInput, MembershipPlanUncheckedUpdateWithoutSubscriptionsInput>
+    create: XOR<MembershipPlanCreateWithoutSubscriptionsInput, MembershipPlanUncheckedCreateWithoutSubscriptionsInput>
+    where?: MembershipPlanWhereInput
+  }
+
+  export type MembershipPlanUpdateToOneWithWhereWithoutSubscriptionsInput = {
+    where?: MembershipPlanWhereInput
+    data: XOR<MembershipPlanUpdateWithoutSubscriptionsInput, MembershipPlanUncheckedUpdateWithoutSubscriptionsInput>
+  }
+
+  export type MembershipPlanUpdateWithoutSubscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    benefits?: PlanBenefitUpdateManyWithoutPlanNestedInput
+  }
+
+  export type MembershipPlanUncheckedUpdateWithoutSubscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: EnumMembershipTierFieldUpdateOperationsInput | $Enums.MembershipTier
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    monthlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    quarterlyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    semiAnnualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    annualPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    enrollmentFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reactivationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    annualDiscountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    benefitsSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    minCommitmentMonths?: IntFieldUpdateOperationsInput | number
+    maxMembers?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMin?: NullableIntFieldUpdateOperationsInput | number | null
+    ageMax?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresAssessment?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    highlightFeatures?: NullableJsonNullValueInput | InputJsonValue
+    availableFacilities?: MembershipPlanUpdateavailableFacilitiesInput | string[]
+    termsAndConditions?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    benefits?: PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type MemberSubscriptionUpsertWithoutDependentSubscriptionsInput = {
+    update: XOR<MemberSubscriptionUpdateWithoutDependentSubscriptionsInput, MemberSubscriptionUncheckedUpdateWithoutDependentSubscriptionsInput>
+    create: XOR<MemberSubscriptionCreateWithoutDependentSubscriptionsInput, MemberSubscriptionUncheckedCreateWithoutDependentSubscriptionsInput>
+    where?: MemberSubscriptionWhereInput
+  }
+
+  export type MemberSubscriptionUpdateToOneWithWhereWithoutDependentSubscriptionsInput = {
+    where?: MemberSubscriptionWhereInput
+    data: XOR<MemberSubscriptionUpdateWithoutDependentSubscriptionsInput, MemberSubscriptionUncheckedUpdateWithoutDependentSubscriptionsInput>
+  }
+
+  export type MemberSubscriptionUpdateWithoutDependentSubscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+    primarySubscription?: MemberSubscriptionUpdateOneWithoutDependentSubscriptionsNestedInput
+    benefitUsages?: BenefitUsageUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateWithoutDependentSubscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    benefitUsages?: BenefitUsageUncheckedUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUpsertWithWhereUniqueWithoutPrimarySubscriptionInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    update: XOR<MemberSubscriptionUpdateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedUpdateWithoutPrimarySubscriptionInput>
+    create: XOR<MemberSubscriptionCreateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedCreateWithoutPrimarySubscriptionInput>
+  }
+
+  export type MemberSubscriptionUpdateWithWhereUniqueWithoutPrimarySubscriptionInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    data: XOR<MemberSubscriptionUpdateWithoutPrimarySubscriptionInput, MemberSubscriptionUncheckedUpdateWithoutPrimarySubscriptionInput>
+  }
+
+  export type MemberSubscriptionUpdateManyWithWhereWithoutPrimarySubscriptionInput = {
+    where: MemberSubscriptionScalarWhereInput
+    data: XOR<MemberSubscriptionUpdateManyMutationInput, MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionInput>
+  }
+
+  export type BenefitUsageUpsertWithWhereUniqueWithoutSubscriptionInput = {
+    where: BenefitUsageWhereUniqueInput
+    update: XOR<BenefitUsageUpdateWithoutSubscriptionInput, BenefitUsageUncheckedUpdateWithoutSubscriptionInput>
+    create: XOR<BenefitUsageCreateWithoutSubscriptionInput, BenefitUsageUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type BenefitUsageUpdateWithWhereUniqueWithoutSubscriptionInput = {
+    where: BenefitUsageWhereUniqueInput
+    data: XOR<BenefitUsageUpdateWithoutSubscriptionInput, BenefitUsageUncheckedUpdateWithoutSubscriptionInput>
+  }
+
+  export type BenefitUsageUpdateManyWithWhereWithoutSubscriptionInput = {
+    where: BenefitUsageScalarWhereInput
+    data: XOR<BenefitUsageUpdateManyMutationInput, BenefitUsageUncheckedUpdateManyWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionInvoiceUpsertWithWhereUniqueWithoutSubscriptionInput = {
+    where: SubscriptionInvoiceWhereUniqueInput
+    update: XOR<SubscriptionInvoiceUpdateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedUpdateWithoutSubscriptionInput>
+    create: XOR<SubscriptionInvoiceCreateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionInvoiceUpdateWithWhereUniqueWithoutSubscriptionInput = {
+    where: SubscriptionInvoiceWhereUniqueInput
+    data: XOR<SubscriptionInvoiceUpdateWithoutSubscriptionInput, SubscriptionInvoiceUncheckedUpdateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionInvoiceUpdateManyWithWhereWithoutSubscriptionInput = {
+    where: SubscriptionInvoiceScalarWhereInput
+    data: XOR<SubscriptionInvoiceUpdateManyMutationInput, SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionInvoiceScalarWhereInput = {
+    AND?: SubscriptionInvoiceScalarWhereInput | SubscriptionInvoiceScalarWhereInput[]
+    OR?: SubscriptionInvoiceScalarWhereInput[]
+    NOT?: SubscriptionInvoiceScalarWhereInput | SubscriptionInvoiceScalarWhereInput[]
+    id?: UuidFilter<"SubscriptionInvoice"> | string
+    tenantId?: UuidFilter<"SubscriptionInvoice"> | string
+    subscriptionId?: UuidFilter<"SubscriptionInvoice"> | string
+    patientId?: UuidFilter<"SubscriptionInvoice"> | string
+    patientDisplayName?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    invoiceNumber?: StringFilter<"SubscriptionInvoice"> | string
+    invoiceDate?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    dueDate?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    periodStart?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    periodEnd?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    invoiceType?: StringFilter<"SubscriptionInvoice"> | string
+    subtotal?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"SubscriptionInvoice"> | string
+    status?: StringFilter<"SubscriptionInvoice"> | string
+    amountPaid?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFilter<"SubscriptionInvoice"> | Decimal | DecimalJsLike | number | string
+    paidAt?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    paymentMethod?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    paymentReference?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    standardInvoiceId?: UuidNullableFilter<"SubscriptionInvoice"> | string | null
+    receiptId?: UuidNullableFilter<"SubscriptionInvoice"> | string | null
+    paymentAttempts?: IntFilter<"SubscriptionInvoice"> | number
+    lastPaymentAttempt?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    nextRetryDate?: DateTimeNullableFilter<"SubscriptionInvoice"> | Date | string | null
+    notes?: StringNullableFilter<"SubscriptionInvoice"> | string | null
+    createdAt?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    updatedAt?: DateTimeFilter<"SubscriptionInvoice"> | Date | string
+    createdBy?: UuidFilter<"SubscriptionInvoice"> | string
+  }
+
+  export type SubscriptionBillingEventUpsertWithWhereUniqueWithoutSubscriptionInput = {
+    where: SubscriptionBillingEventWhereUniqueInput
+    update: XOR<SubscriptionBillingEventUpdateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedUpdateWithoutSubscriptionInput>
+    create: XOR<SubscriptionBillingEventCreateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionBillingEventUpdateWithWhereUniqueWithoutSubscriptionInput = {
+    where: SubscriptionBillingEventWhereUniqueInput
+    data: XOR<SubscriptionBillingEventUpdateWithoutSubscriptionInput, SubscriptionBillingEventUncheckedUpdateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionBillingEventUpdateManyWithWhereWithoutSubscriptionInput = {
+    where: SubscriptionBillingEventScalarWhereInput
+    data: XOR<SubscriptionBillingEventUpdateManyMutationInput, SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionBillingEventScalarWhereInput = {
+    AND?: SubscriptionBillingEventScalarWhereInput | SubscriptionBillingEventScalarWhereInput[]
+    OR?: SubscriptionBillingEventScalarWhereInput[]
+    NOT?: SubscriptionBillingEventScalarWhereInput | SubscriptionBillingEventScalarWhereInput[]
+    id?: UuidFilter<"SubscriptionBillingEvent"> | string
+    tenantId?: UuidFilter<"SubscriptionBillingEvent"> | string
+    subscriptionId?: UuidFilter<"SubscriptionBillingEvent"> | string
+    eventType?: EnumBillingEventTypeFilter<"SubscriptionBillingEvent"> | $Enums.BillingEventType
+    eventTime?: DateTimeFilter<"SubscriptionBillingEvent"> | Date | string
+    eventData?: JsonNullableFilter<"SubscriptionBillingEvent">
+    previousState?: JsonNullableFilter<"SubscriptionBillingEvent">
+    newState?: JsonNullableFilter<"SubscriptionBillingEvent">
+    amount?: DecimalNullableFilter<"SubscriptionBillingEvent"> | Decimal | DecimalJsLike | number | string | null
+    currency?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    invoiceId?: UuidNullableFilter<"SubscriptionBillingEvent"> | string | null
+    paymentReference?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    errorCode?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    errorMessage?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    performedBy?: UuidNullableFilter<"SubscriptionBillingEvent"> | string | null
+    performedByType?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    ipAddress?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+    userAgent?: StringNullableFilter<"SubscriptionBillingEvent"> | string | null
+  }
+
+  export type MemberSubscriptionCreateWithoutBenefitUsagesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    plan: MembershipPlanCreateNestedOneWithoutSubscriptionsInput
+    primarySubscription?: MemberSubscriptionCreateNestedOneWithoutDependentSubscriptionsInput
+    dependentSubscriptions?: MemberSubscriptionCreateNestedManyWithoutPrimarySubscriptionInput
+    invoices?: SubscriptionInvoiceCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUncheckedCreateWithoutBenefitUsagesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    dependentSubscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPrimarySubscriptionInput
+    invoices?: SubscriptionInvoiceUncheckedCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionCreateOrConnectWithoutBenefitUsagesInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    create: XOR<MemberSubscriptionCreateWithoutBenefitUsagesInput, MemberSubscriptionUncheckedCreateWithoutBenefitUsagesInput>
+  }
+
+  export type PlanBenefitCreateWithoutUsagesInput = {
+    id?: string
+    tenantId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plan: MembershipPlanCreateNestedOneWithoutBenefitsInput
+  }
+
+  export type PlanBenefitUncheckedCreateWithoutUsagesInput = {
+    id?: string
+    tenantId: string
+    planId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanBenefitCreateOrConnectWithoutUsagesInput = {
+    where: PlanBenefitWhereUniqueInput
+    create: XOR<PlanBenefitCreateWithoutUsagesInput, PlanBenefitUncheckedCreateWithoutUsagesInput>
+  }
+
+  export type MemberSubscriptionUpsertWithoutBenefitUsagesInput = {
+    update: XOR<MemberSubscriptionUpdateWithoutBenefitUsagesInput, MemberSubscriptionUncheckedUpdateWithoutBenefitUsagesInput>
+    create: XOR<MemberSubscriptionCreateWithoutBenefitUsagesInput, MemberSubscriptionUncheckedCreateWithoutBenefitUsagesInput>
+    where?: MemberSubscriptionWhereInput
+  }
+
+  export type MemberSubscriptionUpdateToOneWithWhereWithoutBenefitUsagesInput = {
+    where?: MemberSubscriptionWhereInput
+    data: XOR<MemberSubscriptionUpdateWithoutBenefitUsagesInput, MemberSubscriptionUncheckedUpdateWithoutBenefitUsagesInput>
+  }
+
+  export type MemberSubscriptionUpdateWithoutBenefitUsagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+    primarySubscription?: MemberSubscriptionUpdateOneWithoutDependentSubscriptionsNestedInput
+    dependentSubscriptions?: MemberSubscriptionUpdateManyWithoutPrimarySubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateWithoutBenefitUsagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    dependentSubscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type PlanBenefitUpsertWithoutUsagesInput = {
+    update: XOR<PlanBenefitUpdateWithoutUsagesInput, PlanBenefitUncheckedUpdateWithoutUsagesInput>
+    create: XOR<PlanBenefitCreateWithoutUsagesInput, PlanBenefitUncheckedCreateWithoutUsagesInput>
+    where?: PlanBenefitWhereInput
+  }
+
+  export type PlanBenefitUpdateToOneWithWhereWithoutUsagesInput = {
+    where?: PlanBenefitWhereInput
+    data: XOR<PlanBenefitUpdateWithoutUsagesInput, PlanBenefitUncheckedUpdateWithoutUsagesInput>
+  }
+
+  export type PlanBenefitUpdateWithoutUsagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutBenefitsNestedInput
+  }
+
+  export type PlanBenefitUncheckedUpdateWithoutUsagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberSubscriptionCreateWithoutInvoicesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    plan: MembershipPlanCreateNestedOneWithoutSubscriptionsInput
+    primarySubscription?: MemberSubscriptionCreateNestedOneWithoutDependentSubscriptionsInput
+    dependentSubscriptions?: MemberSubscriptionCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUncheckedCreateWithoutInvoicesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    dependentSubscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageUncheckedCreateNestedManyWithoutSubscriptionInput
+    billingEvents?: SubscriptionBillingEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionCreateOrConnectWithoutInvoicesInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    create: XOR<MemberSubscriptionCreateWithoutInvoicesInput, MemberSubscriptionUncheckedCreateWithoutInvoicesInput>
+  }
+
+  export type MemberSubscriptionUpsertWithoutInvoicesInput = {
+    update: XOR<MemberSubscriptionUpdateWithoutInvoicesInput, MemberSubscriptionUncheckedUpdateWithoutInvoicesInput>
+    create: XOR<MemberSubscriptionCreateWithoutInvoicesInput, MemberSubscriptionUncheckedCreateWithoutInvoicesInput>
+    where?: MemberSubscriptionWhereInput
+  }
+
+  export type MemberSubscriptionUpdateToOneWithWhereWithoutInvoicesInput = {
+    where?: MemberSubscriptionWhereInput
+    data: XOR<MemberSubscriptionUpdateWithoutInvoicesInput, MemberSubscriptionUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type MemberSubscriptionUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+    primarySubscription?: MemberSubscriptionUpdateOneWithoutDependentSubscriptionsNestedInput
+    dependentSubscriptions?: MemberSubscriptionUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    dependentSubscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUncheckedUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionCreateWithoutBillingEventsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    plan: MembershipPlanCreateNestedOneWithoutSubscriptionsInput
+    primarySubscription?: MemberSubscriptionCreateNestedOneWithoutDependentSubscriptionsInput
+    dependentSubscriptions?: MemberSubscriptionCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionUncheckedCreateWithoutBillingEventsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    dependentSubscriptions?: MemberSubscriptionUncheckedCreateNestedManyWithoutPrimarySubscriptionInput
+    benefitUsages?: BenefitUsageUncheckedCreateNestedManyWithoutSubscriptionInput
+    invoices?: SubscriptionInvoiceUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type MemberSubscriptionCreateOrConnectWithoutBillingEventsInput = {
+    where: MemberSubscriptionWhereUniqueInput
+    create: XOR<MemberSubscriptionCreateWithoutBillingEventsInput, MemberSubscriptionUncheckedCreateWithoutBillingEventsInput>
+  }
+
+  export type MemberSubscriptionUpsertWithoutBillingEventsInput = {
+    update: XOR<MemberSubscriptionUpdateWithoutBillingEventsInput, MemberSubscriptionUncheckedUpdateWithoutBillingEventsInput>
+    create: XOR<MemberSubscriptionCreateWithoutBillingEventsInput, MemberSubscriptionUncheckedCreateWithoutBillingEventsInput>
+    where?: MemberSubscriptionWhereInput
+  }
+
+  export type MemberSubscriptionUpdateToOneWithWhereWithoutBillingEventsInput = {
+    where?: MemberSubscriptionWhereInput
+    data: XOR<MemberSubscriptionUpdateWithoutBillingEventsInput, MemberSubscriptionUncheckedUpdateWithoutBillingEventsInput>
+  }
+
+  export type MemberSubscriptionUpdateWithoutBillingEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+    primarySubscription?: MemberSubscriptionUpdateOneWithoutDependentSubscriptionsNestedInput
+    dependentSubscriptions?: MemberSubscriptionUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateWithoutBillingEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    dependentSubscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUncheckedUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
   export type PolicyCreateManyPayerInput = {
     id?: string
     tenantId: string
@@ -79970,6 +93849,776 @@ export namespace Prisma {
     lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
+  export type PlanBenefitCreateManyPlanInput = {
+    id?: string
+    tenantId: string
+    benefitType: $Enums.BenefitType
+    benefitName: string
+    description?: string | null
+    quantityIncluded?: number | null
+    usageResetOnRenewal?: boolean
+    discountPercent?: Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: string | null
+    displayOrder?: number
+    isHighlighted?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MemberSubscriptionCreateManyPlanInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    primarySubscriptionId?: string | null
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type PlanBenefitUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usages?: BenefitUsageUpdateManyWithoutBenefitNestedInput
+  }
+
+  export type PlanBenefitUncheckedUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usages?: BenefitUsageUncheckedUpdateManyWithoutBenefitNestedInput
+  }
+
+  export type PlanBenefitUncheckedUpdateManyWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitType?: EnumBenefitTypeFieldUpdateOperationsInput | $Enums.BenefitType
+    benefitName?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityIncluded?: NullableIntFieldUpdateOperationsInput | number | null
+    usageResetOnRenewal?: BoolFieldUpdateOperationsInput | boolean
+    discountPercent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxDiscountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    applicableTo?: NullableJsonNullValueInput | InputJsonValue
+    billingItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    isHighlighted?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberSubscriptionUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    primarySubscription?: MemberSubscriptionUpdateOneWithoutDependentSubscriptionsNestedInput
+    dependentSubscriptions?: MemberSubscriptionUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    dependentSubscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUncheckedUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateManyWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    primarySubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BenefitUsageCreateManyBenefitInput = {
+    id?: string
+    tenantId: string
+    subscriptionId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type BenefitUsageUpdateWithoutBenefitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    subscription?: MemberSubscriptionUpdateOneRequiredWithoutBenefitUsagesNestedInput
+  }
+
+  export type BenefitUsageUncheckedUpdateWithoutBenefitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BenefitUsageUncheckedUpdateManyWithoutBenefitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type MemberSubscriptionCreateManyPrimarySubscriptionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    mrn?: string | null
+    patientDisplayName?: string | null
+    planId: string
+    billingCycle: $Enums.BillingCycle
+    subscriptionNumber: string
+    status?: $Enums.SubscriptionStatus
+    enrolledAt?: Date | string
+    activatedAt?: Date | string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    nextBillingDate?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledBy?: string | null
+    cancellationReason?: string | null
+    cancelAtPeriodEnd?: boolean
+    recurringAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    enrollmentFeeCharged?: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    autoRenew?: boolean
+    isDependent?: boolean
+    referredBy?: string | null
+    linkedProgramEnrollmentId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type BenefitUsageCreateManySubscriptionInput = {
+    id?: string
+    tenantId: string
+    benefitId: string
+    usedAt?: Date | string
+    quantity?: number
+    encounterId?: string | null
+    chargeId?: string | null
+    invoiceId?: string | null
+    regularPrice?: Decimal | DecimalJsLike | number | string | null
+    memberPrice?: Decimal | DecimalJsLike | number | string | null
+    discountAmount?: Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart: Date | string
+    billingPeriodEnd: Date | string
+    usedQuantityBefore?: number
+    usedQuantityAfter?: number
+    remainingQuantity?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type SubscriptionInvoiceCreateManySubscriptionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate: Date | string
+    periodStart: Date | string
+    periodEnd: Date | string
+    invoiceType?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    taxAmount?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    status?: string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    paymentMethod?: string | null
+    paymentReference?: string | null
+    standardInvoiceId?: string | null
+    receiptId?: string | null
+    paymentAttempts?: number
+    lastPaymentAttempt?: Date | string | null
+    nextRetryDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type SubscriptionBillingEventCreateManySubscriptionInput = {
+    id?: string
+    tenantId: string
+    eventType: $Enums.BillingEventType
+    eventTime?: Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    invoiceId?: string | null
+    paymentReference?: string | null
+    errorCode?: string | null
+    errorMessage?: string | null
+    performedBy?: string | null
+    performedByType?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type MemberSubscriptionUpdateWithoutPrimarySubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    plan?: MembershipPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+    dependentSubscriptions?: MemberSubscriptionUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateWithoutPrimarySubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    dependentSubscriptions?: MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionNestedInput
+    benefitUsages?: BenefitUsageUncheckedUpdateManyWithoutSubscriptionNestedInput
+    invoices?: SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionNestedInput
+    billingEvents?: SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type MemberSubscriptionUncheckedUpdateManyWithoutPrimarySubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: StringFieldUpdateOperationsInput | string
+    billingCycle?: EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+    subscriptionNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    nextBillingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
+    recurringAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    enrollmentFeeCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    isDependent?: BoolFieldUpdateOperationsInput | boolean
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedProgramEnrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BenefitUsageUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    benefit?: PlanBenefitUpdateOneRequiredWithoutUsagesNestedInput
+  }
+
+  export type BenefitUsageUncheckedUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BenefitUsageUncheckedUpdateManyWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    benefitId?: StringFieldUpdateOperationsInput | string
+    usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    chargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    regularPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discountAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    billingPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    billingPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedQuantityBefore?: IntFieldUpdateOperationsInput | number
+    usedQuantityAfter?: IntFieldUpdateOperationsInput | number
+    remainingQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionInvoiceUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceType?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    standardInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentAttempts?: IntFieldUpdateOperationsInput | number
+    lastPaymentAttempt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRetryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionInvoiceUncheckedUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceType?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    standardInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentAttempts?: IntFieldUpdateOperationsInput | number
+    lastPaymentAttempt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRetryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionInvoiceUncheckedUpdateManyWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceType?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    standardInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentAttempts?: IntFieldUpdateOperationsInput | number
+    lastPaymentAttempt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRetryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionBillingEventUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumBillingEventTypeFieldUpdateOperationsInput | $Enums.BillingEventType
+    eventTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedByType?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubscriptionBillingEventUncheckedUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumBillingEventTypeFieldUpdateOperationsInput | $Enums.BillingEventType
+    eventTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedByType?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubscriptionBillingEventUncheckedUpdateManyWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumBillingEventTypeFieldUpdateOperationsInput | $Enums.BillingEventType
+    eventTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventData?: NullableJsonNullValueInput | InputJsonValue
+    previousState?: NullableJsonNullValueInput | InputJsonValue
+    newState?: NullableJsonNullValueInput | InputJsonValue
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedByType?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
 
 
   /**
@@ -80059,6 +94708,18 @@ export namespace Prisma {
      * @deprecated Use DebitNoteCountOutputTypeDefaultArgs instead
      */
     export type DebitNoteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DebitNoteCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MembershipPlanCountOutputTypeDefaultArgs instead
+     */
+    export type MembershipPlanCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MembershipPlanCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PlanBenefitCountOutputTypeDefaultArgs instead
+     */
+    export type PlanBenefitCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PlanBenefitCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MemberSubscriptionCountOutputTypeDefaultArgs instead
+     */
+    export type MemberSubscriptionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MemberSubscriptionCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PayerDefaultArgs instead
      */
@@ -80215,6 +94876,30 @@ export namespace Prisma {
      * @deprecated Use DebitNoteLineDefaultArgs instead
      */
     export type DebitNoteLineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DebitNoteLineDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MembershipPlanDefaultArgs instead
+     */
+    export type MembershipPlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MembershipPlanDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PlanBenefitDefaultArgs instead
+     */
+    export type PlanBenefitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PlanBenefitDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MemberSubscriptionDefaultArgs instead
+     */
+    export type MemberSubscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MemberSubscriptionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BenefitUsageDefaultArgs instead
+     */
+    export type BenefitUsageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BenefitUsageDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SubscriptionInvoiceDefaultArgs instead
+     */
+    export type SubscriptionInvoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SubscriptionInvoiceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SubscriptionBillingEventDefaultArgs instead
+     */
+    export type SubscriptionBillingEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SubscriptionBillingEventDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

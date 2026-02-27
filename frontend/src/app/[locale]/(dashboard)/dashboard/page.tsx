@@ -1,11 +1,9 @@
 'use client';
 
-import { Suspense, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ActivityTimeline } from '@/components/tables/activity-timeline';
-import { AppointmentSchedule } from '@/components/charts/appointment-schedule';
 import { cn, formatCurrency } from '@/lib/utils';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import { useDashboardMetrics } from '@/modules/reporting/hooks';
@@ -13,7 +11,6 @@ import {
   Activity,
   AlertTriangle,
   BarChart3,
-  Calendar,
   Clock,
   FileText,
   RefreshCw,
@@ -23,7 +20,6 @@ import {
   TrendingDown,
   TrendingUp,
   Users,
-  Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -70,7 +66,12 @@ export default function DashboardPage() {
   // Fetch real metrics from Report Builder
   const { data: metrics, isLoading, refetch } = useDashboardMetrics(resolvedCurrency);
 
-  const lastRefreshed = useMemo(() => new Date(), []);
+  // Use state for lastRefreshed to avoid hydration mismatch (server/client time difference)
+  const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setLastRefreshed(new Date());
+  }, []);
 
   // AI Pulse Metrics - derived from real data
   const aiPulseMetrics = useMemo(() => {
@@ -228,7 +229,7 @@ export default function DashboardPage() {
                 Refresh
               </Button>
               <Badge variant="secondary" className="text-primary">
-                Live insights · {lastRefreshed.toLocaleTimeString()}
+                Live insights{lastRefreshed ? ` · ${lastRefreshed.toLocaleTimeString()}` : ''}
               </Badge>
             </div>
           </div>
@@ -350,22 +351,7 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-3" aria-label="Predictive monitoring">
-        <Card className="xl:col-span-2">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-primary" />
-              <CardTitle>Predicted Encounter Load</CardTitle>
-            </div>
-            <CardDescription>AI-adjusted view of today&apos;s schedule + expected walk-ins.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Suspense fallback={<div className="h-48 animate-pulse rounded-md bg-muted loading-shimmer" />}>
-              <AppointmentSchedule />
-            </Suspense>
-          </CardContent>
-        </Card>
-
+      <div className="grid gap-6 lg:grid-cols-2" aria-label="Monitoring and stats">
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
@@ -400,21 +386,6 @@ export default function DashboardPage() {
                 ))}
               </ul>
             )}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2" aria-label="Live telemetry">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-primary" />
-              <CardTitle>Clinical Activity Stream</CardTitle>
-            </div>
-            <CardDescription>PHI masked until user intent confirmed.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ActivityTimeline />
           </CardContent>
         </Card>
 

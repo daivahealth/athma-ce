@@ -37,7 +37,7 @@ export class RecurringBillingService {
     };
 
     const where: any = {
-      status: 'active',
+      status: 'ACTIVE',
       autoRenew: true,
       nextBillingDate: { lte: new Date() },
     };
@@ -65,13 +65,16 @@ export class RecurringBillingService {
           subscription.plan.billingCycle as BillingCycle,
         );
 
+        const amount = Number(subscription.recurringAmount);
+
         // Create invoice
         await this.subscriptionService.createInvoice(
           subscription.tenantId,
           subscription.id,
+          subscription.patientId,
           newPeriodStart,
           newPeriodEnd,
-          subscription.price,
+          amount,
         );
 
         // Update subscription periods
@@ -89,9 +92,9 @@ export class RecurringBillingService {
           data: {
             tenantId: subscription.tenantId,
             subscriptionId: subscription.id,
-            eventType: BillingEventType.SUBSCRIPTION_RENEWED,
-            amount: subscription.price,
-            metadata: {
+            eventType: 'SUBSCRIPTION_RENEWED',
+            eventData: {
+              amount,
               periodStart: newPeriodStart,
               periodEnd: newPeriodEnd,
               automated: true,
@@ -112,15 +115,15 @@ export class RecurringBillingService {
         // Mark subscription as past_due after billing failure
         await this.prisma.memberSubscription.update({
           where: { id: subscription.id },
-          data: { status: 'past_due' },
+          data: { status: 'PAST_DUE' },
         });
 
         await this.prisma.subscriptionBillingEvent.create({
           data: {
             tenantId: subscription.tenantId,
             subscriptionId: subscription.id,
-            eventType: BillingEventType.PAYMENT_FAILED,
-            metadata: { error: error.message },
+            eventType: 'PAYMENT_FAILED',
+            eventData: { error: error.message },
           },
         });
       }
@@ -134,7 +137,7 @@ export class RecurringBillingService {
    */
   async processExpiredSubscriptions(tenantId?: string): Promise<number> {
     const where: any = {
-      status: 'cancelled',
+      status: 'CANCELLED',
       endDate: { lte: new Date() },
     };
 
@@ -144,14 +147,14 @@ export class RecurringBillingService {
 
     const expired = await this.prisma.memberSubscription.updateMany({
       where,
-      data: { status: 'expired' },
+      data: { status: 'EXPIRED' },
     });
 
     // Create billing events for each expired subscription
     const expiredSubs = await this.prisma.memberSubscription.findMany({
       where: {
         ...where,
-        status: 'expired',
+        status: 'EXPIRED',
         updatedAt: { gte: new Date(Date.now() - 60 * 1000) }, // Updated in last minute
       },
     });
@@ -161,8 +164,8 @@ export class RecurringBillingService {
         data: {
           tenantId: sub.tenantId,
           subscriptionId: sub.id,
-          eventType: BillingEventType.SUBSCRIPTION_EXPIRED,
-          metadata: { expiredAt: new Date().toISOString() },
+          eventType: 'SUBSCRIPTION_EXPIRED',
+          eventData: { expiredAt: new Date().toISOString() },
         },
       });
     }
@@ -183,7 +186,7 @@ export class RecurringBillingService {
     );
 
     const where: any = {
-      status: 'past_due',
+      status: 'PAST_DUE',
       updatedAt: { lte: gracePeriodEnd },
     };
 
@@ -195,34 +198,29 @@ export class RecurringBillingService {
     const cancelled = await this.prisma.memberSubscription.updateMany({
       where,
       data: {
-        status: 'cancelled',
+        status: 'CANCELLED',
         cancelledAt: new Date(),
         cancellationReason: 'Payment failure - grace period expired',
         autoRenew: false,
       },
     });
 
-    // Decrement member counts
+    // Create billing events for cancelled subscriptions
     const cancelledSubs = await this.prisma.memberSubscription.findMany({
       where: {
         ...where,
-        status: 'cancelled',
+        status: 'CANCELLED',
         cancelledAt: { gte: new Date(Date.now() - 60 * 1000) },
       },
     });
 
     for (const sub of cancelledSubs) {
-      await this.prisma.membershipPlan.update({
-        where: { id: sub.planId },
-        data: { currentMembers: { decrement: 1 } },
-      });
-
       await this.prisma.subscriptionBillingEvent.create({
         data: {
           tenantId: sub.tenantId,
           subscriptionId: sub.id,
-          eventType: BillingEventType.SUBSCRIPTION_CANCELLED,
-          metadata: {
+          eventType: 'SUBSCRIPTION_CANCELLED',
+          eventData: {
             reason: 'Payment failure - grace period expired',
             automated: true,
           },
@@ -244,7 +242,7 @@ export class RecurringBillingService {
     subscriptionId: string;
     patientId: string;
     planName: string;
-    renewalDate: Date;
+    renewalDate: Date | null;
     amount: number;
   }>> {
     const futureDate = new Date(Date.now() + daysAhead * 24 * 60 * 60 * 1000);
@@ -252,7 +250,7 @@ export class RecurringBillingService {
     const subscriptions = await this.prisma.memberSubscription.findMany({
       where: {
         tenantId,
-        status: 'active',
+        status: 'ACTIVE',
         autoRenew: true,
         nextBillingDate: { lte: futureDate, gte: new Date() },
       },
@@ -264,7 +262,7 @@ export class RecurringBillingService {
       patientId: s.patientId,
       planName: s.plan.planName,
       renewalDate: s.nextBillingDate,
-      amount: s.price,
+      amount: Number(s.recurringAmount),
     }));
   }
 
@@ -290,13 +288,13 @@ export class RecurringBillingService {
     ] = await Promise.all([
       // Total active subscriptions
       this.prisma.memberSubscription.count({
-        where: { tenantId, status: 'active' },
+        where: { tenantId, status: 'ACTIVE' },
       }),
 
       // Total lifetime revenue
       this.prisma.subscriptionInvoice.aggregate({
         where: { tenantId, status: 'paid' },
-        _sum: { amount: true },
+        _sum: { totalAmount: true },
       }),
 
       // Revenue this month
@@ -306,7 +304,7 @@ export class RecurringBillingService {
           status: 'paid',
           paidAt: { gte: startOfMonth },
         },
-        _sum: { amount: true },
+        _sum: { totalAmount: true },
       }),
 
       // Revenue last month
@@ -316,7 +314,7 @@ export class RecurringBillingService {
           status: 'paid',
           paidAt: { gte: startOfLastMonth, lte: endOfLastMonth },
         },
-        _sum: { amount: true },
+        _sum: { totalAmount: true },
       }),
 
       // New subscriptions this month
@@ -331,7 +329,7 @@ export class RecurringBillingService {
       this.prisma.memberSubscription.count({
         where: {
           tenantId,
-          status: 'cancelled',
+          status: 'CANCELLED',
           cancelledAt: { gte: startOfMonth },
         },
       }),
@@ -340,7 +338,7 @@ export class RecurringBillingService {
       this.prisma.memberSubscription.count({
         where: {
           tenantId,
-          status: 'active',
+          status: 'ACTIVE',
           autoRenew: true,
           nextBillingDate: {
             gte: now,
@@ -351,13 +349,13 @@ export class RecurringBillingService {
 
       // Past due subscriptions
       this.prisma.memberSubscription.count({
-        where: { tenantId, status: 'past_due' },
+        where: { tenantId, status: 'PAST_DUE' },
       }),
 
       // Subscriptions by tier
       this.prisma.memberSubscription.groupBy({
         by: ['planId'],
-        where: { tenantId, status: 'active' },
+        where: { tenantId, status: 'ACTIVE' },
         _count: true,
       }),
     ]);
@@ -366,7 +364,7 @@ export class RecurringBillingService {
     const planIds = subscriptionsByTier.map((s) => s.planId);
     const plans = await this.prisma.membershipPlan.findMany({
       where: { id: { in: planIds } },
-      select: { id: true, tier: true, price: true },
+      select: { id: true, tier: true, basePrice: true },
     });
 
     const planMap = new Map(plans.map((p) => [p.id, p]));
@@ -377,20 +375,22 @@ export class RecurringBillingService {
       const plan = planMap.get(sub.planId);
       if (plan) {
         byTier[plan.tier] = (byTier[plan.tier] || 0) + sub._count;
-        revenueByTier[plan.tier] = (revenueByTier[plan.tier] || 0) + plan.price * sub._count;
+        revenueByTier[plan.tier] = (revenueByTier[plan.tier] || 0) + Number(plan.basePrice) * sub._count;
       }
     }
 
+    const totalRevenueAmount = totalRevenue._sum?.totalAmount ? Number(totalRevenue._sum.totalAmount) : 0;
+    const thisMonthAmount = revenueThisMonth._sum?.totalAmount ? Number(revenueThisMonth._sum.totalAmount) : 0;
+    const lastMonthAmount = revenueLastMonth._sum?.totalAmount ? Number(revenueLastMonth._sum.totalAmount) : 0;
+
     return {
       totalActiveSubscriptions: totalActive,
-      totalRevenue: totalRevenue._sum.amount || 0,
-      revenueThisMonth: revenueThisMonth._sum.amount || 0,
-      revenueLastMonth: revenueLastMonth._sum.amount || 0,
+      totalRevenue: totalRevenueAmount,
+      revenueThisMonth: thisMonthAmount,
+      revenueLastMonth: lastMonthAmount,
       revenueGrowth:
-        revenueLastMonth._sum.amount && revenueLastMonth._sum.amount > 0
-          ? Math.round(
-              ((revenueThisMonth._sum.amount || 0) / revenueLastMonth._sum.amount - 1) * 100,
-            )
+        lastMonthAmount > 0
+          ? Math.round((thisMonthAmount / lastMonthAmount - 1) * 100)
           : 0,
       newSubscriptionsThisMonth: newSubscriptions,
       cancellationsThisMonth: cancellations,

@@ -67,12 +67,12 @@ export class SubscriptionController {
     @Query('limit') limit?: number,
     @Query('offset') offset?: number,
   ) {
-    return this.subscriptionService.findAll(tenantId, {
-      status,
-      planId,
-      limit: limit ? Number(limit) : undefined,
-      offset: offset ? Number(offset) : undefined,
-    });
+    const options: { status?: SubscriptionStatus; planId?: string; limit?: number; offset?: number } = {};
+    if (status !== undefined) options.status = status;
+    if (planId !== undefined) options.planId = planId;
+    if (limit !== undefined) options.limit = Number(limit);
+    if (offset !== undefined) options.offset = Number(offset);
+    return this.subscriptionService.findAll(tenantId, options);
   }
 
   @Get('patient/:patientId')
@@ -184,16 +184,15 @@ export class SubscriptionController {
     @Headers('x-tenant-id') tenantId: string,
     @Body() dto: RecordBenefitUsageDto,
   ) {
+    const data: { encounterId?: string; quantity?: number; notes?: string } = {};
+    if (dto.encounterId !== undefined) data.encounterId = dto.encounterId;
+    if (dto.quantity !== undefined) data.quantity = dto.quantity;
+    if (dto.notes !== undefined) data.notes = dto.notes;
     return this.subscriptionService.recordBenefitUsage(
       tenantId,
       dto.subscriptionId,
       dto.benefitId,
-      {
-        serviceCode: dto.serviceCode,
-        encounterId: dto.encounterId,
-        quantity: dto.quantity,
-        notes: dto.notes,
-      },
+      data,
     );
   }
 
@@ -208,10 +207,10 @@ export class SubscriptionController {
     @Query('benefitId') benefitId?: string,
     @Query('limit') limit?: number,
   ) {
-    return this.subscriptionService.getBenefitUsageHistory(tenantId, id, {
-      benefitId,
-      limit: limit ? Number(limit) : undefined,
-    });
+    const options: { benefitId?: string; limit?: number } = {};
+    if (benefitId !== undefined) options.benefitId = benefitId;
+    if (limit !== undefined) options.limit = Number(limit);
+    return this.subscriptionService.getBenefitUsageHistory(tenantId, id, options);
   }
 
   // ============================================

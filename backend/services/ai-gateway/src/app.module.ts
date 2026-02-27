@@ -11,6 +11,7 @@ import { HealthModule } from './modules/health/health.module';
 import { ReportBuilderModule } from './modules/report-builder/report-builder.module';
 import { SemanticSearchModule } from './modules/semantic-search/semantic-search.module';
 import { LLMClientModule } from './shared/llm-client/llm-client.module';
+import { RedisModule } from './shared/redis/redis.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
 
@@ -33,6 +34,7 @@ import { LoggerService } from './common/logger/logger.service';
     // Core modules
     RequestContextModule,
     LLMClientModule,
+    RedisModule,
     HealthModule,
     // Feature modules
     ReportBuilderModule,

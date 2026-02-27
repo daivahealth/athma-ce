@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '@zeal/database-rcm';
+import { PrismaService, Prisma } from '@zeal/database-rcm';
 import {
   CreateMembershipPlanDto,
   UpdateMembershipPlanDto,
@@ -21,34 +21,39 @@ export class MembershipPlanService {
       throw new BadRequestException(`Plan with name "${dto.planName}" already exists`);
     }
 
+    // Generate planCode from planName if not provided
+    const planCode = dto.planName.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+
     // Create plan with benefits
     const plan = await this.prisma.membershipPlan.create({
       data: {
         tenantId,
+        planCode,
         planName: dto.planName,
-        description: dto.description,
+        description: dto.description ?? null,
         tier: dto.tier,
         billingCycle: dto.billingCycle,
-        price: dto.price,
+        basePrice: dto.price,
         currency: dto.currency || 'AED',
-        setupFee: dto.setupFee || 0,
+        enrollmentFee: dto.setupFee || 0,
         isActive: true,
         isPublic: dto.isPublic ?? true,
-        maxMembers: dto.maxMembers,
-        currentMembers: 0,
+        maxMembers: dto.maxMembers ?? null,
         availableFacilities: dto.availableFacilities || [],
-        termsAndConditions: dto.termsAndConditions,
+        termsAndConditions: dto.termsAndConditions ?? null,
         metadata: dto.metadata || {},
         createdBy: userId,
         benefits: {
           create: dto.benefits.map((benefit) => ({
             tenantId,
             benefitType: benefit.benefitType,
-            name: benefit.name,
-            description: benefit.description,
-            usageLimit: benefit.usageLimit ?? -1, // -1 = unlimited
-            discountPercent: benefit.discountPercent,
-            applicableServiceCodes: benefit.applicableServiceCodes || [],
+            benefitName: benefit.name,
+            description: benefit.description ?? null,
+            quantityIncluded: benefit.usageLimit === -1 ? null : (benefit.usageLimit ?? null),
+            discountPercent: benefit.discountPercent ?? null,
+            applicableTo: benefit.applicableServiceCodes
+              ? { services: benefit.applicableServiceCodes }
+              : Prisma.JsonNull,
             metadata: benefit.metadata || {},
           })),
         },
@@ -67,7 +72,7 @@ export class MembershipPlanService {
       include: {
         benefits: true,
         _count: {
-          select: { subscriptions: { where: { status: 'active' } } },
+          select: { subscriptions: { where: { status: 'ACTIVE' } } },
         },
       },
     });
@@ -108,10 +113,10 @@ export class MembershipPlanService {
       include: {
         benefits: true,
         _count: {
-          select: { subscriptions: { where: { status: 'active' } } },
+          select: { subscriptions: { where: { status: 'ACTIVE' } } },
         },
       },
-      orderBy: [{ tier: 'asc' }, { price: 'asc' }],
+      orderBy: [{ tier: 'asc' }, { basePrice: 'asc' }],
     });
 
     return plans.map((plan) => ({
@@ -121,11 +126,14 @@ export class MembershipPlanService {
   }
 
   async findPublicPlans(tenantId: string, facilityId?: string) {
-    return this.findAll(tenantId, {
+    const options: { isActive: boolean; isPublic: boolean; facilityId?: string } = {
       isActive: true,
       isPublic: true,
-      facilityId,
-    });
+    };
+    if (facilityId) {
+      options.facilityId = facilityId;
+    }
+    return this.findAll(tenantId, options);
   }
 
   async update(tenantId: string, id: string, dto: UpdateMembershipPlanDto) {
@@ -144,11 +152,13 @@ export class MembershipPlanService {
           tenantId,
           planId: id,
           benefitType: benefit.benefitType,
-          name: benefit.name,
-          description: benefit.description,
-          usageLimit: benefit.usageLimit ?? -1,
-          discountPercent: benefit.discountPercent,
-          applicableServiceCodes: benefit.applicableServiceCodes || [],
+          benefitName: benefit.name,
+          description: benefit.description ?? null,
+          quantityIncluded: benefit.usageLimit === -1 ? null : (benefit.usageLimit ?? null),
+          discountPercent: benefit.discountPercent ?? null,
+          applicableTo: benefit.applicableServiceCodes
+            ? { services: benefit.applicableServiceCodes }
+            : Prisma.JsonNull,
           metadata: benefit.metadata || {},
         })),
       });
@@ -170,7 +180,7 @@ export class MembershipPlanService {
 
     // Check if there are active subscriptions
     const activeSubscriptions = await this.prisma.memberSubscription.count({
-      where: { planId: id, status: 'active' },
+      where: { planId: id, status: 'ACTIVE' },
     });
 
     if (activeSubscriptions > 0) {
@@ -217,8 +227,8 @@ export class MembershipPlanService {
         comparison[benefitType][plan.id] = benefit
           ? {
               included: true,
-              name: benefit.name,
-              limit: benefit.usageLimit,
+              name: benefit.benefitName,
+              limit: benefit.quantityIncluded,
               discount: benefit.discountPercent,
             }
           : { included: false };
@@ -230,7 +240,7 @@ export class MembershipPlanService {
         id: p.id,
         planName: p.planName,
         tier: p.tier,
-        price: p.price,
+        price: p.basePrice,
         billingCycle: p.billingCycle,
       })),
       comparison,
@@ -251,7 +261,7 @@ export class MembershipPlanService {
         subscription: { planId, tenantId },
         status: 'paid',
       },
-      _sum: { amount: true },
+      _sum: { totalAmount: true },
     });
 
     const recentEnrollments = await this.prisma.memberSubscription.count({
@@ -266,7 +276,7 @@ export class MembershipPlanService {
       where: {
         planId,
         tenantId,
-        status: 'cancelled',
+        status: 'CANCELLED',
         cancelledAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
       },
     });
@@ -277,7 +287,7 @@ export class MembershipPlanService {
       subscriptionsByStatus: Object.fromEntries(
         subscriptions.map((s) => [s.status, s._count]),
       ),
-      totalRevenue: revenue._sum.amount || 0,
+      totalRevenue: revenue._sum?.totalAmount ? Number(revenue._sum.totalAmount) : 0,
       recentEnrollments,
       recentCancellations,
       churnRate:

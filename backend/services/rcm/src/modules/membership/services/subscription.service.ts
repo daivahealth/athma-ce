@@ -28,7 +28,7 @@ export class SubscriptionService {
       where: {
         tenantId,
         patientId: dto.patientId,
-        status: 'active',
+        status: 'ACTIVE',
       },
     });
 
@@ -54,26 +54,28 @@ export class SubscriptionService {
       plan.billingCycle as BillingCycle,
     );
 
+    // Generate subscription number
+    const subscriptionNumber = `SUB-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+
     // Create subscription
     const subscription = await this.prisma.memberSubscription.create({
       data: {
         tenantId,
         patientId: dto.patientId,
         planId: dto.planId,
-        status: 'active',
+        subscriptionNumber,
+        billingCycle: plan.billingCycle,
+        status: 'ACTIVE',
         startDate,
         currentPeriodStart: startDate,
         currentPeriodEnd,
         nextBillingDate: currentPeriodEnd,
-        price: plan.price,
+        recurringAmount: plan.basePrice,
         currency: plan.currency,
+        enrollmentFeeCharged: dto.applySetupFee ? plan.enrollmentFee : 0,
         autoRenew: true,
-        enrolledBy: dto.enrolledBy || userId,
-        notes: dto.notes,
-        metadata: {
-          promoCode: dto.promoCode,
-          applySetupFee: dto.applySetupFee,
-        },
+        notes: dto.notes ?? null,
+        createdBy: dto.enrolledBy || userId,
       },
     });
 
@@ -81,18 +83,12 @@ export class SubscriptionService {
     await this.createBillingEvent(subscription.id, BillingEventType.SUBSCRIPTION_CREATED, {
       planId: plan.id,
       planName: plan.planName,
-      price: plan.price,
+      price: plan.basePrice,
     });
 
     // Create initial invoice
-    const invoiceAmount = plan.price + (dto.applySetupFee ? (plan.setupFee || 0) : 0);
-    await this.createInvoice(tenantId, subscription.id, startDate, currentPeriodEnd, invoiceAmount);
-
-    // Increment plan member count
-    await this.prisma.membershipPlan.update({
-      where: { id: plan.id },
-      data: { currentMembers: { increment: 1 } },
-    });
+    const invoiceAmount = Number(plan.basePrice) + (dto.applySetupFee ? Number(plan.enrollmentFee || 0) : 0);
+    await this.createInvoice(tenantId, subscription.id, dto.patientId, startDate, currentPeriodEnd, invoiceAmount);
 
     return this.findById(tenantId, subscription.id);
   }
@@ -140,7 +136,7 @@ export class SubscriptionService {
 
   async findActiveByPatient(tenantId: string, patientId: string) {
     const subscription = await this.prisma.memberSubscription.findFirst({
-      where: { tenantId, patientId, status: 'active' },
+      where: { tenantId, patientId, status: 'ACTIVE' },
       include: {
         plan: {
           include: { benefits: true },
@@ -199,9 +195,14 @@ export class SubscriptionService {
   async update(tenantId: string, id: string, dto: UpdateSubscriptionDto) {
     await this.findById(tenantId, id);
 
+    const updateData: any = {};
+    if (dto.status !== undefined) updateData.status = dto.status;
+    if (dto.autoRenew !== undefined) updateData.autoRenew = dto.autoRenew;
+    if (dto.notes !== undefined) updateData.notes = dto.notes;
+
     return this.prisma.memberSubscription.update({
       where: { id },
-      data: dto,
+      data: updateData,
     });
   }
 
@@ -231,20 +232,9 @@ export class SubscriptionService {
       const totalDays = this.planService.getBillingCycleDays(
         subscription.plan.billingCycle as BillingCycle,
       );
-      const dailyRate = subscription.price / totalDays;
+      const dailyRate = Number(subscription.recurringAmount) / totalDays;
       prorationAmount = Math.round(dailyRate * daysRemaining * 100) / 100;
     }
-
-    // Update member counts
-    await this.prisma.membershipPlan.update({
-      where: { id: subscription.planId },
-      data: { currentMembers: { decrement: 1 } },
-    });
-
-    await this.prisma.membershipPlan.update({
-      where: { id: newPlan.id },
-      data: { currentMembers: { increment: 1 } },
-    });
 
     // Update subscription
     const newPeriodEnd = this.planService.getNextBillingDate(
@@ -256,16 +246,11 @@ export class SubscriptionService {
       where: { id },
       data: {
         planId: newPlan.id,
-        price: newPlan.price,
+        billingCycle: newPlan.billingCycle,
+        recurringAmount: newPlan.basePrice,
         currentPeriodStart: effectiveDate,
         currentPeriodEnd: newPeriodEnd,
         nextBillingDate: newPeriodEnd,
-        metadata: {
-          ...(subscription.metadata as object || {}),
-          previousPlanId: subscription.planId,
-          planChangedAt: new Date().toISOString(),
-          prorationAmount,
-        },
       },
     });
 
@@ -281,25 +266,25 @@ export class SubscriptionService {
   async pause(tenantId: string, id: string) {
     const subscription = await this.findById(tenantId, id);
 
-    if (subscription.status !== 'active') {
+    if (subscription.status !== 'ACTIVE') {
       throw new BadRequestException('Only active subscriptions can be paused');
     }
 
+    // Store the remaining days by adjusting the period end date to reflect when paused
+    // When resumed, we'll calculate remaining days from currentPeriodEnd
     const updated = await this.prisma.memberSubscription.update({
       where: { id },
       data: {
-        status: 'paused',
-        metadata: {
-          ...(subscription.metadata as object || {}),
-          pausedAt: new Date().toISOString(),
-          pausedPeriodRemaining: Math.ceil(
-            (subscription.currentPeriodEnd.getTime() - Date.now()) / (24 * 60 * 60 * 1000),
-          ),
-        },
+        status: 'PAUSED',
       },
     });
 
-    await this.createBillingEvent(id, BillingEventType.SUBSCRIPTION_PAUSED);
+    await this.createBillingEvent(id, BillingEventType.SUBSCRIPTION_PAUSED, {
+      pausedAt: new Date().toISOString(),
+      pausedPeriodRemaining: Math.ceil(
+        (subscription.currentPeriodEnd.getTime() - Date.now()) / (24 * 60 * 60 * 1000),
+      ),
+    });
 
     return updated;
   }
@@ -307,20 +292,22 @@ export class SubscriptionService {
   async resume(tenantId: string, id: string) {
     const subscription = await this.findById(tenantId, id);
 
-    if (subscription.status !== 'paused') {
+    if (subscription.status !== 'PAUSED') {
       throw new BadRequestException('Only paused subscriptions can be resumed');
     }
 
-    const metadata = subscription.metadata as any;
-    const pausedDaysRemaining = metadata?.pausedPeriodRemaining || 0;
+    // Calculate remaining days from the stored period end
+    const pausedDaysRemaining = Math.ceil(
+      (subscription.currentPeriodEnd.getTime() - Date.now()) / (24 * 60 * 60 * 1000),
+    );
     const newPeriodEnd = new Date(
-      Date.now() + pausedDaysRemaining * 24 * 60 * 60 * 1000,
+      Date.now() + Math.max(0, pausedDaysRemaining) * 24 * 60 * 60 * 1000,
     );
 
     const updated = await this.prisma.memberSubscription.update({
       where: { id },
       data: {
-        status: 'active',
+        status: 'ACTIVE',
         currentPeriodStart: new Date(),
         currentPeriodEnd: newPeriodEnd,
         nextBillingDate: newPeriodEnd,
@@ -335,7 +322,7 @@ export class SubscriptionService {
   async cancel(tenantId: string, id: string, dto: CancelSubscriptionDto) {
     const subscription = await this.findById(tenantId, id);
 
-    if (['cancelled', 'expired'].includes(subscription.status)) {
+    if (['CANCELLED', 'EXPIRED'].includes(subscription.status)) {
       throw new BadRequestException('Subscription is already cancelled or expired');
     }
 
@@ -344,18 +331,12 @@ export class SubscriptionService {
     const updated = await this.prisma.memberSubscription.update({
       where: { id },
       data: {
-        status: 'cancelled',
+        status: 'CANCELLED',
         endDate,
         cancelledAt: new Date(),
-        cancellationReason: dto.reason,
+        cancellationReason: dto.reason ?? null,
         autoRenew: false,
       },
-    });
-
-    // Decrement plan member count
-    await this.prisma.membershipPlan.update({
-      where: { id: subscription.planId },
-      data: { currentMembers: { decrement: 1 } },
     });
 
     await this.createBillingEvent(id, BillingEventType.SUBSCRIPTION_CANCELLED, {
@@ -370,7 +351,7 @@ export class SubscriptionService {
   async renew(tenantId: string, id: string, dto?: RenewSubscriptionDto) {
     const subscription = await this.findById(tenantId, id);
 
-    if (!['active', 'past_due'].includes(subscription.status)) {
+    if (!['ACTIVE', 'PAST_DUE'].includes(subscription.status)) {
       throw new BadRequestException('Subscription cannot be renewed in current state');
     }
 
@@ -381,24 +362,24 @@ export class SubscriptionService {
       renewalDate,
       subscription.plan.billingCycle as BillingCycle,
     );
-    const price = dto?.overridePrice ?? subscription.price;
+    const amount = dto?.overridePrice ?? Number(subscription.recurringAmount);
 
     const updated = await this.prisma.memberSubscription.update({
       where: { id },
       data: {
-        status: 'active',
+        status: 'ACTIVE',
         currentPeriodStart: renewalDate,
         currentPeriodEnd: newPeriodEnd,
         nextBillingDate: newPeriodEnd,
-        price,
+        recurringAmount: amount,
       },
     });
 
     // Create invoice for renewal
-    await this.createInvoice(tenantId, id, renewalDate, newPeriodEnd, price);
+    await this.createInvoice(tenantId, id, subscription.patientId, renewalDate, newPeriodEnd, amount);
 
     await this.createBillingEvent(id, BillingEventType.SUBSCRIPTION_RENEWED, {
-      price,
+      amount,
       periodStart: renewalDate,
       periodEnd: newPeriodEnd,
     });
@@ -428,13 +409,13 @@ export class SubscriptionService {
       });
 
       const used = usageCount._sum.quantity || 0;
-      const limit = benefit.usageLimit;
+      const limit = benefit.quantityIncluded ?? -1; // null means unlimited
       const remaining = limit === -1 ? -1 : Math.max(0, limit - used);
 
       balances.push({
         benefitId: benefit.id,
         benefitType: benefit.benefitType,
-        benefitName: benefit.name,
+        benefitName: benefit.benefitName,
         limit,
         used,
         remaining,
@@ -459,7 +440,7 @@ export class SubscriptionService {
   ) {
     const subscription = await this.findById(tenantId, subscriptionId);
 
-    if (subscription.status !== 'active') {
+    if (subscription.status !== 'ACTIVE') {
       throw new BadRequestException('Subscription is not active');
     }
 
@@ -472,6 +453,7 @@ export class SubscriptionService {
     // Check usage limit
     const balances = await this.getBenefitBalances(subscription);
     const balance = balances.find((b) => b.benefitId === benefitId);
+    const currentUsed = balance?.used || 0;
 
     if (balance && balance.limit !== -1 && balance.remaining < (data.quantity || 1)) {
       throw new BadRequestException(
@@ -479,24 +461,30 @@ export class SubscriptionService {
       );
     }
 
+    const quantity = data.quantity || 1;
+
     const usage = await this.prisma.benefitUsage.create({
       data: {
         tenantId,
         subscriptionId,
         benefitId,
-        benefitType: benefit.benefitType,
-        serviceCode: data.serviceCode,
-        encounterId: data.encounterId,
-        quantity: data.quantity || 1,
+        encounterId: data.encounterId ?? null,
+        quantity,
         usedAt: new Date(),
-        notes: data.notes,
+        notes: data.notes ?? null,
+        billingPeriodStart: subscription.currentPeriodStart,
+        billingPeriodEnd: subscription.currentPeriodEnd,
+        usedQuantityBefore: currentUsed,
+        usedQuantityAfter: currentUsed + quantity,
+        remainingQuantity: balance?.limit === -1 ? null : (balance?.remaining || 0) - quantity,
+        createdBy: subscription.createdBy,
       },
     });
 
     await this.createBillingEvent(subscriptionId, BillingEventType.BENEFIT_USED, {
       benefitId,
       benefitType: benefit.benefitType,
-      quantity: data.quantity || 1,
+      quantity,
     });
 
     return usage;
@@ -526,23 +514,34 @@ export class SubscriptionService {
   async createInvoice(
     tenantId: string,
     subscriptionId: string,
+    patientId: string,
     periodStart: Date,
     periodEnd: Date,
     amount: number,
+    createdBy?: string,
   ) {
     const invoiceNumber = `MEM-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+
+    // Get subscription for createdBy fallback
+    const subscription = await this.prisma.memberSubscription.findUnique({
+      where: { id: subscriptionId },
+    });
 
     return this.prisma.subscriptionInvoice.create({
       data: {
         tenantId,
         subscriptionId,
+        patientId,
         invoiceNumber,
         periodStart,
         periodEnd,
-        amount,
+        subtotal: amount,
+        totalAmount: amount,
+        balanceDue: amount,
         currency: 'AED',
         status: 'pending',
         dueDate: periodStart,
+        createdBy: createdBy || subscription?.createdBy || 'system',
       },
     });
   }
@@ -577,7 +576,7 @@ export class SubscriptionService {
     await this.createBillingEvent(
       invoice.subscriptionId,
       BillingEventType.PAYMENT_RECEIVED,
-      { invoiceId, amount: invoice.amount, paymentMethod },
+      { invoiceId, amount: invoice.totalAmount, paymentMethod },
     );
 
     return updated;
@@ -590,7 +589,7 @@ export class SubscriptionService {
   private async createBillingEvent(
     subscriptionId: string,
     eventType: BillingEventType,
-    metadata?: any,
+    eventData?: any,
   ) {
     const subscription = await this.prisma.memberSubscription.findUnique({
       where: { id: subscriptionId },
@@ -601,15 +600,15 @@ export class SubscriptionService {
         tenantId: subscription!.tenantId,
         subscriptionId,
         eventType,
-        amount: metadata?.amount || metadata?.price,
-        invoiceId: metadata?.invoiceId,
-        metadata: metadata || {},
+        amount: eventData?.amount || eventData?.price,
+        invoiceId: eventData?.invoiceId,
+        eventData: eventData || {},
       },
     });
   }
 
   private isUpgrade(currentTier: string, newTier: string): boolean {
-    const tierOrder = ['basic', 'standard', 'premium', 'platinum', 'vip'];
+    const tierOrder = ['BASIC', 'STANDARD', 'PREMIUM', 'PLATINUM', 'VIP'];
     return tierOrder.indexOf(newTier) > tierOrder.indexOf(currentTier);
   }
 }

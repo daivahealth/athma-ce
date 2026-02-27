@@ -18,31 +18,33 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 // ============================================
 
 export enum MembershipTier {
-  BASIC = 'basic',
-  STANDARD = 'standard',
-  PREMIUM = 'premium',
-  PLATINUM = 'platinum',
-  VIP = 'vip',
+  BASIC = 'BASIC',
+  STANDARD = 'STANDARD',
+  PREMIUM = 'PREMIUM',
+  PLATINUM = 'PLATINUM',
+  VIP = 'VIP',
 }
 
 export enum BillingCycle {
-  MONTHLY = 'monthly',
-  QUARTERLY = 'quarterly',
-  SEMI_ANNUAL = 'semi_annual',
-  ANNUAL = 'annual',
+  MONTHLY = 'MONTHLY',
+  QUARTERLY = 'QUARTERLY',
+  SEMI_ANNUAL = 'SEMI_ANNUAL',
+  ANNUAL = 'ANNUAL',
 }
 
 export enum BenefitType {
-  CONSULTATION = 'consultation',
-  ASSESSMENT = 'assessment',
-  TREATMENT = 'treatment',
-  LAB_TEST = 'lab_test',
-  SCREENING = 'screening',
-  DISCOUNT = 'discount',
-  PROGRAM_ACCESS = 'program_access',
-  PRIORITY_BOOKING = 'priority_booking',
-  DEVICE_SYNC = 'device_sync',
-  DEDICATED_SUPPORT = 'dedicated_support',
+  CONSULTATION = 'CONSULTATION',
+  ASSESSMENT = 'ASSESSMENT',
+  LAB_TEST = 'LAB_TEST',
+  TREATMENT = 'TREATMENT',
+  PROGRAM_ACCESS = 'PROGRAM_ACCESS',
+  DISCOUNT = 'DISCOUNT',
+  FACILITY_ACCESS = 'FACILITY_ACCESS',
+  PRIORITY_BOOKING = 'PRIORITY_BOOKING',
+  COACHING = 'COACHING',
+  NUTRITION = 'NUTRITION',
+  PHYSIOTHERAPY = 'PHYSIOTHERAPY',
+  OTHER = 'OTHER',
 }
 
 // ============================================
