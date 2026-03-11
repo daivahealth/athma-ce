@@ -13,6 +13,7 @@ export type DocumentType =
   | 'operative_note';
 
 export interface SearchFilters {
+  // ID-based filters (existing)
   patientId?: string;
   encounterId?: string;
   facilityId?: string;
@@ -21,6 +22,16 @@ export interface SearchFilters {
   documentTypes?: DocumentType[];
   dateFrom?: Date;
   dateTo?: Date;
+
+  // Name-based filters (new - uses denormalized fields)
+  patientName?: string;      // ILIKE search
+  patientMrn?: string;       // Exact or prefix match
+  patientGender?: string;    // Exact match
+  patientAgeMin?: number;    // Range filter
+  patientAgeMax?: number;    // Range filter
+  encounterType?: string;    // Exact match
+  authorStaffId?: string;    // UUID filter
+  authorName?: string;       // ILIKE search
 }
 
 export interface SearchRequest {
@@ -41,6 +52,19 @@ export interface SearchResult {
   similarity: number;
   documentDate: Date;
   metadata?: Record<string, any>;
+
+  // Denormalized display fields
+  patientName?: string;
+  patientMrn?: string;
+  patientGender?: string;
+  patientAge?: number;
+  encounterNumber?: string;
+  encounterType?: string;
+  authorStaffId?: string;
+  authorName?: string;
+  departmentId?: string;
+  departmentName?: string;
+  facilityName?: string;
 }
 
 export interface SearchResponse {
@@ -77,6 +101,18 @@ export interface DocumentEmbedding {
   isActive: boolean;
   embeddedAt: Date;
   embeddingModel: string;
+
+  // Denormalized metadata
+  patientName?: string;
+  patientMrn?: string;
+  patientGender?: string;
+  patientAgeAtDoc?: number;
+  encounterNumber?: string;
+  encounterType?: string;
+  authorStaffId?: string;
+  authorName?: string;
+  departmentName?: string;
+  facilityName?: string;
 }
 
 export interface EmbeddingSyncJob {
@@ -99,7 +135,7 @@ export interface ChunkingConfig {
 export const DEFAULT_CHUNKING_CONFIG: ChunkingConfig = {
   targetChunkSize: 512, // tokens
   overlap: 64, // tokens
-  minChunkSize: 100, // characters
+  minChunkSize: 10, // characters - lowered to allow short clinical notes
 };
 
 export const EMBEDDING_CONFIG = {
@@ -111,8 +147,8 @@ export const EMBEDDING_CONFIG = {
 export const SEARCH_CONFIG = {
   DEFAULT_LIMIT: 10,
   MAX_LIMIT: 100,
-  DEFAULT_MIN_SIMILARITY: 0.7,
-  MIN_SIMILARITY_THRESHOLD: 0.5,
+  DEFAULT_MIN_SIMILARITY: 0.3,
+  MIN_SIMILARITY_THRESHOLD: 0.2,
 };
 
 /**

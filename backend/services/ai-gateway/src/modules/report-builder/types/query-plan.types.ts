@@ -47,6 +47,13 @@ export interface QueryFilter {
   operator: ComparisonOperator;
   value: any;
   valueTo?: any; // For 'between' operator
+  /**
+   * Optional group name for OR logic.
+   * Filters with the same logicGroup are joined with OR.
+   * Filters without a group (or different groups) are joined with AND.
+   * Example: Two filters with logicGroup: "age_selection" would be: (filter1 OR filter2) AND other_filters
+   */
+  logicGroup?: string;
 }
 
 export interface QueryOrderBy {

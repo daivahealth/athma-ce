@@ -127,45 +127,74 @@ authClient.interceptors.request.use(async (config) => {
 
 // Interceptor for Foundation, Clinical, and RCM clients
 const createApiInterceptor = (client: typeof foundationClient) => {
-  client.interceptors.request.use(async (config) => {
-    if (!session.accessToken || isTokenExpired(session.accessToken)) {
-      await refreshAccessToken();
-    }
-    const claims = decodeAccessToken(session.accessToken);
+  client.interceptors.request.use(
+    async (config) => {
+      try {
+        if (!session.accessToken || isTokenExpired(session.accessToken)) {
+          console.log('[Interceptor] Token expired or missing, refreshing...');
+          await refreshAccessToken();
+        }
+      } catch (error) {
+        console.error('[Interceptor] Token refresh failed:', error);
+        // Continue without auth - let the server reject if needed
+      }
 
-    if (session.accessToken) {
-      config.headers.Authorization = `Bearer ${session.accessToken}`;
-    }
+      const claims = decodeAccessToken(session.accessToken);
 
-    // Add required tenant context headers
-    if (claims?.tenantId) {
-      config.headers['x-tenant-id'] = claims.tenantId;
-    }
-    if (claims?.userId || claims?.sub) {
-      config.headers['x-user-id'] = claims.userId || claims.sub;
-    }
-    const facilityId = claims?.facilityId ?? claims?.defaultFacilityId;
-    if (facilityId) {
-      config.headers['x-facility-id'] = facilityId;
-    }
+      if (session.accessToken) {
+        config.headers.Authorization = `Bearer ${session.accessToken}`;
+      }
 
-    // Debug logging
-    console.log('API Request Headers:', {
-      url: config.url,
-      hasAuth: !!session.accessToken,
-      tenantId: config.headers['x-tenant-id'],
-      userId: config.headers['x-user-id'],
-      facilityId: config.headers['x-facility-id'],
-      claims: claims ? {
-        tenantId: claims.tenantId,
-        userId: claims.userId,
-        sub: claims.sub,
-        facilityId: claims.facilityId ?? claims.defaultFacilityId,
-      } : 'No claims',
-    });
+      // Add required tenant context headers
+      if (claims?.tenantId) {
+        config.headers['x-tenant-id'] = claims.tenantId;
+      }
+      if (claims?.userId || claims?.sub) {
+        config.headers['x-user-id'] = claims.userId || claims.sub;
+      }
+      const facilityId = claims?.facilityId ?? claims?.defaultFacilityId;
+      if (facilityId) {
+        config.headers['x-facility-id'] = facilityId;
+      }
 
-    return config;
-  });
+      // Debug logging
+      console.log('[Interceptor] API Request:', {
+        method: config.method,
+        url: config.url,
+        baseURL: config.baseURL,
+        hasAuth: !!session.accessToken,
+        tenantId: config.headers['x-tenant-id'],
+        userId: config.headers['x-user-id'],
+        facilityId: config.headers['x-facility-id'],
+      });
+
+      return config;
+    },
+    (error) => {
+      console.error('[Interceptor] Request interceptor error:', error);
+      return Promise.reject(error);
+    }
+  );
+
+  // Add response interceptor for debugging
+  client.interceptors.response.use(
+    (response) => {
+      console.log('[Interceptor] Response:', {
+        url: response.config.url,
+        status: response.status,
+      });
+      return response;
+    },
+    (error) => {
+      console.error('[Interceptor] Response error:', {
+        url: error.config?.url,
+        status: error.response?.status,
+        message: error.message,
+        data: error.response?.data,
+      });
+      return Promise.reject(error);
+    }
+  );
 };
 
 // Apply interceptors to all API clients

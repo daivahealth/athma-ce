@@ -34,10 +34,8 @@ export class OpenAIProvider implements LLMProvider, EmbeddingProvider {
       'EMBEDDING_MODEL',
       EMBEDDING_MODELS.TEXT_EMBEDDING_3_SMALL,
     );
-    this.embeddingDimensions = this.configService.get<number>(
-      'EMBEDDING_DIMENSIONS',
-      1536,
-    );
+    const dimensionsStr = this.configService.get<string>('EMBEDDING_DIMENSIONS', '1536');
+    this.embeddingDimensions = parseInt(dimensionsStr, 10);
   }
 
   async completion(request: LLMCompletionRequest): Promise<LLMCompletionResponse> {

@@ -48,11 +48,19 @@ export class SearchService {
       SEARCH_CONFIG.MIN_SIMILARITY_THRESHOLD,
     );
 
+    // Execute vector search with explicit + inferred filters.
+    // If the user asks "female patients ..." in free text and no gender filter
+    // is provided, infer patientGender to avoid cross-gender results.
+    const effectiveFilters = this.applyInferredFilters(
+      request.query,
+      request.filters || {},
+    );
+
     // Execute vector search with filters
     const results = await this.executeVectorSearch(
       queryEmbedding,
       tenantId,
-      request.filters || {},
+      effectiveFilters,
       limit,
       minSimilarity,
     );
@@ -84,6 +92,91 @@ export class SearchService {
       searchTime,
       query: request.query,
     };
+  }
+
+  private applyInferredFilters(query: string, filters: SearchFilters): SearchFilters {
+    const normalizedQuery = query.toLowerCase();
+    const nextFilters: SearchFilters = { ...filters };
+
+    // Respect explicit UI/API filters first.
+    if (!nextFilters.patientGender) {
+      const mentionsFemale =
+        /\b(female|females|woman|women|girl|girls)\b/.test(normalizedQuery);
+      const mentionsMale =
+        /\b(male|males|man|men|boy|boys)\b/.test(normalizedQuery);
+
+      // Apply only when intent is unambiguous.
+      if (mentionsFemale && !mentionsMale) {
+        nextFilters.patientGender = 'female';
+      } else if (mentionsMale && !mentionsFemale) {
+        nextFilters.patientGender = 'male';
+      }
+    }
+
+    // Age-group inference from natural language.
+    // Respect explicit age filters from UI/API.
+    if (
+      nextFilters.patientAgeMin === undefined &&
+      nextFilters.patientAgeMax === undefined
+    ) {
+      const ageBuckets: Array<{
+        key:
+          | 'infant'
+          | 'children'
+          | 'teen'
+          | 'adult'
+          | 'middle_aged'
+          | 'senior';
+        pattern: RegExp;
+        min?: number;
+        max?: number;
+      }> = [
+        {
+          key: 'infant',
+          pattern: /\b(newborn|neonate|neonatal|infant|infants|baby|babies|toddler|toddlers)\b/,
+          min: 0,
+          max: 2,
+        },
+        {
+          key: 'children',
+          pattern: /\b(child|children|kid|kids|pediatric|paediatric|school-age)\b/,
+          min: 3,
+          max: 12,
+        },
+        {
+          key: 'teen',
+          pattern: /\b(teen|teens|teenager|teenagers|adolescent|adolescents)\b/,
+          min: 13,
+          max: 19,
+        },
+        {
+          key: 'adult',
+          pattern: /\b(adult|adults)\b/,
+          min: 20,
+          max: 64,
+        },
+        {
+          key: 'middle_aged',
+          pattern: /\b(middle-aged|middle aged)\b/,
+          min: 45,
+          max: 64,
+        },
+        {
+          key: 'senior',
+          pattern: /\b(senior|seniors|senior citizen|senior citizens|elderly|geriatric|older adult|older adults)\b/,
+          min: 65,
+        },
+      ];
+
+      const matched = ageBuckets.filter((bucket) => bucket.pattern.test(normalizedQuery));
+      if (matched.length === 1) {
+        const [bucket] = matched;
+        nextFilters.patientAgeMin = bucket.min;
+        nextFilters.patientAgeMax = bucket.max;
+      }
+    }
+
+    return nextFilters;
   }
 
   /**
@@ -134,7 +227,8 @@ export class SearchService {
     minSimilarity: number,
   ): Promise<SearchResult[]> {
     // Build the filter conditions
-    const filterConditions: string[] = ['tenant_id = $1', 'is_active = true'];
+    // Note: UUID columns require explicit casting for Prisma $queryRawUnsafe
+    const filterConditions: string[] = ['tenant_id = $1::uuid', 'is_active = true'];
     const params: any[] = [tenantId];
     let paramIndex = 2;
 
@@ -142,22 +236,22 @@ export class SearchService {
     const embeddingLiteral = `'[${queryEmbedding.join(',')}]'::vector`;
 
     if (filters.patientId) {
-      filterConditions.push(`patient_id = $${paramIndex++}`);
+      filterConditions.push(`patient_id = $${paramIndex++}::uuid`);
       params.push(filters.patientId);
     }
 
     if (filters.encounterId) {
-      filterConditions.push(`encounter_id = $${paramIndex++}`);
+      filterConditions.push(`encounter_id = $${paramIndex++}::uuid`);
       params.push(filters.encounterId);
     }
 
     if (filters.facilityId) {
-      filterConditions.push(`facility_id = $${paramIndex++}`);
+      filterConditions.push(`facility_id = $${paramIndex++}::uuid`);
       params.push(filters.facilityId);
     }
 
     if (filters.departmentId) {
-      filterConditions.push(`department_id = $${paramIndex++}`);
+      filterConditions.push(`department_id = $${paramIndex++}::uuid`);
       params.push(filters.departmentId);
     }
 
@@ -181,6 +275,47 @@ export class SearchService {
       params.push(filters.dateTo);
     }
 
+    // New denormalized filters
+    if (filters.patientName) {
+      filterConditions.push(`patient_name ILIKE $${paramIndex++}`);
+      params.push(`%${filters.patientName}%`);
+    }
+
+    if (filters.patientMrn) {
+      filterConditions.push(`patient_mrn ILIKE $${paramIndex++}`);
+      params.push(`${filters.patientMrn}%`);
+    }
+
+    if (filters.patientGender) {
+      filterConditions.push(`patient_gender = $${paramIndex++}`);
+      params.push(filters.patientGender);
+    }
+
+    if (filters.patientAgeMin !== undefined) {
+      filterConditions.push(`patient_age_at_doc >= $${paramIndex++}`);
+      params.push(filters.patientAgeMin);
+    }
+
+    if (filters.patientAgeMax !== undefined) {
+      filterConditions.push(`patient_age_at_doc <= $${paramIndex++}`);
+      params.push(filters.patientAgeMax);
+    }
+
+    if (filters.encounterType) {
+      filterConditions.push(`encounter_type = $${paramIndex++}`);
+      params.push(filters.encounterType);
+    }
+
+    if (filters.authorStaffId) {
+      filterConditions.push(`author_staff_id = $${paramIndex++}::uuid`);
+      params.push(filters.authorStaffId);
+    }
+
+    if (filters.authorName) {
+      filterConditions.push(`author_name ILIKE $${paramIndex++}`);
+      params.push(`%${filters.authorName}%`);
+    }
+
     // Similarity threshold
     filterConditions.push(`1 - (embedding <=> ${embeddingLiteral}) >= $${paramIndex++}`);
     params.push(minSimilarity);
@@ -194,8 +329,19 @@ export class SearchService {
         patient_id,
         encounter_id,
         facility_id,
+        department_id,
         chunk_text,
         document_date,
+        patient_name,
+        patient_mrn,
+        patient_gender,
+        patient_age_at_doc,
+        encounter_number,
+        encounter_type,
+        author_staff_id,
+        author_name,
+        department_name,
+        facility_name,
         1 - (embedding <=> ${embeddingLiteral}) AS similarity
       FROM clinical_document_embeddings
       WHERE ${filterConditions.join(' AND ')}
@@ -211,10 +357,22 @@ export class SearchService {
         patientId: row.patient_id,
         encounterId: row.encounter_id,
         facilityId: row.facility_id,
+        departmentId: row.department_id,
         chunkText: row.chunk_text,
         highlightedText: '',
         similarity: parseFloat(row.similarity),
         documentDate: row.document_date,
+        // Denormalized fields
+        patientName: row.patient_name,
+        patientMrn: row.patient_mrn,
+        patientGender: row.patient_gender,
+        patientAge: row.patient_age_at_doc,
+        encounterNumber: row.encounter_number,
+        encounterType: row.encounter_type,
+        authorStaffId: row.author_staff_id,
+        authorName: row.author_name,
+        departmentName: row.department_name,
+        facilityName: row.facility_name,
       }));
     } catch (error) {
       // If the table doesn't exist yet, return empty results
@@ -239,8 +397,8 @@ export class SearchService {
       const result = await this.clinicalPrisma.$queryRaw<any[]>`
         SELECT embedding
         FROM clinical_document_embeddings
-        WHERE tenant_id = ${tenantId}
-          AND document_id = ${documentId}
+        WHERE tenant_id = ${tenantId}::uuid
+          AND document_id = ${documentId}::uuid
           AND document_type = ${documentType}
           AND chunk_index = 0
           AND is_active = true

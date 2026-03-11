@@ -1,6 +1,6 @@
 'use client';
 
-import { Filter, Calendar, Building2, Stethoscope, X } from 'lucide-react';
+import { Filter, Calendar, Building2, Stethoscope, X, User, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -20,8 +20,8 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { SearchFilters, DocumentType, DateRange } from '../types/search';
-import { DOCUMENT_TYPE_LABELS } from '../types/search';
+import type { SearchFilters, DocumentType, EncounterType } from '../types/search';
+import { DOCUMENT_TYPE_LABELS, ENCOUNTER_TYPE_LABELS, GENDER_OPTIONS } from '../types/search';
 import { cn } from '@/lib/utils';
 
 interface SearchFiltersProps {
@@ -56,7 +56,13 @@ export function SearchFiltersPanel({
     filters.documentTypes?.length,
     filters.facilityId,
     filters.departmentId,
-    filters.dateRange?.from || filters.dateRange?.to,
+    filters.dateFrom || filters.dateTo,
+    filters.patientName,
+    filters.patientMrn,
+    filters.patientGender,
+    filters.patientAgeMin !== undefined || filters.patientAgeMax !== undefined,
+    filters.encounterType,
+    filters.authorName,
   ].filter(Boolean).length;
 
   const handleDocumentTypeToggle = (type: DocumentType, checked: boolean) => {
@@ -71,25 +77,11 @@ export function SearchFiltersPanel({
     });
   };
 
-  const handleDateChange = (field: 'from' | 'to', value: string) => {
-    const currentRange = filters.dateRange || {};
-    const newRange: DateRange = {
-      ...currentRange,
+  const handleDateChange = (field: 'dateFrom' | 'dateTo', value: string) => {
+    onFiltersChange({
+      ...filters,
       [field]: value || undefined,
-    };
-
-    // Remove empty range
-    if (!newRange.from && !newRange.to) {
-      onFiltersChange({
-        ...filters,
-        dateRange: undefined,
-      });
-    } else {
-      onFiltersChange({
-        ...filters,
-        dateRange: newRange,
-      });
-    }
+    });
   };
 
   const handleClearFilters = () => {
@@ -171,8 +163,8 @@ export function SearchFiltersPanel({
                     <Label className="text-xs text-muted-foreground">From</Label>
                     <Input
                       type="date"
-                      value={filters.dateRange?.from || ''}
-                      onChange={(e) => handleDateChange('from', e.target.value)}
+                      value={filters.dateFrom || ''}
+                      onChange={(e) => handleDateChange('dateFrom', e.target.value)}
                       className="h-9"
                     />
                   </div>
@@ -180,11 +172,174 @@ export function SearchFiltersPanel({
                     <Label className="text-xs text-muted-foreground">To</Label>
                     <Input
                       type="date"
-                      value={filters.dateRange?.to || ''}
-                      onChange={(e) => handleDateChange('to', e.target.value)}
+                      value={filters.dateTo || ''}
+                      onChange={(e) => handleDateChange('dateTo', e.target.value)}
                       className="h-9"
                     />
                   </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Patient Filters */}
+            <AccordionItem value="patient">
+              <AccordionTrigger className="py-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Patient
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-3 pl-6">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Patient Name</Label>
+                    <Input
+                      type="text"
+                      placeholder="Search by name..."
+                      value={filters.patientName || ''}
+                      onChange={(e) =>
+                        onFiltersChange({
+                          ...filters,
+                          patientName: e.target.value || undefined,
+                        })
+                      }
+                      className="h-9"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">MRN</Label>
+                    <Input
+                      type="text"
+                      placeholder="Search by MRN..."
+                      value={filters.patientMrn || ''}
+                      onChange={(e) =>
+                        onFiltersChange({
+                          ...filters,
+                          patientMrn: e.target.value || undefined,
+                        })
+                      }
+                      className="h-9"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Gender</Label>
+                    <Select
+                      value={filters.patientGender || ''}
+                      onValueChange={(value) =>
+                        onFiltersChange({
+                          ...filters,
+                          patientGender: value || undefined,
+                        })
+                      }
+                    >
+                      <SelectTrigger className="w-full h-9">
+                        <SelectValue placeholder="All genders" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All genders</SelectItem>
+                        {GENDER_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Age Range</Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Min"
+                        min={0}
+                        max={150}
+                        value={filters.patientAgeMin ?? ''}
+                        onChange={(e) =>
+                          onFiltersChange({
+                            ...filters,
+                            patientAgeMin: e.target.value ? parseInt(e.target.value) : undefined,
+                          })
+                        }
+                        className="h-9 w-20"
+                      />
+                      <span className="text-muted-foreground">to</span>
+                      <Input
+                        type="number"
+                        placeholder="Max"
+                        min={0}
+                        max={150}
+                        value={filters.patientAgeMax ?? ''}
+                        onChange={(e) =>
+                          onFiltersChange({
+                            ...filters,
+                            patientAgeMax: e.target.value ? parseInt(e.target.value) : undefined,
+                          })
+                        }
+                        className="h-9 w-20"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Encounter Type */}
+            <AccordionItem value="encounterType">
+              <AccordionTrigger className="py-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Encounter Type
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="pl-6">
+                  <Select
+                    value={filters.encounterType || ''}
+                    onValueChange={(value) =>
+                      onFiltersChange({
+                        ...filters,
+                        encounterType: value || undefined,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="All encounter types" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All encounter types</SelectItem>
+                      {(Object.keys(ENCOUNTER_TYPE_LABELS) as EncounterType[]).map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {ENCOUNTER_TYPE_LABELS[type]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Author */}
+            <AccordionItem value="author">
+              <AccordionTrigger className="py-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <Stethoscope className="h-4 w-4" />
+                  Author/Physician
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="pl-6">
+                  <Input
+                    type="text"
+                    placeholder="Search by physician name..."
+                    value={filters.authorName || ''}
+                    onChange={(e) =>
+                      onFiltersChange({
+                        ...filters,
+                        authorName: e.target.value || undefined,
+                      })
+                    }
+                    className="h-9"
+                  />
                 </div>
               </AccordionContent>
             </AccordionItem>

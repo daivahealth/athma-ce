@@ -551,6 +551,9 @@ model Encounter {
   tenantId             String    @map("tenant_id") @db.Uuid
   patientId            String    @map("patient_id") @db.Uuid
   facilityId           String    @map("facility_id") @db.Uuid
+  facilityName         String?   @map("facility_name") @db.VarChar(200) // Denormalized for search
+  departmentId         String?   @map("department_id") @db.Uuid
+  departmentName       String?   @map("department_name") @db.VarChar(200) // Denormalized for search
   appointmentId        String?   @map("appointment_id") @db.Uuid
   primaryStaffId       String    @map("primary_staff_id") @db.Uuid
   encounterClass       String    @default("AMB") @map("encounter_class")
@@ -660,6 +663,7 @@ model EncounterNote {
 
   // Authorship & Signing
   authorStaffId     String    @map("author_staff_id") @db.Uuid
+  authorDisplayName String?   @map("author_display_name") @db.VarChar(200) // Denormalized for search
   coSignStaffId     String?   @map("co_sign_staff_id") @db.Uuid
   signedAt          DateTime? @map("signed_at") @db.Timestamptz(6)
   coSignedAt        DateTime? @map("co_signed_at") @db.Timestamptz(6)
@@ -3685,13 +3689,31 @@ model ClinicalDocumentEmbedding {
   // This column should be created with: embedding vector(1536)
   embedding         Unsupported("vector(1536)")?
 
-  // Denormalized metadata for filtered search
+  // Denormalized metadata for filtered search (IDs)
   patientId         String   @map("patient_id") @db.Uuid
   encounterId       String?  @map("encounter_id") @db.Uuid
   facilityId        String   @map("facility_id") @db.Uuid
   departmentId      String?  @map("department_id") @db.Uuid
   specialtyCode     String?  @map("specialty_code") @db.VarChar(50)
   documentDate      DateTime @map("document_date") @db.Timestamptz(6)
+
+  // Denormalized patient metadata (for filtering without cross-DB joins)
+  patientName       String?  @map("patient_name") @db.VarChar(200)
+  patientMrn        String?  @map("patient_mrn") @db.VarChar(50)
+  patientGender     String?  @map("patient_gender") @db.VarChar(20)
+  patientAgeAtDoc   Int?     @map("patient_age_at_doc")
+
+  // Denormalized encounter metadata
+  encounterNumber   String?  @map("encounter_number") @db.VarChar(50)
+  encounterType     String?  @map("encounter_type") @db.VarChar(50)
+
+  // Denormalized author metadata
+  authorStaffId     String?  @map("author_staff_id") @db.Uuid
+  authorName        String?  @map("author_name") @db.VarChar(200)
+
+  // Denormalized facility/department names
+  departmentName    String?  @map("department_name") @db.VarChar(200)
+  facilityName      String?  @map("facility_name") @db.VarChar(200)
 
   isActive          Boolean  @default(true) @map("is_active")
   embeddedAt        DateTime @default(now()) @map("embedded_at") @db.Timestamptz(6)
@@ -3702,6 +3724,9 @@ model ClinicalDocumentEmbedding {
   @@index([tenantId, documentDate, isActive], map: "idx_emb_tenant_date")
   @@index([tenantId, documentType, isActive], map: "idx_emb_tenant_type")
   @@index([tenantId, facilityId, isActive], map: "idx_emb_tenant_facility")
+  @@index([tenantId, patientMrn, isActive], map: "idx_emb_tenant_mrn")
+  @@index([tenantId, encounterType, isActive], map: "idx_emb_tenant_enc_type")
+  @@index([tenantId, authorStaffId, isActive], map: "idx_emb_tenant_author")
   @@map("clinical_document_embeddings")
 }
 

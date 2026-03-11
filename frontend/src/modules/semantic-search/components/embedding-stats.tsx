@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Clock, AlertCircle, CheckCircle, RefreshCw, Loader2 } from 'lucide-react';
+import { FileText, Clock, AlertCircle, CheckCircle, RefreshCw, Loader2, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,11 +9,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEmbeddingStats, useReindexProgress, useStartReindex, useCancelReindex } from '../hooks/use-search';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import type { ReindexMode } from '../types/search';
+import { REINDEX_MODE_LABELS, REINDEX_MODE_DESCRIPTIONS } from '../types/search';
 
 interface EmbeddingStatsProps {
   className?: string;
@@ -26,14 +34,14 @@ export function EmbeddingStats({ className }: EmbeddingStatsProps) {
   const startReindexMutation = useStartReindex();
   const cancelReindexMutation = useCancelReindex();
 
-  const handleStartReindex = async () => {
+  const handleStartReindex = async (mode: ReindexMode = 'full') => {
     try {
-      const result = await startReindexMutation.mutateAsync();
+      const result = await startReindexMutation.mutateAsync({ mode });
       toast({
         title: 'Reindex started',
         description: result.message,
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'Failed to start reindex',
         description: 'There was an error starting the reindex job.',
@@ -169,18 +177,37 @@ export function EmbeddingStats({ className }: EmbeddingStatsProps) {
               Cancel Reindex
             </Button>
           ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleStartReindex}
-              disabled={startReindexMutation.isPending}
-            >
-              <RefreshCw className={cn(
-                'h-4 w-4 mr-2',
-                startReindexMutation.isPending && 'animate-spin'
-              )} />
-              Reindex All
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={startReindexMutation.isPending}
+                  type="button"
+                >
+                  <RefreshCw className={cn(
+                    'h-4 w-4 mr-2',
+                    startReindexMutation.isPending && 'animate-spin'
+                  )} />
+                  Reindex
+                  <ChevronDown className="h-4 w-4 ml-2" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                {(['full', 'new_only', 'metadata_only'] as ReindexMode[]).map((mode) => (
+                  <DropdownMenuItem
+                    key={mode}
+                    onClick={() => handleStartReindex(mode)}
+                    className="flex flex-col items-start"
+                  >
+                    <span className="font-medium">{REINDEX_MODE_LABELS[mode]}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {REINDEX_MODE_DESCRIPTIONS[mode]}
+                    </span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
       </CardContent>

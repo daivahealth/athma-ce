@@ -140,6 +140,9 @@ RULES:
 6. "last 30 days" means from 30 days ago to today
 7. Default limit is 1000, maximum is 10000
 8. Confidence should be between 0 and 1
+9. OR LOGIC: When the user asks for multiple values of the same dimension (e.g., "newborn, young, or senior"),
+   add a "logicGroup" field with the same group name to each filter. Filters with the same logicGroup are joined with OR.
+   Example: "patients who are newborn or senior" should use logicGroup: "age_selection" for both filters.
 
 QUERY PLAN SCHEMA:
 {
@@ -147,7 +150,7 @@ QUERY PLAN SCHEMA:
     "type": "aggregate" | "list" | "detail",
     "metrics": [{ "name": string, "aggregation"?: "SUM"|"COUNT"|"AVG"|"MIN"|"MAX"|"COUNT_DISTINCT", "alias"?: string }],
     "dimensions": [{ "name": string, "alias"?: string }],
-    "filters": [{ "dimension": string, "operator": "eq"|"ne"|"gt"|"gte"|"lt"|"lte"|"in"|"not_in"|"contains"|"starts_with"|"between", "value": any, "valueTo"?: any }],
+    "filters": [{ "dimension": string, "operator": "eq"|"ne"|"gt"|"gte"|"lt"|"lte"|"in"|"not_in"|"contains"|"starts_with"|"between", "value": any, "valueTo"?: any, "logicGroup"?: string }],
     "orderBy": [{ "field": string, "direction": "asc"|"desc" }],
     "limit": number,
     "offset"?: number
@@ -226,6 +229,24 @@ Query: "Show this month's appointments with doctor name and patient name"
   },
   "confidence": 0.95,
   "suggestedFollowups": ["Filter by doctor?", "Show only confirmed appointments?"]
+}
+
+Query: "List patients who are newborn, young, or senior citizen"
+{
+  "plan": {
+    "type": "list",
+    "metrics": [],
+    "dimensions": [{ "name": "patient_name" }, { "name": "patient_age" }, { "name": "patient_age_group" }],
+    "filters": [
+      { "dimension": "patient_age_group", "operator": "eq", "value": "newborn", "logicGroup": "age_selection" },
+      { "dimension": "patient_age_group", "operator": "eq", "value": "young", "logicGroup": "age_selection" },
+      { "dimension": "patient_age_group", "operator": "eq", "value": "senior_citizen", "logicGroup": "age_selection" }
+    ],
+    "orderBy": [{ "field": "patient_name", "direction": "asc" }],
+    "limit": 1000
+  },
+  "confidence": 0.95,
+  "suggestedFollowups": ["Add gender filter?", "Show with contact details?"]
 }`;
   }
 

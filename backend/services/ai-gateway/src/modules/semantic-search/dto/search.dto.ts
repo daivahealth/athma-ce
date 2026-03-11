@@ -92,6 +92,77 @@ export class SearchRequestDto {
   dateTo?: string;
 
   @ApiPropertyOptional({
+    description: 'Filter by patient name (case-insensitive contains)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  patientName?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by patient MRN (exact or prefix match)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  patientMrn?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by patient gender',
+    enum: ['male', 'female', 'other', 'unknown'],
+  })
+  @IsOptional()
+  @IsString()
+  patientGender?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by minimum patient age at document time',
+    minimum: 0,
+    maximum: 150,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(150)
+  @Type(() => Number)
+  patientAgeMin?: number;
+
+  @ApiPropertyOptional({
+    description: 'Filter by maximum patient age at document time',
+    minimum: 0,
+    maximum: 150,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(150)
+  @Type(() => Number)
+  patientAgeMax?: number;
+
+  @ApiPropertyOptional({
+    description: 'Filter by encounter type',
+    example: 'outpatient',
+  })
+  @IsOptional()
+  @IsString()
+  encounterType?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by author staff ID',
+  })
+  @IsOptional()
+  @IsUUID()
+  authorStaffId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by author name (case-insensitive contains)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  authorName?: string;
+
+  @ApiPropertyOptional({
     description: 'Maximum number of results to return',
     default: 10,
     minimum: 1,
@@ -106,13 +177,13 @@ export class SearchRequestDto {
 
   @ApiPropertyOptional({
     description: 'Minimum similarity score (0-1)',
-    default: 0.7,
-    minimum: 0.5,
+    default: 0.3,
+    minimum: 0.2,
     maximum: 1.0,
   })
   @IsOptional()
   @IsNumber()
-  @Min(0.5)
+  @Min(0.2)
   @Max(1.0)
   @Type(() => Number)
   minSimilarity?: number;
@@ -147,11 +218,11 @@ export class SimilarDocumentsRequestDto {
 
   @ApiPropertyOptional({
     description: 'Minimum similarity score (0-1)',
-    default: 0.8,
+    default: 0.5,
   })
   @IsOptional()
   @IsNumber()
-  @Min(0.5)
+  @Min(0.2)
   @Max(1.0)
   @Type(() => Number)
   minSimilarity?: number;
@@ -172,7 +243,22 @@ export class QueueEmbeddingDto {
   documentType: DocumentTypeEnum;
 }
 
+export enum ReindexModeEnum {
+  FULL = 'full',
+  NEW_ONLY = 'new_only',
+  METADATA_ONLY = 'metadata_only',
+}
+
 export class ReindexRequestDto {
+  @ApiPropertyOptional({
+    description: 'Reindex mode: full = re-index all, new_only = only documents without embeddings, metadata_only = update metadata for existing embeddings',
+    enum: ReindexModeEnum,
+    default: ReindexModeEnum.FULL,
+  })
+  @IsOptional()
+  @IsEnum(ReindexModeEnum)
+  mode?: ReindexModeEnum;
+
   @ApiPropertyOptional({
     description: 'Document types to reindex (all if not specified)',
     enum: DocumentTypeEnum,
@@ -218,6 +304,40 @@ export class SearchResultDto {
 
   @ApiProperty({ description: 'Document date' })
   documentDate: Date;
+
+  // Denormalized display fields
+  @ApiPropertyOptional({ description: 'Patient full name' })
+  patientName?: string;
+
+  @ApiPropertyOptional({ description: 'Patient MRN' })
+  patientMrn?: string;
+
+  @ApiPropertyOptional({ description: 'Patient gender' })
+  patientGender?: string;
+
+  @ApiPropertyOptional({ description: 'Patient age at document time' })
+  patientAge?: number;
+
+  @ApiPropertyOptional({ description: 'Encounter number' })
+  encounterNumber?: string;
+
+  @ApiPropertyOptional({ description: 'Encounter type' })
+  encounterType?: string;
+
+  @ApiPropertyOptional({ description: 'Author staff ID' })
+  authorStaffId?: string;
+
+  @ApiPropertyOptional({ description: 'Author name' })
+  authorName?: string;
+
+  @ApiPropertyOptional({ description: 'Department ID' })
+  departmentId?: string;
+
+  @ApiPropertyOptional({ description: 'Department name' })
+  departmentName?: string;
+
+  @ApiPropertyOptional({ description: 'Facility name' })
+  facilityName?: string;
 }
 
 export class SearchResponseDto {

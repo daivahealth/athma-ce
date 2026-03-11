@@ -20,12 +20,33 @@ class SemanticSearchService {
    * Search clinical documents
    */
   async search(request: SearchRequest): Promise<SearchResponse> {
-    const response = await aiGatewayClient.post<SearchResponse>('/search', {
+    // Build request body with only defined values (backend DTO doesn't allow extra properties)
+    const body: Record<string, unknown> = {
       query: request.query,
-      filters: request.filters,
       limit: request.limit || 20,
-      minSimilarity: request.minSimilarity || 0.7,
-    });
+      minSimilarity: request.minSimilarity || 0.3,
+    };
+
+    // Add filter properties if defined
+    if (request.filters?.patientId) body.patientId = request.filters.patientId;
+    if (request.filters?.encounterId) body.encounterId = request.filters.encounterId;
+    if (request.filters?.facilityId) body.facilityId = request.filters.facilityId;
+    if (request.filters?.departmentId) body.departmentId = request.filters.departmentId;
+    if (request.filters?.specialtyCode) body.specialtyCode = request.filters.specialtyCode;
+    if (request.filters?.documentTypes?.length) body.documentTypes = request.filters.documentTypes;
+    if (request.filters?.dateFrom) body.dateFrom = request.filters.dateFrom;
+    if (request.filters?.dateTo) body.dateTo = request.filters.dateTo;
+    // New denormalized filters
+    if (request.filters?.patientName) body.patientName = request.filters.patientName;
+    if (request.filters?.patientMrn) body.patientMrn = request.filters.patientMrn;
+    if (request.filters?.patientGender) body.patientGender = request.filters.patientGender;
+    if (request.filters?.patientAgeMin !== undefined) body.patientAgeMin = request.filters.patientAgeMin;
+    if (request.filters?.patientAgeMax !== undefined) body.patientAgeMax = request.filters.patientAgeMax;
+    if (request.filters?.encounterType) body.encounterType = request.filters.encounterType;
+    if (request.filters?.authorStaffId) body.authorStaffId = request.filters.authorStaffId;
+    if (request.filters?.authorName) body.authorName = request.filters.authorName;
+
+    const response = await aiGatewayClient.post<SearchResponse>('/search', body);
     return response.data;
   }
 
@@ -37,7 +58,7 @@ class SemanticSearchService {
       documentId: request.documentId,
       documentType: request.documentType,
       limit: request.limit || 10,
-      excludePatient: request.excludePatient,
+      minSimilarity: request.minSimilarity,
     });
     return response.data;
   }
@@ -60,11 +81,17 @@ class SemanticSearchService {
 
   /**
    * Start a reindex job
+   * @param request.mode - 'full' = re-index all, 'new_only' = only new docs, 'metadata_only' = update metadata only
    */
   async startReindex(request?: ReindexRequest): Promise<{ jobId: string; message: string }> {
+    const body: Record<string, unknown> = {};
+    if (request?.mode) body.mode = request.mode;
+    if (request?.documentTypes?.length) body.documentTypes = request.documentTypes;
+    if (request?.fromDate) body.fromDate = request.fromDate;
+
     const response = await aiGatewayClient.post<{ jobId: string; message: string }>(
       '/search/reindex',
-      request
+      body
     );
     return response.data;
   }

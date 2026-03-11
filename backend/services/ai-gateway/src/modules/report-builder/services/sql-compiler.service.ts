@@ -233,8 +233,22 @@ export class SqlCompilerService {
     parameters[`p${paramIndex}`] = tenantId;
     paramIndex++;
 
-    // Process plan filters
+    // Group filters by logicGroup
+    const ungroupedFilters: typeof plan.filters = [];
+    const groupedFilters: Map<string, typeof plan.filters> = new Map();
+
     for (const filter of plan.filters) {
+      if (filter.logicGroup) {
+        const group = groupedFilters.get(filter.logicGroup) || [];
+        group.push(filter);
+        groupedFilters.set(filter.logicGroup, group);
+      } else {
+        ungroupedFilters.push(filter);
+      }
+    }
+
+    // Process ungrouped filters (joined with AND)
+    for (const filter of ungroupedFilters) {
       const def = catalog.dimensions.find((d) => d.name === filter.dimension);
       if (!def) continue;
 
@@ -245,12 +259,41 @@ export class SqlCompilerService {
         filter.value,
         filter.valueTo,
         paramIndex,
-        def.dataType, // Pass data type for proper casting
+        def.dataType,
       );
 
       conditions.push(condition);
       Object.assign(parameters, newParams);
       paramIndex = newParamIndex;
+    }
+
+    // Process grouped filters (filters within same group joined with OR)
+    for (const [groupName, filters] of groupedFilters.entries()) {
+      const orConditions: string[] = [];
+
+      for (const filter of filters) {
+        const def = catalog.dimensions.find((d) => d.name === filter.dimension);
+        if (!def) continue;
+
+        const column = def.columnRef;
+        const { condition, newParams, newParamIndex } = this.buildFilterCondition(
+          column,
+          filter.operator,
+          filter.value,
+          filter.valueTo,
+          paramIndex,
+          def.dataType,
+        );
+
+        orConditions.push(condition);
+        Object.assign(parameters, newParams);
+        paramIndex = newParamIndex;
+      }
+
+      if (orConditions.length > 0) {
+        // Wrap OR conditions in parentheses
+        conditions.push(`(${orConditions.join(' OR ')})`);
+      }
     }
 
     return {

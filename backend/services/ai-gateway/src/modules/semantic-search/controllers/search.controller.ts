@@ -21,7 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { SearchService } from '../services/search.service';
 import { EmbeddingSyncService } from '../services/embedding-sync.service';
-import { ReindexService } from '../services/reindex.service';
+import { ReindexService, ReindexMode } from '../services/reindex.service';
 import { EmbeddingService } from '../services/embedding.service';
 import {
   SearchRequestDto,
@@ -72,6 +72,7 @@ export class SearchController {
     @Context() context: TenantRequestContext,
   ): Promise<SearchResponseDto> {
     const filters: SearchFilters = {
+      // ID-based filters
       patientId: dto.patientId,
       encounterId: dto.encounterId,
       facilityId: dto.facilityId,
@@ -80,6 +81,15 @@ export class SearchController {
       documentTypes: dto.documentTypes as DocumentType[],
       dateFrom: dto.dateFrom ? new Date(dto.dateFrom) : undefined,
       dateTo: dto.dateTo ? new Date(dto.dateTo) : undefined,
+      // Name-based filters (denormalized)
+      patientName: dto.patientName,
+      patientMrn: dto.patientMrn,
+      patientGender: dto.patientGender,
+      patientAgeMin: dto.patientAgeMin,
+      patientAgeMax: dto.patientAgeMax,
+      encounterType: dto.encounterType,
+      authorStaffId: dto.authorStaffId,
+      authorName: dto.authorName,
     };
 
     const response = await this.searchService.search(
@@ -172,7 +182,7 @@ export class SearchController {
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({
     summary: 'Start a reindex job',
-    description: 'Initiates a bulk reindexing of clinical documents',
+    description: 'Initiates bulk reindexing. Modes: full (re-index all), new_only (only docs without embeddings), metadata_only (update metadata for existing embeddings)',
   })
   @ApiResponse({
     status: 202,
@@ -182,11 +192,14 @@ export class SearchController {
     @Body() dto: ReindexRequestDto,
     @Context() context: TenantRequestContext,
   ): Promise<{ jobId: string; message: string }> {
+    const mode = (dto.mode || 'full') as ReindexMode;
+
     logger.info(
       {
         tenantId: context.tenantId,
         documentTypes: dto.documentTypes,
         fromDate: dto.fromDate,
+        mode,
       },
       'Reindex requested',
     );
@@ -195,6 +208,7 @@ export class SearchController {
       context.tenantId,
       dto.documentTypes as DocumentType[],
       dto.fromDate ? new Date(dto.fromDate) : undefined,
+      mode,
     );
   }
 

@@ -32,24 +32,50 @@ export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
 };
 
 /**
- * Date range filter
+ * Encounter types
  */
-export interface DateRange {
-  from?: string;
-  to?: string;
-}
+export type EncounterType = 'outpatient' | 'inpatient' | 'emergency' | 'day_case' | 'virtual';
+
+export const ENCOUNTER_TYPE_LABELS: Record<EncounterType, string> = {
+  outpatient: 'Outpatient',
+  inpatient: 'Inpatient',
+  emergency: 'Emergency',
+  day_case: 'Day Case',
+  virtual: 'Virtual',
+};
+
+/**
+ * Gender options
+ */
+export const GENDER_OPTIONS = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+  { value: 'other', label: 'Other' },
+] as const;
 
 /**
  * Search filters
  */
 export interface SearchFilters {
+  // ID-based filters
   patientId?: string;
   encounterId?: string;
   facilityId?: string;
   departmentId?: string;
   specialtyCode?: string;
   documentTypes?: DocumentType[];
-  dateRange?: DateRange;
+  dateFrom?: string;
+  dateTo?: string;
+
+  // Name-based filters (uses denormalized fields)
+  patientName?: string;      // Case-insensitive contains
+  patientMrn?: string;       // Prefix match
+  patientGender?: string;    // Exact match
+  patientAgeMin?: number;    // Range filter
+  patientAgeMax?: number;    // Range filter
+  encounterType?: string;    // Exact match
+  authorStaffId?: string;    // UUID filter
+  authorName?: string;       // Case-insensitive contains
 }
 
 /**
@@ -69,17 +95,26 @@ export interface SearchResult {
   documentId: string;
   documentType: DocumentType;
   patientId: string;
-  patientName?: string;
   encounterId?: string;
   facilityId: string;
-  facilityName?: string;
-  departmentId?: string;
-  departmentName?: string;
   chunkIndex: number;
   chunkText: string;
   highlightedText?: string;
   similarity: number;
   documentDate: string;
+
+  // Denormalized display fields
+  patientName?: string;
+  patientMrn?: string;
+  patientGender?: string;
+  patientAge?: number;
+  encounterNumber?: string;
+  encounterType?: string;
+  authorStaffId?: string;
+  authorName?: string;
+  departmentId?: string;
+  departmentName?: string;
+  facilityName?: string;
 }
 
 /**
@@ -99,7 +134,7 @@ export interface SimilarDocumentsRequest {
   documentId: string;
   documentType: DocumentType;
   limit?: number;
-  excludePatient?: boolean;
+  minSimilarity?: number;
 }
 
 /**
@@ -122,9 +157,27 @@ export interface EmbeddingStats {
 }
 
 /**
+ * Reindex mode
+ */
+export type ReindexMode = 'full' | 'new_only' | 'metadata_only';
+
+export const REINDEX_MODE_LABELS: Record<ReindexMode, string> = {
+  full: 'Full Re-index (all documents)',
+  new_only: 'New Documents Only',
+  metadata_only: 'Update Metadata Only',
+};
+
+export const REINDEX_MODE_DESCRIPTIONS: Record<ReindexMode, string> = {
+  full: 'Re-generates embeddings for all documents. Use after model upgrades.',
+  new_only: 'Only indexes documents that do not have embeddings yet.',
+  metadata_only: 'Updates patient/author metadata for existing embeddings without regenerating vectors.',
+};
+
+/**
  * Reindex request
  */
 export interface ReindexRequest {
+  mode?: ReindexMode;
   documentTypes?: DocumentType[];
   fromDate?: string;
 }

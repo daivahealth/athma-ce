@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, User, Building2, Calendar, ExternalLink } from 'lucide-react';
+import { FileText, User, Building2, Calendar, ExternalLink, Stethoscope, Hash, Activity } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -103,17 +103,43 @@ function ResultCard({
           <p
             className="line-clamp-4"
             dangerouslySetInnerHTML={{
-              __html: result.highlightedText || result.chunkText,
+              __html: (result.highlightedText || result.chunkText)
+                .replace(/\*\*(.*?)\*\*/g, '<mark class="bg-yellow-200 dark:bg-yellow-800 px-0.5 rounded">$1</mark>'),
             }}
           />
         </div>
 
-        {/* Metadata */}
+        {/* Metadata - Row 1: Patient Info */}
         <div className="flex flex-wrap items-center gap-4 mt-3 text-xs text-muted-foreground">
           {result.patientName && (
             <div className="flex items-center gap-1">
               <User className="h-3 w-3" />
               <span>{result.patientName}</span>
+              {result.patientAge && (
+                <span className="text-muted-foreground/70">({result.patientAge}y)</span>
+              )}
+            </div>
+          )}
+          {result.patientMrn && (
+            <div className="flex items-center gap-1">
+              <Hash className="h-3 w-3" />
+              <span>MRN: {result.patientMrn}</span>
+            </div>
+          )}
+          {result.encounterType && (
+            <div className="flex items-center gap-1">
+              <Activity className="h-3 w-3" />
+              <span className="capitalize">{result.encounterType.replace('_', ' ')}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Metadata - Row 2: Author & Facility */}
+        <div className="flex flex-wrap items-center gap-4 mt-2 text-xs text-muted-foreground">
+          {result.authorName && (
+            <div className="flex items-center gap-1">
+              <Stethoscope className="h-3 w-3" />
+              <span>Dr. {result.authorName}</span>
             </div>
           )}
           {result.facilityName && (
@@ -121,6 +147,9 @@ function ResultCard({
               <Building2 className="h-3 w-3" />
               <span>{result.facilityName}</span>
             </div>
+          )}
+          {result.departmentName && (
+            <span className="text-muted-foreground/70">• {result.departmentName}</span>
           )}
           <div className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />

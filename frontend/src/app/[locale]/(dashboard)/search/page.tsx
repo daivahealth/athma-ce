@@ -19,6 +19,7 @@ import {
   SearchResults,
   SearchFiltersPanel,
   EmbeddingStats,
+  DocumentPreview,
 } from '@/modules/semantic-search/components';
 import { useSemanticSearch, useSimilarDocuments } from '@/modules/semantic-search/hooks';
 import type {
@@ -37,6 +38,8 @@ export default function SemanticSearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<SearchResult | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   // Hooks
   const searchMutation = useSemanticSearch();
@@ -47,7 +50,7 @@ export default function SemanticSearchPage() {
     filters.documentTypes?.length,
     filters.facilityId,
     filters.departmentId,
-    filters.dateRange?.from || filters.dateRange?.to,
+    filters.dateFrom || filters.dateTo,
   ].filter(Boolean).length;
 
   const handleSearch = useCallback(
@@ -60,7 +63,7 @@ export default function SemanticSearchPage() {
           query,
           filters,
           limit: 20,
-          minSimilarity: 0.7,
+          minSimilarity: 0.3,
         });
         setResponse(result);
       } catch (err: any) {
@@ -86,12 +89,9 @@ export default function SemanticSearchPage() {
   };
 
   const handleSelectDocument = (result: SearchResult) => {
-    // Navigate to document detail page
-    // This would typically open the clinical note in the appropriate viewer
-    toast({
-      title: 'Document selected',
-      description: `Opening ${result.documentType}: ${result.documentId.slice(0, 8)}...`,
-    });
+    // Open document preview sheet
+    setSelectedDocument(result);
+    setPreviewOpen(true);
   };
 
   const handleFindSimilar = async (result: SearchResult) => {
@@ -249,6 +249,13 @@ export default function SemanticSearchPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Document Preview Sheet */}
+      <DocumentPreview
+        result={selectedDocument}
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+      />
     </div>
   );
 }
