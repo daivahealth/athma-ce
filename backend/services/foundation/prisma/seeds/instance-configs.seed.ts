@@ -278,6 +278,64 @@ export const instanceConfigsData = [
   },
 
   // ============================================
+  // AI CLINICAL CODING CONFIGS
+  // ============================================
+  {
+    configKey: 'ai.clinical_coding.enabled',
+    value: false,
+    valueType: 'boolean',
+    category: 'clinical',
+    description: 'Enable AI-powered clinical coding suggestions in charting',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'ai.clinical_coding.provider',
+    value: 'anthropic',
+    valueType: 'string',
+    category: 'clinical',
+    description: 'AI provider for clinical coding: anthropic or openai',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'ai.clinical_coding.model',
+    value: 'claude-sonnet-4-20250514',
+    valueType: 'string',
+    category: 'clinical',
+    description: 'AI model for clinical coding suggestions',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'ai.clinical_coding.max_suggestions',
+    value: 10,
+    valueType: 'number',
+    category: 'clinical',
+    description: 'Maximum number of coding suggestions to return per request',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'ai.clinical_coding.min_text_length',
+    value: 20,
+    valueType: 'number',
+    category: 'clinical',
+    description: 'Minimum clinical text length (chars) before triggering AI suggestions',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'ai.clinical_coding.debounce_ms',
+    value: 1500,
+    valueType: 'number',
+    category: 'clinical',
+    description: 'Debounce delay (ms) before triggering AI coding suggestions',
+    isOverridable: true,
+    isSensitive: false,
+  },
+
+  // ============================================
   // SYSTEM CONFIGS
   // ============================================
   {

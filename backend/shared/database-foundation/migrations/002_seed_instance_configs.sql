@@ -65,6 +65,24 @@ ON CONFLICT (config_key) DO UPDATE SET
     is_sensitive = EXCLUDED.is_sensitive,
     updated_at = NOW();
 
+-- AI CLINICAL CODING CONFIGS
+INSERT INTO instance_configs (id, config_key, value, value_type, category, description, is_overridable, is_sensitive, updated_at)
+VALUES
+(gen_random_uuid(), 'ai.clinical_coding.enabled', 'false', 'boolean', 'clinical', 'Enable AI-powered clinical coding suggestions in charting', true, false, NOW()),
+(gen_random_uuid(), 'ai.clinical_coding.provider', '"anthropic"', 'string', 'clinical', 'AI provider for clinical coding: anthropic or openai', true, false, NOW()),
+(gen_random_uuid(), 'ai.clinical_coding.model', '"claude-sonnet-4-20250514"', 'string', 'clinical', 'AI model for clinical coding suggestions', true, false, NOW()),
+(gen_random_uuid(), 'ai.clinical_coding.max_suggestions', '10', 'number', 'clinical', 'Maximum number of coding suggestions to return per request', true, false, NOW()),
+(gen_random_uuid(), 'ai.clinical_coding.min_text_length', '20', 'number', 'clinical', 'Minimum clinical text length (chars) before triggering AI suggestions', true, false, NOW()),
+(gen_random_uuid(), 'ai.clinical_coding.debounce_ms', '1500', 'number', 'clinical', 'Debounce delay (ms) before triggering AI coding suggestions', true, false, NOW())
+ON CONFLICT (config_key) DO UPDATE SET
+    value = EXCLUDED.value,
+    value_type = EXCLUDED.value_type,
+    category = EXCLUDED.category,
+    description = EXCLUDED.description,
+    is_overridable = EXCLUDED.is_overridable,
+    is_sensitive = EXCLUDED.is_sensitive,
+    updated_at = NOW();
+
 -- SYSTEM CONFIGS
 INSERT INTO instance_configs (config_key, value, value_type, category, description, is_overridable, is_sensitive)
 VALUES
