@@ -38,6 +38,8 @@ import {
 } from '@/modules/clinical/hooks/use-charting';
 import { NoteType } from '@/modules/clinical/types/charting';
 import { useToast } from '@/components/ui/use-toast';
+import { extractClinicalText } from '@/modules/clinical/utils/extract-clinical-text';
+import { AiCodingSuggestionsPanel } from './AiCodingSuggestionsPanel';
 import type { SmartChartingEditorProps, SmartChartingStorageFormat } from './types';
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -100,6 +102,8 @@ export function SmartChartingEditor({
   const [isInitialized, setIsInitialized] = useState(false);
   const [isAddBlockOpen, setIsAddBlockOpen] = useState(false);
   const [existingBlockTypes, setExistingBlockTypes] = useState<Set<string>>(new Set());
+  const [clinicalText, setClinicalText] = useState('');
+  const [clinicalBlockTypes, setClinicalBlockTypes] = useState<string[]>([]);
 
   const { data: encounterNotes = [] } = useClinicalNotesByEncounter(encounterId);
   const { mutateAsync: createClinicalNote, isPending: isCreatingNote } = useCreateClinicalNote();
@@ -154,6 +158,10 @@ export function SmartChartingEditor({
     onUpdate: ({ editor }) => {
       // Update existing block types whenever content changes
       setExistingBlockTypes(getExistingBlockTypes(editor));
+      // Extract clinical text for AI coding suggestions (PHI-free)
+      const extracted = extractClinicalText(editor.getJSON());
+      setClinicalText(extracted.text);
+      setClinicalBlockTypes(extracted.blockTypes);
     },
   });
 
@@ -395,61 +403,72 @@ export function SmartChartingEditor({
 
   return (
     <SmartChartingContext.Provider value={contextValue}>
-      <div className="rounded-lg border bg-card p-6">
-        <EditorToolbar
-          blockCount={countBlocks()}
-          isSaving={isCreatingNote || isUpdatingNote}
-          lastSaved={lastSaved}
-          onSave={handleSave}
-        />
+      <div className="flex flex-row gap-0 rounded-lg border bg-card overflow-hidden">
+        {/* Main editor area */}
+        <div className="flex-1 min-w-0 p-6">
+          <EditorToolbar
+            blockCount={countBlocks()}
+            isSaving={isCreatingNote || isUpdatingNote}
+            lastSaved={lastSaved}
+            onSave={handleSave}
+          />
 
-        <div className="mt-3">
-          <EditorContent editor={editor} className="smart-charting-editor" />
+          <div className="mt-3">
+            <EditorContent editor={editor} className="smart-charting-editor" />
+          </div>
+
+          {availableCommands.length > 0 && (
+            <div className="mt-4 flex justify-center">
+              <DropdownMenu open={isAddBlockOpen} onOpenChange={setIsAddBlockOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Add Block
+                    <span className="ml-2 text-xs text-muted-foreground">⌘/</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="center"
+                  className="w-72"
+                  onCloseAutoFocus={(e) => e.preventDefault()}
+                >
+                  {availableCommands.map((cmd) => {
+                    const Icon = ICON_MAP[cmd.icon] || FileText;
+                    return (
+                      <DropdownMenuItem
+                        key={cmd.id}
+                        onClick={() => handleAddBlock(cmd.id)}
+                        className="gap-3 py-2.5 cursor-pointer"
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted">
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{cmd.title}</p>
+                          <p className="text-xs text-muted-foreground">{cmd.description}</p>
+                        </div>
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+
+          {countBlocks() === 0 && (
+            <div className="mt-2 text-center text-sm text-muted-foreground">
+              Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">⌘/</kbd> or click the button to add blocks
+            </div>
+          )}
         </div>
 
-        {availableCommands.length > 0 && (
-          <div className="mt-4 flex justify-center">
-            <DropdownMenu open={isAddBlockOpen} onOpenChange={setIsAddBlockOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Block
-                  <span className="ml-2 text-xs text-muted-foreground">⌘/</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="center"
-                className="w-72"
-                onCloseAutoFocus={(e) => e.preventDefault()}
-              >
-                {availableCommands.map((cmd) => {
-                  const Icon = ICON_MAP[cmd.icon] || FileText;
-                  return (
-                    <DropdownMenuItem
-                      key={cmd.id}
-                      onClick={() => handleAddBlock(cmd.id)}
-                      className="gap-3 py-2.5 cursor-pointer"
-                    >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted">
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{cmd.title}</p>
-                        <p className="text-xs text-muted-foreground">{cmd.description}</p>
-                      </div>
-                    </DropdownMenuItem>
-                  );
-                })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        )}
-
-        {countBlocks() === 0 && (
-          <div className="mt-2 text-center text-sm text-muted-foreground">
-            Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">⌘/</kbd> or click the button to add blocks
-          </div>
-        )}
+        {/* AI Coding Suggestions sidebar */}
+        <AiCodingSuggestionsPanel
+          clinicalText={clinicalText}
+          blockTypes={clinicalBlockTypes}
+          encounterId={encounterId}
+          patientId={patientId}
+        />
       </div>
     </SmartChartingContext.Provider>
   );
