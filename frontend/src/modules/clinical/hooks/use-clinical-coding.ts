@@ -51,8 +51,10 @@ export function useClinicalCodingSuggestions({
 
 /**
  * Hook to check if AI coding feature is enabled.
+ * Returns loading state so the panel can remain visible while config resolves.
  */
-export function useAiCodingEnabled(): boolean {
-  const { data } = useResolveConfig('ai.clinical_coding.enabled');
-  return data?.value === true || data?.value === 'true';
+export function useAiCodingEnabled(): { isEnabled: boolean; isLoading: boolean } {
+  const { data, isLoading } = useResolveConfig('ai.clinical_coding.enabled');
+  const isEnabled = data?.value === true || data?.value === 'true';
+  return { isEnabled, isLoading };
 }
