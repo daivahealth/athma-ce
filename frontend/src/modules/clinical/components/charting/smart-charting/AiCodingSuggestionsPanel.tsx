@@ -124,7 +124,7 @@ export function AiCodingSuggestionsPanel({
   encounterId,
   patientId,
 }: AiCodingSuggestionsPanelProps) {
-  const isEnabled = useAiCodingEnabled();
+  const { isEnabled, isLoading: isConfigLoading } = useAiCodingEnabled();
   const toast = useToast();
   const [collapsed, setCollapsed] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -186,7 +186,8 @@ export function AiCodingSuggestionsPanel({
     [encounter, encounterId, patientId, diagnoses.length, createDiagnosis, toast],
   );
 
-  if (!isEnabled) return null;
+  // Only hide when config has loaded and is explicitly disabled
+  if (!isEnabled && !isConfigLoading) return null;
 
   // Collapsed toggle button
   if (collapsed) {
