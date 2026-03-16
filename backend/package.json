@@ -23,6 +23,8 @@
     "db:studio": "prisma studio"
   },
   "devDependencies": {
+    "@types/mime-types": "^3.0.1",
+    "@types/multer": "^2.1.0",
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",

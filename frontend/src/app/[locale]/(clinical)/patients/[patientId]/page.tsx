@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { PatientDocuments } from '@/modules/clinical/components/PatientDocuments';
 import {
   ArrowLeft,
   Edit,
@@ -536,6 +537,9 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           </Card>
         )}
       </div>
+
+      {/* Patient Documents */}
+      <PatientDocuments patientId={params.patientId} />
 
       {/* Audit Information */}
       <Card>

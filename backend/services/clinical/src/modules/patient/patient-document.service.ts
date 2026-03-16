@@ -6,17 +6,19 @@
 
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
+import type { StorageService } from '../../common/storage/storage.service';
 
 export interface CreateDocumentDto {
   documentType: string;
   documentNumber: string;
   issuingCountry: string;
-  issueDate?: Date;
-  expiryDate?: Date;
-  documentUrl?: string;
-  isPrimaryIdentity?: boolean;
-  verificationStatus?: string;
-  verifiedBy?: string;
+  issueDate?: Date | undefined;
+  expiryDate?: Date | undefined;
+  documentUrl?: string | undefined;
+  isPrimaryIdentity?: boolean | undefined;
+  verificationStatus?: string | undefined;
+  verifiedBy?: string | undefined;
+  metadata?: Record<string, any> | undefined;
 }
 
 @Injectable()
@@ -67,6 +69,7 @@ export class PatientDocumentService {
         isPrimaryIdentity: dto.isPrimaryIdentity || false,
         verificationStatus: dto.verificationStatus || 'pending',
         verifiedBy: dto.verifiedBy ?? null,
+        metadata: dto.metadata ?? {},
       },
     });
 
@@ -131,15 +134,25 @@ export class PatientDocumentService {
   }
 
   /**
-   * Delete a document
+   * Delete a document and its associated file
    */
-  async deleteDocument(tenantId: string, documentId: string) {
+  async deleteDocument(tenantId: string, documentId: string, storageService?: StorageService) {
     const document = await this.prisma.patientDocument.findUnique({
       where: { id: documentId },
     });
 
     if (!document || document.tenantId !== tenantId) {
       throw new BadRequestException('Document not found');
+    }
+
+    // Delete file from storage if it exists
+    const metadata = document.metadata as Record<string, any> | null;
+    if (storageService && metadata?.filePath) {
+      try {
+        await storageService.delete(metadata.filePath);
+      } catch {
+        // Log but don't fail the deletion
+      }
     }
 
     await this.prisma.patientDocument.delete({
