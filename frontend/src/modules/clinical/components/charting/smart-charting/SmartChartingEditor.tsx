@@ -34,7 +34,7 @@ import {
 import {
   useClinicalNotesByEncounter,
   useCreateClinicalNote,
-  useUpdateClinicalNoteSections,
+  useUpdateClinicalNote,
 } from '@/modules/clinical/hooks/use-charting';
 import { NoteType } from '@/modules/clinical/types/charting';
 import { useToast } from '@/components/ui/use-toast';
@@ -67,7 +67,6 @@ export function useSmartChartingContext(): SmartChartingContextValue {
   return context;
 }
 
-const SECTION_CODE = 'smart_charting';
 const STORAGE_VERSION = '1.0.0';
 
 // Helper to get existing block types from editor
@@ -107,13 +106,14 @@ export function SmartChartingEditor({
 
   const { data: encounterNotes = [] } = useClinicalNotesByEncounter(encounterId);
   const { mutateAsync: createClinicalNote, isPending: isCreatingNote } = useCreateClinicalNote();
-  const { mutateAsync: updateNoteSections, isPending: isUpdatingNote } = useUpdateClinicalNoteSections();
+  const { mutateAsync: updateNote, isPending: isUpdatingNote } = useUpdateClinicalNote();
 
   const smartChartingNote = useMemo(
     () =>
-      encounterNotes.find((note) =>
-        (note.sections ?? []).some((section) => section.sectionCode === SECTION_CODE)
-      ) ?? encounterNotes[0] ?? null,
+      encounterNotes.find((note) => {
+        const content = note.content as Record<string, any> | undefined;
+        return content?.noteType === 'smart-charting';
+      }) ?? encounterNotes[0] ?? null,
     [encounterNotes]
   );
 
@@ -169,20 +169,14 @@ export function SmartChartingEditor({
   useEffect(() => {
     if (!editor || isInitialized || !smartChartingNote) return;
 
-    const section = (smartChartingNote.sections ?? []).find(
-      (s) => s.sectionCode === SECTION_CODE
-    );
-
-    if (section?.content) {
-      const stored = section.content as SmartChartingStorageFormat;
-      if (stored.editorType === 'smart-charting' && stored.tiptapJson) {
-        try {
-          editor.commands.setContent(stored.tiptapJson);
-          setExistingBlockTypes(getExistingBlockTypes(editor));
-          setIsInitialized(true);
-        } catch (err) {
-          console.error('Failed to restore editor content:', err);
-        }
+    const stored = smartChartingNote.content as SmartChartingStorageFormat | undefined;
+    if (stored?.editorType === 'smart-charting' && stored.tiptapJson) {
+      try {
+        editor.commands.setContent(stored.tiptapJson);
+        setExistingBlockTypes(getExistingBlockTypes(editor));
+        setIsInitialized(true);
+      } catch (err) {
+        console.error('Failed to restore editor content:', err);
       }
     }
     setIsInitialized(true);
@@ -330,30 +324,20 @@ export function SmartChartingEditor({
       }
     });
 
-    const storagePayload: SmartChartingStorageFormat = {
+    const contentPayload: SmartChartingStorageFormat = {
       version: STORAGE_VERSION,
       editorType: 'smart-charting',
+      noteType: 'smart-charting',
       tiptapJson,
       blocks,
     };
 
-    const sectionPayload = {
-      sectionCode: SECTION_CODE,
-      sectionName: 'Smart Charting',
-      sortOrder: 1000,
-      content: storagePayload,
-    };
-
     try {
       if (smartChartingNote) {
-        const preservedSections = (smartChartingNote.sections ?? []).filter(
-          (section) => section.sectionCode !== SECTION_CODE
-        );
-        await updateNoteSections({
+        await updateNote({
           id: smartChartingNote.id,
-          payload: {
-            sections: [...preservedSections, sectionPayload],
-          },
+          encounterId,
+          payload: { content: contentPayload },
         });
       } else {
         await createClinicalNote({
@@ -362,7 +346,7 @@ export function SmartChartingEditor({
           noteType: NoteType.PROGRESS,
           title: 'Smart Charting',
           authorStaffId,
-          sections: [sectionPayload],
+          content: contentPayload,
         });
       }
       setLastSaved(new Date());
@@ -380,7 +364,7 @@ export function SmartChartingEditor({
   }, [
     editor,
     smartChartingNote,
-    updateNoteSections,
+    updateNote,
     createClinicalNote,
     encounterId,
     patientId,

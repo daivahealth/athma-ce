@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { chartingService } from '../services/charting-service';
 import type {
   CreateClinicalNoteInput,
-  UpdateNoteSectionsInput,
+  UpdateClinicalNoteInput,
   CreateDiagnosisInput,
   CreateClinicalOrderInput,
   UpdateClinicalOrderInput,
@@ -33,14 +33,14 @@ export function useCreateClinicalNote() {
   });
 }
 
-export function useUpdateClinicalNoteSections() {
+export function useUpdateClinicalNote() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: UpdateNoteSectionsInput }) =>
-      chartingService.updateNoteSections(id, payload),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['clinical-notes', 'encounter', data.encounterId] });
+    mutationFn: ({ id, encounterId, payload }: { id: string; encounterId: string; payload: UpdateClinicalNoteInput }) =>
+      chartingService.updateClinicalNote(id, payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['clinical-notes', 'encounter', variables.encounterId] });
     },
   });
 }

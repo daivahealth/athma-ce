@@ -676,40 +676,17 @@ model EncounterNote {
   createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  // Content (flexible JSONB for all note data)
+  content           Json?         @map("content") @db.JsonB // { noteType, version, tiptapJson?, blocks?, sections? }
+
   // Relations
   encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
-  sections          EncounterNoteSection[]
 
   @@index([tenantId, encounterId], map: "idx_encounter_notes_encounter")
   @@index([tenantId, patientId], map: "idx_encounter_notes_patient")
   @@index([tenantId, noteType, status], map: "idx_encounter_notes_type_status")
   @@index([tenantId, authorStaffId], map: "idx_encounter_notes_author")
   @@map("encounter_notes")
-}
-
-// Encounter Note Sections (Flexible JSONB sections)
-model EncounterNoteSection {
-  id              String        @id @default(uuid()) @map("id") @db.Uuid
-  noteId          String        @map("note_id") @db.Uuid
-
-  // Section Identifier
-  sectionCode     String        @map("section_code") @db.VarChar(50) // subjective, objective, assessment, plan, hpi, ros, physical_exam, etc.
-  sectionName     String        @map("section_name") @db.VarChar(100)
-  sortOrder       Int           @default(0) @map("sort_order")
-
-  // Content (flexible JSONB for structured or free-text)
-  content         Json          @map("content") // { "text": "...", "structured": {...} }
-
-  // Metadata
-  isEmpty         Boolean       @default(false) @map("is_empty")
-  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  // Relations
-  encounterNote   EncounterNote @relation(fields: [noteId], references: [id], onDelete: Cascade)
-
-  @@index([noteId, sortOrder], map: "idx_encounter_note_sections_note")
-  @@map("encounter_note_sections")
 }
 
 // Encounter Diagnoses (ICD-10 codes)

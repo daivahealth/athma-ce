@@ -74,15 +74,6 @@ export enum DrugCodeSystem {
 // CLINICAL NOTE TYPES
 // ========================================
 
-export interface ClinicalNoteSection {
-  id?: string;
-  sectionCode: string;
-  sectionName: string;
-  content: Record<string, any>;
-  sortOrder?: number;
-  isEmpty?: boolean;
-}
-
 export interface ClinicalNote {
   id: string;
   tenantId: string;
@@ -101,7 +92,7 @@ export interface ClinicalNote {
   supersededBy?: string;
   createdAt: Date | string;
   updatedAt: Date | string;
-  sections?: ClinicalNoteSection[];
+  content?: Record<string, any>;
 }
 
 export interface CreateClinicalNoteInput {
@@ -112,7 +103,7 @@ export interface CreateClinicalNoteInput {
   title?: string;
   authorStaffId: string;
   coSignStaffId?: string;
-  sections?: Omit<ClinicalNoteSection, 'id'>[];
+  content?: Record<string, any>;
 }
 
 export interface UpdateClinicalNoteInput {
@@ -120,10 +111,7 @@ export interface UpdateClinicalNoteInput {
   status?: NoteStatus;
   coSignStaffId?: string;
   amendmentReason?: string;
-}
-
-export interface UpdateNoteSectionsInput {
-  sections: Omit<ClinicalNoteSection, 'id'>[];
+  content?: Record<string, any>;
 }
 
 export interface SignNoteInput {

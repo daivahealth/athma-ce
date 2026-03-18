@@ -1,5 +1,4 @@
-import { IsString, IsUUID, IsOptional, IsEnum, IsArray, ValidateNested, IsInt, IsBoolean, IsObject } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsUUID, IsOptional, IsEnum, IsBoolean, IsObject } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // Enum for note types
@@ -24,31 +23,6 @@ export enum NoteStatus {
 export enum NoteLanguage {
   EN = 'en',
   AR = 'ar',
-}
-
-// DTO for encounter note section
-export class EncounterNoteSectionDto {
-  @ApiProperty({ description: 'Section code (e.g., subjective, objective, assessment, plan)' })
-  @IsString()
-  sectionCode!: string;
-
-  @ApiProperty({ description: 'Section name' })
-  @IsString()
-  sectionName!: string;
-
-  @ApiProperty({ description: 'Content as JSON (can be free-text or structured)' })
-  @IsObject()
-  content!: Record<string, any>;
-
-  @ApiPropertyOptional({ description: 'Sort order for section display' })
-  @IsOptional()
-  @IsInt()
-  sortOrder?: number;
-
-  @ApiPropertyOptional({ description: 'Whether section is empty' })
-  @IsOptional()
-  @IsBoolean()
-  isEmpty?: boolean;
 }
 
 // DTO for creating an encounter note
@@ -84,12 +58,10 @@ export class CreateEncounterNoteDto {
   @IsUUID()
   coSignStaffId?: string;
 
-  @ApiPropertyOptional({ description: 'Note sections', type: [EncounterNoteSectionDto] })
+  @ApiPropertyOptional({ description: 'Note content as JSON' })
   @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EncounterNoteSectionDto)
-  sections?: EncounterNoteSectionDto[];
+  @IsObject()
+  content?: Record<string, any>;
 }
 
 // DTO for updating an encounter note
@@ -113,15 +85,11 @@ export class UpdateEncounterNoteDto {
   @IsOptional()
   @IsString()
   amendmentReason?: string;
-}
 
-// DTO for adding/updating sections
-export class UpdateNoteSectionsDto {
-  @ApiProperty({ description: 'Note sections', type: [EncounterNoteSectionDto] })
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EncounterNoteSectionDto)
-  sections!: EncounterNoteSectionDto[];
+  @ApiPropertyOptional({ description: 'Note content as JSON' })
+  @IsOptional()
+  @IsObject()
+  content?: Record<string, any>;
 }
 
 // DTO for signing a note
@@ -189,6 +157,6 @@ export class EncounterNoteResponseDto {
   @ApiProperty()
   updatedAt!: Date;
 
-  @ApiPropertyOptional({ type: [EncounterNoteSectionDto] })
-  sections?: EncounterNoteSectionDto[];
+  @ApiPropertyOptional({ description: 'Note content as JSON' })
+  content?: Record<string, any>;
 }

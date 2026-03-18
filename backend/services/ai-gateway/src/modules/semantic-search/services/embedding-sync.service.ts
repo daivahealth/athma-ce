@@ -269,42 +269,43 @@ export class EmbeddingSyncService {
 
       if (noteResult.length === 0) return null;
 
-      // Get all sections and extract text content from JSONB
-      // Handles both simple format {"text": "..."} and smart charting {"blocks": [...]}
-      const sectionsResult = await this.clinicalPrisma.$queryRaw<any[]>`
-        SELECT
-          section_name,
-          COALESCE(
-            -- Try simple text format first
-            content->>'text',
-            -- Then try to extract from blocks array
-            (
-              SELECT string_agg(
-                COALESCE(block->>'header', '') || ': ' || COALESCE(block->>'content', ''),
-                E'\n'
-              )
-              FROM jsonb_array_elements(content->'blocks') AS block
-              WHERE block->>'content' IS NOT NULL AND block->>'content' != ''
-            ),
-            ''
-          ) as section_text
-        FROM encounter_note_sections
-        WHERE note_id = ${documentId}::uuid
-        ORDER BY sort_order
-      `;
-
-      // Combine all section content (only the actual clinical text, no metadata prefixes)
-      const contentParts: string[] = [];
       const noteRow = noteResult[0];
 
-      for (const section of sectionsResult) {
-        if (section.section_text && section.section_text.trim()) {
-          // Only include the actual content, not section names or metadata
-          contentParts.push(section.section_text.trim());
-        }
-      }
+      // Extract text content from the content JSONB field
+      // Handles both formats:
+      //   smart-charting: { noteType: "smart-charting", blocks: [{ header, content }] }
+      //   simple/soap:    { noteType: "soap", sections: [{ code, name, text }] }
+      const contentResult = await this.clinicalPrisma.$queryRaw<any[]>`
+        SELECT
+          COALESCE(
+            -- Smart charting format: extract from blocks array
+            CASE WHEN content->>'noteType' = 'smart-charting' THEN
+              (
+                SELECT string_agg(
+                  COALESCE(block->>'header', '') || ': ' || COALESCE(block->>'content', ''),
+                  E'\n'
+                )
+                FROM jsonb_array_elements(content->'blocks') AS block
+                WHERE block->>'content' IS NOT NULL AND block->>'content' != ''
+              )
+            END,
+            -- Simple/SOAP format: extract from sections array
+            (
+              SELECT string_agg(
+                COALESCE(section->>'text', ''),
+                E'\n\n'
+              )
+              FROM jsonb_array_elements(content->'sections') AS section
+              WHERE section->>'text' IS NOT NULL AND section->>'text' != ''
+            ),
+            ''
+          ) as extracted_text
+        FROM encounter_notes
+        WHERE id = ${documentId}::uuid
+          AND tenant_id = ${tenantId}::uuid
+      `;
 
-      const combinedContent = contentParts.join('\n\n');
+      const combinedContent = contentResult[0]?.extracted_text?.trim() || '';
 
       if (!combinedContent.trim()) {
         logger.warn(

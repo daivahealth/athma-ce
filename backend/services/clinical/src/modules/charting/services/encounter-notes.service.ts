@@ -3,7 +3,6 @@ import { PrismaService } from '@zeal/database-clinical';
 import {
   CreateEncounterNoteDto,
   UpdateEncounterNoteDto,
-  UpdateNoteSectionsDto,
   SignNoteDto,
   NoteStatus,
 } from '../dto/encounter-note.dto';
@@ -24,37 +23,14 @@ export class EncounterNotesService {
 
     if (dto.title) data.title = dto.title;
     if (dto.coSignStaffId) data.coSignStaffId = dto.coSignStaffId;
+    if (dto.content) data.content = dto.content;
 
-    if (dto.sections) {
-      data.sections = {
-        create: dto.sections.map((section) => ({
-          sectionCode: section.sectionCode,
-          sectionName: section.sectionName,
-          content: section.content,
-          sortOrder: section.sortOrder || 0,
-          isEmpty: section.isEmpty || false,
-        })),
-      };
-    }
-
-    return this.prisma.encounterNote.create({
-      data,
-      include: {
-        sections: {
-          orderBy: { sortOrder: 'asc' },
-        },
-      },
-    });
+    return this.prisma.encounterNote.create({ data });
   }
 
   async findById(tenantId: string, id: string) {
     const note = await this.prisma.encounterNote.findFirst({
       where: { id, tenantId },
-      include: {
-        sections: {
-          orderBy: { sortOrder: 'asc' },
-        },
-      },
     });
 
     if (!note) {
@@ -67,11 +43,6 @@ export class EncounterNotesService {
   async findByEncounter(tenantId: string, encounterId: string) {
     return this.prisma.encounterNote.findMany({
       where: { tenantId, encounterId },
-      include: {
-        sections: {
-          orderBy: { sortOrder: 'asc' },
-        },
-      },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -79,11 +50,6 @@ export class EncounterNotesService {
   async findByPatient(tenantId: string, patientId: string, limit?: number) {
     const query: any = {
       where: { tenantId, patientId },
-      include: {
-        sections: {
-          orderBy: { sortOrder: 'asc' },
-        },
-      },
       orderBy: { createdAt: 'desc' },
     };
 
@@ -96,11 +62,16 @@ export class EncounterNotesService {
 
   async update(tenantId: string, id: string, dto: UpdateEncounterNoteDto) {
     // Verify note exists and belongs to tenant
-    await this.findById(tenantId, id);
+    const note = await this.findById(tenantId, id);
 
     // If status is being changed to amended, require amendment reason
     if (dto.status === NoteStatus.AMENDED && !dto.amendmentReason) {
       throw new BadRequestException('Amendment reason is required when amending a note');
+    }
+
+    // Cannot modify content of a signed note
+    if (dto.content && note.status === NoteStatus.SIGNED) {
+      throw new BadRequestException('Cannot modify content of a signed note');
     }
 
     const data: any = {
@@ -111,46 +82,12 @@ export class EncounterNotesService {
     if (dto.status) data.status = dto.status;
     if (dto.coSignStaffId) data.coSignStaffId = dto.coSignStaffId;
     if (dto.amendmentReason) data.amendmentReason = dto.amendmentReason;
+    if (dto.content) data.content = dto.content;
 
     return this.prisma.encounterNote.update({
       where: { id },
       data,
-      include: {
-        sections: {
-          orderBy: { sortOrder: 'asc' },
-        },
-      },
     });
-  }
-
-  async updateSections(tenantId: string, noteId: string, dto: UpdateNoteSectionsDto) {
-    // Verify note exists and belongs to tenant
-    const note = await this.findById(tenantId, noteId);
-
-    // Check if note is signed - cannot modify signed notes
-    if (note.status === NoteStatus.SIGNED) {
-      throw new BadRequestException('Cannot modify sections of a signed note');
-    }
-
-    // Delete existing sections
-    await this.prisma.encounterNoteSection.deleteMany({
-      where: { noteId },
-    });
-
-    // Create new sections
-    await this.prisma.encounterNoteSection.createMany({
-      data: dto.sections.map((section) => ({
-        noteId,
-        sectionCode: section.sectionCode,
-        sectionName: section.sectionName,
-        content: section.content,
-        sortOrder: section.sortOrder || 0,
-        isEmpty: section.isEmpty || false,
-      })),
-    });
-
-    // Return updated note
-    return this.findById(tenantId, noteId);
   }
 
   async signNote(tenantId: string, noteId: string, dto: SignNoteDto) {
@@ -179,11 +116,6 @@ export class EncounterNotesService {
           coSignedAt: new Date(),
           updatedAt: new Date(),
         },
-        include: {
-          sections: {
-            orderBy: { sortOrder: 'asc' },
-          },
-        },
       });
     } else {
       // Primary signing
@@ -197,11 +129,6 @@ export class EncounterNotesService {
           status: NoteStatus.SIGNED,
           signedAt: new Date(),
           updatedAt: new Date(),
-        },
-        include: {
-          sections: {
-            orderBy: { sortOrder: 'asc' },
-          },
         },
       });
     }
@@ -224,7 +151,6 @@ export class EncounterNotesService {
       throw new BadRequestException('Cannot delete a signed note');
     }
 
-    // Soft delete by updating status
     await this.prisma.encounterNote.delete({
       where: { id },
     });
