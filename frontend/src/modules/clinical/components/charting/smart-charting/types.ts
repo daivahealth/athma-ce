@@ -16,6 +16,7 @@ export interface SmartChartingBlock {
 export interface SmartChartingStorageFormat {
   version: string;
   editorType: 'smart-charting';
+  noteType: 'smart-charting';
   tiptapJson: Record<string, unknown>;
   blocks: SmartChartingBlock[];
 }

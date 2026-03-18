@@ -14,7 +14,7 @@ import { NoteType } from '../../types/charting';
 import {
   useClinicalNotesByEncounter,
   useCreateClinicalNote,
-  useUpdateClinicalNoteSections,
+  useUpdateClinicalNote,
 } from '../../hooks/use-charting';
 
 const clinicalNoteSchema = z.object({
@@ -45,7 +45,7 @@ export function ClinicalNotesForm({
   onSuccess
 }: ClinicalNotesFormProps) {
   const createNoteMutation = useCreateClinicalNote();
-  const updateNoteSectionsMutation = useUpdateClinicalNoteSections();
+  const updateNoteMutation = useUpdateClinicalNote();
   const { data: encounterNotes } = useClinicalNotesByEncounter(encounterId);
   const existingNote = useMemo(
     () => (encounterNotes && encounterNotes.length > 0 ? encounterNotes[0] : null),
@@ -67,17 +67,15 @@ export function ClinicalNotesForm({
   useEffect(() => {
     if (existingNote) {
       form.setValue('noteType', existingNote.noteType ?? NoteType.SOAP);
-      const noteSections = (existingNote.sections ?? []).map((section, index) => ({
-        sectionCode: section.sectionCode || `section_${index + 1}`,
-        sectionName: section.sectionName || `Section ${index + 1}`,
+      // Load sections from content JSON
+      const noteContent = existingNote.content as Record<string, any> | undefined;
+      const contentSections = noteContent?.sections as any[] | undefined;
+      const noteSections = (contentSections ?? []).map((section: any, index: number) => ({
+        sectionCode: section.code || `section_${index + 1}`,
+        sectionName: section.name || `Section ${index + 1}`,
         placeholder: '',
         sortOrder: section.sortOrder || index + 1,
-        content:
-          typeof section.content?.text === 'string'
-            ? section.content.text
-            : typeof section.content === 'string'
-            ? section.content
-            : '',
+        content: typeof section.text === 'string' ? section.text : '',
       }));
       setSections(noteSections);
       setSelectedTemplateId(null);
@@ -158,19 +156,26 @@ export function ClinicalNotesForm({
     if (sections.length === 0 || (!existingNote && !selectedTemplateId)) {
       return;
     }
-    const serializedSections = sections
+    const contentSections = sections
       .map((section) => ({
-        sectionCode: section.sectionCode,
-        sectionName: section.sectionName,
+        code: section.sectionCode,
+        name: section.sectionName,
         sortOrder: section.sortOrder,
-        content: { text: section.content.trim() },
+        text: section.content.trim(),
       }))
-      .filter((section) => section.content.text);
+      .filter((section) => section.text);
+
+    const contentPayload = {
+      noteType: values.noteType,
+      version: '1.0.0',
+      sections: contentSections,
+    };
 
     if (existingNote) {
-      await updateNoteSectionsMutation.mutateAsync({
+      await updateNoteMutation.mutateAsync({
         id: existingNote.id,
-        payload: { sections: serializedSections },
+        encounterId,
+        payload: { content: contentPayload },
       });
     } else {
       await createNoteMutation.mutateAsync({
@@ -179,7 +184,7 @@ export function ClinicalNotesForm({
         noteType: values.noteType,
         title: undefined,
         authorStaffId,
-        sections: serializedSections,
+        content: contentPayload,
       });
     }
 
@@ -249,11 +254,11 @@ export function ClinicalNotesForm({
           disabled={
             sections.length === 0 ||
             (!existingNote && (!selectedTemplateId || createNoteMutation.isPending)) ||
-            (existingNote ? updateNoteSectionsMutation.isPending : false)
+            (existingNote ? updateNoteMutation.isPending : false)
           }
         >
           {existingNote
-            ? updateNoteSectionsMutation.isPending
+            ? updateNoteMutation.isPending
               ? 'Updating...'
               : 'Update Clinical Note'
             : createNoteMutation.isPending

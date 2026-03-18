@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Patch,
   Delete,
   Body,
@@ -16,7 +15,6 @@ import { EncounterNotesService } from '../services/encounter-notes.service';
 import {
   CreateEncounterNoteDto,
   UpdateEncounterNoteDto,
-  UpdateNoteSectionsDto,
   SignNoteDto,
   EncounterNoteResponseDto,
 } from '../dto/encounter-note.dto';
@@ -83,7 +81,7 @@ export class EncounterNotesController {
 
   @Patch(':id')
   @Permissions(CLINICAL_NOTE_UPDATE)
-  @ApiOperation({ summary: 'Update encounter note metadata' })
+  @ApiOperation({ summary: 'Update encounter note' })
   @ApiResponse({ status: 200, description: 'Encounter note updated', type: EncounterNoteResponseDto })
   async update(
     @Headers('x-tenant-id') tenantId: string,
@@ -91,18 +89,6 @@ export class EncounterNotesController {
     @Body() dto: UpdateEncounterNoteDto,
   ) {
     return this.encounterNotesService.update(tenantId, id, dto);
-  }
-
-  @Put(':id/sections')
-  @Permissions(CLINICAL_NOTE_UPDATE)
-  @ApiOperation({ summary: 'Update encounter note sections' })
-  @ApiResponse({ status: 200, description: 'Sections updated', type: EncounterNoteResponseDto })
-  async updateSections(
-    @Headers('x-tenant-id') tenantId: string,
-    @Param('id') id: string,
-    @Body() dto: UpdateNoteSectionsDto,
-  ) {
-    return this.encounterNotesService.updateSections(tenantId, id, dto);
   }
 
   @Post(':id/sign')

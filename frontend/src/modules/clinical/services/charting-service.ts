@@ -3,7 +3,6 @@ import type {
   ClinicalNote,
   CreateClinicalNoteInput,
   UpdateClinicalNoteInput,
-  UpdateNoteSectionsInput,
   SignNoteInput,
   Diagnosis,
   CreateDiagnosisInput,
@@ -52,14 +51,6 @@ class ChartingService {
     payload: UpdateClinicalNoteInput
   ): Promise<ClinicalNote> {
     const response = await clinicalClient.patch(`/encounter-notes/${id}`, payload);
-    return response.data;
-  }
-
-  async updateNoteSections(
-    id: string,
-    payload: UpdateNoteSectionsInput
-  ): Promise<ClinicalNote> {
-    const response = await clinicalClient.put(`/encounter-notes/${id}/sections`, payload);
     return response.data;
   }
 
