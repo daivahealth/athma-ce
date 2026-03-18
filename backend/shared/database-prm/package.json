@@ -13,10 +13,10 @@
     "prisma:studio": "prisma studio --schema prisma/schema.prisma"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.0",
-    "prisma": "^5.7.0"
+    "@prisma/client": "~6.19.0"
   },
   "devDependencies": {
+    "prisma": "~6.19.0",
     "@types/node": "^20.10.0",
     "typescript": "^5.3.0"
   }

@@ -1,6 +1,3 @@
-// Zeal PRM Database Schema
-// Multi-tenant patient relationship management with event-driven engagement
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated"
