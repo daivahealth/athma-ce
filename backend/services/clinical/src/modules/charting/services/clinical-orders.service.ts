@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import { CreateClinicalOrderDto, UpdateClinicalOrderDto, AddOrderResultDto, OrderStatus } from '../dto/clinical-order.dto';
+import { ObservationWriterService } from '../../observations/observation-writer.service';
 
 @Injectable()
 export class ClinicalOrdersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly observationWriter: ObservationWriterService,
+  ) {}
 
   async create(tenantId: string, dto: CreateClinicalOrderDto) {
     return this.prisma.clinicalOrder.create({
@@ -72,10 +76,26 @@ export class ClinicalOrdersService {
     if (dto.performedBy) data.performedBy = dto.performedBy;
     if (dto.performedAt) data.performedAt = new Date(dto.performedAt);
 
-    return this.prisma.clinicalOrder.update({
+    const updated = await this.prisma.clinicalOrder.update({
       where: { id },
       data,
     });
+
+    // Write structured observations from result data (async, non-blocking)
+    if (dto.resultData && typeof dto.resultData === 'object') {
+      this.observationWriter.writeOrderResults({
+        tenantId,
+        patientId: order.patientId,
+        encounterId: order.encounterId,
+        orderId: id,
+        orderType: order.orderType,
+        resultData: dto.resultData,
+        resultedAt: updated.resultedAt || new Date(),
+        performedBy: dto.performedBy,
+      }).catch(() => {}); // Fire-and-forget; errors logged inside writer
+    }
+
+    return updated;
   }
 
   async cancel(tenantId: string, id: string) {

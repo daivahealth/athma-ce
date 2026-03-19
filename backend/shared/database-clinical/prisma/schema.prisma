@@ -501,6 +501,8 @@ model Patient {
   deviceConnections       PatientDeviceConnection[]
   deviceHealthMetrics     DeviceHealthMetric[]
   membershipSubscriptions MembershipSubscription[]
+  clinicalObservations    ClinicalObservation[]
+  clinicalCodings         EncounterClinicalCoding[]
 
   @@index([tenantId, mrn], map: "idx_patients_tenant_mrn")
   @@index([tenantId, nationalId], map: "idx_patients_tenant_national_id")
@@ -586,6 +588,8 @@ model Encounter {
   clinicalOrders       ClinicalOrder[]
   prescriptionOrders   PrescriptionOrder[]
   aiNoteSuggestions    AiNoteSuggestion[]
+  clinicalObservations ClinicalObservation[]
+  clinicalCodings      EncounterClinicalCoding[]
   triage               Triage?
   inpatientAdmission   InpatientAdmission?
 
@@ -3724,4 +3728,139 @@ model EmbeddingSyncStatus {
   @@index([status, attemptCount], map: "idx_embedding_sync_pending")
   @@index([tenantId, status], map: "idx_embedding_sync_tenant_status")
   @@map("embedding_sync_status")
+}
+
+// ============================================================================
+// CLINICAL ANALYTICS - Structured observation & coding tables
+// ============================================================================
+
+/// Clinical Observations - FHIR Observation pattern for structured clinical measurements
+/// Stores vitals, lab results, imaging findings, assessment scores as individually coded rows.
+/// Note: The underlying table is partitioned by tenant_id + observed_at via raw SQL migration.
+/// Prisma model is used for type generation and non-partitioned dev environments.
+model ClinicalObservation {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  patientId       String    @map("patient_id") @db.Uuid
+  encounterId     String?   @map("encounter_id") @db.Uuid
+  orderId         String?   @map("order_id") @db.Uuid
+
+  // Observation coding (LOINC for vitals/labs, SNOMED for clinical findings)
+  code            String    @db.VarChar(20)
+  codeSystem      String    @map("code_system") @db.VarChar(20) // LOINC, SNOMED-CT
+  displayName     String    @map("display_name") @db.VarChar(255)
+  displayNameAr   String?   @map("display_name_ar") @db.VarChar(255)
+  category        String    @db.VarChar(50) // vital-signs, laboratory, imaging, exam, score
+
+  // Value - one of these will be populated per observation
+  valueNumeric    Decimal?  @map("value_numeric") @db.Decimal(12, 4)
+  valueString     String?   @map("value_string") @db.Text
+  valueCode       String?   @map("value_code") @db.VarChar(50)
+  valueCodeSystem String?   @map("value_code_system") @db.VarChar(20)
+
+  // Unit of measurement
+  unit            String?   @db.VarChar(50)
+
+  // Reference ranges for interpretation
+  refRangeLow     Decimal?  @map("ref_range_low") @db.Decimal(12, 4)
+  refRangeHigh    Decimal?  @map("ref_range_high") @db.Decimal(12, 4)
+  interpretation  String?   @db.VarChar(20) // normal, high, low, critical_high, critical_low, abnormal
+
+  // Provenance
+  observedAt      DateTime  @map("observed_at") @db.Timestamptz(6)
+  observedBy      String?   @map("observed_by") @db.Uuid
+  sourceType      String    @map("source_type") @db.VarChar(30) // triage, lab_result, imaging_result, assessment, manual
+  sourceId        String?   @map("source_id") @db.Uuid
+
+  // Relations
+  patient         Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounter       Encounter? @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, patientId, code], map: "idx_obs_tenant_patient_code")
+  @@index([tenantId, code, observedAt], map: "idx_obs_tenant_code_time")
+  @@index([tenantId, encounterId], map: "idx_obs_tenant_encounter")
+  @@index([tenantId, category, observedAt], map: "idx_obs_tenant_category_time")
+  @@index([tenantId, orderId], map: "idx_obs_tenant_order")
+  @@index([tenantId, patientId, category, observedAt], map: "idx_obs_tenant_patient_category_time")
+  @@map("clinical_observations")
+}
+
+/// Observation Code Catalog - Reference table for LOINC/SNOMED observation codes
+model ObservationCodeCatalog {
+  id            String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String?  @map("tenant_id") @db.Uuid // NULL = global
+  code          String   @db.VarChar(20)
+  codeSystem    String   @map("code_system") @db.VarChar(20) // LOINC, SNOMED-CT
+  displayName   String   @map("display_name") @db.VarChar(255)
+  displayNameAr String?  @map("display_name_ar") @db.VarChar(255)
+  category      String   @db.VarChar(50) // vital-signs, laboratory, imaging, score
+  dataType      String   @map("data_type") @db.VarChar(20) // numeric, string, coded
+  defaultUnit   String?  @map("default_unit") @db.VarChar(50)
+  refRangeLow   Decimal? @map("ref_range_low") @db.Decimal(12, 4)
+  refRangeHigh  Decimal? @map("ref_range_high") @db.Decimal(12, 4)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code, codeSystem], map: "ux_obs_code_system")
+  @@index([tenantId, category, isActive], map: "idx_obs_catalog_tenant_category")
+  @@map("observation_code_catalog")
+}
+
+/// Encounter Clinical Codings - Structured coded data captured during AI-assisted charting
+/// Written when clinician accepts/rejects AI coding suggestions or manually adds codes.
+/// Pairs ICD-10 with SNOMED equivalents. Tracks AI provenance (confidence, rationale).
+model EncounterClinicalCoding {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  encounterId     String    @map("encounter_id") @db.Uuid
+  patientId       String    @map("patient_id") @db.Uuid
+
+  // Primary code
+  code            String    @db.VarChar(20) // E11.9, J06.9, 73211009
+  codeSystem      String    @map("code_system") @db.VarChar(20) // ICD-10, SNOMED-CT, CPT, LOINC
+  displayName     String    @map("display_name") @db.VarChar(500)
+  displayNameAr   String?   @map("display_name_ar") @db.VarChar(500)
+
+  // Paired SNOMED code (when primary is ICD-10, store SNOMED equivalent)
+  snomedCode      String?   @map("snomed_code") @db.VarChar(20)
+  snomedDisplay   String?   @map("snomed_display") @db.VarChar(500)
+
+  // Classification
+  codingType      String    @map("coding_type") @db.VarChar(30) // diagnosis, symptom, finding, procedure, medication
+
+  // AI provenance
+  confidence      Float?    @map("confidence") // 0.0-1.0 from AI
+  rationale       String?   @map("rationale") @db.Text
+  aiSuggestionId  String?   @map("ai_suggestion_id") @db.Uuid // FK to ai_note_suggestions
+
+  // Source context (which part of the note triggered this)
+  sourceBlockType String?   @map("source_block_type") @db.VarChar(50) // chiefHpi, history, notes, assessment
+  sourceText      String?   @map("source_text") @db.Text
+
+  // Clinician action
+  status          String    @default("accepted") @map("status") @db.VarChar(20) // accepted, rejected, modified, manual
+  reviewedBy      String?   @map("reviewed_by") @db.Uuid
+  reviewedAt      DateTime? @map("reviewed_at") @db.Timestamptz(6)
+
+  // Catalog validation
+  catalogMatch    Boolean   @default(false) @map("catalog_match")
+  isBillable      Boolean?  @map("is_billable")
+
+  // Relations
+  encounter       Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  patient         Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, encounterId], map: "idx_clinical_codings_encounter")
+  @@index([tenantId, patientId], map: "idx_clinical_codings_patient")
+  @@index([tenantId, code, codeSystem], map: "idx_clinical_codings_code")
+  @@index([tenantId, codingType, createdAt], map: "idx_clinical_codings_type_date")
+  @@index([tenantId, status], map: "idx_clinical_codings_status")
+  @@map("encounter_clinical_codings")
 }

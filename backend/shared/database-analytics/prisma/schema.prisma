@@ -253,3 +253,70 @@ model SavedReport {
   @@index([tenantId, isFavorite], map: "idx_saved_report_favorite")
   @@map("saved_reports")
 }
+
+// ============================================================================
+// PRE-AGGREGATED CLINICAL ANALYTICS
+// ============================================================================
+
+/// Daily aggregated clinical observations - refreshed by scheduled job
+model ClinicalObservationDaily {
+  id              String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  facilityId      String?  @map("facility_id") @db.Uuid
+  departmentId    String?  @map("department_id") @db.Uuid
+  observationDate DateTime @map("observation_date") @db.Date
+
+  // What was measured
+  code            String   @db.VarChar(20)         // LOINC code
+  codeSystem      String   @map("code_system") @db.VarChar(20)
+  category        String   @db.VarChar(50)
+
+  // Aggregates
+  recordCount     Int      @map("record_count")
+  avgValue        Decimal? @map("avg_value") @db.Decimal(12, 4)
+  minValue        Decimal? @map("min_value") @db.Decimal(12, 4)
+  maxValue        Decimal? @map("max_value") @db.Decimal(12, 4)
+  p50Value        Decimal? @map("p50_value") @db.Decimal(12, 4)  // Median
+  p95Value        Decimal? @map("p95_value") @db.Decimal(12, 4)
+
+  // Abnormal counts
+  normalCount       Int    @default(0) @map("normal_count")
+  abnormalHighCount  Int   @default(0) @map("abnormal_high_count")
+  abnormalLowCount   Int   @default(0) @map("abnormal_low_count")
+  criticalCount      Int   @default(0) @map("critical_count")
+
+  // Unique patients measured
+  uniquePatients  Int      @default(0) @map("unique_patients")
+
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, facilityId, departmentId, observationDate, code], map: "ux_obs_daily_key")
+  @@index([tenantId, code, observationDate], map: "idx_obs_daily_tenant_code_date")
+  @@index([tenantId, category, observationDate], map: "idx_obs_daily_tenant_cat_date")
+  @@map("clinical_observation_daily")
+}
+
+/// Daily aggregated diagnosis counts - refreshed by scheduled job
+model DiagnosisDailyAggregate {
+  id              String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  facilityId      String?  @map("facility_id") @db.Uuid
+  departmentId    String?  @map("department_id") @db.Uuid
+  diagnosisDate   DateTime @map("diagnosis_date") @db.Date
+
+  icdCode         String   @map("icd_code") @db.VarChar(20)
+  icdBlock        String?  @map("icd_block") @db.VarChar(10)  // First 3 chars
+  diagnosisName   String   @map("diagnosis_name") @db.VarChar(500)
+  diagnosisType   String   @map("diagnosis_type") @db.VarChar(20)
+
+  encounterCount  Int      @map("encounter_count")
+  uniquePatients  Int      @map("unique_patients")
+  primaryCount    Int      @default(0) @map("primary_count")
+  chronicCount    Int      @default(0) @map("chronic_count")
+
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, facilityId, departmentId, diagnosisDate, icdCode, diagnosisType], map: "ux_dx_daily_key")
+  @@index([tenantId, icdCode, diagnosisDate], map: "idx_dx_daily_tenant_code_date")
+  @@map("diagnosis_daily_aggregate")
+}

@@ -11,9 +11,10 @@ import { EncounterService } from './encounter.service';
 import { EncounterNumberGeneratorService } from './encounter-number-generator.service';
 import { TriageController } from './triage.controller';
 import { TriageService } from './triage.service';
+import { ObservationWriterModule } from '../observations/observation-writer.module';
 
 @Module({
-  imports: [ClinicalDatabaseModule],
+  imports: [ClinicalDatabaseModule, ObservationWriterModule],
   controllers: [EncounterController, TriageController],
   providers: [EncounterService, EncounterNumberGeneratorService, TriageService],
   exports: [EncounterService, EncounterNumberGeneratorService, TriageService],
