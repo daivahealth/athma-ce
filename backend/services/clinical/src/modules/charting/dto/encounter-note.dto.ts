@@ -1,5 +1,4 @@
-import { IsString, IsUUID, IsOptional, IsEnum, IsBoolean, IsObject } from 'class-validator';
-import { Exclude, Type } from 'class-transformer';
+import { IsString, IsUUID, IsOptional, IsEnum, IsBoolean, Allow } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // Enum for note types
@@ -61,8 +60,7 @@ export class CreateEncounterNoteDto {
 
   @ApiPropertyOptional({ description: 'Note content as JSON' })
   @IsOptional()
-  @IsObject()
-  @Type(() => Object)
+  @Allow()
   content?: Record<string, any>;
 }
 
@@ -90,8 +88,7 @@ export class UpdateEncounterNoteDto {
 
   @ApiPropertyOptional({ description: 'Note content as JSON' })
   @IsOptional()
-  @IsObject()
-  @Type(() => Object)
+  @Allow()
   content?: Record<string, any>;
 }
 
