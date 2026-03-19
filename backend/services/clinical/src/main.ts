@@ -78,5 +78,7 @@ async function bootstrap() {
 
 bootstrap().catch((error) => {
   logger.fatal({ error }, 'Clinical service failed to bootstrap');
+  // Log the raw error for better debugging (pino may not serialize non-Error objects)
+  console.error('Bootstrap error details:', error);
   process.exit(1);
 });
