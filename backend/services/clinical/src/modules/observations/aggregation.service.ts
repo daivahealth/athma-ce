@@ -28,7 +28,7 @@ export class AggregationService {
   async aggregateYesterday(): Promise<void> {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const dateStr = yesterday.toISOString().split('T')[0];
+    const dateStr = this.toDateString(yesterday);
 
     this.logger.log(`Starting daily aggregation for ${dateStr}`);
 
@@ -119,11 +119,15 @@ export class AggregationService {
     const end = new Date(endDate);
 
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = this.toDateString(d);
       await this.aggregateObservationsForDate(dateStr);
       await this.aggregateDiagnosesForDate(dateStr);
     }
 
     this.logger.log(`Completed aggregation for range ${startDate} to ${endDate}`);
+  }
+
+  private toDateString(date: Date): string {
+    return date.toISOString().slice(0, 10);
   }
 }

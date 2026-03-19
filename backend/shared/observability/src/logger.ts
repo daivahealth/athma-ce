@@ -63,42 +63,47 @@ function createPinoLogger(): PinoLogger {
     },
   };
 
-  const logDir = config.logging.logDir;
+  const logDir = config.logging.logDir
+    ? path.resolve(process.cwd(), config.logging.logDir)
+    : undefined;
 
   // When LOG_DIR is set, write both pretty stdout and JSON file
   if (logDir) {
-    // Ensure log directory exists
-    if (!fs.existsSync(logDir)) {
-      fs.mkdirSync(logDir, { recursive: true });
-    }
+    try {
+      if (!fs.existsSync(logDir)) {
+        fs.mkdirSync(logDir, { recursive: true });
+      }
 
-    const logFile = path.join(logDir, `${config.exporter.serviceName}.log`);
-    const fileStream = pino.destination({
-      dest: logFile,
-      sync: config.exporter.environment !== 'production',
-    });
-
-    const streams: pino.StreamEntry[] = [];
-
-    // Pretty-print to stdout for developer terminal
-    if (config.logging.pretty) {
-      // Import pino-pretty as a stream (required when using multistream)
-      const pinoPretty = require('pino-pretty');
-      streams.push({
-        stream: pinoPretty({
-          colorize: true,
-          translateTime: 'SYS:standard',
-          ignore: 'pid,hostname',
-        }),
+      const logFile = path.join(logDir, `${config.exporter.serviceName}.log`);
+      const fileStream = pino.destination({
+        dest: logFile,
+        sync: config.exporter.environment !== 'production',
       });
-    } else {
-      streams.push({ stream: process.stdout });
+
+      const streams: pino.StreamEntry[] = [];
+
+      if (config.logging.pretty) {
+        const pinoPretty = require('pino-pretty');
+        streams.push({
+          stream: pinoPretty({
+            colorize: true,
+            translateTime: 'SYS:standard',
+            ignore: 'pid,hostname',
+          }),
+        });
+      } else {
+        streams.push({ stream: process.stdout });
+      }
+
+      streams.push({ stream: fileStream });
+
+      return pino(baseOptions, multistream(streams));
+    } catch (error) {
+      console.warn(
+        `[Observability] Failed to initialize file logging at ${logDir}, falling back to stdout only.`,
+        error
+      );
     }
-
-    // JSON file for Promtail
-    streams.push({ stream: fileStream });
-
-    return pino(baseOptions, multistream(streams));
   }
 
   // No LOG_DIR: standard single-destination output

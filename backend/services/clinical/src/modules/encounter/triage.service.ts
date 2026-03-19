@@ -4,13 +4,15 @@
  * Business logic for triage management
  */
 
-import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import { CreateTriageDto, UpdateTriageDto } from './dto/triage.dto';
 import { ObservationWriterService } from '../observations/observation-writer.service';
 
 @Injectable()
 export class TriageService {
+  private readonly logger = new Logger(TriageService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly observationWriter: ObservationWriterService,
@@ -109,7 +111,9 @@ export class TriageService {
         triageId: triage.id,
         observedAt: triage.triageTime || new Date(),
         observedBy: dto.triageStaffId,
-      }).catch(() => {}); // Fire-and-forget; errors logged inside writer
+      }).catch((err) => {
+        this.logger.error(`Failed to write observations for triage ${triage.id}: ${err?.message}`, err?.stack);
+      });
     }
 
     return triage;
@@ -252,7 +256,9 @@ export class TriageService {
         triageId: id,
         observedAt: updated.triageTime || new Date(),
         observedBy: dto.triageStaffId || existing.triageStaffId,
-      }).catch(() => {});
+      }).catch((err) => {
+        this.logger.error(`Failed to write observations for triage update ${id}: ${err?.message}`, err?.stack);
+      });
     }
 
     return updated;

@@ -34,57 +34,40 @@ export interface UpdateClinicalCodingDto {
 export class ClinicalCodingsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private buildCodingCreateData(tenantId: string, dto: CreateClinicalCodingDto) {
+    return {
+      tenantId,
+      encounterId: dto.encounterId,
+      patientId: dto.patientId,
+      code: dto.code,
+      codeSystem: dto.codeSystem,
+      displayName: dto.displayName,
+      displayNameAr: dto.displayNameAr ?? null,
+      snomedCode: dto.snomedCode ?? null,
+      snomedDisplay: dto.snomedDisplay ?? null,
+      codingType: dto.codingType,
+      confidence: dto.confidence ?? null,
+      rationale: dto.rationale ?? null,
+      aiSuggestionId: dto.aiSuggestionId ?? null,
+      sourceBlockType: dto.sourceBlockType ?? null,
+      sourceText: dto.sourceText ?? null,
+      status: dto.status,
+      reviewedBy: dto.reviewedBy ?? null,
+      reviewedAt: dto.reviewedBy ? new Date() : null,
+      catalogMatch: dto.catalogMatch ?? false,
+      isBillable: dto.isBillable ?? null,
+    };
+  }
+
   async create(tenantId: string, dto: CreateClinicalCodingDto) {
     return this.prisma.encounterClinicalCoding.create({
-      data: {
-        tenantId,
-        encounterId: dto.encounterId,
-        patientId: dto.patientId,
-        code: dto.code,
-        codeSystem: dto.codeSystem,
-        displayName: dto.displayName,
-        displayNameAr: dto.displayNameAr,
-        snomedCode: dto.snomedCode,
-        snomedDisplay: dto.snomedDisplay,
-        codingType: dto.codingType,
-        confidence: dto.confidence,
-        rationale: dto.rationale,
-        aiSuggestionId: dto.aiSuggestionId,
-        sourceBlockType: dto.sourceBlockType,
-        sourceText: dto.sourceText,
-        status: dto.status,
-        reviewedBy: dto.reviewedBy,
-        reviewedAt: dto.reviewedBy ? new Date() : undefined,
-        catalogMatch: dto.catalogMatch ?? false,
-        isBillable: dto.isBillable,
-      },
+      data: this.buildCodingCreateData(tenantId, dto),
     });
   }
 
   async createMany(tenantId: string, dtos: CreateClinicalCodingDto[]) {
     return this.prisma.encounterClinicalCoding.createMany({
-      data: dtos.map((dto) => ({
-        tenantId,
-        encounterId: dto.encounterId,
-        patientId: dto.patientId,
-        code: dto.code,
-        codeSystem: dto.codeSystem,
-        displayName: dto.displayName,
-        displayNameAr: dto.displayNameAr,
-        snomedCode: dto.snomedCode,
-        snomedDisplay: dto.snomedDisplay,
-        codingType: dto.codingType,
-        confidence: dto.confidence,
-        rationale: dto.rationale,
-        aiSuggestionId: dto.aiSuggestionId,
-        sourceBlockType: dto.sourceBlockType,
-        sourceText: dto.sourceText,
-        status: dto.status,
-        reviewedBy: dto.reviewedBy,
-        reviewedAt: dto.reviewedBy ? new Date() : undefined,
-        catalogMatch: dto.catalogMatch ?? false,
-        isBillable: dto.isBillable,
-      })),
+      data: dtos.map((dto) => this.buildCodingCreateData(tenantId, dto)),
     });
   }
 

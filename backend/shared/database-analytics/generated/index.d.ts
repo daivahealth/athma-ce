@@ -53,10 +53,20 @@ export type SemanticJoinPath = $Result.DefaultSelection<Prisma.$SemanticJoinPath
  * Saved Reports - Persisted report definitions for quick access
  */
 export type SavedReport = $Result.DefaultSelection<Prisma.$SavedReportPayload>
+/**
+ * Model ClinicalObservationDaily
+ * Daily aggregated clinical observations - refreshed by scheduled job
+ */
+export type ClinicalObservationDaily = $Result.DefaultSelection<Prisma.$ClinicalObservationDailyPayload>
+/**
+ * Model DiagnosisDailyAggregate
+ * Daily aggregated diagnosis counts - refreshed by scheduled job
+ */
+export type DiagnosisDailyAggregate = $Result.DefaultSelection<Prisma.$DiagnosisDailyAggregatePayload>
 
 /**
  * ##  Prisma Client ʲˢ
- * 
+ *
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
@@ -65,19 +75,19 @@ export type SavedReport = $Result.DefaultSelection<Prisma.$SavedReportPayload>
  * const auditLogs = await prisma.auditLog.findMany()
  * ```
  *
- * 
+ *
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
     /**
    * ##  Prisma Client ʲˢ
-   * 
+   *
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
@@ -86,12 +96,12 @@ export class PrismaClient<
    * const auditLogs = await prisma.auditLog.findMany()
    * ```
    *
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
   constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
-  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): void;
+  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
 
   /**
    * Connect with the database
@@ -103,20 +113,13 @@ export class PrismaClient<
    */
   $disconnect(): $Utils.JsPromise<void>;
 
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
-
 /**
    * Executes a prepared raw query and returns the number of affected rows.
    * @example
    * ```
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -128,7 +131,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -139,7 +142,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -151,7 +154,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -175,7 +178,9 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
 
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb, ExtArgs>
+  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
+    extArgs: ExtArgs
+  }>>
 
       /**
    * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
@@ -185,7 +190,7 @@ export class PrismaClient<
     * const auditLogs = await prisma.auditLog.findMany()
     * ```
     */
-  get auditLog(): Prisma.AuditLogDelegate<ExtArgs>;
+  get auditLog(): Prisma.AuditLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.usageEvent`: Exposes CRUD operations for the **UsageEvent** model.
@@ -195,7 +200,7 @@ export class PrismaClient<
     * const usageEvents = await prisma.usageEvent.findMany()
     * ```
     */
-  get usageEvent(): Prisma.UsageEventDelegate<ExtArgs>;
+  get usageEvent(): Prisma.UsageEventDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.aiQueryLog`: Exposes CRUD operations for the **AiQueryLog** model.
@@ -205,7 +210,7 @@ export class PrismaClient<
     * const aiQueryLogs = await prisma.aiQueryLog.findMany()
     * ```
     */
-  get aiQueryLog(): Prisma.AiQueryLogDelegate<ExtArgs>;
+  get aiQueryLog(): Prisma.AiQueryLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.aiUsageMetric`: Exposes CRUD operations for the **AiUsageMetric** model.
@@ -215,7 +220,7 @@ export class PrismaClient<
     * const aiUsageMetrics = await prisma.aiUsageMetric.findMany()
     * ```
     */
-  get aiUsageMetric(): Prisma.AiUsageMetricDelegate<ExtArgs>;
+  get aiUsageMetric(): Prisma.AiUsageMetricDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.semanticMetric`: Exposes CRUD operations for the **SemanticMetric** model.
@@ -225,7 +230,7 @@ export class PrismaClient<
     * const semanticMetrics = await prisma.semanticMetric.findMany()
     * ```
     */
-  get semanticMetric(): Prisma.SemanticMetricDelegate<ExtArgs>;
+  get semanticMetric(): Prisma.SemanticMetricDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.semanticDimension`: Exposes CRUD operations for the **SemanticDimension** model.
@@ -235,7 +240,7 @@ export class PrismaClient<
     * const semanticDimensions = await prisma.semanticDimension.findMany()
     * ```
     */
-  get semanticDimension(): Prisma.SemanticDimensionDelegate<ExtArgs>;
+  get semanticDimension(): Prisma.SemanticDimensionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.semanticJoinPath`: Exposes CRUD operations for the **SemanticJoinPath** model.
@@ -245,7 +250,7 @@ export class PrismaClient<
     * const semanticJoinPaths = await prisma.semanticJoinPath.findMany()
     * ```
     */
-  get semanticJoinPath(): Prisma.SemanticJoinPathDelegate<ExtArgs>;
+  get semanticJoinPath(): Prisma.SemanticJoinPathDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.savedReport`: Exposes CRUD operations for the **SavedReport** model.
@@ -255,7 +260,27 @@ export class PrismaClient<
     * const savedReports = await prisma.savedReport.findMany()
     * ```
     */
-  get savedReport(): Prisma.SavedReportDelegate<ExtArgs>;
+  get savedReport(): Prisma.SavedReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clinicalObservationDaily`: Exposes CRUD operations for the **ClinicalObservationDaily** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClinicalObservationDailies
+    * const clinicalObservationDailies = await prisma.clinicalObservationDaily.findMany()
+    * ```
+    */
+  get clinicalObservationDaily(): Prisma.ClinicalObservationDailyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.diagnosisDailyAggregate`: Exposes CRUD operations for the **DiagnosisDailyAggregate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DiagnosisDailyAggregates
+    * const diagnosisDailyAggregates = await prisma.diagnosisDailyAggregate.findMany()
+    * ```
+    */
+  get diagnosisDailyAggregate(): Prisma.DiagnosisDailyAggregateDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -276,7 +301,6 @@ export namespace Prisma {
   export import PrismaClientRustPanicError = runtime.PrismaClientRustPanicError
   export import PrismaClientInitializationError = runtime.PrismaClientInitializationError
   export import PrismaClientValidationError = runtime.PrismaClientValidationError
-  export import NotFoundError = runtime.NotFoundError
 
   /**
    * Re-export of sql-template-tag
@@ -297,7 +321,7 @@ export namespace Prisma {
   export type DecimalJsLike = runtime.DecimalJsLike
 
   /**
-   * Metrics 
+   * Metrics
    */
   export type Metrics = runtime.Metrics
   export type Metric<T> = runtime.Metric<T>
@@ -315,20 +339,21 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.22.0
-   * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
+   * Prisma Client JS version: 6.19.2
+   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
     client: string
   }
 
-  export const prismaVersion: PrismaVersion 
+  export const prismaVersion: PrismaVersion
 
   /**
    * Utility Types
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -338,15 +363,15 @@ export namespace Prisma {
 
   /**
    * Types of the values used to represent different kinds of `null` values when working with JSON fields.
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   namespace NullTypes {
     /**
     * Type of `Prisma.DbNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.DbNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class DbNull {
@@ -356,9 +381,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.JsonNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.JsonNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class JsonNull {
@@ -368,9 +393,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.AnyNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.AnyNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class AnyNull {
@@ -381,21 +406,21 @@ export namespace Prisma {
 
   /**
    * Helper for filtering JSON entries that have `null` on the database (empty on the db)
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const DbNull: NullTypes.DbNull
 
   /**
    * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const JsonNull: NullTypes.JsonNull
 
   /**
    * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const AnyNull: NullTypes.AnyNull
@@ -583,7 +608,7 @@ export namespace Prisma {
   type AtLeast<O extends object, K extends string> = NoExpand<
     O extends unknown
     ? | (K extends keyof O ? { [P in K]: O[P] } & O : O)
-      | {[P in keyof O as P extends K ? K : never]-?: O[P]} & O
+      | {[P in keyof O as P extends K ? P : never]-?: O[P]} & O
     : never>;
 
   type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
@@ -704,7 +729,9 @@ export namespace Prisma {
     SemanticMetric: 'SemanticMetric',
     SemanticDimension: 'SemanticDimension',
     SemanticJoinPath: 'SemanticJoinPath',
-    SavedReport: 'SavedReport'
+    SavedReport: 'SavedReport',
+    ClinicalObservationDaily: 'ClinicalObservationDaily',
+    DiagnosisDailyAggregate: 'DiagnosisDailyAggregate'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -714,13 +741,16 @@ export namespace Prisma {
     db?: Datasource
   }
 
-  interface TypeMapCb extends $Utils.Fn<{extArgs: $Extensions.InternalArgs, clientOptions: PrismaClientOptions }, $Utils.Record<string, any>> {
-    returns: Prisma.TypeMap<this['params']['extArgs'], this['params']['clientOptions']>
+  interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
+    returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
   }
 
-  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
+  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> = {
+    globalOmitOptions: {
+      omit: GlobalOmitOptions
+    }
     meta: {
-      modelProps: "auditLog" | "usageEvent" | "aiQueryLog" | "aiUsageMetric" | "semanticMetric" | "semanticDimension" | "semanticJoinPath" | "savedReport"
+      modelProps: "auditLog" | "usageEvent" | "aiQueryLog" | "aiUsageMetric" | "semanticMetric" | "semanticDimension" | "semanticJoinPath" | "savedReport" | "clinicalObservationDaily" | "diagnosisDailyAggregate"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -775,6 +805,10 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.AuditLogUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AuditLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
           }
           upsert: {
             args: Prisma.AuditLogUpsertArgs<ExtArgs>
@@ -846,6 +880,10 @@ export namespace Prisma {
             args: Prisma.UsageEventUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.UsageEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageEventPayload>[]
+          }
           upsert: {
             args: Prisma.UsageEventUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$UsageEventPayload>
@@ -915,6 +953,10 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.AiQueryLogUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AiQueryLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>[]
           }
           upsert: {
             args: Prisma.AiQueryLogUpsertArgs<ExtArgs>
@@ -986,6 +1028,10 @@ export namespace Prisma {
             args: Prisma.AiUsageMetricUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.AiUsageMetricUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>[]
+          }
           upsert: {
             args: Prisma.AiUsageMetricUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>
@@ -1055,6 +1101,10 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.SemanticMetricUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SemanticMetricUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>[]
           }
           upsert: {
             args: Prisma.SemanticMetricUpsertArgs<ExtArgs>
@@ -1126,6 +1176,10 @@ export namespace Prisma {
             args: Prisma.SemanticDimensionUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.SemanticDimensionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>[]
+          }
           upsert: {
             args: Prisma.SemanticDimensionUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>
@@ -1195,6 +1249,10 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.SemanticJoinPathUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SemanticJoinPathUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>[]
           }
           upsert: {
             args: Prisma.SemanticJoinPathUpsertArgs<ExtArgs>
@@ -1266,6 +1324,10 @@ export namespace Prisma {
             args: Prisma.SavedReportUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.SavedReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>[]
+          }
           upsert: {
             args: Prisma.SavedReportUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>
@@ -1281,6 +1343,154 @@ export namespace Prisma {
           count: {
             args: Prisma.SavedReportCountArgs<ExtArgs>
             result: $Utils.Optional<SavedReportCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClinicalObservationDaily: {
+        payload: Prisma.$ClinicalObservationDailyPayload<ExtArgs>
+        fields: Prisma.ClinicalObservationDailyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClinicalObservationDailyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClinicalObservationDailyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>
+          }
+          findFirst: {
+            args: Prisma.ClinicalObservationDailyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClinicalObservationDailyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>
+          }
+          findMany: {
+            args: Prisma.ClinicalObservationDailyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>[]
+          }
+          create: {
+            args: Prisma.ClinicalObservationDailyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>
+          }
+          createMany: {
+            args: Prisma.ClinicalObservationDailyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClinicalObservationDailyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>[]
+          }
+          delete: {
+            args: Prisma.ClinicalObservationDailyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>
+          }
+          update: {
+            args: Prisma.ClinicalObservationDailyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClinicalObservationDailyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClinicalObservationDailyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClinicalObservationDailyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClinicalObservationDailyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalObservationDailyPayload>
+          }
+          aggregate: {
+            args: Prisma.ClinicalObservationDailyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClinicalObservationDaily>
+          }
+          groupBy: {
+            args: Prisma.ClinicalObservationDailyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalObservationDailyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClinicalObservationDailyCountArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalObservationDailyCountAggregateOutputType> | number
+          }
+        }
+      }
+      DiagnosisDailyAggregate: {
+        payload: Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>
+        fields: Prisma.DiagnosisDailyAggregateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DiagnosisDailyAggregateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DiagnosisDailyAggregateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>
+          }
+          findFirst: {
+            args: Prisma.DiagnosisDailyAggregateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DiagnosisDailyAggregateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>
+          }
+          findMany: {
+            args: Prisma.DiagnosisDailyAggregateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>[]
+          }
+          create: {
+            args: Prisma.DiagnosisDailyAggregateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>
+          }
+          createMany: {
+            args: Prisma.DiagnosisDailyAggregateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DiagnosisDailyAggregateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>[]
+          }
+          delete: {
+            args: Prisma.DiagnosisDailyAggregateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>
+          }
+          update: {
+            args: Prisma.DiagnosisDailyAggregateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>
+          }
+          deleteMany: {
+            args: Prisma.DiagnosisDailyAggregateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DiagnosisDailyAggregateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DiagnosisDailyAggregateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>[]
+          }
+          upsert: {
+            args: Prisma.DiagnosisDailyAggregateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisDailyAggregatePayload>
+          }
+          aggregate: {
+            args: Prisma.DiagnosisDailyAggregateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDiagnosisDailyAggregate>
+          }
+          groupBy: {
+            args: Prisma.DiagnosisDailyAggregateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisDailyAggregateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DiagnosisDailyAggregateCountArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisDailyAggregateCountAggregateOutputType> | number
           }
         }
       }
@@ -1327,16 +1537,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1351,8 +1569,38 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
+    /**
+     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
+     */
+    adapter?: runtime.SqlDriverAdapterFactory | null
+    /**
+     * Global configuration for omitting model fields by default.
+     * 
+     * @example
+     * ```
+     * const prisma = new PrismaClient({
+     *   omit: {
+     *     user: {
+     *       password: true
+     *     }
+     *   }
+     * })
+     * ```
+     */
+    omit?: Prisma.GlobalOmitConfig
   }
-
+  export type GlobalOmitConfig = {
+    auditLog?: AuditLogOmit
+    usageEvent?: UsageEventOmit
+    aiQueryLog?: AiQueryLogOmit
+    aiUsageMetric?: AiUsageMetricOmit
+    semanticMetric?: SemanticMetricOmit
+    semanticDimension?: SemanticDimensionOmit
+    semanticJoinPath?: SemanticJoinPathOmit
+    savedReport?: SavedReportOmit
+    clinicalObservationDaily?: ClinicalObservationDailyOmit
+    diagnosisDailyAggregate?: DiagnosisDailyAggregateOmit
+  }
 
   /* Types for Logging */
   export type LogLevel = 'info' | 'query' | 'warn' | 'error'
@@ -1361,10 +1609,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -1393,6 +1646,7 @@ export namespace Prisma {
     | 'createManyAndReturn'
     | 'update'
     | 'updateMany'
+    | 'updateManyAndReturn'
     | 'upsert'
     | 'delete'
     | 'deleteMany'
@@ -1403,25 +1657,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -1642,6 +1877,17 @@ export namespace Prisma {
     receivedAt?: boolean
   }, ExtArgs["result"]["auditLog"]>
 
+  export type AuditLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    actorId?: boolean
+    action?: boolean
+    resource?: boolean
+    metadata?: boolean
+    occurredAt?: boolean
+    receivedAt?: boolean
+  }, ExtArgs["result"]["auditLog"]>
+
   export type AuditLogSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -1653,6 +1899,7 @@ export namespace Prisma {
     receivedAt?: boolean
   }
 
+  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "actorId" | "action" | "resource" | "metadata" | "occurredAt" | "receivedAt", ExtArgs["result"]["auditLog"]>
 
   export type $AuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AuditLog"
@@ -1672,12 +1919,12 @@ export namespace Prisma {
 
   type AuditLogGetPayload<S extends boolean | null | undefined | AuditLogDefaultArgs> = $Result.GetResult<Prisma.$AuditLogPayload, S>
 
-  type AuditLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<AuditLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type AuditLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AuditLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: AuditLogCountAggregateInputType | true
     }
 
-  export interface AuditLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface AuditLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AuditLog'], meta: { name: 'AuditLog' } }
     /**
      * Find zero or one AuditLog that matches the filter.
@@ -1690,10 +1937,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends AuditLogFindUniqueArgs>(args: SelectSubset<T, AuditLogFindUniqueArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends AuditLogFindUniqueArgs>(args: SelectSubset<T, AuditLogFindUniqueArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one AuditLog that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one AuditLog that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {AuditLogFindUniqueOrThrowArgs} args - Arguments to find a AuditLog
      * @example
@@ -1704,7 +1951,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AuditLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AuditLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends AuditLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AuditLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first AuditLog that matches the filter.
@@ -1719,7 +1966,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends AuditLogFindFirstArgs>(args?: SelectSubset<T, AuditLogFindFirstArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends AuditLogFindFirstArgs>(args?: SelectSubset<T, AuditLogFindFirstArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first AuditLog that matches the filter or
@@ -1735,7 +1982,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends AuditLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AuditLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends AuditLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AuditLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more AuditLogs that matches the filter.
@@ -1753,7 +2000,7 @@ export namespace Prisma {
      * const auditLogWithIdOnly = await prisma.auditLog.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AuditLogFindManyArgs>(args?: SelectSubset<T, AuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends AuditLogFindManyArgs>(args?: SelectSubset<T, AuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a AuditLog.
@@ -1767,7 +2014,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends AuditLogCreateArgs>(args: SelectSubset<T, AuditLogCreateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends AuditLogCreateArgs>(args: SelectSubset<T, AuditLogCreateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many AuditLogs.
@@ -1795,7 +2042,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many AuditLogs and only return the `id`
-     * const auditLogWithIdOnly = await prisma.auditLog.createManyAndReturn({ 
+     * const auditLogWithIdOnly = await prisma.auditLog.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -1805,7 +2052,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends AuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends AuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a AuditLog.
@@ -1819,7 +2066,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends AuditLogDeleteArgs>(args: SelectSubset<T, AuditLogDeleteArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends AuditLogDeleteArgs>(args: SelectSubset<T, AuditLogDeleteArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one AuditLog.
@@ -1836,7 +2083,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AuditLogUpdateArgs>(args: SelectSubset<T, AuditLogUpdateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends AuditLogUpdateArgs>(args: SelectSubset<T, AuditLogUpdateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more AuditLogs.
@@ -1872,6 +2119,36 @@ export namespace Prisma {
     updateMany<T extends AuditLogUpdateManyArgs>(args: SelectSubset<T, AuditLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more AuditLogs and returns the data updated in the database.
+     * @param {AuditLogUpdateManyAndReturnArgs} args - Arguments to update many AuditLogs.
+     * @example
+     * // Update many AuditLogs
+     * const auditLog = await prisma.auditLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AuditLogUpdateManyAndReturnArgs>(args: SelectSubset<T, AuditLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one AuditLog.
      * @param {AuditLogUpsertArgs} args - Arguments to update or create a AuditLog.
      * @example
@@ -1888,7 +2165,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends AuditLogUpsertArgs>(args: SelectSubset<T, AuditLogUpsertArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends AuditLogUpsertArgs>(args: SelectSubset<T, AuditLogUpsertArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -2028,7 +2305,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__AuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2057,7 +2334,7 @@ export namespace Prisma {
 
   /**
    * Fields of the AuditLog model
-   */ 
+   */
   interface AuditLogFieldRefs {
     readonly id: FieldRef<"AuditLog", 'String'>
     readonly tenantId: FieldRef<"AuditLog", 'String'>
@@ -2080,6 +2357,10 @@ export namespace Prisma {
      */
     select?: AuditLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
      * Filter, which AuditLog to fetch.
      */
     where: AuditLogWhereUniqueInput
@@ -2094,6 +2375,10 @@ export namespace Prisma {
      */
     select?: AuditLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
      * Filter, which AuditLog to fetch.
      */
     where: AuditLogWhereUniqueInput
@@ -2107,6 +2392,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AuditLog
      */
     select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
     /**
      * Filter, which AuditLog to fetch.
      */
@@ -2152,6 +2441,10 @@ export namespace Prisma {
      */
     select?: AuditLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
      * Filter, which AuditLog to fetch.
      */
     where?: AuditLogWhereInput
@@ -2196,6 +2489,10 @@ export namespace Prisma {
      */
     select?: AuditLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
      * Filter, which AuditLogs to fetch.
      */
     where?: AuditLogWhereInput
@@ -2235,6 +2532,10 @@ export namespace Prisma {
      */
     select?: AuditLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
      * The data needed to create a AuditLog.
      */
     data: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
@@ -2260,6 +2561,10 @@ export namespace Prisma {
      */
     select?: AuditLogSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
      * The data used to create many AuditLogs.
      */
     data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
@@ -2274,6 +2579,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AuditLog
      */
     select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
     /**
      * The data needed to update a AuditLog.
      */
@@ -2296,6 +2605,36 @@ export namespace Prisma {
      * Filter which AuditLogs to update
      */
     where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog updateManyAndReturn
+   */
+  export type AuditLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data used to update AuditLogs.
+     */
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditLogs to update
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
   }
 
   /**
@@ -2306,6 +2645,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AuditLog
      */
     select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
     /**
      * The filter to search for the AuditLog to update in case it exists.
      */
@@ -2329,6 +2672,10 @@ export namespace Prisma {
      */
     select?: AuditLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
      * Filter which AuditLog to delete.
      */
     where: AuditLogWhereUniqueInput
@@ -2342,6 +2689,10 @@ export namespace Prisma {
      * Filter which AuditLogs to delete
      */
     where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -2352,6 +2703,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AuditLog
      */
     select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
   }
 
 
@@ -2525,6 +2880,14 @@ export namespace Prisma {
     occurredAt?: boolean
   }, ExtArgs["result"]["usageEvent"]>
 
+  export type UsageEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    eventType?: boolean
+    payload?: boolean
+    occurredAt?: boolean
+  }, ExtArgs["result"]["usageEvent"]>
+
   export type UsageEventSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -2533,6 +2896,7 @@ export namespace Prisma {
     occurredAt?: boolean
   }
 
+  export type UsageEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "eventType" | "payload" | "occurredAt", ExtArgs["result"]["usageEvent"]>
 
   export type $UsageEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "UsageEvent"
@@ -2549,12 +2913,12 @@ export namespace Prisma {
 
   type UsageEventGetPayload<S extends boolean | null | undefined | UsageEventDefaultArgs> = $Result.GetResult<Prisma.$UsageEventPayload, S>
 
-  type UsageEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<UsageEventFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type UsageEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UsageEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: UsageEventCountAggregateInputType | true
     }
 
-  export interface UsageEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface UsageEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UsageEvent'], meta: { name: 'UsageEvent' } }
     /**
      * Find zero or one UsageEvent that matches the filter.
@@ -2567,10 +2931,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends UsageEventFindUniqueArgs>(args: SelectSubset<T, UsageEventFindUniqueArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends UsageEventFindUniqueArgs>(args: SelectSubset<T, UsageEventFindUniqueArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one UsageEvent that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one UsageEvent that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {UsageEventFindUniqueOrThrowArgs} args - Arguments to find a UsageEvent
      * @example
@@ -2581,7 +2945,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends UsageEventFindUniqueOrThrowArgs>(args: SelectSubset<T, UsageEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends UsageEventFindUniqueOrThrowArgs>(args: SelectSubset<T, UsageEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first UsageEvent that matches the filter.
@@ -2596,7 +2960,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends UsageEventFindFirstArgs>(args?: SelectSubset<T, UsageEventFindFirstArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends UsageEventFindFirstArgs>(args?: SelectSubset<T, UsageEventFindFirstArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first UsageEvent that matches the filter or
@@ -2612,7 +2976,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends UsageEventFindFirstOrThrowArgs>(args?: SelectSubset<T, UsageEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends UsageEventFindFirstOrThrowArgs>(args?: SelectSubset<T, UsageEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more UsageEvents that matches the filter.
@@ -2630,7 +2994,7 @@ export namespace Prisma {
      * const usageEventWithIdOnly = await prisma.usageEvent.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends UsageEventFindManyArgs>(args?: SelectSubset<T, UsageEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends UsageEventFindManyArgs>(args?: SelectSubset<T, UsageEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a UsageEvent.
@@ -2644,7 +3008,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends UsageEventCreateArgs>(args: SelectSubset<T, UsageEventCreateArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends UsageEventCreateArgs>(args: SelectSubset<T, UsageEventCreateArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many UsageEvents.
@@ -2672,7 +3036,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many UsageEvents and only return the `id`
-     * const usageEventWithIdOnly = await prisma.usageEvent.createManyAndReturn({ 
+     * const usageEventWithIdOnly = await prisma.usageEvent.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -2682,7 +3046,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends UsageEventCreateManyAndReturnArgs>(args?: SelectSubset<T, UsageEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends UsageEventCreateManyAndReturnArgs>(args?: SelectSubset<T, UsageEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a UsageEvent.
@@ -2696,7 +3060,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends UsageEventDeleteArgs>(args: SelectSubset<T, UsageEventDeleteArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends UsageEventDeleteArgs>(args: SelectSubset<T, UsageEventDeleteArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one UsageEvent.
@@ -2713,7 +3077,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends UsageEventUpdateArgs>(args: SelectSubset<T, UsageEventUpdateArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends UsageEventUpdateArgs>(args: SelectSubset<T, UsageEventUpdateArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more UsageEvents.
@@ -2749,6 +3113,36 @@ export namespace Prisma {
     updateMany<T extends UsageEventUpdateManyArgs>(args: SelectSubset<T, UsageEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more UsageEvents and returns the data updated in the database.
+     * @param {UsageEventUpdateManyAndReturnArgs} args - Arguments to update many UsageEvents.
+     * @example
+     * // Update many UsageEvents
+     * const usageEvent = await prisma.usageEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UsageEvents and only return the `id`
+     * const usageEventWithIdOnly = await prisma.usageEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UsageEventUpdateManyAndReturnArgs>(args: SelectSubset<T, UsageEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one UsageEvent.
      * @param {UsageEventUpsertArgs} args - Arguments to update or create a UsageEvent.
      * @example
@@ -2765,7 +3159,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends UsageEventUpsertArgs>(args: SelectSubset<T, UsageEventUpsertArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends UsageEventUpsertArgs>(args: SelectSubset<T, UsageEventUpsertArgs<ExtArgs>>): Prisma__UsageEventClient<$Result.GetResult<Prisma.$UsageEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -2905,7 +3299,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__UsageEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UsageEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2934,7 +3328,7 @@ export namespace Prisma {
 
   /**
    * Fields of the UsageEvent model
-   */ 
+   */
   interface UsageEventFieldRefs {
     readonly id: FieldRef<"UsageEvent", 'String'>
     readonly tenantId: FieldRef<"UsageEvent", 'String'>
@@ -2954,6 +3348,10 @@ export namespace Prisma {
      */
     select?: UsageEventSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
      * Filter, which UsageEvent to fetch.
      */
     where: UsageEventWhereUniqueInput
@@ -2968,6 +3366,10 @@ export namespace Prisma {
      */
     select?: UsageEventSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
      * Filter, which UsageEvent to fetch.
      */
     where: UsageEventWhereUniqueInput
@@ -2981,6 +3383,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UsageEvent
      */
     select?: UsageEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
     /**
      * Filter, which UsageEvent to fetch.
      */
@@ -3026,6 +3432,10 @@ export namespace Prisma {
      */
     select?: UsageEventSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
      * Filter, which UsageEvent to fetch.
      */
     where?: UsageEventWhereInput
@@ -3070,6 +3480,10 @@ export namespace Prisma {
      */
     select?: UsageEventSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
      * Filter, which UsageEvents to fetch.
      */
     where?: UsageEventWhereInput
@@ -3109,6 +3523,10 @@ export namespace Prisma {
      */
     select?: UsageEventSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
      * The data needed to create a UsageEvent.
      */
     data: XOR<UsageEventCreateInput, UsageEventUncheckedCreateInput>
@@ -3134,6 +3552,10 @@ export namespace Prisma {
      */
     select?: UsageEventSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
      * The data used to create many UsageEvents.
      */
     data: UsageEventCreateManyInput | UsageEventCreateManyInput[]
@@ -3148,6 +3570,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UsageEvent
      */
     select?: UsageEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
     /**
      * The data needed to update a UsageEvent.
      */
@@ -3170,6 +3596,36 @@ export namespace Prisma {
      * Filter which UsageEvents to update
      */
     where?: UsageEventWhereInput
+    /**
+     * Limit how many UsageEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UsageEvent updateManyAndReturn
+   */
+  export type UsageEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageEvent
+     */
+    select?: UsageEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
+     * The data used to update UsageEvents.
+     */
+    data: XOR<UsageEventUpdateManyMutationInput, UsageEventUncheckedUpdateManyInput>
+    /**
+     * Filter which UsageEvents to update
+     */
+    where?: UsageEventWhereInput
+    /**
+     * Limit how many UsageEvents to update.
+     */
+    limit?: number
   }
 
   /**
@@ -3180,6 +3636,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UsageEvent
      */
     select?: UsageEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
     /**
      * The filter to search for the UsageEvent to update in case it exists.
      */
@@ -3203,6 +3663,10 @@ export namespace Prisma {
      */
     select?: UsageEventSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
+    /**
      * Filter which UsageEvent to delete.
      */
     where: UsageEventWhereUniqueInput
@@ -3216,6 +3680,10 @@ export namespace Prisma {
      * Filter which UsageEvents to delete
      */
     where?: UsageEventWhereInput
+    /**
+     * Limit how many UsageEvents to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -3226,6 +3694,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UsageEvent
      */
     select?: UsageEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageEvent
+     */
+    omit?: UsageEventOmit<ExtArgs> | null
   }
 
 
@@ -3562,6 +4034,27 @@ export namespace Prisma {
     createdAt?: boolean
   }, ExtArgs["result"]["aiQueryLog"]>
 
+  export type AiQueryLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    userId?: boolean
+    facilityId?: boolean
+    feature?: boolean
+    queryText?: boolean
+    queryPlan?: boolean
+    compiledSql?: boolean
+    resultCount?: boolean
+    executionTimeMs?: boolean
+    modelUsed?: boolean
+    inputTokens?: boolean
+    outputTokens?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    userAgent?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["aiQueryLog"]>
+
   export type AiQueryLogSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -3583,6 +4076,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
+  export type AiQueryLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "userId" | "facilityId" | "feature" | "queryText" | "queryPlan" | "compiledSql" | "resultCount" | "executionTimeMs" | "modelUsed" | "inputTokens" | "outputTokens" | "status" | "errorMessage" | "userAgent" | "ipAddress" | "createdAt", ExtArgs["result"]["aiQueryLog"]>
 
   export type $AiQueryLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AiQueryLog"
@@ -3612,12 +4106,12 @@ export namespace Prisma {
 
   type AiQueryLogGetPayload<S extends boolean | null | undefined | AiQueryLogDefaultArgs> = $Result.GetResult<Prisma.$AiQueryLogPayload, S>
 
-  type AiQueryLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<AiQueryLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type AiQueryLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AiQueryLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: AiQueryLogCountAggregateInputType | true
     }
 
-  export interface AiQueryLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface AiQueryLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AiQueryLog'], meta: { name: 'AiQueryLog' } }
     /**
      * Find zero or one AiQueryLog that matches the filter.
@@ -3630,10 +4124,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends AiQueryLogFindUniqueArgs>(args: SelectSubset<T, AiQueryLogFindUniqueArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends AiQueryLogFindUniqueArgs>(args: SelectSubset<T, AiQueryLogFindUniqueArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one AiQueryLog that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one AiQueryLog that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {AiQueryLogFindUniqueOrThrowArgs} args - Arguments to find a AiQueryLog
      * @example
@@ -3644,7 +4138,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AiQueryLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AiQueryLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends AiQueryLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AiQueryLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first AiQueryLog that matches the filter.
@@ -3659,7 +4153,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends AiQueryLogFindFirstArgs>(args?: SelectSubset<T, AiQueryLogFindFirstArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends AiQueryLogFindFirstArgs>(args?: SelectSubset<T, AiQueryLogFindFirstArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first AiQueryLog that matches the filter or
@@ -3675,7 +4169,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends AiQueryLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AiQueryLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends AiQueryLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AiQueryLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more AiQueryLogs that matches the filter.
@@ -3693,7 +4187,7 @@ export namespace Prisma {
      * const aiQueryLogWithIdOnly = await prisma.aiQueryLog.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AiQueryLogFindManyArgs>(args?: SelectSubset<T, AiQueryLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends AiQueryLogFindManyArgs>(args?: SelectSubset<T, AiQueryLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a AiQueryLog.
@@ -3707,7 +4201,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends AiQueryLogCreateArgs>(args: SelectSubset<T, AiQueryLogCreateArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends AiQueryLogCreateArgs>(args: SelectSubset<T, AiQueryLogCreateArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many AiQueryLogs.
@@ -3735,7 +4229,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many AiQueryLogs and only return the `id`
-     * const aiQueryLogWithIdOnly = await prisma.aiQueryLog.createManyAndReturn({ 
+     * const aiQueryLogWithIdOnly = await prisma.aiQueryLog.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3745,7 +4239,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends AiQueryLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AiQueryLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends AiQueryLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AiQueryLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a AiQueryLog.
@@ -3759,7 +4253,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends AiQueryLogDeleteArgs>(args: SelectSubset<T, AiQueryLogDeleteArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends AiQueryLogDeleteArgs>(args: SelectSubset<T, AiQueryLogDeleteArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one AiQueryLog.
@@ -3776,7 +4270,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AiQueryLogUpdateArgs>(args: SelectSubset<T, AiQueryLogUpdateArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends AiQueryLogUpdateArgs>(args: SelectSubset<T, AiQueryLogUpdateArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more AiQueryLogs.
@@ -3812,6 +4306,36 @@ export namespace Prisma {
     updateMany<T extends AiQueryLogUpdateManyArgs>(args: SelectSubset<T, AiQueryLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more AiQueryLogs and returns the data updated in the database.
+     * @param {AiQueryLogUpdateManyAndReturnArgs} args - Arguments to update many AiQueryLogs.
+     * @example
+     * // Update many AiQueryLogs
+     * const aiQueryLog = await prisma.aiQueryLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AiQueryLogs and only return the `id`
+     * const aiQueryLogWithIdOnly = await prisma.aiQueryLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AiQueryLogUpdateManyAndReturnArgs>(args: SelectSubset<T, AiQueryLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one AiQueryLog.
      * @param {AiQueryLogUpsertArgs} args - Arguments to update or create a AiQueryLog.
      * @example
@@ -3828,7 +4352,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends AiQueryLogUpsertArgs>(args: SelectSubset<T, AiQueryLogUpsertArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends AiQueryLogUpsertArgs>(args: SelectSubset<T, AiQueryLogUpsertArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -3968,7 +4492,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AiQueryLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__AiQueryLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3997,7 +4521,7 @@ export namespace Prisma {
 
   /**
    * Fields of the AiQueryLog model
-   */ 
+   */
   interface AiQueryLogFieldRefs {
     readonly id: FieldRef<"AiQueryLog", 'String'>
     readonly tenantId: FieldRef<"AiQueryLog", 'String'>
@@ -4030,6 +4554,10 @@ export namespace Prisma {
      */
     select?: AiQueryLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
      * Filter, which AiQueryLog to fetch.
      */
     where: AiQueryLogWhereUniqueInput
@@ -4044,6 +4572,10 @@ export namespace Prisma {
      */
     select?: AiQueryLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
      * Filter, which AiQueryLog to fetch.
      */
     where: AiQueryLogWhereUniqueInput
@@ -4057,6 +4589,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiQueryLog
      */
     select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
     /**
      * Filter, which AiQueryLog to fetch.
      */
@@ -4102,6 +4638,10 @@ export namespace Prisma {
      */
     select?: AiQueryLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
      * Filter, which AiQueryLog to fetch.
      */
     where?: AiQueryLogWhereInput
@@ -4146,6 +4686,10 @@ export namespace Prisma {
      */
     select?: AiQueryLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
      * Filter, which AiQueryLogs to fetch.
      */
     where?: AiQueryLogWhereInput
@@ -4185,6 +4729,10 @@ export namespace Prisma {
      */
     select?: AiQueryLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
      * The data needed to create a AiQueryLog.
      */
     data: XOR<AiQueryLogCreateInput, AiQueryLogUncheckedCreateInput>
@@ -4210,6 +4758,10 @@ export namespace Prisma {
      */
     select?: AiQueryLogSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
      * The data used to create many AiQueryLogs.
      */
     data: AiQueryLogCreateManyInput | AiQueryLogCreateManyInput[]
@@ -4224,6 +4776,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiQueryLog
      */
     select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
     /**
      * The data needed to update a AiQueryLog.
      */
@@ -4246,6 +4802,36 @@ export namespace Prisma {
      * Filter which AiQueryLogs to update
      */
     where?: AiQueryLogWhereInput
+    /**
+     * Limit how many AiQueryLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AiQueryLog updateManyAndReturn
+   */
+  export type AiQueryLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
+     * The data used to update AiQueryLogs.
+     */
+    data: XOR<AiQueryLogUpdateManyMutationInput, AiQueryLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AiQueryLogs to update
+     */
+    where?: AiQueryLogWhereInput
+    /**
+     * Limit how many AiQueryLogs to update.
+     */
+    limit?: number
   }
 
   /**
@@ -4256,6 +4842,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiQueryLog
      */
     select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
     /**
      * The filter to search for the AiQueryLog to update in case it exists.
      */
@@ -4279,6 +4869,10 @@ export namespace Prisma {
      */
     select?: AiQueryLogSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
+    /**
      * Filter which AiQueryLog to delete.
      */
     where: AiQueryLogWhereUniqueInput
@@ -4292,6 +4886,10 @@ export namespace Prisma {
      * Filter which AiQueryLogs to delete
      */
     where?: AiQueryLogWhereInput
+    /**
+     * Limit how many AiQueryLogs to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -4302,6 +4900,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiQueryLog
      */
     select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiQueryLog
+     */
+    omit?: AiQueryLogOmit<ExtArgs> | null
   }
 
 
@@ -4631,6 +5233,24 @@ export namespace Prisma {
     updatedAt?: boolean
   }, ExtArgs["result"]["aiUsageMetric"]>
 
+  export type AiUsageMetricSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    feature?: boolean
+    periodType?: boolean
+    periodStart?: boolean
+    queryCount?: boolean
+    successCount?: boolean
+    errorCount?: boolean
+    uniqueUsers?: boolean
+    totalInputTokens?: boolean
+    totalOutputTokens?: boolean
+    avgExecutionTimeMs?: boolean
+    p95ExecutionTimeMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["aiUsageMetric"]>
+
   export type AiUsageMetricSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -4649,6 +5269,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
+  export type AiUsageMetricOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "feature" | "periodType" | "periodStart" | "queryCount" | "successCount" | "errorCount" | "uniqueUsers" | "totalInputTokens" | "totalOutputTokens" | "avgExecutionTimeMs" | "p95ExecutionTimeMs" | "createdAt" | "updatedAt", ExtArgs["result"]["aiUsageMetric"]>
 
   export type $AiUsageMetricPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AiUsageMetric"
@@ -4675,12 +5296,12 @@ export namespace Prisma {
 
   type AiUsageMetricGetPayload<S extends boolean | null | undefined | AiUsageMetricDefaultArgs> = $Result.GetResult<Prisma.$AiUsageMetricPayload, S>
 
-  type AiUsageMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<AiUsageMetricFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type AiUsageMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AiUsageMetricFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: AiUsageMetricCountAggregateInputType | true
     }
 
-  export interface AiUsageMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface AiUsageMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AiUsageMetric'], meta: { name: 'AiUsageMetric' } }
     /**
      * Find zero or one AiUsageMetric that matches the filter.
@@ -4693,10 +5314,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends AiUsageMetricFindUniqueArgs>(args: SelectSubset<T, AiUsageMetricFindUniqueArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends AiUsageMetricFindUniqueArgs>(args: SelectSubset<T, AiUsageMetricFindUniqueArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one AiUsageMetric that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one AiUsageMetric that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {AiUsageMetricFindUniqueOrThrowArgs} args - Arguments to find a AiUsageMetric
      * @example
@@ -4707,7 +5328,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AiUsageMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, AiUsageMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends AiUsageMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, AiUsageMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first AiUsageMetric that matches the filter.
@@ -4722,7 +5343,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends AiUsageMetricFindFirstArgs>(args?: SelectSubset<T, AiUsageMetricFindFirstArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends AiUsageMetricFindFirstArgs>(args?: SelectSubset<T, AiUsageMetricFindFirstArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first AiUsageMetric that matches the filter or
@@ -4738,7 +5359,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends AiUsageMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, AiUsageMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends AiUsageMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, AiUsageMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more AiUsageMetrics that matches the filter.
@@ -4756,7 +5377,7 @@ export namespace Prisma {
      * const aiUsageMetricWithIdOnly = await prisma.aiUsageMetric.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AiUsageMetricFindManyArgs>(args?: SelectSubset<T, AiUsageMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends AiUsageMetricFindManyArgs>(args?: SelectSubset<T, AiUsageMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a AiUsageMetric.
@@ -4770,7 +5391,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends AiUsageMetricCreateArgs>(args: SelectSubset<T, AiUsageMetricCreateArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends AiUsageMetricCreateArgs>(args: SelectSubset<T, AiUsageMetricCreateArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many AiUsageMetrics.
@@ -4798,7 +5419,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many AiUsageMetrics and only return the `id`
-     * const aiUsageMetricWithIdOnly = await prisma.aiUsageMetric.createManyAndReturn({ 
+     * const aiUsageMetricWithIdOnly = await prisma.aiUsageMetric.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -4808,7 +5429,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends AiUsageMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, AiUsageMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends AiUsageMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, AiUsageMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a AiUsageMetric.
@@ -4822,7 +5443,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends AiUsageMetricDeleteArgs>(args: SelectSubset<T, AiUsageMetricDeleteArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends AiUsageMetricDeleteArgs>(args: SelectSubset<T, AiUsageMetricDeleteArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one AiUsageMetric.
@@ -4839,7 +5460,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AiUsageMetricUpdateArgs>(args: SelectSubset<T, AiUsageMetricUpdateArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends AiUsageMetricUpdateArgs>(args: SelectSubset<T, AiUsageMetricUpdateArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more AiUsageMetrics.
@@ -4875,6 +5496,36 @@ export namespace Prisma {
     updateMany<T extends AiUsageMetricUpdateManyArgs>(args: SelectSubset<T, AiUsageMetricUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more AiUsageMetrics and returns the data updated in the database.
+     * @param {AiUsageMetricUpdateManyAndReturnArgs} args - Arguments to update many AiUsageMetrics.
+     * @example
+     * // Update many AiUsageMetrics
+     * const aiUsageMetric = await prisma.aiUsageMetric.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AiUsageMetrics and only return the `id`
+     * const aiUsageMetricWithIdOnly = await prisma.aiUsageMetric.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AiUsageMetricUpdateManyAndReturnArgs>(args: SelectSubset<T, AiUsageMetricUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one AiUsageMetric.
      * @param {AiUsageMetricUpsertArgs} args - Arguments to update or create a AiUsageMetric.
      * @example
@@ -4891,7 +5542,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends AiUsageMetricUpsertArgs>(args: SelectSubset<T, AiUsageMetricUpsertArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends AiUsageMetricUpsertArgs>(args: SelectSubset<T, AiUsageMetricUpsertArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -5031,7 +5682,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AiUsageMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__AiUsageMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5060,7 +5711,7 @@ export namespace Prisma {
 
   /**
    * Fields of the AiUsageMetric model
-   */ 
+   */
   interface AiUsageMetricFieldRefs {
     readonly id: FieldRef<"AiUsageMetric", 'String'>
     readonly tenantId: FieldRef<"AiUsageMetric", 'String'>
@@ -5090,6 +5741,10 @@ export namespace Prisma {
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
      * Filter, which AiUsageMetric to fetch.
      */
     where: AiUsageMetricWhereUniqueInput
@@ -5104,6 +5759,10 @@ export namespace Prisma {
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
      * Filter, which AiUsageMetric to fetch.
      */
     where: AiUsageMetricWhereUniqueInput
@@ -5117,6 +5776,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiUsageMetric
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
     /**
      * Filter, which AiUsageMetric to fetch.
      */
@@ -5162,6 +5825,10 @@ export namespace Prisma {
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
      * Filter, which AiUsageMetric to fetch.
      */
     where?: AiUsageMetricWhereInput
@@ -5206,6 +5873,10 @@ export namespace Prisma {
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
      * Filter, which AiUsageMetrics to fetch.
      */
     where?: AiUsageMetricWhereInput
@@ -5245,6 +5916,10 @@ export namespace Prisma {
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
      * The data needed to create a AiUsageMetric.
      */
     data: XOR<AiUsageMetricCreateInput, AiUsageMetricUncheckedCreateInput>
@@ -5270,6 +5945,10 @@ export namespace Prisma {
      */
     select?: AiUsageMetricSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
      * The data used to create many AiUsageMetrics.
      */
     data: AiUsageMetricCreateManyInput | AiUsageMetricCreateManyInput[]
@@ -5284,6 +5963,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiUsageMetric
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
     /**
      * The data needed to update a AiUsageMetric.
      */
@@ -5306,6 +5989,36 @@ export namespace Prisma {
      * Filter which AiUsageMetrics to update
      */
     where?: AiUsageMetricWhereInput
+    /**
+     * Limit how many AiUsageMetrics to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AiUsageMetric updateManyAndReturn
+   */
+  export type AiUsageMetricUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
+     * The data used to update AiUsageMetrics.
+     */
+    data: XOR<AiUsageMetricUpdateManyMutationInput, AiUsageMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which AiUsageMetrics to update
+     */
+    where?: AiUsageMetricWhereInput
+    /**
+     * Limit how many AiUsageMetrics to update.
+     */
+    limit?: number
   }
 
   /**
@@ -5316,6 +6029,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiUsageMetric
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
     /**
      * The filter to search for the AiUsageMetric to update in case it exists.
      */
@@ -5339,6 +6056,10 @@ export namespace Prisma {
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
+    /**
      * Filter which AiUsageMetric to delete.
      */
     where: AiUsageMetricWhereUniqueInput
@@ -5352,6 +6073,10 @@ export namespace Prisma {
      * Filter which AiUsageMetrics to delete
      */
     where?: AiUsageMetricWhereInput
+    /**
+     * Limit how many AiUsageMetrics to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -5362,6 +6087,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AiUsageMetric
      */
     select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiUsageMetric
+     */
+    omit?: AiUsageMetricOmit<ExtArgs> | null
   }
 
 
@@ -5690,6 +6419,27 @@ export namespace Prisma {
     updatedAt?: boolean
   }, ExtArgs["result"]["semanticMetric"]>
 
+  export type SemanticMetricSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    expression?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    defaultAggregation?: boolean
+    format?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticMetric"]>
+
   export type SemanticMetricSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -5711,6 +6461,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
+  export type SemanticMetricOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "displayName" | "displayNameAr" | "description" | "expression" | "database" | "baseTable" | "dataType" | "defaultAggregation" | "format" | "requiredPermission" | "category" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["semanticMetric"]>
 
   export type $SemanticMetricPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SemanticMetric"
@@ -5740,12 +6491,12 @@ export namespace Prisma {
 
   type SemanticMetricGetPayload<S extends boolean | null | undefined | SemanticMetricDefaultArgs> = $Result.GetResult<Prisma.$SemanticMetricPayload, S>
 
-  type SemanticMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<SemanticMetricFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type SemanticMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SemanticMetricFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: SemanticMetricCountAggregateInputType | true
     }
 
-  export interface SemanticMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface SemanticMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SemanticMetric'], meta: { name: 'SemanticMetric' } }
     /**
      * Find zero or one SemanticMetric that matches the filter.
@@ -5758,10 +6509,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SemanticMetricFindUniqueArgs>(args: SelectSubset<T, SemanticMetricFindUniqueArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends SemanticMetricFindUniqueArgs>(args: SelectSubset<T, SemanticMetricFindUniqueArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SemanticMetric that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one SemanticMetric that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {SemanticMetricFindUniqueOrThrowArgs} args - Arguments to find a SemanticMetric
      * @example
@@ -5772,7 +6523,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SemanticMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends SemanticMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SemanticMetric that matches the filter.
@@ -5787,7 +6538,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SemanticMetricFindFirstArgs>(args?: SelectSubset<T, SemanticMetricFindFirstArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends SemanticMetricFindFirstArgs>(args?: SelectSubset<T, SemanticMetricFindFirstArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SemanticMetric that matches the filter or
@@ -5803,7 +6554,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SemanticMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends SemanticMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more SemanticMetrics that matches the filter.
@@ -5821,7 +6572,7 @@ export namespace Prisma {
      * const semanticMetricWithIdOnly = await prisma.semanticMetric.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SemanticMetricFindManyArgs>(args?: SelectSubset<T, SemanticMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends SemanticMetricFindManyArgs>(args?: SelectSubset<T, SemanticMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a SemanticMetric.
@@ -5835,7 +6586,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SemanticMetricCreateArgs>(args: SelectSubset<T, SemanticMetricCreateArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends SemanticMetricCreateArgs>(args: SelectSubset<T, SemanticMetricCreateArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many SemanticMetrics.
@@ -5863,7 +6614,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many SemanticMetrics and only return the `id`
-     * const semanticMetricWithIdOnly = await prisma.semanticMetric.createManyAndReturn({ 
+     * const semanticMetricWithIdOnly = await prisma.semanticMetric.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -5873,7 +6624,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SemanticMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends SemanticMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a SemanticMetric.
@@ -5887,7 +6638,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SemanticMetricDeleteArgs>(args: SelectSubset<T, SemanticMetricDeleteArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends SemanticMetricDeleteArgs>(args: SelectSubset<T, SemanticMetricDeleteArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one SemanticMetric.
@@ -5904,7 +6655,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SemanticMetricUpdateArgs>(args: SelectSubset<T, SemanticMetricUpdateArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends SemanticMetricUpdateArgs>(args: SelectSubset<T, SemanticMetricUpdateArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more SemanticMetrics.
@@ -5940,6 +6691,36 @@ export namespace Prisma {
     updateMany<T extends SemanticMetricUpdateManyArgs>(args: SelectSubset<T, SemanticMetricUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more SemanticMetrics and returns the data updated in the database.
+     * @param {SemanticMetricUpdateManyAndReturnArgs} args - Arguments to update many SemanticMetrics.
+     * @example
+     * // Update many SemanticMetrics
+     * const semanticMetric = await prisma.semanticMetric.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SemanticMetrics and only return the `id`
+     * const semanticMetricWithIdOnly = await prisma.semanticMetric.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SemanticMetricUpdateManyAndReturnArgs>(args: SelectSubset<T, SemanticMetricUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one SemanticMetric.
      * @param {SemanticMetricUpsertArgs} args - Arguments to update or create a SemanticMetric.
      * @example
@@ -5956,7 +6737,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SemanticMetricUpsertArgs>(args: SelectSubset<T, SemanticMetricUpsertArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends SemanticMetricUpsertArgs>(args: SelectSubset<T, SemanticMetricUpsertArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -6096,7 +6877,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SemanticMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SemanticMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6125,7 +6906,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SemanticMetric model
-   */ 
+   */
   interface SemanticMetricFieldRefs {
     readonly id: FieldRef<"SemanticMetric", 'String'>
     readonly tenantId: FieldRef<"SemanticMetric", 'String'>
@@ -6158,6 +6939,10 @@ export namespace Prisma {
      */
     select?: SemanticMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticMetric to fetch.
      */
     where: SemanticMetricWhereUniqueInput
@@ -6172,6 +6957,10 @@ export namespace Prisma {
      */
     select?: SemanticMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticMetric to fetch.
      */
     where: SemanticMetricWhereUniqueInput
@@ -6185,6 +6974,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticMetric
      */
     select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
     /**
      * Filter, which SemanticMetric to fetch.
      */
@@ -6230,6 +7023,10 @@ export namespace Prisma {
      */
     select?: SemanticMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticMetric to fetch.
      */
     where?: SemanticMetricWhereInput
@@ -6274,6 +7071,10 @@ export namespace Prisma {
      */
     select?: SemanticMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticMetrics to fetch.
      */
     where?: SemanticMetricWhereInput
@@ -6313,6 +7114,10 @@ export namespace Prisma {
      */
     select?: SemanticMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
      * The data needed to create a SemanticMetric.
      */
     data: XOR<SemanticMetricCreateInput, SemanticMetricUncheckedCreateInput>
@@ -6338,6 +7143,10 @@ export namespace Prisma {
      */
     select?: SemanticMetricSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
      * The data used to create many SemanticMetrics.
      */
     data: SemanticMetricCreateManyInput | SemanticMetricCreateManyInput[]
@@ -6352,6 +7161,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticMetric
      */
     select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
     /**
      * The data needed to update a SemanticMetric.
      */
@@ -6374,6 +7187,36 @@ export namespace Prisma {
      * Filter which SemanticMetrics to update
      */
     where?: SemanticMetricWhereInput
+    /**
+     * Limit how many SemanticMetrics to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SemanticMetric updateManyAndReturn
+   */
+  export type SemanticMetricUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
+     * The data used to update SemanticMetrics.
+     */
+    data: XOR<SemanticMetricUpdateManyMutationInput, SemanticMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which SemanticMetrics to update
+     */
+    where?: SemanticMetricWhereInput
+    /**
+     * Limit how many SemanticMetrics to update.
+     */
+    limit?: number
   }
 
   /**
@@ -6384,6 +7227,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticMetric
      */
     select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
     /**
      * The filter to search for the SemanticMetric to update in case it exists.
      */
@@ -6407,6 +7254,10 @@ export namespace Prisma {
      */
     select?: SemanticMetricSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
+    /**
      * Filter which SemanticMetric to delete.
      */
     where: SemanticMetricWhereUniqueInput
@@ -6420,6 +7271,10 @@ export namespace Prisma {
      * Filter which SemanticMetrics to delete
      */
     where?: SemanticMetricWhereInput
+    /**
+     * Limit how many SemanticMetrics to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -6430,6 +7285,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticMetric
      */
     select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticMetric
+     */
+    omit?: SemanticMetricOmit<ExtArgs> | null
   }
 
 
@@ -6759,6 +7618,28 @@ export namespace Prisma {
     updatedAt?: boolean
   }, ExtArgs["result"]["semanticDimension"]>
 
+  export type SemanticDimensionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    columnRef?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    allowedOperators?: boolean
+    isLookup?: boolean
+    lookupValues?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticDimension"]>
+
   export type SemanticDimensionSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -6781,6 +7662,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
+  export type SemanticDimensionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "displayName" | "displayNameAr" | "description" | "columnRef" | "database" | "baseTable" | "dataType" | "allowedOperators" | "isLookup" | "lookupValues" | "requiredPermission" | "category" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["semanticDimension"]>
 
   export type $SemanticDimensionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SemanticDimension"
@@ -6811,12 +7693,12 @@ export namespace Prisma {
 
   type SemanticDimensionGetPayload<S extends boolean | null | undefined | SemanticDimensionDefaultArgs> = $Result.GetResult<Prisma.$SemanticDimensionPayload, S>
 
-  type SemanticDimensionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<SemanticDimensionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type SemanticDimensionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SemanticDimensionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: SemanticDimensionCountAggregateInputType | true
     }
 
-  export interface SemanticDimensionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface SemanticDimensionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SemanticDimension'], meta: { name: 'SemanticDimension' } }
     /**
      * Find zero or one SemanticDimension that matches the filter.
@@ -6829,10 +7711,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SemanticDimensionFindUniqueArgs>(args: SelectSubset<T, SemanticDimensionFindUniqueArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends SemanticDimensionFindUniqueArgs>(args: SelectSubset<T, SemanticDimensionFindUniqueArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SemanticDimension that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one SemanticDimension that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {SemanticDimensionFindUniqueOrThrowArgs} args - Arguments to find a SemanticDimension
      * @example
@@ -6843,7 +7725,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SemanticDimensionFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticDimensionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends SemanticDimensionFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticDimensionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SemanticDimension that matches the filter.
@@ -6858,7 +7740,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SemanticDimensionFindFirstArgs>(args?: SelectSubset<T, SemanticDimensionFindFirstArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends SemanticDimensionFindFirstArgs>(args?: SelectSubset<T, SemanticDimensionFindFirstArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SemanticDimension that matches the filter or
@@ -6874,7 +7756,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SemanticDimensionFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticDimensionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends SemanticDimensionFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticDimensionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more SemanticDimensions that matches the filter.
@@ -6892,7 +7774,7 @@ export namespace Prisma {
      * const semanticDimensionWithIdOnly = await prisma.semanticDimension.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SemanticDimensionFindManyArgs>(args?: SelectSubset<T, SemanticDimensionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends SemanticDimensionFindManyArgs>(args?: SelectSubset<T, SemanticDimensionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a SemanticDimension.
@@ -6906,7 +7788,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SemanticDimensionCreateArgs>(args: SelectSubset<T, SemanticDimensionCreateArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends SemanticDimensionCreateArgs>(args: SelectSubset<T, SemanticDimensionCreateArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many SemanticDimensions.
@@ -6934,7 +7816,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many SemanticDimensions and only return the `id`
-     * const semanticDimensionWithIdOnly = await prisma.semanticDimension.createManyAndReturn({ 
+     * const semanticDimensionWithIdOnly = await prisma.semanticDimension.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6944,7 +7826,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SemanticDimensionCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticDimensionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends SemanticDimensionCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticDimensionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a SemanticDimension.
@@ -6958,7 +7840,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SemanticDimensionDeleteArgs>(args: SelectSubset<T, SemanticDimensionDeleteArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends SemanticDimensionDeleteArgs>(args: SelectSubset<T, SemanticDimensionDeleteArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one SemanticDimension.
@@ -6975,7 +7857,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SemanticDimensionUpdateArgs>(args: SelectSubset<T, SemanticDimensionUpdateArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends SemanticDimensionUpdateArgs>(args: SelectSubset<T, SemanticDimensionUpdateArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more SemanticDimensions.
@@ -7011,6 +7893,36 @@ export namespace Prisma {
     updateMany<T extends SemanticDimensionUpdateManyArgs>(args: SelectSubset<T, SemanticDimensionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more SemanticDimensions and returns the data updated in the database.
+     * @param {SemanticDimensionUpdateManyAndReturnArgs} args - Arguments to update many SemanticDimensions.
+     * @example
+     * // Update many SemanticDimensions
+     * const semanticDimension = await prisma.semanticDimension.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SemanticDimensions and only return the `id`
+     * const semanticDimensionWithIdOnly = await prisma.semanticDimension.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SemanticDimensionUpdateManyAndReturnArgs>(args: SelectSubset<T, SemanticDimensionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one SemanticDimension.
      * @param {SemanticDimensionUpsertArgs} args - Arguments to update or create a SemanticDimension.
      * @example
@@ -7027,7 +7939,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SemanticDimensionUpsertArgs>(args: SelectSubset<T, SemanticDimensionUpsertArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends SemanticDimensionUpsertArgs>(args: SelectSubset<T, SemanticDimensionUpsertArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -7167,7 +8079,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SemanticDimensionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SemanticDimensionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7196,7 +8108,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SemanticDimension model
-   */ 
+   */
   interface SemanticDimensionFieldRefs {
     readonly id: FieldRef<"SemanticDimension", 'String'>
     readonly tenantId: FieldRef<"SemanticDimension", 'String'>
@@ -7230,6 +8142,10 @@ export namespace Prisma {
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticDimension to fetch.
      */
     where: SemanticDimensionWhereUniqueInput
@@ -7244,6 +8160,10 @@ export namespace Prisma {
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticDimension to fetch.
      */
     where: SemanticDimensionWhereUniqueInput
@@ -7257,6 +8177,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticDimension
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
     /**
      * Filter, which SemanticDimension to fetch.
      */
@@ -7302,6 +8226,10 @@ export namespace Prisma {
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticDimension to fetch.
      */
     where?: SemanticDimensionWhereInput
@@ -7346,6 +8274,10 @@ export namespace Prisma {
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticDimensions to fetch.
      */
     where?: SemanticDimensionWhereInput
@@ -7385,6 +8317,10 @@ export namespace Prisma {
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
      * The data needed to create a SemanticDimension.
      */
     data: XOR<SemanticDimensionCreateInput, SemanticDimensionUncheckedCreateInput>
@@ -7410,6 +8346,10 @@ export namespace Prisma {
      */
     select?: SemanticDimensionSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
      * The data used to create many SemanticDimensions.
      */
     data: SemanticDimensionCreateManyInput | SemanticDimensionCreateManyInput[]
@@ -7424,6 +8364,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticDimension
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
     /**
      * The data needed to update a SemanticDimension.
      */
@@ -7446,6 +8390,36 @@ export namespace Prisma {
      * Filter which SemanticDimensions to update
      */
     where?: SemanticDimensionWhereInput
+    /**
+     * Limit how many SemanticDimensions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SemanticDimension updateManyAndReturn
+   */
+  export type SemanticDimensionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
+     * The data used to update SemanticDimensions.
+     */
+    data: XOR<SemanticDimensionUpdateManyMutationInput, SemanticDimensionUncheckedUpdateManyInput>
+    /**
+     * Filter which SemanticDimensions to update
+     */
+    where?: SemanticDimensionWhereInput
+    /**
+     * Limit how many SemanticDimensions to update.
+     */
+    limit?: number
   }
 
   /**
@@ -7456,6 +8430,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticDimension
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
     /**
      * The filter to search for the SemanticDimension to update in case it exists.
      */
@@ -7479,6 +8457,10 @@ export namespace Prisma {
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
+    /**
      * Filter which SemanticDimension to delete.
      */
     where: SemanticDimensionWhereUniqueInput
@@ -7492,6 +8474,10 @@ export namespace Prisma {
      * Filter which SemanticDimensions to delete
      */
     where?: SemanticDimensionWhereInput
+    /**
+     * Limit how many SemanticDimensions to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -7502,6 +8488,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticDimension
      */
     select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticDimension
+     */
+    omit?: SemanticDimensionOmit<ExtArgs> | null
   }
 
 
@@ -7760,6 +8750,23 @@ export namespace Prisma {
     updatedAt?: boolean
   }, ExtArgs["result"]["semanticJoinPath"]>
 
+  export type SemanticJoinPathSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    fromTable?: boolean
+    fromDatabase?: boolean
+    toTable?: boolean
+    toDatabase?: boolean
+    joinType?: boolean
+    joinCondition?: boolean
+    cardinality?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticJoinPath"]>
+
   export type SemanticJoinPathSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -7777,6 +8784,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
+  export type SemanticJoinPathOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "fromTable" | "fromDatabase" | "toTable" | "toDatabase" | "joinType" | "joinCondition" | "cardinality" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["semanticJoinPath"]>
 
   export type $SemanticJoinPathPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SemanticJoinPath"
@@ -7802,12 +8810,12 @@ export namespace Prisma {
 
   type SemanticJoinPathGetPayload<S extends boolean | null | undefined | SemanticJoinPathDefaultArgs> = $Result.GetResult<Prisma.$SemanticJoinPathPayload, S>
 
-  type SemanticJoinPathCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<SemanticJoinPathFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type SemanticJoinPathCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SemanticJoinPathFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: SemanticJoinPathCountAggregateInputType | true
     }
 
-  export interface SemanticJoinPathDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface SemanticJoinPathDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SemanticJoinPath'], meta: { name: 'SemanticJoinPath' } }
     /**
      * Find zero or one SemanticJoinPath that matches the filter.
@@ -7820,10 +8828,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SemanticJoinPathFindUniqueArgs>(args: SelectSubset<T, SemanticJoinPathFindUniqueArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends SemanticJoinPathFindUniqueArgs>(args: SelectSubset<T, SemanticJoinPathFindUniqueArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SemanticJoinPath that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one SemanticJoinPath that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {SemanticJoinPathFindUniqueOrThrowArgs} args - Arguments to find a SemanticJoinPath
      * @example
@@ -7834,7 +8842,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SemanticJoinPathFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticJoinPathFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends SemanticJoinPathFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticJoinPathFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SemanticJoinPath that matches the filter.
@@ -7849,7 +8857,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SemanticJoinPathFindFirstArgs>(args?: SelectSubset<T, SemanticJoinPathFindFirstArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends SemanticJoinPathFindFirstArgs>(args?: SelectSubset<T, SemanticJoinPathFindFirstArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SemanticJoinPath that matches the filter or
@@ -7865,7 +8873,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SemanticJoinPathFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticJoinPathFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends SemanticJoinPathFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticJoinPathFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more SemanticJoinPaths that matches the filter.
@@ -7883,7 +8891,7 @@ export namespace Prisma {
      * const semanticJoinPathWithIdOnly = await prisma.semanticJoinPath.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SemanticJoinPathFindManyArgs>(args?: SelectSubset<T, SemanticJoinPathFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends SemanticJoinPathFindManyArgs>(args?: SelectSubset<T, SemanticJoinPathFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a SemanticJoinPath.
@@ -7897,7 +8905,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SemanticJoinPathCreateArgs>(args: SelectSubset<T, SemanticJoinPathCreateArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends SemanticJoinPathCreateArgs>(args: SelectSubset<T, SemanticJoinPathCreateArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many SemanticJoinPaths.
@@ -7925,7 +8933,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many SemanticJoinPaths and only return the `id`
-     * const semanticJoinPathWithIdOnly = await prisma.semanticJoinPath.createManyAndReturn({ 
+     * const semanticJoinPathWithIdOnly = await prisma.semanticJoinPath.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -7935,7 +8943,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SemanticJoinPathCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticJoinPathCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends SemanticJoinPathCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticJoinPathCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a SemanticJoinPath.
@@ -7949,7 +8957,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SemanticJoinPathDeleteArgs>(args: SelectSubset<T, SemanticJoinPathDeleteArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends SemanticJoinPathDeleteArgs>(args: SelectSubset<T, SemanticJoinPathDeleteArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one SemanticJoinPath.
@@ -7966,7 +8974,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SemanticJoinPathUpdateArgs>(args: SelectSubset<T, SemanticJoinPathUpdateArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends SemanticJoinPathUpdateArgs>(args: SelectSubset<T, SemanticJoinPathUpdateArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more SemanticJoinPaths.
@@ -8002,6 +9010,36 @@ export namespace Prisma {
     updateMany<T extends SemanticJoinPathUpdateManyArgs>(args: SelectSubset<T, SemanticJoinPathUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more SemanticJoinPaths and returns the data updated in the database.
+     * @param {SemanticJoinPathUpdateManyAndReturnArgs} args - Arguments to update many SemanticJoinPaths.
+     * @example
+     * // Update many SemanticJoinPaths
+     * const semanticJoinPath = await prisma.semanticJoinPath.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SemanticJoinPaths and only return the `id`
+     * const semanticJoinPathWithIdOnly = await prisma.semanticJoinPath.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SemanticJoinPathUpdateManyAndReturnArgs>(args: SelectSubset<T, SemanticJoinPathUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one SemanticJoinPath.
      * @param {SemanticJoinPathUpsertArgs} args - Arguments to update or create a SemanticJoinPath.
      * @example
@@ -8018,7 +9056,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SemanticJoinPathUpsertArgs>(args: SelectSubset<T, SemanticJoinPathUpsertArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends SemanticJoinPathUpsertArgs>(args: SelectSubset<T, SemanticJoinPathUpsertArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -8158,7 +9196,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SemanticJoinPathClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SemanticJoinPathClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8187,7 +9225,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SemanticJoinPath model
-   */ 
+   */
   interface SemanticJoinPathFieldRefs {
     readonly id: FieldRef<"SemanticJoinPath", 'String'>
     readonly tenantId: FieldRef<"SemanticJoinPath", 'String'>
@@ -8216,6 +9254,10 @@ export namespace Prisma {
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticJoinPath to fetch.
      */
     where: SemanticJoinPathWhereUniqueInput
@@ -8230,6 +9272,10 @@ export namespace Prisma {
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticJoinPath to fetch.
      */
     where: SemanticJoinPathWhereUniqueInput
@@ -8243,6 +9289,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticJoinPath
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
     /**
      * Filter, which SemanticJoinPath to fetch.
      */
@@ -8288,6 +9338,10 @@ export namespace Prisma {
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticJoinPath to fetch.
      */
     where?: SemanticJoinPathWhereInput
@@ -8332,6 +9386,10 @@ export namespace Prisma {
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
      * Filter, which SemanticJoinPaths to fetch.
      */
     where?: SemanticJoinPathWhereInput
@@ -8371,6 +9429,10 @@ export namespace Prisma {
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
      * The data needed to create a SemanticJoinPath.
      */
     data: XOR<SemanticJoinPathCreateInput, SemanticJoinPathUncheckedCreateInput>
@@ -8396,6 +9458,10 @@ export namespace Prisma {
      */
     select?: SemanticJoinPathSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
      * The data used to create many SemanticJoinPaths.
      */
     data: SemanticJoinPathCreateManyInput | SemanticJoinPathCreateManyInput[]
@@ -8410,6 +9476,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticJoinPath
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
     /**
      * The data needed to update a SemanticJoinPath.
      */
@@ -8432,6 +9502,36 @@ export namespace Prisma {
      * Filter which SemanticJoinPaths to update
      */
     where?: SemanticJoinPathWhereInput
+    /**
+     * Limit how many SemanticJoinPaths to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SemanticJoinPath updateManyAndReturn
+   */
+  export type SemanticJoinPathUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
+     * The data used to update SemanticJoinPaths.
+     */
+    data: XOR<SemanticJoinPathUpdateManyMutationInput, SemanticJoinPathUncheckedUpdateManyInput>
+    /**
+     * Filter which SemanticJoinPaths to update
+     */
+    where?: SemanticJoinPathWhereInput
+    /**
+     * Limit how many SemanticJoinPaths to update.
+     */
+    limit?: number
   }
 
   /**
@@ -8442,6 +9542,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticJoinPath
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
     /**
      * The filter to search for the SemanticJoinPath to update in case it exists.
      */
@@ -8465,6 +9569,10 @@ export namespace Prisma {
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
+    /**
      * Filter which SemanticJoinPath to delete.
      */
     where: SemanticJoinPathWhereUniqueInput
@@ -8478,6 +9586,10 @@ export namespace Prisma {
      * Filter which SemanticJoinPaths to delete
      */
     where?: SemanticJoinPathWhereInput
+    /**
+     * Limit how many SemanticJoinPaths to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -8488,6 +9600,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SemanticJoinPath
      */
     select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SemanticJoinPath
+     */
+    omit?: SemanticJoinPathOmit<ExtArgs> | null
   }
 
 
@@ -8767,6 +9883,22 @@ export namespace Prisma {
     updatedAt?: boolean
   }, ExtArgs["result"]["savedReport"]>
 
+  export type SavedReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    createdById?: boolean
+    name?: boolean
+    description?: boolean
+    query?: boolean
+    queryPlan?: boolean
+    isPublic?: boolean
+    isFavorite?: boolean
+    executionCount?: boolean
+    lastExecutedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["savedReport"]>
+
   export type SavedReportSelectScalar = {
     id?: boolean
     tenantId?: boolean
@@ -8783,6 +9915,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
+  export type SavedReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "createdById" | "name" | "description" | "query" | "queryPlan" | "isPublic" | "isFavorite" | "executionCount" | "lastExecutedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["savedReport"]>
 
   export type $SavedReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SavedReport"
@@ -8807,12 +9940,12 @@ export namespace Prisma {
 
   type SavedReportGetPayload<S extends boolean | null | undefined | SavedReportDefaultArgs> = $Result.GetResult<Prisma.$SavedReportPayload, S>
 
-  type SavedReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<SavedReportFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type SavedReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SavedReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: SavedReportCountAggregateInputType | true
     }
 
-  export interface SavedReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface SavedReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SavedReport'], meta: { name: 'SavedReport' } }
     /**
      * Find zero or one SavedReport that matches the filter.
@@ -8825,10 +9958,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SavedReportFindUniqueArgs>(args: SelectSubset<T, SavedReportFindUniqueArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends SavedReportFindUniqueArgs>(args: SelectSubset<T, SavedReportFindUniqueArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SavedReport that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one SavedReport that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {SavedReportFindUniqueOrThrowArgs} args - Arguments to find a SavedReport
      * @example
@@ -8839,7 +9972,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SavedReportFindUniqueOrThrowArgs>(args: SelectSubset<T, SavedReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends SavedReportFindUniqueOrThrowArgs>(args: SelectSubset<T, SavedReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SavedReport that matches the filter.
@@ -8854,7 +9987,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SavedReportFindFirstArgs>(args?: SelectSubset<T, SavedReportFindFirstArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends SavedReportFindFirstArgs>(args?: SelectSubset<T, SavedReportFindFirstArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SavedReport that matches the filter or
@@ -8870,7 +10003,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SavedReportFindFirstOrThrowArgs>(args?: SelectSubset<T, SavedReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends SavedReportFindFirstOrThrowArgs>(args?: SelectSubset<T, SavedReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more SavedReports that matches the filter.
@@ -8888,7 +10021,7 @@ export namespace Prisma {
      * const savedReportWithIdOnly = await prisma.savedReport.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SavedReportFindManyArgs>(args?: SelectSubset<T, SavedReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends SavedReportFindManyArgs>(args?: SelectSubset<T, SavedReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a SavedReport.
@@ -8902,7 +10035,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SavedReportCreateArgs>(args: SelectSubset<T, SavedReportCreateArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends SavedReportCreateArgs>(args: SelectSubset<T, SavedReportCreateArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many SavedReports.
@@ -8930,7 +10063,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many SavedReports and only return the `id`
-     * const savedReportWithIdOnly = await prisma.savedReport.createManyAndReturn({ 
+     * const savedReportWithIdOnly = await prisma.savedReport.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -8940,7 +10073,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SavedReportCreateManyAndReturnArgs>(args?: SelectSubset<T, SavedReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends SavedReportCreateManyAndReturnArgs>(args?: SelectSubset<T, SavedReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a SavedReport.
@@ -8954,7 +10087,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SavedReportDeleteArgs>(args: SelectSubset<T, SavedReportDeleteArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends SavedReportDeleteArgs>(args: SelectSubset<T, SavedReportDeleteArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one SavedReport.
@@ -8971,7 +10104,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SavedReportUpdateArgs>(args: SelectSubset<T, SavedReportUpdateArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends SavedReportUpdateArgs>(args: SelectSubset<T, SavedReportUpdateArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more SavedReports.
@@ -9007,6 +10140,36 @@ export namespace Prisma {
     updateMany<T extends SavedReportUpdateManyArgs>(args: SelectSubset<T, SavedReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more SavedReports and returns the data updated in the database.
+     * @param {SavedReportUpdateManyAndReturnArgs} args - Arguments to update many SavedReports.
+     * @example
+     * // Update many SavedReports
+     * const savedReport = await prisma.savedReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SavedReports and only return the `id`
+     * const savedReportWithIdOnly = await prisma.savedReport.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SavedReportUpdateManyAndReturnArgs>(args: SelectSubset<T, SavedReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one SavedReport.
      * @param {SavedReportUpsertArgs} args - Arguments to update or create a SavedReport.
      * @example
@@ -9023,7 +10186,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SavedReportUpsertArgs>(args: SelectSubset<T, SavedReportUpsertArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends SavedReportUpsertArgs>(args: SelectSubset<T, SavedReportUpsertArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -9163,7 +10326,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SavedReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SavedReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9192,7 +10355,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SavedReport model
-   */ 
+   */
   interface SavedReportFieldRefs {
     readonly id: FieldRef<"SavedReport", 'String'>
     readonly tenantId: FieldRef<"SavedReport", 'String'>
@@ -9220,6 +10383,10 @@ export namespace Prisma {
      */
     select?: SavedReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
      * Filter, which SavedReport to fetch.
      */
     where: SavedReportWhereUniqueInput
@@ -9234,6 +10401,10 @@ export namespace Prisma {
      */
     select?: SavedReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
      * Filter, which SavedReport to fetch.
      */
     where: SavedReportWhereUniqueInput
@@ -9247,6 +10418,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SavedReport
      */
     select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
     /**
      * Filter, which SavedReport to fetch.
      */
@@ -9292,6 +10467,10 @@ export namespace Prisma {
      */
     select?: SavedReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
      * Filter, which SavedReport to fetch.
      */
     where?: SavedReportWhereInput
@@ -9336,6 +10515,10 @@ export namespace Prisma {
      */
     select?: SavedReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
      * Filter, which SavedReports to fetch.
      */
     where?: SavedReportWhereInput
@@ -9375,6 +10558,10 @@ export namespace Prisma {
      */
     select?: SavedReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
      * The data needed to create a SavedReport.
      */
     data: XOR<SavedReportCreateInput, SavedReportUncheckedCreateInput>
@@ -9400,6 +10587,10 @@ export namespace Prisma {
      */
     select?: SavedReportSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
      * The data used to create many SavedReports.
      */
     data: SavedReportCreateManyInput | SavedReportCreateManyInput[]
@@ -9414,6 +10605,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SavedReport
      */
     select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
     /**
      * The data needed to update a SavedReport.
      */
@@ -9436,6 +10631,36 @@ export namespace Prisma {
      * Filter which SavedReports to update
      */
     where?: SavedReportWhereInput
+    /**
+     * Limit how many SavedReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SavedReport updateManyAndReturn
+   */
+  export type SavedReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
+     * The data used to update SavedReports.
+     */
+    data: XOR<SavedReportUpdateManyMutationInput, SavedReportUncheckedUpdateManyInput>
+    /**
+     * Filter which SavedReports to update
+     */
+    where?: SavedReportWhereInput
+    /**
+     * Limit how many SavedReports to update.
+     */
+    limit?: number
   }
 
   /**
@@ -9446,6 +10671,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SavedReport
      */
     select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
     /**
      * The filter to search for the SavedReport to update in case it exists.
      */
@@ -9469,6 +10698,10 @@ export namespace Prisma {
      */
     select?: SavedReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+    /**
      * Filter which SavedReport to delete.
      */
     where: SavedReportWhereUniqueInput
@@ -9482,6 +10715,10 @@ export namespace Prisma {
      * Filter which SavedReports to delete
      */
     where?: SavedReportWhereInput
+    /**
+     * Limit how many SavedReports to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -9492,6 +10729,2432 @@ export namespace Prisma {
      * Select specific fields to fetch from the SavedReport
      */
     select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedReport
+     */
+    omit?: SavedReportOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClinicalObservationDaily
+   */
+
+  export type AggregateClinicalObservationDaily = {
+    _count: ClinicalObservationDailyCountAggregateOutputType | null
+    _avg: ClinicalObservationDailyAvgAggregateOutputType | null
+    _sum: ClinicalObservationDailySumAggregateOutputType | null
+    _min: ClinicalObservationDailyMinAggregateOutputType | null
+    _max: ClinicalObservationDailyMaxAggregateOutputType | null
+  }
+
+  export type ClinicalObservationDailyAvgAggregateOutputType = {
+    recordCount: number | null
+    avgValue: Decimal | null
+    minValue: Decimal | null
+    maxValue: Decimal | null
+    p50Value: Decimal | null
+    p95Value: Decimal | null
+    normalCount: number | null
+    abnormalHighCount: number | null
+    abnormalLowCount: number | null
+    criticalCount: number | null
+    uniquePatients: number | null
+  }
+
+  export type ClinicalObservationDailySumAggregateOutputType = {
+    recordCount: number | null
+    avgValue: Decimal | null
+    minValue: Decimal | null
+    maxValue: Decimal | null
+    p50Value: Decimal | null
+    p95Value: Decimal | null
+    normalCount: number | null
+    abnormalHighCount: number | null
+    abnormalLowCount: number | null
+    criticalCount: number | null
+    uniquePatients: number | null
+  }
+
+  export type ClinicalObservationDailyMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    departmentId: string | null
+    observationDate: Date | null
+    code: string | null
+    codeSystem: string | null
+    category: string | null
+    recordCount: number | null
+    avgValue: Decimal | null
+    minValue: Decimal | null
+    maxValue: Decimal | null
+    p50Value: Decimal | null
+    p95Value: Decimal | null
+    normalCount: number | null
+    abnormalHighCount: number | null
+    abnormalLowCount: number | null
+    criticalCount: number | null
+    uniquePatients: number | null
+    createdAt: Date | null
+  }
+
+  export type ClinicalObservationDailyMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    departmentId: string | null
+    observationDate: Date | null
+    code: string | null
+    codeSystem: string | null
+    category: string | null
+    recordCount: number | null
+    avgValue: Decimal | null
+    minValue: Decimal | null
+    maxValue: Decimal | null
+    p50Value: Decimal | null
+    p95Value: Decimal | null
+    normalCount: number | null
+    abnormalHighCount: number | null
+    abnormalLowCount: number | null
+    criticalCount: number | null
+    uniquePatients: number | null
+    createdAt: Date | null
+  }
+
+  export type ClinicalObservationDailyCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    facilityId: number
+    departmentId: number
+    observationDate: number
+    code: number
+    codeSystem: number
+    category: number
+    recordCount: number
+    avgValue: number
+    minValue: number
+    maxValue: number
+    p50Value: number
+    p95Value: number
+    normalCount: number
+    abnormalHighCount: number
+    abnormalLowCount: number
+    criticalCount: number
+    uniquePatients: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ClinicalObservationDailyAvgAggregateInputType = {
+    recordCount?: true
+    avgValue?: true
+    minValue?: true
+    maxValue?: true
+    p50Value?: true
+    p95Value?: true
+    normalCount?: true
+    abnormalHighCount?: true
+    abnormalLowCount?: true
+    criticalCount?: true
+    uniquePatients?: true
+  }
+
+  export type ClinicalObservationDailySumAggregateInputType = {
+    recordCount?: true
+    avgValue?: true
+    minValue?: true
+    maxValue?: true
+    p50Value?: true
+    p95Value?: true
+    normalCount?: true
+    abnormalHighCount?: true
+    abnormalLowCount?: true
+    criticalCount?: true
+    uniquePatients?: true
+  }
+
+  export type ClinicalObservationDailyMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    departmentId?: true
+    observationDate?: true
+    code?: true
+    codeSystem?: true
+    category?: true
+    recordCount?: true
+    avgValue?: true
+    minValue?: true
+    maxValue?: true
+    p50Value?: true
+    p95Value?: true
+    normalCount?: true
+    abnormalHighCount?: true
+    abnormalLowCount?: true
+    criticalCount?: true
+    uniquePatients?: true
+    createdAt?: true
+  }
+
+  export type ClinicalObservationDailyMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    departmentId?: true
+    observationDate?: true
+    code?: true
+    codeSystem?: true
+    category?: true
+    recordCount?: true
+    avgValue?: true
+    minValue?: true
+    maxValue?: true
+    p50Value?: true
+    p95Value?: true
+    normalCount?: true
+    abnormalHighCount?: true
+    abnormalLowCount?: true
+    criticalCount?: true
+    uniquePatients?: true
+    createdAt?: true
+  }
+
+  export type ClinicalObservationDailyCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    departmentId?: true
+    observationDate?: true
+    code?: true
+    codeSystem?: true
+    category?: true
+    recordCount?: true
+    avgValue?: true
+    minValue?: true
+    maxValue?: true
+    p50Value?: true
+    p95Value?: true
+    normalCount?: true
+    abnormalHighCount?: true
+    abnormalLowCount?: true
+    criticalCount?: true
+    uniquePatients?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ClinicalObservationDailyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalObservationDaily to aggregate.
+     */
+    where?: ClinicalObservationDailyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalObservationDailies to fetch.
+     */
+    orderBy?: ClinicalObservationDailyOrderByWithRelationInput | ClinicalObservationDailyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClinicalObservationDailyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalObservationDailies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalObservationDailies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClinicalObservationDailies
+    **/
+    _count?: true | ClinicalObservationDailyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClinicalObservationDailyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClinicalObservationDailySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClinicalObservationDailyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClinicalObservationDailyMaxAggregateInputType
+  }
+
+  export type GetClinicalObservationDailyAggregateType<T extends ClinicalObservationDailyAggregateArgs> = {
+        [P in keyof T & keyof AggregateClinicalObservationDaily]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClinicalObservationDaily[P]>
+      : GetScalarType<T[P], AggregateClinicalObservationDaily[P]>
+  }
+
+
+
+
+  export type ClinicalObservationDailyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicalObservationDailyWhereInput
+    orderBy?: ClinicalObservationDailyOrderByWithAggregationInput | ClinicalObservationDailyOrderByWithAggregationInput[]
+    by: ClinicalObservationDailyScalarFieldEnum[] | ClinicalObservationDailyScalarFieldEnum
+    having?: ClinicalObservationDailyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClinicalObservationDailyCountAggregateInputType | true
+    _avg?: ClinicalObservationDailyAvgAggregateInputType
+    _sum?: ClinicalObservationDailySumAggregateInputType
+    _min?: ClinicalObservationDailyMinAggregateInputType
+    _max?: ClinicalObservationDailyMaxAggregateInputType
+  }
+
+  export type ClinicalObservationDailyGroupByOutputType = {
+    id: string
+    tenantId: string
+    facilityId: string | null
+    departmentId: string | null
+    observationDate: Date
+    code: string
+    codeSystem: string
+    category: string
+    recordCount: number
+    avgValue: Decimal | null
+    minValue: Decimal | null
+    maxValue: Decimal | null
+    p50Value: Decimal | null
+    p95Value: Decimal | null
+    normalCount: number
+    abnormalHighCount: number
+    abnormalLowCount: number
+    criticalCount: number
+    uniquePatients: number
+    createdAt: Date
+    _count: ClinicalObservationDailyCountAggregateOutputType | null
+    _avg: ClinicalObservationDailyAvgAggregateOutputType | null
+    _sum: ClinicalObservationDailySumAggregateOutputType | null
+    _min: ClinicalObservationDailyMinAggregateOutputType | null
+    _max: ClinicalObservationDailyMaxAggregateOutputType | null
+  }
+
+  type GetClinicalObservationDailyGroupByPayload<T extends ClinicalObservationDailyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClinicalObservationDailyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClinicalObservationDailyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClinicalObservationDailyGroupByOutputType[P]>
+            : GetScalarType<T[P], ClinicalObservationDailyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClinicalObservationDailySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    observationDate?: boolean
+    code?: boolean
+    codeSystem?: boolean
+    category?: boolean
+    recordCount?: boolean
+    avgValue?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    p50Value?: boolean
+    p95Value?: boolean
+    normalCount?: boolean
+    abnormalHighCount?: boolean
+    abnormalLowCount?: boolean
+    criticalCount?: boolean
+    uniquePatients?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["clinicalObservationDaily"]>
+
+  export type ClinicalObservationDailySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    observationDate?: boolean
+    code?: boolean
+    codeSystem?: boolean
+    category?: boolean
+    recordCount?: boolean
+    avgValue?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    p50Value?: boolean
+    p95Value?: boolean
+    normalCount?: boolean
+    abnormalHighCount?: boolean
+    abnormalLowCount?: boolean
+    criticalCount?: boolean
+    uniquePatients?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["clinicalObservationDaily"]>
+
+  export type ClinicalObservationDailySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    observationDate?: boolean
+    code?: boolean
+    codeSystem?: boolean
+    category?: boolean
+    recordCount?: boolean
+    avgValue?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    p50Value?: boolean
+    p95Value?: boolean
+    normalCount?: boolean
+    abnormalHighCount?: boolean
+    abnormalLowCount?: boolean
+    criticalCount?: boolean
+    uniquePatients?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["clinicalObservationDaily"]>
+
+  export type ClinicalObservationDailySelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    observationDate?: boolean
+    code?: boolean
+    codeSystem?: boolean
+    category?: boolean
+    recordCount?: boolean
+    avgValue?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    p50Value?: boolean
+    p95Value?: boolean
+    normalCount?: boolean
+    abnormalHighCount?: boolean
+    abnormalLowCount?: boolean
+    criticalCount?: boolean
+    uniquePatients?: boolean
+    createdAt?: boolean
+  }
+
+  export type ClinicalObservationDailyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "facilityId" | "departmentId" | "observationDate" | "code" | "codeSystem" | "category" | "recordCount" | "avgValue" | "minValue" | "maxValue" | "p50Value" | "p95Value" | "normalCount" | "abnormalHighCount" | "abnormalLowCount" | "criticalCount" | "uniquePatients" | "createdAt", ExtArgs["result"]["clinicalObservationDaily"]>
+
+  export type $ClinicalObservationDailyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClinicalObservationDaily"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      facilityId: string | null
+      departmentId: string | null
+      observationDate: Date
+      code: string
+      codeSystem: string
+      category: string
+      recordCount: number
+      avgValue: Prisma.Decimal | null
+      minValue: Prisma.Decimal | null
+      maxValue: Prisma.Decimal | null
+      p50Value: Prisma.Decimal | null
+      p95Value: Prisma.Decimal | null
+      normalCount: number
+      abnormalHighCount: number
+      abnormalLowCount: number
+      criticalCount: number
+      uniquePatients: number
+      createdAt: Date
+    }, ExtArgs["result"]["clinicalObservationDaily"]>
+    composites: {}
+  }
+
+  type ClinicalObservationDailyGetPayload<S extends boolean | null | undefined | ClinicalObservationDailyDefaultArgs> = $Result.GetResult<Prisma.$ClinicalObservationDailyPayload, S>
+
+  type ClinicalObservationDailyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClinicalObservationDailyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClinicalObservationDailyCountAggregateInputType | true
+    }
+
+  export interface ClinicalObservationDailyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClinicalObservationDaily'], meta: { name: 'ClinicalObservationDaily' } }
+    /**
+     * Find zero or one ClinicalObservationDaily that matches the filter.
+     * @param {ClinicalObservationDailyFindUniqueArgs} args - Arguments to find a ClinicalObservationDaily
+     * @example
+     * // Get one ClinicalObservationDaily
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClinicalObservationDailyFindUniqueArgs>(args: SelectSubset<T, ClinicalObservationDailyFindUniqueArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClinicalObservationDaily that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClinicalObservationDailyFindUniqueOrThrowArgs} args - Arguments to find a ClinicalObservationDaily
+     * @example
+     * // Get one ClinicalObservationDaily
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClinicalObservationDailyFindUniqueOrThrowArgs>(args: SelectSubset<T, ClinicalObservationDailyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClinicalObservationDaily that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalObservationDailyFindFirstArgs} args - Arguments to find a ClinicalObservationDaily
+     * @example
+     * // Get one ClinicalObservationDaily
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClinicalObservationDailyFindFirstArgs>(args?: SelectSubset<T, ClinicalObservationDailyFindFirstArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClinicalObservationDaily that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalObservationDailyFindFirstOrThrowArgs} args - Arguments to find a ClinicalObservationDaily
+     * @example
+     * // Get one ClinicalObservationDaily
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClinicalObservationDailyFindFirstOrThrowArgs>(args?: SelectSubset<T, ClinicalObservationDailyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClinicalObservationDailies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalObservationDailyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClinicalObservationDailies
+     * const clinicalObservationDailies = await prisma.clinicalObservationDaily.findMany()
+     * 
+     * // Get first 10 ClinicalObservationDailies
+     * const clinicalObservationDailies = await prisma.clinicalObservationDaily.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clinicalObservationDailyWithIdOnly = await prisma.clinicalObservationDaily.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClinicalObservationDailyFindManyArgs>(args?: SelectSubset<T, ClinicalObservationDailyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClinicalObservationDaily.
+     * @param {ClinicalObservationDailyCreateArgs} args - Arguments to create a ClinicalObservationDaily.
+     * @example
+     * // Create one ClinicalObservationDaily
+     * const ClinicalObservationDaily = await prisma.clinicalObservationDaily.create({
+     *   data: {
+     *     // ... data to create a ClinicalObservationDaily
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClinicalObservationDailyCreateArgs>(args: SelectSubset<T, ClinicalObservationDailyCreateArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClinicalObservationDailies.
+     * @param {ClinicalObservationDailyCreateManyArgs} args - Arguments to create many ClinicalObservationDailies.
+     * @example
+     * // Create many ClinicalObservationDailies
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClinicalObservationDailyCreateManyArgs>(args?: SelectSubset<T, ClinicalObservationDailyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClinicalObservationDailies and returns the data saved in the database.
+     * @param {ClinicalObservationDailyCreateManyAndReturnArgs} args - Arguments to create many ClinicalObservationDailies.
+     * @example
+     * // Create many ClinicalObservationDailies
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClinicalObservationDailies and only return the `id`
+     * const clinicalObservationDailyWithIdOnly = await prisma.clinicalObservationDaily.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClinicalObservationDailyCreateManyAndReturnArgs>(args?: SelectSubset<T, ClinicalObservationDailyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClinicalObservationDaily.
+     * @param {ClinicalObservationDailyDeleteArgs} args - Arguments to delete one ClinicalObservationDaily.
+     * @example
+     * // Delete one ClinicalObservationDaily
+     * const ClinicalObservationDaily = await prisma.clinicalObservationDaily.delete({
+     *   where: {
+     *     // ... filter to delete one ClinicalObservationDaily
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClinicalObservationDailyDeleteArgs>(args: SelectSubset<T, ClinicalObservationDailyDeleteArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClinicalObservationDaily.
+     * @param {ClinicalObservationDailyUpdateArgs} args - Arguments to update one ClinicalObservationDaily.
+     * @example
+     * // Update one ClinicalObservationDaily
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClinicalObservationDailyUpdateArgs>(args: SelectSubset<T, ClinicalObservationDailyUpdateArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClinicalObservationDailies.
+     * @param {ClinicalObservationDailyDeleteManyArgs} args - Arguments to filter ClinicalObservationDailies to delete.
+     * @example
+     * // Delete a few ClinicalObservationDailies
+     * const { count } = await prisma.clinicalObservationDaily.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClinicalObservationDailyDeleteManyArgs>(args?: SelectSubset<T, ClinicalObservationDailyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClinicalObservationDailies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalObservationDailyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClinicalObservationDailies
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClinicalObservationDailyUpdateManyArgs>(args: SelectSubset<T, ClinicalObservationDailyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClinicalObservationDailies and returns the data updated in the database.
+     * @param {ClinicalObservationDailyUpdateManyAndReturnArgs} args - Arguments to update many ClinicalObservationDailies.
+     * @example
+     * // Update many ClinicalObservationDailies
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClinicalObservationDailies and only return the `id`
+     * const clinicalObservationDailyWithIdOnly = await prisma.clinicalObservationDaily.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClinicalObservationDailyUpdateManyAndReturnArgs>(args: SelectSubset<T, ClinicalObservationDailyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClinicalObservationDaily.
+     * @param {ClinicalObservationDailyUpsertArgs} args - Arguments to update or create a ClinicalObservationDaily.
+     * @example
+     * // Update or create a ClinicalObservationDaily
+     * const clinicalObservationDaily = await prisma.clinicalObservationDaily.upsert({
+     *   create: {
+     *     // ... data to create a ClinicalObservationDaily
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClinicalObservationDaily we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClinicalObservationDailyUpsertArgs>(args: SelectSubset<T, ClinicalObservationDailyUpsertArgs<ExtArgs>>): Prisma__ClinicalObservationDailyClient<$Result.GetResult<Prisma.$ClinicalObservationDailyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClinicalObservationDailies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalObservationDailyCountArgs} args - Arguments to filter ClinicalObservationDailies to count.
+     * @example
+     * // Count the number of ClinicalObservationDailies
+     * const count = await prisma.clinicalObservationDaily.count({
+     *   where: {
+     *     // ... the filter for the ClinicalObservationDailies we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClinicalObservationDailyCountArgs>(
+      args?: Subset<T, ClinicalObservationDailyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClinicalObservationDailyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClinicalObservationDaily.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalObservationDailyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClinicalObservationDailyAggregateArgs>(args: Subset<T, ClinicalObservationDailyAggregateArgs>): Prisma.PrismaPromise<GetClinicalObservationDailyAggregateType<T>>
+
+    /**
+     * Group by ClinicalObservationDaily.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalObservationDailyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClinicalObservationDailyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClinicalObservationDailyGroupByArgs['orderBy'] }
+        : { orderBy?: ClinicalObservationDailyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClinicalObservationDailyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClinicalObservationDailyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClinicalObservationDaily model
+   */
+  readonly fields: ClinicalObservationDailyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClinicalObservationDaily.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClinicalObservationDailyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClinicalObservationDaily model
+   */
+  interface ClinicalObservationDailyFieldRefs {
+    readonly id: FieldRef<"ClinicalObservationDaily", 'String'>
+    readonly tenantId: FieldRef<"ClinicalObservationDaily", 'String'>
+    readonly facilityId: FieldRef<"ClinicalObservationDaily", 'String'>
+    readonly departmentId: FieldRef<"ClinicalObservationDaily", 'String'>
+    readonly observationDate: FieldRef<"ClinicalObservationDaily", 'DateTime'>
+    readonly code: FieldRef<"ClinicalObservationDaily", 'String'>
+    readonly codeSystem: FieldRef<"ClinicalObservationDaily", 'String'>
+    readonly category: FieldRef<"ClinicalObservationDaily", 'String'>
+    readonly recordCount: FieldRef<"ClinicalObservationDaily", 'Int'>
+    readonly avgValue: FieldRef<"ClinicalObservationDaily", 'Decimal'>
+    readonly minValue: FieldRef<"ClinicalObservationDaily", 'Decimal'>
+    readonly maxValue: FieldRef<"ClinicalObservationDaily", 'Decimal'>
+    readonly p50Value: FieldRef<"ClinicalObservationDaily", 'Decimal'>
+    readonly p95Value: FieldRef<"ClinicalObservationDaily", 'Decimal'>
+    readonly normalCount: FieldRef<"ClinicalObservationDaily", 'Int'>
+    readonly abnormalHighCount: FieldRef<"ClinicalObservationDaily", 'Int'>
+    readonly abnormalLowCount: FieldRef<"ClinicalObservationDaily", 'Int'>
+    readonly criticalCount: FieldRef<"ClinicalObservationDaily", 'Int'>
+    readonly uniquePatients: FieldRef<"ClinicalObservationDaily", 'Int'>
+    readonly createdAt: FieldRef<"ClinicalObservationDaily", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClinicalObservationDaily findUnique
+   */
+  export type ClinicalObservationDailyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicalObservationDaily to fetch.
+     */
+    where: ClinicalObservationDailyWhereUniqueInput
+  }
+
+  /**
+   * ClinicalObservationDaily findUniqueOrThrow
+   */
+  export type ClinicalObservationDailyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicalObservationDaily to fetch.
+     */
+    where: ClinicalObservationDailyWhereUniqueInput
+  }
+
+  /**
+   * ClinicalObservationDaily findFirst
+   */
+  export type ClinicalObservationDailyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicalObservationDaily to fetch.
+     */
+    where?: ClinicalObservationDailyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalObservationDailies to fetch.
+     */
+    orderBy?: ClinicalObservationDailyOrderByWithRelationInput | ClinicalObservationDailyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalObservationDailies.
+     */
+    cursor?: ClinicalObservationDailyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalObservationDailies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalObservationDailies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalObservationDailies.
+     */
+    distinct?: ClinicalObservationDailyScalarFieldEnum | ClinicalObservationDailyScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalObservationDaily findFirstOrThrow
+   */
+  export type ClinicalObservationDailyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicalObservationDaily to fetch.
+     */
+    where?: ClinicalObservationDailyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalObservationDailies to fetch.
+     */
+    orderBy?: ClinicalObservationDailyOrderByWithRelationInput | ClinicalObservationDailyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalObservationDailies.
+     */
+    cursor?: ClinicalObservationDailyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalObservationDailies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalObservationDailies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalObservationDailies.
+     */
+    distinct?: ClinicalObservationDailyScalarFieldEnum | ClinicalObservationDailyScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalObservationDaily findMany
+   */
+  export type ClinicalObservationDailyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicalObservationDailies to fetch.
+     */
+    where?: ClinicalObservationDailyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalObservationDailies to fetch.
+     */
+    orderBy?: ClinicalObservationDailyOrderByWithRelationInput | ClinicalObservationDailyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClinicalObservationDailies.
+     */
+    cursor?: ClinicalObservationDailyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalObservationDailies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalObservationDailies.
+     */
+    skip?: number
+    distinct?: ClinicalObservationDailyScalarFieldEnum | ClinicalObservationDailyScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalObservationDaily create
+   */
+  export type ClinicalObservationDailyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ClinicalObservationDaily.
+     */
+    data: XOR<ClinicalObservationDailyCreateInput, ClinicalObservationDailyUncheckedCreateInput>
+  }
+
+  /**
+   * ClinicalObservationDaily createMany
+   */
+  export type ClinicalObservationDailyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClinicalObservationDailies.
+     */
+    data: ClinicalObservationDailyCreateManyInput | ClinicalObservationDailyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClinicalObservationDaily createManyAndReturn
+   */
+  export type ClinicalObservationDailyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClinicalObservationDailies.
+     */
+    data: ClinicalObservationDailyCreateManyInput | ClinicalObservationDailyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClinicalObservationDaily update
+   */
+  export type ClinicalObservationDailyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ClinicalObservationDaily.
+     */
+    data: XOR<ClinicalObservationDailyUpdateInput, ClinicalObservationDailyUncheckedUpdateInput>
+    /**
+     * Choose, which ClinicalObservationDaily to update.
+     */
+    where: ClinicalObservationDailyWhereUniqueInput
+  }
+
+  /**
+   * ClinicalObservationDaily updateMany
+   */
+  export type ClinicalObservationDailyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClinicalObservationDailies.
+     */
+    data: XOR<ClinicalObservationDailyUpdateManyMutationInput, ClinicalObservationDailyUncheckedUpdateManyInput>
+    /**
+     * Filter which ClinicalObservationDailies to update
+     */
+    where?: ClinicalObservationDailyWhereInput
+    /**
+     * Limit how many ClinicalObservationDailies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClinicalObservationDaily updateManyAndReturn
+   */
+  export type ClinicalObservationDailyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * The data used to update ClinicalObservationDailies.
+     */
+    data: XOR<ClinicalObservationDailyUpdateManyMutationInput, ClinicalObservationDailyUncheckedUpdateManyInput>
+    /**
+     * Filter which ClinicalObservationDailies to update
+     */
+    where?: ClinicalObservationDailyWhereInput
+    /**
+     * Limit how many ClinicalObservationDailies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClinicalObservationDaily upsert
+   */
+  export type ClinicalObservationDailyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ClinicalObservationDaily to update in case it exists.
+     */
+    where: ClinicalObservationDailyWhereUniqueInput
+    /**
+     * In case the ClinicalObservationDaily found by the `where` argument doesn't exist, create a new ClinicalObservationDaily with this data.
+     */
+    create: XOR<ClinicalObservationDailyCreateInput, ClinicalObservationDailyUncheckedCreateInput>
+    /**
+     * In case the ClinicalObservationDaily was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClinicalObservationDailyUpdateInput, ClinicalObservationDailyUncheckedUpdateInput>
+  }
+
+  /**
+   * ClinicalObservationDaily delete
+   */
+  export type ClinicalObservationDailyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+    /**
+     * Filter which ClinicalObservationDaily to delete.
+     */
+    where: ClinicalObservationDailyWhereUniqueInput
+  }
+
+  /**
+   * ClinicalObservationDaily deleteMany
+   */
+  export type ClinicalObservationDailyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalObservationDailies to delete
+     */
+    where?: ClinicalObservationDailyWhereInput
+    /**
+     * Limit how many ClinicalObservationDailies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClinicalObservationDaily without action
+   */
+  export type ClinicalObservationDailyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalObservationDaily
+     */
+    select?: ClinicalObservationDailySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicalObservationDaily
+     */
+    omit?: ClinicalObservationDailyOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DiagnosisDailyAggregate
+   */
+
+  export type AggregateDiagnosisDailyAggregate = {
+    _count: DiagnosisDailyAggregateCountAggregateOutputType | null
+    _avg: DiagnosisDailyAggregateAvgAggregateOutputType | null
+    _sum: DiagnosisDailyAggregateSumAggregateOutputType | null
+    _min: DiagnosisDailyAggregateMinAggregateOutputType | null
+    _max: DiagnosisDailyAggregateMaxAggregateOutputType | null
+  }
+
+  export type DiagnosisDailyAggregateAvgAggregateOutputType = {
+    encounterCount: number | null
+    uniquePatients: number | null
+    primaryCount: number | null
+    chronicCount: number | null
+  }
+
+  export type DiagnosisDailyAggregateSumAggregateOutputType = {
+    encounterCount: number | null
+    uniquePatients: number | null
+    primaryCount: number | null
+    chronicCount: number | null
+  }
+
+  export type DiagnosisDailyAggregateMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    departmentId: string | null
+    diagnosisDate: Date | null
+    icdCode: string | null
+    icdBlock: string | null
+    diagnosisName: string | null
+    diagnosisType: string | null
+    encounterCount: number | null
+    uniquePatients: number | null
+    primaryCount: number | null
+    chronicCount: number | null
+    createdAt: Date | null
+  }
+
+  export type DiagnosisDailyAggregateMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    departmentId: string | null
+    diagnosisDate: Date | null
+    icdCode: string | null
+    icdBlock: string | null
+    diagnosisName: string | null
+    diagnosisType: string | null
+    encounterCount: number | null
+    uniquePatients: number | null
+    primaryCount: number | null
+    chronicCount: number | null
+    createdAt: Date | null
+  }
+
+  export type DiagnosisDailyAggregateCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    facilityId: number
+    departmentId: number
+    diagnosisDate: number
+    icdCode: number
+    icdBlock: number
+    diagnosisName: number
+    diagnosisType: number
+    encounterCount: number
+    uniquePatients: number
+    primaryCount: number
+    chronicCount: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type DiagnosisDailyAggregateAvgAggregateInputType = {
+    encounterCount?: true
+    uniquePatients?: true
+    primaryCount?: true
+    chronicCount?: true
+  }
+
+  export type DiagnosisDailyAggregateSumAggregateInputType = {
+    encounterCount?: true
+    uniquePatients?: true
+    primaryCount?: true
+    chronicCount?: true
+  }
+
+  export type DiagnosisDailyAggregateMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    departmentId?: true
+    diagnosisDate?: true
+    icdCode?: true
+    icdBlock?: true
+    diagnosisName?: true
+    diagnosisType?: true
+    encounterCount?: true
+    uniquePatients?: true
+    primaryCount?: true
+    chronicCount?: true
+    createdAt?: true
+  }
+
+  export type DiagnosisDailyAggregateMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    departmentId?: true
+    diagnosisDate?: true
+    icdCode?: true
+    icdBlock?: true
+    diagnosisName?: true
+    diagnosisType?: true
+    encounterCount?: true
+    uniquePatients?: true
+    primaryCount?: true
+    chronicCount?: true
+    createdAt?: true
+  }
+
+  export type DiagnosisDailyAggregateCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    departmentId?: true
+    diagnosisDate?: true
+    icdCode?: true
+    icdBlock?: true
+    diagnosisName?: true
+    diagnosisType?: true
+    encounterCount?: true
+    uniquePatients?: true
+    primaryCount?: true
+    chronicCount?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type DiagnosisDailyAggregateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisDailyAggregate to aggregate.
+     */
+    where?: DiagnosisDailyAggregateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisDailyAggregates to fetch.
+     */
+    orderBy?: DiagnosisDailyAggregateOrderByWithRelationInput | DiagnosisDailyAggregateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DiagnosisDailyAggregateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisDailyAggregates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisDailyAggregates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DiagnosisDailyAggregates
+    **/
+    _count?: true | DiagnosisDailyAggregateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DiagnosisDailyAggregateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DiagnosisDailyAggregateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DiagnosisDailyAggregateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DiagnosisDailyAggregateMaxAggregateInputType
+  }
+
+  export type GetDiagnosisDailyAggregateAggregateType<T extends DiagnosisDailyAggregateAggregateArgs> = {
+        [P in keyof T & keyof AggregateDiagnosisDailyAggregate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDiagnosisDailyAggregate[P]>
+      : GetScalarType<T[P], AggregateDiagnosisDailyAggregate[P]>
+  }
+
+
+
+
+  export type DiagnosisDailyAggregateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisDailyAggregateWhereInput
+    orderBy?: DiagnosisDailyAggregateOrderByWithAggregationInput | DiagnosisDailyAggregateOrderByWithAggregationInput[]
+    by: DiagnosisDailyAggregateScalarFieldEnum[] | DiagnosisDailyAggregateScalarFieldEnum
+    having?: DiagnosisDailyAggregateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DiagnosisDailyAggregateCountAggregateInputType | true
+    _avg?: DiagnosisDailyAggregateAvgAggregateInputType
+    _sum?: DiagnosisDailyAggregateSumAggregateInputType
+    _min?: DiagnosisDailyAggregateMinAggregateInputType
+    _max?: DiagnosisDailyAggregateMaxAggregateInputType
+  }
+
+  export type DiagnosisDailyAggregateGroupByOutputType = {
+    id: string
+    tenantId: string
+    facilityId: string | null
+    departmentId: string | null
+    diagnosisDate: Date
+    icdCode: string
+    icdBlock: string | null
+    diagnosisName: string
+    diagnosisType: string
+    encounterCount: number
+    uniquePatients: number
+    primaryCount: number
+    chronicCount: number
+    createdAt: Date
+    _count: DiagnosisDailyAggregateCountAggregateOutputType | null
+    _avg: DiagnosisDailyAggregateAvgAggregateOutputType | null
+    _sum: DiagnosisDailyAggregateSumAggregateOutputType | null
+    _min: DiagnosisDailyAggregateMinAggregateOutputType | null
+    _max: DiagnosisDailyAggregateMaxAggregateOutputType | null
+  }
+
+  type GetDiagnosisDailyAggregateGroupByPayload<T extends DiagnosisDailyAggregateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DiagnosisDailyAggregateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DiagnosisDailyAggregateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DiagnosisDailyAggregateGroupByOutputType[P]>
+            : GetScalarType<T[P], DiagnosisDailyAggregateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DiagnosisDailyAggregateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    diagnosisDate?: boolean
+    icdCode?: boolean
+    icdBlock?: boolean
+    diagnosisName?: boolean
+    diagnosisType?: boolean
+    encounterCount?: boolean
+    uniquePatients?: boolean
+    primaryCount?: boolean
+    chronicCount?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["diagnosisDailyAggregate"]>
+
+  export type DiagnosisDailyAggregateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    diagnosisDate?: boolean
+    icdCode?: boolean
+    icdBlock?: boolean
+    diagnosisName?: boolean
+    diagnosisType?: boolean
+    encounterCount?: boolean
+    uniquePatients?: boolean
+    primaryCount?: boolean
+    chronicCount?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["diagnosisDailyAggregate"]>
+
+  export type DiagnosisDailyAggregateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    diagnosisDate?: boolean
+    icdCode?: boolean
+    icdBlock?: boolean
+    diagnosisName?: boolean
+    diagnosisType?: boolean
+    encounterCount?: boolean
+    uniquePatients?: boolean
+    primaryCount?: boolean
+    chronicCount?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["diagnosisDailyAggregate"]>
+
+  export type DiagnosisDailyAggregateSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    departmentId?: boolean
+    diagnosisDate?: boolean
+    icdCode?: boolean
+    icdBlock?: boolean
+    diagnosisName?: boolean
+    diagnosisType?: boolean
+    encounterCount?: boolean
+    uniquePatients?: boolean
+    primaryCount?: boolean
+    chronicCount?: boolean
+    createdAt?: boolean
+  }
+
+  export type DiagnosisDailyAggregateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "facilityId" | "departmentId" | "diagnosisDate" | "icdCode" | "icdBlock" | "diagnosisName" | "diagnosisType" | "encounterCount" | "uniquePatients" | "primaryCount" | "chronicCount" | "createdAt", ExtArgs["result"]["diagnosisDailyAggregate"]>
+
+  export type $DiagnosisDailyAggregatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DiagnosisDailyAggregate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      facilityId: string | null
+      departmentId: string | null
+      diagnosisDate: Date
+      icdCode: string
+      icdBlock: string | null
+      diagnosisName: string
+      diagnosisType: string
+      encounterCount: number
+      uniquePatients: number
+      primaryCount: number
+      chronicCount: number
+      createdAt: Date
+    }, ExtArgs["result"]["diagnosisDailyAggregate"]>
+    composites: {}
+  }
+
+  type DiagnosisDailyAggregateGetPayload<S extends boolean | null | undefined | DiagnosisDailyAggregateDefaultArgs> = $Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload, S>
+
+  type DiagnosisDailyAggregateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DiagnosisDailyAggregateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DiagnosisDailyAggregateCountAggregateInputType | true
+    }
+
+  export interface DiagnosisDailyAggregateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DiagnosisDailyAggregate'], meta: { name: 'DiagnosisDailyAggregate' } }
+    /**
+     * Find zero or one DiagnosisDailyAggregate that matches the filter.
+     * @param {DiagnosisDailyAggregateFindUniqueArgs} args - Arguments to find a DiagnosisDailyAggregate
+     * @example
+     * // Get one DiagnosisDailyAggregate
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DiagnosisDailyAggregateFindUniqueArgs>(args: SelectSubset<T, DiagnosisDailyAggregateFindUniqueArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DiagnosisDailyAggregate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DiagnosisDailyAggregateFindUniqueOrThrowArgs} args - Arguments to find a DiagnosisDailyAggregate
+     * @example
+     * // Get one DiagnosisDailyAggregate
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DiagnosisDailyAggregateFindUniqueOrThrowArgs>(args: SelectSubset<T, DiagnosisDailyAggregateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DiagnosisDailyAggregate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisDailyAggregateFindFirstArgs} args - Arguments to find a DiagnosisDailyAggregate
+     * @example
+     * // Get one DiagnosisDailyAggregate
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DiagnosisDailyAggregateFindFirstArgs>(args?: SelectSubset<T, DiagnosisDailyAggregateFindFirstArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DiagnosisDailyAggregate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisDailyAggregateFindFirstOrThrowArgs} args - Arguments to find a DiagnosisDailyAggregate
+     * @example
+     * // Get one DiagnosisDailyAggregate
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DiagnosisDailyAggregateFindFirstOrThrowArgs>(args?: SelectSubset<T, DiagnosisDailyAggregateFindFirstOrThrowArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DiagnosisDailyAggregates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisDailyAggregateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DiagnosisDailyAggregates
+     * const diagnosisDailyAggregates = await prisma.diagnosisDailyAggregate.findMany()
+     * 
+     * // Get first 10 DiagnosisDailyAggregates
+     * const diagnosisDailyAggregates = await prisma.diagnosisDailyAggregate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const diagnosisDailyAggregateWithIdOnly = await prisma.diagnosisDailyAggregate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DiagnosisDailyAggregateFindManyArgs>(args?: SelectSubset<T, DiagnosisDailyAggregateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DiagnosisDailyAggregate.
+     * @param {DiagnosisDailyAggregateCreateArgs} args - Arguments to create a DiagnosisDailyAggregate.
+     * @example
+     * // Create one DiagnosisDailyAggregate
+     * const DiagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.create({
+     *   data: {
+     *     // ... data to create a DiagnosisDailyAggregate
+     *   }
+     * })
+     * 
+     */
+    create<T extends DiagnosisDailyAggregateCreateArgs>(args: SelectSubset<T, DiagnosisDailyAggregateCreateArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DiagnosisDailyAggregates.
+     * @param {DiagnosisDailyAggregateCreateManyArgs} args - Arguments to create many DiagnosisDailyAggregates.
+     * @example
+     * // Create many DiagnosisDailyAggregates
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DiagnosisDailyAggregateCreateManyArgs>(args?: SelectSubset<T, DiagnosisDailyAggregateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DiagnosisDailyAggregates and returns the data saved in the database.
+     * @param {DiagnosisDailyAggregateCreateManyAndReturnArgs} args - Arguments to create many DiagnosisDailyAggregates.
+     * @example
+     * // Create many DiagnosisDailyAggregates
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DiagnosisDailyAggregates and only return the `id`
+     * const diagnosisDailyAggregateWithIdOnly = await prisma.diagnosisDailyAggregate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DiagnosisDailyAggregateCreateManyAndReturnArgs>(args?: SelectSubset<T, DiagnosisDailyAggregateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DiagnosisDailyAggregate.
+     * @param {DiagnosisDailyAggregateDeleteArgs} args - Arguments to delete one DiagnosisDailyAggregate.
+     * @example
+     * // Delete one DiagnosisDailyAggregate
+     * const DiagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.delete({
+     *   where: {
+     *     // ... filter to delete one DiagnosisDailyAggregate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DiagnosisDailyAggregateDeleteArgs>(args: SelectSubset<T, DiagnosisDailyAggregateDeleteArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DiagnosisDailyAggregate.
+     * @param {DiagnosisDailyAggregateUpdateArgs} args - Arguments to update one DiagnosisDailyAggregate.
+     * @example
+     * // Update one DiagnosisDailyAggregate
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DiagnosisDailyAggregateUpdateArgs>(args: SelectSubset<T, DiagnosisDailyAggregateUpdateArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DiagnosisDailyAggregates.
+     * @param {DiagnosisDailyAggregateDeleteManyArgs} args - Arguments to filter DiagnosisDailyAggregates to delete.
+     * @example
+     * // Delete a few DiagnosisDailyAggregates
+     * const { count } = await prisma.diagnosisDailyAggregate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DiagnosisDailyAggregateDeleteManyArgs>(args?: SelectSubset<T, DiagnosisDailyAggregateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DiagnosisDailyAggregates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisDailyAggregateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DiagnosisDailyAggregates
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DiagnosisDailyAggregateUpdateManyArgs>(args: SelectSubset<T, DiagnosisDailyAggregateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DiagnosisDailyAggregates and returns the data updated in the database.
+     * @param {DiagnosisDailyAggregateUpdateManyAndReturnArgs} args - Arguments to update many DiagnosisDailyAggregates.
+     * @example
+     * // Update many DiagnosisDailyAggregates
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DiagnosisDailyAggregates and only return the `id`
+     * const diagnosisDailyAggregateWithIdOnly = await prisma.diagnosisDailyAggregate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DiagnosisDailyAggregateUpdateManyAndReturnArgs>(args: SelectSubset<T, DiagnosisDailyAggregateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DiagnosisDailyAggregate.
+     * @param {DiagnosisDailyAggregateUpsertArgs} args - Arguments to update or create a DiagnosisDailyAggregate.
+     * @example
+     * // Update or create a DiagnosisDailyAggregate
+     * const diagnosisDailyAggregate = await prisma.diagnosisDailyAggregate.upsert({
+     *   create: {
+     *     // ... data to create a DiagnosisDailyAggregate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DiagnosisDailyAggregate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DiagnosisDailyAggregateUpsertArgs>(args: SelectSubset<T, DiagnosisDailyAggregateUpsertArgs<ExtArgs>>): Prisma__DiagnosisDailyAggregateClient<$Result.GetResult<Prisma.$DiagnosisDailyAggregatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DiagnosisDailyAggregates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisDailyAggregateCountArgs} args - Arguments to filter DiagnosisDailyAggregates to count.
+     * @example
+     * // Count the number of DiagnosisDailyAggregates
+     * const count = await prisma.diagnosisDailyAggregate.count({
+     *   where: {
+     *     // ... the filter for the DiagnosisDailyAggregates we want to count
+     *   }
+     * })
+    **/
+    count<T extends DiagnosisDailyAggregateCountArgs>(
+      args?: Subset<T, DiagnosisDailyAggregateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DiagnosisDailyAggregateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DiagnosisDailyAggregate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisDailyAggregateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DiagnosisDailyAggregateAggregateArgs>(args: Subset<T, DiagnosisDailyAggregateAggregateArgs>): Prisma.PrismaPromise<GetDiagnosisDailyAggregateAggregateType<T>>
+
+    /**
+     * Group by DiagnosisDailyAggregate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisDailyAggregateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DiagnosisDailyAggregateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DiagnosisDailyAggregateGroupByArgs['orderBy'] }
+        : { orderBy?: DiagnosisDailyAggregateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DiagnosisDailyAggregateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDiagnosisDailyAggregateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DiagnosisDailyAggregate model
+   */
+  readonly fields: DiagnosisDailyAggregateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DiagnosisDailyAggregate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DiagnosisDailyAggregateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DiagnosisDailyAggregate model
+   */
+  interface DiagnosisDailyAggregateFieldRefs {
+    readonly id: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly tenantId: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly facilityId: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly departmentId: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly diagnosisDate: FieldRef<"DiagnosisDailyAggregate", 'DateTime'>
+    readonly icdCode: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly icdBlock: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly diagnosisName: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly diagnosisType: FieldRef<"DiagnosisDailyAggregate", 'String'>
+    readonly encounterCount: FieldRef<"DiagnosisDailyAggregate", 'Int'>
+    readonly uniquePatients: FieldRef<"DiagnosisDailyAggregate", 'Int'>
+    readonly primaryCount: FieldRef<"DiagnosisDailyAggregate", 'Int'>
+    readonly chronicCount: FieldRef<"DiagnosisDailyAggregate", 'Int'>
+    readonly createdAt: FieldRef<"DiagnosisDailyAggregate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DiagnosisDailyAggregate findUnique
+   */
+  export type DiagnosisDailyAggregateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisDailyAggregate to fetch.
+     */
+    where: DiagnosisDailyAggregateWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisDailyAggregate findUniqueOrThrow
+   */
+  export type DiagnosisDailyAggregateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisDailyAggregate to fetch.
+     */
+    where: DiagnosisDailyAggregateWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisDailyAggregate findFirst
+   */
+  export type DiagnosisDailyAggregateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisDailyAggregate to fetch.
+     */
+    where?: DiagnosisDailyAggregateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisDailyAggregates to fetch.
+     */
+    orderBy?: DiagnosisDailyAggregateOrderByWithRelationInput | DiagnosisDailyAggregateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisDailyAggregates.
+     */
+    cursor?: DiagnosisDailyAggregateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisDailyAggregates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisDailyAggregates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisDailyAggregates.
+     */
+    distinct?: DiagnosisDailyAggregateScalarFieldEnum | DiagnosisDailyAggregateScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisDailyAggregate findFirstOrThrow
+   */
+  export type DiagnosisDailyAggregateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisDailyAggregate to fetch.
+     */
+    where?: DiagnosisDailyAggregateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisDailyAggregates to fetch.
+     */
+    orderBy?: DiagnosisDailyAggregateOrderByWithRelationInput | DiagnosisDailyAggregateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisDailyAggregates.
+     */
+    cursor?: DiagnosisDailyAggregateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisDailyAggregates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisDailyAggregates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisDailyAggregates.
+     */
+    distinct?: DiagnosisDailyAggregateScalarFieldEnum | DiagnosisDailyAggregateScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisDailyAggregate findMany
+   */
+  export type DiagnosisDailyAggregateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisDailyAggregates to fetch.
+     */
+    where?: DiagnosisDailyAggregateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisDailyAggregates to fetch.
+     */
+    orderBy?: DiagnosisDailyAggregateOrderByWithRelationInput | DiagnosisDailyAggregateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DiagnosisDailyAggregates.
+     */
+    cursor?: DiagnosisDailyAggregateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisDailyAggregates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisDailyAggregates.
+     */
+    skip?: number
+    distinct?: DiagnosisDailyAggregateScalarFieldEnum | DiagnosisDailyAggregateScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisDailyAggregate create
+   */
+  export type DiagnosisDailyAggregateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a DiagnosisDailyAggregate.
+     */
+    data: XOR<DiagnosisDailyAggregateCreateInput, DiagnosisDailyAggregateUncheckedCreateInput>
+  }
+
+  /**
+   * DiagnosisDailyAggregate createMany
+   */
+  export type DiagnosisDailyAggregateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DiagnosisDailyAggregates.
+     */
+    data: DiagnosisDailyAggregateCreateManyInput | DiagnosisDailyAggregateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DiagnosisDailyAggregate createManyAndReturn
+   */
+  export type DiagnosisDailyAggregateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * The data used to create many DiagnosisDailyAggregates.
+     */
+    data: DiagnosisDailyAggregateCreateManyInput | DiagnosisDailyAggregateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DiagnosisDailyAggregate update
+   */
+  export type DiagnosisDailyAggregateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a DiagnosisDailyAggregate.
+     */
+    data: XOR<DiagnosisDailyAggregateUpdateInput, DiagnosisDailyAggregateUncheckedUpdateInput>
+    /**
+     * Choose, which DiagnosisDailyAggregate to update.
+     */
+    where: DiagnosisDailyAggregateWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisDailyAggregate updateMany
+   */
+  export type DiagnosisDailyAggregateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DiagnosisDailyAggregates.
+     */
+    data: XOR<DiagnosisDailyAggregateUpdateManyMutationInput, DiagnosisDailyAggregateUncheckedUpdateManyInput>
+    /**
+     * Filter which DiagnosisDailyAggregates to update
+     */
+    where?: DiagnosisDailyAggregateWhereInput
+    /**
+     * Limit how many DiagnosisDailyAggregates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DiagnosisDailyAggregate updateManyAndReturn
+   */
+  export type DiagnosisDailyAggregateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * The data used to update DiagnosisDailyAggregates.
+     */
+    data: XOR<DiagnosisDailyAggregateUpdateManyMutationInput, DiagnosisDailyAggregateUncheckedUpdateManyInput>
+    /**
+     * Filter which DiagnosisDailyAggregates to update
+     */
+    where?: DiagnosisDailyAggregateWhereInput
+    /**
+     * Limit how many DiagnosisDailyAggregates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DiagnosisDailyAggregate upsert
+   */
+  export type DiagnosisDailyAggregateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the DiagnosisDailyAggregate to update in case it exists.
+     */
+    where: DiagnosisDailyAggregateWhereUniqueInput
+    /**
+     * In case the DiagnosisDailyAggregate found by the `where` argument doesn't exist, create a new DiagnosisDailyAggregate with this data.
+     */
+    create: XOR<DiagnosisDailyAggregateCreateInput, DiagnosisDailyAggregateUncheckedCreateInput>
+    /**
+     * In case the DiagnosisDailyAggregate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DiagnosisDailyAggregateUpdateInput, DiagnosisDailyAggregateUncheckedUpdateInput>
+  }
+
+  /**
+   * DiagnosisDailyAggregate delete
+   */
+  export type DiagnosisDailyAggregateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
+    /**
+     * Filter which DiagnosisDailyAggregate to delete.
+     */
+    where: DiagnosisDailyAggregateWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisDailyAggregate deleteMany
+   */
+  export type DiagnosisDailyAggregateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisDailyAggregates to delete
+     */
+    where?: DiagnosisDailyAggregateWhereInput
+    /**
+     * Limit how many DiagnosisDailyAggregates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DiagnosisDailyAggregate without action
+   */
+  export type DiagnosisDailyAggregateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisDailyAggregate
+     */
+    select?: DiagnosisDailyAggregateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiagnosisDailyAggregate
+     */
+    omit?: DiagnosisDailyAggregateOmit<ExtArgs> | null
   }
 
 
@@ -9667,6 +13330,52 @@ export namespace Prisma {
   export type SavedReportScalarFieldEnum = (typeof SavedReportScalarFieldEnum)[keyof typeof SavedReportScalarFieldEnum]
 
 
+  export const ClinicalObservationDailyScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    facilityId: 'facilityId',
+    departmentId: 'departmentId',
+    observationDate: 'observationDate',
+    code: 'code',
+    codeSystem: 'codeSystem',
+    category: 'category',
+    recordCount: 'recordCount',
+    avgValue: 'avgValue',
+    minValue: 'minValue',
+    maxValue: 'maxValue',
+    p50Value: 'p50Value',
+    p95Value: 'p95Value',
+    normalCount: 'normalCount',
+    abnormalHighCount: 'abnormalHighCount',
+    abnormalLowCount: 'abnormalLowCount',
+    criticalCount: 'criticalCount',
+    uniquePatients: 'uniquePatients',
+    createdAt: 'createdAt'
+  };
+
+  export type ClinicalObservationDailyScalarFieldEnum = (typeof ClinicalObservationDailyScalarFieldEnum)[keyof typeof ClinicalObservationDailyScalarFieldEnum]
+
+
+  export const DiagnosisDailyAggregateScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    facilityId: 'facilityId',
+    departmentId: 'departmentId',
+    diagnosisDate: 'diagnosisDate',
+    icdCode: 'icdCode',
+    icdBlock: 'icdBlock',
+    diagnosisName: 'diagnosisName',
+    diagnosisType: 'diagnosisType',
+    encounterCount: 'encounterCount',
+    uniquePatients: 'uniquePatients',
+    primaryCount: 'primaryCount',
+    chronicCount: 'chronicCount',
+    createdAt: 'createdAt'
+  };
+
+  export type DiagnosisDailyAggregateScalarFieldEnum = (typeof DiagnosisDailyAggregateScalarFieldEnum)[keyof typeof DiagnosisDailyAggregateScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -9716,7 +13425,7 @@ export namespace Prisma {
 
 
   /**
-   * Field references 
+   * Field references
    */
 
 
@@ -9738,6 +13447,13 @@ export namespace Prisma {
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -10585,6 +14301,236 @@ export namespace Prisma {
     lastExecutedAt?: DateTimeNullableWithAggregatesFilter<"SavedReport"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SavedReport"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SavedReport"> | Date | string
+  }
+
+  export type ClinicalObservationDailyWhereInput = {
+    AND?: ClinicalObservationDailyWhereInput | ClinicalObservationDailyWhereInput[]
+    OR?: ClinicalObservationDailyWhereInput[]
+    NOT?: ClinicalObservationDailyWhereInput | ClinicalObservationDailyWhereInput[]
+    id?: UuidFilter<"ClinicalObservationDaily"> | string
+    tenantId?: UuidFilter<"ClinicalObservationDaily"> | string
+    facilityId?: UuidNullableFilter<"ClinicalObservationDaily"> | string | null
+    departmentId?: UuidNullableFilter<"ClinicalObservationDaily"> | string | null
+    observationDate?: DateTimeFilter<"ClinicalObservationDaily"> | Date | string
+    code?: StringFilter<"ClinicalObservationDaily"> | string
+    codeSystem?: StringFilter<"ClinicalObservationDaily"> | string
+    category?: StringFilter<"ClinicalObservationDaily"> | string
+    recordCount?: IntFilter<"ClinicalObservationDaily"> | number
+    avgValue?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    minValue?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    maxValue?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    p50Value?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    p95Value?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    normalCount?: IntFilter<"ClinicalObservationDaily"> | number
+    abnormalHighCount?: IntFilter<"ClinicalObservationDaily"> | number
+    abnormalLowCount?: IntFilter<"ClinicalObservationDaily"> | number
+    criticalCount?: IntFilter<"ClinicalObservationDaily"> | number
+    uniquePatients?: IntFilter<"ClinicalObservationDaily"> | number
+    createdAt?: DateTimeFilter<"ClinicalObservationDaily"> | Date | string
+  }
+
+  export type ClinicalObservationDailyOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    departmentId?: SortOrderInput | SortOrder
+    observationDate?: SortOrder
+    code?: SortOrder
+    codeSystem?: SortOrder
+    category?: SortOrder
+    recordCount?: SortOrder
+    avgValue?: SortOrderInput | SortOrder
+    minValue?: SortOrderInput | SortOrder
+    maxValue?: SortOrderInput | SortOrder
+    p50Value?: SortOrderInput | SortOrder
+    p95Value?: SortOrderInput | SortOrder
+    normalCount?: SortOrder
+    abnormalHighCount?: SortOrder
+    abnormalLowCount?: SortOrder
+    criticalCount?: SortOrder
+    uniquePatients?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClinicalObservationDailyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_facilityId_departmentId_observationDate_code?: ClinicalObservationDailyTenantIdFacilityIdDepartmentIdObservationDateCodeCompoundUniqueInput
+    AND?: ClinicalObservationDailyWhereInput | ClinicalObservationDailyWhereInput[]
+    OR?: ClinicalObservationDailyWhereInput[]
+    NOT?: ClinicalObservationDailyWhereInput | ClinicalObservationDailyWhereInput[]
+    tenantId?: UuidFilter<"ClinicalObservationDaily"> | string
+    facilityId?: UuidNullableFilter<"ClinicalObservationDaily"> | string | null
+    departmentId?: UuidNullableFilter<"ClinicalObservationDaily"> | string | null
+    observationDate?: DateTimeFilter<"ClinicalObservationDaily"> | Date | string
+    code?: StringFilter<"ClinicalObservationDaily"> | string
+    codeSystem?: StringFilter<"ClinicalObservationDaily"> | string
+    category?: StringFilter<"ClinicalObservationDaily"> | string
+    recordCount?: IntFilter<"ClinicalObservationDaily"> | number
+    avgValue?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    minValue?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    maxValue?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    p50Value?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    p95Value?: DecimalNullableFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    normalCount?: IntFilter<"ClinicalObservationDaily"> | number
+    abnormalHighCount?: IntFilter<"ClinicalObservationDaily"> | number
+    abnormalLowCount?: IntFilter<"ClinicalObservationDaily"> | number
+    criticalCount?: IntFilter<"ClinicalObservationDaily"> | number
+    uniquePatients?: IntFilter<"ClinicalObservationDaily"> | number
+    createdAt?: DateTimeFilter<"ClinicalObservationDaily"> | Date | string
+  }, "id" | "tenantId_facilityId_departmentId_observationDate_code">
+
+  export type ClinicalObservationDailyOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    departmentId?: SortOrderInput | SortOrder
+    observationDate?: SortOrder
+    code?: SortOrder
+    codeSystem?: SortOrder
+    category?: SortOrder
+    recordCount?: SortOrder
+    avgValue?: SortOrderInput | SortOrder
+    minValue?: SortOrderInput | SortOrder
+    maxValue?: SortOrderInput | SortOrder
+    p50Value?: SortOrderInput | SortOrder
+    p95Value?: SortOrderInput | SortOrder
+    normalCount?: SortOrder
+    abnormalHighCount?: SortOrder
+    abnormalLowCount?: SortOrder
+    criticalCount?: SortOrder
+    uniquePatients?: SortOrder
+    createdAt?: SortOrder
+    _count?: ClinicalObservationDailyCountOrderByAggregateInput
+    _avg?: ClinicalObservationDailyAvgOrderByAggregateInput
+    _max?: ClinicalObservationDailyMaxOrderByAggregateInput
+    _min?: ClinicalObservationDailyMinOrderByAggregateInput
+    _sum?: ClinicalObservationDailySumOrderByAggregateInput
+  }
+
+  export type ClinicalObservationDailyScalarWhereWithAggregatesInput = {
+    AND?: ClinicalObservationDailyScalarWhereWithAggregatesInput | ClinicalObservationDailyScalarWhereWithAggregatesInput[]
+    OR?: ClinicalObservationDailyScalarWhereWithAggregatesInput[]
+    NOT?: ClinicalObservationDailyScalarWhereWithAggregatesInput | ClinicalObservationDailyScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ClinicalObservationDaily"> | string
+    tenantId?: UuidWithAggregatesFilter<"ClinicalObservationDaily"> | string
+    facilityId?: UuidNullableWithAggregatesFilter<"ClinicalObservationDaily"> | string | null
+    departmentId?: UuidNullableWithAggregatesFilter<"ClinicalObservationDaily"> | string | null
+    observationDate?: DateTimeWithAggregatesFilter<"ClinicalObservationDaily"> | Date | string
+    code?: StringWithAggregatesFilter<"ClinicalObservationDaily"> | string
+    codeSystem?: StringWithAggregatesFilter<"ClinicalObservationDaily"> | string
+    category?: StringWithAggregatesFilter<"ClinicalObservationDaily"> | string
+    recordCount?: IntWithAggregatesFilter<"ClinicalObservationDaily"> | number
+    avgValue?: DecimalNullableWithAggregatesFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    minValue?: DecimalNullableWithAggregatesFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    maxValue?: DecimalNullableWithAggregatesFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    p50Value?: DecimalNullableWithAggregatesFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    p95Value?: DecimalNullableWithAggregatesFilter<"ClinicalObservationDaily"> | Decimal | DecimalJsLike | number | string | null
+    normalCount?: IntWithAggregatesFilter<"ClinicalObservationDaily"> | number
+    abnormalHighCount?: IntWithAggregatesFilter<"ClinicalObservationDaily"> | number
+    abnormalLowCount?: IntWithAggregatesFilter<"ClinicalObservationDaily"> | number
+    criticalCount?: IntWithAggregatesFilter<"ClinicalObservationDaily"> | number
+    uniquePatients?: IntWithAggregatesFilter<"ClinicalObservationDaily"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ClinicalObservationDaily"> | Date | string
+  }
+
+  export type DiagnosisDailyAggregateWhereInput = {
+    AND?: DiagnosisDailyAggregateWhereInput | DiagnosisDailyAggregateWhereInput[]
+    OR?: DiagnosisDailyAggregateWhereInput[]
+    NOT?: DiagnosisDailyAggregateWhereInput | DiagnosisDailyAggregateWhereInput[]
+    id?: UuidFilter<"DiagnosisDailyAggregate"> | string
+    tenantId?: UuidFilter<"DiagnosisDailyAggregate"> | string
+    facilityId?: UuidNullableFilter<"DiagnosisDailyAggregate"> | string | null
+    departmentId?: UuidNullableFilter<"DiagnosisDailyAggregate"> | string | null
+    diagnosisDate?: DateTimeFilter<"DiagnosisDailyAggregate"> | Date | string
+    icdCode?: StringFilter<"DiagnosisDailyAggregate"> | string
+    icdBlock?: StringNullableFilter<"DiagnosisDailyAggregate"> | string | null
+    diagnosisName?: StringFilter<"DiagnosisDailyAggregate"> | string
+    diagnosisType?: StringFilter<"DiagnosisDailyAggregate"> | string
+    encounterCount?: IntFilter<"DiagnosisDailyAggregate"> | number
+    uniquePatients?: IntFilter<"DiagnosisDailyAggregate"> | number
+    primaryCount?: IntFilter<"DiagnosisDailyAggregate"> | number
+    chronicCount?: IntFilter<"DiagnosisDailyAggregate"> | number
+    createdAt?: DateTimeFilter<"DiagnosisDailyAggregate"> | Date | string
+  }
+
+  export type DiagnosisDailyAggregateOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    departmentId?: SortOrderInput | SortOrder
+    diagnosisDate?: SortOrder
+    icdCode?: SortOrder
+    icdBlock?: SortOrderInput | SortOrder
+    diagnosisName?: SortOrder
+    diagnosisType?: SortOrder
+    encounterCount?: SortOrder
+    uniquePatients?: SortOrder
+    primaryCount?: SortOrder
+    chronicCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DiagnosisDailyAggregateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_facilityId_departmentId_diagnosisDate_icdCode_diagnosisType?: DiagnosisDailyAggregateTenantIdFacilityIdDepartmentIdDiagnosisDateIcdCodeDiagnosisTypeCompoundUniqueInput
+    AND?: DiagnosisDailyAggregateWhereInput | DiagnosisDailyAggregateWhereInput[]
+    OR?: DiagnosisDailyAggregateWhereInput[]
+    NOT?: DiagnosisDailyAggregateWhereInput | DiagnosisDailyAggregateWhereInput[]
+    tenantId?: UuidFilter<"DiagnosisDailyAggregate"> | string
+    facilityId?: UuidNullableFilter<"DiagnosisDailyAggregate"> | string | null
+    departmentId?: UuidNullableFilter<"DiagnosisDailyAggregate"> | string | null
+    diagnosisDate?: DateTimeFilter<"DiagnosisDailyAggregate"> | Date | string
+    icdCode?: StringFilter<"DiagnosisDailyAggregate"> | string
+    icdBlock?: StringNullableFilter<"DiagnosisDailyAggregate"> | string | null
+    diagnosisName?: StringFilter<"DiagnosisDailyAggregate"> | string
+    diagnosisType?: StringFilter<"DiagnosisDailyAggregate"> | string
+    encounterCount?: IntFilter<"DiagnosisDailyAggregate"> | number
+    uniquePatients?: IntFilter<"DiagnosisDailyAggregate"> | number
+    primaryCount?: IntFilter<"DiagnosisDailyAggregate"> | number
+    chronicCount?: IntFilter<"DiagnosisDailyAggregate"> | number
+    createdAt?: DateTimeFilter<"DiagnosisDailyAggregate"> | Date | string
+  }, "id" | "tenantId_facilityId_departmentId_diagnosisDate_icdCode_diagnosisType">
+
+  export type DiagnosisDailyAggregateOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    departmentId?: SortOrderInput | SortOrder
+    diagnosisDate?: SortOrder
+    icdCode?: SortOrder
+    icdBlock?: SortOrderInput | SortOrder
+    diagnosisName?: SortOrder
+    diagnosisType?: SortOrder
+    encounterCount?: SortOrder
+    uniquePatients?: SortOrder
+    primaryCount?: SortOrder
+    chronicCount?: SortOrder
+    createdAt?: SortOrder
+    _count?: DiagnosisDailyAggregateCountOrderByAggregateInput
+    _avg?: DiagnosisDailyAggregateAvgOrderByAggregateInput
+    _max?: DiagnosisDailyAggregateMaxOrderByAggregateInput
+    _min?: DiagnosisDailyAggregateMinOrderByAggregateInput
+    _sum?: DiagnosisDailyAggregateSumOrderByAggregateInput
+  }
+
+  export type DiagnosisDailyAggregateScalarWhereWithAggregatesInput = {
+    AND?: DiagnosisDailyAggregateScalarWhereWithAggregatesInput | DiagnosisDailyAggregateScalarWhereWithAggregatesInput[]
+    OR?: DiagnosisDailyAggregateScalarWhereWithAggregatesInput[]
+    NOT?: DiagnosisDailyAggregateScalarWhereWithAggregatesInput | DiagnosisDailyAggregateScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DiagnosisDailyAggregate"> | string
+    tenantId?: UuidWithAggregatesFilter<"DiagnosisDailyAggregate"> | string
+    facilityId?: UuidNullableWithAggregatesFilter<"DiagnosisDailyAggregate"> | string | null
+    departmentId?: UuidNullableWithAggregatesFilter<"DiagnosisDailyAggregate"> | string | null
+    diagnosisDate?: DateTimeWithAggregatesFilter<"DiagnosisDailyAggregate"> | Date | string
+    icdCode?: StringWithAggregatesFilter<"DiagnosisDailyAggregate"> | string
+    icdBlock?: StringNullableWithAggregatesFilter<"DiagnosisDailyAggregate"> | string | null
+    diagnosisName?: StringWithAggregatesFilter<"DiagnosisDailyAggregate"> | string
+    diagnosisType?: StringWithAggregatesFilter<"DiagnosisDailyAggregate"> | string
+    encounterCount?: IntWithAggregatesFilter<"DiagnosisDailyAggregate"> | number
+    uniquePatients?: IntWithAggregatesFilter<"DiagnosisDailyAggregate"> | number
+    primaryCount?: IntWithAggregatesFilter<"DiagnosisDailyAggregate"> | number
+    chronicCount?: IntWithAggregatesFilter<"DiagnosisDailyAggregate"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"DiagnosisDailyAggregate"> | Date | string
   }
 
   export type AuditLogCreateInput = {
@@ -11525,6 +15471,286 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ClinicalObservationDailyCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId?: string | null
+    departmentId?: string | null
+    observationDate: Date | string
+    code: string
+    codeSystem: string
+    category: string
+    recordCount: number
+    avgValue?: Decimal | DecimalJsLike | number | string | null
+    minValue?: Decimal | DecimalJsLike | number | string | null
+    maxValue?: Decimal | DecimalJsLike | number | string | null
+    p50Value?: Decimal | DecimalJsLike | number | string | null
+    p95Value?: Decimal | DecimalJsLike | number | string | null
+    normalCount?: number
+    abnormalHighCount?: number
+    abnormalLowCount?: number
+    criticalCount?: number
+    uniquePatients?: number
+    createdAt?: Date | string
+  }
+
+  export type ClinicalObservationDailyUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId?: string | null
+    departmentId?: string | null
+    observationDate: Date | string
+    code: string
+    codeSystem: string
+    category: string
+    recordCount: number
+    avgValue?: Decimal | DecimalJsLike | number | string | null
+    minValue?: Decimal | DecimalJsLike | number | string | null
+    maxValue?: Decimal | DecimalJsLike | number | string | null
+    p50Value?: Decimal | DecimalJsLike | number | string | null
+    p95Value?: Decimal | DecimalJsLike | number | string | null
+    normalCount?: number
+    abnormalHighCount?: number
+    abnormalLowCount?: number
+    criticalCount?: number
+    uniquePatients?: number
+    createdAt?: Date | string
+  }
+
+  export type ClinicalObservationDailyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    observationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    recordCount?: IntFieldUpdateOperationsInput | number
+    avgValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p50Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    normalCount?: IntFieldUpdateOperationsInput | number
+    abnormalHighCount?: IntFieldUpdateOperationsInput | number
+    abnormalLowCount?: IntFieldUpdateOperationsInput | number
+    criticalCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalObservationDailyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    observationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    recordCount?: IntFieldUpdateOperationsInput | number
+    avgValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p50Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    normalCount?: IntFieldUpdateOperationsInput | number
+    abnormalHighCount?: IntFieldUpdateOperationsInput | number
+    abnormalLowCount?: IntFieldUpdateOperationsInput | number
+    criticalCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalObservationDailyCreateManyInput = {
+    id?: string
+    tenantId: string
+    facilityId?: string | null
+    departmentId?: string | null
+    observationDate: Date | string
+    code: string
+    codeSystem: string
+    category: string
+    recordCount: number
+    avgValue?: Decimal | DecimalJsLike | number | string | null
+    minValue?: Decimal | DecimalJsLike | number | string | null
+    maxValue?: Decimal | DecimalJsLike | number | string | null
+    p50Value?: Decimal | DecimalJsLike | number | string | null
+    p95Value?: Decimal | DecimalJsLike | number | string | null
+    normalCount?: number
+    abnormalHighCount?: number
+    abnormalLowCount?: number
+    criticalCount?: number
+    uniquePatients?: number
+    createdAt?: Date | string
+  }
+
+  export type ClinicalObservationDailyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    observationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    recordCount?: IntFieldUpdateOperationsInput | number
+    avgValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p50Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    normalCount?: IntFieldUpdateOperationsInput | number
+    abnormalHighCount?: IntFieldUpdateOperationsInput | number
+    abnormalLowCount?: IntFieldUpdateOperationsInput | number
+    criticalCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalObservationDailyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    observationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    recordCount?: IntFieldUpdateOperationsInput | number
+    avgValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maxValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p50Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95Value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    normalCount?: IntFieldUpdateOperationsInput | number
+    abnormalHighCount?: IntFieldUpdateOperationsInput | number
+    abnormalLowCount?: IntFieldUpdateOperationsInput | number
+    criticalCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisDailyAggregateCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId?: string | null
+    departmentId?: string | null
+    diagnosisDate: Date | string
+    icdCode: string
+    icdBlock?: string | null
+    diagnosisName: string
+    diagnosisType: string
+    encounterCount: number
+    uniquePatients: number
+    primaryCount?: number
+    chronicCount?: number
+    createdAt?: Date | string
+  }
+
+  export type DiagnosisDailyAggregateUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId?: string | null
+    departmentId?: string | null
+    diagnosisDate: Date | string
+    icdCode: string
+    icdBlock?: string | null
+    diagnosisName: string
+    diagnosisType: string
+    encounterCount: number
+    uniquePatients: number
+    primaryCount?: number
+    chronicCount?: number
+    createdAt?: Date | string
+  }
+
+  export type DiagnosisDailyAggregateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdBlock?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    encounterCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    primaryCount?: IntFieldUpdateOperationsInput | number
+    chronicCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisDailyAggregateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdBlock?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    encounterCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    primaryCount?: IntFieldUpdateOperationsInput | number
+    chronicCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisDailyAggregateCreateManyInput = {
+    id?: string
+    tenantId: string
+    facilityId?: string | null
+    departmentId?: string | null
+    diagnosisDate: Date | string
+    icdCode: string
+    icdBlock?: string | null
+    diagnosisName: string
+    diagnosisType: string
+    encounterCount: number
+    uniquePatients: number
+    primaryCount?: number
+    chronicCount?: number
+    createdAt?: Date | string
+  }
+
+  export type DiagnosisDailyAggregateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdBlock?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    encounterCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    primaryCount?: IntFieldUpdateOperationsInput | number
+    chronicCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisDailyAggregateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdBlock?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    encounterCount?: IntFieldUpdateOperationsInput | number
+    uniquePatients?: IntFieldUpdateOperationsInput | number
+    primaryCount?: IntFieldUpdateOperationsInput | number
+    chronicCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -11563,7 +15789,7 @@ export namespace Prisma {
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
   }
-  export type JsonFilter<$PrismaModel = never> = 
+  export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
         Required<JsonFilterBase<$PrismaModel>>
@@ -11573,12 +15799,13 @@ export namespace Prisma {
   export type JsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -11680,7 +15907,7 @@ export namespace Prisma {
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
   }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
         Required<JsonWithAggregatesFilterBase<$PrismaModel>>
@@ -11690,12 +15917,13 @@ export namespace Prisma {
   export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -11741,7 +15969,7 @@ export namespace Prisma {
     eventType?: SortOrder
     occurredAt?: SortOrder
   }
-  export type JsonNullableFilter<$PrismaModel = never> = 
+  export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
         Required<JsonNullableFilterBase<$PrismaModel>>
@@ -11751,12 +15979,13 @@ export namespace Prisma {
   export type JsonNullableFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -11864,7 +16093,7 @@ export namespace Prisma {
     inputTokens?: SortOrder
     outputTokens?: SortOrder
   }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
         Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
@@ -11874,12 +16103,13 @@ export namespace Prisma {
   export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -12368,6 +16598,185 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type ClinicalObservationDailyTenantIdFacilityIdDepartmentIdObservationDateCodeCompoundUniqueInput = {
+    tenantId: string
+    facilityId: string
+    departmentId: string
+    observationDate: Date | string
+    code: string
+  }
+
+  export type ClinicalObservationDailyCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    departmentId?: SortOrder
+    observationDate?: SortOrder
+    code?: SortOrder
+    codeSystem?: SortOrder
+    category?: SortOrder
+    recordCount?: SortOrder
+    avgValue?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    p50Value?: SortOrder
+    p95Value?: SortOrder
+    normalCount?: SortOrder
+    abnormalHighCount?: SortOrder
+    abnormalLowCount?: SortOrder
+    criticalCount?: SortOrder
+    uniquePatients?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClinicalObservationDailyAvgOrderByAggregateInput = {
+    recordCount?: SortOrder
+    avgValue?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    p50Value?: SortOrder
+    p95Value?: SortOrder
+    normalCount?: SortOrder
+    abnormalHighCount?: SortOrder
+    abnormalLowCount?: SortOrder
+    criticalCount?: SortOrder
+    uniquePatients?: SortOrder
+  }
+
+  export type ClinicalObservationDailyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    departmentId?: SortOrder
+    observationDate?: SortOrder
+    code?: SortOrder
+    codeSystem?: SortOrder
+    category?: SortOrder
+    recordCount?: SortOrder
+    avgValue?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    p50Value?: SortOrder
+    p95Value?: SortOrder
+    normalCount?: SortOrder
+    abnormalHighCount?: SortOrder
+    abnormalLowCount?: SortOrder
+    criticalCount?: SortOrder
+    uniquePatients?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClinicalObservationDailyMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    departmentId?: SortOrder
+    observationDate?: SortOrder
+    code?: SortOrder
+    codeSystem?: SortOrder
+    category?: SortOrder
+    recordCount?: SortOrder
+    avgValue?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    p50Value?: SortOrder
+    p95Value?: SortOrder
+    normalCount?: SortOrder
+    abnormalHighCount?: SortOrder
+    abnormalLowCount?: SortOrder
+    criticalCount?: SortOrder
+    uniquePatients?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ClinicalObservationDailySumOrderByAggregateInput = {
+    recordCount?: SortOrder
+    avgValue?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    p50Value?: SortOrder
+    p95Value?: SortOrder
+    normalCount?: SortOrder
+    abnormalHighCount?: SortOrder
+    abnormalLowCount?: SortOrder
+    criticalCount?: SortOrder
+    uniquePatients?: SortOrder
+  }
+
+  export type DiagnosisDailyAggregateTenantIdFacilityIdDepartmentIdDiagnosisDateIcdCodeDiagnosisTypeCompoundUniqueInput = {
+    tenantId: string
+    facilityId: string
+    departmentId: string
+    diagnosisDate: Date | string
+    icdCode: string
+    diagnosisType: string
+  }
+
+  export type DiagnosisDailyAggregateCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    departmentId?: SortOrder
+    diagnosisDate?: SortOrder
+    icdCode?: SortOrder
+    icdBlock?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisType?: SortOrder
+    encounterCount?: SortOrder
+    uniquePatients?: SortOrder
+    primaryCount?: SortOrder
+    chronicCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DiagnosisDailyAggregateAvgOrderByAggregateInput = {
+    encounterCount?: SortOrder
+    uniquePatients?: SortOrder
+    primaryCount?: SortOrder
+    chronicCount?: SortOrder
+  }
+
+  export type DiagnosisDailyAggregateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    departmentId?: SortOrder
+    diagnosisDate?: SortOrder
+    icdCode?: SortOrder
+    icdBlock?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisType?: SortOrder
+    encounterCount?: SortOrder
+    uniquePatients?: SortOrder
+    primaryCount?: SortOrder
+    chronicCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DiagnosisDailyAggregateMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    departmentId?: SortOrder
+    diagnosisDate?: SortOrder
+    icdCode?: SortOrder
+    icdBlock?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisType?: SortOrder
+    encounterCount?: SortOrder
+    uniquePatients?: SortOrder
+    primaryCount?: SortOrder
+    chronicCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DiagnosisDailyAggregateSumOrderByAggregateInput = {
+    encounterCount?: SortOrder
+    uniquePatients?: SortOrder
+    primaryCount?: SortOrder
+    chronicCount?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -12557,7 +16966,7 @@ export namespace Prisma {
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
   }
-  export type NestedJsonFilter<$PrismaModel = never> = 
+  export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
         Required<NestedJsonFilterBase<$PrismaModel>>
@@ -12567,12 +16976,13 @@ export namespace Prisma {
   export type NestedJsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -12593,7 +17003,7 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
-  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
         Required<NestedJsonNullableFilterBase<$PrismaModel>>
@@ -12603,12 +17013,13 @@ export namespace Prisma {
   export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -12753,42 +17164,6 @@ export namespace Prisma {
   }
 
 
-
-  /**
-   * Aliases for legacy arg types
-   */
-    /**
-     * @deprecated Use AuditLogDefaultArgs instead
-     */
-    export type AuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AuditLogDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use UsageEventDefaultArgs instead
-     */
-    export type UsageEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UsageEventDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use AiQueryLogDefaultArgs instead
-     */
-    export type AiQueryLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AiQueryLogDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use AiUsageMetricDefaultArgs instead
-     */
-    export type AiUsageMetricArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AiUsageMetricDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SemanticMetricDefaultArgs instead
-     */
-    export type SemanticMetricArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SemanticMetricDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SemanticDimensionDefaultArgs instead
-     */
-    export type SemanticDimensionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SemanticDimensionDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SemanticJoinPathDefaultArgs instead
-     */
-    export type SemanticJoinPathArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SemanticJoinPathDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SavedReportDefaultArgs instead
-     */
-    export type SavedReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SavedReportDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

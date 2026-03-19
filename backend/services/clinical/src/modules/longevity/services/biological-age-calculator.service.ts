@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 
-interface BiologicalAgeResult {
+export interface BiologicalAgeResult {
   chronologicalAge: number;
   biologicalAge: number;
   ageGap: number; // positive = older than chronological age

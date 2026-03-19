@@ -1,10 +1,12 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import { CreateClinicalOrderDto, UpdateClinicalOrderDto, AddOrderResultDto, OrderStatus } from '../dto/clinical-order.dto';
 import { ObservationWriterService } from '../../observations/observation-writer.service';
 
 @Injectable()
 export class ClinicalOrdersService {
+  private readonly logger = new Logger(ClinicalOrdersService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly observationWriter: ObservationWriterService,
@@ -83,7 +85,7 @@ export class ClinicalOrdersService {
 
     // Write structured observations from result data (async, non-blocking)
     if (dto.resultData && typeof dto.resultData === 'object') {
-      this.observationWriter.writeOrderResults({
+      const context = {
         tenantId,
         patientId: order.patientId,
         encounterId: order.encounterId,
@@ -91,8 +93,12 @@ export class ClinicalOrdersService {
         orderType: order.orderType,
         resultData: dto.resultData,
         resultedAt: updated.resultedAt || new Date(),
-        performedBy: dto.performedBy,
-      }).catch(() => {}); // Fire-and-forget; errors logged inside writer
+        ...(dto.performedBy ? { performedBy: dto.performedBy } : {}),
+      };
+
+      this.observationWriter.writeOrderResults(context).catch((err) => {
+        this.logger.error(`Failed to write observations for order ${id}: ${err?.message}`, err?.stack);
+      });
     }
 
     return updated;

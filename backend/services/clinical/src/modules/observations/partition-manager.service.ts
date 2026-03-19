@@ -62,8 +62,8 @@ export class PartitionManagerService implements OnModuleInit {
         const nextMonth = new Date(now.getFullYear(), now.getMonth() + monthOffset + 1, 1);
 
         const yearMonth = `${targetDate.getFullYear()}_${String(targetDate.getMonth() + 1).padStart(2, '0')}`;
-        const fromDate = targetDate.toISOString().split('T')[0];
-        const toDate = nextMonth.toISOString().split('T')[0];
+        const fromDate = this.toPartitionDate(targetDate);
+        const toDate = this.toPartitionDate(nextMonth);
 
         for (const { tenant_id } of tenants) {
           const tenantShort = tenant_id.replace(/-/g, '').substring(0, 12);
@@ -79,6 +79,13 @@ export class PartitionManagerService implements OnModuleInit {
    * Create tenant partition + monthly sub-partition if they don't exist.
    */
   async createTenantPartitions(tenantId: string): Promise<void> {
+    // First check if the table is actually partitioned
+    const isPartitioned = await this.isTablePartitioned();
+    if (!isPartitioned) {
+      this.logger.debug('clinical_observations is not partitioned — skipping partition creation');
+      return;
+    }
+
     const tenantShort = tenantId.replace(/-/g, '').substring(0, 12);
     const tenantPartitionName = `clinical_observations_t_${tenantShort}`;
 
@@ -101,13 +108,27 @@ export class PartitionManagerService implements OnModuleInit {
         const targetDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
         const nextMonth = new Date(now.getFullYear(), now.getMonth() + monthOffset + 1, 1);
         const yearMonth = `${targetDate.getFullYear()}_${String(targetDate.getMonth() + 1).padStart(2, '0')}`;
-        const fromDate = targetDate.toISOString().split('T')[0];
-        const toDate = nextMonth.toISOString().split('T')[0];
+        const fromDate = this.toPartitionDate(targetDate);
+        const toDate = this.toPartitionDate(nextMonth);
 
         await this.ensureMonthlyPartition(tenantShort, tenantId, yearMonth, fromDate, toDate);
       }
-    } catch (error) {
-      this.logger.error(`Failed to create partitions for tenant ${tenantId}`, error);
+    } catch (error: any) {
+      this.logger.error(`Failed to create partitions for tenant ${tenantId}: ${error?.message}`, error?.stack);
+    }
+  }
+
+  private async isTablePartitioned(): Promise<boolean> {
+    try {
+      const result = await this.prisma.$queryRawUnsafe<any[]>(`
+        SELECT COUNT(*)::int as cnt
+        FROM pg_catalog.pg_partitioned_table pt
+        JOIN pg_catalog.pg_class c ON c.oid = pt.partrelid
+        WHERE c.relname = 'clinical_observations'
+      `);
+      return (result[0]?.cnt ?? 0) > 0;
+    } catch {
+      return false;
     }
   }
 
@@ -152,5 +173,9 @@ export class PartitionManagerService implements OnModuleInit {
       SELECT COUNT(*)::int as cnt FROM pg_class WHERE relname = '${partitionName}'
     `);
     return (result[0]?.cnt ?? 0) > 0;
+  }
+
+  private toPartitionDate(date: Date): string {
+    return date.toISOString().slice(0, 10);
   }
 }

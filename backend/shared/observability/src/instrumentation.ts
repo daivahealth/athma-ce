@@ -28,7 +28,6 @@ import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { ParentBasedSampler, TraceIdRatioBasedSampler } from '@opentelemetry/sdk-trace-base';
 import { BatchLogRecordProcessor } from '@opentelemetry/sdk-logs';
-import { PrismaInstrumentation } from '@prisma/instrumentation';
 import { getObservabilityConfig } from './config';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 
@@ -109,8 +108,6 @@ export function initializeObservability(): boolean {
           ignoreIncomingPaths: ['/health', '/ready', '/metrics', '/favicon.ico'],
         },
       }),
-      // Add Prisma instrumentation for database tracing
-      new PrismaInstrumentation(),
     ];
 
     // Build SDK configuration

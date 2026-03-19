@@ -16,13 +16,36 @@ import type {
   UpdatePrescriptionInput,
 } from '../types/charting';
 
+type LegacySectionsPayload = {
+  sections?: unknown;
+  content?: Record<string, any>;
+};
+
+function normalizeClinicalNotePayload<T extends LegacySectionsPayload>(payload: T): T {
+  const { sections, content, ...rest } = payload;
+
+  if (sections === undefined) {
+    return payload;
+  }
+
+  const normalizedContent = content ?? { sections };
+
+  return {
+    ...rest,
+    content: normalizedContent,
+  } as T;
+}
+
 class ChartingService {
   // ========================================
   // CLINICAL NOTES
   // ========================================
 
   async createClinicalNote(payload: CreateClinicalNoteInput): Promise<ClinicalNote> {
-    const response = await clinicalClient.post('/encounter-notes', payload);
+    const response = await clinicalClient.post(
+      '/encounter-notes',
+      normalizeClinicalNotePayload(payload)
+    );
     return response.data;
   }
 
@@ -50,7 +73,10 @@ class ChartingService {
     id: string,
     payload: UpdateClinicalNoteInput
   ): Promise<ClinicalNote> {
-    const response = await clinicalClient.patch(`/encounter-notes/${id}`, payload);
+    const response = await clinicalClient.patch(
+      `/encounter-notes/${id}`,
+      normalizeClinicalNotePayload(payload)
+    );
     return response.data;
   }
 

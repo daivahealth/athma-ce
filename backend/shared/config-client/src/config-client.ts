@@ -27,6 +27,7 @@ interface CacheEntry {
 export class ConfigClient {
   private httpClient: AxiosInstance;
   private redisClient?: Redis;
+  private redisAvailable = false;
   private memoryCache: Map<string, CacheEntry> = new Map();
   private enableCache: boolean;
   private memoryTtlMs: number;
@@ -45,8 +46,32 @@ export class ConfigClient {
     // Initialize Redis if URL provided
     if (options.cacheConfig?.redisUrl) {
       try {
-        this.redisClient = new Redis(options.cacheConfig.redisUrl);
-        console.log('✅ ConfigClient: Redis connected');
+        const redisClient = new Redis(options.cacheConfig.redisUrl, {
+          lazyConnect: true,
+          maxRetriesPerRequest: 1,
+        });
+
+        redisClient.on('connect', () => {
+          this.redisAvailable = true;
+          console.log('✅ ConfigClient: Redis connected');
+        });
+
+        redisClient.on('error', (error) => {
+          if (this.redisAvailable) {
+            console.warn('⚠️ ConfigClient: Redis error, falling back to memory cache only', error);
+          } else {
+            console.warn('⚠️ ConfigClient: Redis unavailable, using memory cache only', error.message);
+          }
+
+          this.redisAvailable = false;
+        });
+
+        redisClient.connect().catch((error) => {
+          this.redisAvailable = false;
+          console.warn('⚠️ ConfigClient: Redis connection failed, using memory cache only', error.message);
+        });
+
+        this.redisClient = redisClient;
       } catch (error) {
         console.warn('⚠️ ConfigClient: Redis connection failed, using memory cache only', error);
       }
@@ -172,7 +197,7 @@ export class ConfigClient {
     }
 
     // Try Redis cache
-    if (this.redisClient) {
+    if (this.redisClient && this.redisAvailable) {
       try {
         const cached = await this.redisClient.get(cacheKey);
         if (cached) {
@@ -209,7 +234,7 @@ export class ConfigClient {
     });
 
     // Set in Redis cache
-    if (this.redisClient) {
+    if (this.redisClient && this.redisAvailable) {
       try {
         await this.redisClient.set(
           cacheKey,
@@ -233,7 +258,7 @@ export class ConfigClient {
     this.memoryCache.delete(cacheKey);
 
     // Remove from Redis
-    if (this.redisClient) {
+    if (this.redisClient && this.redisAvailable) {
       try {
         await this.redisClient.del(cacheKey);
       } catch (error) {
@@ -248,7 +273,7 @@ export class ConfigClient {
   async clearCache(): Promise<void> {
     this.memoryCache.clear();
 
-    if (this.redisClient) {
+    if (this.redisClient && this.redisAvailable) {
       try {
         // Clear all config keys from Redis
         const keys = await this.redisClient.keys('config:*');
@@ -306,7 +331,7 @@ export class ConfigClient {
    * Close connections
    */
   async close(): Promise<void> {
-    if (this.redisClient) {
+    if (this.redisClient && this.redisAvailable) {
       await this.redisClient.quit();
     }
   }

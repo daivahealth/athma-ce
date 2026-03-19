@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
+import { PartitionManagerService } from './partition-manager.service';
 import {
   VITAL_SIGN_MAPPINGS,
   ALL_OBSERVATION_MAPPINGS,
@@ -52,8 +53,12 @@ interface OrderResultContext {
 @Injectable()
 export class ObservationWriterService {
   private readonly logger = new Logger(ObservationWriterService.name);
+  private readonly ensuredTenants = new Set<string>();
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly partitionManager: PartitionManagerService,
+  ) {}
 
   /**
    * Extract vital signs from triage JSON and write individual observation rows.
@@ -113,6 +118,9 @@ export class ObservationWriterService {
     if (observations.length === 0) return;
 
     try {
+      // Ensure tenant partition exists before writing (cached per tenant)
+      await this.ensureTenantPartition(context.tenantId);
+
       // Delete existing observations for this triage (for upsert on update)
       await this.prisma.clinicalObservation.deleteMany({
         where: {
@@ -129,10 +137,10 @@ export class ObservationWriterService {
       this.logger.log(
         `Wrote ${observations.length} vital observations for triage ${context.triageId}`,
       );
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
-        `Failed to write vital observations for triage ${context.triageId}`,
-        error,
+        `Failed to write vital observations for triage ${context.triageId}: ${error?.message}`,
+        error?.stack,
       );
     }
   }
@@ -212,6 +220,9 @@ export class ObservationWriterService {
     if (observations.length === 0) return;
 
     try {
+      // Ensure tenant partition exists before writing (cached per tenant)
+      await this.ensureTenantPartition(context.tenantId);
+
       // Delete existing observations for this order (for re-adding results)
       await this.prisma.clinicalObservation.deleteMany({
         where: {
@@ -227,11 +238,31 @@ export class ObservationWriterService {
       this.logger.log(
         `Wrote ${observations.length} result observations for order ${context.orderId}`,
       );
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
-        `Failed to write result observations for order ${context.orderId}`,
-        error,
+        `Failed to write result observations for order ${context.orderId}: ${error?.message}`,
+        error?.stack,
       );
+    }
+  }
+
+  /**
+   * Ensure partition exists for this tenant before writing.
+   * Caches per-tenant to avoid repeated checks within the same process lifetime.
+   */
+  private async ensureTenantPartition(tenantId: string): Promise<void> {
+    if (this.ensuredTenants.has(tenantId)) return;
+
+    try {
+      await this.partitionManager.createTenantPartitions(tenantId);
+      this.ensuredTenants.add(tenantId);
+    } catch (error: any) {
+      // If partition creation fails (e.g., table not partitioned), log but don't block
+      // The DEFAULT partition or non-partitioned table should still accept writes
+      this.logger.warn(
+        `Partition creation for tenant ${tenantId} failed (may be non-partitioned): ${error?.message}`,
+      );
+      this.ensuredTenants.add(tenantId); // Cache to avoid retrying every write
     }
   }
 

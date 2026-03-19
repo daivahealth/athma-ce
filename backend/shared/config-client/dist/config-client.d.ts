@@ -9,6 +9,7 @@ import type { ConfigContext, ConfigValues, ConfigClientOptions } from './types';
 export declare class ConfigClient {
     private httpClient;
     private redisClient?;
+    private redisAvailable;
     private memoryCache;
     private enableCache;
     private memoryTtlMs;

@@ -5,8 +5,13 @@
  * to ensure row-level security and data isolation
  */
 
-import { Prisma } from '../generated';
 import { RequestContext, type RequestContextStore } from '@zeal/shared-utils';
+
+type TenantMiddlewareParams = {
+  model?: string;
+  action: string;
+  args: Record<string, any>;
+};
 
 /**
  * Models that require tenant isolation
@@ -31,6 +36,9 @@ const TENANT_ISOLATED_MODELS = [
   'Package',
   'AdministrativeService',
   'VitalSignsTemplate',
+  'EncounterClinicalCoding',
+  // ClinicalObservation: handled explicitly by ObservationWriterService (fire-and-forget, no request context)
+  // ObservationCodeCatalog: has global entries with NULL tenant_id
   // Add all your tenant-isolated models here
 ];
 
@@ -48,7 +56,7 @@ const EXCLUDED_MODELS: string[] = [
  * Creates Prisma middleware for automatic tenant isolation
  */
 export function createTenantIsolationMiddleware() {
-  return async (params: Prisma.MiddlewareParams, next: any) => {
+  return async (params: TenantMiddlewareParams, next: any) => {
     const model = params.model;
 
     // Skip if no model (raw queries, etc.)
