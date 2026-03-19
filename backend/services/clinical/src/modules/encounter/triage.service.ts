@@ -7,10 +7,14 @@
 import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import { CreateTriageDto, UpdateTriageDto } from './dto/triage.dto';
+import { ObservationWriterService } from '../observations/observation-writer.service';
 
 @Injectable()
 export class TriageService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly observationWriter: ObservationWriterService,
+  ) {}
 
   /**
    * Create a new triage record
@@ -94,6 +98,18 @@ export class TriageService {
         where: { id: dto.encounterId },
         data: { status: 'triaged' },
       });
+    }
+
+    // Write structured observations from vital signs (async, non-blocking)
+    if (dto.vitalSigns && Object.keys(dto.vitalSigns).length > 0) {
+      this.observationWriter.writeVitals(dto.vitalSigns, {
+        tenantId,
+        patientId: dto.patientId,
+        encounterId: dto.encounterId,
+        triageId: triage.id,
+        observedAt: triage.triageTime || new Date(),
+        observedBy: dto.triageStaffId,
+      }).catch(() => {}); // Fire-and-forget; errors logged inside writer
     }
 
     return triage;
@@ -226,6 +242,18 @@ export class TriageService {
         },
       },
     });
+
+    // Re-write structured observations if vital signs were updated
+    if (dto.vitalSigns && Object.keys(dto.vitalSigns).length > 0) {
+      this.observationWriter.writeVitals(dto.vitalSigns, {
+        tenantId,
+        patientId: existing.patientId,
+        encounterId: existing.encounterId,
+        triageId: id,
+        observedAt: updated.triageTime || new Date(),
+        observedBy: dto.triageStaffId || existing.triageStaffId,
+      }).catch(() => {});
+    }
 
     return updated;
   }
