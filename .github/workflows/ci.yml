@@ -27,30 +27,36 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: backend/package-lock.json
 
       - name: Install deps
+        working-directory: backend
         run: npm ci
 
       - name: Cache Turbo
         uses: actions/cache@v4
         with:
-          path: .turbo
+          path: backend/.turbo
           key: turbo-${{ runner.os }}-${{ github.sha }}
           restore-keys: |
             turbo-${{ runner.os }}-
 
       - name: Lint
+        working-directory: backend
         run: npx turbo run lint --cache-dir=.turbo
 
       - name: Typecheck & Build (only changed)
+        working-directory: backend
         run: npx turbo run build --cache-dir=.turbo
 
       - name: Unit Tests (only changed)
+        working-directory: backend
         run: npx turbo run test --cache-dir=.turbo -- --ci --reporter=default
 
       # Optional: verify DB migrations compile (no prod DB access here)
       - name: Dry-run Prisma generate (if used)
+        working-directory: backend
         run: |
-          if [ -d backend/shared/database-foundation ]; then
+          if [ -d shared/database-foundation ]; then
             npx turbo run db:gen --cache-dir=.turbo || true
           fi
