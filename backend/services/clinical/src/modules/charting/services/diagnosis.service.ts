@@ -90,7 +90,7 @@ export class DiagnosisService {
       code: dto.icdCode,
       codeSystem: dto.icdVersion || 'ICD-10',
       displayName: dto.diagnosisName,
-      displayNameAr: dto.diagnosisNameAr,
+      ...(dto.diagnosisNameAr != null ? { displayNameAr: dto.diagnosisNameAr } : {}),
       codingType: 'diagnosis',
       status,
       reviewedBy: dto.diagnosedBy,
