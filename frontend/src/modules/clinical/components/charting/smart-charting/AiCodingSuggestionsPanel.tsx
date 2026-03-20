@@ -92,6 +92,24 @@ function SuggestionCard({
           <Badge variant="secondary" className="text-[10px]">
             {suggestion.codeSystem}
           </Badge>
+          {suggestion.codingType && suggestion.codingType !== 'diagnosis' && (
+            <Badge
+              variant="outline"
+              className={`text-[10px] capitalize ${
+                suggestion.codingType === 'history'
+                  ? 'border-amber-300 text-amber-700 bg-amber-50'
+                  : suggestion.codingType === 'symptom'
+                    ? 'border-orange-300 text-orange-700 bg-orange-50'
+                    : suggestion.codingType === 'finding'
+                      ? 'border-teal-300 text-teal-700 bg-teal-50'
+                      : suggestion.codingType === 'procedure'
+                        ? 'border-indigo-300 text-indigo-700 bg-indigo-50'
+                        : 'border-gray-300 text-gray-700 bg-gray-50'
+              }`}
+            >
+              {suggestion.codingType}
+            </Badge>
+          )}
           {!suggestion.catalogMatch && isIcd && (
             <TooltipProvider>
               <Tooltip>

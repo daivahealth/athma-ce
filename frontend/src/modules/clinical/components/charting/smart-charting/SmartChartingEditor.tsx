@@ -401,7 +401,7 @@ export function SmartChartingEditor({
       code: s.code,
       codeSystem: s.codeSystem,
       displayName: s.shortDescription || s.description,
-      codingType: 'diagnosis',
+      codingType: s.codingType || 'diagnosis',
       confidence: s.confidence,
       rationale: s.rationale,
       status: acceptedCodes.has(s.code) ? 'accepted' : 'suggested',

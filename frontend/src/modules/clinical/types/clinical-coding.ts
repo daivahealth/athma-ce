@@ -9,6 +9,8 @@ export interface ClinicalCodingSuggestion {
   confidence: number;
   codeSystem: 'ICD-10' | 'SNOMED';
   rationale: string;
+  /** Clinical coding type: diagnosis, history, symptom, finding, procedure, medication */
+  codingType: string;
   catalogMatch: boolean;
   isBillable: boolean | null;
 }
@@ -37,7 +39,7 @@ export interface CreateClinicalCodingInput {
   displayNameAr?: string;
   snomedCode?: string;
   snomedDisplay?: string;
-  codingType: string; // diagnosis, symptom, finding, procedure, medication
+  codingType: string; // diagnosis, history, symptom, finding, procedure, medication
   confidence?: number;
   rationale?: string;
   aiSuggestionId?: string;

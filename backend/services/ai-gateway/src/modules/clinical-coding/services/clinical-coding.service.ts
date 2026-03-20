@@ -26,6 +26,7 @@ interface RawLLMSuggestion {
   confidence: number;
   codeSystem: 'ICD-10' | 'SNOMED';
   rationale: string;
+  codingType?: string;
 }
 
 @Injectable()
@@ -119,19 +120,27 @@ export class ClinicalCodingService {
 
 RULES:
 1. Output ONLY a valid JSON array — no markdown, no explanation, no code fences.
-2. Each element must have: code, description, shortDescription, confidence (0.0–1.0), codeSystem ("ICD-10" or "SNOMED"), rationale.
-3. Suggest codes at the highest specificity available.
-4. Order by confidence descending.
-5. Return at most ${maxSuggestions} suggestions total, with a mix of ICD-10 and SNOMED codes.
-6. For ICD-10, use ICD-10-CM codes (e.g., E11.9, I10, J06.9).
-7. For SNOMED, use SNOMED-CT concept IDs (e.g., 73211009, 38341003).
-8. Never include any patient-identifiable information in your response.
-9. If the clinical text is too vague to assign codes confidently, return an empty array [].
+2. Each element must have: code, description, shortDescription, confidence (0.0–1.0), codeSystem ("ICD-10" or "SNOMED"), rationale, codingType.
+3. codingType classifies what the code represents based on the clinical context:
+   - "diagnosis" — Active/current diagnosis or condition being treated in this encounter.
+   - "history" — Past medical/surgical/family history condition not actively treated now (e.g., "history of appendectomy", "family history of CAD", "past DVT").
+   - "symptom" — Presenting symptom or chief complaint (e.g., "cough", "chest pain", "headache").
+   - "finding" — Clinical observation or exam finding (e.g., "elevated BP reading", "heart murmur").
+   - "procedure" — Procedure or intervention mentioned (e.g., "angioplasty", "biopsy").
+   - "medication" — Medication-related code (rare, only if a drug-related code applies).
+4. Suggest codes at the highest specificity available.
+5. Order by confidence descending.
+6. Return at most ${maxSuggestions} suggestions total, with a mix of ICD-10 and SNOMED codes.
+7. For ICD-10, use ICD-10-CM codes (e.g., E11.9, I10, J06.9).
+8. For SNOMED, use SNOMED-CT concept IDs (e.g., 73211009, 38341003).
+9. Never include any patient-identifiable information in your response.
+10. If the clinical text is too vague to assign codes confidently, return an empty array [].
 
 EXAMPLE OUTPUT:
 [
-  {"code":"E11.9","description":"Type 2 diabetes mellitus without complications","shortDescription":"Type 2 DM","confidence":0.95,"codeSystem":"ICD-10","rationale":"Patient described as diabetic"},
-  {"code":"73211009","description":"Diabetes mellitus (disorder)","shortDescription":"Diabetes mellitus","confidence":0.90,"codeSystem":"SNOMED","rationale":"SNOMED equivalent for diabetes"}
+  {"code":"E11.9","description":"Type 2 diabetes mellitus without complications","shortDescription":"Type 2 DM","confidence":0.95,"codeSystem":"ICD-10","rationale":"Patient described as diabetic","codingType":"diagnosis"},
+  {"code":"Z87.19","description":"Personal history of other diseases of the digestive system","shortDescription":"Hx digestive disease","confidence":0.85,"codeSystem":"ICD-10","rationale":"Past history of appendectomy mentioned","codingType":"history"},
+  {"code":"R05.9","description":"Cough, unspecified","shortDescription":"Cough","confidence":0.80,"codeSystem":"ICD-10","rationale":"Patient presents with cough","codingType":"symptom"}
 ]`;
   }
 
@@ -209,6 +218,7 @@ EXAMPLE OUTPUT:
         confidence: s.confidence,
         codeSystem: s.codeSystem,
         rationale: s.rationale,
+        codingType: s.codingType || 'diagnosis',
         catalogMatch: !!catalogEntry,
         isBillable: catalogEntry?.isBillable ?? null,
       };

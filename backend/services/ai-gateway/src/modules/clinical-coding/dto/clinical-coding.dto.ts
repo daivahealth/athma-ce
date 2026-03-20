@@ -67,6 +67,13 @@ export class ClinicalCodingSuggestion {
   @ApiProperty({ example: 'Patient described as having uncontrolled diabetes' })
   rationale: string;
 
+  @ApiProperty({
+    description: 'Clinical coding type: what the code represents',
+    enum: ['diagnosis', 'history', 'symptom', 'finding', 'procedure', 'medication'],
+    example: 'diagnosis',
+  })
+  codingType: string;
+
   @ApiProperty({ description: 'Whether the code exists in the DiagnosisMaster catalog' })
   catalogMatch: boolean;
 
