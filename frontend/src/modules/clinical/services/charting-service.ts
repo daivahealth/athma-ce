@@ -15,6 +15,7 @@ import type {
   CreatePrescriptionInput,
   UpdatePrescriptionInput,
 } from '../types/charting';
+import type { CreateClinicalCodingInput } from '../types/clinical-coding';
 
 type LegacySectionsPayload = {
   sections?: unknown;
@@ -222,6 +223,16 @@ class ChartingService {
 
   async deletePrescription(id: string): Promise<void> {
     await clinicalClient.delete(`/prescriptions/${id}`);
+  }
+
+  // ========================================
+  // CLINICAL CODINGS (AI provenance tracking)
+  // ========================================
+
+  async saveClinicalCodings(codings: CreateClinicalCodingInput[]): Promise<{ count: number }> {
+    if (codings.length === 0) return { count: 0 };
+    const response = await clinicalClient.post('/clinical-codings/batch', codings);
+    return response.data;
   }
 }
 

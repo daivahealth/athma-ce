@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import { NodeSelection } from '@tiptap/pm/state';
 import StarterKit from '@tiptap/starter-kit';
@@ -35,12 +35,15 @@ import {
   useClinicalNotesByEncounter,
   useCreateClinicalNote,
   useUpdateClinicalNote,
+  useSaveClinicalCodings,
 } from '@/modules/clinical/hooks/use-charting';
 import { NoteType } from '@/modules/clinical/types/charting';
 import { useToast } from '@/components/ui/use-toast';
 import { extractClinicalText } from '@/modules/clinical/utils/extract-clinical-text';
 import { AiCodingSuggestionsPanel } from './AiCodingSuggestionsPanel';
+import type { AiCodingSuggestionsPanelHandle } from './AiCodingSuggestionsPanel';
 import type { SmartChartingEditorProps, SmartChartingStorageFormat } from './types';
+import type { CreateClinicalCodingInput } from '@/modules/clinical/types/clinical-coding';
 
 const ICON_MAP: Record<string, LucideIcon> = {
   FileText,
@@ -104,9 +107,13 @@ export function SmartChartingEditor({
   const [clinicalText, setClinicalText] = useState('');
   const [clinicalBlockTypes, setClinicalBlockTypes] = useState<string[]>([]);
 
+  // Ref to the AI suggestions panel for reading current suggestions on Save
+  const aiPanelRef = useRef<AiCodingSuggestionsPanelHandle>(null);
+
   const { data: encounterNotes = [] } = useClinicalNotesByEncounter(encounterId);
   const { mutateAsync: createClinicalNote, isPending: isCreatingNote } = useCreateClinicalNote();
   const { mutateAsync: updateNote, isPending: isUpdatingNote } = useUpdateClinicalNote();
+  const { mutateAsync: saveClinicalCodings } = useSaveClinicalCodings();
 
   const smartChartingNote = useMemo(
     () =>
@@ -333,6 +340,7 @@ export function SmartChartingEditor({
     };
 
     try {
+      // 1. Save the clinical note content
       if (smartChartingNote) {
         await updateNote({
           id: smartChartingNote.id,
@@ -349,6 +357,10 @@ export function SmartChartingEditor({
           content: contentPayload,
         });
       }
+
+      // 2. Persist AI coding suggestions to encounter_clinical_codings
+      await persistAiCodingSuggestions();
+
       setLastSaved(new Date());
       toast({
         title: 'Saved',
@@ -371,6 +383,40 @@ export function SmartChartingEditor({
     authorStaffId,
     toast,
   ]);
+
+  /**
+   * Persist all current AI coding suggestions to encounter_clinical_codings.
+   * Accepted suggestions (those added as diagnoses) get status='accepted'.
+   * Others get status='suggested' for analytics tracking.
+   */
+  const persistAiCodingSuggestions = useCallback(async () => {
+    const snapshot = aiPanelRef.current?.getSuggestionsSnapshot();
+    if (!snapshot || snapshot.suggestions.length === 0) return;
+
+    const { suggestions, acceptedCodes } = snapshot;
+
+    const codings: CreateClinicalCodingInput[] = suggestions.map((s) => ({
+      encounterId,
+      patientId,
+      code: s.code,
+      codeSystem: s.codeSystem,
+      displayName: s.shortDescription || s.description,
+      codingType: 'diagnosis',
+      confidence: s.confidence,
+      rationale: s.rationale,
+      status: acceptedCodes.has(s.code) ? 'accepted' : 'suggested',
+      reviewedBy: authorStaffId,
+      catalogMatch: s.catalogMatch,
+      isBillable: s.isBillable ?? undefined,
+    }));
+
+    try {
+      await saveClinicalCodings(codings);
+    } catch (err) {
+      // Log but don't fail the save — coding persistence is supplementary
+      console.error('Failed to persist AI coding suggestions:', err);
+    }
+  }, [encounterId, patientId, authorStaffId, saveClinicalCodings]);
 
   const contextValue = useMemo(
     () => ({ encounterId, patientId, authorStaffId }),
@@ -448,6 +494,7 @@ export function SmartChartingEditor({
 
         {/* AI Coding Suggestions sidebar */}
         <AiCodingSuggestionsPanel
+          ref={aiPanelRef}
           clinicalText={clinicalText}
           blockTypes={clinicalBlockTypes}
           encounterId={encounterId}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useImperativeHandle, forwardRef, useRef } from 'react';
 import {
   Sparkles,
   RefreshCw,
@@ -33,6 +33,18 @@ interface AiCodingSuggestionsPanelProps {
   blockTypes: string[];
   encounterId: string;
   patientId: string;
+}
+
+/**
+ * Handle exposed to the parent (SmartChartingEditor) via ref.
+ * Used on Save to batch-persist AI suggestions to encounter_clinical_codings.
+ */
+export interface AiCodingSuggestionsPanelHandle {
+  /** Returns all current AI suggestions with their accepted/suggested status */
+  getSuggestionsSnapshot: () => {
+    suggestions: ClinicalCodingSuggestion[];
+    acceptedCodes: Set<string>;
+  };
 }
 
 const COLLAPSE_KEY = 'ai-coding-panel-collapsed';
@@ -118,12 +130,13 @@ function SuggestionCard({
   );
 }
 
-export function AiCodingSuggestionsPanel({
-  clinicalText,
-  blockTypes,
-  encounterId,
-  patientId,
-}: AiCodingSuggestionsPanelProps) {
+export const AiCodingSuggestionsPanel = forwardRef<
+  AiCodingSuggestionsPanelHandle,
+  AiCodingSuggestionsPanelProps
+>(function AiCodingSuggestionsPanel(
+  { clinicalText, blockTypes, encounterId, patientId },
+  ref,
+) {
   const { isEnabled, isLoading: isConfigLoading } = useAiCodingEnabled();
   const toast = useToast();
   const [collapsed, setCollapsed] = useState(() => {
@@ -131,6 +144,9 @@ export function AiCodingSuggestionsPanel({
     return localStorage.getItem(COLLAPSE_KEY) === 'true';
   });
   const [addingCode, setAddingCode] = useState<string | null>(null);
+
+  // Track codes that have been accepted (clicked "+") during this session
+  const acceptedCodesRef = useRef<Set<string>>(new Set());
 
   const { data: encounter } = useEncounter(encounterId);
   const { data: diagnoses = [] } = useDiagnosesByEncounter(encounterId);
@@ -146,6 +162,14 @@ export function AiCodingSuggestionsPanel({
     blockTypes,
     existingCodes,
   });
+
+  // Expose snapshot method to parent for Save
+  useImperativeHandle(ref, () => ({
+    getSuggestionsSnapshot: () => ({
+      suggestions: data?.suggestions ?? [],
+      acceptedCodes: new Set(acceptedCodesRef.current),
+    }),
+  }), [data?.suggestions]);
 
   const toggleCollapse = useCallback(() => {
     setCollapsed((prev) => {
@@ -169,6 +193,8 @@ export function AiCodingSuggestionsPanel({
           diagnosisRank: diagnoses.length + 1,
           diagnosedBy: encounter.primaryStaffId,
         });
+        // Track as accepted for Save
+        acceptedCodesRef.current.add(suggestion.code);
         toast({
           title: 'Diagnosis added',
           description: `${suggestion.code} added to encounter.`,
@@ -297,4 +323,4 @@ export function AiCodingSuggestionsPanel({
       </div>
     </div>
   );
-}
+});

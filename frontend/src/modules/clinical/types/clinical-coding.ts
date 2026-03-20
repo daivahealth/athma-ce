@@ -24,3 +24,27 @@ export interface ClinicalCodingSuggestResponse {
   fromCache: boolean;
   processingTimeMs: number;
 }
+
+/**
+ * Input for saving a clinical coding to encounter_clinical_codings.
+ */
+export interface CreateClinicalCodingInput {
+  encounterId: string;
+  patientId: string;
+  code: string;
+  codeSystem: string;
+  displayName: string;
+  displayNameAr?: string;
+  snomedCode?: string;
+  snomedDisplay?: string;
+  codingType: string; // diagnosis, symptom, finding, procedure, medication
+  confidence?: number;
+  rationale?: string;
+  aiSuggestionId?: string;
+  sourceBlockType?: string;
+  sourceText?: string;
+  status: string; // accepted, rejected, suggested, manual
+  reviewedBy?: string;
+  catalogMatch?: boolean;
+  isBillable?: boolean;
+}

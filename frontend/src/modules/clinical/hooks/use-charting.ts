@@ -9,6 +9,7 @@ import type {
   CreatePrescriptionInput,
   UpdatePrescriptionInput,
 } from '../types/charting';
+import type { CreateClinicalCodingInput } from '../types/clinical-coding';
 
 // Clinical Notes Hooks
 export function useClinicalNotesByEncounter(encounterId: string) {
@@ -195,5 +196,13 @@ export function useDeletePrescription() {
         queryKey: ['prescriptions', 'encounter', variables.encounterId],
       });
     },
+  });
+}
+
+// Clinical Codings Hooks (AI provenance tracking)
+export function useSaveClinicalCodings() {
+  return useMutation({
+    mutationFn: (codings: CreateClinicalCodingInput[]) =>
+      chartingService.saveClinicalCodings(codings),
   });
 }
