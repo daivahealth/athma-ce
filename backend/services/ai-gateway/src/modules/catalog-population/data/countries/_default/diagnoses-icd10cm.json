@@ -1,0 +1,459 @@
+{
+  "version": "1.0",
+  "countryIso": "_default",
+  "countryName": "International",
+  "catalogType": "diagnoses",
+  "codeSet": "ICD-10-CM",
+  "entries": [
+    {
+      "code": "E11.9",
+      "description": "Type 2 diabetes mellitus without complications",
+      "shortDescription": "Type 2 diabetes, unspecified",
+      "chapter": "IV",
+      "block": "E08-E13",
+      "category": "Diabetes mellitus",
+      "isBillable": true
+    },
+    {
+      "code": "I10",
+      "description": "Essential (primary) hypertension",
+      "shortDescription": "Essential hypertension",
+      "chapter": "IX",
+      "block": "I10-I16",
+      "category": "Hypertensive diseases",
+      "isBillable": true
+    },
+    {
+      "code": "J06.9",
+      "description": "Acute upper respiratory infection, unspecified",
+      "shortDescription": "Acute URI",
+      "chapter": "X",
+      "block": "J00-J06",
+      "category": "Acute upper respiratory infections",
+      "isBillable": true
+    },
+    {
+      "code": "M54.5",
+      "description": "Low back pain",
+      "shortDescription": "Low back pain",
+      "chapter": "XIII",
+      "block": "M50-M54",
+      "category": "Other dorsopathies",
+      "isBillable": true
+    },
+    {
+      "code": "K21.0",
+      "description": "Gastro-esophageal reflux disease with esophagitis",
+      "shortDescription": "GERD with esophagitis",
+      "chapter": "XI",
+      "block": "K20-K31",
+      "category": "Diseases of esophagus, stomach and duodenum",
+      "isBillable": true
+    },
+    {
+      "code": "J45.909",
+      "description": "Unspecified asthma, uncomplicated",
+      "shortDescription": "Asthma, unspecified",
+      "chapter": "X",
+      "block": "J40-J47",
+      "category": "Chronic lower respiratory diseases",
+      "isBillable": true
+    },
+    {
+      "code": "E78.5",
+      "description": "Hyperlipidemia, unspecified",
+      "shortDescription": "Hyperlipidemia",
+      "chapter": "IV",
+      "block": "E70-E88",
+      "category": "Metabolic disorders",
+      "isBillable": true
+    },
+    {
+      "code": "F41.1",
+      "description": "Generalized anxiety disorder",
+      "shortDescription": "Generalized anxiety",
+      "chapter": "V",
+      "block": "F40-F48",
+      "category": "Anxiety, dissociative and stress-related disorders",
+      "isBillable": true
+    },
+    {
+      "code": "F32.9",
+      "description": "Major depressive disorder, single episode, unspecified",
+      "shortDescription": "Major depression, unspecified",
+      "chapter": "V",
+      "block": "F30-F39",
+      "category": "Mood disorders",
+      "isBillable": true
+    },
+    {
+      "code": "E03.9",
+      "description": "Hypothyroidism, unspecified",
+      "shortDescription": "Hypothyroidism",
+      "chapter": "IV",
+      "block": "E00-E07",
+      "category": "Disorders of thyroid gland",
+      "isBillable": true
+    },
+    {
+      "code": "N39.0",
+      "description": "Urinary tract infection, site not specified",
+      "shortDescription": "UTI",
+      "chapter": "XIV",
+      "block": "N30-N39",
+      "category": "Other diseases of urinary system",
+      "isBillable": true
+    },
+    {
+      "code": "J20.9",
+      "description": "Acute bronchitis, unspecified",
+      "shortDescription": "Acute bronchitis",
+      "chapter": "X",
+      "block": "J20-J22",
+      "category": "Other acute lower respiratory infections",
+      "isBillable": true
+    },
+    {
+      "code": "R10.9",
+      "description": "Unspecified abdominal pain",
+      "shortDescription": "Abdominal pain",
+      "chapter": "XVIII",
+      "block": "R10-R19",
+      "category": "Symptoms involving the digestive system",
+      "isBillable": true
+    },
+    {
+      "code": "R51.9",
+      "description": "Headache, unspecified",
+      "shortDescription": "Headache",
+      "chapter": "XVIII",
+      "block": "R50-R69",
+      "category": "General symptoms and signs",
+      "isBillable": true
+    },
+    {
+      "code": "M79.3",
+      "description": "Panniculitis, unspecified",
+      "shortDescription": "Panniculitis",
+      "chapter": "XIII",
+      "block": "M70-M79",
+      "category": "Other soft tissue disorders",
+      "isBillable": true
+    },
+    {
+      "code": "G43.909",
+      "description": "Migraine, unspecified, not intractable, without status migrainosus",
+      "shortDescription": "Migraine, unspecified",
+      "chapter": "VI",
+      "block": "G40-G47",
+      "category": "Episodic and paroxysmal disorders",
+      "isBillable": true
+    },
+    {
+      "code": "B34.9",
+      "description": "Viral infection, unspecified",
+      "shortDescription": "Viral infection",
+      "chapter": "I",
+      "block": "B25-B34",
+      "category": "Other viral diseases",
+      "isBillable": true
+    },
+    {
+      "code": "J02.9",
+      "description": "Acute pharyngitis, unspecified",
+      "shortDescription": "Acute pharyngitis",
+      "chapter": "X",
+      "block": "J00-J06",
+      "category": "Acute upper respiratory infections",
+      "isBillable": true
+    },
+    {
+      "code": "L30.9",
+      "description": "Dermatitis, unspecified",
+      "shortDescription": "Dermatitis",
+      "chapter": "XII",
+      "block": "L20-L30",
+      "category": "Dermatitis and eczema",
+      "isBillable": true
+    },
+    {
+      "code": "K30",
+      "description": "Functional dyspepsia",
+      "shortDescription": "Dyspepsia",
+      "chapter": "XI",
+      "block": "K20-K31",
+      "category": "Diseases of esophagus, stomach and duodenum",
+      "isBillable": true
+    },
+    {
+      "code": "J00",
+      "description": "Acute nasopharyngitis (common cold)",
+      "shortDescription": "Common cold",
+      "chapter": "X",
+      "block": "J00-J06",
+      "category": "Acute upper respiratory infections",
+      "isBillable": true
+    },
+    {
+      "code": "E11.65",
+      "description": "Type 2 diabetes mellitus with hyperglycemia",
+      "shortDescription": "Type 2 diabetes with hyperglycemia",
+      "chapter": "IV",
+      "block": "E08-E13",
+      "category": "Diabetes mellitus",
+      "isBillable": true
+    },
+    {
+      "code": "I25.10",
+      "description": "Atherosclerotic heart disease of native coronary artery without angina pectoris",
+      "shortDescription": "Coronary artery disease",
+      "chapter": "IX",
+      "block": "I20-I25",
+      "category": "Ischemic heart diseases",
+      "isBillable": true
+    },
+    {
+      "code": "E66.01",
+      "description": "Morbid (severe) obesity due to excess calories",
+      "shortDescription": "Morbid obesity",
+      "chapter": "IV",
+      "block": "E65-E68",
+      "category": "Obesity and other hyperalimentation",
+      "isBillable": true
+    },
+    {
+      "code": "E55.9",
+      "description": "Vitamin D deficiency, unspecified",
+      "shortDescription": "Vitamin D deficiency",
+      "chapter": "IV",
+      "block": "E50-E64",
+      "category": "Other nutritional deficiencies",
+      "isBillable": true
+    },
+    {
+      "code": "D64.9",
+      "description": "Anemia, unspecified",
+      "shortDescription": "Anemia",
+      "chapter": "III",
+      "block": "D60-D64",
+      "category": "Aplastic and other anemias",
+      "isBillable": true
+    },
+    {
+      "code": "J18.9",
+      "description": "Pneumonia, unspecified organism",
+      "shortDescription": "Pneumonia",
+      "chapter": "X",
+      "block": "J12-J18",
+      "category": "Pneumonia",
+      "isBillable": true
+    },
+    {
+      "code": "K59.00",
+      "description": "Constipation, unspecified",
+      "shortDescription": "Constipation",
+      "chapter": "XI",
+      "block": "K55-K64",
+      "category": "Other diseases of intestines",
+      "isBillable": true
+    },
+    {
+      "code": "R05.9",
+      "description": "Cough, unspecified",
+      "shortDescription": "Cough",
+      "chapter": "XVIII",
+      "block": "R00-R09",
+      "category": "Symptoms involving the circulatory and respiratory systems",
+      "isBillable": true
+    },
+    {
+      "code": "R50.9",
+      "description": "Fever, unspecified",
+      "shortDescription": "Fever",
+      "chapter": "XVIII",
+      "block": "R50-R69",
+      "category": "General symptoms and signs",
+      "isBillable": true
+    },
+    {
+      "code": "M25.50",
+      "description": "Pain in unspecified joint",
+      "shortDescription": "Joint pain",
+      "chapter": "XIII",
+      "block": "M20-M25",
+      "category": "Other joint disorders",
+      "isBillable": false
+    },
+    {
+      "code": "M54.2",
+      "description": "Cervicalgia",
+      "shortDescription": "Neck pain",
+      "chapter": "XIII",
+      "block": "M50-M54",
+      "category": "Other dorsopathies",
+      "isBillable": true
+    },
+    {
+      "code": "R11.2",
+      "description": "Nausea with vomiting, unspecified",
+      "shortDescription": "Nausea and vomiting",
+      "chapter": "XVIII",
+      "block": "R10-R19",
+      "category": "Symptoms involving the digestive system",
+      "isBillable": true
+    },
+    {
+      "code": "R42",
+      "description": "Dizziness and giddiness",
+      "shortDescription": "Dizziness",
+      "chapter": "XVIII",
+      "block": "R40-R46",
+      "category": "Symptoms involving cognition and awareness",
+      "isBillable": true
+    },
+    {
+      "code": "J30.9",
+      "description": "Allergic rhinitis, unspecified",
+      "shortDescription": "Allergic rhinitis",
+      "chapter": "X",
+      "block": "J30-J39",
+      "category": "Other diseases of upper respiratory tract",
+      "isBillable": true
+    },
+    {
+      "code": "L50.9",
+      "description": "Urticaria, unspecified",
+      "shortDescription": "Urticaria",
+      "chapter": "XII",
+      "block": "L50-L54",
+      "category": "Urticaria and erythema",
+      "isBillable": true
+    },
+    {
+      "code": "K58.9",
+      "description": "Irritable bowel syndrome without diarrhea",
+      "shortDescription": "IBS",
+      "chapter": "XI",
+      "block": "K55-K64",
+      "category": "Other diseases of intestines",
+      "isBillable": true
+    },
+    {
+      "code": "E87.6",
+      "description": "Hypokalemia",
+      "shortDescription": "Hypokalemia",
+      "chapter": "IV",
+      "block": "E70-E88",
+      "category": "Metabolic disorders",
+      "isBillable": true
+    },
+    {
+      "code": "I48.91",
+      "description": "Unspecified atrial fibrillation",
+      "shortDescription": "Atrial fibrillation",
+      "chapter": "IX",
+      "block": "I44-I49",
+      "category": "Cardiac arrhythmias",
+      "isBillable": true
+    },
+    {
+      "code": "I50.9",
+      "description": "Heart failure, unspecified",
+      "shortDescription": "Heart failure",
+      "chapter": "IX",
+      "block": "I50-I52",
+      "category": "Heart failure",
+      "isBillable": true
+    },
+    {
+      "code": "N18.9",
+      "description": "Chronic kidney disease, unspecified",
+      "shortDescription": "Chronic kidney disease",
+      "chapter": "XIV",
+      "block": "N17-N19",
+      "category": "Renal failure",
+      "isBillable": true
+    },
+    {
+      "code": "J44.1",
+      "description": "Chronic obstructive pulmonary disease with acute exacerbation",
+      "shortDescription": "COPD with exacerbation",
+      "chapter": "X",
+      "block": "J40-J47",
+      "category": "Chronic lower respiratory diseases",
+      "isBillable": true
+    },
+    {
+      "code": "G47.00",
+      "description": "Insomnia, unspecified",
+      "shortDescription": "Insomnia",
+      "chapter": "VI",
+      "block": "G40-G47",
+      "category": "Episodic and paroxysmal disorders",
+      "isBillable": true
+    },
+    {
+      "code": "M17.9",
+      "description": "Osteoarthritis of knee, unspecified",
+      "shortDescription": "Knee osteoarthritis",
+      "chapter": "XIII",
+      "block": "M15-M19",
+      "category": "Osteoarthritis",
+      "isBillable": true
+    },
+    {
+      "code": "E05.90",
+      "description": "Thyrotoxicosis, unspecified without thyrotoxic crisis or storm",
+      "shortDescription": "Hyperthyroidism",
+      "chapter": "IV",
+      "block": "E00-E07",
+      "category": "Disorders of thyroid gland",
+      "isBillable": true
+    },
+    {
+      "code": "B00.9",
+      "description": "Herpesviral infection, unspecified",
+      "shortDescription": "Herpes infection",
+      "chapter": "I",
+      "block": "B00-B09",
+      "category": "Viral infections with skin and mucous membrane lesions",
+      "isBillable": true
+    },
+    {
+      "code": "R19.7",
+      "description": "Diarrhea, unspecified",
+      "shortDescription": "Diarrhea",
+      "chapter": "XVIII",
+      "block": "R10-R19",
+      "category": "Symptoms involving the digestive system",
+      "isBillable": true
+    },
+    {
+      "code": "H66.90",
+      "description": "Otitis media, unspecified, unspecified ear",
+      "shortDescription": "Otitis media",
+      "chapter": "VIII",
+      "block": "H65-H75",
+      "category": "Diseases of middle ear and mastoid",
+      "isBillable": false
+    },
+    {
+      "code": "H10.9",
+      "description": "Unspecified conjunctivitis",
+      "shortDescription": "Conjunctivitis",
+      "chapter": "VII",
+      "block": "H10-H11",
+      "category": "Disorders of conjunctiva",
+      "isBillable": true
+    },
+    {
+      "code": "L03.90",
+      "description": "Cellulitis, unspecified",
+      "shortDescription": "Cellulitis",
+      "chapter": "XII",
+      "block": "L00-L08",
+      "category": "Infections of the skin and subcutaneous tissue",
+      "isBillable": false
+    }
+  ]
+}

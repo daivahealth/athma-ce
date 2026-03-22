@@ -1,0 +1,629 @@
+{
+  "version": "1.0",
+  "countryIso": "AE",
+  "countryName": "United Arab Emirates",
+  "catalogType": "procedures",
+  "entries": [
+    {
+      "procedureName": "Excision of Skin Lesion",
+      "cptCode": "11400",
+      "icd10PcsCode": null,
+      "localCode": "PROC-001",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Integumentary",
+      "procedureType": "Minor",
+      "anesthesiaType": "Local",
+      "facilityRequired": "Outpatient clinic or minor procedure room",
+      "estimatedDurationMinutes": 30,
+      "preparationInstructions": "Clean the area with antiseptic. Informed consent required. Review medications (anticoagulants). Mark the lesion before procedure.",
+      "postProcedureInstructions": "Keep wound clean and dry for 24-48 hours. Apply prescribed antibiotic ointment. Watch for signs of infection. Suture removal in 7-14 days depending on location.",
+      "risksAndComplications": [
+        "Infection",
+        "Bleeding",
+        "Scarring",
+        "Nerve damage",
+        "Incomplete excision",
+        "Wound dehiscence"
+      ],
+      "contraindications": [
+        "Active infection at the site",
+        "Uncontrolled bleeding disorder",
+        "Patient on anticoagulants (relative - may need to hold)"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Medication review",
+        "Allergy assessment",
+        "Lesion marking"
+      ],
+      "postProcedureMonitoring": "Monitor for bleeding for 15-30 minutes post-procedure. Wound check at 48 hours if needed.",
+      "recoveryTimeHours": 1
+    },
+    {
+      "procedureName": "Incision and Drainage of Abscess",
+      "cptCode": "10060",
+      "icd10PcsCode": null,
+      "localCode": "PROC-002",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Integumentary",
+      "procedureType": "Minor",
+      "anesthesiaType": "Local",
+      "facilityRequired": "Outpatient clinic or emergency department",
+      "estimatedDurationMinutes": 20,
+      "preparationInstructions": "Clean the area with antiseptic. Local anesthesia around the abscess. Informed consent required.",
+      "postProcedureInstructions": "Pack the wound if indicated. Change packing as directed (usually daily). Warm compresses. Complete antibiotic course if prescribed. Follow up in 48-72 hours for wound check.",
+      "risksAndComplications": [
+        "Recurrence",
+        "Incomplete drainage",
+        "Fistula formation",
+        "Scarring",
+        "Bleeding",
+        "Sepsis (rare)"
+      ],
+      "contraindications": [
+        "Peritonsillar or deep neck abscess (requires ENT/surgical consult)",
+        "Suspected vascular malformation"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Assessment of abscess size and depth",
+        "Allergy assessment (local anesthetics)"
+      ],
+      "postProcedureMonitoring": "Monitor for bleeding and hemodynamic stability for 15-30 minutes. Wound culture if indicated.",
+      "recoveryTimeHours": 1
+    },
+    {
+      "procedureName": "Joint Injection (Knee)",
+      "cptCode": "20610",
+      "icd10PcsCode": null,
+      "localCode": "PROC-003",
+      "procedureCategory": "Therapeutic",
+      "bodySystem": "Musculoskeletal",
+      "procedureType": "Minor",
+      "anesthesiaType": "Local",
+      "facilityRequired": "Outpatient clinic or procedure room",
+      "estimatedDurationMinutes": 15,
+      "preparationInstructions": "Clean injection site with antiseptic. Review for anticoagulant use. Ultrasound guidance if available. Confirm no active joint infection.",
+      "postProcedureInstructions": "Rest the joint for 24-48 hours. Avoid strenuous activity for 48 hours. Apply ice as needed. Monitor for signs of infection (increasing pain, swelling, fever).",
+      "risksAndComplications": [
+        "Infection (septic arthritis)",
+        "Post-injection flare",
+        "Tendon weakening (repeated steroid injections)",
+        "Skin depigmentation",
+        "Fat atrophy at injection site",
+        "Bleeding"
+      ],
+      "contraindications": [
+        "Active joint infection",
+        "Overlying skin infection",
+        "Fracture through the joint",
+        "Uncontrolled coagulopathy",
+        "Prosthetic joint (relative)"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Confirm no joint infection",
+        "Review anticoagulant medications",
+        "Joint assessment"
+      ],
+      "postProcedureMonitoring": "Observe for 15 minutes post-injection for allergic reaction or vasovagal response.",
+      "recoveryTimeHours": 1
+    },
+    {
+      "procedureName": "Colonoscopy with Biopsy",
+      "cptCode": "45380",
+      "icd10PcsCode": "0DJD8ZZ",
+      "localCode": "PROC-004",
+      "procedureCategory": "Diagnostic",
+      "bodySystem": "Gastrointestinal",
+      "procedureType": "Endoscopic",
+      "anesthesiaType": "Conscious sedation / Monitored anesthesia care",
+      "facilityRequired": "Endoscopy suite or ambulatory surgery center",
+      "estimatedDurationMinutes": 45,
+      "preparationInstructions": "Bowel preparation with prescribed solution (e.g., PEG solution) day before. Clear liquid diet 24 hours prior. NPO after midnight. Arrange transportation home. Hold anticoagulants as directed.",
+      "postProcedureInstructions": "Rest for remainder of the day. Resume diet gradually starting with clear liquids. Do not drive for 24 hours after sedation. Watch for bleeding, severe abdominal pain, or fever. Contact physician immediately if symptoms occur.",
+      "risksAndComplications": [
+        "Bleeding (especially post-biopsy/polypectomy)",
+        "Perforation",
+        "Infection",
+        "Adverse reaction to sedation",
+        "Post-polypectomy syndrome",
+        "Missed lesions"
+      ],
+      "contraindications": [
+        "Suspected bowel perforation",
+        "Fulminant colitis",
+        "Acute diverticulitis",
+        "Recent myocardial infarction",
+        "Hemodynamic instability",
+        "Inadequate bowel preparation (relative)"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with sedation consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Bowel preparation completed",
+        "Pre-procedure assessment",
+        "IV access",
+        "NPO verification",
+        "Coagulation profile if on anticoagulants",
+        "Arrange post-procedure transportation"
+      ],
+      "postProcedureMonitoring": "Recovery room monitoring for 30-60 minutes. Monitor vitals, oxygen saturation, level of consciousness. Discharge when Aldrete score is adequate.",
+      "recoveryTimeHours": 2
+    },
+    {
+      "procedureName": "Upper Endoscopy (EGD)",
+      "cptCode": "43239",
+      "icd10PcsCode": "0DJ08ZZ",
+      "localCode": "PROC-005",
+      "procedureCategory": "Diagnostic",
+      "bodySystem": "Gastrointestinal",
+      "procedureType": "Endoscopic",
+      "anesthesiaType": "Conscious sedation / Monitored anesthesia care",
+      "facilityRequired": "Endoscopy suite or ambulatory surgery center",
+      "estimatedDurationMinutes": 30,
+      "preparationInstructions": "NPO for 6-8 hours before procedure. Arrange transportation home. Hold anticoagulants as directed. Remove dentures before procedure.",
+      "postProcedureInstructions": "Do not eat or drink until gag reflex returns (usually 1-2 hours). Start with clear liquids then advance diet. Do not drive for 24 hours after sedation. Watch for difficulty swallowing, chest pain, or bleeding.",
+      "risksAndComplications": [
+        "Bleeding",
+        "Perforation",
+        "Aspiration",
+        "Adverse reaction to sedation",
+        "Sore throat",
+        "Infection"
+      ],
+      "contraindications": [
+        "Suspected perforation",
+        "Severe cervical spine instability",
+        "Recent upper GI surgery (relative)",
+        "Hemodynamic instability",
+        "Uncooperative patient without sedation"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with sedation consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "NPO verification",
+        "Pre-procedure assessment",
+        "IV access",
+        "Coagulation profile if on anticoagulants",
+        "Arrange post-procedure transportation"
+      ],
+      "postProcedureMonitoring": "Recovery room monitoring for 30-60 minutes. Monitor vitals, oxygen saturation, gag reflex return.",
+      "recoveryTimeHours": 2
+    },
+    {
+      "procedureName": "Cardiac Catheterization",
+      "cptCode": "93458",
+      "icd10PcsCode": "4A023N7",
+      "localCode": "PROC-006",
+      "procedureCategory": "Diagnostic",
+      "bodySystem": "Cardiovascular",
+      "procedureType": "Invasive",
+      "anesthesiaType": "Local with conscious sedation",
+      "facilityRequired": "Cardiac catheterization laboratory (hospital-based)",
+      "estimatedDurationMinutes": 60,
+      "preparationInstructions": "NPO 6-8 hours prior. Pre-procedure labs (CBC, CMP, coagulation, type and screen). IV access. Shave groin/wrist as needed. Allergy assessment for contrast. Hold metformin. Hydration protocol for renal protection.",
+      "postProcedureInstructions": "Bed rest with affected limb straight for 2-6 hours (femoral) or 1-2 hours (radial). Monitor access site for bleeding or hematoma. Resume fluids to flush contrast. Resume medications as directed.",
+      "risksAndComplications": [
+        "Bleeding at access site",
+        "Hematoma",
+        "Pseudoaneurysm",
+        "Arteriovenous fistula",
+        "Contrast-induced nephropathy",
+        "Stroke",
+        "Myocardial infarction",
+        "Arrhythmia",
+        "Allergic reaction to contrast",
+        "Coronary artery dissection",
+        "Death (rare)"
+      ],
+      "contraindications": [
+        "Severe contrast allergy (without premedication)",
+        "Active bleeding",
+        "Severe uncontrolled hypertension",
+        "Decompensated heart failure",
+        "Acute renal failure",
+        "Active infection",
+        "Severe coagulopathy"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with detailed risk discussion",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Pre-procedure labs (CBC, CMP, PT/INR, type and screen)",
+        "ECG",
+        "IV access (two sites preferred)",
+        "NPO verification",
+        "Allergy assessment",
+        "Renal protection protocol if indicated",
+        "Cardiology pre-procedure evaluation"
+      ],
+      "postProcedureMonitoring": "Continuous cardiac monitoring for 4-6 hours. Vital signs every 15 minutes for first hour. Access site checks every 15 minutes. Monitor urine output. Serial ECGs if indicated.",
+      "recoveryTimeHours": 6
+    },
+    {
+      "procedureName": "Dilation and Curettage (D&C)",
+      "cptCode": "58120",
+      "icd10PcsCode": "0UDB7ZZ",
+      "localCode": "PROC-007",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Reproductive",
+      "procedureType": "Minor",
+      "anesthesiaType": "General anesthesia or conscious sedation",
+      "facilityRequired": "Ambulatory surgery center or operating room",
+      "estimatedDurationMinutes": 30,
+      "preparationInstructions": "NPO for 6-8 hours prior. Pre-procedure labs (CBC, pregnancy test, blood type). IV access. Empty bladder before procedure.",
+      "postProcedureInstructions": "Expect vaginal bleeding and cramping for several days. Use pads (no tampons) for 2 weeks. No sexual intercourse for 2 weeks. No heavy lifting for 1 week. Follow up in 2 weeks. Seek care for heavy bleeding, fever, or foul-smelling discharge.",
+      "risksAndComplications": [
+        "Uterine perforation",
+        "Cervical laceration",
+        "Infection",
+        "Hemorrhage",
+        "Asherman syndrome (intrauterine adhesions)",
+        "Incomplete evacuation",
+        "Adverse reaction to anesthesia"
+      ],
+      "contraindications": [
+        "Desired pregnancy",
+        "Active pelvic infection",
+        "Cervical cancer (relative)",
+        "Coagulopathy"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with anesthesia consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Pregnancy test",
+        "Pre-procedure labs (CBC, type and screen)",
+        "IV access",
+        "NPO verification",
+        "Pelvic examination"
+      ],
+      "postProcedureMonitoring": "Recovery room monitoring for 1-2 hours. Monitor vitals, vaginal bleeding, and pain level. Discharge when stable and able to tolerate oral intake.",
+      "recoveryTimeHours": 4
+    },
+    {
+      "procedureName": "Arthroscopy Knee",
+      "cptCode": "29881",
+      "icd10PcsCode": "0SJD4ZZ",
+      "localCode": "PROC-008",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Musculoskeletal",
+      "procedureType": "Major",
+      "anesthesiaType": "General anesthesia or regional (spinal/epidural)",
+      "facilityRequired": "Operating room (hospital or ambulatory surgery center)",
+      "estimatedDurationMinutes": 60,
+      "preparationInstructions": "NPO for 6-8 hours prior. Pre-procedure labs (CBC, CMP, coagulation). Hold anticoagulants as directed. Arrange transportation and post-operative assistance. Pre-operative MRI if not already done.",
+      "postProcedureInstructions": "RICE protocol (Rest, Ice, Compression, Elevation). Weight bearing as tolerated with crutches. Pain management as prescribed. Begin physical therapy as directed. Keep wounds clean and dry. Follow up in 1-2 weeks for wound check.",
+      "risksAndComplications": [
+        "Infection",
+        "Deep vein thrombosis",
+        "Nerve or vascular injury",
+        "Hemarthrosis",
+        "Stiffness",
+        "Continued pain",
+        "Cartilage damage",
+        "Anesthesia complications"
+      ],
+      "contraindications": [
+        "Active joint infection",
+        "Overlying skin infection",
+        "Severe peripheral vascular disease",
+        "Ankylosed joint",
+        "Uncontrolled coagulopathy"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with anesthesia consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Pre-operative labs (CBC, CMP, coagulation)",
+        "Pre-operative MRI",
+        "Anesthesia evaluation",
+        "NPO verification",
+        "DVT prophylaxis plan",
+        "Physical therapy referral"
+      ],
+      "postProcedureMonitoring": "Post-anesthesia care unit (PACU) monitoring for 1-2 hours. Monitor vitals, neurovascular status of the limb, drain output if placed, pain level.",
+      "recoveryTimeHours": 4
+    },
+    {
+      "procedureName": "Bronchoscopy with Bronchoalveolar Lavage (BAL)",
+      "cptCode": "31624",
+      "icd10PcsCode": "0B9B8ZZ",
+      "localCode": "PROC-009",
+      "procedureCategory": "Diagnostic",
+      "bodySystem": "Respiratory",
+      "procedureType": "Endoscopic",
+      "anesthesiaType": "Conscious sedation with topical anesthesia",
+      "facilityRequired": "Bronchoscopy suite or operating room",
+      "estimatedDurationMinutes": 45,
+      "preparationInstructions": "NPO for 6-8 hours prior. Pre-procedure labs (CBC, coagulation, ABG if indicated). Review imaging. Discontinue anticoagulants as directed. Pre-medication with atropine and sedation as ordered.",
+      "postProcedureInstructions": "NPO until gag and cough reflex return (1-2 hours). Monitor for respiratory distress. No driving for 24 hours. Report hemoptysis, fever, or increasing shortness of breath.",
+      "risksAndComplications": [
+        "Bleeding",
+        "Pneumothorax",
+        "Bronchospasm",
+        "Laryngospasm",
+        "Hypoxia",
+        "Fever",
+        "Infection",
+        "Adverse reaction to sedation",
+        "Respiratory failure (rare)"
+      ],
+      "contraindications": [
+        "Severe hypoxia refractory to supplemental oxygen",
+        "Severe coagulopathy",
+        "Unstable hemodynamics",
+        "Acute myocardial infarction",
+        "Severe tracheal stenosis",
+        "Uncooperative patient"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with sedation consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Pre-procedure labs (CBC, coagulation)",
+        "Chest imaging review",
+        "IV access",
+        "NPO verification",
+        "Pulse oximetry baseline",
+        "Supplemental oxygen availability"
+      ],
+      "postProcedureMonitoring": "Continuous pulse oximetry for 2 hours. Monitor for respiratory distress, hemoptysis, fever. Chest X-ray if pneumothorax suspected.",
+      "recoveryTimeHours": 3
+    },
+    {
+      "procedureName": "Cystoscopy",
+      "cptCode": "52000",
+      "icd10PcsCode": "0TJB8ZZ",
+      "localCode": "PROC-010",
+      "procedureCategory": "Diagnostic",
+      "bodySystem": "Urinary",
+      "procedureType": "Endoscopic",
+      "anesthesiaType": "Local anesthesia (topical lidocaine gel) or conscious sedation",
+      "facilityRequired": "Procedure room or ambulatory surgery center",
+      "estimatedDurationMinutes": 15,
+      "preparationInstructions": "Urine culture to rule out active UTI. May need to hold anticoagulants. Hydrate well before procedure. Empty bladder before if not catheterized.",
+      "postProcedureInstructions": "Increase fluid intake for 24-48 hours. Mild burning with urination is normal for 24-48 hours. Light pink-tinged urine may occur. Report heavy bleeding, inability to urinate, fever, or chills.",
+      "risksAndComplications": [
+        "Urinary tract infection",
+        "Bleeding (hematuria)",
+        "Urethral injury",
+        "Bladder perforation (rare)",
+        "Urinary retention",
+        "Dysuria"
+      ],
+      "contraindications": [
+        "Active urinary tract infection",
+        "Urethral stricture (relative - may need dilation)",
+        "Severe coagulopathy"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Urine culture (negative)",
+        "Coagulation profile if on anticoagulants",
+        "Pre-procedure urinalysis"
+      ],
+      "postProcedureMonitoring": "Monitor for urinary retention and gross hematuria for 30-60 minutes post-procedure.",
+      "recoveryTimeHours": 1
+    },
+    {
+      "procedureName": "Cataract Extraction with IOL Implant",
+      "cptCode": "66984",
+      "icd10PcsCode": "08RJ3JZ",
+      "localCode": "PROC-011",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Eye",
+      "procedureType": "Minor",
+      "anesthesiaType": "Topical or local (retrobulbar/peribulbar block)",
+      "facilityRequired": "Operating room or ambulatory surgery center with ophthalmic equipment",
+      "estimatedDurationMinutes": 30,
+      "preparationInstructions": "Pre-operative eye measurements (biometry). Dilating drops on the day. NPO if sedation planned. Discontinue anticoagulants as directed by surgeon. Antibiotic drops 1-3 days before surgery if prescribed.",
+      "postProcedureInstructions": "Wear eye shield at night for 1 week. Use prescribed eye drops as directed (antibiotic and anti-inflammatory). Avoid rubbing the eye. No heavy lifting or bending for 1-2 weeks. No swimming for 2 weeks. Follow up next day and at 1 week.",
+      "risksAndComplications": [
+        "Infection (endophthalmitis)",
+        "Posterior capsule rupture",
+        "Cystoid macular edema",
+        "Retinal detachment",
+        "Increased intraocular pressure",
+        "Corneal edema",
+        "IOL dislocation",
+        "Vitreous loss"
+      ],
+      "contraindications": [
+        "Active ocular infection",
+        "Uncontrolled glaucoma",
+        "Uncontrolled diabetes with active retinopathy",
+        "Unable to cooperate during surgery"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with IOL selection discussion",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Biometry (IOL calculation)",
+        "Pre-operative ophthalmic examination",
+        "IOL type selection",
+        "Dilating drops",
+        "Pre-operative antibiotic drops if ordered"
+      ],
+      "postProcedureMonitoring": "Monitor intraocular pressure 1-2 hours post-procedure. Check for wound integrity and anterior chamber depth. Same-day discharge typical.",
+      "recoveryTimeHours": 2
+    },
+    {
+      "procedureName": "Mohs Micrographic Surgery",
+      "cptCode": "17311",
+      "icd10PcsCode": null,
+      "localCode": "PROC-012",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Integumentary",
+      "procedureType": "Minor",
+      "anesthesiaType": "Local",
+      "facilityRequired": "Mohs surgery suite with on-site histopathology laboratory",
+      "estimatedDurationMinutes": 120,
+      "preparationInstructions": "Review medications (anticoagulants). Clean face/site of makeup. Plan for extended visit (multiple stages may be needed). Eat breakfast before arrival. Informed consent with discussion of reconstruction options.",
+      "postProcedureInstructions": "Pressure dressing for 24-48 hours. Keep wound clean and moist with prescribed ointment. Change dressing daily. Avoid strenuous activity for 48 hours. Suture removal in 5-14 days depending on location.",
+      "risksAndComplications": [
+        "Bleeding",
+        "Infection",
+        "Scarring",
+        "Nerve damage",
+        "Recurrence (low rate)",
+        "Need for flap or graft reconstruction",
+        "Wound dehiscence"
+      ],
+      "contraindications": [
+        "Melanoma (most types)",
+        "Tumors with perineural invasion extending beyond surgical field",
+        "Patient unable to tolerate prolonged procedure"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with reconstruction options discussed",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Biopsy-proven skin cancer",
+        "Medication review",
+        "Tumor mapping and marking",
+        "Photography"
+      ],
+      "postProcedureMonitoring": "Monitor for bleeding after each stage. Final wound check before discharge. Follow-up wound check in 1 week.",
+      "recoveryTimeHours": 1
+    },
+    {
+      "procedureName": "Epidural Steroid Injection",
+      "cptCode": "62323",
+      "icd10PcsCode": "3E0S33Z",
+      "localCode": "PROC-013",
+      "procedureCategory": "Therapeutic",
+      "bodySystem": "Nervous System",
+      "procedureType": "Minor",
+      "anesthesiaType": "Local with fluoroscopic guidance",
+      "facilityRequired": "Fluoroscopy suite or operating room with C-arm",
+      "estimatedDurationMinutes": 30,
+      "preparationInstructions": "NPO for 6 hours if sedation planned. Hold anticoagulants as directed. Review MRI before procedure. No active infection. Blood glucose management in diabetics.",
+      "postProcedureInstructions": "Rest for 24 hours. Avoid driving day of procedure. May have temporary leg weakness or numbness. Apply ice to injection site. Monitor blood glucose if diabetic (steroids may raise glucose). Avoid bathing/soaking for 24 hours.",
+      "risksAndComplications": [
+        "Dural puncture (wet tap) with headache",
+        "Infection",
+        "Epidural hematoma",
+        "Nerve injury",
+        "Transient increase in pain",
+        "Elevated blood glucose",
+        "Allergic reaction to steroid or contrast",
+        "Arachnoiditis (rare)"
+      ],
+      "contraindications": [
+        "Active systemic or local infection",
+        "Bleeding disorder or anticoagulant use",
+        "Allergy to injected medications",
+        "Pregnancy",
+        "Uncontrolled diabetes",
+        "Cauda equina syndrome (requires surgery)"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Recent MRI review",
+        "Medication review (anticoagulant status)",
+        "Coagulation profile if indicated",
+        "Blood glucose check if diabetic",
+        "IV access if sedation planned"
+      ],
+      "postProcedureMonitoring": "Monitor for 30-60 minutes. Check lower extremity sensation and motor function. Vital signs. Discharge when stable and able to ambulate.",
+      "recoveryTimeHours": 2
+    },
+    {
+      "procedureName": "Tonsillectomy",
+      "cptCode": "42825",
+      "icd10PcsCode": "0CTN0ZZ",
+      "localCode": "PROC-014",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Respiratory",
+      "procedureType": "Major",
+      "anesthesiaType": "General anesthesia",
+      "facilityRequired": "Operating room (hospital or ambulatory surgery center)",
+      "estimatedDurationMinutes": 45,
+      "preparationInstructions": "NPO for 6-8 hours prior. Pre-operative labs (CBC, coagulation). Anesthesia evaluation. Discontinue NSAIDs and aspirin 2 weeks prior. Arrange post-operative care and transportation.",
+      "postProcedureInstructions": "Soft/liquid diet for 10-14 days. Adequate fluid intake essential. Pain management (avoid aspirin/NSAIDs). Rest for 10-14 days. No strenuous activity for 2 weeks. Seek emergency care for active bleeding from mouth or throat.",
+      "risksAndComplications": [
+        "Post-operative hemorrhage (primary and secondary)",
+        "Dehydration",
+        "Infection",
+        "Velopharyngeal insufficiency",
+        "Voice change",
+        "Burns to lips or tongue",
+        "Tooth damage",
+        "Anesthesia complications"
+      ],
+      "contraindications": [
+        "Active infection (postpone until resolved)",
+        "Bleeding disorder (uncontrolled)",
+        "Palatal abnormality (relative - risk of VPI)",
+        "Recent upper respiratory infection (postpone 2-3 weeks)"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent with anesthesia consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Pre-operative labs (CBC, coagulation)",
+        "Anesthesia evaluation",
+        "NPO verification",
+        "Review of medications (NSAIDs/aspirin discontinued)",
+        "Post-operative care instructions reviewed with patient/family"
+      ],
+      "postProcedureMonitoring": "PACU monitoring for 2-4 hours. Monitor for bleeding, airway patency, nausea/vomiting, pain control, and ability to tolerate fluids. May require overnight observation in children.",
+      "recoveryTimeHours": 4
+    },
+    {
+      "procedureName": "Tooth Extraction (Simple)",
+      "cptCode": "41899",
+      "icd10PcsCode": null,
+      "localCode": "PROC-015",
+      "procedureCategory": "Surgical",
+      "bodySystem": "Oral",
+      "procedureType": "Minor",
+      "anesthesiaType": "Local (nerve block and/or infiltration)",
+      "facilityRequired": "Dental clinic or oral surgery office",
+      "estimatedDurationMinutes": 20,
+      "preparationInstructions": "Review medications (anticoagulants, bisphosphonates). Dental radiograph of affected tooth. Informed consent. Assess for infection requiring pre-treatment antibiotics.",
+      "postProcedureInstructions": "Bite on gauze for 30-45 minutes. No rinsing, spitting, or using straws for 24 hours. Soft foods for 24-48 hours. Avoid smoking for at least 48 hours. Gentle salt water rinses after 24 hours. Take prescribed pain medication as directed.",
+      "risksAndComplications": [
+        "Dry socket (alveolar osteitis)",
+        "Infection",
+        "Bleeding",
+        "Nerve damage (numbness of lip, tongue, or chin)",
+        "Root fracture",
+        "Sinus communication (upper molars)",
+        "Adjacent tooth damage",
+        "Jaw fracture (rare)"
+      ],
+      "contraindications": [
+        "Uncontrolled coagulopathy",
+        "Active pericoronitis with trismus (may need antibiotics first)",
+        "Radiation therapy to jaw (risk of osteoradionecrosis)",
+        "Bisphosphonate therapy (risk of osteonecrosis - requires specialist referral)"
+      ],
+      "consentRequired": true,
+      "consentType": "Written informed consent",
+      "preProcedureRequirements": [
+        "Informed consent",
+        "Dental radiograph",
+        "Medication review",
+        "Medical history review",
+        "Allergy assessment"
+      ],
+      "postProcedureMonitoring": "Monitor for 15-30 minutes for hemostasis. Verify clot formation. Review post-operative instructions with patient.",
+      "recoveryTimeHours": 1
+    }
+  ]
+}

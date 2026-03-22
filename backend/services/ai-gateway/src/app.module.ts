@@ -11,6 +11,7 @@ import { HealthModule } from './modules/health/health.module';
 import { ReportBuilderModule } from './modules/report-builder/report-builder.module';
 import { SemanticSearchModule } from './modules/semantic-search/semantic-search.module';
 import { ClinicalCodingModule } from './modules/clinical-coding/clinical-coding.module';
+import { CatalogPopulationModule } from './modules/catalog-population/catalog-population.module';
 import { LLMClientModule } from './shared/llm-client/llm-client.module';
 import { RedisModule } from './shared/redis/redis.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
@@ -41,6 +42,7 @@ import { LoggerService } from './common/logger/logger.service';
     ReportBuilderModule,
     SemanticSearchModule,
     ClinicalCodingModule,
+    CatalogPopulationModule,
   ],
   providers: [LoggerService],
   exports: [LoggerService],
