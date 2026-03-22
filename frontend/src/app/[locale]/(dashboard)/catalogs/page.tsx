@@ -3,11 +3,19 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity, ClipboardCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity, ClipboardCheck, Sparkles } from 'lucide-react';
+import { useCatalogPopulationHistory } from '@/modules/clinical/hooks/use-catalog-population';
 
 export default function CatalogsPage() {
   const params = useParams();
   const locale = params.locale as string;
+  const { data: populationHistory } = useCatalogPopulationHistory();
+
+  // Show setup banner if no population has ever been completed
+  const hasCompletedPopulation = populationHistory?.some((j) => j.status === 'completed');
+  const hasRunningJob = populationHistory?.some((j) => j.status === 'running' || j.status === 'pending');
 
   const catalogs = [
     {
@@ -97,6 +105,44 @@ export default function CatalogsPage() {
           Manage healthcare master data including medications, diagnoses, lab tests, imaging studies, and procedures
         </p>
       </div>
+
+      {/* Setup banner - shown when no catalogs have been populated */}
+      {!hasCompletedPopulation && !hasRunningJob && (
+        <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950/20 dark:border-blue-900">
+          <Sparkles className="h-4 w-4 text-blue-600" />
+          <AlertTitle className="text-blue-800 dark:text-blue-300">Setup Your Catalogs</AlertTitle>
+          <AlertDescription className="text-blue-700 dark:text-blue-400">
+            <div className="flex items-center justify-between">
+              <span>
+                Auto-populate your catalogs with country-specific healthcare data using curated templates and AI generation.
+              </span>
+              <Link href={`/${locale}/catalogs/setup`}>
+                <Button size="sm" className="ml-4 shrink-0">
+                  <Sparkles className="mr-2 h-3.5 w-3.5" />
+                  Setup Catalogs
+                </Button>
+              </Link>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {hasRunningJob && (
+        <Alert className="border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
+          <Sparkles className="h-4 w-4 text-amber-600 animate-pulse" />
+          <AlertTitle className="text-amber-800 dark:text-amber-300">Catalog Population In Progress</AlertTitle>
+          <AlertDescription className="text-amber-700 dark:text-amber-400">
+            <div className="flex items-center justify-between">
+              <span>A catalog population job is currently running. You can track its progress.</span>
+              <Link href={`/${locale}/catalogs/setup`}>
+                <Button variant="outline" size="sm" className="ml-4 shrink-0">
+                  View Progress
+                </Button>
+              </Link>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="grid gap-6 md:grid-cols-2">
         {catalogs.map((catalog) => {

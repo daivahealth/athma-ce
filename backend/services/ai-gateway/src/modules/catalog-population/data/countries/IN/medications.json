@@ -1,0 +1,580 @@
+{
+  "version": "1.0",
+  "countryIso": "IN",
+  "countryName": "India",
+  "catalogType": "medications",
+  "entries": [
+    {
+      "medicationName": "Metformin HCl 500mg Tablet",
+      "genericName": "Metformin Hydrochloride",
+      "brandName": "Glycomet",
+      "atcCode": "A10BA02",
+      "localCode": "MED-001",
+      "dosageForm": "tablet",
+      "strength": "500mg",
+      "route": "oral",
+      "manufacturer": "USV Private Limited",
+      "drugClass": "Biguanide",
+      "therapeuticClass": "Antidiabetic",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "twice daily",
+      "defaultDuration": "90 days",
+      "contraindications": [
+        "Severe renal impairment (eGFR <30 mL/min)",
+        "Metabolic acidosis",
+        "Diabetic ketoacidosis",
+        "Hepatic insufficiency",
+        "Acute conditions with risk of tissue hypoxia"
+      ],
+      "commonSideEffects": [
+        "Nausea",
+        "Diarrhea",
+        "Abdominal discomfort",
+        "Metallic taste",
+        "Vitamin B12 deficiency with long-term use"
+      ],
+      "drugInteractions": [
+        "Iodinated contrast agents",
+        "Alcohol",
+        "Cimetidine",
+        "ACE inhibitors"
+      ],
+      "storageRequirements": "Store below 25°C in a dry place. Protect from light."
+    },
+    {
+      "medicationName": "Amlodipine 5mg Tablet",
+      "genericName": "Amlodipine Besylate",
+      "brandName": "Amlopress",
+      "atcCode": "C08CA01",
+      "localCode": "MED-002",
+      "dosageForm": "tablet",
+      "strength": "5mg",
+      "route": "oral",
+      "manufacturer": "Cipla Limited",
+      "drugClass": "Calcium Channel Blocker",
+      "therapeuticClass": "Antihypertensive",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily",
+      "defaultDuration": "30 days",
+      "contraindications": [
+        "Severe hypotension",
+        "Cardiogenic shock",
+        "Severe aortic stenosis",
+        "Unstable angina (not Prinzmetal's)"
+      ],
+      "commonSideEffects": [
+        "Peripheral edema",
+        "Headache",
+        "Dizziness",
+        "Flushing",
+        "Fatigue"
+      ],
+      "drugInteractions": [
+        "Simvastatin (limit dose to 20mg)",
+        "CYP3A4 inhibitors",
+        "Beta-blockers",
+        "Cyclosporine"
+      ],
+      "storageRequirements": "Store below 30°C. Protect from moisture."
+    },
+    {
+      "medicationName": "Atorvastatin 10mg Tablet",
+      "genericName": "Atorvastatin Calcium",
+      "brandName": "Atorva",
+      "atcCode": "C10AA05",
+      "localCode": "MED-003",
+      "dosageForm": "tablet",
+      "strength": "10mg",
+      "route": "oral",
+      "manufacturer": "Zydus Lifesciences",
+      "drugClass": "HMG-CoA Reductase Inhibitor",
+      "therapeuticClass": "Antihyperlipidemic",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily at bedtime",
+      "defaultDuration": "90 days",
+      "contraindications": [
+        "Active liver disease",
+        "Unexplained persistent elevations of serum transaminases",
+        "Pregnancy",
+        "Lactation"
+      ],
+      "commonSideEffects": [
+        "Myalgia",
+        "Headache",
+        "Elevated liver enzymes",
+        "GI disturbances",
+        "Nasopharyngitis"
+      ],
+      "drugInteractions": [
+        "Gemfibrozil",
+        "Cyclosporine",
+        "Clarithromycin",
+        "Itraconazole",
+        "Grapefruit juice"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture and light."
+    },
+    {
+      "medicationName": "Telmisartan 40mg Tablet",
+      "genericName": "Telmisartan",
+      "brandName": "Telma",
+      "atcCode": "C09CA07",
+      "localCode": "MED-004",
+      "dosageForm": "tablet",
+      "strength": "40mg",
+      "route": "oral",
+      "manufacturer": "Glenmark Pharmaceuticals",
+      "drugClass": "Angiotensin II Receptor Blocker",
+      "therapeuticClass": "Antihypertensive",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily",
+      "defaultDuration": "30 days",
+      "contraindications": [
+        "Pregnancy",
+        "Bilateral renal artery stenosis",
+        "Severe hepatic impairment",
+        "Concomitant use with aliskiren in diabetes"
+      ],
+      "commonSideEffects": [
+        "Dizziness",
+        "Upper respiratory infection",
+        "Back pain",
+        "Diarrhea",
+        "Hyperkalemia"
+      ],
+      "drugInteractions": [
+        "ACE inhibitors",
+        "Aliskiren",
+        "NSAIDs",
+        "Lithium",
+        "Potassium-sparing diuretics"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture."
+    },
+    {
+      "medicationName": "Pantoprazole 40mg Tablet",
+      "genericName": "Pantoprazole Sodium",
+      "brandName": "Pantocid",
+      "atcCode": "A02BC02",
+      "localCode": "MED-005",
+      "dosageForm": "tablet",
+      "strength": "40mg",
+      "route": "oral",
+      "manufacturer": "Sun Pharmaceutical Industries",
+      "drugClass": "Proton Pump Inhibitor",
+      "therapeuticClass": "Antiulcerant",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily before breakfast",
+      "defaultDuration": "14 days",
+      "contraindications": [
+        "Hypersensitivity to substituted benzimidazoles",
+        "Co-administration with rilpivirine"
+      ],
+      "commonSideEffects": [
+        "Headache",
+        "Diarrhea",
+        "Nausea",
+        "Abdominal pain",
+        "Flatulence"
+      ],
+      "drugInteractions": [
+        "Clopidogrel",
+        "Methotrexate",
+        "Atazanavir",
+        "Rilpivirine",
+        "Warfarin"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture. Do not crush or chew."
+    },
+    {
+      "medicationName": "Azithromycin 500mg Tablet",
+      "genericName": "Azithromycin Dihydrate",
+      "brandName": "Azithral",
+      "atcCode": "J01FA10",
+      "localCode": "MED-006",
+      "dosageForm": "tablet",
+      "strength": "500mg",
+      "route": "oral",
+      "manufacturer": "Alembic Pharmaceuticals",
+      "drugClass": "Macrolide Antibiotic",
+      "therapeuticClass": "Antibiotic",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily",
+      "defaultDuration": "3 days",
+      "contraindications": [
+        "Hypersensitivity to macrolide antibiotics",
+        "History of cholestatic jaundice with prior azithromycin use",
+        "Severe hepatic impairment"
+      ],
+      "commonSideEffects": [
+        "Diarrhea",
+        "Nausea",
+        "Abdominal pain",
+        "Vomiting",
+        "Headache"
+      ],
+      "drugInteractions": [
+        "Antacids (separate by 2 hours)",
+        "Warfarin",
+        "Digoxin",
+        "Ergotamine",
+        "Cyclosporine"
+      ],
+      "storageRequirements": "Store below 30°C. Protect from moisture."
+    },
+    {
+      "medicationName": "Amoxicillin+Clavulanate 625mg Tablet",
+      "genericName": "Amoxicillin Trihydrate + Potassium Clavulanate",
+      "brandName": "Moxikind-CV",
+      "atcCode": "J01CR02",
+      "localCode": "MED-007",
+      "dosageForm": "tablet",
+      "strength": "625mg",
+      "route": "oral",
+      "manufacturer": "Mankind Pharma",
+      "drugClass": "Beta-Lactam + Beta-Lactamase Inhibitor",
+      "therapeuticClass": "Antibiotic",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "twice daily",
+      "defaultDuration": "7 days",
+      "contraindications": [
+        "Penicillin allergy",
+        "History of cholestatic jaundice with amoxicillin/clavulanate",
+        "Infectious mononucleosis",
+        "Severe hepatic impairment"
+      ],
+      "commonSideEffects": [
+        "Diarrhea",
+        "Nausea",
+        "Skin rash",
+        "Vomiting",
+        "Candidiasis"
+      ],
+      "drugInteractions": [
+        "Methotrexate",
+        "Warfarin",
+        "Allopurinol",
+        "Oral contraceptives",
+        "Probenecid"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture. Keep in original packaging."
+    },
+    {
+      "medicationName": "Cetirizine 10mg Tablet",
+      "genericName": "Cetirizine Hydrochloride",
+      "brandName": "Cetzine",
+      "atcCode": "R06AE07",
+      "localCode": "MED-008",
+      "dosageForm": "tablet",
+      "strength": "10mg",
+      "route": "oral",
+      "manufacturer": "Dr. Reddy's Laboratories",
+      "drugClass": "Second-Generation Antihistamine",
+      "therapeuticClass": "Antiallergic",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": false,
+      "defaultFrequency": "once daily",
+      "defaultDuration": "7 days",
+      "contraindications": [
+        "Severe renal impairment (CrCl <10 mL/min)",
+        "End-stage renal disease on hemodialysis",
+        "Hypersensitivity to cetirizine or hydroxyzine"
+      ],
+      "commonSideEffects": [
+        "Drowsiness",
+        "Dry mouth",
+        "Fatigue",
+        "Headache",
+        "Pharyngitis"
+      ],
+      "drugInteractions": [
+        "CNS depressants",
+        "Alcohol",
+        "Theophylline",
+        "Ritonavir"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture."
+    },
+    {
+      "medicationName": "Paracetamol 650mg Tablet",
+      "genericName": "Paracetamol (Acetaminophen)",
+      "brandName": "Dolo",
+      "atcCode": "N02BE01",
+      "localCode": "MED-009",
+      "dosageForm": "tablet",
+      "strength": "650mg",
+      "route": "oral",
+      "manufacturer": "Micro Labs Limited",
+      "drugClass": "Analgesic-Antipyretic",
+      "therapeuticClass": "Analgesic",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": false,
+      "defaultFrequency": "three times daily as needed",
+      "defaultDuration": "5 days",
+      "contraindications": [
+        "Severe hepatic impairment",
+        "Active liver disease",
+        "Hypersensitivity to paracetamol"
+      ],
+      "commonSideEffects": [
+        "Nausea (rare at therapeutic doses)",
+        "Allergic skin reactions (rare)",
+        "Hepatotoxicity (overdose)"
+      ],
+      "drugInteractions": [
+        "Warfarin (prolonged use increases INR)",
+        "Alcohol",
+        "Isoniazid",
+        "Carbamazepine",
+        "Phenytoin"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture."
+    },
+    {
+      "medicationName": "Ibuprofen 400mg Tablet",
+      "genericName": "Ibuprofen",
+      "brandName": "Brufen",
+      "atcCode": "M01AE01",
+      "localCode": "MED-010",
+      "dosageForm": "tablet",
+      "strength": "400mg",
+      "route": "oral",
+      "manufacturer": "Abbott India Limited",
+      "drugClass": "Non-Steroidal Anti-Inflammatory Drug",
+      "therapeuticClass": "Analgesic / Anti-inflammatory",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": false,
+      "defaultFrequency": "three times daily after meals",
+      "defaultDuration": "5 days",
+      "contraindications": [
+        "Active GI bleeding or peptic ulcer",
+        "Severe heart failure (NYHA Class IV)",
+        "Severe renal impairment",
+        "Third trimester of pregnancy",
+        "History of NSAID-induced asthma"
+      ],
+      "commonSideEffects": [
+        "Dyspepsia",
+        "Nausea",
+        "Abdominal pain",
+        "Dizziness",
+        "Peripheral edema"
+      ],
+      "drugInteractions": [
+        "Aspirin (reduces cardioprotective effect)",
+        "Anticoagulants",
+        "ACE inhibitors/ARBs",
+        "Lithium",
+        "Methotrexate"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture and light."
+    },
+    {
+      "medicationName": "Montelukast 10mg Tablet",
+      "genericName": "Montelukast Sodium",
+      "brandName": "Montair",
+      "atcCode": "R03DC03",
+      "localCode": "MED-011",
+      "dosageForm": "tablet",
+      "strength": "10mg",
+      "route": "oral",
+      "manufacturer": "Cipla Limited",
+      "drugClass": "Leukotriene Receptor Antagonist",
+      "therapeuticClass": "Anti-asthmatic",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily at bedtime",
+      "defaultDuration": "30 days",
+      "contraindications": [
+        "Hypersensitivity to montelukast",
+        "Phenylketonuria (chewable tablets containing phenylalanine)"
+      ],
+      "commonSideEffects": [
+        "Headache",
+        "Abdominal pain",
+        "Upper respiratory infection",
+        "Cough",
+        "Neuropsychiatric events (rare)"
+      ],
+      "drugInteractions": [
+        "Phenobarbital",
+        "Rifampicin",
+        "CYP3A4 inducers",
+        "Gemfibrozil"
+      ],
+      "storageRequirements": "Store below 30°C. Protect from moisture and light."
+    },
+    {
+      "medicationName": "Metoprolol Succinate 50mg Tablet",
+      "genericName": "Metoprolol Succinate",
+      "brandName": "Met XL",
+      "atcCode": "C07AB02",
+      "localCode": "MED-012",
+      "dosageForm": "tablet",
+      "strength": "50mg",
+      "route": "oral",
+      "manufacturer": "AstraZeneca Pharma India",
+      "drugClass": "Beta-1 Selective Blocker",
+      "therapeuticClass": "Antihypertensive / Anti-anginal",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily",
+      "defaultDuration": "30 days",
+      "contraindications": [
+        "Sinus bradycardia (HR <45 bpm)",
+        "Second or third degree AV block",
+        "Cardiogenic shock",
+        "Decompensated heart failure",
+        "Sick sinus syndrome without pacemaker"
+      ],
+      "commonSideEffects": [
+        "Bradycardia",
+        "Fatigue",
+        "Dizziness",
+        "Depression",
+        "Cold extremities"
+      ],
+      "drugInteractions": [
+        "Verapamil/Diltiazem",
+        "Clonidine (rebound hypertension on withdrawal)",
+        "MAO inhibitors",
+        "CYP2D6 inhibitors",
+        "Digoxin"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture. Do not crush extended-release tablets."
+    },
+    {
+      "medicationName": "Levothyroxine 50mcg Tablet",
+      "genericName": "Levothyroxine Sodium",
+      "brandName": "Thyronorm",
+      "atcCode": "H03AA01",
+      "localCode": "MED-013",
+      "dosageForm": "tablet",
+      "strength": "50mcg",
+      "route": "oral",
+      "manufacturer": "Abbott India Limited",
+      "drugClass": "Thyroid Hormone",
+      "therapeuticClass": "Thyroid Supplement",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily on empty stomach",
+      "defaultDuration": "90 days",
+      "contraindications": [
+        "Untreated adrenal insufficiency",
+        "Uncorrected thyrotoxicosis",
+        "Acute myocardial infarction"
+      ],
+      "commonSideEffects": [
+        "Palpitations (dose-related)",
+        "Weight loss",
+        "Tremor",
+        "Insomnia",
+        "Heat intolerance"
+      ],
+      "drugInteractions": [
+        "Calcium supplements (separate by 4 hours)",
+        "Iron supplements (separate by 4 hours)",
+        "Antacids (separate by 4 hours)",
+        "Warfarin",
+        "Carbamazepine"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from light and moisture."
+    },
+    {
+      "medicationName": "Clopidogrel 75mg Tablet",
+      "genericName": "Clopidogrel Bisulfate",
+      "brandName": "Clopilet",
+      "atcCode": "B01AC04",
+      "localCode": "MED-014",
+      "dosageForm": "tablet",
+      "strength": "75mg",
+      "route": "oral",
+      "manufacturer": "Sun Pharmaceutical Industries",
+      "drugClass": "P2Y12 Platelet Inhibitor",
+      "therapeuticClass": "Antiplatelet",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": true,
+      "defaultFrequency": "once daily",
+      "defaultDuration": "30 days",
+      "contraindications": [
+        "Active pathological bleeding",
+        "Peptic ulcer",
+        "Intracranial hemorrhage",
+        "Severe hepatic impairment"
+      ],
+      "commonSideEffects": [
+        "Bleeding",
+        "Bruising",
+        "GI disturbances",
+        "Rash",
+        "Headache"
+      ],
+      "drugInteractions": [
+        "Omeprazole/Esomeprazole (reduces efficacy)",
+        "Warfarin",
+        "NSAIDs",
+        "Aspirin (increased bleeding risk)",
+        "CYP2C19 inhibitors"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from moisture."
+    },
+    {
+      "medicationName": "Ranitidine 150mg Tablet",
+      "genericName": "Ranitidine Hydrochloride",
+      "brandName": "Rantac",
+      "atcCode": "A02BA02",
+      "localCode": "MED-015",
+      "dosageForm": "tablet",
+      "strength": "150mg",
+      "route": "oral",
+      "manufacturer": "J.B. Chemicals & Pharmaceuticals",
+      "drugClass": "H2-Receptor Antagonist",
+      "therapeuticClass": "Antiulcerant",
+      "controlledSubstance": false,
+      "controlledClass": null,
+      "requiresPrescription": false,
+      "defaultFrequency": "twice daily",
+      "defaultDuration": "14 days",
+      "contraindications": [
+        "Hypersensitivity to ranitidine",
+        "Acute porphyria"
+      ],
+      "commonSideEffects": [
+        "Headache",
+        "Dizziness",
+        "Constipation",
+        "Diarrhea",
+        "Nausea"
+      ],
+      "drugInteractions": [
+        "Ketoconazole (reduced absorption)",
+        "Atazanavir (reduced absorption)",
+        "Warfarin",
+        "Procainamide",
+        "Triazolam"
+      ],
+      "storageRequirements": "Store below 25°C. Protect from light and moisture."
+    }
+  ]
+}
