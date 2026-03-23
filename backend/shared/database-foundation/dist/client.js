@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.prisma = exports.ZealPrismaClient = void 0;
 const generated_1 = require("../generated");
+const observability_1 = require("@zeal/observability");
 /**
  * Extended Prisma Client with custom configuration and middleware
  */
@@ -17,46 +18,23 @@ class ZealPrismaClient extends generated_1.PrismaClient {
             errorFormat: 'pretty',
             ...options,
         });
-        this.setupMiddleware();
         this.setupLogging();
-    }
-    setupMiddleware() {
-        // Add middleware for tenant context
-        this.$use(async (params, next) => {
-            // Add tenant_id to create/update operations if not present
-            if ((params.action === 'create' || params.action === 'update') && params.args.data) {
-                const tenantId = this.getTenantId();
-                if (tenantId && !params.args.data.tenantId) {
-                    params.args.data.tenantId = tenantId;
-                }
-            }
-            return next(params);
-        });
-        // Add middleware for soft delete
-        this.$use(async (params, next) => {
-            if (params.action === 'delete') {
-                params.action = 'update';
-                params.args.data = { status: 'deleted' };
-            }
-            if (params.action === 'deleteMany') {
-                params.action = 'updateMany';
-                params.args.data = { status: 'deleted' };
-            }
-            return next(params);
-        });
     }
     setupLogging() {
         // @ts-expect-error Prisma event typings for `$on('query')` are not exposed in generated client
         this.$on('query', (e) => {
             if (process.env.NODE_ENV === 'development') {
-                console.log('Query: ' + e.query);
-                console.log('Params: ' + e.params);
-                console.log('Duration: ' + e.duration + 'ms');
+                observability_1.logger.debug({
+                    type: 'query',
+                    query: e.query,
+                    params: e.params,
+                    duration: e.duration,
+                }, `SQL Query (${e.duration}ms)`);
             }
         });
         // @ts-expect-error Prisma event typings for `$on('error')` are not exposed in generated client
         this.$on('error', (e) => {
-            console.error('Database Error:', e);
+            observability_1.logger.error({ type: 'database', error: e }, 'Database Error');
         });
     }
     getTenantId() {

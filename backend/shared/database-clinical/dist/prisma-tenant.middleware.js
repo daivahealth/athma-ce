@@ -32,6 +32,9 @@ const TENANT_ISOLATED_MODELS = [
     'Package',
     'AdministrativeService',
     'VitalSignsTemplate',
+    'EncounterClinicalCoding',
+    // ClinicalObservation: handled explicitly by ObservationWriterService (fire-and-forget, no request context)
+    // ObservationCodeCatalog: has global entries with NULL tenant_id
     // Add all your tenant-isolated models here
 ];
 /**

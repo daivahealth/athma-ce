@@ -3865,3 +3865,28 @@ model EncounterClinicalCoding {
   @@index([tenantId, status], map: "idx_clinical_codings_status")
   @@map("encounter_clinical_codings")
 }
+
+// ============================================================================
+// CATALOG POPULATION - AI-powered catalog auto-population job tracking
+// ============================================================================
+
+/// Tracks async catalog population jobs triggered during tenant setup
+model CatalogPopulationJob {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  countryIso    String    @map("country_iso") @db.VarChar(2)
+  status        String    @default("pending") @db.VarChar(30) // pending, running, completed, failed, cancelled
+  catalogTypes  String[]  @map("catalog_types")
+  progress      Json? // { completed: N, total: N, currentCatalog: "...", details: [...] }
+  totalInserted Int       @default(0) @map("total_inserted")
+  errorMessage  String?   @map("error_message") @db.Text
+  startedAt     DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt   DateTime? @map("completed_at") @db.Timestamptz(6)
+  initiatedBy   String    @map("initiated_by") @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId], map: "idx_catalog_population_tenant")
+  @@index([status], map: "idx_catalog_population_status")
+  @@map("catalog_population_jobs")
+}

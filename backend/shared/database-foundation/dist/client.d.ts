@@ -4,7 +4,6 @@ import { PrismaClient, Prisma } from '../generated';
  */
 export declare class ZealPrismaClient extends PrismaClient {
     constructor(options?: Prisma.PrismaClientOptions);
-    private setupMiddleware;
     private setupLogging;
     private getTenantId;
     /**

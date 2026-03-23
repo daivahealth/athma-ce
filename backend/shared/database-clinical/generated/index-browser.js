@@ -1952,6 +1952,22 @@ exports.Prisma.EncounterClinicalCodingScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CatalogPopulationJobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  countryIso: 'countryIso',
+  status: 'status',
+  catalogTypes: 'catalogTypes',
+  progress: 'progress',
+  totalInserted: 'totalInserted',
+  errorMessage: 'errorMessage',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  initiatedBy: 'initiatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2332,7 +2348,8 @@ exports.Prisma.ModelName = {
   EmbeddingSyncStatus: 'EmbeddingSyncStatus',
   ClinicalObservation: 'ClinicalObservation',
   ObservationCodeCatalog: 'ObservationCodeCatalog',
-  EncounterClinicalCoding: 'EncounterClinicalCoding'
+  EncounterClinicalCoding: 'EncounterClinicalCoding',
+  CatalogPopulationJob: 'CatalogPopulationJob'
 };
 
 /**
