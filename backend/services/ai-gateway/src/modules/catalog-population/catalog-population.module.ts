@@ -6,10 +6,12 @@ import { AiCatalogGeneratorService } from './services/ai-catalog-generator.servi
 import { CatalogValidatorService } from './services/catalog-validator.service';
 import { CatalogWriterService } from './services/catalog-writer.service';
 import { CatalogJobTrackerService } from './services/catalog-job-tracker.service';
+import { ConfigClientService } from '../../shared/llm-client/config-client.service';
 
 @Module({
   controllers: [CatalogPopulationController],
   providers: [
+    ConfigClientService,
     CatalogPopulationService,
     TemplateLoaderService,
     AiCatalogGeneratorService,

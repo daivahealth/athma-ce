@@ -20,7 +20,7 @@
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/platform-express": "^10.2.0",
     "@nestjs/swagger": "^7.4.2",
-    "@prisma/client": "^5.7.1",
+    "@prisma/client": "~6.19.0",
     "@zeal/contracts": "file:../../contracts",
     "@zeal/database-clinical": "file:../../shared/database-clinical",
     "@zeal/observability": "file:../../shared/observability",

@@ -17,35 +17,7 @@ export class ZealPrismaClient extends PrismaClient {
       ...options,
     });
 
-    this.setupMiddleware();
     this.setupLogging();
-  }
-
-  private setupMiddleware() {
-    // Add middleware for tenant context
-    this.$use(async (params, next) => {
-      // Add tenant_id to create/update operations if not present
-      if ((params.action === 'create' || params.action === 'update') && params.args.data) {
-        const tenantId = this.getTenantId();
-        if (tenantId && !params.args.data.tenantId) {
-          params.args.data.tenantId = tenantId;
-        }
-      }
-      return next(params);
-    });
-
-    // Add middleware for soft delete
-    this.$use(async (params, next) => {
-      if (params.action === 'delete') {
-        params.action = 'update';
-        params.args.data = { status: 'deleted' };
-      }
-      if (params.action === 'deleteMany') {
-        params.action = 'updateMany';
-        params.args.data = { status: 'deleted' };
-      }
-      return next(params);
-    });
   }
 
   private setupLogging() {
