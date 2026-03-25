@@ -9,6 +9,7 @@ import { ConsentModule } from './modules/consent/consent.module';
 import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { EncounterModule } from './modules/encounter/encounter.module';
 import { ChartingModule } from './modules/charting/charting.module';
+import { ObservationsModule } from './modules/observations/observations.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { ValueSetModule } from './modules/valueset/valueset.module';
 import { InpatientModule } from './modules/inpatient/inpatient.module';
@@ -37,6 +38,7 @@ import { LoggerService } from './common/logger/logger.service';
     SchedulingModule,
     EncounterModule,
     ChartingModule,
+    ObservationsModule,
     CatalogModule,
     ValueSetModule,
     InpatientModule,
