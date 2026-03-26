@@ -138,9 +138,10 @@ RULES:
 4. "today" means the current date
 5. "this month" means from the first day of the current month to today
 6. "last 30 days" means from 30 days ago to today
-7. Default limit is 1000, maximum is 10000
-8. Confidence should be between 0 and 1
-9. OR LOGIC: When the user asks for multiple values of the same dimension (e.g., "newborn, young, or senior"),
+7. "last month" means from LAST_MONTH_START to LAST_MONTH_END - ALWAYS use these keywords instead of calculating specific dates
+8. Default limit is 1000, maximum is 10000
+9. Confidence should be between 0 and 1
+10. OR LOGIC: When the user asks for multiple values of the same dimension (e.g., "newborn, young, or senior"),
    add a "logicGroup" field with the same group name to each filter. Filters with the same logicGroup are joined with OR.
    Example: "patients who are newborn or senior" should use logicGroup: "age_selection" for both filters.
 
@@ -229,6 +230,20 @@ Query: "Show this month's appointments with doctor name and patient name"
   },
   "confidence": 0.95,
   "suggestedFollowups": ["Filter by doctor?", "Show only confirmed appointments?"]
+}
+
+Query: "What was last month's revenue?"
+{
+  "plan": {
+    "type": "aggregate",
+    "metrics": [{ "name": "total_revenue", "aggregation": "SUM" }],
+    "dimensions": [],
+    "filters": [{ "dimension": "invoice_date", "operator": "between", "value": "LAST_MONTH_START", "valueTo": "LAST_MONTH_END" }],
+    "orderBy": [],
+    "limit": 1
+  },
+  "confidence": 0.95,
+  "suggestedFollowups": ["Revenue by department last month?", "Compare with this month?"]
 }
 
 Query: "List patients who are newborn, young, or senior citizen"

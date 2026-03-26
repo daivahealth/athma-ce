@@ -465,9 +465,41 @@ export class SqlCompilerService {
         return `${yyyy}-${mm}-01`;
       case 'THIS_YEAR_START':
         return `${yyyy}-01-01`;
+      case 'LAST_MONTH_START': {
+        const d = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        return d.toISOString().split('T')[0];
+      }
+      case 'LAST_MONTH_END': {
+        const d = new Date(today.getFullYear(), today.getMonth(), 0);
+        return d.toISOString().split('T')[0];
+      }
       default:
-        return value;
+        return this.validateAndCorrectDate(value);
     }
+  }
+
+  /**
+   * Validate and correct ISO date strings with invalid days (e.g., Feb 29 in non-leap years).
+   * Returns the input unchanged if it's not an ISO date string.
+   */
+  private validateAndCorrectDate(dateStr: string): string {
+    const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return dateStr;
+
+    const year = parseInt(match[1], 10);
+    const month = parseInt(match[2], 10);
+    const day = parseInt(match[3], 10);
+
+    if (month < 1 || month > 12) return dateStr;
+
+    const maxDay = new Date(year, month, 0).getDate();
+    if (day > maxDay) {
+      const corrected = `${year}-${String(month).padStart(2, '0')}-${String(maxDay).padStart(2, '0')}`;
+      logger.warn({ original: dateStr, corrected }, 'Corrected invalid date from LLM');
+      return corrected;
+    }
+
+    return dateStr;
   }
 
   /**
