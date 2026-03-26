@@ -1,36 +1,36 @@
 'use client';
 
+import { useMemo } from 'react';
 import { formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
-const activity = [
-  {
-    id: 'evt-101',
-    type: 'Encounter Signed',
-    timestamp: new Date().toISOString(),
-    owner: 'Dr. Sara Mahmoud',
-    details: 'OPD consultation completed. SOAP note signed.',
-    phi: 'Patient: A**** H****',
-  },
-  {
-    id: 'evt-102',
-    type: 'Medication Dispensed',
-    timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-    owner: 'Pharmacist - DXB Clinic',
-    details: 'Amoxicillin 500mg (Qty 20)',
-    phi: 'Prescription: RX-24-0093',
-  },
-  {
-    id: 'evt-103',
-    type: 'Claim Submitted',
-    timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-    owner: 'Revenue Ops',
-    details: 'Claim #CLM-47382 sent to payer Watania',
-    phi: 'Amount: AED 1,240.00',
-  },
-];
-
 export function ActivityTimeline() {
+  const activity = useMemo(() => [
+    {
+      id: 'evt-101',
+      type: 'Encounter Signed',
+      timestamp: new Date().toISOString(),
+      owner: 'Dr. Sara Mahmoud',
+      details: 'OPD consultation completed. SOAP note signed.',
+      phi: 'Patient: A**** H****',
+    },
+    {
+      id: 'evt-102',
+      type: 'Medication Dispensed',
+      timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+      owner: 'Pharmacist - DXB Clinic',
+      details: 'Amoxicillin 500mg (Qty 20)',
+      phi: 'Prescription: RX-24-0093',
+    },
+    {
+      id: 'evt-103',
+      type: 'Claim Submitted',
+      timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+      owner: 'Revenue Ops',
+      details: 'Claim #CLM-47382 sent to payer Watania',
+      phi: 'Amount: AED 1,240.00',
+    },
+  ], []);
   return (
     <ol className="relative space-y-6 border-l border-border pl-6">
       {activity.map((item) => (
