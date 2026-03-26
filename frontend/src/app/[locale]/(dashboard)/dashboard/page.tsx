@@ -71,7 +71,12 @@ export default function DashboardPage() {
     if (!metrics.cachedAt) return null;
     try {
       const cachedDate = new Date(metrics.cachedAt);
-      return cachedDate.toLocaleTimeString();
+      return cachedDate.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
     } catch {
       return null;
     }

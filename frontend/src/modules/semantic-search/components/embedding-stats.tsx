@@ -159,7 +159,12 @@ export function EmbeddingStats({ className }: EmbeddingStatsProps) {
             />
             {reindexProgress.estimatedCompletionAt && (
               <p className="text-xs text-muted-foreground">
-                ETA: {new Date(reindexProgress.estimatedCompletionAt).toLocaleTimeString()}
+                ETA: {new Date(reindexProgress.estimatedCompletionAt).toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: true,
+                })}
               </p>
             )}
           </div>
