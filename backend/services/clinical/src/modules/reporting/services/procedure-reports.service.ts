@@ -36,7 +36,7 @@ export class ProcedureReportsService {
         orderId: dto.orderId,
         encounterId: order.encounterId,
         patientId: order.patientId,
-        indication: dto.indication,
+        indication: dto.indication ?? null,
         reportedBy: userId,
         createdBy: userId,
         updatedBy: userId,
@@ -81,9 +81,23 @@ export class ProcedureReportsService {
       throw new BadRequestException('Can only update DRAFT or PRELIMINARY reports');
     }
 
-    const data: any = { ...dto, updatedBy: userId };
-    if (dto.startTime) data.startTime = new Date(dto.startTime);
-    if (dto.endTime) data.endTime = new Date(dto.endTime);
+    const data: Record<string, any> = { updatedBy: userId };
+    if (dto.indication !== undefined) data.indication = dto.indication;
+    if (dto.procedureDescription !== undefined) data.procedureDescription = dto.procedureDescription;
+    if (dto.findings !== undefined) data.findings = dto.findings;
+    if (dto.complications !== undefined) data.complications = dto.complications;
+    if (dto.specimens !== undefined) data.specimens = dto.specimens;
+    if (dto.postProcedureInstructions !== undefined) data.postProcedureInstructions = dto.postProcedureInstructions;
+    if (dto.anesthesiaType !== undefined) data.anesthesiaType = dto.anesthesiaType;
+    if (dto.anesthesiaProvider !== undefined) data.anesthesiaProvider = dto.anesthesiaProvider;
+    if (dto.startTime !== undefined) data.startTime = dto.startTime ? new Date(dto.startTime) : null;
+    if (dto.endTime !== undefined) data.endTime = dto.endTime ? new Date(dto.endTime) : null;
+    if (dto.durationMinutes !== undefined) data.durationMinutes = dto.durationMinutes;
+    if (dto.primaryPerformer !== undefined) data.primaryPerformer = dto.primaryPerformer;
+    if (dto.assistants !== undefined) data.assistants = dto.assistants;
+    if (dto.estimatedBloodLoss !== undefined) data.estimatedBloodLoss = dto.estimatedBloodLoss;
+    if (dto.implantsUsed !== undefined) data.implantsUsed = dto.implantsUsed;
+    if (dto.comments !== undefined) data.comments = dto.comments;
 
     return this.prisma.procedureReport.update({
       where: { id },
