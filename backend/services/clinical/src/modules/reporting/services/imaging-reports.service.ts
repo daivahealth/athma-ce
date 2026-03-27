@@ -36,10 +36,10 @@ export class ImagingReportsService {
         orderId: dto.orderId,
         encounterId: order.encounterId,
         patientId: order.patientId,
-        modality: dto.modality,
-        bodyPart: dto.bodyPart,
-        accessionNumber: dto.accessionNumber,
-        studyInstanceUid: dto.studyInstanceUid,
+        modality: dto.modality ?? null,
+        bodyPart: dto.bodyPart ?? null,
+        accessionNumber: dto.accessionNumber ?? null,
+        studyInstanceUid: dto.studyInstanceUid ?? null,
         reportedBy: userId,
         createdBy: userId,
         updatedBy: userId,
@@ -84,9 +84,20 @@ export class ImagingReportsService {
       throw new BadRequestException('Can only update DRAFT or PRELIMINARY reports');
     }
 
+    const data: Record<string, any> = { updatedBy: userId };
+    if (dto.technique !== undefined) data.technique = dto.technique;
+    if (dto.comparison !== undefined) data.comparison = dto.comparison;
+    if (dto.findings !== undefined) data.findings = dto.findings;
+    if (dto.impression !== undefined) data.impression = dto.impression;
+    if (dto.recommendations !== undefined) data.recommendations = dto.recommendations;
+    if (dto.criticalFinding !== undefined) data.criticalFinding = dto.criticalFinding;
+    if (dto.comments !== undefined) data.comments = dto.comments;
+    if (dto.accessionNumber !== undefined) data.accessionNumber = dto.accessionNumber;
+    if (dto.studyInstanceUid !== undefined) data.studyInstanceUid = dto.studyInstanceUid;
+
     return this.prisma.imagingReport.update({
       where: { id },
-      data: { ...dto, updatedBy: userId },
+      data,
     });
   }
 

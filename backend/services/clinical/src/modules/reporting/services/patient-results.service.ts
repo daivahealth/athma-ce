@@ -39,10 +39,10 @@ export class PatientResultsService {
     tenantId: string,
     patientId: string,
     options?: {
-      reportType?: string;
-      reportStatus?: string;
-      page?: number;
-      limit?: number;
+      reportType?: string | undefined;
+      reportStatus?: string | undefined;
+      page?: number | undefined;
+      limit?: number | undefined;
     },
   ): Promise<{ results: PatientResultSummary[]; total: number }> {
     const page = options?.page || 1;

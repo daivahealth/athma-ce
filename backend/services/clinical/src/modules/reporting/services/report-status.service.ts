@@ -37,7 +37,7 @@ export class ReportStatusService {
     fromStatus: string | null;
     toStatus: string;
     changedBy: string;
-    reason?: string;
+    reason?: string | undefined;
     version: number;
   }): Promise<void> {
     await this.prisma.reportStatusHistory.create({
@@ -48,7 +48,7 @@ export class ReportStatusService {
         fromStatus: params.fromStatus,
         toStatus: params.toStatus,
         changedBy: params.changedBy,
-        reason: params.reason,
+        reason: params.reason ?? null,
         version: params.version,
       },
     });
