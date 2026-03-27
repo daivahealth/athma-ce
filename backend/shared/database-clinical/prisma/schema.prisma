@@ -590,6 +590,9 @@ model Encounter {
   aiNoteSuggestions    AiNoteSuggestion[]
   clinicalObservations ClinicalObservation[]
   clinicalCodings      EncounterClinicalCoding[]
+  labReports           LabReport[]
+  imagingReports       ImagingReport[]
+  procedureReports     ProcedureReport[]
   triage               Triage?
   inpatientAdmission   InpatientAdmission?
 
@@ -780,6 +783,9 @@ model ClinicalOrder {
 
   // Relations
   encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  labReports        LabReport[]
+  imagingReports    ImagingReport[]
+  procedureReports  ProcedureReport[]
 
   @@index([tenantId, encounterId], map: "idx_orders_encounter")
   @@index([tenantId, patientId], map: "idx_orders_patient")
@@ -3888,4 +3894,236 @@ model CatalogPopulationJob {
   @@index([tenantId], map: "idx_catalog_population_tenant")
   @@index([status], map: "idx_catalog_population_status")
   @@map("catalog_population_jobs")
+}
+
+// ============================================================================
+// CLINICAL REPORTING - Structured results for Lab, Imaging, Procedure orders
+// ============================================================================
+
+/// Audit trail for all report status transitions (shared across report types)
+model ReportStatusHistory {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  reportType    String    @map("report_type") @db.VarChar(20) // lab, imaging, procedure
+  reportId      String    @map("report_id") @db.Uuid
+  fromStatus    String?   @map("from_status") @db.VarChar(20)
+  toStatus      String    @map("to_status") @db.VarChar(20)
+  changedBy     String    @map("changed_by") @db.Uuid
+  changedAt     DateTime  @default(now()) @map("changed_at") @db.Timestamptz(6)
+  reason        String?   @db.Text // required for amendments/corrections
+  version       Int       @default(1)
+
+  @@index([tenantId, reportType, reportId], map: "idx_report_status_history")
+  @@index([tenantId, changedAt], map: "idx_report_status_history_time")
+  @@map("report_status_history")
+}
+
+/// Lab Report - Structured laboratory test results with specimen tracking and verification
+model LabReport {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  orderId           String    @map("order_id") @db.Uuid
+  encounterId       String    @map("encounter_id") @db.Uuid
+  patientId         String    @map("patient_id") @db.Uuid
+
+  // Report status workflow: DRAFT -> PRELIMINARY -> FINAL -> AMENDED
+  reportStatus      String    @default("DRAFT") @map("report_status") @db.VarChar(20)
+  version           Int       @default(1)
+  previousVersionId String?   @map("previous_version_id") @db.Uuid
+
+  // Specimen information
+  specimenType      String?   @map("specimen_type") @db.VarChar(100)
+  collectionDate    DateTime? @map("collection_date") @db.Timestamptz(6)
+  receivedDate      DateTime? @map("received_date") @db.Timestamptz(6)
+
+  // Authorship
+  reportedBy        String?   @map("reported_by") @db.Uuid   // lab tech who entered results
+  verifiedBy        String?   @map("verified_by") @db.Uuid   // pathologist/supervisor sign-off
+  reportedAt        DateTime? @map("reported_at") @db.Timestamptz(6)
+  verifiedAt        DateTime? @map("verified_at") @db.Timestamptz(6)
+
+  // Notes
+  comments          String?   @db.Text
+  internalNotes     String?   @map("internal_notes") @db.Text
+
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy         String?   @map("created_by") @db.Uuid
+  updatedBy         String?   @map("updated_by") @db.Uuid
+
+  // Relations
+  order             ClinicalOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  encounter         Encounter     @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  items             LabResultItem[]
+
+  @@index([tenantId, orderId], map: "idx_lab_report_order")
+  @@index([tenantId, patientId], map: "idx_lab_report_patient")
+  @@index([tenantId, encounterId], map: "idx_lab_report_encounter")
+  @@index([tenantId, reportStatus], map: "idx_lab_report_status")
+  @@index([tenantId, patientId, reportStatus], map: "idx_lab_report_patient_status")
+  @@map("lab_reports")
+}
+
+/// Lab Result Item - Individual analyte/test component within a lab report
+model LabResultItem {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  labReportId     String    @map("lab_report_id") @db.Uuid
+  sortOrder       Int       @default(0) @map("sort_order")
+
+  // Test identification (LOINC coding)
+  testCode        String    @map("test_code") @db.VarChar(20)
+  codeSystem      String    @default("LOINC") @map("code_system") @db.VarChar(20)
+  testName        String    @map("test_name") @db.VarChar(255)
+  testNameAr      String?   @map("test_name_ar") @db.VarChar(255)
+
+  // Result value - one of these will be populated per item
+  valueNumeric    Decimal?  @map("value_numeric") @db.Decimal(12, 4)
+  valueString     String?   @map("value_string") @db.Text
+  valueCode       String?   @map("value_code") @db.VarChar(50)
+
+  // Unit of measurement and reference ranges
+  unit            String?   @db.VarChar(50)
+  refRangeLow     Decimal?  @map("ref_range_low") @db.Decimal(12, 4)
+  refRangeHigh    Decimal?  @map("ref_range_high") @db.Decimal(12, 4)
+  refRangeText    String?   @map("ref_range_text") @db.VarChar(100) // e.g., "Negative", "< 5.0"
+
+  // Interpretation
+  interpretation  String?   @db.VarChar(20) // normal, high, low, critical_high, critical_low, abnormal
+  abnormalFlag    Boolean   @default(false) @map("abnormal_flag")
+  criticalFlag    Boolean   @default(false) @map("critical_flag")
+
+  // Notes
+  comment         String?   @db.Text
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  labReport       LabReport @relation(fields: [labReportId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, labReportId], map: "idx_lab_result_item_report")
+  @@index([tenantId, testCode], map: "idx_lab_result_item_code")
+  @@map("lab_result_items")
+}
+
+/// Imaging Report - Radiology/diagnostic imaging reports with structured sections
+model ImagingReport {
+  id                             String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                       String    @map("tenant_id") @db.Uuid
+  orderId                        String    @map("order_id") @db.Uuid
+  encounterId                    String    @map("encounter_id") @db.Uuid
+  patientId                      String    @map("patient_id") @db.Uuid
+
+  // Report status workflow: DRAFT -> PRELIMINARY -> FINAL -> AMENDED
+  reportStatus                   String    @default("DRAFT") @map("report_status") @db.VarChar(20)
+  version                        Int       @default(1)
+  previousVersionId              String?   @map("previous_version_id") @db.Uuid
+
+  // Denormalized from order for fast queries and display
+  modality                       String?   @db.VarChar(50) // X-ray, CT, MRI, Ultrasound
+  bodyPart                       String?   @map("body_part") @db.VarChar(100)
+
+  // Structured report sections
+  technique                      String?   @db.Text
+  comparison                     String?   @db.Text       // comparison with prior studies
+  findings                       String?   @db.Text
+  impression                     String?   @db.Text       // clinical impression/conclusion
+  recommendations                String?   @db.Text
+
+  // Critical finding management
+  criticalFinding                Boolean   @default(false) @map("critical_finding")
+  criticalFindingNotifiedTo      String?   @map("critical_finding_notified_to") @db.Uuid
+  criticalFindingNotifiedAt      DateTime? @map("critical_finding_notified_at") @db.Timestamptz(6)
+  criticalFindingAcknowledgedAt  DateTime? @map("critical_finding_acknowledged_at") @db.Timestamptz(6)
+
+  // DICOM references (for future PACS integration)
+  accessionNumber                String?   @map("accession_number") @db.VarChar(64)
+  studyInstanceUid               String?   @map("study_instance_uid") @db.VarChar(128)
+
+  // Authorship
+  reportedBy                     String?   @map("reported_by") @db.Uuid   // radiologist
+  reviewedBy                     String?   @map("reviewed_by") @db.Uuid
+  reportedAt                     DateTime? @map("reported_at") @db.Timestamptz(6)
+  reviewedAt                     DateTime? @map("reviewed_at") @db.Timestamptz(6)
+
+  comments                       String?   @db.Text
+
+  createdAt                      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy                      String?   @map("created_by") @db.Uuid
+  updatedBy                      String?   @map("updated_by") @db.Uuid
+
+  // Relations
+  order                          ClinicalOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  encounter                      Encounter     @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, orderId], map: "idx_imaging_report_order")
+  @@index([tenantId, patientId], map: "idx_imaging_report_patient")
+  @@index([tenantId, encounterId], map: "idx_imaging_report_encounter")
+  @@index([tenantId, reportStatus], map: "idx_imaging_report_status")
+  @@index([tenantId, criticalFinding], map: "idx_imaging_report_critical")
+  @@index([tenantId, patientId, reportStatus], map: "idx_imaging_report_patient_status")
+  @@map("imaging_reports")
+}
+
+/// Procedure Report - Structured procedure notes with timing, performers, and specimens
+model ProcedureReport {
+  id                        String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String    @map("tenant_id") @db.Uuid
+  orderId                   String    @map("order_id") @db.Uuid
+  encounterId               String    @map("encounter_id") @db.Uuid
+  patientId                 String    @map("patient_id") @db.Uuid
+
+  // Report status workflow: DRAFT -> PRELIMINARY -> FINAL -> AMENDED
+  reportStatus              String    @default("DRAFT") @map("report_status") @db.VarChar(20)
+  version                   Int       @default(1)
+  previousVersionId         String?   @map("previous_version_id") @db.Uuid
+
+  // Structured procedure sections
+  indication                String?   @db.Text
+  procedureDescription      String?   @map("procedure_description") @db.Text
+  findings                  String?   @db.Text
+  complications             String?   @db.Text
+  specimens                 Json?     @db.JsonB   // array of { type, sentTo, label }
+  postProcedureInstructions String?   @map("post_procedure_instructions") @db.Text
+
+  // Anesthesia details
+  anesthesiaType            String?   @map("anesthesia_type") @db.VarChar(30) // none, local, regional, general, sedation
+  anesthesiaProvider        String?   @map("anesthesia_provider") @db.Uuid
+
+  // Timing
+  startTime                 DateTime? @map("start_time") @db.Timestamptz(6)
+  endTime                   DateTime? @map("end_time") @db.Timestamptz(6)
+  durationMinutes           Int?      @map("duration_minutes")
+
+  // Performers
+  primaryPerformer          String?   @map("primary_performer") @db.Uuid
+  assistants                String[]  @db.Uuid     // array of staff UUIDs
+
+  // Clinical details
+  estimatedBloodLoss        String?   @map("estimated_blood_loss") @db.VarChar(50)
+  implantsUsed              Json?     @map("implants_used") @db.JsonB // array of { name, manufacturer, lot }
+
+  // Authorship
+  reportedBy                String?   @map("reported_by") @db.Uuid
+  reportedAt                DateTime? @map("reported_at") @db.Timestamptz(6)
+
+  comments                  String?   @db.Text
+
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy                 String?   @map("created_by") @db.Uuid
+  updatedBy                 String?   @map("updated_by") @db.Uuid
+
+  // Relations
+  order                     ClinicalOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  encounter                 Encounter     @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, orderId], map: "idx_procedure_report_order")
+  @@index([tenantId, patientId], map: "idx_procedure_report_patient")
+  @@index([tenantId, encounterId], map: "idx_procedure_report_encounter")
+  @@index([tenantId, reportStatus], map: "idx_procedure_report_status")
+  @@index([tenantId, patientId, reportStatus], map: "idx_procedure_report_patient_status")
+  @@map("procedure_reports")
 }

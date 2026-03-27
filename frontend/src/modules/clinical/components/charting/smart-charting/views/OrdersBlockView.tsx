@@ -6,7 +6,9 @@ import type { NodeViewProps } from '@tiptap/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Trash2, GripVertical } from 'lucide-react';
+import { Trash2, GripVertical, FileText } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { OrderAutocomplete, type OrderSelection } from '@/components/autocomplete/catalog-autocomplete.order';
 import {
   useClinicalOrdersByEncounter,
@@ -21,6 +23,8 @@ import { BLOCK_COLORS } from '../types';
 
 export function OrdersBlockView({ deleteNode }: NodeViewProps) {
   const { encounterId, patientId } = useSmartChartingContext();
+  const params = useParams();
+  const locale = (params?.locale as string) || 'en';
   const [catalogType, setCatalogType] = useState<'lab' | 'imaging' | 'procedure'>('lab');
   const [removingId, setRemovingId] = useState<string | null>(null);
   const toast = useToast();
@@ -147,10 +151,19 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
                   </Badge>
                   <span className="font-medium">{order.orderName}</span>
                   <span className="text-xs text-muted-foreground">{order.orderCode}</span>
+                  {(order.status === 'completed' || order.resultStatus) && (
+                    <Link
+                      href={`/${locale}/results/${order.orderType}/${order.id}`}
+                      className="ml-auto flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800"
+                    >
+                      <FileText className="h-3 w-3" />
+                      Results
+                    </Link>
+                  )}
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-6 w-6 p-0 ml-auto text-muted-foreground hover:text-destructive"
+                    className={`h-6 w-6 p-0 ${order.status === 'completed' || order.resultStatus ? '' : 'ml-auto'} text-muted-foreground hover:text-destructive`}
                     onClick={() => handleRemoveOrder(order.id)}
                     disabled={removingId === order.id}
                   >
