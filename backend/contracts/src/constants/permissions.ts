@@ -85,6 +85,8 @@ export const LAB_ORDER_DELETE = 'lab_order.delete';
 export const LAB_ORDER_CANCEL = 'lab_order.cancel';
 export const LAB_RESULT_READ = 'lab_result.read';
 export const LAB_RESULT_ENTER = 'lab_result.enter';
+export const LAB_RESULT_VERIFY = 'lab_result.verify';
+export const LAB_RESULT_AMEND = 'lab_result.amend';
 
 // ============================================
 // IMAGING ORDER PERMISSIONS
@@ -95,6 +97,16 @@ export const IMAGING_ORDER_UPDATE = 'imaging_order.update';
 export const IMAGING_ORDER_DELETE = 'imaging_order.delete';
 export const IMAGING_RESULT_READ = 'imaging_result.read';
 export const IMAGING_RESULT_ENTER = 'imaging_result.enter';
+export const IMAGING_RESULT_VERIFY = 'imaging_result.verify';
+export const IMAGING_RESULT_AMEND = 'imaging_result.amend';
+
+// ============================================
+// PROCEDURE RESULT PERMISSIONS
+// ============================================
+export const PROCEDURE_RESULT_READ = 'procedure_result.read';
+export const PROCEDURE_RESULT_ENTER = 'procedure_result.enter';
+export const PROCEDURE_RESULT_VERIFY = 'procedure_result.verify';
+export const PROCEDURE_RESULT_AMEND = 'procedure_result.amend';
 
 // ============================================
 // SCHEDULING PERMISSIONS
@@ -368,6 +380,7 @@ export const CLINICAL_ALL = [
   IMAGING_ORDER_READ,
   IMAGING_ORDER_CREATE,
   IMAGING_RESULT_READ,
+  PROCEDURE_RESULT_READ,
 ];
 
 /**
@@ -464,6 +477,8 @@ export const ALL_PERMISSIONS = [
   { code: LAB_ORDER_CANCEL, name: 'Cancel Lab Orders', resource: 'lab_order', action: 'cancel' },
   { code: LAB_RESULT_READ, name: 'Read Lab Results', resource: 'lab_result', action: 'read' },
   { code: LAB_RESULT_ENTER, name: 'Enter Lab Results', resource: 'lab_result', action: 'enter' },
+  { code: LAB_RESULT_VERIFY, name: 'Verify Lab Results', resource: 'lab_result', action: 'verify' },
+  { code: LAB_RESULT_AMEND, name: 'Amend Lab Results', resource: 'lab_result', action: 'amend' },
 
   // Imaging Orders
   { code: IMAGING_ORDER_READ, name: 'Read Imaging Orders', resource: 'imaging_order', action: 'read' },
@@ -472,6 +487,14 @@ export const ALL_PERMISSIONS = [
   { code: IMAGING_ORDER_DELETE, name: 'Delete Imaging Orders', resource: 'imaging_order', action: 'delete' },
   { code: IMAGING_RESULT_READ, name: 'Read Imaging Results', resource: 'imaging_result', action: 'read' },
   { code: IMAGING_RESULT_ENTER, name: 'Enter Imaging Results', resource: 'imaging_result', action: 'enter' },
+  { code: IMAGING_RESULT_VERIFY, name: 'Verify Imaging Results', resource: 'imaging_result', action: 'verify' },
+  { code: IMAGING_RESULT_AMEND, name: 'Amend Imaging Results', resource: 'imaging_result', action: 'amend' },
+
+  // Procedure Results
+  { code: PROCEDURE_RESULT_READ, name: 'Read Procedure Results', resource: 'procedure_result', action: 'read' },
+  { code: PROCEDURE_RESULT_ENTER, name: 'Enter Procedure Results', resource: 'procedure_result', action: 'enter' },
+  { code: PROCEDURE_RESULT_VERIFY, name: 'Verify Procedure Results', resource: 'procedure_result', action: 'verify' },
+  { code: PROCEDURE_RESULT_AMEND, name: 'Amend Procedure Results', resource: 'procedure_result', action: 'amend' },
 
   // Scheduling
   { code: SCHEDULE_READ, name: 'Read Schedules', resource: 'schedule', action: 'read' },

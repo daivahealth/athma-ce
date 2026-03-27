@@ -21,12 +21,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.2
- * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+ * Prisma Client JS version: 6.19.0
+ * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
  */
 Prisma.prismaVersion = {
-  client: "6.19.2",
-  engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
+  client: "6.19.0",
+  engine: "2ba551f319ab1df4bc874a89965d8b3641056773"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -1968,6 +1968,133 @@ exports.Prisma.CatalogPopulationJobScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ReportStatusHistoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  reportType: 'reportType',
+  reportId: 'reportId',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
+  changedBy: 'changedBy',
+  changedAt: 'changedAt',
+  reason: 'reason',
+  version: 'version'
+};
+
+exports.Prisma.LabReportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  reportStatus: 'reportStatus',
+  version: 'version',
+  previousVersionId: 'previousVersionId',
+  specimenType: 'specimenType',
+  collectionDate: 'collectionDate',
+  receivedDate: 'receivedDate',
+  reportedBy: 'reportedBy',
+  verifiedBy: 'verifiedBy',
+  reportedAt: 'reportedAt',
+  verifiedAt: 'verifiedAt',
+  comments: 'comments',
+  internalNotes: 'internalNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.LabResultItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  labReportId: 'labReportId',
+  sortOrder: 'sortOrder',
+  testCode: 'testCode',
+  codeSystem: 'codeSystem',
+  testName: 'testName',
+  testNameAr: 'testNameAr',
+  valueNumeric: 'valueNumeric',
+  valueString: 'valueString',
+  valueCode: 'valueCode',
+  unit: 'unit',
+  refRangeLow: 'refRangeLow',
+  refRangeHigh: 'refRangeHigh',
+  refRangeText: 'refRangeText',
+  interpretation: 'interpretation',
+  abnormalFlag: 'abnormalFlag',
+  criticalFlag: 'criticalFlag',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ImagingReportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  reportStatus: 'reportStatus',
+  version: 'version',
+  previousVersionId: 'previousVersionId',
+  modality: 'modality',
+  bodyPart: 'bodyPart',
+  technique: 'technique',
+  comparison: 'comparison',
+  findings: 'findings',
+  impression: 'impression',
+  recommendations: 'recommendations',
+  criticalFinding: 'criticalFinding',
+  criticalFindingNotifiedTo: 'criticalFindingNotifiedTo',
+  criticalFindingNotifiedAt: 'criticalFindingNotifiedAt',
+  criticalFindingAcknowledgedAt: 'criticalFindingAcknowledgedAt',
+  accessionNumber: 'accessionNumber',
+  studyInstanceUid: 'studyInstanceUid',
+  reportedBy: 'reportedBy',
+  reviewedBy: 'reviewedBy',
+  reportedAt: 'reportedAt',
+  reviewedAt: 'reviewedAt',
+  comments: 'comments',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ProcedureReportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  reportStatus: 'reportStatus',
+  version: 'version',
+  previousVersionId: 'previousVersionId',
+  indication: 'indication',
+  procedureDescription: 'procedureDescription',
+  findings: 'findings',
+  complications: 'complications',
+  specimens: 'specimens',
+  postProcedureInstructions: 'postProcedureInstructions',
+  anesthesiaType: 'anesthesiaType',
+  anesthesiaProvider: 'anesthesiaProvider',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  durationMinutes: 'durationMinutes',
+  primaryPerformer: 'primaryPerformer',
+  assistants: 'assistants',
+  estimatedBloodLoss: 'estimatedBloodLoss',
+  implantsUsed: 'implantsUsed',
+  reportedBy: 'reportedBy',
+  reportedAt: 'reportedAt',
+  comments: 'comments',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2349,7 +2476,12 @@ exports.Prisma.ModelName = {
   ClinicalObservation: 'ClinicalObservation',
   ObservationCodeCatalog: 'ObservationCodeCatalog',
   EncounterClinicalCoding: 'EncounterClinicalCoding',
-  CatalogPopulationJob: 'CatalogPopulationJob'
+  CatalogPopulationJob: 'CatalogPopulationJob',
+  ReportStatusHistory: 'ReportStatusHistory',
+  LabReport: 'LabReport',
+  LabResultItem: 'LabResultItem',
+  ImagingReport: 'ImagingReport',
+  ProcedureReport: 'ProcedureReport'
 };
 
 /**
