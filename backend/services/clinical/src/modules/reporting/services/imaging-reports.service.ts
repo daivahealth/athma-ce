@@ -85,15 +85,15 @@ export class ImagingReportsService {
     }
 
     const data: Record<string, any> = { updatedBy: userId };
-    if (dto.technique !== undefined) data.technique = dto.technique;
-    if (dto.comparison !== undefined) data.comparison = dto.comparison;
-    if (dto.findings !== undefined) data.findings = dto.findings;
-    if (dto.impression !== undefined) data.impression = dto.impression;
-    if (dto.recommendations !== undefined) data.recommendations = dto.recommendations;
-    if (dto.criticalFinding !== undefined) data.criticalFinding = dto.criticalFinding;
-    if (dto.comments !== undefined) data.comments = dto.comments;
-    if (dto.accessionNumber !== undefined) data.accessionNumber = dto.accessionNumber;
-    if (dto.studyInstanceUid !== undefined) data.studyInstanceUid = dto.studyInstanceUid;
+    if (dto.technique !== undefined) data.technique = dto.technique ?? null;
+    if (dto.comparison !== undefined) data.comparison = dto.comparison ?? null;
+    if (dto.findings !== undefined) data.findings = dto.findings ?? null;
+    if (dto.impression !== undefined) data.impression = dto.impression ?? null;
+    if (dto.recommendations !== undefined) data.recommendations = dto.recommendations ?? null;
+    if (dto.criticalFinding !== undefined) data.criticalFinding = dto.criticalFinding ?? false;
+    if (dto.comments !== undefined) data.comments = dto.comments ?? null;
+    if (dto.accessionNumber !== undefined) data.accessionNumber = dto.accessionNumber ?? null;
+    if (dto.studyInstanceUid !== undefined) data.studyInstanceUid = dto.studyInstanceUid ?? null;
 
     return this.prisma.imagingReport.update({
       where: { id },

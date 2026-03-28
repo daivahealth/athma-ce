@@ -82,22 +82,22 @@ export class ProcedureReportsService {
     }
 
     const data: Record<string, any> = { updatedBy: userId };
-    if (dto.indication !== undefined) data.indication = dto.indication;
-    if (dto.procedureDescription !== undefined) data.procedureDescription = dto.procedureDescription;
-    if (dto.findings !== undefined) data.findings = dto.findings;
-    if (dto.complications !== undefined) data.complications = dto.complications;
-    if (dto.specimens !== undefined) data.specimens = dto.specimens;
-    if (dto.postProcedureInstructions !== undefined) data.postProcedureInstructions = dto.postProcedureInstructions;
-    if (dto.anesthesiaType !== undefined) data.anesthesiaType = dto.anesthesiaType;
-    if (dto.anesthesiaProvider !== undefined) data.anesthesiaProvider = dto.anesthesiaProvider;
+    if (dto.indication !== undefined) data.indication = dto.indication ?? null;
+    if (dto.procedureDescription !== undefined) data.procedureDescription = dto.procedureDescription ?? null;
+    if (dto.findings !== undefined) data.findings = dto.findings ?? null;
+    if (dto.complications !== undefined) data.complications = dto.complications ?? null;
+    if (dto.specimens !== undefined) data.specimens = dto.specimens ?? null;
+    if (dto.postProcedureInstructions !== undefined) data.postProcedureInstructions = dto.postProcedureInstructions ?? null;
+    if (dto.anesthesiaType !== undefined) data.anesthesiaType = dto.anesthesiaType ?? null;
+    if (dto.anesthesiaProvider !== undefined) data.anesthesiaProvider = dto.anesthesiaProvider ?? null;
     if (dto.startTime !== undefined) data.startTime = dto.startTime ? new Date(dto.startTime) : null;
     if (dto.endTime !== undefined) data.endTime = dto.endTime ? new Date(dto.endTime) : null;
-    if (dto.durationMinutes !== undefined) data.durationMinutes = dto.durationMinutes;
-    if (dto.primaryPerformer !== undefined) data.primaryPerformer = dto.primaryPerformer;
-    if (dto.assistants !== undefined) data.assistants = dto.assistants;
-    if (dto.estimatedBloodLoss !== undefined) data.estimatedBloodLoss = dto.estimatedBloodLoss;
-    if (dto.implantsUsed !== undefined) data.implantsUsed = dto.implantsUsed;
-    if (dto.comments !== undefined) data.comments = dto.comments;
+    if (dto.durationMinutes !== undefined) data.durationMinutes = dto.durationMinutes ?? null;
+    if (dto.primaryPerformer !== undefined) data.primaryPerformer = dto.primaryPerformer ?? null;
+    if (dto.assistants !== undefined) data.assistants = dto.assistants ?? null;
+    if (dto.estimatedBloodLoss !== undefined) data.estimatedBloodLoss = dto.estimatedBloodLoss ?? null;
+    if (dto.implantsUsed !== undefined) data.implantsUsed = dto.implantsUsed ?? null;
+    if (dto.comments !== undefined) data.comments = dto.comments ?? null;
 
     return this.prisma.procedureReport.update({
       where: { id },

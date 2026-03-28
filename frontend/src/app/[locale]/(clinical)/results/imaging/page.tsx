@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Search, ScanLine, Eye, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
+import { NewReportDialog } from '@/modules/clinical/components/reporting/NewReportDialog';
 import type { PatientResult } from '@/modules/clinical/types/reporting';
 
 export default function ImagingResultsListPage() {
@@ -57,11 +58,14 @@ export default function ImagingResultsListPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Imaging Results</h1>
-        <p className="text-muted-foreground mt-1">
-          View and manage radiology and imaging reports
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold">Imaging Results</h1>
+          <p className="text-muted-foreground mt-1">
+            View and manage radiology and imaging reports
+          </p>
+        </div>
+        <NewReportDialog reportType="imaging" />
       </div>
 
       <Card className="p-4">

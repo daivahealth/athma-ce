@@ -280,3 +280,14 @@ export interface PatientResultsResponse {
   results: PatientResult[];
   total: number;
 }
+
+export interface ReportableOrder {
+  id: string;
+  orderName: string;
+  orderNameAr: string | null;
+  patientId: string;
+  patientName: string;
+  encounterId: string;
+  status: string;
+  orderedAt: string;
+}

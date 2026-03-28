@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Search, Scissors, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import { NewReportDialog } from '@/modules/clinical/components/reporting/NewReportDialog';
 import type { PatientResult } from '@/modules/clinical/types/reporting';
 
 export default function ProcedureResultsListPage() {
@@ -64,11 +65,14 @@ export default function ProcedureResultsListPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Procedure Results</h1>
-        <p className="text-muted-foreground mt-1">
-          View and manage procedure reports
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold">Procedure Results</h1>
+          <p className="text-muted-foreground mt-1">
+            View and manage procedure reports
+          </p>
+        </div>
+        <NewReportDialog reportType="procedure" />
       </div>
 
       <Card className="p-4">

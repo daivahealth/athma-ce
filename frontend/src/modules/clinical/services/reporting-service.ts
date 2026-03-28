@@ -16,6 +16,7 @@ import type {
   ReportStatusHistoryEntry,
   PatientResult,
   PatientResultsResponse,
+  ReportableOrder,
 } from '../types/reporting';
 
 class ReportingService {
@@ -187,6 +188,14 @@ class ReportingService {
 
   async getEncounterResults(encounterId: string): Promise<PatientResult[]> {
     const response = await clinicalClient.get(`/patient-results/encounter/${encounterId}`);
+    return response.data;
+  }
+
+  async getReportableOrders(
+    orderType: string,
+    params?: { search?: string; limit?: number },
+  ): Promise<ReportableOrder[]> {
+    const response = await clinicalClient.get(`/patient-results/reportable-orders/${orderType}`, { params });
     return response.data;
   }
 }
