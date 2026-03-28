@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Search, FlaskConical, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import { NewReportDialog } from '@/modules/clinical/components/reporting/NewReportDialog';
 import type { PatientResult } from '@/modules/clinical/types/reporting';
 
 export default function LabResultsListPage() {
@@ -56,11 +57,14 @@ export default function LabResultsListPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Lab Results</h1>
-        <p className="text-muted-foreground mt-1">
-          View and manage laboratory test reports
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold">Lab Results</h1>
+          <p className="text-muted-foreground mt-1">
+            View and manage laboratory test reports
+          </p>
+        </div>
+        <NewReportDialog reportType="lab" />
       </div>
 
       <Card className="p-4">

@@ -75,4 +75,22 @@ export class PatientResultsController {
   ) {
     return this.patientResultsService.getByEncounter(tenantId, encounterId);
   }
+
+  @Get('reportable-orders/:orderType')
+  @Permissions(LAB_RESULT_READ)
+  @ApiOperation({ summary: 'Get orders that do not yet have a report for the given type' })
+  @ApiResponse({ status: 200, description: 'Reportable orders retrieved' })
+  @ApiQuery({ name: 'search', required: false, description: 'Search by order name' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Max results (default: 50)' })
+  async getReportableOrders(
+    @Headers('x-tenant-id') tenantId: string,
+    @Param('orderType') orderType: string,
+    @Query('search') search?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.patientResultsService.getReportableOrders(tenantId, orderType, {
+      search,
+      limit: limit ? parseInt(limit, 10) : undefined,
+    });
+  }
 }

@@ -429,4 +429,97 @@ export class PatientResultsService {
       patientName: nameMap.get(r.patientId) || 'Unknown',
     }));
   }
+
+  /**
+   * Get orders of a given type that do NOT yet have a report.
+   * Used by the "New Report" dialog on listing pages.
+   */
+  async getReportableOrders(
+    tenantId: string,
+    orderType: string,
+    options?: { search?: string; limit?: number },
+  ): Promise<
+    {
+      id: string;
+      orderName: string;
+      orderNameAr: string | null;
+      patientId: string;
+      patientName: string;
+      encounterId: string;
+      status: string;
+      orderedAt: Date;
+    }[]
+  > {
+    const limit = options?.limit || 50;
+
+    // Get all order IDs that already have a report for this type
+    let existingOrderIds: string[] = [];
+    if (orderType === 'lab') {
+      const existing = await this.prisma.labReport.findMany({
+        where: { tenantId },
+        select: { orderId: true },
+        distinct: ['orderId'],
+      });
+      existingOrderIds = existing.map((r) => r.orderId);
+    } else if (orderType === 'imaging') {
+      const existing = await this.prisma.imagingReport.findMany({
+        where: { tenantId },
+        select: { orderId: true },
+        distinct: ['orderId'],
+      });
+      existingOrderIds = existing.map((r) => r.orderId);
+    } else if (orderType === 'procedure') {
+      const existing = await this.prisma.procedureReport.findMany({
+        where: { tenantId },
+        select: { orderId: true },
+        distinct: ['orderId'],
+      });
+      existingOrderIds = existing.map((r) => r.orderId);
+    }
+
+    const where: any = {
+      tenantId,
+      orderType,
+      status: { notIn: ['cancelled'] },
+    };
+
+    if (existingOrderIds.length > 0) {
+      where.id = { notIn: existingOrderIds };
+    }
+
+    if (options?.search) {
+      where.orderName = { contains: options.search, mode: 'insensitive' };
+    }
+
+    const orders = await this.prisma.clinicalOrder.findMany({
+      where,
+      select: {
+        id: true,
+        orderName: true,
+        orderNameAr: true,
+        patientId: true,
+        encounterId: true,
+        status: true,
+        orderedAt: true,
+      },
+      orderBy: { orderedAt: 'desc' },
+      take: limit,
+    });
+
+    const nameMap = await this.resolvePatientNames(
+      tenantId,
+      orders.map((o) => o.patientId),
+    );
+
+    return orders.map((o) => ({
+      id: o.id,
+      orderName: o.orderName,
+      orderNameAr: o.orderNameAr,
+      patientId: o.patientId,
+      patientName: nameMap.get(o.patientId) || 'Unknown',
+      encounterId: o.encounterId,
+      status: o.status,
+      orderedAt: o.orderedAt,
+    }));
+  }
 }

@@ -315,3 +315,15 @@ export function useEncounterResults(encounterId: string) {
     enabled: !!encounterId,
   });
 }
+
+export function useReportableOrders(
+  orderType: string,
+  params?: { search?: string; limit?: number },
+  enabled = true,
+) {
+  return useQuery({
+    queryKey: ['reportable-orders', orderType, params],
+    queryFn: () => reportingService.getReportableOrders(orderType, params),
+    enabled: !!orderType && enabled,
+  });
+}
