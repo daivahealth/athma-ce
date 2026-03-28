@@ -18,6 +18,29 @@ import { PatientResultsService } from '../services/patient-results.service';
 export class PatientResultsController {
   constructor(private readonly patientResultsService: PatientResultsService) {}
 
+  @Get()
+  @Permissions(LAB_RESULT_READ)
+  @ApiOperation({ summary: 'Get all results for the tenant (lab, imaging, procedure)' })
+  @ApiResponse({ status: 200, description: 'All results retrieved' })
+  @ApiQuery({ name: 'type', required: false, description: 'Filter by report type: lab, imaging, procedure' })
+  @ApiQuery({ name: 'status', required: false, description: 'Filter by report status' })
+  @ApiQuery({ name: 'page', required: false, description: 'Page number (default: 1)' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Items per page (default: 20)' })
+  async getAll(
+    @Headers('x-tenant-id') tenantId: string,
+    @Query('type') reportType?: string,
+    @Query('status') reportStatus?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.patientResultsService.getAll(tenantId, {
+      reportType,
+      reportStatus,
+      page: page ? parseInt(page, 10) : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
+    });
+  }
+
   @Get('patient/:patientId')
   @Permissions(LAB_RESULT_READ)
   @ApiOperation({ summary: 'Get all results for a patient (lab, imaging, procedure)' })

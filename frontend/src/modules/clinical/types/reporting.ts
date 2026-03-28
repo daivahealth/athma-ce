@@ -250,6 +250,8 @@ export interface PatientResult {
   orderId: string;
   orderName: string;
   orderNameAr?: string | null;
+  patientId: string;
+  patientName: string;
   encounterId: string;
   reportStatus: string;
   reportedAt: string | null;

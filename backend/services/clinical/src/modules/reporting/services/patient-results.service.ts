@@ -7,6 +7,8 @@ export interface PatientResultSummary {
   orderId: string;
   orderName: string;
   orderNameAr?: string | null;
+  patientId: string;
+  patientName: string;
   encounterId: string;
   reportStatus: string;
   reportedAt: Date | null;
@@ -31,9 +33,150 @@ export interface PatientResultSummary {
   };
 }
 
+const patientSelect = { select: { firstName: true, lastName: true } } as const;
+const orderSelect = { select: { orderName: true, orderNameAr: true } } as const;
+
+function formatPatientName(patient: { firstName: string; lastName: string }): string {
+  return [patient.firstName, patient.lastName].filter(Boolean).join(' ');
+}
+
 @Injectable()
 export class PatientResultsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getAll(
+    tenantId: string,
+    options?: {
+      reportType?: string | undefined;
+      reportStatus?: string | undefined;
+      page?: number | undefined;
+      limit?: number | undefined;
+    },
+  ): Promise<{ results: PatientResultSummary[]; total: number }> {
+    const page = options?.page || 1;
+    const limit = options?.limit || 20;
+    const skip = (page - 1) * limit;
+
+    const results: PatientResultSummary[] = [];
+
+    if (!options?.reportType || options.reportType === 'lab') {
+      const where: any = { tenantId };
+      if (options?.reportStatus) where.reportStatus = options.reportStatus;
+
+      const labReports = await this.prisma.labReport.findMany({
+        where,
+        include: {
+          order: orderSelect,
+          patient: patientSelect,
+          items: { select: { abnormalFlag: true, criticalFlag: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      for (const lr of labReports) {
+        results.push({
+          id: lr.id,
+          reportType: 'lab',
+          orderId: lr.orderId,
+          orderName: lr.order.orderName,
+          orderNameAr: lr.order.orderNameAr,
+          patientId: lr.patientId,
+          patientName: formatPatientName(lr.patient),
+          encounterId: lr.encounterId,
+          reportStatus: lr.reportStatus,
+          reportedAt: lr.reportedAt,
+          version: lr.version,
+          createdAt: lr.createdAt,
+          labSummary: {
+            itemCount: lr.items.length,
+            abnormalCount: lr.items.filter((i) => i.abnormalFlag).length,
+            criticalCount: lr.items.filter((i) => i.criticalFlag).length,
+            specimenType: lr.specimenType,
+          },
+        });
+      }
+    }
+
+    if (!options?.reportType || options.reportType === 'imaging') {
+      const where: any = { tenantId };
+      if (options?.reportStatus) where.reportStatus = options.reportStatus;
+
+      const imagingReports = await this.prisma.imagingReport.findMany({
+        where,
+        include: {
+          order: orderSelect,
+          patient: patientSelect,
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      for (const ir of imagingReports) {
+        results.push({
+          id: ir.id,
+          reportType: 'imaging',
+          orderId: ir.orderId,
+          orderName: ir.order.orderName,
+          orderNameAr: ir.order.orderNameAr,
+          patientId: ir.patientId,
+          patientName: formatPatientName(ir.patient),
+          encounterId: ir.encounterId,
+          reportStatus: ir.reportStatus,
+          reportedAt: ir.reportedAt,
+          version: ir.version,
+          createdAt: ir.createdAt,
+          imagingSummary: {
+            modality: ir.modality,
+            bodyPart: ir.bodyPart,
+            impression: ir.impression,
+            criticalFinding: ir.criticalFinding,
+          },
+        });
+      }
+    }
+
+    if (!options?.reportType || options.reportType === 'procedure') {
+      const where: any = { tenantId };
+      if (options?.reportStatus) where.reportStatus = options.reportStatus;
+
+      const procedureReports = await this.prisma.procedureReport.findMany({
+        where,
+        include: {
+          order: orderSelect,
+          patient: patientSelect,
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      for (const pr of procedureReports) {
+        results.push({
+          id: pr.id,
+          reportType: 'procedure',
+          orderId: pr.orderId,
+          orderName: pr.order.orderName,
+          orderNameAr: pr.order.orderNameAr,
+          patientId: pr.patientId,
+          patientName: formatPatientName(pr.patient),
+          encounterId: pr.encounterId,
+          reportStatus: pr.reportStatus,
+          reportedAt: pr.reportedAt,
+          version: pr.version,
+          createdAt: pr.createdAt,
+          procedureSummary: {
+            procedureDescription: pr.procedureDescription,
+            complications: pr.complications,
+            durationMinutes: pr.durationMinutes,
+          },
+        });
+      }
+    }
+
+    results.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+    const total = results.length;
+    const paged = results.slice(skip, skip + limit);
+
+    return { results: paged, total };
+  }
 
   async getByPatient(
     tenantId: string,
@@ -51,7 +194,6 @@ export class PatientResultsService {
 
     const results: PatientResultSummary[] = [];
 
-    // Fetch lab reports
     if (!options?.reportType || options.reportType === 'lab') {
       const where: any = { tenantId, patientId };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
@@ -59,7 +201,8 @@ export class PatientResultsService {
       const labReports = await this.prisma.labReport.findMany({
         where,
         include: {
-          order: { select: { orderName: true, orderNameAr: true } },
+          order: orderSelect,
+          patient: patientSelect,
           items: { select: { abnormalFlag: true, criticalFlag: true } },
         },
         orderBy: { createdAt: 'desc' },
@@ -72,6 +215,8 @@ export class PatientResultsService {
           orderId: lr.orderId,
           orderName: lr.order.orderName,
           orderNameAr: lr.order.orderNameAr,
+          patientId: lr.patientId,
+          patientName: formatPatientName(lr.patient),
           encounterId: lr.encounterId,
           reportStatus: lr.reportStatus,
           reportedAt: lr.reportedAt,
@@ -87,7 +232,6 @@ export class PatientResultsService {
       }
     }
 
-    // Fetch imaging reports
     if (!options?.reportType || options.reportType === 'imaging') {
       const where: any = { tenantId, patientId };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
@@ -95,7 +239,8 @@ export class PatientResultsService {
       const imagingReports = await this.prisma.imagingReport.findMany({
         where,
         include: {
-          order: { select: { orderName: true, orderNameAr: true } },
+          order: orderSelect,
+          patient: patientSelect,
         },
         orderBy: { createdAt: 'desc' },
       });
@@ -107,6 +252,8 @@ export class PatientResultsService {
           orderId: ir.orderId,
           orderName: ir.order.orderName,
           orderNameAr: ir.order.orderNameAr,
+          patientId: ir.patientId,
+          patientName: formatPatientName(ir.patient),
           encounterId: ir.encounterId,
           reportStatus: ir.reportStatus,
           reportedAt: ir.reportedAt,
@@ -122,7 +269,6 @@ export class PatientResultsService {
       }
     }
 
-    // Fetch procedure reports
     if (!options?.reportType || options.reportType === 'procedure') {
       const where: any = { tenantId, patientId };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
@@ -130,7 +276,8 @@ export class PatientResultsService {
       const procedureReports = await this.prisma.procedureReport.findMany({
         where,
         include: {
-          order: { select: { orderName: true, orderNameAr: true } },
+          order: orderSelect,
+          patient: patientSelect,
         },
         orderBy: { createdAt: 'desc' },
       });
@@ -142,6 +289,8 @@ export class PatientResultsService {
           orderId: pr.orderId,
           orderName: pr.order.orderName,
           orderNameAr: pr.order.orderNameAr,
+          patientId: pr.patientId,
+          patientName: formatPatientName(pr.patient),
           encounterId: pr.encounterId,
           reportStatus: pr.reportStatus,
           reportedAt: pr.reportedAt,
@@ -156,7 +305,6 @@ export class PatientResultsService {
       }
     }
 
-    // Sort all results by date descending
     results.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
     const total = results.length;
@@ -172,7 +320,8 @@ export class PatientResultsService {
       this.prisma.labReport.findMany({
         where: { tenantId, encounterId },
         include: {
-          order: { select: { orderName: true, orderNameAr: true } },
+          order: orderSelect,
+          patient: patientSelect,
           items: { select: { abnormalFlag: true, criticalFlag: true } },
         },
         orderBy: { createdAt: 'desc' },
@@ -180,14 +329,16 @@ export class PatientResultsService {
       this.prisma.imagingReport.findMany({
         where: { tenantId, encounterId },
         include: {
-          order: { select: { orderName: true, orderNameAr: true } },
+          order: orderSelect,
+          patient: patientSelect,
         },
         orderBy: { createdAt: 'desc' },
       }),
       this.prisma.procedureReport.findMany({
         where: { tenantId, encounterId },
         include: {
-          order: { select: { orderName: true, orderNameAr: true } },
+          order: orderSelect,
+          patient: patientSelect,
         },
         orderBy: { createdAt: 'desc' },
       }),
@@ -200,6 +351,8 @@ export class PatientResultsService {
         orderId: lr.orderId,
         orderName: lr.order.orderName,
         orderNameAr: lr.order.orderNameAr,
+        patientId: lr.patientId,
+        patientName: formatPatientName(lr.patient),
         encounterId: lr.encounterId,
         reportStatus: lr.reportStatus,
         reportedAt: lr.reportedAt,
@@ -221,6 +374,8 @@ export class PatientResultsService {
         orderId: ir.orderId,
         orderName: ir.order.orderName,
         orderNameAr: ir.order.orderNameAr,
+        patientId: ir.patientId,
+        patientName: formatPatientName(ir.patient),
         encounterId: ir.encounterId,
         reportStatus: ir.reportStatus,
         reportedAt: ir.reportedAt,
@@ -242,6 +397,8 @@ export class PatientResultsService {
         orderId: pr.orderId,
         orderName: pr.order.orderName,
         orderNameAr: pr.order.orderNameAr,
+        patientId: pr.patientId,
+        patientName: formatPatientName(pr.patient),
         encounterId: pr.encounterId,
         reportStatus: pr.reportStatus,
         reportedAt: pr.reportedAt,

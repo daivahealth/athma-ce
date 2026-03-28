@@ -288,6 +288,15 @@ export function useProcedureReportHistory(id: string) {
 // AGGREGATED PATIENT RESULTS HOOKS
 // ========================================
 
+export function useAllResults(
+  params?: { type?: string; status?: string; page?: number; limit?: number },
+) {
+  return useQuery({
+    queryKey: ['all-results', params],
+    queryFn: () => reportingService.getAllResults(params),
+  });
+}
+
 export function usePatientResults(
   patientId: string,
   params?: { type?: string; status?: string; page?: number; limit?: number },
