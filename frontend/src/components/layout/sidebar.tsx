@@ -49,6 +49,9 @@ import {
   BarChart3,
   Sparkles,
   Search,
+  FlaskConical,
+  ScanLine,
+  Scissors,
 } from 'lucide-react';
 
 type NavItem = {
@@ -92,6 +95,19 @@ const navSections: NavSection[] = [
         children: [
           { href: '/charting', icon: ClipboardList, labelKey: 'nav.charting' },
           { href: '/triage', icon: Activity, labelKey: 'nav.triage' },
+        ],
+      },
+    ],
+  },
+  {
+    items: [
+      {
+        icon: FileText,
+        labelKey: 'nav.resultsReporting',
+        children: [
+          { href: '/results/lab', icon: FlaskConical, labelKey: 'nav.labResults' },
+          { href: '/results/imaging', icon: ScanLine, labelKey: 'nav.imagingResults' },
+          { href: '/results/procedure', icon: Scissors, labelKey: 'nav.procedureResults' },
         ],
       },
     ],

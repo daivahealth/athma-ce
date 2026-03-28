@@ -170,6 +170,13 @@ class ReportingService {
   // PATIENT RESULTS (Aggregated)
   // ========================================
 
+  async getAllResults(
+    params?: { type?: string; status?: string; page?: number; limit?: number },
+  ): Promise<PatientResultsResponse> {
+    const response = await clinicalClient.get('/patient-results', { params });
+    return response.data;
+  }
+
   async getPatientResults(
     patientId: string,
     params?: { type?: string; status?: string; page?: number; limit?: number },
