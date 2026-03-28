@@ -89,8 +89,8 @@ export class PatientResultsController {
     @Query('limit') limit?: string,
   ) {
     return this.patientResultsService.getReportableOrders(tenantId, orderType, {
-      search,
-      limit: limit ? parseInt(limit, 10) : undefined,
+      ...(search ? { search } : {}),
+      ...(limit ? { limit: parseInt(limit, 10) } : {}),
     });
   }
 }
