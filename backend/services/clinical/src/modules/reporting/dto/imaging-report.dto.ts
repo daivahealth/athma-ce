@@ -1,4 +1,4 @@
-import { IsString, IsUUID, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsUUID, IsOptional, IsBoolean, IsObject } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateImagingReportDto {
@@ -72,6 +72,11 @@ export class UpdateImagingReportDto {
   @IsOptional()
   @IsString()
   studyInstanceUid?: string;
+
+  @ApiPropertyOptional({ description: 'Block editor content (Tiptap JSON)' })
+  @IsOptional()
+  @IsObject()
+  reportContent?: Record<string, any>;
 }
 
 export class CriticalFindingDto {

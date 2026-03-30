@@ -1,28 +1,19 @@
 'use client';
 
-import { cn } from '@/lib/utils';
 import { ResultStatusBadge } from '../ResultStatusBadge';
 import { ResultStatusWorkflow } from '../ResultStatusWorkflow';
 import { ReportVersionIndicator } from '../ReportVersionIndicator';
+import { ReportContentViewer } from '../ReportEditor';
 import type { ImagingReport } from '../../../types/reporting';
 
 interface ImagingReportViewerProps {
   report: ImagingReport;
 }
 
-function Section({ label, content }: { label: string; content?: string | null }) {
-  if (!content) return null;
-  return (
-    <div>
-      <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-        {label}
-      </h4>
-      <p className="text-sm whitespace-pre-wrap">{content}</p>
-    </div>
-  );
-}
-
 export function ImagingReportViewer({ report }: ImagingReportViewerProps) {
+  const hasLegacyContent =
+    report.technique || report.comparison || report.findings || report.impression || report.recommendations;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -77,14 +68,24 @@ export function ImagingReportViewer({ report }: ImagingReportViewerProps) {
         </div>
       </div>
 
-      {/* Report Sections */}
-      <div className="rounded-lg border p-4 space-y-4">
-        <Section label="Technique" content={report.technique} />
-        <Section label="Comparison" content={report.comparison} />
-        <Section label="Findings" content={report.findings} />
-        <Section label="Impression" content={report.impression} />
-        <Section label="Recommendations" content={report.recommendations} />
-      </div>
+      {/* Report Content (Block Editor) */}
+      {report.reportContent && (
+        <div className="rounded-lg border p-4">
+          <h3 className="font-medium mb-2">Report</h3>
+          <ReportContentViewer content={report.reportContent} />
+        </div>
+      )}
+
+      {/* Legacy Structured Sections (for old reports without reportContent) */}
+      {!report.reportContent && hasLegacyContent && (
+        <div className="rounded-lg border p-4 space-y-4">
+          <LegacySection label="Technique" content={report.technique} />
+          <LegacySection label="Comparison" content={report.comparison} />
+          <LegacySection label="Findings" content={report.findings} />
+          <LegacySection label="Impression" content={report.impression} />
+          <LegacySection label="Recommendations" content={report.recommendations} />
+        </div>
+      )}
 
       {/* Comments */}
       {report.comments && (
@@ -99,6 +100,18 @@ export function ImagingReportViewer({ report }: ImagingReportViewerProps) {
         {report.reportedAt && <span>Reported: {new Date(report.reportedAt).toLocaleString()}</span>}
         {report.reviewedAt && <span>Reviewed: {new Date(report.reviewedAt).toLocaleString()}</span>}
       </div>
+    </div>
+  );
+}
+
+function LegacySection({ label, content }: { label: string; content?: string | null }) {
+  if (!content) return null;
+  return (
+    <div>
+      <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-1">
+        {label}
+      </h4>
+      <p className="text-sm whitespace-pre-wrap">{content}</p>
     </div>
   );
 }

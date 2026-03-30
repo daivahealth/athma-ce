@@ -3,25 +3,21 @@
 import { ResultStatusBadge } from '../ResultStatusBadge';
 import { ResultStatusWorkflow } from '../ResultStatusWorkflow';
 import { ReportVersionIndicator } from '../ReportVersionIndicator';
+import { ReportContentViewer } from '../ReportEditor';
 import type { ProcedureReport } from '../../../types/reporting';
 
 interface ProcedureReportViewerProps {
   report: ProcedureReport;
 }
 
-function Section({ label, content }: { label: string; content?: string | null }) {
-  if (!content) return null;
-  return (
-    <div>
-      <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-        {label}
-      </h4>
-      <p className="text-sm whitespace-pre-wrap">{content}</p>
-    </div>
-  );
-}
-
 export function ProcedureReportViewer({ report }: ProcedureReportViewerProps) {
+  const hasLegacyContent =
+    report.indication ||
+    report.procedureDescription ||
+    report.findings ||
+    report.complications ||
+    report.postProcedureInstructions;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -75,14 +71,24 @@ export function ProcedureReportViewer({ report }: ProcedureReportViewerProps) {
         </div>
       </div>
 
-      {/* Report Sections */}
-      <div className="rounded-lg border p-4 space-y-4">
-        <Section label="Indication" content={report.indication} />
-        <Section label="Procedure Description" content={report.procedureDescription} />
-        <Section label="Findings" content={report.findings} />
-        <Section label="Complications" content={report.complications} />
-        <Section label="Post-Procedure Instructions" content={report.postProcedureInstructions} />
-      </div>
+      {/* Report Content (Block Editor) */}
+      {report.reportContent && (
+        <div className="rounded-lg border p-4">
+          <h3 className="font-medium mb-2">Report</h3>
+          <ReportContentViewer content={report.reportContent} />
+        </div>
+      )}
+
+      {/* Legacy Structured Sections (for old reports without reportContent) */}
+      {!report.reportContent && hasLegacyContent && (
+        <div className="rounded-lg border p-4 space-y-4">
+          <LegacySection label="Indication" content={report.indication} />
+          <LegacySection label="Procedure Description" content={report.procedureDescription} />
+          <LegacySection label="Findings" content={report.findings} />
+          <LegacySection label="Complications" content={report.complications} />
+          <LegacySection label="Post-Procedure Instructions" content={report.postProcedureInstructions} />
+        </div>
+      )}
 
       {/* Specimens */}
       {report.specimens && report.specimens.length > 0 && (
@@ -112,6 +118,18 @@ export function ProcedureReportViewer({ report }: ProcedureReportViewerProps) {
       <div className="flex gap-6 text-sm text-muted-foreground">
         {report.reportedAt && <span>Reported: {new Date(report.reportedAt).toLocaleString()}</span>}
       </div>
+    </div>
+  );
+}
+
+function LegacySection({ label, content }: { label: string; content?: string | null }) {
+  if (!content) return null;
+  return (
+    <div>
+      <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-1">
+        {label}
+      </h4>
+      <p className="text-sm whitespace-pre-wrap">{content}</p>
     </div>
   );
 }
