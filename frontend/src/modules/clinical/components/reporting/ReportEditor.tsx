@@ -36,6 +36,7 @@ export function ReportEditor({
   className,
 }: ReportEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: {
