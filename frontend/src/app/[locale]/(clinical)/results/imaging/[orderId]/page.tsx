@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useImagingReportsByOrder, useCreateImagingReport } from '@/modules/clinical/hooks/use-reporting';
 import { ImagingReportForm } from '@/modules/clinical/components/reporting/imaging/ImagingReportForm';
 import { ImagingReportViewer } from '@/modules/clinical/components/reporting/imaging/ImagingReportViewer';
+import { ReportPatientHeader } from '@/modules/clinical/components/reporting/ReportPatientHeader';
 import { ReportStatus } from '@/modules/clinical/types/reporting';
 import { Button } from '@/components/ui/button';
 
@@ -53,7 +54,12 @@ export default function ImagingResultPage() {
     displayReport.reportStatus === ReportStatus.PRELIMINARY;
 
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-6 max-w-4xl space-y-6">
+      <ReportPatientHeader
+        encounterId={displayReport.encounterId}
+        reportType="imaging"
+        reportStatus={displayReport.reportStatus}
+      />
       {isEditable ? (
         <ImagingReportForm report={displayReport} onSaved={() => refetch()} />
       ) : (
