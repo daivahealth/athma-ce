@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { ResultStatusBadge } from '../ResultStatusBadge';
 import { ResultStatusWorkflow } from '../ResultStatusWorkflow';
 import { ReportVersionIndicator } from '../ReportVersionIndicator';
@@ -26,7 +25,6 @@ export function ImagingReportForm({ report, onSaved }: ImagingReportFormProps) {
   const [reportContent, setReportContent] = useState<Record<string, any> | undefined>(
     report.reportContent || undefined,
   );
-  const [criticalFinding, setCriticalFinding] = useState(report.criticalFinding);
 
   const updateReport = useUpdateImagingReport();
   const transitionStatus = useTransitionImagingReportStatus();
@@ -37,7 +35,6 @@ export function ImagingReportForm({ report, onSaved }: ImagingReportFormProps) {
 
   const buildPayload = (): UpdateImagingReportInput => ({
     reportContent: reportContent,
-    criticalFinding,
   });
 
   const handleSave = async () => {
@@ -73,50 +70,6 @@ export function ImagingReportForm({ report, onSaved }: ImagingReportFormProps) {
           />
         </div>
         <ResultStatusWorkflow currentStatus={report.reportStatus} />
-      </div>
-
-      {/* Study Info */}
-      <div className="rounded-lg border p-4">
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          {report.modality && (
-            <div>
-              <span className="text-muted-foreground">Modality:</span>{' '}
-              <span className="font-medium">{report.modality}</span>
-            </div>
-          )}
-          {report.bodyPart && (
-            <div>
-              <span className="text-muted-foreground">Body Part:</span>{' '}
-              <span className="font-medium">{report.bodyPart}</span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Critical Finding Toggle */}
-      <div
-        className={cn(
-          'rounded-lg border p-4',
-          criticalFinding && 'border-red-300 bg-red-50',
-        )}
-      >
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={criticalFinding}
-            onChange={(e) => setCriticalFinding(e.target.checked)}
-            disabled={!isEditable}
-            className="h-4 w-4"
-          />
-          <span className={cn('font-medium', criticalFinding && 'text-red-700')}>
-            Critical Finding
-          </span>
-        </label>
-        {criticalFinding && (
-          <p className="mt-2 text-sm text-red-600">
-            This report contains a critical finding. The ordering clinician must be notified.
-          </p>
-        )}
       </div>
 
       {/* Report Editor */}
