@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useLabReportsByOrder, useCreateLabReport } from '@/modules/clinical/hooks/use-reporting';
 import { LabResultEntryForm } from '@/modules/clinical/components/reporting/lab/LabResultEntryForm';
 import { LabReportViewer } from '@/modules/clinical/components/reporting/lab/LabReportViewer';
+import { ReportPatientHeader } from '@/modules/clinical/components/reporting/ReportPatientHeader';
 import { ReportStatus } from '@/modules/clinical/types/reporting';
 import { Button } from '@/components/ui/button';
 
@@ -53,7 +54,12 @@ export default function LabResultPage() {
     displayReport.reportStatus === ReportStatus.PRELIMINARY;
 
   return (
-    <div className="p-6 max-w-7xl">
+    <div className="p-6 max-w-7xl space-y-6">
+      <ReportPatientHeader
+        encounterId={displayReport.encounterId}
+        reportType="lab"
+        reportStatus={displayReport.reportStatus}
+      />
       {isEditable ? (
         <LabResultEntryForm report={displayReport} onSaved={() => refetch()} />
       ) : (

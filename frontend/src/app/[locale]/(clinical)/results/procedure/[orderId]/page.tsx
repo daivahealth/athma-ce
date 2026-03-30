@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useProcedureReportsByOrder, useCreateProcedureReport } from '@/modules/clinical/hooks/use-reporting';
 import { ProcedureReportForm } from '@/modules/clinical/components/reporting/procedure/ProcedureReportForm';
 import { ProcedureReportViewer } from '@/modules/clinical/components/reporting/procedure/ProcedureReportViewer';
+import { ReportPatientHeader } from '@/modules/clinical/components/reporting/ReportPatientHeader';
 import { ReportStatus } from '@/modules/clinical/types/reporting';
 import { Button } from '@/components/ui/button';
 
@@ -53,7 +54,12 @@ export default function ProcedureResultPage() {
     displayReport.reportStatus === ReportStatus.PRELIMINARY;
 
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-6 max-w-4xl space-y-6">
+      <ReportPatientHeader
+        encounterId={displayReport.encounterId}
+        reportType="procedure"
+        reportStatus={displayReport.reportStatus}
+      />
       {isEditable ? (
         <ProcedureReportForm report={displayReport} onSaved={() => refetch()} />
       ) : (
