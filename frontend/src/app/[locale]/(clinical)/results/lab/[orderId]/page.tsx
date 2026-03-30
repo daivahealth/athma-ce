@@ -54,7 +54,7 @@ export default function LabResultPage() {
     displayReport.reportStatus === ReportStatus.PRELIMINARY;
 
   return (
-    <div className="p-6 max-w-7xl space-y-6">
+    <div className="p-6 space-y-6">
       <ReportPatientHeader
         encounterId={displayReport.encounterId}
         reportType="lab"
