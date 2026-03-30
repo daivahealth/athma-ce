@@ -1,14 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { ResultStatusBadge } from '../ResultStatusBadge';
 import { ResultStatusWorkflow } from '../ResultStatusWorkflow';
 import { ReportVersionIndicator } from '../ReportVersionIndicator';
+import { ReportEditor } from '../ReportEditor';
 import { ReportStatus } from '../../../types/reporting';
 import type { ImagingReport, UpdateImagingReportInput } from '../../../types/reporting';
 import {
@@ -25,36 +23,36 @@ export function ImagingReportForm({ report, onSaved }: ImagingReportFormProps) {
   const isEditable =
     report.reportStatus === ReportStatus.DRAFT || report.reportStatus === ReportStatus.PRELIMINARY;
 
-  const [formData, setFormData] = useState<UpdateImagingReportInput>({
-    technique: report.technique || '',
-    comparison: report.comparison || '',
-    findings: report.findings || '',
-    impression: report.impression || '',
-    recommendations: report.recommendations || '',
-    criticalFinding: report.criticalFinding,
-    comments: report.comments || '',
-  });
+  const [reportContent, setReportContent] = useState<Record<string, any> | undefined>(
+    report.reportContent || undefined,
+  );
+  const [criticalFinding, setCriticalFinding] = useState(report.criticalFinding);
 
   const updateReport = useUpdateImagingReport();
   const transitionStatus = useTransitionImagingReportStatus();
 
-  const updateField = (field: keyof UpdateImagingReportInput, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  const handleContentChange = useCallback((content: Record<string, any>) => {
+    setReportContent(content);
+  }, []);
+
+  const buildPayload = (): UpdateImagingReportInput => ({
+    reportContent: reportContent,
+    criticalFinding,
+  });
 
   const handleSave = async () => {
-    await updateReport.mutateAsync({ id: report.id, data: formData });
+    await updateReport.mutateAsync({ id: report.id, data: buildPayload() });
     onSaved?.();
   };
 
   const handleSubmitPreliminary = async () => {
-    await handleSave();
+    await updateReport.mutateAsync({ id: report.id, data: buildPayload() });
     await transitionStatus.mutateAsync({ id: report.id, status: ReportStatus.PRELIMINARY });
     onSaved?.();
   };
 
   const handleSubmitFinal = async () => {
-    await handleSave();
+    await updateReport.mutateAsync({ id: report.id, data: buildPayload() });
     await transitionStatus.mutateAsync({ id: report.id, status: ReportStatus.FINAL });
     onSaved?.();
   };
@@ -99,97 +97,40 @@ export function ImagingReportForm({ report, onSaved }: ImagingReportFormProps) {
       <div
         className={cn(
           'rounded-lg border p-4',
-          formData.criticalFinding && 'border-red-300 bg-red-50',
+          criticalFinding && 'border-red-300 bg-red-50',
         )}
       >
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
-            checked={formData.criticalFinding || false}
-            onChange={(e) => updateField('criticalFinding', e.target.checked)}
+            checked={criticalFinding}
+            onChange={(e) => setCriticalFinding(e.target.checked)}
             disabled={!isEditable}
             className="h-4 w-4"
           />
-          <span className={cn('font-medium', formData.criticalFinding && 'text-red-700')}>
+          <span className={cn('font-medium', criticalFinding && 'text-red-700')}>
             Critical Finding
           </span>
         </label>
-        {formData.criticalFinding && (
+        {criticalFinding && (
           <p className="mt-2 text-sm text-red-600">
             This report contains a critical finding. The ordering clinician must be notified.
           </p>
         )}
       </div>
 
-      {/* Report Sections */}
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="technique">Technique</Label>
-          <Textarea
-            id="technique"
-            value={formData.technique || ''}
-            onChange={(e) => updateField('technique', e.target.value)}
-            disabled={!isEditable}
-            placeholder="Describe the imaging technique used..."
-            rows={2}
-          />
-        </div>
-        <div>
-          <Label htmlFor="comparison">Comparison</Label>
-          <Textarea
-            id="comparison"
-            value={formData.comparison || ''}
-            onChange={(e) => updateField('comparison', e.target.value)}
-            disabled={!isEditable}
-            placeholder="Comparison with prior studies..."
-            rows={2}
-          />
-        </div>
-        <div>
-          <Label htmlFor="findings">Findings</Label>
-          <Textarea
-            id="findings"
-            value={formData.findings || ''}
-            onChange={(e) => updateField('findings', e.target.value)}
-            disabled={!isEditable}
-            placeholder="Describe the imaging findings..."
-            rows={6}
-          />
-        </div>
-        <div>
-          <Label htmlFor="impression">Impression</Label>
-          <Textarea
-            id="impression"
-            value={formData.impression || ''}
-            onChange={(e) => updateField('impression', e.target.value)}
-            disabled={!isEditable}
-            placeholder="Clinical impression and conclusion..."
-            rows={4}
-            className={cn(formData.criticalFinding && 'border-red-300')}
-          />
-        </div>
-        <div>
-          <Label htmlFor="recommendations">Recommendations</Label>
-          <Textarea
-            id="recommendations"
-            value={formData.recommendations || ''}
-            onChange={(e) => updateField('recommendations', e.target.value)}
-            disabled={!isEditable}
-            placeholder="Follow-up recommendations..."
-            rows={3}
-          />
-        </div>
-        <div>
-          <Label htmlFor="comments">Additional Comments</Label>
-          <Textarea
-            id="comments"
-            value={formData.comments || ''}
-            onChange={(e) => updateField('comments', e.target.value)}
-            disabled={!isEditable}
-            placeholder="Additional comments..."
-            rows={2}
-          />
-        </div>
+      {/* Report Editor */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Report Content</h3>
+        <ReportEditor
+          content={reportContent}
+          onChange={handleContentChange}
+          editable={isEditable}
+          placeholder="Start typing your imaging report...
+
+Use headings to organize sections like Technique, Findings, Impression, etc.
+Use bullet lists for structured observations."
+        />
       </div>
 
       {/* Actions */}

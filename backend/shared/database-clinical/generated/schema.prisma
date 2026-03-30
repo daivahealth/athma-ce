@@ -4025,12 +4025,15 @@ model ImagingReport {
   modality String? @db.VarChar(50) // X-ray, CT, MRI, Ultrasound
   bodyPart String? @map("body_part") @db.VarChar(100)
 
-  // Structured report sections
+  // Structured report sections (legacy — kept for backward compatibility)
   technique       String? @db.Text
   comparison      String? @db.Text // comparison with prior studies
   findings        String? @db.Text
   impression      String? @db.Text // clinical impression/conclusion
   recommendations String? @db.Text
+
+  // Block editor content (Tiptap JSON) — replaces structured sections above
+  reportContent Json? @map("report_content") @db.JsonB
 
   // Critical finding management
   criticalFinding               Boolean   @default(false) @map("critical_finding")
@@ -4081,13 +4084,16 @@ model ProcedureReport {
   version           Int     @default(1)
   previousVersionId String? @map("previous_version_id") @db.Uuid
 
-  // Structured procedure sections
+  // Structured procedure sections (legacy — kept for backward compatibility)
   indication                String? @db.Text
   procedureDescription      String? @map("procedure_description") @db.Text
   findings                  String? @db.Text
   complications             String? @db.Text
   specimens                 Json?   @db.JsonB // array of { type, sentTo, label }
   postProcedureInstructions String? @map("post_procedure_instructions") @db.Text
+
+  // Block editor content (Tiptap JSON) — replaces structured sections above
+  reportContent Json? @map("report_content") @db.JsonB
 
   // Anesthesia details
   anesthesiaType     String? @map("anesthesia_type") @db.VarChar(30) // none, local, regional, general, sedation

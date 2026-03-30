@@ -94,6 +94,7 @@ export class ImagingReportsService {
     if (dto.comments !== undefined) data.comments = dto.comments ?? null;
     if (dto.accessionNumber !== undefined) data.accessionNumber = dto.accessionNumber ?? null;
     if (dto.studyInstanceUid !== undefined) data.studyInstanceUid = dto.studyInstanceUid ?? null;
+    if (dto.reportContent !== undefined) data.reportContent = dto.reportContent ?? null;
 
     return this.prisma.imagingReport.update({
       where: { id },

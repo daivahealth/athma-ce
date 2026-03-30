@@ -101,4 +101,9 @@ export class UpdateProcedureReportDto {
   @IsOptional()
   @IsString()
   comments?: string;
+
+  @ApiPropertyOptional({ description: 'Block editor content (Tiptap JSON)' })
+  @IsOptional()
+  @IsObject()
+  reportContent?: Record<string, any>;
 }

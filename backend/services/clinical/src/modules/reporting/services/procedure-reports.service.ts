@@ -98,6 +98,7 @@ export class ProcedureReportsService {
     if (dto.estimatedBloodLoss !== undefined) data.estimatedBloodLoss = dto.estimatedBloodLoss ?? null;
     if (dto.implantsUsed !== undefined) data.implantsUsed = dto.implantsUsed ?? null;
     if (dto.comments !== undefined) data.comments = dto.comments ?? null;
+    if (dto.reportContent !== undefined) data.reportContent = dto.reportContent ?? null;
 
     return this.prisma.procedureReport.update({
       where: { id },
