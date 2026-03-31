@@ -38,18 +38,6 @@ export function ProcedureReportViewer({ report }: ProcedureReportViewerProps) {
       <div className="rounded-lg border p-4">
         <h3 className="font-medium mb-2">Procedure Details</h3>
         <div className="grid grid-cols-2 gap-4 text-sm">
-          {report.anesthesiaType && (
-            <div>
-              <span className="text-muted-foreground">Anesthesia:</span>{' '}
-              <span className="font-medium capitalize">{report.anesthesiaType}</span>
-            </div>
-          )}
-          {report.estimatedBloodLoss && (
-            <div>
-              <span className="text-muted-foreground">Est. Blood Loss:</span>{' '}
-              <span className="font-medium">{report.estimatedBloodLoss}</span>
-            </div>
-          )}
           {report.startTime && (
             <div>
               <span className="text-muted-foreground">Start:</span>{' '}
