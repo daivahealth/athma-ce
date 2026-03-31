@@ -33,7 +33,7 @@ export default function LabResultsListPage() {
   const locale = params.locale as string;
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [page, setPage] = useState(1);
-  const limit = 20;
+  const [limit, setLimit] = useState(20);
 
   const { data, isLoading, error } = useAllResults({
     type: 'lab',
@@ -110,10 +110,6 @@ export default function LabResultsListPage() {
 
       {!isLoading && !error && data && (
         <div className="space-y-4">
-          <div className="text-sm text-muted-foreground">
-            Found {data.total} lab result{data.total !== 1 ? 's' : ''}
-          </div>
-
           {data.results.length === 0 ? (
             <Card className="p-12 text-center">
               <FlaskConical className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
@@ -192,31 +188,67 @@ export default function LabResultsListPage() {
             </Card>
           )}
 
-          {totalPages > 1 && (
+          {data.results.length > 0 && (
             <div className="flex justify-between items-center">
-              <div className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-muted-foreground">
+                  Showing {(page - 1) * limit + 1}–{Math.min(page * limit, data.total)} of {data.total}
+                </div>
+                <Select value={String(limit)} onValueChange={(val) => { setLimit(Number(val)); setPage(1); }}>
+                  <SelectTrigger className="w-[110px] h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10 / page</SelectItem>
+                    <SelectItem value="20">20 / page</SelectItem>
+                    <SelectItem value="50">50 / page</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page <= 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page >= totalPages}
-                >
-                  Next
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
+              {totalPages > 1 && (
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page <= 1}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                    .reduce<(number | string)[]>((acc, p, idx, arr) => {
+                      if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push('...');
+                      acc.push(p);
+                      return acc;
+                    }, [])
+                    .map((item, idx) =>
+                      typeof item === 'string' ? (
+                        <span key={`ellipsis-${idx}`} className="px-1 text-muted-foreground text-sm">...</span>
+                      ) : (
+                        <Button
+                          key={item}
+                          variant={item === page ? 'default' : 'outline'}
+                          size="icon"
+                          className="h-8 w-8 text-xs"
+                          onClick={() => setPage(item)}
+                        >
+                          {item}
+                        </Button>
+                      ),
+                    )}
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page >= totalPages}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
