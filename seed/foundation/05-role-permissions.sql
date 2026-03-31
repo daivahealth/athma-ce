@@ -34,12 +34,12 @@ FROM permissions p
 WHERE p.resource IN (
   'patient', 'appointment', 'encounter', 'clinical_note', 'diagnosis',
   'vitals', 'prescription', 'lab_order', 'lab_result', 'imaging_order',
-  'imaging_result', 'schedule', 'calendar', 'admission', 'discharge',
+  'imaging_result', 'procedure_result', 'schedule', 'calendar', 'admission', 'discharge',
   'ward', 'triage', 'consent', 'clinical_order', 'availability',
   'care_channel', 'care_team', 'care_message', 'checklist',
   'discharge_summary', 'note_template', 'catalog', 'valueset'
 )
-AND p.action IN ('read', 'create', 'update', 'sign', 'close', 'add')
+AND p.action IN ('read', 'create', 'update', 'sign', 'close', 'add', 'enter', 'verify', 'amend')
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
 -- Nurse gets nursing-specific permissions
