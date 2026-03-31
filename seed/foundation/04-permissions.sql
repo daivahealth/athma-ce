@@ -295,3 +295,23 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0033-000000000003', 'note_template.update', 'Update Note Templates', 'Modify note templates', 'note_template', 'update', NOW(), NOW()),
   ('00000000-0000-0000-0033-000000000004', 'note_template.delete', 'Delete Note Templates', 'Delete note templates', 'note_template', 'delete', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
+
+-- Lab Result Reporting Permissions (verify/amend)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0034-000000000001', 'lab_result.verify', 'Verify Lab Results', 'Verify and sign off lab results', 'lab_result', 'verify', NOW(), NOW()),
+  ('00000000-0000-0000-0034-000000000002', 'lab_result.amend', 'Amend Lab Results', 'Amend finalized lab results', 'lab_result', 'amend', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Imaging Result Reporting Permissions (verify/amend)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0035-000000000001', 'imaging_result.verify', 'Verify Imaging Results', 'Verify and sign off imaging results', 'imaging_result', 'verify', NOW(), NOW()),
+  ('00000000-0000-0000-0035-000000000002', 'imaging_result.amend', 'Amend Imaging Results', 'Amend finalized imaging results', 'imaging_result', 'amend', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Procedure Result Reporting Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0036-000000000001', 'procedure_result.read', 'Read Procedure Results', 'View procedure results and reports', 'procedure_result', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0036-000000000002', 'procedure_result.enter', 'Enter Procedure Results', 'Enter and update procedure results', 'procedure_result', 'enter', NOW(), NOW()),
+  ('00000000-0000-0000-0036-000000000003', 'procedure_result.verify', 'Verify Procedure Results', 'Verify and sign off procedure results', 'procedure_result', 'verify', NOW(), NOW()),
+  ('00000000-0000-0000-0036-000000000004', 'procedure_result.amend', 'Amend Procedure Results', 'Amend finalized procedure results', 'procedure_result', 'amend', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
