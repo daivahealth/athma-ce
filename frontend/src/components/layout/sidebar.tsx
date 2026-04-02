@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { userService } from '@/modules/foundation/services/user-service';
+import { useNavFeatureFlags } from '@/modules/foundation/hooks/use-nav-feature-flags';
 import {
   LayoutDashboard,
   Users,
@@ -64,6 +65,7 @@ type NavItem = {
 type NavSection = {
   labelKey?: string;
   items: NavItem[];
+  featureFlag?: string;
 };
 
 const navSections: NavSection[] = [
@@ -161,6 +163,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.wellness',
     items: [
       {
         icon: Heart,
@@ -179,6 +182,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.membership',
     items: [
       {
         icon: Crown,
@@ -247,6 +251,15 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const [isLoadingProfile, setIsLoadingProfile] = React.useState(false);
   const session = getSession();
   const claims = decodeAccessToken(session.accessToken);
+  const { flags: navFlags, isLoading: isLoadingNavFlags } = useNavFeatureFlags();
+
+  const visibleSections = React.useMemo(() => {
+    if (isLoadingNavFlags) return navSections;
+    return navSections.filter((section) => {
+      if (!section.featureFlag) return true;
+      return navFlags[section.featureFlag] === true;
+    });
+  }, [navFlags, isLoadingNavFlags]);
 
   React.useEffect(() => {
     let isActive = true;
@@ -310,7 +323,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       });
     };
 
-    navSections.forEach((section) => visitItems(section.items));
+    visibleSections.forEach((section) => visitItems(section.items));
     return bestMatch;
   }, [locale, matchesPath]);
 
@@ -501,7 +514,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
 
       {/* Navigation */}
       <nav className="flex-1 space-y-6 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
-        {navSections.map((section, sectionIndex) => (
+        {visibleSections.map((section, sectionIndex) => (
           <div key={`${section.labelKey ?? 'section'}-${sectionIndex}`} className="space-y-1">
             {!isCollapsed && section.labelKey && (
               <p className="px-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">

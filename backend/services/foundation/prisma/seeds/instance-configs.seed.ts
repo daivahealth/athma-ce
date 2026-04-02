@@ -410,6 +410,27 @@ export const instanceConfigsData = [
     isOverridable: false,
     isSensitive: false,
   },
+  // ============================================
+  // NAVIGATION FEATURE FLAGS
+  // ============================================
+  {
+    configKey: 'feature.nav.wellness',
+    value: false,
+    valueType: 'boolean',
+    category: 'features',
+    description: 'Enable the Wellness navigation section (programs, assessments, biomarkers, etc.)',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'feature.nav.membership',
+    value: false,
+    valueType: 'boolean',
+    category: 'features',
+    description: 'Enable the Membership navigation section (plans, subscriptions)',
+    isOverridable: true,
+    isSensitive: false,
+  },
 ];
 
 /**

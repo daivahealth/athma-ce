@@ -2469,7 +2469,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/sajithchandran/aira/zeal/.claude/worktrees/confident-wiles/backend/shared/database-clinical/generated",
+      "value": "/Users/sajithchandran/aira/zeal/backend/shared/database-clinical/generated",
       "fromEnvVar": null
     },
     "config": {
@@ -2485,7 +2485,7 @@ const config = {
     "previewFeatures": [
       "postgresqlExtensions"
     ],
-    "sourceFilePath": "/Users/sajithchandran/aira/zeal/.claude/worktrees/confident-wiles/backend/shared/database-clinical/prisma/schema.prisma",
+    "sourceFilePath": "/Users/sajithchandran/aira/zeal/backend/shared/database-clinical/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
