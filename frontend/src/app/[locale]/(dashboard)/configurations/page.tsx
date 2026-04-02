@@ -6,12 +6,16 @@ import {
   useInstanceConfigs,
   useTenantConfigs,
   useFacilityConfigs,
+  useSetTenantConfig,
+  useDeleteTenantConfig,
 } from '@/modules/foundation/hooks/use-configs';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search, Settings2, Building2, Globe } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Search, Settings2, Building2, Globe, RotateCcw, Check, X } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -20,14 +24,21 @@ export default function ConfigurationsPage() {
   const params = useParams();
   const locale = params.locale as string;
   const [search, setSearch] = useState('');
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+
   const session = getSession();
   const claims = decodeAccessToken(session.accessToken);
   const tenantId = claims?.tenantId ?? session.user?.tenantId;
   const facilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? session.user?.defaultFacilityId;
+  const userId = claims?.userId ?? session.user?.id ?? '';
 
   const { data: instanceConfigs, isLoading: instanceLoading, error: instanceError } = useInstanceConfigs();
   const { data: tenantConfigs, isLoading: tenantLoading } = useTenantConfigs(tenantId || '');
   const { data: facilityConfigs, isLoading: facilityLoading } = useFacilityConfigs(facilityId || '');
+
+  const setTenantConfig = useSetTenantConfig();
+  const deleteTenantConfig = useDeleteTenantConfig();
 
   // Group configurations by category
   type ConfigList = NonNullable<typeof instanceConfigs>;
@@ -90,7 +101,7 @@ export default function ConfigurationsPage() {
     }
 
     if (valueType === 'boolean') {
-      return value ? 'Yes' : 'No';
+      return value === true || value === 'true' ? 'Yes' : 'No';
     }
 
     if (valueType === 'json') {
@@ -104,6 +115,40 @@ export default function ConfigurationsPage() {
     return String(value);
   };
 
+  const handleBooleanToggle = (configKey: string, currentValue: any) => {
+    if (!tenantId) return;
+    const newValue = !(currentValue === true || currentValue === 'true');
+    setTenantConfig.mutate({
+      tenantId,
+      key: configKey,
+      data: { value: newValue, changeReason: 'Updated via configurations UI' },
+    });
+  };
+
+  const handleSaveEdit = (configKey: string) => {
+    if (!tenantId) return;
+    setTenantConfig.mutate(
+      {
+        tenantId,
+        key: configKey,
+        data: { value: editValue, changeReason: 'Updated via configurations UI' },
+      },
+      {
+        onSuccess: () => setEditingKey(null),
+      }
+    );
+  };
+
+  const handleResetToDefault = (configKey: string) => {
+    if (!tenantId) return;
+    deleteTenantConfig.mutate({ tenantId, key: configKey, changeReason: 'Reset to instance default' });
+  };
+
+  const startEditing = (configKey: string, currentValue: any) => {
+    setEditingKey(configKey);
+    setEditValue(String(currentValue));
+  };
+
   // Render configuration row
   const renderConfigRow = (config: NonNullable<typeof instanceConfigs>[0], index: number, showOverrides = false) => {
     const hasTenantOverride = tenantOverridesMap.has(config.configKey);
@@ -114,6 +159,10 @@ export default function ConfigurationsPage() {
       ? tenantOverridesMap.get(config.configKey)
       : config.value;
     const valueSource = hasFacilityOverride ? 'facility' : hasTenantOverride ? 'tenant' : 'instance';
+    const isEditing = editingKey === config.configKey;
+    const canEdit = config.isOverridable && !config.isSensitive && !!tenantId;
+    const isSaving = setTenantConfig.isPending && setTenantConfig.variables?.key === config.configKey;
+    const isResetting = deleteTenantConfig.isPending && deleteTenantConfig.variables?.key === config.configKey;
 
     return (
       <div key={config.id}>
@@ -162,13 +211,97 @@ export default function ConfigurationsPage() {
               <p className="text-xs text-muted-foreground mt-2">{config.description}</p>
             )}
           </div>
+
           <div className="md:col-span-2">
             <div className="text-sm font-medium text-muted-foreground mb-1">
               {showOverrides && valueSource !== 'instance' ? 'Effective Value (Overridden)' : 'Current Value'}
             </div>
-            <div className="text-sm">
-              {formatValue(effectiveValue, config.valueType, config.isSensitive)}
-            </div>
+
+            {/* Boolean: Switch toggle */}
+            {config.valueType === 'boolean' && canEdit ? (
+              <div className="flex items-center gap-3">
+                <Switch
+                  checked={effectiveValue === true || effectiveValue === 'true'}
+                  onCheckedChange={() => handleBooleanToggle(config.configKey, effectiveValue)}
+                  disabled={isSaving || hasFacilityOverride}
+                />
+                <span className="text-sm text-muted-foreground">
+                  {isSaving ? 'Saving...' : (effectiveValue === true || effectiveValue === 'true') ? 'Enabled' : 'Disabled'}
+                </span>
+                {hasTenantOverride && !hasFacilityOverride && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-xs text-muted-foreground"
+                    onClick={() => handleResetToDefault(config.configKey)}
+                    disabled={isResetting}
+                  >
+                    <RotateCcw className="h-3 w-3 mr-1" />
+                    {isResetting ? 'Resetting...' : 'Reset'}
+                  </Button>
+                )}
+              </div>
+            ) : isEditing ? (
+              /* String/number inline edit */
+              <div className="flex items-center gap-2">
+                <Input
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  className="h-8 text-sm max-w-xs"
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveEdit(config.configKey);
+                    if (e.key === 'Escape') setEditingKey(null);
+                  }}
+                />
+                <Button
+                  size="sm"
+                  className="h-8 px-2"
+                  onClick={() => handleSaveEdit(config.configKey)}
+                  disabled={isSaving}
+                >
+                  <Check className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 px-2"
+                  onClick={() => setEditingKey(null)}
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            ) : (
+              /* Read-only value with edit button */
+              <div className="flex items-center gap-2">
+                <div className="text-sm">
+                  {formatValue(effectiveValue, config.valueType, config.isSensitive)}
+                </div>
+                {canEdit && config.valueType !== 'json' && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-xs"
+                    onClick={() => startEditing(config.configKey, effectiveValue)}
+                  >
+                    Edit
+                  </Button>
+                )}
+                {canEdit && hasTenantOverride && !hasFacilityOverride && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-xs text-muted-foreground"
+                    onClick={() => handleResetToDefault(config.configKey)}
+                    disabled={isResetting}
+                  >
+                    <RotateCcw className="h-3 w-3 mr-1" />
+                    {isResetting ? 'Resetting...' : 'Reset'}
+                  </Button>
+                )}
+              </div>
+            )}
+
             {showOverrides && valueSource !== 'instance' && (
               <div className="mt-2 p-2 bg-muted rounded text-xs">
                 <div className="text-muted-foreground">Instance Default:</div>
@@ -193,7 +326,7 @@ export default function ConfigurationsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">System Configurations</h1>
           <p className="text-muted-foreground">
-            View configuration settings at instance, tenant, and facility levels
+            View and edit configuration settings at instance, tenant, and facility levels
           </p>
         </div>
         <Settings2 className="h-8 w-8 text-muted-foreground" />
@@ -251,8 +384,8 @@ export default function ConfigurationsPage() {
               <div className="rounded-md border border-blue-200 bg-blue-50 dark:bg-blue-950 p-4 text-sm">
                 <div className="font-medium mb-1">Effective Configuration View</div>
                 <p className="text-muted-foreground">
-                  This shows the actual values being used, with facility overrides taking precedence
-                  over tenant overrides, which take precedence over instance defaults.
+                  Shows actual values in use. Overridable settings can be changed at the tenant level.
+                  Facility overrides take precedence over tenant overrides, which take precedence over instance defaults.
                 </p>
               </div>
 
@@ -332,6 +465,7 @@ export default function ConfigurationsPage() {
                 <div className="space-y-4">
                   {tenantConfigs.map((config, index) => {
                     const instanceConfig = instanceConfigs?.find((ic) => ic.configKey === config.configKey);
+                    const isResetting = deleteTenantConfig.isPending && deleteTenantConfig.variables?.key === config.configKey;
                     return (
                       <div key={config.id}>
                         {index > 0 && <Separator className="my-4" />}
@@ -343,15 +477,33 @@ export default function ConfigurationsPage() {
                               Tenant Override
                             </Badge>
                           </div>
-                          <div>
-                            <div className="text-xs text-muted-foreground mb-1">Override Value:</div>
-                            <div className="text-sm">
-                              {formatValue(
-                                config.value,
-                                instanceConfig?.valueType || 'string',
-                                instanceConfig?.isSensitive || false
-                              )}
-                            </div>
+                          <div className="flex items-center gap-3">
+                            {instanceConfig?.valueType === 'boolean' ? (
+                              <>
+                                <Switch
+                                  checked={config.value === true || config.value === 'true'}
+                                  onCheckedChange={() => handleBooleanToggle(config.configKey, config.value)}
+                                  disabled={setTenantConfig.isPending}
+                                />
+                                <span className="text-sm text-muted-foreground">
+                                  {(config.value === true || config.value === 'true') ? 'Enabled' : 'Disabled'}
+                                </span>
+                              </>
+                            ) : (
+                              <div className="text-sm">
+                                {formatValue(config.value, instanceConfig?.valueType || 'string', instanceConfig?.isSensitive || false)}
+                              </div>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-2 text-xs text-muted-foreground"
+                              onClick={() => handleResetToDefault(config.configKey)}
+                              disabled={isResetting}
+                            >
+                              <RotateCcw className="h-3 w-3 mr-1" />
+                              {isResetting ? 'Resetting...' : 'Reset to default'}
+                            </Button>
                           </div>
                           <div className="text-xs text-muted-foreground">
                             Updated: {new Date(config.updatedAt).toLocaleString()}

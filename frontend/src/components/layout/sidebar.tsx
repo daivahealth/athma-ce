@@ -102,6 +102,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.resultsReporting',
     items: [
       {
         icon: FileText,
@@ -115,6 +116,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.inpatientCare',
     items: [
       {
         icon: Stethoscope,
@@ -148,6 +150,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.revenueCycle',
     items: [
       {
         icon: Landmark,
@@ -196,6 +199,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.prm',
     items: [
       {
         icon: Bell,
@@ -209,6 +213,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.analytics',
     items: [
       {
         icon: BarChart3,
