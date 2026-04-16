@@ -12,6 +12,7 @@ export enum ChargeSourceType {
   ENCOUNTER = 'encounter',
   ORDER = 'order',
   MANUAL = 'manual',
+  PHARMACY = 'pharmacy',
 }
 
 export class CreateChargeDto {

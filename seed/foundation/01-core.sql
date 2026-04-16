@@ -64,8 +64,16 @@ VALUES
   (gen_random_uuid(), 'system.password_min_length', '8', 'number', 'system', 'Minimum password length', false, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'system.password_require_special_char', 'true', 'boolean', 'system', 'Require special characters in passwords', false, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
+  -- FEATURE FLAGS (Navigation)
+  (gen_random_uuid(), 'feature.nav.pharmacy', 'true', 'boolean', 'feature', 'Enable Pharmacy module navigation', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
   -- AI CATALOG POPULATION CONFIGS
   (gen_random_uuid(), 'ai.catalog_population.enabled', 'true', 'boolean', 'ai', 'Enable AI-powered catalog auto-population for new tenants', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'ai.catalog_population.batch_size', '30', 'number', 'ai', 'Number of catalog items to process per LLM batch call', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'ai.catalog_population.max_concurrent_jobs', '1', 'number', 'ai', 'Maximum concurrent catalog population jobs per tenant', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (config_key) DO NOTHING;
+
+-- Ensure pharmacy feature flag is enabled (upsert so re-running the seed always enables it)
+INSERT INTO instance_configs (id, config_key, value, value_type, category, description, is_overridable, is_sensitive, created_at, updated_at)
+VALUES (gen_random_uuid(), 'feature.nav.pharmacy', 'true', 'boolean', 'feature', 'Enable Pharmacy module navigation', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+ON CONFLICT (config_key) DO UPDATE SET value = 'true', updated_at = CURRENT_TIMESTAMP;

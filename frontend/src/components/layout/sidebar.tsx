@@ -53,6 +53,8 @@ import {
   FlaskConical,
   ScanLine,
   Scissors,
+  Pill,
+  Package,
 } from 'lucide-react';
 
 type NavItem = {
@@ -161,6 +163,21 @@ const navSections: NavSection[] = [
           { href: '/revenue-cycle/eligibility', icon: ShieldCheck, labelKey: 'nav.eligibility' },
           { href: '/revenue-cycle/preauth', icon: ClipboardList, labelKey: 'nav.preauth' },
           { href: '/revenue-cycle/remittance', icon: ReceiptText, labelKey: 'nav.remittance' },
+        ],
+      },
+    ],
+  },
+  {
+    featureFlag: 'feature.nav.pharmacy',
+    items: [
+      {
+        icon: Pill,
+        labelKey: 'nav.pharmacy',
+        children: [
+          { href: '/pharmacy/queue', icon: ClipboardList, labelKey: 'nav.pharmacyQueue' },
+          { href: '/pharmacy/dispensings', icon: FileCheck, labelKey: 'nav.dispensingHistory' },
+          { href: '/pharmacy/stock', icon: Package, labelKey: 'nav.pharmacyStock' },
+          { href: '/pharmacy/alerts', icon: Bell, labelKey: 'nav.pharmacyAlerts' },
         ],
       },
     ],
