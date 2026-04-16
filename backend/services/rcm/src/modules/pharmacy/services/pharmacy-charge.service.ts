@@ -96,7 +96,7 @@ export class PharmacyChargeService {
   ): Promise<string | null> {
     // Get billingItemId from the first item's stock record
     const firstStock = await this.prisma.pharmacyStock.findFirst({
-      where: { id: items[0]?.stockId },
+      where: { id: items[0]?.stockId ?? '' },
       select: { billingItemId: true },
     });
 
