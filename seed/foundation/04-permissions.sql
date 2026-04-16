@@ -67,6 +67,18 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0007-000000000005', 'prescription.dispense', 'Dispense Prescriptions', 'Dispense medications', 'prescription', 'dispense', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
 
+-- Pharmacy Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0020-000000000001', 'pharmacy.queue.read', 'View Pharmacy Queue', 'View the pharmacy dispensing queue', 'pharmacy', 'queue.read', NOW(), NOW()),
+  ('00000000-0000-0000-0020-000000000002', 'pharmacy.dispensing.read', 'Read Dispensing Records', 'View dispensing history and records', 'pharmacy', 'dispensing.read', NOW(), NOW()),
+  ('00000000-0000-0000-0020-000000000003', 'pharmacy.dispensing.verify', 'Verify Dispensing', 'Pharmacist verify step before dispensing', 'pharmacy', 'dispensing.verify', NOW(), NOW()),
+  ('00000000-0000-0000-0020-000000000004', 'pharmacy.dispensing.cancel', 'Cancel Dispensing', 'Cancel a queued or verified dispensing', 'pharmacy', 'dispensing.cancel', NOW(), NOW()),
+  ('00000000-0000-0000-0020-000000000005', 'pharmacy.dispensing.return', 'Process Medication Return', 'Accept returned medications', 'pharmacy', 'dispensing.return', NOW(), NOW()),
+  ('00000000-0000-0000-0020-000000000006', 'pharmacy.ward.receive', 'Confirm Ward Medication Receipt', 'Ward nurse confirms medication receipt', 'pharmacy', 'ward.receive', NOW(), NOW()),
+  ('00000000-0000-0000-0020-000000000007', 'pharmacy.stock.read', 'Read Pharmacy Stock', 'View pharmacy inventory', 'pharmacy', 'stock.read', NOW(), NOW()),
+  ('00000000-0000-0000-0020-000000000008', 'pharmacy.stock.manage', 'Manage Pharmacy Stock', 'Receive, adjust, quarantine stock batches', 'pharmacy', 'stock.manage', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
 -- Lab Order Permissions
 INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
   ('00000000-0000-0000-0008-000000000001', 'lab_order.read', 'Read Lab Orders', 'View lab orders', 'lab_order', 'read', NOW(), NOW()),

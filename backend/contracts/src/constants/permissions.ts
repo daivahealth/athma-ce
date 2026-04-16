@@ -76,6 +76,18 @@ export const PRESCRIPTION_DELETE = 'prescription.delete';
 export const PRESCRIPTION_DISPENSE = 'prescription.dispense';
 
 // ============================================
+// PHARMACY PERMISSIONS
+// ============================================
+export const PHARMACY_QUEUE_READ        = 'pharmacy.queue.read';
+export const PHARMACY_DISPENSING_READ   = 'pharmacy.dispensing.read';
+export const PHARMACY_DISPENSING_VERIFY = 'pharmacy.dispensing.verify';
+export const PHARMACY_DISPENSING_CANCEL = 'pharmacy.dispensing.cancel';
+export const PHARMACY_DISPENSING_RETURN = 'pharmacy.dispensing.return';
+export const PHARMACY_WARD_RECEIVE      = 'pharmacy.ward.receive';
+export const PHARMACY_STOCK_READ        = 'pharmacy.stock.read';
+export const PHARMACY_STOCK_MANAGE      = 'pharmacy.stock.manage';
+
+// ============================================
 // LAB ORDER PERMISSIONS
 // ============================================
 export const LAB_ORDER_READ = 'lab_order.read';
@@ -468,6 +480,16 @@ export const ALL_PERMISSIONS = [
   { code: PRESCRIPTION_UPDATE, name: 'Update Prescriptions', resource: 'prescription', action: 'update' },
   { code: PRESCRIPTION_DELETE, name: 'Delete Prescriptions', resource: 'prescription', action: 'delete' },
   { code: PRESCRIPTION_DISPENSE, name: 'Dispense Prescriptions', resource: 'prescription', action: 'dispense' },
+
+  // Pharmacy
+  { code: PHARMACY_QUEUE_READ, name: 'View Pharmacy Queue', resource: 'pharmacy', action: 'queue.read' },
+  { code: PHARMACY_DISPENSING_READ, name: 'Read Dispensing Records', resource: 'pharmacy', action: 'dispensing.read' },
+  { code: PHARMACY_DISPENSING_VERIFY, name: 'Verify Dispensing', resource: 'pharmacy', action: 'dispensing.verify' },
+  { code: PHARMACY_DISPENSING_CANCEL, name: 'Cancel Dispensing', resource: 'pharmacy', action: 'dispensing.cancel' },
+  { code: PHARMACY_DISPENSING_RETURN, name: 'Process Medication Return', resource: 'pharmacy', action: 'dispensing.return' },
+  { code: PHARMACY_WARD_RECEIVE, name: 'Confirm Ward Medication Receipt', resource: 'pharmacy', action: 'ward.receive' },
+  { code: PHARMACY_STOCK_READ, name: 'Read Pharmacy Stock', resource: 'pharmacy', action: 'stock.read' },
+  { code: PHARMACY_STOCK_MANAGE, name: 'Manage Pharmacy Stock', resource: 'pharmacy', action: 'stock.manage' },
 
   // Lab Orders
   { code: LAB_ORDER_READ, name: 'Read Lab Orders', resource: 'lab_order', action: 'read' },

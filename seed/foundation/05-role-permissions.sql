@@ -163,5 +163,18 @@ WHERE (
   OR (p.resource = 'catalog' AND p.action = 'read')
   -- Admission read for inpatient prescriptions
   OR (p.resource = 'admission' AND p.action = 'read')
+  -- Pharmacy module permissions (all except stock.manage — that requires pharmacy manager)
+  OR (p.resource = 'pharmacy' AND p.action IN ('queue.read', 'dispensing.read', 'dispensing.verify', 'dispensing.cancel', 'dispensing.return', 'stock.read'))
 )
+ON CONFLICT (role_id, permission_id) DO NOTHING;
+
+-- Ward nurse gets ward receive permission
+INSERT INTO role_permissions (id, role_id, permission_id, created_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000104', -- nurse role
+  p.id,
+  NOW()
+FROM permissions p
+WHERE p.resource = 'pharmacy' AND p.action IN ('ward.receive', 'queue.read', 'dispensing.read')
 ON CONFLICT (role_id, permission_id) DO NOTHING;

@@ -14,6 +14,7 @@ import { EligibilityModule } from './modules/eligibility/eligibility.module';
 import { PreAuthModule } from './modules/preauth/preauth.module';
 import { RemittanceModule } from './modules/remittance/remittance.module';
 import { MembershipModule } from './modules/membership/membership.module';
+import { PharmacyModule } from './modules/pharmacy/pharmacy.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { MembershipModule } from './modules/membership/membership.module';
     PreAuthModule,
     RemittanceModule,
     MembershipModule,
+    PharmacyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
