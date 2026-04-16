@@ -28,11 +28,11 @@ export default function PharmacyStockPage() {
   const params = useParams();
   const locale = params.locale as string;
   const router = useRouter();
-  const [statusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [searchCode, setSearchCode] = useState('');
 
   const { data: stocks = [], isLoading } = usePharmacyStock({
-    ...(statusFilter && { status: statusFilter }),
+    ...(statusFilter !== 'all' && { status: statusFilter }),
     ...(searchCode && { drugCode: searchCode }),
   });
 
@@ -138,7 +138,7 @@ export default function PharmacyStockPage() {
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All statuses</SelectItem>
+              <SelectItem value="all">All statuses</SelectItem>
               {Object.values(PharmacyStockStatus).map((s) => (
                 <SelectItem key={s} value={s}>{s}</SelectItem>
               ))}

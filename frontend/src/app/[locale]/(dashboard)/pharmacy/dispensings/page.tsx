@@ -36,10 +36,10 @@ export default function DispensingHistoryPage() {
   const params = useParams();
   const locale = params.locale as string;
   const router = useRouter();
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const filters = {
-    ...(statusFilter && { status: statusFilter }),
+    ...(statusFilter !== 'all' && { status: statusFilter }),
   };
 
   const { data: dispensings = [], isLoading } = usePharmacyDispensings(filters);
@@ -121,7 +121,7 @@ export default function DispensingHistoryPage() {
             <SelectValue placeholder="All statuses" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All statuses</SelectItem>
+            <SelectItem value="all">All statuses</SelectItem>
             {Object.values(DispensingStatus).map((s) => (
               <SelectItem key={s} value={s}>
                 {s}
