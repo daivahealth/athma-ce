@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { BillingItemForm } from '@/modules/rcm/components/billing-item-form';
+import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 import {
   useBillingItem,
   useUpdateBillingItem,
@@ -127,6 +128,18 @@ export default function BillingItemDetailPage() {
             submitLabel="Update billing item"
             isSubmitting={updateMutation.isPending}
             onSubmit={handleUpdate}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Mapped Catalog Items</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CatalogBillingMappingsPanel
+            billingItemId={itemId}
+            billingItem={billingItem}
           />
         </CardContent>
       </Card>

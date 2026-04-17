@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useMedication } from '@/modules/foundation/hooks/use-catalogs';
+import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 
 export default function MedicationDetailPage() {
   const params = useParams();
@@ -229,6 +230,21 @@ export default function MedicationDetailPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Billing Mappings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Billing Mappings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CatalogBillingMappingsPanel
+            catalogType="medication"
+            catalogItemId={medicationId}
+            catalogItemName={medication.medicationName}
+            catalogItemCode={medication.ndcCode ?? medication.atcCode ?? null}
+          />
+        </CardContent>
+      </Card>
 
       {/* Metadata */}
       <Card>

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useImagingStudy } from '@/modules/foundation/hooks/use-catalogs';
+import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 
 export default function ImagingStudyDetailPage() {
   const params = useParams();
@@ -235,6 +236,21 @@ export default function ImagingStudyDetailPage() {
               <p className="text-base">{study.estimatedDurationMinutes ? `${study.estimatedDurationMinutes} minutes` : 'N/A'}</p>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Billing Mappings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Billing Mappings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CatalogBillingMappingsPanel
+            catalogType="imaging_study"
+            catalogItemId={studyId}
+            catalogItemName={study.studyName}
+            catalogItemCode={study.cptCode ?? null}
+          />
         </CardContent>
       </Card>
 

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useLabTest } from '@/modules/foundation/hooks/use-catalogs';
+import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 
 export default function LabTestDetailPage() {
   const params = useParams();
@@ -219,6 +220,21 @@ export default function LabTestDetailPage() {
               <p className="text-base">{labTest.referenceLab || 'In-house'}</p>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Billing Mappings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Billing Mappings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CatalogBillingMappingsPanel
+            catalogType="lab_test"
+            catalogItemId={labTestId}
+            catalogItemName={labTest.testName}
+            catalogItemCode={labTest.loincCode ?? labTest.cptCode ?? null}
+          />
         </CardContent>
       </Card>
 
