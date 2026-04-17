@@ -2,6 +2,7 @@ import { rcmClient } from '@/lib/api/client';
 import type {
   PharmacyStock,
   PharmacyStockMovement,
+  ResolvedMedication,
   CreateStockInput,
   UpdateStockInput,
   AdjustStockInput,
@@ -46,6 +47,13 @@ class PharmacyStockService {
 
   async quarantine(id: string): Promise<PharmacyStock> {
     const response = await rcmClient.post(`/pharmacy/stock/${id}/quarantine`);
+    return response.data;
+  }
+
+  async resolveMedication(medicationId: string, facilityId?: string): Promise<ResolvedMedication> {
+    const response = await rcmClient.get(`/pharmacy/stock/resolve-medication/${medicationId}`, {
+      params: facilityId ? { facilityId } : undefined,
+    });
     return response.data;
   }
 

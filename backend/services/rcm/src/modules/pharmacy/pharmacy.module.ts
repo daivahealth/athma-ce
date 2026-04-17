@@ -16,10 +16,13 @@ import { PharmacyChargeService } from './services/pharmacy-charge.service';
 
 // Dependencies from Billing module
 import { BillingModule } from '../billing/billing.module';
+// Catalog mapping for medication → billing item resolution
+import { CatalogMappingModule } from '../catalog-mappings/catalog-mapping.module';
 
 @Module({
   imports: [
     BillingModule,
+    CatalogMappingModule,
     HttpModule.register({
       timeout: 10000,
       maxRedirects: 5,

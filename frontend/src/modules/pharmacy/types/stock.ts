@@ -17,9 +17,18 @@ export enum StockMovementType {
   WRITE_OFF = 'write_off',
 }
 
+export interface ResolvedMedication {
+  medicationId: string;
+  billingItemId: string | null;
+  billingCode: string | null;
+  billingDescription: string | null;
+  listPrice: number | null;
+}
+
 export interface PharmacyStock {
   id: string;
   tenantId: string;
+  medicationId?: string | null;
   drugCode: string;
   codeSystem: string;
   drugName: string;
@@ -71,6 +80,7 @@ export interface PharmacyStockMovement {
 }
 
 export interface CreateStockInput {
+  medicationId?: string;
   drugCode: string;
   codeSystem?: string;
   drugName: string;

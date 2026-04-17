@@ -1043,6 +1043,121 @@ exports.Prisma.SubscriptionBillingEventScalarFieldEnum = {
   userAgent: 'userAgent'
 };
 
+exports.Prisma.PharmacyStockScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  drugCode: 'drugCode',
+  codeSystem: 'codeSystem',
+  drugName: 'drugName',
+  drugNameAr: 'drugNameAr',
+  genericName: 'genericName',
+  dosageForm: 'dosageForm',
+  strength: 'strength',
+  unit: 'unit',
+  batchNumber: 'batchNumber',
+  manufacturer: 'manufacturer',
+  expiryDate: 'expiryDate',
+  receivedDate: 'receivedDate',
+  quantityReceived: 'quantityReceived',
+  quantityOnHand: 'quantityOnHand',
+  quantityReserved: 'quantityReserved',
+  quantityReturned: 'quantityReturned',
+  reorderLevel: 'reorderLevel',
+  reorderQuantity: 'reorderQuantity',
+  facilityId: 'facilityId',
+  storageLocation: 'storageLocation',
+  unitCostPrice: 'unitCostPrice',
+  currency: 'currency',
+  medicationId: 'medicationId',
+  billingItemId: 'billingItemId',
+  status: 'status',
+  isControlled: 'isControlled',
+  controlledClass: 'controlledClass',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.PharmacyStockMovementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  stockId: 'stockId',
+  movementType: 'movementType',
+  quantity: 'quantity',
+  quantityBefore: 'quantityBefore',
+  quantityAfter: 'quantityAfter',
+  referenceType: 'referenceType',
+  referenceId: 'referenceId',
+  reason: 'reason',
+  notes: 'notes',
+  performedBy: 'performedBy',
+  performedAt: 'performedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PharmacyDispensingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  dispensingNumber: 'dispensingNumber',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  prescriptionOrderId: 'prescriptionOrderId',
+  patientDisplayName: 'patientDisplayName',
+  mrn: 'mrn',
+  encounterType: 'encounterType',
+  encounterNumber: 'encounterNumber',
+  prescribedByName: 'prescribedByName',
+  status: 'status',
+  verifiedBy: 'verifiedBy',
+  verifiedAt: 'verifiedAt',
+  verificationNotes: 'verificationNotes',
+  dispensedBy: 'dispensedBy',
+  dispensedAt: 'dispensedAt',
+  dispensingChannel: 'dispensingChannel',
+  wardId: 'wardId',
+  wardName: 'wardName',
+  bedNumber: 'bedNumber',
+  dispatchedToWardAt: 'dispatchedToWardAt',
+  wardReceivedBy: 'wardReceivedBy',
+  wardReceivedAt: 'wardReceivedAt',
+  counsellingProvided: 'counsellingProvided',
+  counsellingNotes: 'counsellingNotes',
+  chargeId: 'chargeId',
+  chargePosted: 'chargePosted',
+  chargePostedAt: 'chargePostedAt',
+  cancelledBy: 'cancelledBy',
+  cancelledAt: 'cancelledAt',
+  cancellationReason: 'cancellationReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.PharmacyDispensingItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  dispensingId: 'dispensingId',
+  stockId: 'stockId',
+  drugCode: 'drugCode',
+  drugName: 'drugName',
+  dosageForm: 'dosageForm',
+  strength: 'strength',
+  batchNumber: 'batchNumber',
+  expiryDate: 'expiryDate',
+  quantityPrescribed: 'quantityPrescribed',
+  quantityDispensed: 'quantityDispensed',
+  unit: 'unit',
+  dispensingInstructions: 'dispensingInstructions',
+  unitPrice: 'unitPrice',
+  lineAmount: 'lineAmount',
+  isSubstituted: 'isSubstituted',
+  substitutionReason: 'substitutionReason',
+  originalDrugCode: 'originalDrugCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1220,7 +1335,11 @@ exports.Prisma.ModelName = {
   MemberSubscription: 'MemberSubscription',
   BenefitUsage: 'BenefitUsage',
   SubscriptionInvoice: 'SubscriptionInvoice',
-  SubscriptionBillingEvent: 'SubscriptionBillingEvent'
+  SubscriptionBillingEvent: 'SubscriptionBillingEvent',
+  PharmacyStock: 'PharmacyStock',
+  PharmacyStockMovement: 'PharmacyStockMovement',
+  PharmacyDispensing: 'PharmacyDispensing',
+  PharmacyDispensingItem: 'PharmacyDispensingItem'
 };
 
 /**

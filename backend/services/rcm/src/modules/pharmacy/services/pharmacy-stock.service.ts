@@ -15,22 +15,46 @@ import {
   PharmacyStockStatus,
 } from '../dto/pharmacy-stock.dto';
 import { StockMovementType } from '../dto/pharmacy-stock-movement.dto';
+import { CatalogMappingService } from '../../catalog-mappings/services/catalog-mapping.service';
 
 @Injectable()
 export class PharmacyStockService {
   private readonly logger = new Logger(PharmacyStockService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly catalogMappingService: CatalogMappingService,
+  ) {}
 
   async create(tenantId: string, dto: CreatePharmacyStockDto, userId: string) {
     this.logger.log(`Receiving stock: ${dto.drugName} batch ${dto.batchNumber} for tenant ${tenantId}`);
 
     const quantity = new Decimal(dto.quantityReceived);
 
+    // Auto-resolve billingItemId from CatalogItemMapping when medicationId is provided
+    let resolvedBillingItemId = dto.billingItemId ?? null;
+    if (dto.medicationId && !resolvedBillingItemId) {
+      try {
+        const result = await this.catalogMappingService.findBillingItemsForCatalogItem(tenantId, {
+          catalogType: 'medication',
+          catalogItemId: dto.medicationId,
+          facilityId: dto.facilityId,
+        });
+        const primary = result.mappings?.find((m: any) => m.isPrimary) ?? result.mappings?.[0];
+        if (primary?.billingItemId) {
+          resolvedBillingItemId = primary.billingItemId;
+          this.logger.log(`Auto-resolved billingItemId ${resolvedBillingItemId} for medication ${dto.medicationId}`);
+        }
+      } catch (err) {
+        this.logger.warn(`Could not auto-resolve billingItemId for medication ${dto.medicationId}: ${(err as Error).message}`);
+      }
+    }
+
     const stock = await this.prisma.$transaction(async (tx) => {
       const newStock = await tx.pharmacyStock.create({
         data: {
           tenantId,
+          medicationId: dto.medicationId ?? null,
           drugCode: dto.drugCode,
           codeSystem: dto.codeSystem ?? 'NDC',
           drugName: dto.drugName,
@@ -52,7 +76,7 @@ export class PharmacyStockService {
           storageLocation: dto.storageLocation ?? null,
           unitCostPrice: dto.unitCostPrice != null ? new Decimal(dto.unitCostPrice) : null,
           currency: dto.currency ?? 'AED',
-          billingItemId: dto.billingItemId ?? null,
+          billingItemId: resolvedBillingItemId,
           status: PharmacyStockStatus.ACTIVE,
           isControlled: dto.isControlled ?? false,
           controlledClass: dto.controlledClass ?? null,
@@ -87,6 +111,7 @@ export class PharmacyStockService {
     const where: any = { tenantId };
 
     if (filters.drugCode) where.drugCode = filters.drugCode;
+    if (filters.medicationId) where.medicationId = filters.medicationId;
     if (filters.status) where.status = filters.status;
     if (filters.facilityId) where.facilityId = filters.facilityId;
 
@@ -226,6 +251,28 @@ export class PharmacyStockService {
     return stocks.filter(
       (s) => s.reorderLevel != null && s.quantityOnHand.lte(s.reorderLevel),
     );
+  }
+
+  /**
+   * Resolve billing item for a medication catalog entry via CatalogItemMapping.
+   * Used by the frontend form to preview the linked billing item before saving.
+   */
+  async resolveMedication(tenantId: string, medicationId: string, facilityId?: string) {
+    const result = await this.catalogMappingService.findBillingItemsForCatalogItem(tenantId, {
+      catalogType: 'medication',
+      catalogItemId: medicationId,
+      facilityId,
+    });
+
+    const primary = result.mappings?.find((m: any) => m.isPrimary) ?? result.mappings?.[0];
+
+    return {
+      medicationId,
+      billingItemId: primary?.billingItemId ?? null,
+      billingCode: primary?.billingCode ?? null,
+      billingDescription: primary?.billingDescription ?? null,
+      listPrice: primary?.listPrice ?? null,
+    };
   }
 
   /**
