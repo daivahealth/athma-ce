@@ -2,67 +2,100 @@
 
 ## Overview
 
-This document describes the many-to-many mapping system between clinical catalog items and billing items. This allows flexible integration between the Clinical EHR system and the RCM (Revenue Cycle Management) billing system, supporting multi-EHR deployments.
+This document describes the system that links clinical catalog items (medications, lab tests, imaging studies, procedures) to billing items in the RCM module. These mappings drive automatic charge posting — when a clinician orders a service, the system uses the mapping to determine which billing items to charge, at what quantity, and under which context.
 
-## Architecture Decision
+The mapping layer lives entirely in the **RCM database** (`zeal_rcm`), keeping billing logic independent of the clinical domain.
 
-**Location**: RCM Database
-**Rationale**: Keeping mappings in RCM enables:
-- Integration with multiple EHR systems
-- Centralized billing configuration
-- Independent pricing and billing logic
-- Easier contract management and payer negotiations
+---
+
+## Architecture
+
+### Cross-Database Design
+
+```
+zeal_clinical (Clinical DB)           zeal_rcm (RCM DB)
+─────────────────────────             ──────────────────────────────────────
+MedicationMaster (id, ndcCode, …)  ──┐
+LabTestMaster    (id, loincCode, …)   │  CatalogItemMapping
+ImagingStudyMaster (id, cptCode, …)  ─┼─ (catalogType, catalogItemId, billingItemId)
+ProcedureMaster  (id, cptCode, …)  ──┘         │
+                                                ▼
+                                        BillingItem
+                                        (billingCode, listPrice, itemType)
+```
+
+**Key constraint:** `catalogItemId` is a *logical foreign key* — it stores the clinical item's UUID but there is no database-level constraint across the database boundary. Integrity is enforced at the application level.
+
+### itemType → catalogType Correspondence
+
+| `BillingItem.itemType` | `CatalogItemMapping.catalogType` | Clinical table |
+|---|---|---|
+| `pharmacy` | `medication` | `MedicationMaster` |
+| `lab` | `lab_test` | `LabTestMaster` |
+| `imaging` | `imaging_study` | `ImagingStudyMaster` |
+| `procedure` | `procedure` | `ProcedureMaster` |
+| `package` | `package` | — (no master table) |
+| `misc` | `administrative_service` | — |
+
+### Code Correspondence (used for auto-suggest)
+
+| Catalog type | Clinical code field(s) | Expected billing code type |
+|---|---|---|
+| `lab_test` | `loincCode`, `cptCode` | `LOINC`, `CPT` |
+| `imaging_study` | `cptCode` | `CPT` |
+| `procedure` | `cptCode`, `icd10PcsCode` | `CPT` |
+| `medication` | `ndcCode`, `atcCode` | `INTERNAL`, `CUSTOM` |
+
+---
 
 ## Database Schema
 
-### CatalogItemMapping Table
-
-**Purpose**: Many-to-many join table linking clinical catalog items to billing items
+### CatalogItemMapping
 
 ```prisma
 model CatalogItemMapping {
-  id        String   @id @default(uuid())
-  tenantId  String   @map("tenant_id")
+  id        String @id @default(uuid())
+  tenantId  String @map("tenant_id")
 
-  // Clinical catalog item reference (logical FK to Clinical DB)
-  catalogType   String  // medication, lab_test, imaging_study, procedure, package, administrative_service
-  catalogItemId String  // UUID of the catalog item
+  // Catalog reference — logical FK to Clinical DB
+  catalogType   String   // medication | lab_test | imaging_study | procedure | package | administrative_service
+  catalogItemId String   @db.Uuid  // UUID of item in Clinical DB
 
-  // Billing item reference (FK to RCM DB billing_items)
+  // Billing item — real FK in RCM DB
   billingItemId String
+  billingItem   BillingItem @relation(fields: [billingItemId], references: [id], onDelete: Cascade)
 
-  // Mapping configuration
-  quantity          Decimal  @default(1)      // How many billing items per catalog item
-  isAutomatic       Boolean  @default(true)   // Auto-create charge when ordered
-  isPrimary         Boolean  @default(false)  // Primary billing item
-  requiresApproval  Boolean  @default(false)  // Requires approval before charging
+  // Mapping behaviour
+  quantity         Decimal  @default(1)     // billing units per clinical item ordered
+  isAutomatic      Boolean  @default(true)  // create charge automatically on order
+  isPrimary        Boolean  @default(false) // primary mapping for this catalog item
+  requiresApproval Boolean  @default(false) // hold charge pending approval
 
-  // Context-based mapping (optional filters)
-  facilityIds       String[] // Empty = all facilities
-  payerIds          String[] // Empty = all payers
-  patientTypes      String[] // cash, insurance, vip, etc. Empty = all
+  // Context filters (empty array = applies to all)
+  facilityIds  String[] @default([])   // restrict to specific facilities
+  payerIds     String[] @default([])   // restrict to specific payers
+  patientTypes String[] @default([])   // cash | insurance | vip | etc.
 
-  // Pricing rules
-  overridePrice     Decimal?  // Override billing item price
-  discountPercent   Decimal?  // Discount percentage
+  // Validity window
+  effectiveDate  DateTime?
+  expirationDate DateTime?
 
   // Metadata
-  mappingReason     String?   // Why this mapping exists
-  notes             String?
-  effectiveDate     DateTime? // When mapping becomes active
-  expirationDate    DateTime? // When mapping expires
+  mappingReason String?
+  notes         String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?
 
-  // Status
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  createdBy String?
+  @@unique([tenantId, catalogType, catalogItemId, billingItemId])
+  @@index([tenantId, catalogType, catalogItemId])
 }
 ```
 
-### CatalogMappingAudit Table
+### CatalogMappingAudit
 
-**Purpose**: Track all changes to catalog mappings for compliance and debugging
+Tracks every create / update / deactivate / delete on a mapping for compliance purposes.
 
 ```prisma
 model CatalogMappingAudit {
@@ -70,7 +103,7 @@ model CatalogMappingAudit {
   tenantId  String
   mappingId String
 
-  action        String    // create, update, delete, activate, deactivate
+  action        String    // create | update | delete | activate | deactivate
   oldValue      Json?
   newValue      Json?
   changedFields String[]
@@ -81,30 +114,74 @@ model CatalogMappingAudit {
 }
 ```
 
-## Catalog Types
+---
 
-The system supports mappings for all clinical catalog types:
+## API Reference
 
-| Catalog Type | Source Database | Example |
-|--------------|-----------------|---------|
-| `medication` | Clinical DB | Paracetamol 500mg → Drug code + Dispensing fee |
-| `lab_test` | Clinical DB | CBC Test → CPT code + Lab facility fee |
-| `imaging_study` | Clinical DB | Chest X-Ray → Radiology code + Facility fee |
-| `procedure` | Clinical DB | Wound Dressing → Procedure code + Supplies |
-| `package` | Clinical DB | Annual Checkup → Multiple billing items |
-| `administrative_service` | Clinical DB | Registration → Registration fee |
+All endpoints require `x-tenant-id` header. Base path: `/api/v1/catalog-mappings`
 
-## Use Cases
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/catalog-mappings` | List all mappings (supports filters) |
+| `POST` | `/catalog-mappings` | Create a new mapping |
+| `GET` | `/catalog-mappings/find-billing-items` | Resolve billing items for a catalog item with context |
+| `GET` | `/catalog-mappings/:id` | Get a single mapping |
+| `GET` | `/catalog-mappings/:id/audit` | Get audit trail for a mapping |
+| `PUT` | `/catalog-mappings/:id` | Update a mapping |
+| `DELETE` | `/catalog-mappings/:id` | Soft-delete (sets `isActive = false`) |
+| `DELETE` | `/catalog-mappings/:id/permanent` | Hard delete |
 
-### 1. Simple 1:1 Mapping
-One clinical item maps to one billing item.
+### GET /find-billing-items
 
-**Example**: CBC Lab Test → Lab Test CPT Code
+Used at order time to resolve which billing items to charge.
+
+**Query parameters:**
+
+| Param | Required | Description |
+|---|---|---|
+| `catalogType` | Yes | `lab_test`, `medication`, etc. |
+| `catalogItemId` | Yes | UUID of the clinical item |
+| `facilityId` | No | Narrows to facility-specific mappings |
+| `payerId` | No | Narrows to payer-specific mappings |
+| `patientType` | No | `cash`, `insurance`, `vip`, etc. |
+
+**Resolution logic:**
+1. Filter active mappings by `tenantId + catalogType + catalogItemId`
+2. Apply context filters: if a mapping has `facilityIds: ["A"]` it only matches facility A; if `facilityIds: []` it matches all
+3. Apply date window: respect `effectiveDate` / `expirationDate`
+4. Sort: primary mappings first, then by `createdAt`
+
+**Example response:**
 
 ```json
 {
   "catalogType": "lab_test",
-  "catalogItemId": "uuid-of-cbc-test",
+  "catalogItemId": "uuid-of-cbc",
+  "mappings": [
+    {
+      "billingItemId": "uuid",
+      "billingCode": "85025",
+      "billingDescription": "Complete Blood Count",
+      "quantity": 1,
+      "isPrimary": true,
+      "isAutomatic": true,
+      "requiresApproval": false
+    }
+  ]
+}
+```
+
+---
+
+## Use Cases
+
+### 1. Simple 1:1 mapping
+A lab test maps to one CPT billing code.
+
+```json
+{
+  "catalogType": "lab_test",
+  "catalogItemId": "uuid-of-cbc",
   "billingItemId": "uuid-of-cpt-85025",
   "quantity": 1,
   "isPrimary": true,
@@ -112,323 +189,184 @@ One clinical item maps to one billing item.
 }
 ```
 
-### 2. One-to-Many Mapping
-One clinical item maps to multiple billing items.
-
-**Example**: Chest X-Ray → Radiology code + Facility fee + Reading fee
+### 2. One-to-many mapping
+A chest X-ray generates three billing charges.
 
 ```json
 [
-  {
-    "catalogType": "imaging_study",
-    "catalogItemId": "uuid-of-chest-xray",
-    "billingItemId": "uuid-of-xray-code",
-    "quantity": 1,
-    "isPrimary": true
-  },
-  {
-    "catalogType": "imaging_study",
-    "catalogItemId": "uuid-of-chest-xray",
-    "billingItemId": "uuid-of-facility-fee",
-    "quantity": 1,
-    "isPrimary": false
-  },
-  {
-    "catalogType": "imaging_study",
-    "catalogItemId": "uuid-of-chest-xray",
-    "billingItemId": "uuid-of-reading-fee",
-    "quantity": 1,
-    "isPrimary": false
-  }
+  { "catalogItemId": "uuid-of-xray", "billingItemId": "uuid-radiology-code", "isPrimary": true },
+  { "catalogItemId": "uuid-of-xray", "billingItemId": "uuid-facility-fee",   "isPrimary": false },
+  { "catalogItemId": "uuid-of-xray", "billingItemId": "uuid-reading-fee",    "isPrimary": false }
 ]
 ```
 
-### 3. Package Mapping
-Package maps to bundle of services.
-
-**Example**: Annual Health Checkup Package → Multiple tests, consultation, vitals
+### 3. Payer-specific mapping
+Same lab test billed with different codes depending on the insurer.
 
 ```json
 [
-  {
-    "catalogType": "package",
-    "catalogItemId": "uuid-of-health-checkup-package",
-    "billingItemId": "uuid-of-consultation-fee",
-    "quantity": 1
-  },
-  {
-    "catalogType": "package",
-    "catalogItemId": "uuid-of-health-checkup-package",
-    "billingItemId": "uuid-of-cbc-test",
-    "quantity": 1
-  },
-  {
-    "catalogType": "package",
-    "catalogItemId": "uuid-of-health-checkup-package",
-    "billingItemId": "uuid-of-lipid-panel",
-    "quantity": 1
-  }
+  { "catalogItemId": "uuid-cbc", "billingItemId": "uuid-dha-code",     "payerIds": ["uuid-dha"] },
+  { "catalogItemId": "uuid-cbc", "billingItemId": "uuid-private-code", "payerIds": ["uuid-axa", "uuid-nic"] }
 ]
 ```
 
-### 4. Context-Based Mapping
-Different billing items based on payer, facility, or patient type.
-
-**Example**: Same medication → Different codes for insurance vs cash patients
+### 4. Patient-type mapping
+Different billing items for cash vs. insurance patients.
 
 ```json
 [
-  {
-    "catalogType": "medication",
-    "catalogItemId": "uuid-of-paracetamol",
-    "billingItemId": "uuid-of-insurance-drug-code",
-    "patientTypes": ["insurance"]
-  },
-  {
-    "catalogType": "medication",
-    "catalogItemId": "uuid-of-paracetamol",
-    "billingItemId": "uuid-of-cash-drug-code",
-    "patientTypes": ["cash"]
-  }
+  { "catalogItemId": "uuid-paracetamol", "billingItemId": "uuid-cash-drug",      "patientTypes": ["cash"] },
+  { "catalogItemId": "uuid-paracetamol", "billingItemId": "uuid-insurance-drug", "patientTypes": ["insurance"] }
 ]
 ```
 
-**Note**: Prices are determined by fee schedules, not by the mapping. Insurance patients will use payer-specific fee schedules, while cash patients will use the tenant's cash fee schedule.
+### 5. Date-windowed mapping
+A mapping valid only during a contract period.
 
-### 5. Payer-Specific Mapping
-Different billing codes based on insurance payer.
-
-**Example**: Lab test → Different CPT codes for DHA vs Private Insurance
-
-```json
-[
-  {
-    "catalogType": "lab_test",
-    "catalogItemId": "uuid-of-cbc-test",
-    "billingItemId": "uuid-of-dha-lab-code",
-    "payerIds": ["uuid-of-dha-payer"],
-    "isPrimary": true
-  },
-  {
-    "catalogType": "lab_test",
-    "catalogItemId": "uuid-of-cbc-test",
-    "billingItemId": "uuid-of-private-insurance-code",
-    "payerIds": ["uuid-of-axa-payer", "uuid-of-nic-payer"],
-    "isPrimary": true
-  }
-]
-```
-
-## Workflow
-
-### When a Clinical Item is Ordered
-
-1. **Order Created** (Clinical Service)
-   - User orders a lab test/medication/procedure from clinical catalog
-   - Clinical service creates order in Clinical DB
-   - Publishes event or calls RCM API
-
-2. **Lookup Mappings** (RCM Service)
-   - RCM service queries `CatalogItemMapping` table
-   - Filters by: `catalogType`, `catalogItemId`, `tenantId`
-   - Additional filtering by `facilityId`, `payerId`, `patientType` if applicable
-   - Considers `effectiveDate` and `expirationDate`
-   - Returns active mappings where `isActive = true`
-
-3. **Price Lookup** (RCM Service)
-   - For each billing item from mapping:
-     - Determine patient's payer/insurance
-     - Look up applicable `FeeSchedule`:
-       - Check for payer contract-specific fee schedule
-       - Fall back to authority fee schedule (DHA/DOH/MOHAP)
-       - Fall back to tenant default fee schedule
-     - Find `FeeScheduleItem` matching `billingItem.billingCode`
-     - Calculate price:
-       - Base amount from fee schedule
-       - Apply payer contract adjustments (multiplier, discount)
-       - Apply co-pay/deductible rules
-       - Calculate patient vs payer responsibility
-
-4. **Create Charges** (RCM Service)
-   - For each mapping with `isAutomatic = true`:
-     - Create `Charge` record in RCM DB
-     - Set `unitPrice` from fee schedule lookup
-     - Store `feeScheduleId`, `feeScheduleItemId`, `payerContractId` for audit trail
-     - Calculate `grossAmount = quantity * unitPrice`
-     - Set `patientResponsibility` and `payerResponsibility`
-   - For mappings with `requiresApproval = true`:
-     - Create charge with status `pending_approval`
-
-5. **Invoice Generation** (RCM Service)
-   - Charges are aggregated into invoices
-   - Submitted to payers or billed to patients
-   - Tracked through RCM workflow
-
-## API Endpoints
-
-### GET /api/v1/rcm/catalog-mappings
-Get all mappings with optional filtering
-
-**Query Parameters**:
-- `catalogType` - Filter by catalog type
-- `catalogItemId` - Filter by catalog item
-- `billingItemId` - Filter by billing item
-- `isActive` - Filter by active status
-- `facilityId` - Filter by facility
-- `payerId` - Filter by payer
-
-**Response**:
-```json
-[
-  {
-    "id": "uuid",
-    "tenantId": "uuid",
-    "catalogType": "lab_test",
-    "catalogItemId": "uuid",
-    "billingItemId": "uuid",
-    "quantity": 1,
-    "isAutomatic": true,
-    "isPrimary": true,
-    "facilityIds": [],
-    "payerIds": [],
-    "patientTypes": [],
-    "overridePrice": null,
-    "discountPercent": null,
-    "isActive": true,
-    "createdAt": "2025-12-05T10:00:00Z",
-    "billingItem": {
-      "billingCode": "85025",
-      "billingDescription": "Complete Blood Count (CBC)",
-      "listPrice": 150.00
-    }
-  }
-]
-```
-
-### POST /api/v1/rcm/catalog-mappings
-Create a new mapping
-
-**Request Body**:
 ```json
 {
-  "catalogType": "medication",
-  "catalogItemId": "uuid",
-  "billingItemId": "uuid",
-  "quantity": 1,
-  "isAutomatic": true,
-  "isPrimary": true,
-  "requiresApproval": false,
-  "facilityIds": [],
-  "payerIds": [],
-  "patientTypes": ["cash"],
-  "overridePrice": 50.00,
-  "discountPercent": 10,
-  "mappingReason": "Standard cash price with 10% discount",
-  "effectiveDate": "2025-01-01"
+  "catalogItemId": "uuid-mri",
+  "billingItemId": "uuid-contract-mri-code",
+  "effectiveDate": "2025-01-01",
+  "expirationDate": "2025-12-31",
+  "payerIds": ["uuid-daman"]
 }
 ```
 
-### GET /api/v1/rcm/catalog-mappings/find-billing-items
-Find billing items for a catalog item with context
+---
 
-**Query Parameters**:
-- `catalogType` (required)
-- `catalogItemId` (required)
-- `facilityId` (optional)
-- `payerId` (optional)
-- `patientType` (optional)
+## Pharmacy Integration
 
-**Response**:
-```json
-{
-  "catalogType": "lab_test",
-  "catalogItemId": "uuid",
-  "mappings": [
-    {
-      "billingItemId": "uuid",
-      "billingCode": "85025",
-      "billingDescription": "CBC Test",
-      "quantity": 1,
-      "unitPrice": 150.00,
-      "isPrimary": true,
-      "isAutomatic": true
-    },
-    {
-      "billingItemId": "uuid",
-      "billingCode": "FAC001",
-      "billingDescription": "Lab Facility Fee",
-      "quantity": 1,
-      "unitPrice": 25.00,
-      "isPrimary": false,
-      "isAutomatic": true
-    }
-  ],
-  "totalEstimate": 175.00
-}
+When a pharmacist receives stock (`POST /pharmacy/stock`), the system automatically resolves the linked billing item:
+
+```
+PharmacyStock.medicationId (logical FK → MedicationMaster)
+       │
+       ▼
+CatalogItemMapping (catalogType = 'medication', catalogItemId = medicationId)
+       │
+       ▼
+BillingItem  →  stored in PharmacyStock.billingItemId
 ```
 
-### PUT /api/v1/rcm/catalog-mappings/:id
-Update a mapping
+If `medicationId` is provided but `billingItemId` is not, `PharmacyStockService.create()` calls `CatalogMappingService.findBillingItemsForCatalogItem()` and saves the primary mapping's billing item automatically.
 
-### DELETE /api/v1/rcm/catalog-mappings/:id
-Delete a mapping (soft delete by setting `isActive = false`)
+**Related endpoint:** `GET /pharmacy/stock/resolve-medication/:medicationId` — used by the "Receive Stock" form to preview the linked billing item before saving.
 
-### GET /api/v1/rcm/catalog-mappings/:id/audit
-Get audit trail for a mapping
+---
 
-## Benefits
+## Charge Posting Flow
 
-### 1. Flexibility
-- One clinical item → multiple billing items
-- One billing item → used by multiple clinical items
-- Context-based pricing (payer, facility, patient type)
+When a clinical event occurs (medication dispensed, order completed):
 
-### 2. Multi-EHR Support
-- Mappings in RCM database
-- Can integrate with external EHR systems
-- Same billing logic across all EHRs
+```
+Clinical event (e.g. medication dispensed)
+       │
+       ▼
+ChargePostingService.processEvent()
+       │
+       ├─ Tries rules engine (EventType.MEDICATION_DISPENSED)
+       │
+       └─ Fallback: PharmacyChargeService.fallbackDirectCharge()
+              │
+              └─ Reads billingItemId from PharmacyStock
+                 → Creates Charge record in RCM DB
+```
 
-### 3. Pricing Control
-- Override prices per mapping
-- Apply discounts per mapping
-- Different prices for different contexts
+Charge records reference `sourceType: 'pharmacy'` and `sourceId: dispensingId`.
 
-### 4. Compliance
-- Full audit trail
-- Effective/expiration dates
-- Approval workflows
+---
 
-### 5. Revenue Optimization
-- Automatic charge creation
-- Package bundling
-- Payer-specific coding
+## Frontend UI
+
+### Where mappings are managed
+
+| Screen | Path | What you can do |
+|---|---|---|
+| Catalog Mappings | `/rcm-setup/catalog-mappings` | Create and list all mappings; search by catalog type and billing item |
+| Suggested Mappings | `/rcm-setup/catalog-mappings/suggestions` | One-click accept for catalog items and billing items that share the same code (LOINC, CPT, NDC) |
+| Billing Item detail | `/rcm-setup/billing-items/:id` | See which catalog items map to this billing item; add new mappings |
+| Medication detail | `/catalogs/medications/:id` | See and manage billing item mappings for this medication |
+| Lab Test detail | `/catalogs/lab-tests/:id` | See and manage billing item mappings for this lab test |
+| Imaging Study detail | `/catalogs/imaging-studies/:id` | See and manage billing item mappings for this imaging study |
+| Procedure detail | `/catalogs/procedures/:id` | See and manage billing item mappings for this procedure |
+| Receive Stock | `/pharmacy/stock/new` | Medication picker auto-populates drug fields and resolves billing item via mapping |
+
+### Suggested Mappings (code-based auto-match)
+
+The `/rcm-setup/catalog-mappings/suggestions` page detects unmapped pairs automatically:
+
+1. Loads all active billing items of a given `itemType` from RCM
+2. Loads all active clinical catalog items of the matching `catalogType` from Clinical
+3. Loads existing mappings to exclude already-mapped pairs
+4. Matches by code: a lab test with `loincCode = "85025"` is matched to a billing item with `billingCode = "85025"`
+5. Shows the unlinked pairs for one-click or bulk acceptance
+
+### Shared component
+
+`CatalogBillingMappingsPanel` (`frontend/src/modules/rcm/components/catalog-billing-mappings-panel.tsx`) is used on both clinical catalog detail pages and the billing item detail page. It operates in two modes:
+
+- **Catalog mode** — catalog item is fixed; user searches for a billing item to link
+- **Billing mode** — billing item is fixed; user picks a catalog type then searches for a catalog item
+
+---
+
+## Role Responsibilities
+
+```
+Billing Admin
+  └─ Creates/manages: Billing Items (/rcm-setup/billing-items)
+  └─ Creates/manages: Catalog Mappings (/rcm-setup/catalog-mappings)
+  └─ Uses: Suggested Mappings for initial setup
+
+Clinical Admin
+  └─ Manages: Medication / Lab / Imaging / Procedure catalogs
+  └─ Can add billing mappings from each catalog item detail page
+
+Pharmacist
+  └─ Receives stock (/pharmacy/stock/new)
+     → picks medication from catalog → billing item auto-resolves
+```
+
+---
 
 ## Implementation Checklist
 
-- [x] Prisma schema models created
-- [x] Database tables created
-- [x] DTOs for mapping management
-- [x] Service layer implementation
-- [x] REST API endpoints
-- [x] Seed data with examples
-- [x] Module registration in app.module.ts
-- [ ] Integration with order workflow
-- [ ] Audit logging implementation
-- [ ] Unit and integration testing
-- [ ] Frontend UI for mapping management
+- [x] Prisma schema — `CatalogItemMapping`, `CatalogMappingAudit`
+- [x] DTOs — `CreateCatalogMappingDto`, `QueryCatalogMappingsDto`, `FindBillingItemsDto`
+- [x] Service — `CatalogMappingService` with context-aware resolution, audit logging
+- [x] Controller — full CRUD + `/find-billing-items`
+- [x] Module registration — `CatalogMappingModule` exported, imported in `PharmacyModule`
+- [x] Pharmacy integration — `medicationId` on `PharmacyStock`, auto-resolve on create
+- [x] Pharmacy endpoint — `GET /pharmacy/stock/resolve-medication/:medicationId`
+- [x] Frontend — search combobox form on `/rcm-setup/catalog-mappings`
+- [x] Frontend — `CatalogBillingMappingsPanel` shared component
+- [x] Frontend — Billing Mappings panel on all 4 clinical catalog detail pages
+- [x] Frontend — Mapped Catalog Items panel on billing item detail page
+- [x] Frontend — Suggested Mappings page (code-based auto-match)
+- [x] Frontend — Receive Stock form with medication picker + billing item preview
+- [ ] Integration tests for context-based resolution
+- [ ] Fee schedule integration (price lookup per payer contract)
+- [ ] Bulk import via CSV
 
-## Next Steps
+---
 
-1. Create DTOs for catalog mapping management
-2. Implement `CatalogMappingService` in RCM service
-3. Create REST API endpoints
-4. Add seed data with sample mappings
-5. Integrate with Clinical service order workflow
-6. Add frontend UI for mapping management
-7. Write documentation for mapping configuration
+## Related Files
+
+| File | Purpose |
+|---|---|
+| `backend/shared/database-rcm/prisma/schema.prisma` | `CatalogItemMapping` + `CatalogMappingAudit` models |
+| `backend/services/rcm/src/modules/catalog-mappings/` | Service, controller, DTOs, module |
+| `backend/services/rcm/src/modules/pharmacy/services/pharmacy-stock.service.ts` | Auto-resolve `billingItemId` on stock creation |
+| `backend/services/rcm/src/modules/pharmacy/services/pharmacy-charge.service.ts` | Post charges after dispensing |
+| `frontend/src/modules/rcm/components/catalog-billing-mappings-panel.tsx` | Shared inline mapping panel |
+| `frontend/src/app/[locale]/(dashboard)/rcm-setup/catalog-mappings/page.tsx` | Main mapping management screen |
+| `frontend/src/app/[locale]/(dashboard)/rcm-setup/catalog-mappings/suggestions/page.tsx` | Auto-suggest unmapped pairs |
+| `frontend/src/modules/rcm/hooks/use-catalog-mappings.ts` | React Query hooks |
+| `frontend/src/modules/rcm/services/catalog-mapping-service.ts` | API client |
 
 ## Related Documentation
 
-- `/docs/architecture/ADR-0013-service-decomposition.md` - Service boundaries
-- `/docs/architecture/FRONTEND-ARCHITECTURE-RECOMMENDATION.md` - Frontend integration
-- `/backend/shared/database-rcm/prisma/schema.prisma` - Complete schema
+- [`docs/ADR/ADR-0013-service-decomposition.md`](../ADR/ADR-0013-service-decomposition.md) — service and database boundaries
+- [`docs/architecture/BACKEND-ARCHITECTURE.md`](BACKEND-ARCHITECTURE.md) — overall backend structure
+- [`docs/features/billing/14-Billing-Workflows.md`](../features/billing/14-Billing-Workflows.md) — end-to-end billing flow
