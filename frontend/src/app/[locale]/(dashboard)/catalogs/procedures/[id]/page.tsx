@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useProcedure } from '@/modules/foundation/hooks/use-catalogs';
+import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 
 export default function ProcedureDetailPage() {
   const params = useParams();
@@ -273,6 +274,21 @@ export default function ProcedureDetailPage() {
               </div>
             )}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Billing Mappings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Billing Mappings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CatalogBillingMappingsPanel
+            catalogType="procedure"
+            catalogItemId={procedureId}
+            catalogItemName={procedure.procedureName}
+            catalogItemCode={procedure.cptCode ?? procedure.icd10PcsCode ?? null}
+          />
         </CardContent>
       </Card>
 
