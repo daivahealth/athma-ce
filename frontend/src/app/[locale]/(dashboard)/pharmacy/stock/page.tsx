@@ -52,7 +52,18 @@ export default function PharmacyStockPage() {
       header: 'Drug',
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original.drugName}</div>
+          <div className="flex items-center gap-2">
+            <span className="font-medium">{row.original.drugName}</span>
+            {row.original.medicationId && (
+              <button
+                type="button"
+                title="View in Medication Catalog"
+                onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/catalogs/medications/${row.original.medicationId}`); }}
+              >
+                <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">catalog</Badge>
+              </button>
+            )}
+          </div>
           <div className="text-xs text-muted-foreground">
             {row.original.genericName ?? row.original.drugCode} · {row.original.dosageForm}
             {row.original.strength && ` · ${row.original.strength}`}
@@ -108,6 +119,22 @@ export default function PharmacyStockPage() {
           {row.original.status}
         </Badge>
       ),
+    },
+    {
+      accessorKey: 'billingItemId',
+      header: 'Billing',
+      cell: ({ row }) =>
+        row.original.billingItemId ? (
+          <button
+            type="button"
+            title="View Billing Item"
+            onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/rcm-setup/billing-items/${row.original.billingItemId}`); }}
+          >
+            <Badge variant="secondary" className="font-mono text-xs cursor-pointer hover:bg-accent">linked</Badge>
+          </button>
+        ) : (
+          <span className="text-muted-foreground text-xs">—</span>
+        ),
     },
     {
       id: 'actions',

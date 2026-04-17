@@ -105,3 +105,12 @@ export function useQuarantineStock() {
     },
   });
 }
+
+export function useResolveMedication(medicationId?: string, facilityId?: string) {
+  return useQuery({
+    queryKey: ['pharmacy', 'resolve-medication', medicationId, facilityId],
+    queryFn: () => pharmacyStockService.resolveMedication(medicationId!, facilityId),
+    enabled: Boolean(medicationId),
+    staleTime: 5 * 60 * 1000,
+  });
+}

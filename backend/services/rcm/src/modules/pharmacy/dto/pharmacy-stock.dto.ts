@@ -117,7 +117,12 @@ export class CreatePharmacyStockDto {
   @IsOptional()
   currency?: string;
 
-  @ApiPropertyOptional({ description: 'Linked billing item UUID for automatic charge posting' })
+  @ApiPropertyOptional({ description: 'Medication catalog UUID (logical FK → MedicationMaster in Clinical DB)' })
+  @IsUUID()
+  @IsOptional()
+  medicationId?: string;
+
+  @ApiPropertyOptional({ description: 'Linked billing item UUID for automatic charge posting (auto-resolved from medicationId if omitted)' })
   @IsUUID()
   @IsOptional()
   billingItemId?: string;
@@ -173,6 +178,11 @@ export class PharmacyStockFiltersDto {
   @IsDateString()
   @IsOptional()
   expiringBefore?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by medication catalog UUID' })
+  @IsUUID()
+  @IsOptional()
+  medicationId?: string;
 
   @ApiPropertyOptional({ description: 'Return only stock at or below reorder level' })
   @IsOptional()

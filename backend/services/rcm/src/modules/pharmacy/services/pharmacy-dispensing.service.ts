@@ -406,7 +406,7 @@ export class PharmacyDispensingService {
     let seq = 1;
     if (last?.dispensingNumber) {
       const parts = last.dispensingNumber.split('-');
-      seq = (parseInt(parts[parts.length - 1], 10) || 0) + 1;
+      seq = (parseInt(parts[parts.length - 1] ?? '0', 10) || 0) + 1;
     }
 
     return `${prefix}-${String(seq).padStart(5, '0')}`;

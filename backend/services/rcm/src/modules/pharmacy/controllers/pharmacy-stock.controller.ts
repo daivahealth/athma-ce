@@ -38,6 +38,18 @@ export class PharmacyStockController {
     return this.stockService.findAll(tenantId, filters);
   }
 
+  @Get('resolve-medication/:medicationId')
+  @ApiOperation({ summary: 'Resolve the linked billing item for a medication catalog entry' })
+  @ApiQuery({ name: 'facilityId', required: false })
+  @ApiResponse({ status: 200, description: 'Returns billingItemId, billingCode, listPrice for the medication' })
+  async resolveMedication(
+    @Headers('x-tenant-id') tenantId: string,
+    @Param('medicationId') medicationId: string,
+    @Query('facilityId') facilityId?: string,
+  ) {
+    return this.stockService.resolveMedication(tenantId, medicationId, facilityId);
+  }
+
   @Get('alerts/low-stock')
   @ApiOperation({ summary: 'Get all stock batches at or below reorder level' })
   @ApiResponse({ status: 200, description: 'Low stock alerts returned' })

@@ -174,6 +174,7 @@ model BillingItem {
   payerContractAdjustments PayerContractAdjustment[]
   codingProcedures         CodingProcedure[]
   catalogMappings          CatalogItemMapping[]
+  pharmacyStocks           PharmacyStock[]
 
   @@unique([tenantId, billingCodeType, billingCode], map: "ux_billing_items_tenant_code")
   @@index([tenantId], map: "idx_billing_items_tenant")
@@ -1874,4 +1875,231 @@ model SubscriptionBillingEvent {
   @@index([tenantId, eventType], map: "idx_billing_event_tenant_type")
   @@index([eventTime], map: "idx_billing_event_time")
   @@map("subscription_billing_events")
+}
+
+// ========================================
+// PHARMACY MODULE
+// ========================================
+
+/// Tracks physical stock of a drug SKU at a pharmacy location.
+/// One row per drug-batch combination. Multiple batches of the same drug
+/// coexist as separate rows to support FEFO (First Expiry First Out).
+model PharmacyStock {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Drug identity — mirrors PrescriptionOrder.drugCode / MedicationMaster
+  drugCode    String  @map("drug_code") @db.VarChar(50)
+  codeSystem  String  @default("NDC") @map("code_system") @db.VarChar(20)
+  drugName    String  @map("drug_name") @db.VarChar(500)
+  drugNameAr  String? @map("drug_name_ar") @db.VarChar(500)
+  genericName String? @map("generic_name") @db.VarChar(500)
+  dosageForm  String  @map("dosage_form") @db.VarChar(50)
+  strength    String? @db.VarChar(100)
+  unit        String  @map("unit") @db.VarChar(30)
+
+  // Batch / lot tracking
+  batchNumber  String   @map("batch_number") @db.VarChar(100)
+  manufacturer String?  @db.VarChar(255)
+  expiryDate   DateTime @map("expiry_date") @db.Date
+  receivedDate DateTime @default(now()) @map("received_date") @db.Date
+
+  // Quantities
+  quantityReceived Decimal @map("quantity_received") @db.Decimal(12, 3)
+  quantityOnHand   Decimal @map("quantity_on_hand") @db.Decimal(12, 3)
+  quantityReserved Decimal @default(0) @map("quantity_reserved") @db.Decimal(12, 3)
+  quantityReturned Decimal @default(0) @map("quantity_returned") @db.Decimal(12, 3)
+
+  // Reorder management
+  reorderLevel    Decimal? @map("reorder_level") @db.Decimal(12, 3)
+  reorderQuantity Decimal? @map("reorder_quantity") @db.Decimal(12, 3)
+
+  // Location within the pharmacy
+  facilityId      String? @map("facility_id") @db.Uuid
+  storageLocation String? @map("storage_location") @db.VarChar(100)
+
+  // Cost
+  unitCostPrice Decimal? @map("unit_cost_price") @db.Decimal(10, 4)
+  currency      String   @default("AED") @db.VarChar(10)
+
+  // Link to clinical medication catalog (logical FK, cross-DB, no constraint)
+  medicationId String? @map("medication_id") @db.Uuid
+
+  // Link to billing catalog for charge posting
+  billingItemId String? @map("billing_item_id") @db.Uuid
+
+  // Status: active | quarantined | expired | depleted | recalled
+  status String @default("active") @map("status") @db.VarChar(20)
+
+  // Controlled substance flag (copied from MedicationMaster for quick access)
+  isControlled    Boolean @default(false) @map("is_controlled")
+  controlledClass String? @map("controlled_class") @db.VarChar(50)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  billingItem     BillingItem?             @relation(fields: [billingItemId], references: [id], onDelete: SetNull)
+  movements       PharmacyStockMovement[]
+  dispensingItems PharmacyDispensingItem[]
+
+  @@index([tenantId, drugCode], map: "idx_pharmacy_stock_tenant_drug")
+  @@index([tenantId, medicationId], map: "idx_pharmacy_stock_medication")
+  @@index([tenantId, status], map: "idx_pharmacy_stock_tenant_status")
+  @@index([tenantId, expiryDate], map: "idx_pharmacy_stock_tenant_expiry")
+  @@index([tenantId, facilityId], map: "idx_pharmacy_stock_tenant_facility")
+  @@index([batchNumber], map: "idx_pharmacy_stock_batch")
+  @@map("pharmacy_stocks")
+}
+
+/// Immutable audit trail for every stock quantity change.
+model PharmacyStockMovement {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+  stockId  String @map("stock_id") @db.Uuid
+
+  // movementType: receive | dispense | return | adjustment | transfer | expire | recall | write_off
+  movementType   String  @map("movement_type") @db.VarChar(30)
+  quantity       Decimal @map("quantity") @db.Decimal(12, 3)
+  quantityBefore Decimal @map("quantity_before") @db.Decimal(12, 3)
+  quantityAfter  Decimal @map("quantity_after") @db.Decimal(12, 3)
+
+  // Reference to triggering entity
+  referenceType String? @map("reference_type") @db.VarChar(30)
+  referenceId   String? @map("reference_id") @db.Uuid
+
+  reason String? @map("reason") @db.Text
+  notes  String? @map("notes") @db.Text
+
+  performedBy String   @map("performed_by") @db.Uuid
+  performedAt DateTime @default(now()) @map("performed_at") @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  stock PharmacyStock @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, stockId], map: "idx_pharmacy_movements_tenant_stock")
+  @@index([tenantId, movementType], map: "idx_pharmacy_movements_tenant_type")
+  @@index([tenantId, performedAt], map: "idx_pharmacy_movements_tenant_date")
+  @@index([referenceId], map: "idx_pharmacy_movements_reference")
+  @@map("pharmacy_stock_movements")
+}
+
+/// One dispense event per prescription. Outpatient = counter pickup; inpatient = ward dispatch.
+model PharmacyDispensing {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Human-readable dispensing number (unique per tenant)
+  dispensingNumber String @map("dispensing_number") @db.VarChar(50)
+
+  // Cross-DB logical FKs (UUID only, no FK constraint — resolved via Clinical API)
+  patientId           String @map("patient_id") @db.Uuid
+  encounterId         String @map("encounter_id") @db.Uuid
+  prescriptionOrderId String @map("prescription_order_id") @db.Uuid
+
+  // Denormalized for display without cross-DB join
+  patientDisplayName String? @map("patient_display_name") @db.VarChar(255)
+  mrn                String? @db.VarChar(50)
+  encounterType      String? @map("encounter_type") @db.VarChar(50)
+  encounterNumber    String? @map("encounter_number") @db.VarChar(50)
+  prescribedByName   String? @map("prescribed_by_name") @db.VarChar(255)
+
+  // Workflow status: queued | verified | dispensed | partially_dispensed | cancelled | returned
+  status String @default("queued") @map("status") @db.VarChar(30)
+
+  // Verification step
+  verifiedBy        String?   @map("verified_by") @db.Uuid
+  verifiedAt        DateTime? @map("verified_at") @db.Timestamptz(6)
+  verificationNotes String?   @map("verification_notes") @db.Text
+
+  // Dispensing step
+  dispensedBy String?   @map("dispensed_by") @db.Uuid
+  dispensedAt DateTime? @map("dispensed_at") @db.Timestamptz(6)
+
+  // Fulfilment channel: outpatient_counter | inpatient_ward | inpatient_bedside | emergency
+  dispensingChannel String @default("outpatient_counter") @map("dispensing_channel") @db.VarChar(30)
+
+  // Inpatient routing (null for outpatient)
+  wardId             String?   @map("ward_id") @db.Uuid
+  wardName           String?   @map("ward_name") @db.VarChar(255)
+  bedNumber          String?   @map("bed_number") @db.VarChar(50)
+  dispatchedToWardAt DateTime? @map("dispatched_to_ward_at") @db.Timestamptz(6)
+  wardReceivedBy     String?   @map("ward_received_by") @db.Uuid
+  wardReceivedAt     DateTime? @map("ward_received_at") @db.Timestamptz(6)
+
+  // Patient counselling
+  counsellingProvided Boolean @default(false) @map("counselling_provided")
+  counsellingNotes    String? @map("counselling_notes") @db.Text
+
+  // RCM charge reference (set after dispense)
+  chargeId       String?   @map("charge_id") @db.Uuid
+  chargePosted   Boolean   @default(false) @map("charge_posted")
+  chargePostedAt DateTime? @map("charge_posted_at") @db.Timestamptz(6)
+
+  // Cancellation
+  cancelledBy        String?   @map("cancelled_by") @db.Uuid
+  cancelledAt        DateTime? @map("cancelled_at") @db.Timestamptz(6)
+  cancellationReason String?   @map("cancellation_reason") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  items PharmacyDispensingItem[]
+
+  @@unique([tenantId, dispensingNumber], map: "ux_pharmacy_dispensing_number")
+  @@index([tenantId, status], map: "idx_pharmacy_dispensing_tenant_status")
+  @@index([tenantId, patientId], map: "idx_pharmacy_dispensing_tenant_patient")
+  @@index([tenantId, encounterId], map: "idx_pharmacy_dispensing_tenant_encounter")
+  @@index([tenantId, prescriptionOrderId], map: "idx_pharmacy_dispensing_tenant_rx")
+  @@index([tenantId, dispensingChannel], map: "idx_pharmacy_dispensing_tenant_channel")
+  @@index([tenantId, createdAt], map: "idx_pharmacy_dispensing_tenant_created")
+  @@map("pharmacy_dispensings")
+}
+
+/// Line items within a dispense event. Fields are snapshotted at dispense time for immutable audit.
+model PharmacyDispensingItem {
+  id           String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String @map("tenant_id") @db.Uuid
+  dispensingId String @map("dispensing_id") @db.Uuid
+  stockId      String @map("stock_id") @db.Uuid
+
+  // Snapshot of drug details at dispense time (immutable audit)
+  drugCode    String   @map("drug_code") @db.VarChar(50)
+  drugName    String   @map("drug_name") @db.VarChar(500)
+  dosageForm  String   @map("dosage_form") @db.VarChar(50)
+  strength    String?  @db.VarChar(100)
+  batchNumber String   @map("batch_number") @db.VarChar(100)
+  expiryDate  DateTime @map("expiry_date") @db.Date
+
+  // Quantities
+  quantityPrescribed Decimal @map("quantity_prescribed") @db.Decimal(12, 3)
+  quantityDispensed  Decimal @map("quantity_dispensed") @db.Decimal(12, 3)
+  unit               String  @map("unit") @db.VarChar(30)
+
+  dispensingInstructions String? @map("dispensing_instructions") @db.Text
+
+  // Pricing at time of dispense
+  unitPrice  Decimal? @map("unit_price") @db.Decimal(10, 4)
+  lineAmount Decimal? @map("line_amount") @db.Decimal(10, 2)
+
+  // Substitution tracking
+  isSubstituted      Boolean @default(false) @map("is_substituted")
+  substitutionReason String? @map("substitution_reason") @db.Text
+  originalDrugCode   String? @map("original_drug_code") @db.VarChar(50)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  dispensing PharmacyDispensing @relation(fields: [dispensingId], references: [id], onDelete: Cascade)
+  stock      PharmacyStock      @relation(fields: [stockId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, dispensingId], map: "idx_pharmacy_disp_items_dispensing")
+  @@index([tenantId, stockId], map: "idx_pharmacy_disp_items_stock")
+  @@index([tenantId, drugCode], map: "idx_pharmacy_disp_items_drug")
+  @@map("pharmacy_dispensing_items")
 }
