@@ -14,6 +14,7 @@ import {
   usePackageTypes,
 } from '@/modules/clinical/hooks/use-packages';
 import type { PackageItem } from '@/modules/clinical/types/package';
+import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 
 const careSettingLabels: Record<string, string> = {
   OP: 'Outpatient',
@@ -189,6 +190,21 @@ export default function PackageDetailPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Billing Mappings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Billing Mappings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CatalogBillingMappingsPanel
+            catalogType="package"
+            catalogItemId={id}
+            catalogItemName={pkg.name}
+            catalogItemCode={pkg.code}
+          />
+        </CardContent>
+      </Card>
 
       <Separator />
       <p className="text-xs text-muted-foreground">

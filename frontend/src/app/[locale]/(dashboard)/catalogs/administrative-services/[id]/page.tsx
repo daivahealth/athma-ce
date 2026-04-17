@@ -13,6 +13,7 @@ import {
   useAdministrativeServiceCategories,
   useAdministrativeServiceTypes,
 } from '@/modules/clinical/hooks/use-administrative-services';
+import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 
 const careSettingLabels: Record<string, string> = {
   OP: 'Outpatient',
@@ -171,6 +172,21 @@ export default function AdministrativeServiceDetailPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Billing Mappings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Billing Mappings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CatalogBillingMappingsPanel
+            catalogType="administrative_service"
+            catalogItemId={id}
+            catalogItemName={service.serviceName}
+            catalogItemCode={service.billingCode ?? service.serviceCode ?? null}
+          />
+        </CardContent>
+      </Card>
 
       <Separator />
       <p className="text-xs text-muted-foreground">

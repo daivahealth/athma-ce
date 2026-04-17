@@ -23,6 +23,8 @@ import { useToast } from '@/components/ui/use-toast';
 
 import { useBillingItems } from '@/modules/rcm/hooks/use-billing-items';
 import { useMedications, useLabTests, useImagingStudies, useProcedures } from '@/modules/foundation/hooks/use-catalogs';
+import { useAdministrativeServices } from '@/modules/clinical/hooks/use-administrative-services';
+import { usePackages } from '@/modules/clinical/hooks/use-packages';
 import { useCatalogMappings, useCreateCatalogMapping } from '@/modules/rcm/hooks/use-catalog-mappings';
 import type { CatalogType } from '@/modules/rcm/types/catalog-mapping';
 import { ItemType, BillingCodeType } from '@/modules/rcm/types/billing-item';
@@ -45,6 +47,8 @@ const CATALOG_OPTIONS: { value: CatalogType; label: string; itemType: ItemType }
   { value: 'imaging_study', label: 'Imaging Studies', itemType: ItemType.IMAGING },
   { value: 'procedure', label: 'Procedures', itemType: ItemType.PROCEDURE },
   { value: 'medication', label: 'Medications', itemType: ItemType.PHARMACY },
+  { value: 'administrative_service', label: 'Administrative Services', itemType: ItemType.MISC },
+  { value: 'package', label: 'Packages', itemType: ItemType.PACKAGE },
 ];
 
 // ─── Main page ────────────────────────────────────────────────────────────────
@@ -73,6 +77,12 @@ export default function MappingSuggestionsPage() {
   const { data: procedures = [], isFetching: loadingProcs } = useProcedures(
     catalogType === 'procedure' ? { isActive: true, includeGlobal: true } : undefined,
   );
+  const { data: adminServices = [], isFetching: loadingAdminServices } = useAdministrativeServices(
+    catalogType === 'administrative_service' ? { isActive: true } : undefined,
+  );
+  const { data: packages = [], isFetching: loadingPackages } = usePackages(
+    catalogType === 'package' ? { isActive: true } : undefined,
+  );
 
   // Fetch billing items for the matching itemType
   const { data: billingItems = [], isFetching: loadingBilling } = useBillingItems({
@@ -89,7 +99,7 @@ export default function MappingSuggestionsPage() {
 
   const { mutateAsync: createMapping } = useCreateCatalogMapping();
 
-  const isLoading = loadingMeds || loadingLabs || loadingImaging || loadingProcs || loadingBilling || loadingMappings;
+  const isLoading = loadingMeds || loadingLabs || loadingImaging || loadingProcs || loadingAdminServices || loadingPackages || loadingBilling || loadingMappings;
 
   // Build a set of already-mapped pairs: "catalogItemId::billingItemId"
   const existingPairKeys = useMemo(
@@ -134,10 +144,14 @@ export default function MappingSuggestionsPage() {
       for (const p of procedures) tryMatch(p.id, p.procedureName, [p.cptCode, p.icd10PcsCode]);
     } else if (catalogType === 'medication') {
       for (const m of medications) tryMatch(m.id, m.medicationName, [m.ndcCode, m.atcCode]);
+    } else if (catalogType === 'administrative_service') {
+      for (const s of adminServices) tryMatch(s.id, s.serviceName, [s.billingCode, s.serviceCode]);
+    } else if (catalogType === 'package') {
+      for (const p of packages) tryMatch(p.id, p.name, [p.code]);
     }
 
     return pairs;
-  }, [catalogType, labTests, imagingStudies, procedures, medications, billingByCode, existingPairKeys, createdIds]);
+  }, [catalogType, labTests, imagingStudies, procedures, medications, adminServices, packages, billingByCode, existingPairKeys, createdIds]);
 
   const handleCreate = async (pair: SuggestedPair) => {
     const key = `${pair.catalogItemId}::${pair.billingItem.id}`;
