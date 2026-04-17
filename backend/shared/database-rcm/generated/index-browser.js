@@ -1068,7 +1068,6 @@ exports.Prisma.PharmacyStockScalarFieldEnum = {
   storageLocation: 'storageLocation',
   unitCostPrice: 'unitCostPrice',
   currency: 'currency',
-  medicationId: 'medicationId',
   billingItemId: 'billingItemId',
   status: 'status',
   isControlled: 'isControlled',
