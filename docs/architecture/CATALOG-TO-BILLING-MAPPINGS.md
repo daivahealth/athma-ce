@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the system that links clinical catalog items (medications, lab tests, imaging studies, procedures) to billing items in the RCM module. These mappings drive automatic charge posting — when a clinician orders a service, the system uses the mapping to determine which billing items to charge, at what quantity, and under which context.
+This document describes the system that links clinical catalog items (medications, lab tests, imaging studies, procedures, administrative services, and packages) to billing items in the RCM module. These mappings drive automatic charge posting — when a clinician orders a service, the system uses the mapping to determine which billing items to charge, at what quantity, and under which context.
 
 The mapping layer lives entirely in the **RCM database** (`zeal_rcm`), keeping billing logic independent of the clinical domain.
 
@@ -13,15 +13,15 @@ The mapping layer lives entirely in the **RCM database** (`zeal_rcm`), keeping b
 ### Cross-Database Design
 
 ```
-zeal_clinical (Clinical DB)           zeal_rcm (RCM DB)
-─────────────────────────             ──────────────────────────────────────
-MedicationMaster (id, ndcCode, …)  ──┐
-LabTestMaster    (id, loincCode, …)   │  CatalogItemMapping
-ImagingStudyMaster (id, cptCode, …)  ─┼─ (catalogType, catalogItemId, billingItemId)
-ProcedureMaster  (id, cptCode, …)  ──┘         │
-                                                ▼
-                                        BillingItem
-                                        (billingCode, listPrice, itemType)
+zeal_clinical (Clinical DB)                  zeal_rcm (RCM DB)
+──────────────────────────────               ──────────────────────────────────────
+MedicationMaster      (id, ndcCode, …)  ──┐
+LabTestMaster         (id, loincCode, …)  │  CatalogItemMapping
+ImagingStudyMaster    (id, cptCode, …)   ─┼─ (catalogType, catalogItemId, billingItemId)
+ProcedureMaster       (id, cptCode, …)   │          │
+AdministrativeService (id, serviceCode, …)│          ▼
+Package               (id, code, …)     ──┘  BillingItem
+                                             (billingCode, listPrice, itemType)
 ```
 
 **Key constraint:** `catalogItemId` is a *logical foreign key* — it stores the clinical item's UUID but there is no database-level constraint across the database boundary. Integrity is enforced at the application level.
@@ -34,8 +34,8 @@ ProcedureMaster  (id, cptCode, …)  ──┘         │
 | `lab` | `lab_test` | `LabTestMaster` |
 | `imaging` | `imaging_study` | `ImagingStudyMaster` |
 | `procedure` | `procedure` | `ProcedureMaster` |
-| `package` | `package` | — (no master table) |
-| `misc` | `administrative_service` | — |
+| `misc` | `administrative_service` | `AdministrativeService` |
+| `package` | `package` | `Package` |
 
 ### Code Correspondence (used for auto-suggest)
 
@@ -45,6 +45,8 @@ ProcedureMaster  (id, cptCode, …)  ──┘         │
 | `imaging_study` | `cptCode` | `CPT` |
 | `procedure` | `cptCode`, `icd10PcsCode` | `CPT` |
 | `medication` | `ndcCode`, `atcCode` | `INTERNAL`, `CUSTOM` |
+| `administrative_service` | `billingCode`, `serviceCode` | `CPT`, `LOCAL`, `CUSTOM` |
+| `package` | `code` | `INTERNAL`, `CUSTOM` |
 
 ---
 
@@ -283,13 +285,15 @@ Charge records reference `sourceType: 'pharmacy'` and `sourceId: dispensingId`.
 
 | Screen | Path | What you can do |
 |---|---|---|
-| Catalog Mappings | `/rcm-setup/catalog-mappings` | Create and list all mappings; search by catalog type and billing item |
-| Suggested Mappings | `/rcm-setup/catalog-mappings/suggestions` | One-click accept for catalog items and billing items that share the same code (LOINC, CPT, NDC) |
+| Catalog Mappings | `/rcm-setup/catalog-mappings` | Create and list all mappings; search comboboxes for all 6 catalog types |
+| Suggested Mappings | `/rcm-setup/catalog-mappings/suggestions` | One-click accept for catalog items and billing items that share the same code (LOINC, CPT, NDC, serviceCode) |
 | Billing Item detail | `/rcm-setup/billing-items/:id` | See which catalog items map to this billing item; add new mappings |
 | Medication detail | `/catalogs/medications/:id` | See and manage billing item mappings for this medication |
 | Lab Test detail | `/catalogs/lab-tests/:id` | See and manage billing item mappings for this lab test |
 | Imaging Study detail | `/catalogs/imaging-studies/:id` | See and manage billing item mappings for this imaging study |
 | Procedure detail | `/catalogs/procedures/:id` | See and manage billing item mappings for this procedure |
+| Administrative Service detail | `/catalogs/administrative-services/:id` | See and manage billing item mappings for this service |
+| Package detail | `/catalogs/packages/:id` | See and manage billing item mappings for this package |
 | Receive Stock | `/pharmacy/stock/new` | Medication picker auto-populates drug fields and resolves billing item via mapping |
 
 ### Suggested Mappings (code-based auto-match)
@@ -299,8 +303,10 @@ The `/rcm-setup/catalog-mappings/suggestions` page detects unmapped pairs automa
 1. Loads all active billing items of a given `itemType` from RCM
 2. Loads all active clinical catalog items of the matching `catalogType` from Clinical
 3. Loads existing mappings to exclude already-mapped pairs
-4. Matches by code: a lab test with `loincCode = "85025"` is matched to a billing item with `billingCode = "85025"`
+4. Matches by code: a lab test with `loincCode = "85025"` is matched to a billing item with `billingCode = "85025"`, an administrative service with `billingCode = "REG001"` is matched to a `misc` billing item with `billingCode = "REG001"`, etc.
 5. Shows the unlinked pairs for one-click or bulk acceptance
+
+Supported catalog types on the suggestions page: `lab_test`, `imaging_study`, `procedure`, `medication`, `administrative_service`, `package`.
 
 ### Shared component
 
@@ -321,7 +327,8 @@ Billing Admin
 
 Clinical Admin
   └─ Manages: Medication / Lab / Imaging / Procedure catalogs
-  └─ Can add billing mappings from each catalog item detail page
+  └─ Manages: Administrative Service / Package catalogs
+  └─ Can add billing mappings from any catalog item detail page
 
 Pharmacist
   └─ Receives stock (/pharmacy/stock/new)
@@ -341,9 +348,9 @@ Pharmacist
 - [x] Pharmacy endpoint — `GET /pharmacy/stock/resolve-medication/:medicationId`
 - [x] Frontend — search combobox form on `/rcm-setup/catalog-mappings`
 - [x] Frontend — `CatalogBillingMappingsPanel` shared component
-- [x] Frontend — Billing Mappings panel on all 4 clinical catalog detail pages
+- [x] Frontend — Billing Mappings panel on all 6 catalog detail pages (medications, lab tests, imaging studies, procedures, administrative services, packages)
 - [x] Frontend — Mapped Catalog Items panel on billing item detail page
-- [x] Frontend — Suggested Mappings page (code-based auto-match)
+- [x] Frontend — Suggested Mappings page (code-based auto-match, all 6 catalog types)
 - [x] Frontend — Receive Stock form with medication picker + billing item preview
 - [ ] Integration tests for context-based resolution
 - [ ] Fee schedule integration (price lookup per payer contract)
@@ -359,11 +366,15 @@ Pharmacist
 | `backend/services/rcm/src/modules/catalog-mappings/` | Service, controller, DTOs, module |
 | `backend/services/rcm/src/modules/pharmacy/services/pharmacy-stock.service.ts` | Auto-resolve `billingItemId` on stock creation |
 | `backend/services/rcm/src/modules/pharmacy/services/pharmacy-charge.service.ts` | Post charges after dispensing |
-| `frontend/src/modules/rcm/components/catalog-billing-mappings-panel.tsx` | Shared inline mapping panel |
+| `frontend/src/modules/rcm/components/catalog-billing-mappings-panel.tsx` | Shared inline mapping panel (all 6 catalog types) |
 | `frontend/src/app/[locale]/(dashboard)/rcm-setup/catalog-mappings/page.tsx` | Main mapping management screen |
 | `frontend/src/app/[locale]/(dashboard)/rcm-setup/catalog-mappings/suggestions/page.tsx` | Auto-suggest unmapped pairs |
+| `frontend/src/app/[locale]/(dashboard)/catalogs/administrative-services/[id]/page.tsx` | Administrative service detail + billing mappings panel |
+| `frontend/src/app/[locale]/(dashboard)/catalogs/packages/[id]/page.tsx` | Package detail + billing mappings panel |
 | `frontend/src/modules/rcm/hooks/use-catalog-mappings.ts` | React Query hooks |
 | `frontend/src/modules/rcm/services/catalog-mapping-service.ts` | API client |
+| `frontend/src/modules/clinical/hooks/use-administrative-services.ts` | React Query hooks for administrative services |
+| `frontend/src/modules/clinical/hooks/use-packages.ts` | React Query hooks for packages |
 
 ## Related Documentation
 
