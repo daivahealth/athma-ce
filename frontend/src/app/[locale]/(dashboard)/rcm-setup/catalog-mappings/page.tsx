@@ -19,10 +19,14 @@ import { useToast } from '@/components/ui/use-toast';
 import { useCatalogMappings, useCreateCatalogMapping } from '@/modules/rcm/hooks/use-catalog-mappings';
 import { useBillingItems } from '@/modules/rcm/hooks/use-billing-items';
 import { useMedications, useLabTests, useImagingStudies, useProcedures } from '@/modules/foundation/hooks/use-catalogs';
+import { useAdministrativeServices } from '@/modules/clinical/hooks/use-administrative-services';
+import { usePackages } from '@/modules/clinical/hooks/use-packages';
 import type { CatalogMapping, CatalogMappingFilters, CatalogType } from '@/modules/rcm/types/catalog-mapping';
 import type { BillingItem } from '@/modules/rcm/types/billing-item';
 import { ItemType } from '@/modules/rcm/types/billing-item';
 import type { Medication, LabTest, ImagingStudy, Procedure } from '@/modules/foundation/types/catalog';
+import type { AdministrativeService } from '@/modules/clinical/types/administrative-service';
+import type { Package } from '@/modules/clinical/types/package';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -41,6 +45,8 @@ const catalogTypeToItemType: Partial<Record<CatalogType, ItemType>> = {
   lab_test: ItemType.LAB,
   imaging_study: ItemType.IMAGING,
   procedure: ItemType.PROCEDURE,
+  administrative_service: ItemType.MISC,
+  package: ItemType.PACKAGE,
 };
 
 // ─── Resolved catalog item shape ─────────────────────────────────────────────
@@ -82,6 +88,22 @@ function resolveProcedure(p: Procedure): ResolvedCatalogItem {
     name: p.procedureName,
     subLabel: [p.procedureCategory, p.bodySystem].filter(Boolean).join(' · '),
     primaryCode: p.cptCode ?? p.icd10PcsCode ?? null,
+  };
+}
+function resolveAdministrativeService(s: AdministrativeService): ResolvedCatalogItem {
+  return {
+    id: s.id,
+    name: s.serviceName,
+    subLabel: [s.serviceCategory, s.careSetting].filter(Boolean).join(' · '),
+    primaryCode: s.billingCode ?? s.serviceCode ?? null,
+  };
+}
+function resolvePackage(p: Package): ResolvedCatalogItem {
+  return {
+    id: p.id,
+    name: p.name,
+    subLabel: [p.packageType, p.careSetting].filter(Boolean).join(' · '),
+    primaryCode: p.code,
   };
 }
 
@@ -284,12 +306,16 @@ function useCatalogItemSearch(catalogType: CatalogType, search: string) {
   const labs = useLabTests(catalogType === 'lab_test' ? filters : undefined);
   const imaging = useImagingStudies(catalogType === 'imaging_study' ? filters : undefined);
   const procedures = useProcedures(catalogType === 'procedure' ? filters : undefined);
+  const adminServices = useAdministrativeServices(catalogType === 'administrative_service' ? filters : undefined);
+  const packages = usePackages(catalogType === 'package' ? filters : undefined);
 
   const isLoading =
     (catalogType === 'medication' && meds.isFetching) ||
     (catalogType === 'lab_test' && labs.isFetching) ||
     (catalogType === 'imaging_study' && imaging.isFetching) ||
-    (catalogType === 'procedure' && procedures.isFetching);
+    (catalogType === 'procedure' && procedures.isFetching) ||
+    (catalogType === 'administrative_service' && adminServices.isFetching) ||
+    (catalogType === 'package' && packages.isFetching);
 
   const items: ResolvedCatalogItem[] = useMemo(() => {
     if (!enabled) return [];
@@ -297,8 +323,10 @@ function useCatalogItemSearch(catalogType: CatalogType, search: string) {
     if (catalogType === 'lab_test') return (labs.data ?? []).map(resolveLabTest);
     if (catalogType === 'imaging_study') return (imaging.data ?? []).map(resolveImagingStudy);
     if (catalogType === 'procedure') return (procedures.data ?? []).map(resolveProcedure);
+    if (catalogType === 'administrative_service') return (adminServices.data ?? []).map(resolveAdministrativeService);
+    if (catalogType === 'package') return (packages.data ?? []).map(resolvePackage);
     return [];
-  }, [catalogType, enabled, meds.data, labs.data, imaging.data, procedures.data]);
+  }, [catalogType, enabled, meds.data, labs.data, imaging.data, procedures.data, adminServices.data, packages.data]);
 
   return { items, isLoading };
 }
@@ -508,41 +536,20 @@ export default function CatalogMappingsPage() {
               </Select>
             </div>
             <div className="space-y-1">
-              <Label>
-                {catalogTypeLabels[catalogType]} *
-                {catalogType === 'package' || catalogType === 'administrative_service' ? (
-                  <span className="ml-1 text-xs text-muted-foreground">(enter ID manually)</span>
-                ) : null}
-              </Label>
-              {catalogType === 'package' || catalogType === 'administrative_service' ? (
-                <Input
-                  placeholder="Catalog item UUID"
-                  value={selectedCatalogItem?.id ?? catalogSearch}
-                  onChange={(e) => {
-                    setCatalogSearch(e.target.value);
-                    // For non-searchable types, use raw ID
-                    if (e.target.value) {
-                      setSelectedCatalogItem({ id: e.target.value, name: e.target.value, subLabel: '', primaryCode: null });
-                    } else {
-                      setSelectedCatalogItem(null);
-                    }
-                  }}
-                />
-              ) : (
-                <SearchCombobox
-                  placeholder={`Search ${catalogTypeLabels[catalogType].toLowerCase()}…`}
-                  value={selectedCatalogItem ? { id: selectedCatalogItem.id, label: selectedCatalogItem.name, subLabel: selectedCatalogItem.subLabel, code: selectedCatalogItem.primaryCode } : null}
-                  options={catalogItems.map((item) => ({ id: item.id, label: item.name, subLabel: item.subLabel, code: item.primaryCode }))}
-                  isLoading={searchingCatalog}
-                  searchText={catalogSearch}
-                  onSearchChange={setCatalogSearch}
-                  onSelect={(opt) => {
-                    const found = catalogItems.find((i) => i.id === opt.id);
-                    if (found) setSelectedCatalogItem(found);
-                  }}
-                  onClear={() => { setSelectedCatalogItem(null); setCatalogSearch(''); }}
-                />
-              )}
+              <Label>{catalogTypeLabels[catalogType]} *</Label>
+              <SearchCombobox
+                placeholder={`Search ${catalogTypeLabels[catalogType].toLowerCase()}…`}
+                value={selectedCatalogItem ? { id: selectedCatalogItem.id, label: selectedCatalogItem.name, subLabel: selectedCatalogItem.subLabel, code: selectedCatalogItem.primaryCode } : null}
+                options={catalogItems.map((item) => ({ id: item.id, label: item.name, subLabel: item.subLabel, code: item.primaryCode }))}
+                isLoading={searchingCatalog}
+                searchText={catalogSearch}
+                onSearchChange={setCatalogSearch}
+                onSelect={(opt) => {
+                  const found = catalogItems.find((i) => i.id === opt.id);
+                  if (found) setSelectedCatalogItem(found);
+                }}
+                onClear={() => { setSelectedCatalogItem(null); setCatalogSearch(''); }}
+              />
             </div>
           </div>
 
@@ -569,9 +576,9 @@ export default function CatalogMappingsPage() {
                 if (found) setSelectedBillingItem(found);
               }}
               onClear={() => { setSelectedBillingItem(null); setBillingSearch(''); }}
-              disabled={!selectedCatalogItem && (catalogType !== 'package' && catalogType !== 'administrative_service')}
+              disabled={!selectedCatalogItem}
             />
-            {!selectedCatalogItem && catalogType !== 'package' && catalogType !== 'administrative_service' && (
+            {!selectedCatalogItem && (
               <p className="text-xs text-muted-foreground">Select a catalog item first to enable billing item search.</p>
             )}
           </div>

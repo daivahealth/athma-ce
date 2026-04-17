@@ -40,10 +40,14 @@ import {
 } from '@/modules/rcm/hooks/use-catalog-mappings';
 import { useBillingItems, useBillingItem } from '@/modules/rcm/hooks/use-billing-items';
 import { useMedications, useLabTests, useImagingStudies, useProcedures } from '@/modules/foundation/hooks/use-catalogs';
+import { useAdministrativeServices } from '@/modules/clinical/hooks/use-administrative-services';
+import { usePackages } from '@/modules/clinical/hooks/use-packages';
 import type { CatalogType } from '@/modules/rcm/types/catalog-mapping';
 import type { BillingItem } from '@/modules/rcm/types/billing-item';
 import { ItemType } from '@/modules/rcm/types/billing-item';
 import type { Medication, LabTest, ImagingStudy, Procedure } from '@/modules/foundation/types/catalog';
+import type { AdministrativeService } from '@/modules/clinical/types/administrative-service';
+import type { Package } from '@/modules/clinical/types/package';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -61,6 +65,8 @@ const catalogTypeToItemType: Partial<Record<CatalogType, ItemType>> = {
   lab_test: ItemType.LAB,
   imaging_study: ItemType.IMAGING,
   procedure: ItemType.PROCEDURE,
+  administrative_service: ItemType.MISC,
+  package: ItemType.PACKAGE,
 };
 
 // ─── Catalog item helpers ─────────────────────────────────────────────────────
@@ -83,6 +89,12 @@ function resolveImagingStudy(s: ImagingStudy): ResolvedCatalogItem {
 }
 function resolveProcedure(p: Procedure): ResolvedCatalogItem {
   return { id: p.id, name: p.procedureName, subLabel: [p.procedureCategory, p.bodySystem].filter(Boolean).join(' · '), primaryCode: p.cptCode ?? p.icd10PcsCode ?? null };
+}
+function resolveAdministrativeService(s: AdministrativeService): ResolvedCatalogItem {
+  return { id: s.id, name: s.serviceName, subLabel: [s.serviceCategory, s.careSetting].filter(Boolean).join(' · '), primaryCode: s.billingCode ?? s.serviceCode ?? null };
+}
+function resolvePackage(p: Package): ResolvedCatalogItem {
+  return { id: p.id, name: p.name, subLabel: [p.packageType, p.careSetting].filter(Boolean).join(' · '), primaryCode: p.code };
 }
 
 // ─── Small search combobox (inline) ──────────────────────────────────────────
@@ -166,15 +178,25 @@ function useCatalogSearch(catalogType: CatalogType, search: string) {
   const labs = useLabTests(catalogType === 'lab_test' ? f : undefined);
   const imaging = useImagingStudies(catalogType === 'imaging_study' ? f : undefined);
   const procs = useProcedures(catalogType === 'procedure' ? f : undefined);
-  const isLoading = (catalogType === 'medication' && meds.isFetching) || (catalogType === 'lab_test' && labs.isFetching) || (catalogType === 'imaging_study' && imaging.isFetching) || (catalogType === 'procedure' && procs.isFetching);
+  const adminServices = useAdministrativeServices(catalogType === 'administrative_service' ? f : undefined);
+  const packages = usePackages(catalogType === 'package' ? f : undefined);
+  const isLoading =
+    (catalogType === 'medication' && meds.isFetching) ||
+    (catalogType === 'lab_test' && labs.isFetching) ||
+    (catalogType === 'imaging_study' && imaging.isFetching) ||
+    (catalogType === 'procedure' && procs.isFetching) ||
+    (catalogType === 'administrative_service' && adminServices.isFetching) ||
+    (catalogType === 'package' && packages.isFetching);
   const items = useMemo<ResolvedCatalogItem[]>(() => {
     if (!enabled) return [];
     if (catalogType === 'medication') return (meds.data ?? []).map(resolveMedication);
     if (catalogType === 'lab_test') return (labs.data ?? []).map(resolveLabTest);
     if (catalogType === 'imaging_study') return (imaging.data ?? []).map(resolveImagingStudy);
     if (catalogType === 'procedure') return (procs.data ?? []).map(resolveProcedure);
+    if (catalogType === 'administrative_service') return (adminServices.data ?? []).map(resolveAdministrativeService);
+    if (catalogType === 'package') return (packages.data ?? []).map(resolvePackage);
     return [];
-  }, [catalogType, enabled, meds.data, labs.data, imaging.data, procs.data]);
+  }, [catalogType, enabled, meds.data, labs.data, imaging.data, procs.data, adminServices.data, packages.data]);
   return { items, isLoading };
 }
 
