@@ -1,5 +1,12 @@
 -- Packages Seed Data
 -- Health check packages and wellness programs
+-- Fixed UUIDs assigned so that zeal_rcm catalog mappings can reference them deterministically.
+--
+-- UUID mapping (f1111111-1111-1111-1111-11111111111x):
+--   111 PKG-BASIC-HEALTH      112 PKG-EXECUTIVE-HEALTH  113 PKG-PREMIUM-HEALTH
+--   114 PKG-WOMENS-HEALTH     115 PKG-MENS-HEALTH        116 PKG-SENIOR-HEALTH
+--   117 PKG-YOUTH-HEALTH      118 PKG-DIABETES-SCREEN    119 PKG-CARDIAC-SCREEN
+--   120 PKG-PRE-EMPLOYMENT    121 PKG-PRE-MARITAL
 
 TRUNCATE packages CASCADE;
 
@@ -29,7 +36,7 @@ INSERT INTO packages (
   -- BASIC HEALTH CHECK PACKAGES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111111'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-BASIC-HEALTH',
     'Basic Health Check Package',
@@ -47,7 +54,7 @@ INSERT INTO packages (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111112'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-EXECUTIVE-HEALTH',
     'Executive Health Check Package',
@@ -65,7 +72,7 @@ INSERT INTO packages (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111113'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-PREMIUM-HEALTH',
     'Premium Health Check Package',
@@ -87,7 +94,7 @@ INSERT INTO packages (
   -- GENDER-SPECIFIC PACKAGES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111114'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-WOMENS-HEALTH',
     'Women''s Health Check Package',
@@ -105,7 +112,7 @@ INSERT INTO packages (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111115'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-MENS-HEALTH',
     'Men''s Health Check Package',
@@ -127,7 +134,7 @@ INSERT INTO packages (
   -- AGE-SPECIFIC PACKAGES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111116'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-SENIOR-HEALTH',
     'Senior Citizen Health Check Package',
@@ -145,7 +152,7 @@ INSERT INTO packages (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111117'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-YOUTH-HEALTH',
     'Youth Health Check Package',
@@ -167,7 +174,7 @@ INSERT INTO packages (
   -- CONDITION-SPECIFIC PACKAGES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111118'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-DIABETES-SCREEN',
     'Diabetes Screening Package',
@@ -185,7 +192,7 @@ INSERT INTO packages (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111119'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-CARDIAC-SCREEN',
     'Cardiac Screening Package',
@@ -203,7 +210,7 @@ INSERT INTO packages (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111120'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-PRE-EMPLOYMENT',
     'Pre-Employment Medical Check',
@@ -221,7 +228,7 @@ INSERT INTO packages (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'f1111111-1111-1111-1111-111111111121'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'PKG-PRE-MARITAL',
     'Pre-Marital Health Check',

@@ -1,5 +1,20 @@
 -- Administrative Services Seed Data
 -- Non-clinical services including registration, consultation fees, room charges, etc.
+-- Fixed UUIDs assigned so that zeal_rcm catalog mappings can reference them deterministically.
+--
+-- UUID mapping (e1111111-1111-1111-1111-11111111111x):
+--   111 REG-NEW           112 REG-FOLLOWUP       113 REG-EMR
+--   114 CONS-GP-NEW       115 CONS-GP-FOLLOWUP   116 CONS-SPEC-NEW
+--   117 CONS-SPEC-FOLLOWUP 118 CONS-EMR
+--   119 ADM-WARD          120 ADM-ICU            121 ADM-DAYCARE
+--   122 ROOM-WARD-DAY     123 ROOM-SEMI-DAY      124 ROOM-PRIVATE-DAY
+--   125 ROOM-ICU-DAY      126 ROOM-VIP-DAY
+--   127 NURS-IV-CANN      128 NURS-IV-MED        129 NURS-DRESS-SIMPLE
+--   130 NURS-DRESS-COMPLEX 131 NURS-CATH-URIN    132 NURS-NG-TUBE
+--   133 THER-PHYSIO-INIT  134 THER-PHYSIO-FU     135 THER-OT
+--   136 THER-SPEECH
+--   137 ADMIN-MED-CERT    138 ADMIN-MED-REPORT   139 ADMIN-PRESC-COPY
+--   140 ADMIN-MR-COPY     141 ADMIN-NOC
 
 TRUNCATE administrative_services CASCADE;
 
@@ -31,7 +46,7 @@ INSERT INTO administrative_services (
   -- REGISTRATION SERVICES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111111'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'New Patient Registration',
     'REG-NEW',
@@ -55,7 +70,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111112'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Follow-up Patient Registration',
     'REG-FOLLOWUP',
@@ -79,7 +94,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111113'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Emergency Registration',
     'REG-EMR',
@@ -107,7 +122,7 @@ INSERT INTO administrative_services (
   -- CONSULTATION SERVICES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111114'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'General Physician Consultation - New',
     'CONS-GP-NEW',
@@ -131,7 +146,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111115'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'General Physician Consultation - Follow-up',
     'CONS-GP-FOLLOWUP',
@@ -155,7 +170,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111116'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Specialist Consultation - New',
     'CONS-SPEC-NEW',
@@ -179,7 +194,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111117'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Specialist Consultation - Follow-up',
     'CONS-SPEC-FOLLOWUP',
@@ -203,7 +218,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111118'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Emergency Physician Consultation',
     'CONS-EMR',
@@ -231,7 +246,7 @@ INSERT INTO administrative_services (
   -- ADMISSION SERVICES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111119'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'General Ward Admission',
     'ADM-WARD',
@@ -255,7 +270,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111120'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'ICU Admission',
     'ADM-ICU',
@@ -279,7 +294,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111121'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Day Care Admission',
     'ADM-DAYCARE',
@@ -307,7 +322,7 @@ INSERT INTO administrative_services (
   -- ROOM CHARGES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111122'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'General Ward Bed - Per Day',
     'ROOM-WARD-DAY',
@@ -331,7 +346,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111123'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Semi-Private Room - Per Day',
     'ROOM-SEMI-DAY',
@@ -355,7 +370,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111124'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Private Room - Per Day',
     'ROOM-PRIVATE-DAY',
@@ -379,7 +394,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111125'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'ICU Bed - Per Day',
     'ROOM-ICU-DAY',
@@ -403,7 +418,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111126'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'VIP Suite - Per Day',
     'ROOM-VIP-DAY',
@@ -431,7 +446,7 @@ INSERT INTO administrative_services (
   -- NURSING SERVICES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111127'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'IV Cannulation',
     'NURS-IV-CANN',
@@ -455,7 +470,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111128'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'IV Medication Administration',
     'NURS-IV-MED',
@@ -479,7 +494,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111129'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Wound Dressing - Simple',
     'NURS-DRESS-SIMPLE',
@@ -503,7 +518,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111130'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Wound Dressing - Complex',
     'NURS-DRESS-COMPLEX',
@@ -527,7 +542,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111131'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Catheterization - Urinary',
     'NURS-CATH-URIN',
@@ -551,7 +566,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111132'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Nasogastric Tube Insertion',
     'NURS-NG-TUBE',
@@ -579,7 +594,7 @@ INSERT INTO administrative_services (
   -- THERAPY SERVICES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111133'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Physiotherapy Session - Initial',
     'THER-PHYSIO-INIT',
@@ -603,7 +618,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111134'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Physiotherapy Session - Follow-up',
     'THER-PHYSIO-FU',
@@ -627,7 +642,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111135'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Occupational Therapy Session',
     'THER-OT',
@@ -651,7 +666,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111136'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Speech Therapy Session',
     'THER-SPEECH',
@@ -679,7 +694,7 @@ INSERT INTO administrative_services (
   -- ADMINISTRATIVE SERVICES
   -- =========================================================================
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111137'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Medical Certificate',
     'ADMIN-MED-CERT',
@@ -703,7 +718,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111138'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Medical Report',
     'ADMIN-MED-REPORT',
@@ -727,7 +742,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111139'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Prescription Copy',
     'ADMIN-PRESC-COPY',
@@ -751,7 +766,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111140'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'Medical Records Copy',
     'ADMIN-MR-COPY',
@@ -775,7 +790,7 @@ INSERT INTO administrative_services (
     NOW()
   ),
   (
-    gen_random_uuid(),
+    'e1111111-1111-1111-1111-111111111141'::UUID,
     '11111111-1111-1111-1111-111111111111',
     'No Objection Certificate (NOC)',
     'ADMIN-NOC',
