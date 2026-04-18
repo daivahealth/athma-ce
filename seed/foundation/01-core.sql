@@ -15,7 +15,7 @@ VALUES
   (gen_random_uuid(), 'locale.number_format', '"en-US"', 'string', 'localization', 'Number formatting locale', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
   -- FINANCE CONFIGS
-  (gen_random_uuid(), 'finance.currency', '"AED"', 'string', 'finance', 'Default currency (ISO 4217 code)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.currency', '"INR"', 'string', 'finance', 'Default currency (ISO 4217 code)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.decimal_places', '2', 'number', 'finance', 'Number of decimal places for currency display', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.tax_rate', '0', 'number', 'finance', 'Default tax rate (percentage)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.tax_number', '""', 'string', 'finance', 'Tax registration number or VAT number for invoicing and compliance', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
