@@ -8,12 +8,12 @@ export class PharmacyQueueFiltersDto {
   encounterType?: string;
 
   @ApiPropertyOptional({ description: 'Filter by ward UUID (inpatient only)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   wardId?: string;
 
   @ApiPropertyOptional({ description: 'Filter by facility UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   facilityId?: string;
 

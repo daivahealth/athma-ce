@@ -53,11 +53,11 @@ export enum BillingEventType {
 
 export class CreateSubscriptionDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({ description: 'Membership plan ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   planId!: string;
 
   @ApiPropertyOptional({ description: 'Start date (defaults to now)' })
@@ -82,7 +82,7 @@ export class CreateSubscriptionDto {
 
   @ApiPropertyOptional({ description: 'Enrolled by staff ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   enrolledBy?: string;
 }
 
@@ -105,7 +105,7 @@ export class UpdateSubscriptionDto {
 
 export class ChangePlanDto {
   @ApiProperty({ description: 'New plan ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   newPlanId!: string;
 
   @ApiPropertyOptional({ description: 'Effective date (defaults to next billing cycle)' })
@@ -155,11 +155,11 @@ export class RenewSubscriptionDto {
 
 export class RecordBenefitUsageDto {
   @ApiProperty({ description: 'Subscription ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   subscriptionId!: string;
 
   @ApiProperty({ description: 'Benefit ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   benefitId!: string;
 
   @ApiPropertyOptional({ description: 'Service code used' })
@@ -169,7 +169,7 @@ export class RecordBenefitUsageDto {
 
   @ApiPropertyOptional({ description: 'Encounter/visit ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   encounterId?: string;
 
   @ApiPropertyOptional({ description: 'Usage quantity' })

@@ -31,17 +31,17 @@ export enum DispensingChannel {
 
 export class CreateDispensingDto {
   @ApiProperty({ description: 'Prescription order UUID (from Clinical DB)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   prescriptionOrderId!: string;
 
   @ApiProperty({ description: 'Encounter UUID (from Clinical DB)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   encounterId!: string;
 
   @ApiProperty({ description: 'Patient UUID (from Clinical DB)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
@@ -60,7 +60,7 @@ export class VerifyDispensingDto {
 
 export class DispenseItemDto {
   @ApiProperty({ description: 'Stock UUID to dispense from (FEFO batch)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   stockId!: string;
 
@@ -111,7 +111,7 @@ export class ExecuteDispenseDto {
 
 export class DispatchToWardDto {
   @ApiProperty({ description: 'Target ward UUID (from Foundation DB)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   wardId!: string;
 
@@ -135,7 +135,7 @@ export class CancelDispensingDto {
 
 export class ReturnDispensingItemDto {
   @ApiProperty({ description: 'Stock UUID of the batch being returned' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   stockId!: string;
 
@@ -161,12 +161,12 @@ export class ReturnDispensingDto {
 
 export class DispensingFiltersDto {
   @ApiPropertyOptional({ description: 'Filter by patient UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   patientId?: string;
 
   @ApiPropertyOptional({ description: 'Filter by encounter UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   encounterId?: string;
 

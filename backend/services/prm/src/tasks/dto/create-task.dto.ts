@@ -7,7 +7,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateTaskDto {
   @ApiProperty({ description: 'Patient ID (UUID)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   patient_id: string;
 
   @ApiProperty({ description: 'Task type', example: 'follow_up' })
@@ -31,7 +31,7 @@ export class CreateTaskDto {
 
   @ApiPropertyOptional({ description: 'Assigned to user ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   assigned_to_user_id?: string;
 
   @ApiPropertyOptional({ description: 'Assigned to role' })
@@ -51,6 +51,6 @@ export class CreateTaskDto {
 
   @ApiPropertyOptional({ description: 'Related entity ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   related_entity_id?: string;
 }

@@ -15,7 +15,7 @@ export enum PatientGender {
 
 export class IngestEventDto {
   @ApiProperty({ description: 'Patient UUID', example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   patient_id: string;
 
   @ApiPropertyOptional({ description: 'Patient display name' })
@@ -83,7 +83,7 @@ export class IngestEventDto {
   entity_type: string;
 
   @ApiProperty({ description: 'Entity UUID', example: 'f1e2d3c4-b5a6-7890-cdef-123456789abc' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   entity_id: string;
 
   @ApiProperty({ description: 'Event payload (flexible JSON)', type: 'object' })

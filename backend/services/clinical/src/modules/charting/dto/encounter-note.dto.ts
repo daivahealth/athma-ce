@@ -28,11 +28,11 @@ export enum NoteLanguage {
 // DTO for creating an encounter note
 export class CreateEncounterNoteDto {
   @ApiProperty({ description: 'Encounter ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({ description: 'Note type', enum: NoteType })
@@ -50,12 +50,12 @@ export class CreateEncounterNoteDto {
   title?: string;
 
   @ApiProperty({ description: 'Author staff ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   authorStaffId!: string;
 
   @ApiPropertyOptional({ description: 'Co-signer staff ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   coSignStaffId?: string;
 
   @ApiPropertyOptional({ description: 'Note content as JSON' })
@@ -78,7 +78,7 @@ export class UpdateEncounterNoteDto {
 
   @ApiPropertyOptional({ description: 'Co-signer staff ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   coSignStaffId?: string;
 
   @ApiPropertyOptional({ description: 'Amendment reason (required when status is amended)' })
@@ -95,7 +95,7 @@ export class UpdateEncounterNoteDto {
 // DTO for signing a note
 export class SignNoteDto {
   @ApiProperty({ description: 'Staff ID signing the note' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   staffId!: string;
 
   @ApiPropertyOptional({ description: 'Whether this is a co-signature' })

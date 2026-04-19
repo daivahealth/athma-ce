@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
 
 export class ValidateBedDto {
-  @IsUUID()
+  @IsUUID("loose" as any)
   bedId!: string;
 }

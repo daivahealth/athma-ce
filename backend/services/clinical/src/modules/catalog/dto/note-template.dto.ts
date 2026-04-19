@@ -32,7 +32,7 @@ export class CreateNoteTemplateDto {
 
   @ApiPropertyOptional({ description: 'Specialty ID (Foundation DB reference)' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   specialtyId?: string;
 
   @ApiPropertyOptional({ description: 'Template status', enum: TemplateStatus, default: TemplateStatus.ACTIVE })
@@ -51,7 +51,7 @@ export class CreateNoteTemplateDto {
 
   @ApiPropertyOptional({ description: 'Staff ID creating the template' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   createdBy?: string;
 }
 
@@ -74,7 +74,7 @@ export class UpdateNoteTemplateDto {
 
   @ApiPropertyOptional({ description: 'Specialty ID (Foundation DB reference)' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   specialtyId?: string;
 
   @ApiPropertyOptional({ description: 'Template status', enum: TemplateStatus })
@@ -96,7 +96,7 @@ export class CreateTemplateVersionDto {
 
   @ApiPropertyOptional({ description: 'Staff ID creating the version' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   createdBy?: string;
 }
 

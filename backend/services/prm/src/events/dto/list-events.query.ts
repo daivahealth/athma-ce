@@ -4,7 +4,7 @@ import { IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 export class ListEventsQueryDto {
   @ApiPropertyOptional({ description: 'Filter by patient UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   patient_id?: string;
 
   @ApiPropertyOptional({ description: 'Filter by event type' })

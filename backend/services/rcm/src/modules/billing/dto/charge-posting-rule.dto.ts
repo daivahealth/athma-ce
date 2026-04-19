@@ -73,7 +73,7 @@ export class CreateChargePostingRuleDto {
   billingItemType!: BillingItemType;
 
   @ApiPropertyOptional({ description: 'Specific billing item ID (null for dynamic lookup)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   billingItemId?: string;
 
@@ -207,17 +207,17 @@ export class ProcessEventDto {
   eventSource!: EventSource;
 
   @ApiProperty({ description: 'Event ID (e.g., encounter_id, order_id)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   eventId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Encounter ID (if applicable)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   encounterId?: string;
 

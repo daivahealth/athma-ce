@@ -16,6 +16,7 @@ import {
 } from '../dto/pharmacy-stock.dto';
 import { StockMovementType } from '../dto/pharmacy-stock-movement.dto';
 import { CatalogMappingService } from '../../catalog-mappings/services/catalog-mapping.service';
+import { CatalogType } from '../../catalog-mappings/dto/catalog-mapping.dto';
 
 @Injectable()
 export class PharmacyStockService {
@@ -36,9 +37,9 @@ export class PharmacyStockService {
     if (dto.medicationId && !resolvedBillingItemId) {
       try {
         const result = await this.catalogMappingService.findBillingItemsForCatalogItem(tenantId, {
-          catalogType: 'medication',
+          catalogType: CatalogType.MEDICATION,
           catalogItemId: dto.medicationId,
-          facilityId: dto.facilityId,
+          ...(dto.facilityId !== undefined && { facilityId: dto.facilityId }),
         });
         const primary = result.mappings?.find((m: any) => m.isPrimary) ?? result.mappings?.[0];
         if (primary?.billingItemId) {
@@ -75,7 +76,7 @@ export class PharmacyStockService {
           facilityId: dto.facilityId ?? null,
           storageLocation: dto.storageLocation ?? null,
           unitCostPrice: dto.unitCostPrice != null ? new Decimal(dto.unitCostPrice) : null,
-          currency: dto.currency ?? 'AED',
+          currency: dto.currency ?? 'INR',
           billingItemId: resolvedBillingItemId,
           status: PharmacyStockStatus.ACTIVE,
           isControlled: dto.isControlled ?? false,
@@ -259,9 +260,9 @@ export class PharmacyStockService {
    */
   async resolveMedication(tenantId: string, medicationId: string, facilityId?: string) {
     const result = await this.catalogMappingService.findBillingItemsForCatalogItem(tenantId, {
-      catalogType: 'medication',
+      catalogType: CatalogType.MEDICATION,
       catalogItemId: medicationId,
-      facilityId,
+      ...(facilityId !== undefined && { facilityId }),
     });
 
     const primary = result.mappings?.find((m: any) => m.isPrimary) ?? result.mappings?.[0];
@@ -271,7 +272,6 @@ export class PharmacyStockService {
       billingItemId: primary?.billingItemId ?? null,
       billingCode: primary?.billingCode ?? null,
       billingDescription: primary?.billingDescription ?? null,
-      listPrice: primary?.listPrice ?? null,
     };
   }
 

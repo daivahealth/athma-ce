@@ -16,7 +16,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateNutritionPlanDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({ description: 'Plan name' })
@@ -88,7 +88,7 @@ export class CreateNutritionPlanDto {
 
   @ApiPropertyOptional({ description: 'Dietitian ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   createdByDietitian?: string;
 
   @ApiPropertyOptional({ description: 'Notes' })
@@ -220,7 +220,7 @@ export class NutritionPlanResponseDto {
 
 export class CreateExercisePrescriptionDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({ description: 'Prescription name' })
@@ -302,7 +302,7 @@ export class CreateExercisePrescriptionDto {
 
   @ApiPropertyOptional({ description: 'Prescribing provider ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   prescribedBy?: string;
 
   @ApiPropertyOptional({ description: 'Notes' })

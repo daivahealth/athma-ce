@@ -12,12 +12,12 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateStaffScheduleDto {
   @ApiProperty({ description: 'Staff UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   staffId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   // Denormalized fields from Foundation database (populated automatically from staffId/facilityId)
@@ -158,12 +158,12 @@ export class UpdateStaffScheduleDto {
 
 export class CreateEquipmentScheduleDto {
   @ApiProperty({ description: 'Equipment UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   equipmentId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiProperty({ description: 'Day of week (0=Sunday, 6=Saturday)', minimum: 0, maximum: 6 })
@@ -258,12 +258,12 @@ export class UpdateEquipmentScheduleDto {
 
 export class CreateSpaceScheduleDto {
   @ApiProperty({ description: 'Space UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   spaceId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiProperty({ description: 'Day of week (0=Sunday, 6=Saturday)', minimum: 0, maximum: 6 })
@@ -362,12 +362,12 @@ export class CreateResourceBlockDto {
   resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   resourceId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiProperty({ description: 'Block type', enum: ['vacation', 'sick_leave', 'maintenance', 'emergency', 'special_event'] })
@@ -435,7 +435,7 @@ export class RejectResourceBlockDto {
 
 export class CreateWeeklyScheduleDto {
   @ApiProperty({ description: 'Staff UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   staffId!: string;
 
   @ApiPropertyOptional({ description: 'Staff display name (denormalized)', maxLength: 200 })
@@ -480,7 +480,7 @@ export class CreateWeeklyScheduleDto {
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiProperty({ description: 'Effective from date' })

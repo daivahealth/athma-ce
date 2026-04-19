@@ -35,7 +35,7 @@ export enum AdjustmentType {
 
 export class CreateLedgerEntryDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
@@ -75,7 +75,7 @@ export class CreateLedgerEntryDto {
   sourceType!: string;
 
   @ApiProperty({ description: 'Source document ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   sourceId!: string;
 
@@ -85,32 +85,32 @@ export class CreateLedgerEntryDto {
   sourceNumber!: string;
 
   @ApiPropertyOptional({ description: 'Encounter ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   encounterId?: string;
 
   @ApiPropertyOptional({ description: 'Invoice ID (shortcut FK)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   invoiceId?: string;
 
   @ApiPropertyOptional({ description: 'Receipt ID (shortcut FK)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   receiptId?: string;
 
   @ApiPropertyOptional({ description: 'Refund ID (shortcut FK)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   refundId?: string;
 
   @ApiPropertyOptional({ description: 'Credit note ID (shortcut FK)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   creditNoteId?: string;
 
   @ApiPropertyOptional({ description: 'Debit note ID (shortcut FK)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   debitNoteId?: string;
 
@@ -130,7 +130,7 @@ export class CreateLedgerEntryDto {
   status?: LedgerEntryStatus;
 
   @ApiPropertyOptional({ description: 'ID of the entry being reversed' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   reversalOfEntryId?: string;
 }
@@ -168,7 +168,7 @@ export class ReverseEntryDto {
 
 export class CreateAdjustmentDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
@@ -208,7 +208,7 @@ export class CreateAdjustmentDto {
 
 export class CreateOpeningBalanceDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 

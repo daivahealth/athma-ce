@@ -11,7 +11,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateProcedureReportDto {
   @ApiProperty({ description: 'Clinical order ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   orderId!: string;
 
   @ApiPropertyOptional({ description: 'Indication for the procedure' })
@@ -58,7 +58,7 @@ export class UpdateProcedureReportDto {
 
   @ApiPropertyOptional({ description: 'Anesthesia provider staff ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   anesthesiaProvider?: string;
 
   @ApiPropertyOptional({ description: 'Procedure start time' })
@@ -78,7 +78,7 @@ export class UpdateProcedureReportDto {
 
   @ApiPropertyOptional({ description: 'Primary performer staff ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   primaryPerformer?: string;
 
   @ApiPropertyOptional({ description: 'Assistant staff IDs' })

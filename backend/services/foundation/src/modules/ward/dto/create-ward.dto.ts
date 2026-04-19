@@ -34,7 +34,7 @@ export class CreateWardDto {
   @IsOptional()
   genderRestriction?: GenderRestriction;
 
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   specialtyId?: string;
 

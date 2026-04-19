@@ -11,7 +11,7 @@ export enum InvoiceStatus {
 
 export class InvoiceLineDto {
   @ApiProperty({ description: 'Charge ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   chargeId!: string;
 
@@ -52,12 +52,12 @@ export class InvoiceLineDto {
 
 export class CreateInvoiceDto {
   @ApiProperty({ description: 'Patient ID (from Clinical DB)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Encounter ID (from Clinical DB)' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   @IsOptional()
   encounterId?: string;
 

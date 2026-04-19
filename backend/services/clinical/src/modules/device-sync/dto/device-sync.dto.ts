@@ -69,7 +69,7 @@ export enum SyncStatus {
 
 export class InitiateConnectionDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({ enum: DeviceType, description: 'Device/platform type' })
@@ -148,7 +148,7 @@ export class DeviceConnectionResponseDto {
 
 export class TriggerSyncDto {
   @ApiProperty({ description: 'Connection ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   connectionId!: string;
 
   @ApiPropertyOptional({ description: 'Start date for sync range' })
@@ -223,7 +223,7 @@ export class HealthMetricDto {
 
 export class BulkMetricsDto {
   @ApiProperty({ description: 'Connection ID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   connectionId!: string;
 
   @ApiProperty({ type: [HealthMetricDto] })

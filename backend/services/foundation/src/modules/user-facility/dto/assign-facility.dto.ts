@@ -7,7 +7,7 @@ export enum FacilityAccessLevel {
 }
 
 export class AssignFacilityDto {
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId!: string;
 
   @IsEnum(FacilityAccessLevel)

@@ -12,7 +12,7 @@ export class FindAvailableSlotsDto {
   resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   resourceId!: string;
 
   @ApiProperty({ description: 'Search start date' })
@@ -32,7 +32,7 @@ export class FindAvailableSlotsDto {
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiPropertyOptional({ description: 'Slot interval in minutes', default: 15 })
@@ -65,7 +65,7 @@ export class CheckSlotAvailabilityDto {
   resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   resourceId!: string;
 
   @ApiProperty({ description: 'Slot start time' })
@@ -108,7 +108,7 @@ export class FindSlotsForAppointmentTypeDto {
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiPropertyOptional({ description: 'Preferred staff UUIDs', isArray: true })
@@ -134,7 +134,7 @@ export class GetResourceUtilizationDto {
   resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   resourceId!: string;
 
   @ApiProperty({ description: 'Period start date' })
@@ -154,7 +154,7 @@ export class FindNextAvailableSlotDto {
   resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   resourceId!: string;
 
   @ApiProperty({ description: 'Required duration in minutes' })
@@ -181,7 +181,7 @@ export class SuggestAlternativeSlotsDto {
   resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("loose" as any)
   resourceId!: string;
 
   @ApiProperty({ description: 'Preferred start time' })

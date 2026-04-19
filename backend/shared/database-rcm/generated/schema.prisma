@@ -1922,6 +1922,9 @@ model PharmacyStock {
   unitCostPrice Decimal? @map("unit_cost_price") @db.Decimal(10, 4)
   currency      String   @default("AED") @db.VarChar(10)
 
+  // Link to clinical medication catalog (logical FK, cross-DB, no constraint)
+  medicationId String? @map("medication_id") @db.Uuid
+
   // Link to billing catalog for charge posting
   billingItemId String? @map("billing_item_id") @db.Uuid
 
@@ -1943,6 +1946,7 @@ model PharmacyStock {
   dispensingItems PharmacyDispensingItem[]
 
   @@index([tenantId, drugCode], map: "idx_pharmacy_stock_tenant_drug")
+  @@index([tenantId, medicationId], map: "idx_pharmacy_stock_medication")
   @@index([tenantId, status], map: "idx_pharmacy_stock_tenant_status")
   @@index([tenantId, expiryDate], map: "idx_pharmacy_stock_tenant_expiry")
   @@index([tenantId, facilityId], map: "idx_pharmacy_stock_tenant_facility")
