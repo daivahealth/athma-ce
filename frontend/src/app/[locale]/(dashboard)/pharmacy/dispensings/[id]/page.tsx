@@ -25,7 +25,7 @@ import {
   useCancelDispensing,
   useWardReceive,
 } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
-import { DispensingStatus } from '@/modules/pharmacy/types/dispensing';
+import { DispensingStatus, DispensingSource } from '@/modules/pharmacy/types/dispensing';
 
 export default function DispensingDetailPage() {
   const params = useParams();
@@ -50,8 +50,14 @@ export default function DispensingDetailPage() {
 
   if (!dispensing) return <div className="text-muted-foreground">Dispensing record not found</div>;
 
-  const canVerify = dispensing.status === DispensingStatus.QUEUED;
-  const canDispense = dispensing.status === DispensingStatus.VERIFIED;
+  // OTC / paper dispensings skip the manual verify step — go straight to dispense
+  const isOtcOrPaper = dispensing.dispensingSource !== DispensingSource.DIGITAL_PRESCRIPTION;
+
+  const canVerify =
+    dispensing.status === DispensingStatus.QUEUED && !isOtcOrPaper;
+  const canDispense =
+    dispensing.status === DispensingStatus.VERIFIED ||
+    (dispensing.status === DispensingStatus.QUEUED && isOtcOrPaper);
   const canCancel = [DispensingStatus.QUEUED, DispensingStatus.VERIFIED].includes(
     dispensing.status as DispensingStatus,
   );
@@ -210,7 +216,7 @@ export default function DispensingDetailPage() {
         {canDispense && (
           <Button onClick={() => router.push(`/${locale}/pharmacy/dispensings/${id}/dispense`)}>
             <Pill className="h-4 w-4 mr-2" />
-            Dispense Medication
+            {dispensing.status === DispensingStatus.QUEUED ? 'Add Medicines & Dispense' : 'Dispense Medication'}
           </Button>
         )}
 

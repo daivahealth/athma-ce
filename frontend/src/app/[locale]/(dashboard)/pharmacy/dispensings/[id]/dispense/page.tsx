@@ -17,10 +17,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import {
   usePharmacyDispensing,
+  useVerifyDispensing,
   useExecuteDispense,
 } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
 import { usePharmacyStock } from '@/modules/pharmacy/hooks/use-pharmacy-stock';
-import { DispensingStatus } from '@/modules/pharmacy/types/dispensing';
+import { DispensingStatus, DispensingSource } from '@/modules/pharmacy/types/dispensing';
 import type { PharmacyStock } from '@/modules/pharmacy/types/stock';
 
 /* ─── Types ──────────────────────────────────────────────────────────── */
@@ -247,6 +248,7 @@ export default function ExecuteDispensePage() {
   const id = params.id as string;
 
   const { data: dispensing, isLoading } = usePharmacyDispensing(id);
+  const verifyDispensing = useVerifyDispensing();
   const executeDispense = useExecuteDispense();
 
   const [items, setItems] = useState<DispenseItem[]>([makeItem()]);
@@ -261,6 +263,15 @@ export default function ExecuteDispensePage() {
 
   const handleSubmit = async () => {
     const readyItems = items.filter((i) => i.stock !== null);
+
+    // For OTC / paper dispensings that are still QUEUED, auto-verify first
+    if (
+      dispensing?.status === DispensingStatus.QUEUED &&
+      dispensing?.dispensingSource !== DispensingSource.DIGITAL_PRESCRIPTION
+    ) {
+      await verifyDispensing.mutateAsync({ id, payload: {} });
+    }
+
     await executeDispense.mutateAsync({
       id,
       payload: {
@@ -293,8 +304,16 @@ export default function ExecuteDispensePage() {
     return <div className="text-muted-foreground">Dispensing record not found</div>;
   }
 
-  /* ── Wrong status guard ── */
-  if (dispensing.status !== DispensingStatus.VERIFIED) {
+  /* ── Status guard ──
+       OTC/paper: allow QUEUED (auto-verified on submit) or VERIFIED
+       Digital:   require VERIFIED (manual verify step)
+  ── */
+  const isOtcOrPaper = dispensing.dispensingSource !== DispensingSource.DIGITAL_PRESCRIPTION;
+  const allowedToDispense =
+    dispensing.status === DispensingStatus.VERIFIED ||
+    (dispensing.status === DispensingStatus.QUEUED && isOtcOrPaper);
+
+  if (!allowedToDispense) {
     return (
       <div className="max-w-md space-y-4">
         <Button variant="ghost" size="sm" onClick={() => router.back()}>
@@ -305,8 +324,8 @@ export default function ExecuteDispensePage() {
           <CardContent className="pt-6 space-y-4">
             <p className="text-sm text-muted-foreground">
               This dispensing is currently{' '}
-              <Badge variant="outline">{dispensing.status}</Badge>. Medication can only be
-              dispensed after verification.
+              <Badge variant="outline">{dispensing.status}</Badge>. Please verify the
+              prescription before dispensing.
             </p>
             <Button
               variant="outline"
@@ -436,11 +455,13 @@ export default function ExecuteDispensePage() {
       <div className="flex items-center gap-3">
         <Button
           onClick={handleSubmit}
-          disabled={readyCount === 0 || executeDispense.isPending}
+          disabled={readyCount === 0 || verifyDispensing.isPending || executeDispense.isPending}
           className="min-w-40"
         >
           <PackageCheck className="h-4 w-4 mr-2" />
-          {executeDispense.isPending
+          {verifyDispensing.isPending
+            ? 'Verifying...'
+            : executeDispense.isPending
             ? 'Dispensing...'
             : `Dispense ${readyCount} Item${readyCount !== 1 ? 's' : ''}`}
         </Button>
