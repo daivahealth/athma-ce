@@ -457,7 +457,17 @@ export function CatalogBillingMappingsPanel({
                 {/* In catalog mode show the billing item; in billing mode show the catalog item */}
                 {catalogItemId ? (
                   <div>
-                    <span className="font-mono text-xs truncate block">{m.billingItemId}</span>
+                    {m.billingItem ? (
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono text-xs font-medium">{m.billingItem.billingCode}</span>
+                        <span className="text-xs text-muted-foreground truncate">{m.billingItem.billingDescription}</span>
+                        {m.billingItem.listPrice != null && (
+                          <span className="text-xs text-muted-foreground">· ₹{Number(m.billingItem.listPrice).toFixed(2)}</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="font-mono text-xs text-muted-foreground truncate block">{m.billingItemId}</span>
+                    )}
                     <div className="flex gap-1 mt-0.5 flex-wrap">
                       {m.isPrimary && <Badge variant="default" className="text-xs">Primary</Badge>}
                       {m.isAutomatic && <Badge variant="outline" className="text-xs">Auto</Badge>}

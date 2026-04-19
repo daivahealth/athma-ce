@@ -6,12 +6,22 @@ export type CatalogType =
   | 'package'
   | 'administrative_service';
 
+export interface CatalogMappingBillingItem {
+  id: string;
+  billingCode: string;
+  billingCodeType: string;
+  billingDescription: string;
+  itemType: string;
+  listPrice?: string | number | null;
+}
+
 export interface CatalogMapping {
   id: string;
   tenantId: string;
   catalogType: CatalogType;
   catalogItemId: string;
   billingItemId: string;
+  billingItem?: CatalogMappingBillingItem | null;
   quantity: number | null;
   isAutomatic: boolean;
   isPrimary: boolean;
