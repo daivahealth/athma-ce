@@ -51,10 +51,10 @@ export enum VitalsFrequency {
 
 export class CreateAdmissionDto {
   // Patient & Encounter
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   encounterId?: string; // Optional: create new if not provided
 
@@ -69,18 +69,18 @@ export class CreateAdmissionDto {
   admissionSource!: AdmissionSource;
 
   // Clinical Team
-  @IsUUID()
+  @IsUUID("all")
   attendingPhysicianId!: string;
 
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   primaryNurseId?: string;
 
   // Initial Location
-  @IsUUID()
+  @IsUUID("all")
   initialWardId!: string;
 
-  @IsUUID()
+  @IsUUID("all")
   initialBedId!: string;
 
   // Alerts (optional)

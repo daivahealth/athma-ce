@@ -23,11 +23,11 @@ export enum BillingCycle {
 
 export class CreateMembershipSubscriptionDto {
     @ApiProperty({ description: 'Patient ID' })
-    @IsUUID()
+    @IsUUID("all")
     patientId!: string;
 
     @ApiProperty({ description: 'Membership Plan ID' })
-    @IsUUID()
+    @IsUUID("all")
     planId!: string;
 
     @ApiProperty({ enum: BillingCycle, description: 'Billing cycle' })

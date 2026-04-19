@@ -120,11 +120,11 @@ export class UpdateScreeningProtocolDto {
 
 export class ScheduleScreeningDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Protocol ID' })
-  @IsUUID()
+  @IsUUID("all")
   protocolId!: string;
 
   @ApiProperty({ description: 'Due date' })
@@ -155,7 +155,7 @@ export class ScheduleScreeningDto {
 export class CompleteScreeningDto {
   @ApiPropertyOptional({ description: 'Encounter ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   encounterId?: string;
 
   @ApiPropertyOptional({ description: 'Results' })

@@ -87,7 +87,7 @@ export class CreateBiomarkerDefinitionDto {
 
   @ApiPropertyOptional({ description: 'Lab test catalog ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   labTestCatalogId?: string;
 }
 
@@ -130,11 +130,11 @@ export class UpdateBiomarkerDefinitionDto {
 
 export class CreateBiomarkerResultDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Biomarker ID' })
-  @IsUUID()
+  @IsUUID("all")
   biomarkerId!: string;
 
   @ApiProperty({ description: 'Result value' })
@@ -151,7 +151,7 @@ export class CreateBiomarkerResultDto {
 
   @ApiPropertyOptional({ description: 'Source ID (e.g., lab order result ID)' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   sourceId?: string;
 
   @ApiProperty({ description: 'Collection timestamp' })
@@ -338,11 +338,11 @@ export class ResolveAlertDto {
 
 export class BiomarkerTrendQueryDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Biomarker ID' })
-  @IsUUID()
+  @IsUUID("all")
   biomarkerId!: string;
 
   @ApiPropertyOptional({ description: 'Start date' })

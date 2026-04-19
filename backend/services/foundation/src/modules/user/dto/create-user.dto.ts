@@ -26,6 +26,6 @@ export class CreateUserDto {
   role?: string;
 
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   staffId?: string;
 }

@@ -54,14 +54,14 @@ export enum EncounterSource {
 }
 
 export class CreateEncounterDto {
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   appointmentId?: string;
 
-  @IsUUID()
+  @IsUUID("all")
   primaryStaffId!: string;
 
   @IsEnum(EncounterClass)

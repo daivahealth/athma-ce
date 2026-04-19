@@ -29,7 +29,7 @@ export class StockMovementFiltersDto {
   dateTo?: string;
 
   @ApiPropertyOptional({ description: 'Filter by performer (staff UUID)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   performedBy?: string;
 }

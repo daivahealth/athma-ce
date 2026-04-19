@@ -83,7 +83,7 @@ export class CreateLongevityProtocolDto {
 
   @ApiPropertyOptional({ description: 'Consent template ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   consentTemplateId?: string;
 
   @ApiPropertyOptional({ description: 'Estimated cost' })
@@ -126,20 +126,20 @@ export class UpdateLongevityProtocolDto {
 
 export class ScheduleTreatmentDto {
   @ApiProperty({ description: 'Facility ID' })
-  @IsUUID()
+  @IsUUID("all")
   facilityId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Protocol ID' })
-  @IsUUID()
+  @IsUUID("all")
   protocolId!: string;
 
   @ApiPropertyOptional({ description: 'Encounter ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   encounterId?: string;
 
   @ApiProperty({ description: 'Scheduled date/time' })
@@ -153,12 +153,12 @@ export class ScheduleTreatmentDto {
 
   @ApiPropertyOptional({ description: 'Provider ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   providerId?: string;
 
   @ApiPropertyOptional({ description: 'Nurse ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   nurseId?: string;
 }
 
@@ -186,7 +186,7 @@ export class StartTreatmentDto {
 
   @ApiPropertyOptional({ description: 'Consent ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   consentId?: string;
 }
 

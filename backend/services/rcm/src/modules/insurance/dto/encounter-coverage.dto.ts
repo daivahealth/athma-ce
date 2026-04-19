@@ -19,22 +19,22 @@ export enum CoverageLevel {
 
 export class CreateEncounterCoverageDto {
   @ApiProperty({ description: 'Encounter ID (from Clinical database)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID (from Clinical database)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Policy ID (may be null for self-pay)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   policyId?: string;
 
   @ApiPropertyOptional({ description: 'Payer ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   payerId?: string;
 
@@ -91,17 +91,17 @@ export class CreateEncounterCoverageDto {
   benefitsSnapshot?: Record<string, any>;
 
   @ApiPropertyOptional({ description: 'Eligibility request ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   eligibilityRequestId?: string;
 
   @ApiPropertyOptional({ description: 'Pre-authorization request ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   preauthRequestId?: string;
 
   @ApiPropertyOptional({ description: 'Cost estimate ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   costEstimateId?: string;
 

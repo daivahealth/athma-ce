@@ -1,10 +1,10 @@
 import { IsString, IsBoolean, IsUUID, IsOptional } from 'class-validator';
 
 export class AssignSpecialtyDto {
-  @IsUUID()
+  @IsUUID("all")
   facilityId!: string;
 
-  @IsUUID()
+  @IsUUID("all")
   specialtyId!: string;
 
   @IsBoolean()
@@ -13,11 +13,11 @@ export class AssignSpecialtyDto {
 }
 
 export class BulkAssignSpecialtiesDto {
-  @IsUUID()
+  @IsUUID("all")
   facilityId!: string;
 
   @IsString()
-  @IsUUID()
+  @IsUUID("all")
   primarySpecialtyId!: string;
 
   @IsUUID('4', { each: true })

@@ -36,28 +36,28 @@ export class SearchRequestDto {
     description: 'Filter by patient ID',
   })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   patientId?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by encounter ID',
   })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   encounterId?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by facility ID',
   })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   facilityId?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by department ID',
   })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   departmentId?: string;
 
   @ApiPropertyOptional({
@@ -151,7 +151,7 @@ export class SearchRequestDto {
     description: 'Filter by author staff ID',
   })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   authorStaffId?: string;
 
   @ApiPropertyOptional({
@@ -193,7 +193,7 @@ export class SimilarDocumentsRequestDto {
   @ApiProperty({
     description: 'Document ID to find similar documents for',
   })
-  @IsUUID()
+  @IsUUID("all")
   documentId: string;
 
   @ApiProperty({
@@ -232,7 +232,7 @@ export class QueueEmbeddingDto {
   @ApiProperty({
     description: 'Document ID to embed',
   })
-  @IsUUID()
+  @IsUUID("all")
   documentId: string;
 
   @ApiProperty({

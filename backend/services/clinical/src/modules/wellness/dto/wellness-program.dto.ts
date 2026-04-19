@@ -123,15 +123,15 @@ export class UpdateWellnessProgramTemplateDto {
 
 export class EnrollInProgramDto {
   @ApiProperty({ description: 'Facility ID' })
-  @IsUUID()
+  @IsUUID("all")
   facilityId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Program template ID' })
-  @IsUUID()
+  @IsUUID("all")
   programTemplateId!: string;
 
   @ApiProperty({ description: 'Start date' })
@@ -140,17 +140,17 @@ export class EnrollInProgramDto {
 
   @ApiPropertyOptional({ description: 'Primary coach ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   primaryCoachId?: string;
 
   @ApiPropertyOptional({ description: 'Initial assessment ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   initialAssessmentId?: string;
 
   @ApiPropertyOptional({ description: 'Subscription ID (from RCM)' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   subscriptionId?: string;
 
   @ApiPropertyOptional({ description: 'Notes' })
@@ -177,7 +177,7 @@ export class UpdateEnrollmentDto {
 
   @ApiPropertyOptional({ description: 'Primary coach ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   primaryCoachId?: string;
 
   @ApiPropertyOptional({ description: 'Outcome notes' })
@@ -187,7 +187,7 @@ export class UpdateEnrollmentDto {
 
   @ApiPropertyOptional({ description: 'Final assessment ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   finalAssessmentId?: string;
 
   @ApiPropertyOptional({ description: 'Notes' })
@@ -212,12 +212,12 @@ export class ScheduleSessionDto {
 
   @ApiPropertyOptional({ description: 'Provider ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   providerId?: string;
 
   @ApiPropertyOptional({ description: 'Appointment ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   appointmentId?: string;
 }
 
@@ -256,7 +256,7 @@ export class UpdateSessionDto {
 export class CompleteMilestoneDto {
   @ApiPropertyOptional({ description: 'Assessment ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   assessmentId?: string;
 
   @ApiPropertyOptional({ description: 'Outcome data' })

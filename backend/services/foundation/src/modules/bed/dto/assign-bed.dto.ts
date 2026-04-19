@@ -1,7 +1,7 @@
 import { IsUUID, IsString, IsOptional } from 'class-validator';
 
 export class AssignBedDto {
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @IsString()

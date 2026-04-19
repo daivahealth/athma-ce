@@ -17,10 +17,10 @@ export enum TransferType {
 }
 
 export class TransferPatientDto {
-  @IsUUID()
+  @IsUUID("all")
   toWardId!: string;
 
-  @IsUUID()
+  @IsUUID("all")
   toBedId!: string;
 
   @IsString()

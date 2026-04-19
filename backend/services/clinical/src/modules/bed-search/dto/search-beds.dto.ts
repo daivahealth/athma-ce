@@ -16,10 +16,10 @@ export enum GenderRestriction {
 }
 
 export class SearchBedsDto {
-  @IsUUID()
+  @IsUUID("all")
   facilityId!: string;
 
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   wardId?: string;
 
@@ -45,7 +45,7 @@ export class SearchBedsDto {
   @IsOptional()
   patientGender?: string; // For automatic gender matching
 
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   specialtyId?: string;
 }

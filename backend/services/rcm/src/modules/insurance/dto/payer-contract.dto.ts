@@ -51,7 +51,7 @@ export enum AuthorityCode {
 
 export class CreatePayerContractDto {
   @ApiProperty({ description: 'Payer ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   payerId!: string;
 
@@ -71,7 +71,7 @@ export class CreatePayerContractDto {
   authorityCode?: AuthorityCode;
 
   @ApiPropertyOptional({ description: 'Base fee schedule ID to reference' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   baseFeeScheduleId?: string;
 
@@ -179,7 +179,7 @@ export interface PayerContractResponseDto {
 
 export class CreatePayerContractAdjustmentDto {
   @ApiProperty({ description: 'Contract ID this adjustment belongs to' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   contractId!: string;
 
@@ -189,12 +189,12 @@ export class CreatePayerContractAdjustmentDto {
   serviceGroup?: string;
 
   @ApiPropertyOptional({ description: 'Billing item ID to apply adjustment to' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   billingItemId?: string;
 
   @ApiPropertyOptional({ description: 'Fee schedule item ID to apply adjustment to' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   feeScheduleItemId?: string;
 
@@ -271,7 +271,7 @@ export interface PayerContractAdjustmentResponseDto {
 
 export class BulkCreatePayerContractAdjustmentsDto {
   @ApiProperty({ description: 'Contract ID for all adjustments' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   contractId!: string;
 
@@ -286,7 +286,7 @@ export class BulkCreatePayerContractAdjustmentsDto {
 
 export class PayerContractQueryDto {
   @ApiPropertyOptional({ description: 'Filter by payer ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   payerId?: string;
 
@@ -323,7 +323,7 @@ export class PayerContractQueryDto {
 
 export class PayerContractAdjustmentQueryDto {
   @ApiPropertyOptional({ description: 'Filter by contract ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   contractId?: string;
 
@@ -333,12 +333,12 @@ export class PayerContractAdjustmentQueryDto {
   serviceGroup?: string;
 
   @ApiPropertyOptional({ description: 'Filter by billing item ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   billingItemId?: string;
 
   @ApiPropertyOptional({ description: 'Filter by fee schedule item ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   feeScheduleItemId?: string;
 
@@ -357,7 +357,7 @@ export class PayerContractAdjustmentQueryDto {
 
 export class CalculateContractPriceDto {
   @ApiProperty({ description: 'Contract ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   contractId!: string;
 

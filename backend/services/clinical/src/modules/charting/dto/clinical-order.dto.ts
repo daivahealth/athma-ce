@@ -41,11 +41,11 @@ export enum CodeSystem {
 // DTO for creating a clinical order
 export class CreateClinicalOrderDto {
   @ApiProperty({ description: 'Encounter ID' })
-  @IsUUID()
+  @IsUUID("all")
   encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Order type', enum: OrderType })
@@ -85,7 +85,7 @@ export class CreateClinicalOrderDto {
   specialInstructions?: string;
 
   @ApiProperty({ description: 'Staff ID who ordered' })
-  @IsUUID()
+  @IsUUID("all")
   orderedBy!: string;
 }
 
@@ -129,7 +129,7 @@ export class AddOrderResultDto {
 
   @ApiPropertyOptional({ description: 'Staff ID who performed the procedure' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   performedBy?: string;
 
   @ApiPropertyOptional({ description: 'When the procedure was performed' })

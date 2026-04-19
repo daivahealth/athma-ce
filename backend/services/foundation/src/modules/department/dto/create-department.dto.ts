@@ -21,7 +21,7 @@ export class CreateDepartmentDto {
   @IsEnum(DepartmentType)
   departmentType!: DepartmentType;
 
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   headOfDepartment?: string;
 

@@ -19,11 +19,11 @@ export enum DrugCodeSystem {
 // DTO for creating a prescription order
 export class CreatePrescriptionDto {
   @ApiProperty({ description: 'Encounter ID' })
-  @IsUUID()
+  @IsUUID("all")
   encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Drug code (NDC, RxNorm, or local formulary code)' })
@@ -88,7 +88,7 @@ export class CreatePrescriptionDto {
   instructionsAr?: string;
 
   @ApiProperty({ description: 'Staff ID who prescribed' })
-  @IsUUID()
+  @IsUUID("all")
   prescribedBy!: string;
 }
 

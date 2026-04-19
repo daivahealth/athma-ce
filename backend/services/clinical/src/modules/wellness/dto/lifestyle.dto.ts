@@ -22,7 +22,7 @@ export class CreateNutritionPlanDto {
     planType!: string;
 
     @ApiProperty({ description: 'Patient ID' })
-    @IsUUID()
+    @IsUUID("all")
     patientId!: string;
 
     @ApiProperty({ description: 'Start date' })
@@ -105,7 +105,7 @@ export class CreateExercisePrescriptionDto {
     prescriptionName!: string;
 
     @ApiProperty({ description: 'Patient ID' })
-    @IsUUID()
+    @IsUUID("all")
     patientId!: string;
 
     @ApiProperty({ description: 'Goal (weight_loss, cardiovascular, etc.)' })

@@ -50,12 +50,12 @@ export class DebitNoteLineDto {
 
 export class CreateDebitNoteDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Invoice ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   invoiceId?: string;
 

@@ -99,20 +99,20 @@ export class UpdateWellnessAssessmentTemplateDto {
 
 export class CreateWellnessAssessmentDto {
   @ApiProperty({ description: 'Facility ID' })
-  @IsUUID()
+  @IsUUID("all")
   facilityId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Encounter ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   encounterId?: string;
 
   @ApiProperty({ description: 'Template ID' })
-  @IsUUID()
+  @IsUUID("all")
   templateId!: string;
 
   @ApiProperty({ description: 'Template version' })

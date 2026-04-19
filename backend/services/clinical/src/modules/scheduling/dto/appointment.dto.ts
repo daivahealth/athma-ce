@@ -16,7 +16,7 @@ export class PreferredResourceDto {
   type!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("all")
   id!: string;
 
   @ApiPropertyOptional({ description: 'Resource role', example: 'primary_physician' })
@@ -43,7 +43,7 @@ export class PreferredTimeDto {
 
 export class BookAppointmentDto {
   @ApiProperty({ description: 'Patient UUID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiProperty({ description: 'Appointment type', example: 'general_checkup' })
@@ -62,17 +62,17 @@ export class BookAppointmentDto {
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   facilityId?: string;
 
   @ApiPropertyOptional({ description: 'Space UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   spaceId?: string;
 
   @ApiPropertyOptional({ description: 'Staff UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   staffId?: string;
 
   @ApiPropertyOptional({ description: 'Preferred resources', type: [PreferredResourceDto] })
@@ -100,7 +100,7 @@ export class BookAppointmentDto {
 
 export class AllocateResourceDto {
   @ApiProperty({ description: 'Appointment UUID' })
-  @IsUUID()
+  @IsUUID("all")
   appointmentId!: string;
 
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
@@ -108,7 +108,7 @@ export class AllocateResourceDto {
   resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
-  @IsUUID()
+  @IsUUID("all")
   resourceId!: string;
 
   @ApiPropertyOptional({ description: 'Resource role', example: 'primary_physician' })
@@ -169,7 +169,7 @@ export class CancelAppointmentDto {
 
 export class CreateAppointmentSeriesDto {
   @ApiProperty({ description: 'Patient UUID' })
-  @IsUUID()
+  @IsUUID("all")
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Series name', example: 'Physical Therapy - 8 weeks' })
@@ -218,7 +218,7 @@ export class CreateAppointmentSeriesDto {
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   facilityId?: string;
 
   @ApiPropertyOptional({ description: 'Preferred resources', type: [PreferredResourceDto] })
@@ -281,7 +281,7 @@ export class GetFacilityAppointmentsDto {
 
   @ApiPropertyOptional({ description: 'Facility UUID (defaults to user facility)' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   facilityId?: string;
 
   @ApiPropertyOptional({ description: 'Status filter', example: 'scheduled' })

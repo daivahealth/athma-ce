@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateImagingReportDto {
   @ApiProperty({ description: 'Clinical order ID' })
-  @IsUUID()
+  @IsUUID("all")
   orderId!: string;
 
   @ApiPropertyOptional({ description: 'Imaging modality (X-ray, CT, MRI, Ultrasound)' })
@@ -81,6 +81,6 @@ export class UpdateImagingReportDto {
 
 export class CriticalFindingDto {
   @ApiProperty({ description: 'Staff ID notified about critical finding' })
-  @IsUUID()
+  @IsUUID("all")
   notifiedTo!: string;
 }

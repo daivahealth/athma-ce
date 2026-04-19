@@ -16,11 +16,11 @@ import {
 import { IsolationType, VitalsFrequency } from './create-admission.dto';
 
 export class UpdateAdmissionDto {
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   attendingPhysicianId?: string;
 
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   primaryNurseId?: string;
 

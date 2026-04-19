@@ -10,7 +10,7 @@ export enum PolicyStatus {
 
 export class CreatePolicyDto {
   @ApiProperty({ description: 'Patient ID (from Clinical database)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   patientId!: string;
 
@@ -30,7 +30,7 @@ export class CreatePolicyDto {
   payerName!: string;
 
   @ApiProperty({ description: 'Payer ID (references Payer entity)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   payerId!: string;
 

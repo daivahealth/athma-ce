@@ -160,12 +160,12 @@ export class CodingSessionQueryDto {
 
   @ApiPropertyOptional({ description: 'Filter by encounter ID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   encounterId?: string;
 
   @ApiPropertyOptional({ description: 'Filter by patient ID (via encounter)' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   patientId?: string;
 
   @ApiPropertyOptional({ description: 'Date from (ISO format)' })
@@ -224,7 +224,7 @@ export class CreateCodingDiagnosisDto {
  */
 export class CreateCodingProcedureDto {
   @ApiProperty({ description: 'Billing item ID' })
-  @IsUUID()
+  @IsUUID("all")
   billingItemId!: string;
 
   @ApiProperty({ description: 'Procedure code (CPT, HCPCS, etc.)' })

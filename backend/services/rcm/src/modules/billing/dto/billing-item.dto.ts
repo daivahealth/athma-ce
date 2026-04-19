@@ -37,7 +37,7 @@ export enum ChargeType {
 
 export class CreateBillingItemDto {
   @ApiPropertyOptional({ description: 'Tenant ID (null for global items)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   tenantId?: string;
 
@@ -47,7 +47,7 @@ export class CreateBillingItemDto {
   itemType!: ItemType;
 
   @ApiPropertyOptional({ description: 'Clinical reference ID (logical FK to Foundation catalog)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   clinicalRefId?: string;
 

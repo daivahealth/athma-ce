@@ -17,17 +17,17 @@ export enum ChargeSourceType {
 
 export class CreateChargeDto {
   @ApiProperty({ description: 'Patient ID (from Clinical DB)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Encounter ID (from Clinical DB)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   encounterId?: string;
 
   @ApiProperty({ description: 'Billing item ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   billingItemId!: string;
 
@@ -78,7 +78,7 @@ export class CreateChargeDto {
   sourceType?: ChargeSourceType;
 
   @ApiPropertyOptional({ description: 'Source ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   sourceId?: string;
 

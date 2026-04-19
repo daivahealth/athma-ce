@@ -14,7 +14,7 @@ import { Type } from 'class-transformer';
 
 export class CreateLabReportDto {
   @ApiProperty({ description: 'Clinical order ID' })
-  @IsUUID()
+  @IsUUID("all")
   orderId!: string;
 
   @ApiPropertyOptional({ description: 'Specimen type' })
@@ -73,7 +73,7 @@ export class UpdateLabReportDto {
 export class LabResultItemDto {
   @ApiPropertyOptional({ description: 'Existing item ID (for updates)' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID("all")
   id?: string;
 
   @ApiProperty({ description: 'Test code (LOINC)' })

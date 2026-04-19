@@ -37,7 +37,7 @@ export enum FeeScheduleCodeType {
 // Fee Schedule DTOs
 export class CreateFeeScheduleDto {
   @ApiPropertyOptional({ description: 'Tenant ID (null for authority/global schedules)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   tenantId?: string;
 
@@ -79,7 +79,7 @@ export class CreateFeeScheduleDto {
   status?: FeeScheduleStatus;
 
   @ApiPropertyOptional({ description: 'Base fee schedule ID (for derived schedules)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   baseFeeScheduleId?: string;
 
@@ -113,12 +113,12 @@ export interface FeeScheduleResponseDto {
 // Fee Schedule Item DTOs
 export class CreateFeeScheduleItemDto {
   @ApiProperty({ description: 'Fee schedule ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   feeScheduleId!: string;
 
   @ApiPropertyOptional({ description: 'Billing item ID (optional link to catalog)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   billingItemId?: string;
 
@@ -207,7 +207,7 @@ export interface FeeScheduleItemResponseDto {
 // Bulk operations DTOs
 export class BulkCreateFeeScheduleItemsDto {
   @ApiProperty({ description: 'Fee schedule ID' })
-  @IsUUID()
+  @IsUUID("all")
   @IsNotEmpty()
   feeScheduleId!: string;
 
@@ -270,7 +270,7 @@ export class PriceLookupDto {
   codeType!: FeeScheduleCodeType;
 
   @ApiPropertyOptional({ description: 'Fee schedule ID (optional, will search all active schedules if not provided)' })
-  @IsUUID()
+  @IsUUID("all")
   @IsOptional()
   feeScheduleId?: string;
 

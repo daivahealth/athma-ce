@@ -2,7 +2,7 @@ import { IsUUID, IsEnum } from 'class-validator';
 import { CareTeamRole } from '@zeal/database-clinical';
 
 export class AddMemberDto {
-  @IsUUID()
+  @IsUUID("all")
   staffId!: string;
 
   @IsEnum(CareTeamRole)
