@@ -159,7 +159,12 @@ export class AdjustPharmacyStockDto {
 }
 
 export class PharmacyStockFiltersDto {
-  @ApiPropertyOptional({ description: 'Filter by drug code' })
+  @ApiPropertyOptional({ description: 'Search by drug name or code (case-insensitive contains)' })
+  @IsString()
+  @IsOptional()
+  search?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by drug code (exact match)' })
   @IsString()
   @IsOptional()
   drugCode?: string;

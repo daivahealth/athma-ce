@@ -119,6 +119,7 @@ export interface AdjustStockInput {
 }
 
 export interface StockFilters {
+  search?: string;
   drugCode?: string;
   status?: string;
   facilityId?: string;

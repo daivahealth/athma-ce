@@ -111,6 +111,12 @@ export class PharmacyStockService {
   async findAll(tenantId: string, filters: PharmacyStockFiltersDto) {
     const where: any = { tenantId };
 
+    if (filters.search) {
+      where.OR = [
+        { drugName: { contains: filters.search, mode: 'insensitive' } },
+        { drugCode: { contains: filters.search, mode: 'insensitive' } },
+      ];
+    }
     if (filters.drugCode) where.drugCode = filters.drugCode;
     if (filters.medicationId) where.medicationId = filters.medicationId;
     if (filters.status) where.status = filters.status;

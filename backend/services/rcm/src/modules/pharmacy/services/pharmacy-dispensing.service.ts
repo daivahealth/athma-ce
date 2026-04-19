@@ -19,6 +19,7 @@ import {
   DispensingFiltersDto,
   DispensingStatus,
   DispensingChannel,
+  DispensingSource,
 } from '../dto/pharmacy-dispensing.dto';
 import { PharmacyStockService } from './pharmacy-stock.service';
 import { PharmacyChargeService } from './pharmacy-charge.service';
@@ -36,87 +37,112 @@ export class PharmacyDispensingService {
   ) {}
 
   async create(tenantId: string, dto: CreateDispensingDto, userId: string, authHeader: string) {
-    // Check no active dispensing exists for this prescription
-    const existing = await this.prisma.pharmacyDispensing.findFirst({
-      where: {
-        tenantId,
-        prescriptionOrderId: dto.prescriptionOrderId,
-        status: { notIn: [DispensingStatus.CANCELLED, DispensingStatus.RETURNED] },
-      },
-    });
+    const isDigital = !!dto.prescriptionOrderId;
 
-    if (existing) {
-      throw new ConflictException(
-        `A dispensing record already exists for this prescription (${existing.dispensingNumber})`,
-      );
-    }
-
-    // Fetch encounter + patient context from Clinical API
-    const [encounter, prescription] = await Promise.all([
-      this.fetchEncounter(tenantId, dto.encounterId, authHeader),
-      this.fetchPrescription(tenantId, dto.prescriptionOrderId, authHeader),
-    ]);
-
-    if (prescription?.status !== 'active') {
-      throw new BadRequestException(
-        `Prescription is not active (status: ${prescription?.status ?? 'unknown'})`,
-      );
-    }
-
-    // Determine dispensing channel from encounter type
-    let dispensingChannel = dto.dispensingChannel ?? DispensingChannel.OUTPATIENT_COUNTER;
-    if (encounter?.encounterType === 'inpatient' && !dto.dispensingChannel) {
-      dispensingChannel = DispensingChannel.INPATIENT_WARD;
-    }
-
-    // For inpatient, fetch ward/bed info
-    let wardId: string | null = null;
-    let wardName: string | null = null;
-    let bedNumber: string | null = null;
-
-    if (encounter?.encounterType === 'inpatient') {
-      const admission = await this.fetchInpatientAdmission(tenantId, dto.encounterId, authHeader);
-      wardId = admission?.currentWardId ?? null;
-      wardName = admission?.currentWardName ?? null;
-      bedNumber = admission?.currentBedNumber ?? null;
-    }
-
-    // Check stock availability
-    const drugCode = prescription?.drugCode;
-    const qty = prescription?.quantity ?? 1;
-    if (drugCode) {
-      const availability = await this.stockService.suggestStockForDrug(tenantId, drugCode, qty);
-      if (!availability.canFulfill) {
-        this.logger.warn(
-          `Insufficient stock for ${drugCode} — shortfall: ${availability.shortfall}. Creating queued record anyway.`,
+    // ── Digital prescription path ──────────────────────────────────────────────
+    if (isDigital) {
+      // Guard against duplicate dispensing for the same prescription
+      const existing = await this.prisma.pharmacyDispensing.findFirst({
+        where: {
+          tenantId,
+          ...(dto.prescriptionOrderId !== undefined && { prescriptionOrderId: dto.prescriptionOrderId }),
+          status: { notIn: [DispensingStatus.CANCELLED, DispensingStatus.RETURNED] },
+        },
+      });
+      if (existing) {
+        throw new ConflictException(
+          `A dispensing record already exists for this prescription (${existing.dispensingNumber})`,
         );
       }
+
+      // Fetch encounter + prescription from Clinical API
+      const [encounter, prescription] = await Promise.all([
+        dto.encounterId ? this.fetchEncounter(tenantId, dto.encounterId, authHeader) : null,
+        this.fetchPrescription(tenantId, dto.prescriptionOrderId!, authHeader),
+      ]);
+
+      if (prescription?.status !== 'active') {
+        throw new BadRequestException(
+          `Prescription is not active (status: ${prescription?.status ?? 'unknown'})`,
+        );
+      }
+
+      let dispensingChannel = dto.dispensingChannel ?? DispensingChannel.OUTPATIENT_COUNTER;
+      if (encounter?.encounterType === 'inpatient' && !dto.dispensingChannel) {
+        dispensingChannel = DispensingChannel.INPATIENT_WARD;
+      }
+
+      let wardId: string | null = null;
+      let wardName: string | null = null;
+      let bedNumber: string | null = null;
+      if (encounter?.encounterType === 'inpatient' && dto.encounterId) {
+        const admission = await this.fetchInpatientAdmission(tenantId, dto.encounterId, authHeader);
+        wardId = admission?.currentWardId ?? null;
+        wardName = admission?.currentWardName ?? null;
+        bedNumber = admission?.currentBedNumber ?? null;
+      }
+
+      const drugCode = prescription?.drugCode;
+      if (drugCode) {
+        const availability = await this.stockService.suggestStockForDrug(tenantId, drugCode, 1);
+        if (!availability.canFulfill) {
+          this.logger.warn(`Insufficient stock for ${drugCode}. Creating queued record anyway.`);
+        }
+      }
+
+      const dispensingNumber = await this.generateDispensingNumber(tenantId);
+      const dispensing = await this.prisma.pharmacyDispensing.create({
+        data: {
+          tenantId,
+          dispensingNumber,
+          patientId: dto.patientId,
+          encounterId: dto.encounterId ?? null,
+          prescriptionOrderId: dto.prescriptionOrderId ?? null,
+          dispensingSource: dto.dispensingSource ?? DispensingSource.DIGITAL_PRESCRIPTION,
+          patientDisplayName: encounter?.patientDisplayName ?? prescription?.patientDisplayName ?? null,
+          mrn: encounter?.mrn ?? prescription?.mrn ?? null,
+          encounterType: encounter?.encounterType ?? 'outpatient',
+          encounterNumber: encounter?.encounterNumber ?? null,
+          prescribedByName: prescription?.prescribedByName ?? null,
+          status: DispensingStatus.QUEUED,
+          dispensingChannel,
+          wardId,
+          wardName,
+          bedNumber,
+          createdBy: userId,
+        },
+      });
+      return this.findById(tenantId, dispensing.id);
     }
 
-    // Generate dispensing number
-    const dispensingNumber = await this.generateDispensingNumber(tenantId);
+    // ── OTC / Paper prescription path ─────────────────────────────────────────
+    const source = dto.dispensingSource ?? DispensingSource.OTC;
+    const dispensingChannel =
+      dto.dispensingChannel ??
+      (source === DispensingSource.PAPER_WARD
+        ? DispensingChannel.INPATIENT_WARD
+        : DispensingChannel.OUTPATIENT_COUNTER);
 
+    const dispensingNumber = await this.generateDispensingNumber(tenantId);
     const dispensing = await this.prisma.pharmacyDispensing.create({
       data: {
         tenantId,
         dispensingNumber,
         patientId: dto.patientId,
-        encounterId: dto.encounterId,
-        prescriptionOrderId: dto.prescriptionOrderId,
-        patientDisplayName: encounter?.patientDisplayName ?? prescription?.patientDisplayName ?? null,
-        mrn: encounter?.mrn ?? prescription?.mrn ?? null,
-        encounterType: encounter?.encounterType ?? 'outpatient',
-        encounterNumber: encounter?.encounterNumber ?? null,
-        prescribedByName: prescription?.prescribedByName ?? null,
+        encounterId: null,
+        prescriptionOrderId: null,
+        dispensingSource: source,
+        paperPrescriptionRef: dto.paperPrescriptionRef ?? null,
+        patientDisplayName: dto.patientDisplayName ?? null,
+        mrn: dto.mrn ?? null,
+        encounterType: source === DispensingSource.PAPER_WARD ? 'inpatient' : 'outpatient',
+        encounterNumber: null,
+        prescribedByName: null,
         status: DispensingStatus.QUEUED,
         dispensingChannel,
-        wardId,
-        wardName,
-        bedNumber,
         createdBy: userId,
       },
     });
-
     return this.findById(tenantId, dispensing.id);
   }
 
@@ -162,7 +188,9 @@ export class PharmacyDispensingService {
     }
 
     // Confirm prescription is still active
-    const prescription = await this.fetchPrescription(tenantId, dispensing.prescriptionOrderId, authHeader);
+    const prescription = dispensing.prescriptionOrderId
+      ? await this.fetchPrescription(tenantId, dispensing.prescriptionOrderId, authHeader)
+      : null;
     if (prescription && prescription.status !== 'active') {
       throw new BadRequestException(`Prescription is no longer active (status: ${prescription.status})`);
     }
@@ -277,7 +305,7 @@ export class PharmacyDispensingService {
       tenantId,
       id,
       dispensing.patientId,
-      dispensing.encounterId,
+      dispensing.encounterId ?? dispensing.patientId,
       dispensedAt,
       chargeItems,
     );

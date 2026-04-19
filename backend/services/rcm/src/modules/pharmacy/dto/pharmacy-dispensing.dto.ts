@@ -29,16 +29,23 @@ export enum DispensingChannel {
   EMERGENCY = 'emergency',
 }
 
-export class CreateDispensingDto {
-  @ApiProperty({ description: 'Prescription order UUID (from Clinical DB)' })
-  @IsUUID("loose" as any)
-  @IsNotEmpty()
-  prescriptionOrderId!: string;
+export enum DispensingSource {
+  DIGITAL_PRESCRIPTION = 'digital_prescription', // standard queue from clinical system
+  OTC = 'otc',                                    // over-the-counter, no prescription required
+  PAPER_OP = 'paper_op',                          // paper outpatient prescription
+  PAPER_WARD = 'paper_ward',                      // paper ward / inpatient prescription
+}
 
-  @ApiProperty({ description: 'Encounter UUID (from Clinical DB)' })
+export class CreateDispensingDto {
+  @ApiPropertyOptional({ description: 'Prescription order UUID (from Clinical DB) — omit for OTC / paper Rx' })
   @IsUUID("loose" as any)
-  @IsNotEmpty()
-  encounterId!: string;
+  @IsOptional()
+  prescriptionOrderId?: string;
+
+  @ApiPropertyOptional({ description: 'Encounter UUID (from Clinical DB) — omit for OTC / walk-in' })
+  @IsUUID("loose" as any)
+  @IsOptional()
+  encounterId?: string;
 
   @ApiProperty({ description: 'Patient UUID (from Clinical DB)' })
   @IsUUID("loose" as any)
@@ -49,6 +56,26 @@ export class CreateDispensingDto {
   @IsString()
   @IsOptional()
   dispensingChannel?: string;
+
+  @ApiPropertyOptional({ description: 'How the dispensing was initiated', enum: DispensingSource, default: DispensingSource.DIGITAL_PRESCRIPTION })
+  @IsString()
+  @IsOptional()
+  dispensingSource?: string;
+
+  @ApiPropertyOptional({ description: 'Reference number on a paper prescription (OTC / paper_op / paper_ward)' })
+  @IsString()
+  @IsOptional()
+  paperPrescriptionRef?: string;
+
+  @ApiPropertyOptional({ description: 'Patient display name (used when no encounterId is provided)' })
+  @IsString()
+  @IsOptional()
+  patientDisplayName?: string;
+
+  @ApiPropertyOptional({ description: 'MRN (used when no encounterId is provided)' })
+  @IsString()
+  @IsOptional()
+  mrn?: string;
 }
 
 export class VerifyDispensingDto {

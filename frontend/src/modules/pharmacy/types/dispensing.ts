@@ -16,6 +16,13 @@ export enum DispensingChannel {
   EMERGENCY = 'emergency',
 }
 
+export enum DispensingSource {
+  DIGITAL_PRESCRIPTION = 'digital_prescription',
+  OTC = 'otc',
+  PAPER_OP = 'paper_op',
+  PAPER_WARD = 'paper_ward',
+}
+
 export interface PharmacyDispensingItem {
   id: string;
   tenantId: string;
@@ -46,8 +53,10 @@ export interface PharmacyDispensing {
   tenantId: string;
   dispensingNumber: string;
   patientId: string;
-  encounterId: string;
-  prescriptionOrderId: string;
+  encounterId?: string | null;
+  prescriptionOrderId?: string | null;
+  dispensingSource: DispensingSource;
+  paperPrescriptionRef?: string | null;
   patientDisplayName?: string | null;
   mrn?: string | null;
   encounterType?: string | null;
@@ -81,10 +90,14 @@ export interface PharmacyDispensing {
 }
 
 export interface CreateDispensingInput {
-  prescriptionOrderId: string;
-  encounterId: string;
+  prescriptionOrderId?: string;
+  encounterId?: string;
   patientId: string;
   dispensingChannel?: DispensingChannel;
+  dispensingSource?: DispensingSource;
+  paperPrescriptionRef?: string;
+  patientDisplayName?: string;
+  mrn?: string;
 }
 
 export interface VerifyDispensingInput {

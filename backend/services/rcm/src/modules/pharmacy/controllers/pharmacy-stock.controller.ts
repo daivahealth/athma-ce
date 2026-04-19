@@ -25,6 +25,7 @@ export class PharmacyStockController {
 
   @Get()
   @ApiOperation({ summary: 'List pharmacy stock batches' })
+  @ApiQuery({ name: 'search', required: false, description: 'Search by drug name or code (contains)' })
   @ApiQuery({ name: 'drugCode', required: false })
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'facilityId', required: false })

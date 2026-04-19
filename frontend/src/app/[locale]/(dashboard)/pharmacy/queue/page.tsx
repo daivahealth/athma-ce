@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Search, Pill, User, ClipboardCheck, Building2 } from 'lucide-react';
+import { Search, Pill, User, ClipboardCheck, Building2, Plus } from 'lucide-react';
+import Link from 'next/link';
 import { format } from 'date-fns';
 
 import { Input } from '@/components/ui/input';
@@ -74,6 +75,12 @@ export default function PharmacyQueuePage() {
             className="pl-9"
           />
         </div>
+        <Button asChild>
+          <Link href={`/${locale}/pharmacy/dispensings/new`}>
+            <Plus className="h-4 w-4 mr-2" />
+            Direct Dispense
+          </Link>
+        </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>

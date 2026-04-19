@@ -1995,9 +1995,14 @@ model PharmacyDispensing {
   dispensingNumber String @map("dispensing_number") @db.VarChar(50)
 
   // Cross-DB logical FKs (UUID only, no FK constraint — resolved via Clinical API)
-  patientId           String @map("patient_id") @db.Uuid
-  encounterId         String @map("encounter_id") @db.Uuid
-  prescriptionOrderId String @map("prescription_order_id") @db.Uuid
+  patientId           String  @map("patient_id") @db.Uuid
+  encounterId         String? @map("encounter_id") @db.Uuid // nullable for OTC / paper prescriptions
+  prescriptionOrderId String? @map("prescription_order_id") @db.Uuid // nullable for OTC / paper prescriptions
+
+  // Dispensing source — how this dispensing was initiated
+  // digital_prescription | otc | paper_op | paper_ward
+  dispensingSource     String  @default("digital_prescription") @map("dispensing_source") @db.VarChar(50)
+  paperPrescriptionRef String? @map("paper_prescription_ref") @db.VarChar(100) // paper Rx ref number
 
   // Denormalized for display without cross-DB join
   patientDisplayName String? @map("patient_display_name") @db.VarChar(255)
