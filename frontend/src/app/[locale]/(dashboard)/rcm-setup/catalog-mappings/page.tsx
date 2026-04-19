@@ -256,14 +256,7 @@ export default function CatalogMappingsPage() {
           data={mappings ?? []}
           isLoading={isLoading}
           emptyState="No mappings found. Adjust the filters or create a new mapping."
-          cta={
-            <Button asChild size="sm">
-              <Link href={`/${locale}/rcm-setup/catalog-mappings/new`}>
-                <Plus className="h-4 w-4 mr-2" />
-                New Mapping
-              </Link>
-            </Button>
-          }
+          cta={<div />}
         />
       )}
     </div>
