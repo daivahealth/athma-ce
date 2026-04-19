@@ -52,6 +52,7 @@ CLINICAL_FILES=(
 RCM_FILES=(
   "rcm/01-claims.sql"
   "rcm/07-catalog-mappings.sql"  # Billing items and clinical catalog mappings
+  "rcm/08-pharmacy-stock.sql"    # Pharmacy stock batches (15 medications + OTC items)
 )
 
 PRM_FILES=(
