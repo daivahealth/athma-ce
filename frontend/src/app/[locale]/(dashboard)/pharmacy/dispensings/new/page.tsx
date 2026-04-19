@@ -2,19 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Search, User, FileText, ShoppingBag, CheckCircle } from 'lucide-react';
+import { ArrowLeft, FileText, ShoppingBag } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 
-import { useDebouncedValue } from '@/hooks/use-debounced-value';
-import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useCreateDispensing } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
 import { DispensingSource, DispensingChannel } from '@/modules/pharmacy/types/dispensing';
-import type { Patient } from '@/modules/clinical/types/patient';
 
 const SOURCE_OPTIONS = [
   {
@@ -47,27 +45,11 @@ export default function DirectDispensePage() {
   const locale = params.locale as string;
   const router = useRouter();
 
-  const [patientSearch, setPatientSearch] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [source, setSource] = useState<DispensingSource>(DispensingSource.OTC);
   const [paperRef, setPaperRef] = useState('');
 
-  const debouncedPatientSearch = useDebouncedValue(patientSearch, 300);
-
-  const { data: patients = [], isLoading: patientsLoading } = usePatients(
-    { search: debouncedPatientSearch },
-    { enabled: debouncedPatientSearch.length >= 2 },
-  );
-
   const createDispensing = useCreateDispensing();
-
-  const handleSelectPatient = (patient: Patient) => {
-    setSelectedPatient(patient);
-    setShowSuggestions(false);
-    setPatientSearch('');
-  };
 
   const isPaperSource =
     source === DispensingSource.PAPER_OP || source === DispensingSource.PAPER_WARD;
@@ -80,7 +62,6 @@ export default function DirectDispensePage() {
       dispensingSource: source,
       dispensingChannel: channelForSource(source),
       patientDisplayName:
-        selectedPatient.fullName ??
         `${selectedPatient.firstName} ${selectedPatient.lastName}`.trim(),
       mrn: selectedPatient.mrn,
       ...(isPaperSource && paperRef ? { paperPrescriptionRef: paperRef } : {}),
@@ -111,96 +92,16 @@ export default function DirectDispensePage() {
       {/* Patient Search */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <User className="h-4 w-4" />
-            Patient
-          </CardTitle>
+          <CardTitle className="text-sm font-medium">Patient</CardTitle>
         </CardHeader>
         <CardContent>
-          {selectedPatient ? (
-            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-              <div className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <div>
-                  <div className="font-medium">
-                    {selectedPatient.fullName ??
-                      `${selectedPatient.firstName} ${selectedPatient.lastName}`}
-                  </div>
-                  <div className="text-sm text-muted-foreground">MRN: {selectedPatient.mrn}</div>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSelectedPatient(null);
-                  setPatientSearch('');
-                }}
-                className="text-muted-foreground"
-              >
-                Change
-              </Button>
-            </div>
-          ) : (
-            <div className="relative">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search patient by name or MRN..."
-                  className="pl-9"
-                  value={patientSearch}
-                  onChange={(e) => {
-                    setPatientSearch(e.target.value);
-                    setShowSuggestions(true);
-                  }}
-                  onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                />
-              </div>
-
-              {showSuggestions && debouncedPatientSearch.length >= 2 && (
-                <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-md max-h-56 overflow-y-auto">
-                  {patientsLoading ? (
-                    <div className="p-3 text-sm text-muted-foreground text-center">
-                      Searching...
-                    </div>
-                  ) : patients.length === 0 ? (
-                    <div className="p-3 text-sm text-muted-foreground text-center">
-                      No patients found
-                    </div>
-                  ) : (
-                    <ul>
-                      {patients.map((patient) => (
-                        <li key={patient.id}>
-                          <button
-                            type="button"
-                            className="w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors"
-                            onMouseDown={() => handleSelectPatient(patient)}
-                          >
-                            <div className="font-medium text-sm">
-                              {patient.fullName ??
-                                `${patient.firstName} ${patient.lastName}`}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              MRN: {patient.mrn}
-                            </div>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
-
-              {showSuggestions && debouncedPatientSearch.length < 2 && patientSearch.length > 0 && (
-                <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-md">
-                  <div className="p-3 text-sm text-muted-foreground text-center">
-                    Type at least 2 characters to search
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          <PatientSearchSelect
+            label=""
+            required
+            selectedPatient={selectedPatient}
+            onSelect={setSelectedPatient}
+            onClear={() => setSelectedPatient(null)}
+          />
         </CardContent>
       </Card>
 
@@ -233,9 +134,7 @@ export default function DirectDispensePage() {
                     }`}
                   />
                   <div className="flex-1">
-                    <div
-                      className={`font-medium text-sm ${isSelected ? 'text-primary' : ''}`}
-                    >
+                    <div className={`font-medium text-sm ${isSelected ? 'text-primary' : ''}`}>
                       {label}
                     </div>
                     <div className="text-xs text-muted-foreground">{description}</div>
