@@ -12,11 +12,11 @@ export enum DiagnosisType {
 // DTO for creating a diagnosis
 export class CreateDiagnosisDto {
   @ApiProperty({ description: 'Encounter ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({ description: 'ICD-10 code' })
@@ -67,7 +67,7 @@ export class CreateDiagnosisDto {
   clinicalNotes?: string;
 
   @ApiProperty({ description: 'Staff ID who diagnosed' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   diagnosedBy!: string;
 }
 

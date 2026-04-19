@@ -41,14 +41,14 @@ export class CreateCatalogMappingDto {
     description: 'UUID of the catalog item in Clinical DB',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   catalogItemId!: string;
 
   @ApiProperty({
     description: 'UUID of the billing item in RCM DB',
     example: '123e4567-e89b-12d3-a456-426614174001',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   billingItemId!: string;
 
   @ApiPropertyOptional({
@@ -183,14 +183,14 @@ export class QueryCatalogMappingsDto {
     description: 'Filter by catalog item ID',
   })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   catalogItemId?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by billing item ID',
   })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   billingItemId?: string;
 
   @ApiPropertyOptional({
@@ -213,14 +213,14 @@ export class QueryCatalogMappingsDto {
     description: 'Filter by facility ID',
   })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by payer ID',
   })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   payerId?: string;
 
   @ApiPropertyOptional({
@@ -245,21 +245,21 @@ export class FindBillingItemsDto {
   @ApiProperty({
     description: 'UUID of the catalog item',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   catalogItemId!: string;
 
   @ApiPropertyOptional({
     description: 'Facility ID for context-based filtering',
   })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   facilityId?: string;
 
   @ApiPropertyOptional({
     description: 'Payer ID for context-based filtering',
   })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   payerId?: string;
 
   @ApiPropertyOptional({

@@ -52,21 +52,21 @@ export class CreateTriageDto {
     description: 'Encounter ID this triage is associated with',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   encounterId!: string;
 
   @ApiProperty({
     description: 'Patient ID',
     example: '123e4567-e89b-12d3-a456-426614174001',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({
     description: 'Staff ID who performed the triage',
     example: '123e4567-e89b-12d3-a456-426614174002',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   triageStaffId!: string;
 
   @ApiProperty({
@@ -180,7 +180,7 @@ export class UpdateTriageDto {
     example: '123e4567-e89b-12d3-a456-426614174002',
   })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   triageStaffId?: string;
 
   @ApiPropertyOptional({

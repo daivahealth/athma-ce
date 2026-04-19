@@ -1,7 +1,7 @@
 import { IsUUID } from 'class-validator';
 
 export class SetDefaultFacilityDto {
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   facilityId!: string;
 }
 

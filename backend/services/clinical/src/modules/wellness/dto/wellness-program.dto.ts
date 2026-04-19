@@ -123,15 +123,15 @@ export class UpdateWellnessProgramTemplateDto {
 
 export class EnrollInProgramDto {
   @ApiProperty({ description: 'Facility ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   facilityId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @ApiProperty({ description: 'Program template ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   programTemplateId!: string;
 
   @ApiProperty({ description: 'Start date' })
@@ -140,17 +140,17 @@ export class EnrollInProgramDto {
 
   @ApiPropertyOptional({ description: 'Primary coach ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   primaryCoachId?: string;
 
   @ApiPropertyOptional({ description: 'Initial assessment ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   initialAssessmentId?: string;
 
   @ApiPropertyOptional({ description: 'Subscription ID (from RCM)' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   subscriptionId?: string;
 
   @ApiPropertyOptional({ description: 'Notes' })
@@ -177,7 +177,7 @@ export class UpdateEnrollmentDto {
 
   @ApiPropertyOptional({ description: 'Primary coach ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   primaryCoachId?: string;
 
   @ApiPropertyOptional({ description: 'Outcome notes' })
@@ -187,7 +187,7 @@ export class UpdateEnrollmentDto {
 
   @ApiPropertyOptional({ description: 'Final assessment ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   finalAssessmentId?: string;
 
   @ApiPropertyOptional({ description: 'Notes' })
@@ -212,12 +212,12 @@ export class ScheduleSessionDto {
 
   @ApiPropertyOptional({ description: 'Provider ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   providerId?: string;
 
   @ApiPropertyOptional({ description: 'Appointment ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   appointmentId?: string;
 }
 
@@ -256,7 +256,7 @@ export class UpdateSessionDto {
 export class CompleteMilestoneDto {
   @ApiPropertyOptional({ description: 'Assessment ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   assessmentId?: string;
 
   @ApiPropertyOptional({ description: 'Outcome data' })

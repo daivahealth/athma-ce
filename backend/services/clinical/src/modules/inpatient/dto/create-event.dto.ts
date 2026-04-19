@@ -36,16 +36,16 @@ export {
  * All fields map to InpatientEvent model
  */
 export class CreateEventDto {
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   facilityId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   admissionId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   encounterId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   patientId!: string;
 
   @IsEnum(InpatientEventType)
@@ -77,27 +77,27 @@ export class CreateEventDto {
   toAcuity?: InpatientAcuity;
 
   // Location Change Tracking (optional, for transfers)
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   fromWardId?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   fromSpaceId?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   fromBedId?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   toWardId?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   toSpaceId?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   toBedId?: string;
 
@@ -109,7 +109,7 @@ export class CreateEventDto {
   @IsOptional()
   metadata?: Record<string, any>;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   performedBy!: string;
 }
 
@@ -147,22 +147,22 @@ export class LogDischargeStatusChangeDto {
  * Simplified DTO for logging transfers
  */
 export class LogTransferDto {
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   fromWardId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   fromSpaceId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   fromBedId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   toWardId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   toSpaceId!: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   toBedId!: string;
 
   @IsString()

@@ -32,7 +32,7 @@ export enum RefundMethod {
 
 export class RefundAllocationDto {
   @ApiProperty({ description: 'Invoice ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   invoiceId!: string;
 
@@ -46,12 +46,12 @@ export class RefundAllocationDto {
 
 export class CreateRefundDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Receipt ID (for receipt-linked refunds)' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   receiptId?: string;
 

@@ -128,7 +128,7 @@ export class MfaVerifyDto {
     description: 'User UUID',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   userId!: string;
 
   @ApiProperty({
@@ -161,7 +161,7 @@ export class SwitchFacilityDto {
     description: 'Facility UUID to switch to',
     example: '323e4567-e89b-12d3-a456-426614174000',
   })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   facilityId!: string;
 }

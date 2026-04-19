@@ -22,7 +22,7 @@ export class PostMessageDto {
   linkedEntityType?: string;
 
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   linkedEntityId?: string;
 
   @IsOptional()
@@ -34,7 +34,7 @@ export class PostMessageDto {
   priority?: MessagePriority;
 
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   authorStaffId?: string;
 
   @IsOptional()

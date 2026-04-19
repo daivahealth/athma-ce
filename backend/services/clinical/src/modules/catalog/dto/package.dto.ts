@@ -43,7 +43,7 @@ export class PackageItemDto {
   @IsEnum(CatalogType)
   catalogType!: CatalogType;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   catalogId!: string;
 
   @IsNumber()

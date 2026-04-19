@@ -15,7 +15,7 @@ export class SearchStaffBySpecialtyDto {
   @IsOptional()
   specialtyCode?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   specialtyId?: string;
 
@@ -31,7 +31,7 @@ export class SearchStaffBySpecialtyDto {
   @IsOptional()
   activeOnly?: boolean;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   facilityId?: string;
 

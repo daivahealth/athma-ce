@@ -22,7 +22,7 @@ export class UpdateTaskDto {
 
   @ApiPropertyOptional({ description: 'Assigned to user ID' })
   @IsOptional()
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   assigned_to_user_id?: string;
 
   @ApiPropertyOptional({ description: 'Outcome description' })

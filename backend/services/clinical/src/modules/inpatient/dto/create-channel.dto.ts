@@ -1,7 +1,7 @@
 import { IsUUID, IsOptional, IsString } from 'class-validator';
 
 export class CreateChannelDto {
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   admissionId!: string;
 
   @IsOptional()

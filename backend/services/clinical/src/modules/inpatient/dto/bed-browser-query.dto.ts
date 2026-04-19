@@ -8,7 +8,7 @@ export enum BedBrowserStatus {
 }
 
 export class BedBrowserQueryDto {
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   wardId?: string;
 

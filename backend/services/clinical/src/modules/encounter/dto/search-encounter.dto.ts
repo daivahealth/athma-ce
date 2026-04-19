@@ -7,15 +7,15 @@ import { Type } from 'class-transformer';
 import { EncounterStatus, EncounterClass } from './create-encounter.dto';
 
 export class SearchEncounterDto {
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   patientId?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   primaryStaffId?: string;
 
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   facilityId?: string;
 

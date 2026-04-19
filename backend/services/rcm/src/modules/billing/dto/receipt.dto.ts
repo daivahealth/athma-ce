@@ -12,7 +12,7 @@ export enum PaymentMethod {
 
 export class ReceiptAllocationDto {
   @ApiProperty({ description: 'Invoice ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   invoiceId!: string;
 
@@ -25,12 +25,12 @@ export class ReceiptAllocationDto {
 
 export class CreateReceiptDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Invoice ID (null for advance payment)' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   invoiceId?: string;
 

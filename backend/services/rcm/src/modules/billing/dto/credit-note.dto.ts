@@ -50,12 +50,12 @@ export class CreditNoteLineDto {
 
 export class CreateCreditNoteDto {
   @ApiProperty({ description: 'Patient ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsNotEmpty()
   patientId!: string;
 
   @ApiPropertyOptional({ description: 'Invoice ID' })
-  @IsUUID("all")
+  @IsUUID("loose" as any)
   @IsOptional()
   invoiceId?: string;
 
