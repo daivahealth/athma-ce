@@ -84,6 +84,9 @@ export class PharmacyQueueSyncJob {
   // ─── Private helpers ────────────────────────────────────────────────────────
 
   private async processTenant(tenantId: string): Promise<void> {
+    // Backfill patient data for existing dispensings that were created before the patient-join fix
+    await this.backfillPatientData(tenantId);
+
     const prescriptions = await this.fetchPendingPrescriptions(tenantId);
 
     if (prescriptions.length === 0) {
@@ -185,6 +188,65 @@ export class PharmacyQueueSyncJob {
     }
 
     return `${prefix}-${String(seq).padStart(5, '0')}`;
+  }
+
+  /**
+   * Backfills patient data (name, MRN, DOB, gender) on dispensing records that
+   * were created before the patient-join was added to the Clinical API.
+   * Only processes records where patientDisplayName IS NULL.
+   */
+  private async backfillPatientData(tenantId: string): Promise<void> {
+    const nullRecords = await this.prisma.pharmacyDispensing.findMany({
+      where: {
+        tenantId,
+        patientDisplayName: null,
+        prescriptionOrderId: { not: null },
+      },
+      select: { id: true, prescriptionOrderId: true },
+      take: 100,
+    });
+
+    if (nullRecords.length === 0) return;
+
+    this.logger.log(`Tenant ${tenantId}: backfilling patient data for ${nullRecords.length} dispensing(s)`);
+
+    for (const record of nullRecords) {
+      try {
+        const rx = await this.fetchPrescriptionById(tenantId, record.prescriptionOrderId!);
+        if (!rx) continue;
+
+        await this.prisma.pharmacyDispensing.update({
+          where: { id: record.id },
+          data: {
+            patientDisplayName: rx.patientDisplayName ?? null,
+            mrn: rx.mrn ?? null,
+            patientDateOfBirth: rx.dateOfBirth ? new Date(rx.dateOfBirth) : null,
+            patientGender: rx.gender ?? null,
+            encounterNumber: rx.encounterNumber ?? null,
+            encounterType: rx.encounterType ?? null,
+          },
+        });
+      } catch (err) {
+        this.logger.warn(`Backfill failed for dispensing ${record.id}: ${(err as Error).message}`);
+      }
+    }
+  }
+
+  /** Fetch a single prescription (with patient data) by ID from Clinical */
+  private async fetchPrescriptionById(tenantId: string, prescriptionId: string): Promise<any | null> {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.clinicalServiceUrl}/prescriptions/${prescriptionId}`, {
+          headers: {
+            'x-tenant-id': tenantId,
+            'x-internal-api-key': this.internalApiKey,
+          },
+        }),
+      );
+      return response.data ?? null;
+    } catch {
+      return null;
+    }
   }
 
   /** Fetch prescriptions with dispensingQueueStatus = 'not_queued' from Clinical */

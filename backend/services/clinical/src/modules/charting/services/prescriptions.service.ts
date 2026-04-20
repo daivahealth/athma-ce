@@ -18,13 +18,42 @@ export class PrescriptionsService {
   }
 
   async findById(tenantId: string, id: string) {
-    const prescription = await this.prisma.prescriptionOrder.findFirst({
+    const rx = await this.prisma.prescriptionOrder.findFirst({
       where: { id, tenantId },
+      include: {
+        encounter: {
+          select: {
+            encounterNumber: true,
+            encounterType: true,
+            patient: {
+              select: {
+                mrn: true,
+                firstName: true,
+                lastName: true,
+                displayName: true,
+                dateOfBirth: true,
+                gender: true,
+              },
+            },
+          },
+        },
+      },
     });
-    if (!prescription) {
+    if (!rx) {
       throw new NotFoundException(`Prescription with ID ${id} not found`);
     }
-    return prescription;
+    return {
+      ...rx,
+      mrn: rx.encounter?.patient?.mrn ?? null,
+      patientDisplayName:
+        rx.encounter?.patient?.displayName ??
+        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
+        null,
+      dateOfBirth: rx.encounter?.patient?.dateOfBirth ?? null,
+      gender: rx.encounter?.patient?.gender ?? null,
+      encounterNumber: rx.encounter?.encounterNumber ?? null,
+      encounterType: rx.encounter?.encounterType ?? 'outpatient',
+    };
   }
 
   async findByEncounter(tenantId: string, encounterId: string) {
