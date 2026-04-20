@@ -36,14 +36,44 @@ export class PrescriptionsService {
 
   async findAll(tenantId: string, filters: { status?: string; facilityId?: string; limit?: number }) {
     const { status, limit = 200 } = filters;
-    return this.prisma.prescriptionOrder.findMany({
+    const rows = await this.prisma.prescriptionOrder.findMany({
       where: {
         tenantId,
         ...(status ? { status } : {}),
       },
+      include: {
+        encounter: {
+          select: {
+            encounterNumber: true,
+            encounterType: true,
+            facilityId: true,
+            patient: {
+              select: {
+                mrn: true,
+                firstName: true,
+                lastName: true,
+                displayName: true,
+                dateOfBirth: true,
+                gender: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: { prescribedAt: 'desc' },
       take: limit,
     });
+
+    return rows.map((rx) => ({
+      ...rx,
+      mrn: rx.encounter?.patient?.mrn ?? null,
+      patientDisplayName:
+        rx.encounter?.patient?.displayName ??
+        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
+        null,
+      encounterNumber: rx.encounter?.encounterNumber ?? null,
+      encounterType: rx.encounter?.encounterType ?? 'outpatient',
+    }));
   }
 
   async findByPatient(tenantId: string, patientId: string, activeOnly: boolean = false) {
@@ -87,15 +117,42 @@ export class PrescriptionsService {
    * Called exclusively by the RCM pharmacy queue scheduler via internal API key.
    */
   async findPendingQueue(tenantId: string, limit = 100) {
-    return this.prisma.prescriptionOrder.findMany({
+    const rows = await this.prisma.prescriptionOrder.findMany({
       where: {
         tenantId,
         status: PrescriptionStatus.ACTIVE,
         dispensingQueueStatus: 'not_queued',
       },
+      include: {
+        encounter: {
+          select: {
+            encounterNumber: true,
+            encounterType: true,
+            patient: {
+              select: {
+                mrn: true,
+                firstName: true,
+                lastName: true,
+                displayName: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: { prescribedAt: 'asc' }, // FIFO — oldest first
       take: limit,
     });
+
+    return rows.map((rx) => ({
+      ...rx,
+      mrn: rx.encounter?.patient?.mrn ?? null,
+      patientDisplayName:
+        rx.encounter?.patient?.displayName ??
+        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
+        null,
+      encounterNumber: rx.encounter?.encounterNumber ?? null,
+      encounterType: rx.encounter?.encounterType ?? 'outpatient',
+    }));
   }
 
   /**
