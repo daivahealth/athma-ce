@@ -23,10 +23,11 @@ export class PharmacyQueueController {
   async getQueue(
     @Headers('x-tenant-id') tenantId: string,
     @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Headers('authorization') authHeader: string,
     @Query() filters: PharmacyQueueFiltersDto,
   ) {
-    return this.queueService.getQueue(tenantId, facilityId, authHeader, filters);
+    return this.queueService.getQueue(tenantId, facilityId, userId, authHeader, filters);
   }
 
   @Get(':prescriptionOrderId')
@@ -34,10 +35,12 @@ export class PharmacyQueueController {
   @ApiResponse({ status: 200, description: 'Queue item returned' })
   async getQueueItem(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Headers('authorization') authHeader: string,
     @Param('prescriptionOrderId') prescriptionOrderId: string,
   ) {
-    return this.queueService.getQueueItem(tenantId, prescriptionOrderId, authHeader);
+    return this.queueService.getQueueItem(tenantId, prescriptionOrderId, facilityId, userId, authHeader);
   }
 
   @Post('sync-now')

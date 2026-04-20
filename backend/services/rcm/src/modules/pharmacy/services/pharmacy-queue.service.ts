@@ -18,9 +18,9 @@ export class PharmacyQueueService {
    * Returns active prescriptions not yet queued/dispensed.
    * Fetches from Clinical API then filters out already-processed prescriptions.
    */
-  async getQueue(tenantId: string, facilityId: string, authHeader: string, filters: PharmacyQueueFiltersDto) {
+  async getQueue(tenantId: string, facilityId: string, userId: string, authHeader: string, filters: PharmacyQueueFiltersDto) {
     // Fetch active prescriptions from Clinical service
-    const prescriptions = await this.fetchActivePrescriptions(tenantId, facilityId, authHeader, filters);
+    const prescriptions = await this.fetchActivePrescriptions(tenantId, facilityId, userId, authHeader, filters);
 
     if (!prescriptions.length) return [];
 
@@ -93,8 +93,8 @@ export class PharmacyQueueService {
     return queue;
   }
 
-  async getQueueItem(tenantId: string, prescriptionOrderId: string, authHeader: string) {
-    const rx = await this.fetchPrescription(tenantId, prescriptionOrderId, authHeader);
+  async getQueueItem(tenantId: string, prescriptionOrderId: string, facilityId: string, userId: string, authHeader: string) {
+    const rx = await this.fetchPrescription(tenantId, prescriptionOrderId, facilityId, userId, authHeader);
 
     const existing = await this.prisma.pharmacyDispensing.findFirst({
       where: { tenantId, prescriptionOrderId, status: { notIn: ['cancelled'] } },
@@ -110,6 +110,7 @@ export class PharmacyQueueService {
   private async fetchActivePrescriptions(
     tenantId: string,
     facilityId: string,
+    userId: string,
     authHeader: string,
     filters: PharmacyQueueFiltersDto,
   ) {
@@ -122,6 +123,8 @@ export class PharmacyQueueService {
         this.httpService.get(`${this.clinicalServiceUrl}/prescriptions`, {
           headers: {
             'x-tenant-id': tenantId,
+            'x-user-id': userId,
+            'x-facility-id': facilityId,
             authorization: authHeader,
           },
           params,
@@ -135,11 +138,16 @@ export class PharmacyQueueService {
     }
   }
 
-  private async fetchPrescription(tenantId: string, prescriptionId: string, authHeader: string) {
+  private async fetchPrescription(tenantId: string, prescriptionId: string, facilityId: string, userId: string, authHeader: string) {
     try {
       const response = await firstValueFrom(
         this.httpService.get(`${this.clinicalServiceUrl}/prescriptions/${prescriptionId}`, {
-          headers: { 'x-tenant-id': tenantId, authorization: authHeader },
+          headers: {
+            'x-tenant-id': tenantId,
+            'x-user-id': userId,
+            'x-facility-id': facilityId,
+            authorization: authHeader,
+          },
         }),
       );
       return response.data;
