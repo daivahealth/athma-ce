@@ -29,8 +29,15 @@ export class TenantContextMiddleware implements NestMiddleware {
     }
 
     // Internal service calls (scheduler, inter-service) carry x-internal-api-key instead of a user JWT.
-    // Skip user/facility validation for those — InternalApiKeyGuard enforces the secret on the route.
-    const isInternalCall = !!req.headers['x-internal-api-key'];
+    // Validate the key value here (not just presence) so that a random header cannot bypass user/facility
+    // validation. InternalApiKeyGuard performs a second independent check at the route level.
+    const providedInternalKey = req.headers['x-internal-api-key'] as string | undefined;
+    const expectedInternalKey = process.env.INTERNAL_API_KEY;
+    const isInternalCall = !!(
+      providedInternalKey &&
+      expectedInternalKey &&
+      providedInternalKey === expectedInternalKey
+    );
 
     // Extract user information from JWT token or headers
     // Priority: JWT token (req.user) > headers > error

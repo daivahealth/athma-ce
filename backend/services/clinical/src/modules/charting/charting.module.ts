@@ -14,6 +14,7 @@ import { EncounterNotesController } from './controllers/encounter-notes.controll
 import { DiagnosisController } from './controllers/diagnosis.controller';
 import { ClinicalOrdersController } from './controllers/clinical-orders.controller';
 import { PrescriptionsController } from './controllers/prescriptions.controller';
+import { PrescriptionsInternalController } from './controllers/prescriptions-internal.controller';
 import { ClinicalCodingsController } from './controllers/clinical-codings.controller';
 
 @Module({
@@ -23,6 +24,7 @@ import { ClinicalCodingsController } from './controllers/clinical-codings.contro
     DiagnosisController,
     ClinicalOrdersController,
     PrescriptionsController,
+    PrescriptionsInternalController,
     ClinicalCodingsController,
   ],
   providers: [
