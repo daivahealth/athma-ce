@@ -71,6 +71,8 @@ export class PrescriptionsService {
         rx.encounter?.patient?.displayName ??
         `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
         null,
+      dateOfBirth: rx.encounter?.patient?.dateOfBirth ?? null,
+      gender: rx.encounter?.patient?.gender ?? null,
       encounterNumber: rx.encounter?.encounterNumber ?? null,
       encounterType: rx.encounter?.encounterType ?? 'outpatient',
     }));
@@ -134,6 +136,8 @@ export class PrescriptionsService {
                 firstName: true,
                 lastName: true,
                 displayName: true,
+                dateOfBirth: true,
+                gender: true,
               },
             },
           },
@@ -150,6 +154,8 @@ export class PrescriptionsService {
         rx.encounter?.patient?.displayName ??
         `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
         null,
+      dateOfBirth: rx.encounter?.patient?.dateOfBirth ?? null,
+      gender: rx.encounter?.patient?.gender ?? null,
       encounterNumber: rx.encounter?.encounterNumber ?? null,
       encounterType: rx.encounter?.encounterType ?? 'outpatient',
     }));

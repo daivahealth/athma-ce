@@ -222,6 +222,14 @@ export default function DispensePage() {
                                 {item.mrn && (
                                   <span className="text-xs text-muted-foreground">MRN: {item.mrn}</span>
                                 )}
+                                {item.dateOfBirth && (
+                                  <span className="text-xs text-muted-foreground">
+                                    {Math.floor((Date.now() - new Date(item.dateOfBirth).getTime()) / (1000 * 60 * 60 * 24 * 365.25))}y
+                                  </span>
+                                )}
+                                {item.gender && (
+                                  <span className="text-xs text-muted-foreground capitalize">{item.gender}</span>
+                                )}
                                 <Badge variant="outline" className="text-xs">
                                   {item.encounterType}
                                 </Badge>
