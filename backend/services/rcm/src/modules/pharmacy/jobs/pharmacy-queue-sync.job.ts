@@ -156,6 +156,8 @@ export class PharmacyQueueSyncJob {
         dispensingSource: DispensingSource.DIGITAL_PRESCRIPTION,
         patientDisplayName: rx.patientDisplayName ?? null,
         mrn: rx.mrn ?? null,
+        patientDateOfBirth: rx.dateOfBirth ? new Date(rx.dateOfBirth) : null,
+        patientGender: rx.gender ?? null,
         encounterType: rx.encounterType ?? 'outpatient',
         encounterNumber: rx.encounterNumber ?? null,
         prescribedByName: rx.prescribedByName ?? null,
