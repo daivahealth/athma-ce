@@ -6,10 +6,11 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   Headers,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { PrescriptionsService } from '../services/prescriptions.service';
 import {
   CreatePrescriptionDto,
@@ -30,6 +31,26 @@ import {
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class PrescriptionsController {
   constructor(private readonly prescriptionsService: PrescriptionsService) {}
+
+  @Get()
+  @Permissions(PRESCRIPTION_READ)
+  @ApiOperation({ summary: 'List prescriptions with optional filters' })
+  @ApiQuery({ name: 'status', required: false, description: 'active | completed | cancelled | discontinued' })
+  @ApiQuery({ name: 'facilityId', required: false })
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiResponse({ status: 200, description: 'Prescriptions retrieved', type: [PrescriptionResponseDto] })
+  async findAll(
+    @Headers('x-tenant-id') tenantId: string,
+    @Query('status') status?: string,
+    @Query('facilityId') facilityId?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.prescriptionsService.findAll(tenantId, {
+      status,
+      facilityId,
+      limit: limit ? parseInt(limit, 10) : 200,
+    });
+  }
 
   @Post()
   @Permissions(PRESCRIPTION_CREATE)

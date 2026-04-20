@@ -34,6 +34,18 @@ export class PrescriptionsService {
     });
   }
 
+  async findAll(tenantId: string, filters: { status?: string; facilityId?: string; limit?: number }) {
+    const { status, limit = 200 } = filters;
+    return this.prisma.prescriptionOrder.findMany({
+      where: {
+        tenantId,
+        ...(status ? { status } : {}),
+      },
+      orderBy: { prescribedAt: 'desc' },
+      take: limit,
+    });
+  }
+
   async findByPatient(tenantId: string, patientId: string, activeOnly: boolean = false) {
     return this.prisma.prescriptionOrder.findMany({
       where: {
