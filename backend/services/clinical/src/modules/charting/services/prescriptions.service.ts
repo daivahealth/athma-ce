@@ -46,8 +46,8 @@ export class PrescriptionsService {
       ...rx,
       mrn: rx.encounter?.patient?.mrn ?? null,
       patientDisplayName:
-        rx.encounter?.patient?.displayName ??
-        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
+        (rx.encounter?.patient?.displayName ??
+        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim()) ||
         null,
       dateOfBirth: rx.encounter?.patient?.dateOfBirth ?? null,
       gender: rx.encounter?.patient?.gender ?? null,
@@ -97,8 +97,8 @@ export class PrescriptionsService {
       ...rx,
       mrn: rx.encounter?.patient?.mrn ?? null,
       patientDisplayName:
-        rx.encounter?.patient?.displayName ??
-        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
+        (rx.encounter?.patient?.displayName ??
+        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim()) ||
         null,
       dateOfBirth: rx.encounter?.patient?.dateOfBirth ?? null,
       gender: rx.encounter?.patient?.gender ?? null,
@@ -180,8 +180,8 @@ export class PrescriptionsService {
       ...rx,
       mrn: rx.encounter?.patient?.mrn ?? null,
       patientDisplayName:
-        rx.encounter?.patient?.displayName ??
-        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim() ||
+        (rx.encounter?.patient?.displayName ??
+        `${rx.encounter?.patient?.firstName ?? ''} ${rx.encounter?.patient?.lastName ?? ''}`.trim()) ||
         null,
       dateOfBirth: rx.encounter?.patient?.dateOfBirth ?? null,
       gender: rx.encounter?.patient?.gender ?? null,
