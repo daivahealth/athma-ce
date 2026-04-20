@@ -46,8 +46,8 @@ export class PrescriptionsController {
     @Query('limit') limit?: string,
   ) {
     return this.prescriptionsService.findAll(tenantId, {
-      status,
-      facilityId,
+      ...(status && { status }),
+      ...(facilityId && { facilityId }),
       limit: limit ? parseInt(limit, 10) : 200,
     });
   }
