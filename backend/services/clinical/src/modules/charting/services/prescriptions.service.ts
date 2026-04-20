@@ -66,4 +66,40 @@ export class PrescriptionsService {
     await this.prisma.prescriptionOrder.delete({ where: { id } });
     return { message: 'Prescription deleted successfully' };
   }
+
+  // ─── Internal: Pharmacy Queue Scheduler ────────────────────────────────────
+
+  /**
+   * Returns active prescriptions that have not yet been pushed to the RCM
+   * dispensing queue (dispensingQueueStatus = 'not_queued').
+   * Called exclusively by the RCM pharmacy queue scheduler via internal API key.
+   */
+  async findPendingQueue(tenantId: string, limit = 100) {
+    return this.prisma.prescriptionOrder.findMany({
+      where: {
+        tenantId,
+        status: PrescriptionStatus.ACTIVE,
+        dispensingQueueStatus: 'not_queued',
+      },
+      orderBy: { prescribedAt: 'asc' }, // FIFO — oldest first
+      take: limit,
+    });
+  }
+
+  /**
+   * Updates the dispensingQueueStatus on a prescription order.
+   * Called by the RCM scheduler after successfully creating a dispensing record.
+   * Valid values: 'queued' | 'not_queued' | 'cancelled'
+   */
+  async updateDispensingQueueStatus(tenantId: string, id: string, status: string) {
+    await this.findById(tenantId, id);
+    await this.prisma.prescriptionOrder.update({
+      where: { id },
+      data: {
+        dispensingQueueStatus: status,
+        dispensingQueuedAt: status === 'queued' ? new Date() : null,
+      },
+    });
+    return { id, dispensingQueueStatus: status };
+  }
 }

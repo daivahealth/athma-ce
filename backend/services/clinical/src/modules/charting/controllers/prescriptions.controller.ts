@@ -10,7 +10,7 @@ import {
   Headers,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { PrescriptionsService } from '../services/prescriptions.service';
 import {
   CreatePrescriptionDto,
@@ -24,6 +24,7 @@ import {
   PRESCRIPTION_UPDATE,
   PRESCRIPTION_DELETE,
 } from '@zeal/contracts';
+import { InternalApiKeyGuard } from '../../../common/guards/internal-api-key.guard';
 
 @ApiTags('Prescriptions')
 @ApiBearerAuth()
@@ -109,5 +110,29 @@ export class PrescriptionsController {
     @Param('id') id: string,
   ) {
     return this.prescriptionsService.delete(tenantId, id);
+  }
+
+  // ─── Internal endpoints for RCM pharmacy queue scheduler ───────────────────
+  // Protected by InternalApiKeyGuard (X-Internal-Api-Key header), NOT by JWT.
+
+  @Get('internal/pending-queue')
+  @UseGuards(InternalApiKeyGuard)
+  @ApiExcludeEndpoint()
+  async getPendingQueue(
+    @Headers('x-tenant-id') tenantId: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.prescriptionsService.findPendingQueue(tenantId, limit ? parseInt(limit, 10) : 100);
+  }
+
+  @Patch(':id/dispensing-queue-status')
+  @UseGuards(InternalApiKeyGuard)
+  @ApiExcludeEndpoint()
+  async updateDispensingQueueStatus(
+    @Headers('x-tenant-id') tenantId: string,
+    @Param('id') id: string,
+    @Body('status') status: string,
+  ) {
+    return this.prescriptionsService.updateDispensingQueueStatus(tenantId, id, status);
   }
 }

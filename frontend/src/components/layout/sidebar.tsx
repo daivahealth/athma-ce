@@ -174,8 +174,7 @@ const navSections: NavSection[] = [
         icon: Pill,
         labelKey: 'nav.pharmacy',
         children: [
-          { href: '/pharmacy/queue', icon: ClipboardList, labelKey: 'nav.pharmacyQueue' },
-          { href: '/pharmacy/dispensings', icon: FileCheck, labelKey: 'nav.dispensingHistory' },
+          { href: '/pharmacy/queue', icon: ClipboardList, labelKey: 'nav.dispense' },
           { href: '/pharmacy/stock', icon: Package, labelKey: 'nav.pharmacyStock' },
           { href: '/pharmacy/alerts', icon: Bell, labelKey: 'nav.pharmacyAlerts' },
         ],

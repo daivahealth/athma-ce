@@ -3,21 +3,17 @@
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import {
-  ArrowLeft,
   CheckCircle,
   XCircle,
   Truck,
-  RotateCcw,
   ClipboardCheck,
   Pill,
-  Building2,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
 
 import {
   usePharmacyDispensing,
@@ -26,6 +22,7 @@ import {
   useWardReceive,
 } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
 import { DispensingStatus, DispensingSource } from '@/modules/pharmacy/types/dispensing';
+import { DispensingPatientHeader } from '@/modules/pharmacy/components/DispensingPatientHeader';
 
 export default function DispensingDetailPage() {
   const params = useParams();
@@ -41,7 +38,7 @@ export default function DispensingDetailPage() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-28 w-full rounded-xl" />
         <Skeleton className="h-48 w-full" />
         <Skeleton className="h-48 w-full" />
       </div>
@@ -50,11 +47,9 @@ export default function DispensingDetailPage() {
 
   if (!dispensing) return <div className="text-muted-foreground">Dispensing record not found</div>;
 
-  // OTC / paper dispensings skip the manual verify step — go straight to dispense
   const isOtcOrPaper = dispensing.dispensingSource !== DispensingSource.DIGITAL_PRESCRIPTION;
 
-  const canVerify =
-    dispensing.status === DispensingStatus.QUEUED && !isOtcOrPaper;
+  const canVerify  = dispensing.status === DispensingStatus.QUEUED && !isOtcOrPaper;
   const canDispense =
     dispensing.status === DispensingStatus.VERIFIED ||
     (dispensing.status === DispensingStatus.QUEUED && isOtcOrPaper);
@@ -66,52 +61,10 @@ export default function DispensingDetailPage() {
     dispensing.dispatchedToWardAt &&
     !dispensing.wardReceivedAt;
 
-  const statusVariant: Record<string, 'default' | 'secondary' | 'outline' | 'destructive'> = {
-    queued: 'outline',
-    verified: 'secondary',
-    dispensed: 'default',
-    cancelled: 'destructive',
-    returned: 'outline',
-  };
-
   return (
-    <div className="space-y-4 max-w-3xl">
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={() => router.back()}>
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back
-        </Button>
-        <h2 className="text-lg font-semibold">
-          Dispensing {dispensing.dispensingNumber}
-        </h2>
-        <Badge variant={statusVariant[dispensing.status] ?? 'outline'}>{dispensing.status}</Badge>
-      </div>
-
-      {/* Patient & Encounter */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-muted-foreground">Patient</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <div className="font-medium">{dispensing.patientDisplayName ?? '—'}</div>
-            {dispensing.mrn && <div className="text-muted-foreground">MRN: {dispensing.mrn}</div>}
-          </div>
-          <div>
-            <div className="font-medium capitalize">{dispensing.encounterType} encounter</div>
-            {dispensing.encounterNumber && (
-              <div className="text-muted-foreground">#{dispensing.encounterNumber}</div>
-            )}
-          </div>
-          {dispensing.wardName && (
-            <div className="col-span-2 flex items-center gap-2 text-muted-foreground">
-              <Building2 className="h-4 w-4" />
-              Ward: {dispensing.wardName}
-              {dispensing.bedNumber && ` — Bed ${dispensing.bedNumber}`}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+    <div className="space-y-4">
+      {/* Patient header — matches Lab Report style */}
+      <DispensingPatientHeader dispensing={dispensing} />
 
       {/* Dispensing Items */}
       {dispensing.items && dispensing.items.length > 0 && (
@@ -126,10 +79,13 @@ export default function DispensingDetailPage() {
                   <div className="font-medium flex items-center gap-2">
                     <Pill className="h-4 w-4 text-muted-foreground" />
                     {item.drugName}
-                    {item.strength && <span className="text-muted-foreground text-xs">{item.strength}</span>}
+                    {item.strength && (
+                      <span className="text-muted-foreground text-xs">{item.strength}</span>
+                    )}
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    Batch: {item.batchNumber} · Expires: {format(new Date(item.expiryDate), 'MMM yyyy')}
+                    Batch: {item.batchNumber} · Expires:{' '}
+                    {format(new Date(item.expiryDate), 'MMM yyyy')}
                   </div>
                   {item.dispensingInstructions && (
                     <div className="text-xs text-muted-foreground mt-1 italic">
@@ -195,7 +151,11 @@ export default function DispensingDetailPage() {
           {dispensing.chargePosted && (
             <div className="flex justify-between text-green-600">
               <span>Charge Posted</span>
-              <span>{dispensing.chargePostedAt ? format(new Date(dispensing.chargePostedAt), 'dd MMM yyyy HH:mm') : '✓'}</span>
+              <span>
+                {dispensing.chargePostedAt
+                  ? format(new Date(dispensing.chargePostedAt), 'dd MMM yyyy HH:mm')
+                  : '✓'}
+              </span>
             </div>
           )}
         </CardContent>
@@ -216,19 +176,30 @@ export default function DispensingDetailPage() {
         {canDispense && (
           <Button onClick={() => router.push(`/${locale}/pharmacy/dispensings/${id}/dispense`)}>
             <Pill className="h-4 w-4 mr-2" />
-            {dispensing.status === DispensingStatus.QUEUED ? 'Add Medicines & Dispense' : 'Dispense Medication'}
+            {dispensing.status === DispensingStatus.QUEUED
+              ? 'Add Medicines & Dispense'
+              : 'Dispense Medication'}
           </Button>
         )}
 
-        {dispensing.status === DispensingStatus.DISPENSED && dispensing.encounterType === 'inpatient' && !dispensing.dispatchedToWardAt && (
-          <Button variant="outline" onClick={() => router.push(`/${locale}/pharmacy/dispensings/${id}/dispatch`)}>
-            <Truck className="h-4 w-4 mr-2" />
-            Dispatch to Ward
-          </Button>
-        )}
+        {dispensing.status === DispensingStatus.DISPENSED &&
+          dispensing.encounterType === 'inpatient' &&
+          !dispensing.dispatchedToWardAt && (
+            <Button
+              variant="outline"
+              onClick={() => router.push(`/${locale}/pharmacy/dispensings/${id}/dispatch`)}
+            >
+              <Truck className="h-4 w-4 mr-2" />
+              Dispatch to Ward
+            </Button>
+          )}
 
         {canWardReceive && (
-          <Button variant="outline" onClick={() => wardReceiveMutation.mutate(id)} disabled={wardReceiveMutation.isPending}>
+          <Button
+            variant="outline"
+            onClick={() => wardReceiveMutation.mutate(id)}
+            disabled={wardReceiveMutation.isPending}
+          >
             <CheckCircle className="h-4 w-4 mr-2" />
             Confirm Ward Receipt
           </Button>
@@ -237,7 +208,9 @@ export default function DispensingDetailPage() {
         {canCancel && (
           <Button
             variant="destructive"
-            onClick={() => cancelMutation.mutate({ id, payload: { reason: 'Cancelled by pharmacist' } })}
+            onClick={() =>
+              cancelMutation.mutate({ id, payload: { reason: 'Cancelled by pharmacist' } })
+            }
             disabled={cancelMutation.isPending}
           >
             <XCircle className="h-4 w-4 mr-2" />
