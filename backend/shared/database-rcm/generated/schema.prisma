@@ -2005,11 +2005,13 @@ model PharmacyDispensing {
   paperPrescriptionRef String? @map("paper_prescription_ref") @db.VarChar(100) // paper Rx ref number
 
   // Denormalized for display without cross-DB join
-  patientDisplayName String? @map("patient_display_name") @db.VarChar(255)
-  mrn                String? @db.VarChar(50)
-  encounterType      String? @map("encounter_type") @db.VarChar(50)
-  encounterNumber    String? @map("encounter_number") @db.VarChar(50)
-  prescribedByName   String? @map("prescribed_by_name") @db.VarChar(255)
+  patientDisplayName String?   @map("patient_display_name") @db.VarChar(255)
+  mrn                String?   @db.VarChar(50)
+  patientDateOfBirth DateTime? @map("patient_date_of_birth") @db.Date
+  patientGender      String?   @map("patient_gender") @db.VarChar(20)
+  encounterType      String?   @map("encounter_type") @db.VarChar(50)
+  encounterNumber    String?   @map("encounter_number") @db.VarChar(50)
+  prescribedByName   String?   @map("prescribed_by_name") @db.VarChar(255)
 
   // Workflow status: queued | verified | dispensed | partially_dispensed | cancelled | returned
   status String @default("queued") @map("status") @db.VarChar(30)

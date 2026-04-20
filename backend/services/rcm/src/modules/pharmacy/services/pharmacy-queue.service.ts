@@ -70,27 +70,32 @@ export class PharmacyQueueService {
       };
     });
 
+    // Never show already-dispensed items in the active queue
+    const active = queue.filter(
+      (item: any) => !['dispensed', 'partially_dispensed'].includes(item.dispensingStatus ?? ''),
+    );
+
     // Apply encounter type filter
     if (filters.encounterType) {
-      return queue.filter((item: any) => item.encounterType === filters.encounterType);
+      return active.filter((item: any) => item.encounterType === filters.encounterType);
     }
 
     // Apply ward filter (inpatient)
     if (filters.wardId) {
-      return queue.filter((item: any) => item.wardId === filters.wardId);
+      return active.filter((item: any) => item.wardId === filters.wardId);
     }
 
     // Apply search filter
     if (filters.search) {
       const search = filters.search.toLowerCase();
-      return queue.filter(
+      return active.filter(
         (item: any) =>
           item.patientDisplayName?.toLowerCase().includes(search) ||
           item.mrn?.toLowerCase().includes(search),
       );
     }
 
-    return queue;
+    return active;
   }
 
   async getQueueItem(tenantId: string, prescriptionOrderId: string, facilityId: string, userId: string, authHeader: string) {

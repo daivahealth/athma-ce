@@ -825,11 +825,6 @@ model PrescriptionOrder {
   // Status
   status String @default("active") @map("status") @db.VarChar(20) // active, completed, cancelled, discontinued
 
-  // Dispensing queue sync — tracks whether this Rx has been pushed to RCM dispensing queue
-  // Values: not_queued | queued | cancelled
-  dispensingQueueStatus String    @default("not_queued") @map("dispensing_queue_status") @db.VarChar(20)
-  dispensingQueuedAt    DateTime? @map("dispensing_queued_at") @db.Timestamptz(6)
-
   // Authorship
   prescribedBy String   @map("prescribed_by") @db.Uuid
   prescribedAt DateTime @default(now()) @map("prescribed_at") @db.Timestamptz(6)
@@ -845,7 +840,6 @@ model PrescriptionOrder {
   @@index([tenantId, patientId], map: "idx_rx_patient")
   @@index([tenantId, drugCode], map: "idx_rx_drug_code")
   @@index([tenantId, status], map: "idx_rx_status")
-  @@index([tenantId, dispensingQueueStatus], map: "idx_rx_dispensing_queue_status")
   @@map("prescription_orders")
 }
 

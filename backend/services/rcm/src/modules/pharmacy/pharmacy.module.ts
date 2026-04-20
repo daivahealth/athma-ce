@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaService } from '@zeal/database-rcm';
 
 // Controllers
@@ -15,9 +14,6 @@ import { PharmacyDispensingService } from './services/pharmacy-dispensing.servic
 import { PharmacyStockService } from './services/pharmacy-stock.service';
 import { PharmacyChargeService } from './services/pharmacy-charge.service';
 
-// Jobs
-import { PharmacyQueueSyncJob } from './jobs/pharmacy-queue-sync.job';
-
 // Dependencies from Billing module
 import { BillingModule } from '../billing/billing.module';
 // Catalog mapping for medication → billing item resolution
@@ -25,7 +21,6 @@ import { CatalogMappingModule } from '../catalog-mappings/catalog-mapping.module
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
     BillingModule,
     CatalogMappingModule,
     HttpModule.register({
@@ -45,7 +40,6 @@ import { CatalogMappingModule } from '../catalog-mappings/catalog-mapping.module
     PharmacyDispensingService,
     PharmacyStockService,
     PharmacyChargeService,
-    PharmacyQueueSyncJob,
   ],
   exports: [
     PharmacyDispensingService,

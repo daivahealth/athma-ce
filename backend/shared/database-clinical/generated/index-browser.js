@@ -415,8 +415,6 @@ exports.Prisma.PrescriptionOrderScalarFieldEnum = {
   instructions: 'instructions',
   instructionsAr: 'instructionsAr',
   status: 'status',
-  dispensingQueueStatus: 'dispensingQueueStatus',
-  dispensingQueuedAt: 'dispensingQueuedAt',
   prescribedBy: 'prescribedBy',
   prescribedAt: 'prescribedAt',
   createdAt: 'createdAt',
