@@ -146,7 +146,7 @@ export default function TriagePage() {
 
   const form = useForm<TriageFormValues>({
     defaultValues: {
-      triageLevel: 3,
+      triageLevel: 5,
       triageStaffId: '',
       chiefComplaintsAndHPI: '',
       painScore: undefined,
@@ -431,7 +431,7 @@ export default function TriagePage() {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Chief complaint & HPI</FormLabel>
+                    <FormLabel>Chief complaint & HPI <span className="text-destructive">*</span></FormLabel>
                     <FormControl>
                       <Textarea rows={4} placeholder="Describe the presenting symptoms..." {...field} />
                     </FormControl>
