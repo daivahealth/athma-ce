@@ -70,11 +70,12 @@ export class PharmacyDispensingController {
   async verify(
     @Headers('x-tenant-id') tenantId: string,
     @Headers('x-user-id') userId: string,
+    @Headers('x-facility-id') facilityId: string,
     @Headers('authorization') authHeader: string,
     @Param('id') id: string,
     @Body() dto: VerifyDispensingDto,
   ) {
-    return this.dispensingService.verify(tenantId, id, dto, userId, authHeader);
+    return this.dispensingService.verify(tenantId, id, dto, userId, facilityId, authHeader);
   }
 
   @Post(':id/dispense')

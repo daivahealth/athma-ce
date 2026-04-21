@@ -150,10 +150,13 @@ export class MedicalCodingService {
   ): Promise<number> {
     try {
       // Fetch encounter diagnoses from Clinical API
+      // Uses internal API key to bypass user-context requirement (system-level call).
+      // Route: GET /diagnoses/encounter/:encounterId (DiagnosisController)
       const response = await firstValueFrom(
-        this.httpService.get<any[]>(`${this.clinicalApiUrl}/encounters/${encounterId}/diagnoses`, {
+        this.httpService.get<any[]>(`${this.clinicalApiUrl}/diagnoses/encounter/${encounterId}`, {
           headers: {
             'x-tenant-id': tenantId,
+            'x-internal-api-key': process.env.INTERNAL_API_KEY ?? '',
           },
         }),
       );

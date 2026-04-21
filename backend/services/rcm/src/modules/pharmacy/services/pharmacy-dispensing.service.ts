@@ -63,7 +63,7 @@ export class PharmacyDispensingService {
       // Fetch prescription data from Clinical API
       const prescription = useHeader
         ? await this.fetchPrescriptionHeader(tenantId, dto.prescriptionId!, userId, facilityId, authHeader)
-        : await this.fetchPrescription(tenantId, dto.prescriptionOrderId!, authHeader);
+        : await this.fetchPrescription(tenantId, dto.prescriptionOrderId!, userId, facilityId, authHeader);
 
       if (!prescription || prescription.status !== 'active') {
         throw new BadRequestException(
@@ -76,7 +76,7 @@ export class PharmacyDispensingService {
 
       // Fetch encounter for inpatient ward routing (patient data already in prescription header)
       const encounter = encounterId
-        ? await this.fetchEncounter(tenantId, encounterId, authHeader)
+        ? await this.fetchEncounter(tenantId, encounterId, userId, facilityId, authHeader)
         : null;
 
       const encounterType = prescription.encounterType ?? encounter?.encounterType ?? 'outpatient';
@@ -90,7 +90,7 @@ export class PharmacyDispensingService {
       let wardName: string | null = null;
       let bedNumber: string | null = null;
       if (encounterType === 'inpatient' && encounterId) {
-        const admission = await this.fetchInpatientAdmission(tenantId, encounterId, authHeader);
+        const admission = await this.fetchInpatientAdmission(tenantId, encounterId, userId, facilityId, authHeader);
         wardId = admission?.currentWardId ?? null;
         wardName = admission?.currentWardName ?? null;
         bedNumber = admission?.currentBedNumber ?? null;
@@ -200,7 +200,7 @@ export class PharmacyDispensingService {
     return dispensing;
   }
 
-  async verify(tenantId: string, id: string, dto: VerifyDispensingDto, userId: string, authHeader: string) {
+  async verify(tenantId: string, id: string, dto: VerifyDispensingDto, userId: string, facilityId: string, authHeader: string) {
     const dispensing = await this.findById(tenantId, id);
 
     if (dispensing.status !== DispensingStatus.QUEUED) {
@@ -209,7 +209,7 @@ export class PharmacyDispensingService {
 
     // Confirm prescription is still active
     const prescription = dispensing.prescriptionOrderId
-      ? await this.fetchPrescription(tenantId, dispensing.prescriptionOrderId, authHeader)
+      ? await this.fetchPrescription(tenantId, dispensing.prescriptionOrderId, userId, facilityId, authHeader)
       : null;
     if (prescription && prescription.status !== 'active') {
       throw new BadRequestException(`Prescription is no longer active (status: ${prescription.status})`);
@@ -461,11 +461,22 @@ export class PharmacyDispensingService {
     return `${prefix}-${String(seq).padStart(5, '0')}`;
   }
 
-  private async fetchEncounter(tenantId: string, encounterId: string, authHeader: string) {
+  private async fetchEncounter(
+    tenantId: string,
+    encounterId: string,
+    userId: string,
+    facilityId: string,
+    authHeader: string,
+  ) {
     try {
       const response = await firstValueFrom(
         this.httpService.get(`${this.clinicalServiceUrl}/encounters/${encounterId}`, {
-          headers: { 'x-tenant-id': tenantId, authorization: authHeader },
+          headers: {
+            'x-tenant-id': tenantId,
+            'x-user-id': userId,
+            'x-facility-id': facilityId,
+            authorization: authHeader,
+          },
         }),
       );
       return response.data;
@@ -474,11 +485,22 @@ export class PharmacyDispensingService {
     }
   }
 
-  private async fetchPrescription(tenantId: string, prescriptionId: string, authHeader: string) {
+  private async fetchPrescription(
+    tenantId: string,
+    prescriptionId: string,
+    userId: string,
+    facilityId: string,
+    authHeader: string,
+  ) {
     try {
       const response = await firstValueFrom(
         this.httpService.get(`${this.clinicalServiceUrl}/prescriptions/${prescriptionId}`, {
-          headers: { 'x-tenant-id': tenantId, authorization: authHeader },
+          headers: {
+            'x-tenant-id': tenantId,
+            'x-user-id': userId,
+            'x-facility-id': facilityId,
+            authorization: authHeader,
+          },
         }),
       );
       return response.data;
@@ -511,11 +533,22 @@ export class PharmacyDispensingService {
     }
   }
 
-  private async fetchInpatientAdmission(tenantId: string, encounterId: string, authHeader: string) {
+  private async fetchInpatientAdmission(
+    tenantId: string,
+    encounterId: string,
+    userId: string,
+    facilityId: string,
+    authHeader: string,
+  ) {
     try {
       const response = await firstValueFrom(
         this.httpService.get(`${this.clinicalServiceUrl}/inpatient/admissions/encounter/${encounterId}`, {
-          headers: { 'x-tenant-id': tenantId, authorization: authHeader },
+          headers: {
+            'x-tenant-id': tenantId,
+            'x-user-id': userId,
+            'x-facility-id': facilityId,
+            authorization: authHeader,
+          },
         }),
       );
       return response.data;
