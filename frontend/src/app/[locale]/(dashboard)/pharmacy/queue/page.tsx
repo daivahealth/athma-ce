@@ -2,7 +2,18 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Search, Pill, User, ClipboardCheck, Building2, Plus, Eye } from 'lucide-react';
+import {
+  Search,
+  Pill,
+  User,
+  ClipboardCheck,
+  Building2,
+  Plus,
+  Eye,
+  ChevronDown,
+  ChevronRight,
+  Hash,
+} from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -19,7 +30,7 @@ import { ResourceTable } from '@/components/tables/resource-table';
 import { usePharmacyQueue } from '@/modules/pharmacy/hooks/use-pharmacy-queue';
 import { useCreateDispensing } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
 import { usePharmacyDispensings } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
-import type { PharmacyQueueItem } from '@/modules/pharmacy/types/queue';
+import type { PharmacyQueueItem, PrescriptionDrugItem } from '@/modules/pharmacy/types/queue';
 import type { PharmacyDispensing } from '@/modules/pharmacy/types/dispensing';
 import { DispensingStatus, DispensingChannel } from '@/modules/pharmacy/types/dispensing';
 
@@ -39,6 +50,164 @@ const CHANNEL_LABELS: Record<string, string> = {
   [DispensingChannel.INPATIENT_BEDSIDE]: 'Bedside',
   [DispensingChannel.EMERGENCY]: 'Emergency',
 };
+
+/* ─── Age helper ──────────────────────────────────────────────────── */
+function calcAge(dob: string | null | undefined): number | null {
+  if (!dob) return null;
+  return Math.floor((Date.now() - new Date(dob).getTime()) / (1000 * 60 * 60 * 24 * 365.25));
+}
+
+/* ─── Drug list row ──────────────────────────────────────────────── */
+function DrugRow({ drug }: { drug: PrescriptionDrugItem }) {
+  return (
+    <div className="flex items-baseline gap-2 text-sm py-0.5">
+      <Pill className="h-3.5 w-3.5 text-muted-foreground mt-0.5 flex-shrink-0" />
+      <span className="font-medium">{drug.drugName}</span>
+      <span className="text-muted-foreground">{drug.dosage}</span>
+      <span className="text-muted-foreground">·</span>
+      <span className="text-muted-foreground">{drug.frequency}</span>
+      {drug.duration && (
+        <>
+          <span className="text-muted-foreground">·</span>
+          <span className="text-muted-foreground">{drug.duration}</span>
+        </>
+      )}
+      {drug.quantity && (
+        <span className="text-xs bg-muted px-1.5 py-0.5 rounded text-muted-foreground">
+          Qty: {drug.quantity}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/* ─── Prescription queue card ────────────────────────────────────── */
+function PrescriptionCard({
+  item,
+  onProcess,
+  isPending,
+  locale,
+}: {
+  item: PharmacyQueueItem;
+  onProcess: (item: PharmacyQueueItem) => void;
+  isPending: boolean;
+  locale: string;
+}) {
+  const [expanded, setExpanded] = useState(true);
+  const age = calcAge(item.dateOfBirth);
+
+  return (
+    <Card className="hover:shadow-sm transition-shadow">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            {/* ── Prescription number + version ── */}
+            <div className="flex items-center gap-2 mb-1.5">
+              <Hash className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+              <span className="font-mono text-sm font-semibold text-primary">
+                {item.prescriptionNumber}
+              </span>
+              {item.version > 1 && (
+                <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                  v{item.version}
+                </Badge>
+              )}
+              <Badge variant="outline" className="text-xs">
+                {item.encounterType}
+              </Badge>
+              {item.encounterNumber && (
+                <span className="text-xs text-muted-foreground">{item.encounterNumber}</span>
+              )}
+            </div>
+
+            {/* ── Patient info ── */}
+            <div className="flex items-center gap-2 mb-2">
+              <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              <span className="font-medium">{item.patientDisplayName ?? 'Unknown Patient'}</span>
+              {item.mrn && (
+                <span className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                  MRN: {item.mrn}
+                </span>
+              )}
+              {age !== null && (
+                <span className="text-xs text-muted-foreground">{age}y</span>
+              )}
+              {item.gender && (
+                <span className="text-xs text-muted-foreground capitalize">{item.gender}</span>
+              )}
+            </div>
+
+            {/* ── Drug list (collapsible) ── */}
+            <div>
+              <button
+                type="button"
+                className="flex items-center gap-1 text-xs text-muted-foreground mb-1 hover:text-foreground transition-colors"
+                onClick={() => setExpanded((v) => !v)}
+              >
+                {expanded ? (
+                  <ChevronDown className="h-3.5 w-3.5" />
+                ) : (
+                  <ChevronRight className="h-3.5 w-3.5" />
+                )}
+                {item.items.length} drug{item.items.length !== 1 ? 's' : ''}
+              </button>
+
+              {expanded && (
+                <div className="pl-1 border-l-2 border-muted ml-1 space-y-0.5">
+                  {item.items.map((drug) => (
+                    <DrugRow key={drug.id} drug={drug} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* ── Footer meta ── */}
+            <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
+              <span>
+                Prescribed: {format(new Date(item.prescribedAt), 'dd MMM yyyy HH:mm')}
+              </span>
+              {item.wardName && (
+                <span className="flex items-center gap-1">
+                  <Building2 className="h-3 w-3" />
+                  {item.wardName}
+                  {item.bedNumber && ` — Bed ${item.bedNumber}`}
+                </span>
+              )}
+              {item.notes && (
+                <span className="italic">Note: {item.notes}</span>
+              )}
+            </div>
+          </div>
+
+          {/* ── Actions ── */}
+          <div className="flex items-start gap-2 flex-shrink-0 pt-0.5">
+            <Badge variant={STATUS_VARIANTS[item.dispensingStatus] ?? 'outline'}>
+              {item.dispensingStatus === 'pending' ? 'New' : item.dispensingStatus}
+            </Badge>
+            <Button
+              size="sm"
+              variant={item.dispensingId ? 'outline' : 'default'}
+              onClick={() => onProcess(item)}
+              disabled={isPending}
+            >
+              {item.dispensingId ? (
+                <>
+                  <ClipboardCheck className="h-4 w-4 mr-1" />
+                  View
+                </>
+              ) : (
+                <>
+                  <Pill className="h-4 w-4 mr-1" />
+                  Process
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 /* ─── Page ───────────────────────────────────────────────────────────── */
 export default function DispensePage() {
@@ -77,8 +246,8 @@ export default function DispensePage() {
         : DispensingChannel.OUTPATIENT_COUNTER;
 
     const result = await createDispensing.mutateAsync({
-      prescriptionOrderId: item.prescriptionOrderId,
-      encounterId: item.encounterId,
+      prescriptionId: item.prescriptionId,
+      encounterId: item.encounterId ?? undefined,
       patientId: item.patientId,
       dispensingChannel: channel,
     });
@@ -199,7 +368,7 @@ export default function DispensePage() {
                 {queueLoading ? (
                   <div className="space-y-3">
                     {[1, 2, 3].map((i) => (
-                      <Skeleton key={i} className="h-24 w-full rounded-lg" />
+                      <Skeleton key={i} className="h-32 w-full rounded-lg" />
                     ))}
                   </div>
                 ) : queue.length === 0 ? (
@@ -210,82 +379,13 @@ export default function DispensePage() {
                 ) : (
                   <div className="space-y-3">
                     {queue.map((item) => (
-                      <Card key={item.prescriptionOrderId} className="hover:shadow-sm transition-shadow">
-                        <CardContent className="p-4">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                                <span className="font-medium truncate">
-                                  {item.patientDisplayName ?? 'Unknown Patient'}
-                                </span>
-                                {item.mrn && (
-                                  <span className="text-xs text-muted-foreground">MRN: {item.mrn}</span>
-                                )}
-                                {item.dateOfBirth && (
-                                  <span className="text-xs text-muted-foreground">
-                                    {Math.floor((Date.now() - new Date(item.dateOfBirth).getTime()) / (1000 * 60 * 60 * 24 * 365.25))}y
-                                  </span>
-                                )}
-                                {item.gender && (
-                                  <span className="text-xs text-muted-foreground capitalize">{item.gender}</span>
-                                )}
-                                <Badge variant="outline" className="text-xs">
-                                  {item.encounterType}
-                                </Badge>
-                              </div>
-
-                              <div className="flex items-center gap-2 mb-2">
-                                <Pill className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                                <span className="font-medium text-sm">{item.drugName}</span>
-                                <span className="text-xs text-muted-foreground">
-                                  {item.dosage} — {item.frequency}
-                                </span>
-                                <span className="text-xs text-muted-foreground">
-                                  Qty: {item.quantity}
-                                </span>
-                              </div>
-
-                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                <span>
-                                  Prescribed: {format(new Date(item.prescribedAt), 'dd MMM yyyy HH:mm')}
-                                </span>
-                                {item.wardName && (
-                                  <span className="flex items-center gap-1">
-                                    <Building2 className="h-3 w-3" />
-                                    {item.wardName}
-                                    {item.bedNumber && ` — Bed ${item.bedNumber}`}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 flex-shrink-0">
-                              <Badge variant={STATUS_VARIANTS[item.dispensingStatus] ?? 'outline'}>
-                                {item.dispensingStatus}
-                              </Badge>
-                              <Button
-                                size="sm"
-                                variant={item.dispensingId ? 'outline' : 'default'}
-                                onClick={() => handleProcess(item)}
-                                disabled={createDispensing.isPending}
-                              >
-                                {item.dispensingId ? (
-                                  <>
-                                    <ClipboardCheck className="h-4 w-4 mr-1" />
-                                    View
-                                  </>
-                                ) : (
-                                  <>
-                                    <Pill className="h-4 w-4 mr-1" />
-                                    Process
-                                  </>
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <PrescriptionCard
+                        key={item.prescriptionId}
+                        item={item}
+                        onProcess={handleProcess}
+                        isPending={createDispensing.isPending}
+                        locale={locale}
+                      />
                     ))}
                   </div>
                 )}
@@ -316,7 +416,6 @@ export default function DispensePage() {
             columns={historyColumns}
             data={dispensings}
             isLoading={historyLoading}
-            emptyMessage="No dispensing records found"
           />
         </TabsContent>
       </Tabs>

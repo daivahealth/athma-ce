@@ -26,16 +26,16 @@ export class PharmacyQueueController {
     return this.queueService.getQueue(tenantId, facilityId, userId, authHeader, filters);
   }
 
-  @Get(':prescriptionOrderId')
-  @ApiOperation({ summary: 'Get queue detail for a specific prescription order' })
+  @Get(':prescriptionId')
+  @ApiOperation({ summary: 'Get queue detail for a specific prescription (header + items + dispensing record)' })
   @ApiResponse({ status: 200, description: 'Queue item returned' })
   async getQueueItem(
     @Headers('x-tenant-id') tenantId: string,
     @Headers('x-facility-id') facilityId: string,
     @Headers('x-user-id') userId: string,
     @Headers('authorization') authHeader: string,
-    @Param('prescriptionOrderId') prescriptionOrderId: string,
+    @Param('prescriptionId') prescriptionId: string,
   ) {
-    return this.queueService.getQueueItem(tenantId, prescriptionOrderId, facilityId, userId, authHeader);
+    return this.queueService.getQueueItem(tenantId, prescriptionId, facilityId, userId, authHeader);
   }
 }

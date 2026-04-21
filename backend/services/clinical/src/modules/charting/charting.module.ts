@@ -7,6 +7,7 @@ import { EncounterNotesService } from './services/encounter-notes.service';
 import { DiagnosisService } from './services/diagnosis.service';
 import { ClinicalOrdersService } from './services/clinical-orders.service';
 import { PrescriptionsService } from './services/prescriptions.service';
+import { PrescriptionHeadersService } from './services/prescription-headers.service';
 import { ClinicalCodingsService } from './services/clinical-codings.service';
 
 // Controllers
@@ -14,6 +15,7 @@ import { EncounterNotesController } from './controllers/encounter-notes.controll
 import { DiagnosisController } from './controllers/diagnosis.controller';
 import { ClinicalOrdersController } from './controllers/clinical-orders.controller';
 import { PrescriptionsController } from './controllers/prescriptions.controller';
+import { PrescriptionHeadersController } from './controllers/prescription-headers.controller';
 import { ClinicalCodingsController } from './controllers/clinical-codings.controller';
 
 @Module({
@@ -23,6 +25,7 @@ import { ClinicalCodingsController } from './controllers/clinical-codings.contro
     DiagnosisController,
     ClinicalOrdersController,
     PrescriptionsController,
+    PrescriptionHeadersController,
     ClinicalCodingsController,
   ],
   providers: [
@@ -31,6 +34,7 @@ import { ClinicalCodingsController } from './controllers/clinical-codings.contro
     DiagnosisService,
     ClinicalOrdersService,
     PrescriptionsService,
+    PrescriptionHeadersService,
     ClinicalCodingsService,
   ],
   exports: [
@@ -38,6 +42,7 @@ import { ClinicalCodingsController } from './controllers/clinical-codings.contro
     DiagnosisService,
     ClinicalOrdersService,
     PrescriptionsService,
+    PrescriptionHeadersService,
     ClinicalCodingsService,
   ],
 })

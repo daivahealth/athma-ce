@@ -1,8 +1,17 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Trash2, Search, Pill, PackageCheck, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  Trash2,
+  Search,
+  Pill,
+  PackageCheck,
+  X,
+  ClipboardList,
+  ChevronDown,
+} from 'lucide-react';
 import { format } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
@@ -13,7 +22,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
 
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import {
@@ -22,20 +30,112 @@ import {
   useExecuteDispense,
 } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
 import { usePharmacyStock } from '@/modules/pharmacy/hooks/use-pharmacy-stock';
+import { usePrescriptionHeader } from '@/modules/pharmacy/hooks/use-prescription-header';
 import { DispensingStatus, DispensingSource } from '@/modules/pharmacy/types/dispensing';
 import type { PharmacyStock } from '@/modules/pharmacy/types/stock';
+import type { PrescriptionDrugItemResponse } from '@/modules/pharmacy/services/prescription-header-service';
 
 /* ─── Types ──────────────────────────────────────────────────────────── */
 interface DispenseItem {
   rowId: string;
-  stock: PharmacyStock;
+  /** Set when this row comes from a prescription drug line */
+  prescriptionOrderId?: string;
+  /** Set when the pharmacist has chosen a stock batch */
+  stock: PharmacyStock | null;
   quantityDispensed: number;
   dispensingInstructions: string;
   isSubstituted: boolean;
   substitutionReason: string;
+  /** Drug name shown even before a batch is selected (from prescription) */
+  prescribedDrugName?: string;
+  prescribedDrugCode?: string;
+  prescribedDosage?: string;
+  prescribedFrequency?: string;
+  prescribedQuantity?: string | null;
 }
 
-/* ─── Single search input that adds to the list ──────────────────────── */
+/* ─── Inline stock selector (filtered by drug code if known) ──────────── */
+function StockSelector({
+  drugCode,
+  onSelect,
+}: {
+  drugCode?: string;
+  onSelect: (stock: PharmacyStock) => void;
+}) {
+  const [search, setSearch] = useState(drugCode ?? '');
+  const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const debouncedSearch = useDebouncedValue(search, 300);
+
+  const { data: results = [] } = usePharmacyStock(
+    debouncedSearch.length >= 2 ? { search: debouncedSearch, status: 'active' } : undefined,
+  );
+
+  const handleSelect = (stock: PharmacyStock) => {
+    onSelect(stock);
+    setSearch('');
+    setOpen(false);
+  };
+
+  return (
+    <div className="relative">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+        <Input
+          ref={inputRef}
+          placeholder="Search batch / drug name…"
+          className="pl-8 h-8 text-sm"
+          value={search}
+          onChange={(e) => { setSearch(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+        />
+        {search && (
+          <button
+            type="button"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            onMouseDown={() => { setSearch(''); setOpen(false); }}
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
+
+      {open && search.length > 0 && (
+        <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg max-h-48 overflow-y-auto">
+          {debouncedSearch.length < 2 ? (
+            <div className="p-2 text-xs text-muted-foreground text-center">Type at least 2 characters…</div>
+          ) : results.length === 0 ? (
+            <div className="p-2 text-xs text-muted-foreground text-center">No stock found</div>
+          ) : (
+            <ul>
+              {results.map((s) => (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    className="w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors"
+                    onMouseDown={() => handleSelect(s)}
+                  >
+                    <div className="font-medium text-xs">
+                      {s.drugName}
+                      {s.strength ? ` (${s.strength})` : ''}
+                      <Badge variant="outline" className="ml-2 text-xs">{s.dosageForm}</Badge>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Batch: {s.batchNumber} · Exp: {format(new Date(s.expiryDate), 'MMM yyyy')} · On hand: {Number(s.quantityOnHand)} {s.unit}
+                    </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Single search input that adds freeform items ─────────────────────── */
 function MedicationSearchInput({ onSelect }: { onSelect: (stock: PharmacyStock) => void }) {
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
@@ -59,7 +159,7 @@ function MedicationSearchInput({ onSelect }: { onSelect: (stock: PharmacyStock) 
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           ref={inputRef}
-          placeholder="Search by drug name or code to add..."
+          placeholder="Add medication by name or code…"
           className="pl-9 pr-8"
           value={search}
           onChange={(e) => { setSearch(e.target.value); setOpen(true); }}
@@ -80,13 +180,9 @@ function MedicationSearchInput({ onSelect }: { onSelect: (stock: PharmacyStock) 
       {open && search.length > 0 && (
         <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg max-h-64 overflow-y-auto">
           {debouncedSearch.length < 2 ? (
-            <div className="p-3 text-sm text-muted-foreground text-center">
-              Type at least 2 characters…
-            </div>
+            <div className="p-3 text-sm text-muted-foreground text-center">Type at least 2 characters…</div>
           ) : results.length === 0 ? (
-            <div className="p-3 text-sm text-muted-foreground text-center">
-              No stock found for &quot;{debouncedSearch}&quot;
-            </div>
+            <div className="p-3 text-sm text-muted-foreground text-center">No stock found for &quot;{debouncedSearch}&quot;</div>
           ) : (
             <ul>
               {results.map((s) => (
@@ -102,7 +198,7 @@ function MedicationSearchInput({ onSelect }: { onSelect: (stock: PharmacyStock) 
                       <Badge variant="outline" className="ml-2 text-xs">{s.dosageForm}</Badge>
                     </div>
                     <div className="text-xs text-muted-foreground mt-0.5">
-                      Batch: {s.batchNumber} · Exp: {format(new Date(s.expiryDate), 'MMM yyyy')} · In stock: {Number(s.quantityOnHand)} {s.unit}
+                      Batch: {s.batchNumber} · Exp: {format(new Date(s.expiryDate), 'MMM yyyy')} · On hand: {Number(s.quantityOnHand)} {s.unit}
                     </div>
                   </button>
                 </li>
@@ -115,83 +211,133 @@ function MedicationSearchInput({ onSelect }: { onSelect: (stock: PharmacyStock) 
   );
 }
 
-/* ─── Row for each added medication ──────────────────────────────────── */
+/* ─── Row for each medication ──────────────────────────────────────────── */
 function DispensedItemRow({
   item,
-  index,
   onChange,
   onRemove,
 }: {
   item: DispenseItem;
-  index: number;
   onChange: (patch: Partial<DispenseItem>) => void;
   onRemove: () => void;
 }) {
-  const availableQty = Number(item.stock.quantityOnHand);
+  const stock = item.stock;
+  const availableQty = stock ? Number(stock.quantityOnHand) : null;
+  const isPrescribed = Boolean(item.prescriptionOrderId);
 
   return (
     <div className="grid grid-cols-[1fr_auto] gap-3 items-start py-4">
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {/* Drug info */}
-        <div className="flex items-center gap-2">
-          <Pill className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-          <span className="font-medium text-sm">{item.stock.drugName}</span>
-          {item.stock.strength && (
-            <span className="text-xs text-muted-foreground">{item.stock.strength}</span>
-          )}
-          <Badge variant="outline" className="text-xs">{item.stock.dosageForm}</Badge>
-          <span className="text-xs text-muted-foreground ml-auto">
-            Batch: {item.stock.batchNumber} · Exp: {format(new Date(item.stock.expiryDate), 'MMM yyyy')} · On hand: {availableQty} {item.stock.unit}
-          </span>
-        </div>
-
-        {/* Qty + instructions */}
-        <div className="grid grid-cols-[140px_1fr] gap-3">
-          <div className="space-y-1">
-            <Label className="text-xs">
-              Qty <span className="text-muted-foreground">(max {availableQty})</span>
-            </Label>
-            <Input
-              type="number"
-              min={1}
-              max={availableQty}
-              value={item.quantityDispensed}
-              onChange={(e) =>
-                onChange({ quantityDispensed: Math.max(1, parseInt(e.target.value) || 1) })
-              }
-            />
-          </div>
-          <div className="space-y-1">
-            <Label className="text-xs">Instructions</Label>
-            <Input
-              placeholder="e.g. Take 1 tablet twice daily after food"
-              value={item.dispensingInstructions}
-              onChange={(e) => onChange({ dispensingInstructions: e.target.value })}
-            />
+        <div className="flex items-start gap-2 flex-wrap">
+          <Pill className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-medium text-sm">
+                {stock?.drugName ?? item.prescribedDrugName ?? '—'}
+              </span>
+              {stock?.strength && (
+                <span className="text-xs text-muted-foreground">{stock.strength}</span>
+              )}
+              {stock && (
+                <Badge variant="outline" className="text-xs">{stock.dosageForm}</Badge>
+              )}
+              {isPrescribed && (
+                <Badge variant="secondary" className="text-xs">Prescribed</Badge>
+              )}
+            </div>
+            {isPrescribed && (
+              <div className="text-xs text-muted-foreground mt-0.5 space-x-2">
+                {item.prescribedDosage && <span>{item.prescribedDosage}</span>}
+                {item.prescribedFrequency && <span>· {item.prescribedFrequency}</span>}
+                {item.prescribedQuantity && <span>· Qty: {item.prescribedQuantity}</span>}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Substitution */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id={`sub-${item.rowId}`}
-              checked={item.isSubstituted}
-              onCheckedChange={(c) => onChange({ isSubstituted: !!c })}
+        {/* Batch selector — shown if no stock yet selected */}
+        {!stock ? (
+          <div className="space-y-1">
+            <Label className="text-xs text-muted-foreground">Select stock batch</Label>
+            <StockSelector
+              drugCode={item.prescribedDrugCode}
+              onSelect={(s) => onChange({
+                stock: s,
+                quantityDispensed: item.prescribedQuantity
+                  ? Math.min(parseInt(item.prescribedQuantity) || 1, Number(s.quantityOnHand))
+                  : 1,
+              })}
             />
-            <Label htmlFor={`sub-${item.rowId}`} className="text-xs cursor-pointer text-muted-foreground">
-              Generic substitution
-            </Label>
           </div>
-          {item.isSubstituted && (
-            <Input
-              placeholder="Reason for substitution…"
-              value={item.substitutionReason}
-              onChange={(e) => onChange({ substitutionReason: e.target.value })}
-              className="text-sm"
-            />
-          )}
-        </div>
+        ) : (
+          <div className="text-xs text-muted-foreground space-x-2 flex items-center gap-1">
+            <span>Batch: {stock.batchNumber}</span>
+            <span>·</span>
+            <span>Exp: {format(new Date(stock.expiryDate), 'MMM yyyy')}</span>
+            <span>·</span>
+            <span>On hand: {Number(stock.quantityOnHand)} {stock.unit}</span>
+            <button
+              type="button"
+              className="text-xs text-primary underline hover:no-underline ml-1"
+              onClick={() => onChange({ stock: null })}
+            >
+              change
+            </button>
+          </div>
+        )}
+
+        {/* Qty + instructions (only when batch selected) */}
+        {stock && (
+          <div className="grid grid-cols-[140px_1fr] gap-3">
+            <div className="space-y-1">
+              <Label className="text-xs">
+                Qty <span className="text-muted-foreground">(max {availableQty})</span>
+              </Label>
+              <Input
+                type="number"
+                min={1}
+                max={availableQty ?? undefined}
+                value={item.quantityDispensed}
+                onChange={(e) =>
+                  onChange({ quantityDispensed: Math.max(1, parseInt(e.target.value) || 1) })
+                }
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Instructions</Label>
+              <Input
+                placeholder="e.g. Take 1 tablet twice daily after food"
+                value={item.dispensingInstructions}
+                onChange={(e) => onChange({ dispensingInstructions: e.target.value })}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Substitution (only when batch selected) */}
+        {stock && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id={`sub-${item.rowId}`}
+                checked={item.isSubstituted}
+                onChange={(e) => onChange({ isSubstituted: (e.target as HTMLInputElement).checked })}
+              />
+              <Label htmlFor={`sub-${item.rowId}`} className="text-xs cursor-pointer text-muted-foreground">
+                Generic substitution
+              </Label>
+            </div>
+            {item.isSubstituted && (
+              <Input
+                placeholder="Reason for substitution…"
+                value={item.substitutionReason}
+                onChange={(e) => onChange({ substitutionReason: e.target.value })}
+                className="text-sm"
+              />
+            )}
+          </div>
+        )}
       </div>
 
       {/* Remove */}
@@ -207,7 +353,25 @@ function DispensedItemRow({
   );
 }
 
-/* ─── Main page ──────────────────────────────────────────────────────── */
+/* ─── Helper — build pre-populated rows from prescription ──────────────── */
+function buildItemsFromPrescription(drugs: PrescriptionDrugItemResponse[]): DispenseItem[] {
+  return drugs.map((drug) => ({
+    rowId: `rx-${drug.id}`,
+    prescriptionOrderId: drug.id,
+    stock: null,
+    quantityDispensed: 1,
+    dispensingInstructions: drug.instructions ?? '',
+    isSubstituted: false,
+    substitutionReason: '',
+    prescribedDrugName: drug.drugName,
+    prescribedDrugCode: drug.drugCode,
+    prescribedDosage: drug.dosage,
+    prescribedFrequency: drug.frequency,
+    prescribedQuantity: drug.quantity,
+  }));
+}
+
+/* ─── Main page ──────────────────────────────────────────────────────────── */
 export default function ExecuteDispensePage() {
   const params = useParams();
   const router = useRouter();
@@ -215,14 +379,31 @@ export default function ExecuteDispensePage() {
   const id = params.id as string;
 
   const { data: dispensing, isLoading } = usePharmacyDispensing(id);
+  const { data: prescriptionHeader, isLoading: rxLoading } = usePrescriptionHeader(
+    dispensing?.prescriptionId,
+  );
+
   const verifyDispensing = useVerifyDispensing();
   const executeDispense = useExecuteDispense();
 
   const [items, setItems] = useState<DispenseItem[]>([]);
+  const [initialised, setInitialised] = useState(false);
   const [counsellingProvided, setCounsellingProvided] = useState(false);
   const [counsellingNotes, setCounsellingNotes] = useState('');
 
-  const addItem = (stock: PharmacyStock) =>
+  // Pre-populate from prescription header once loaded
+  useEffect(() => {
+    if (!initialised && prescriptionHeader?.items?.length) {
+      setItems(buildItemsFromPrescription(prescriptionHeader.items));
+      setInitialised(true);
+    }
+    // If no prescription, just leave empty (OTC / paper flow)
+    if (!initialised && dispensing && !dispensing.prescriptionId) {
+      setInitialised(true);
+    }
+  }, [initialised, prescriptionHeader, dispensing]);
+
+  const addFreeformItem = (stock: PharmacyStock) =>
     setItems((prev) => [
       ...prev,
       {
@@ -241,6 +422,9 @@ export default function ExecuteDispensePage() {
   const removeItem = (index: number) =>
     setItems((prev) => prev.filter((_, i) => i !== index));
 
+  // Only items with a stock batch selected can be submitted
+  const readyItems = items.filter((i) => i.stock !== null);
+
   const handleSubmit = async () => {
     if (
       dispensing?.status === DispensingStatus.QUEUED &&
@@ -251,8 +435,9 @@ export default function ExecuteDispensePage() {
     await executeDispense.mutateAsync({
       id,
       payload: {
-        items: items.map((i) => ({
-          stockId: i.stock.id,
+        items: readyItems.map((i) => ({
+          stockId: i.stock!.id,
+          ...(i.prescriptionOrderId ? { prescriptionOrderId: i.prescriptionOrderId } : {}),
           quantityDispensed: i.quantityDispensed,
           ...(i.dispensingInstructions ? { dispensingInstructions: i.dispensingInstructions } : {}),
           ...(i.isSubstituted ? { isSubstituted: true } : {}),
@@ -265,7 +450,7 @@ export default function ExecuteDispensePage() {
     router.push(`/${locale}/pharmacy/dispensings/${id}`);
   };
 
-  if (isLoading) {
+  if (isLoading || (dispensing?.prescriptionId && rxLoading && !initialised)) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-8 w-48" />
@@ -306,6 +491,8 @@ export default function ExecuteDispensePage() {
       </div>
     );
   }
+
+  const hasPrescription = Boolean(dispensing.prescriptionId);
 
   return (
     <div className="space-y-6">
@@ -358,26 +545,46 @@ export default function ExecuteDispensePage() {
               </div>
             </div>
           )}
+          {prescriptionHeader && (
+            <div className="col-span-2">
+              <div className="text-xs text-muted-foreground mb-0.5">Prescription</div>
+              <div className="flex items-center gap-2">
+                <ClipboardList className="h-3.5 w-3.5 text-muted-foreground" />
+                <span className="font-mono text-sm font-semibold">
+                  {prescriptionHeader.prescriptionNumber}
+                </span>
+                {prescriptionHeader.version > 1 && (
+                  <Badge variant="secondary" className="text-xs">v{prescriptionHeader.version}</Badge>
+                )}
+                {prescriptionHeader.notes && (
+                  <span className="text-xs text-muted-foreground italic">— {prescriptionHeader.notes}</span>
+                )}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
       {/* Medications */}
       <Card className="overflow-visible">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">Medications to Dispense</CardTitle>
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            Medications to Dispense
+            {hasPrescription && items.length > 0 && (
+              <Badge variant="secondary" className="text-xs font-normal">
+                {readyItems.length} of {items.length} batches selected
+              </Badge>
+            )}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Single search input — selecting an item appends it to the list */}
-          <MedicationSearchInput onSelect={addItem} />
-
-          {/* Added items */}
+          {/* Items (pre-populated from prescription or manually added) */}
           {items.length > 0 && (
             <div className="divide-y">
               {items.map((item, index) => (
                 <DispensedItemRow
                   key={item.rowId}
                   item={item}
-                  index={index}
                   onChange={(patch) => updateItem(index, patch)}
                   onRemove={() => removeItem(index)}
                 />
@@ -385,11 +592,20 @@ export default function ExecuteDispensePage() {
             </div>
           )}
 
-          {items.length === 0 && (
+          {items.length === 0 && !hasPrescription && (
             <p className="text-sm text-muted-foreground text-center py-6">
-              Use the search above to add medications
+              Use the search below to add medications
             </p>
           )}
+
+          {/* Add extra drugs (always available for substitutions / additional items) */}
+          <div className="pt-2">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
+              <ChevronDown className="h-3.5 w-3.5" />
+              {hasPrescription ? 'Add extra / substitution drug' : 'Add medication'}
+            </div>
+            <MedicationSearchInput onSelect={addFreeformItem} />
+          </div>
         </CardContent>
       </Card>
 
@@ -403,7 +619,7 @@ export default function ExecuteDispensePage() {
             <Checkbox
               id="counselling"
               checked={counsellingProvided}
-              onCheckedChange={(c) => setCounsellingProvided(!!c)}
+              onChange={(e) => setCounsellingProvided((e.target as HTMLInputElement).checked)}
             />
             <Label htmlFor="counselling" className="cursor-pointer">
               Counselling provided to patient
@@ -427,7 +643,7 @@ export default function ExecuteDispensePage() {
       <div className="flex items-center gap-3">
         <Button
           onClick={handleSubmit}
-          disabled={items.length === 0 || verifyDispensing.isPending || executeDispense.isPending}
+          disabled={readyItems.length === 0 || verifyDispensing.isPending || executeDispense.isPending}
           className="min-w-44"
         >
           <PackageCheck className="h-4 w-4 mr-2" />
@@ -435,12 +651,17 @@ export default function ExecuteDispensePage() {
             ? 'Verifying…'
             : executeDispense.isPending
             ? 'Dispensing…'
-            : `Dispense ${items.length} Item${items.length !== 1 ? 's' : ''}`}
+            : `Dispense ${readyItems.length} Item${readyItems.length !== 1 ? 's' : ''}`}
         </Button>
         <Button variant="outline" onClick={() => router.back()}>
           Cancel
         </Button>
-        {items.length === 0 && (
+        {readyItems.length === 0 && items.length > 0 && (
+          <p className="text-sm text-muted-foreground">
+            Select a stock batch for each drug to proceed
+          </p>
+        )}
+        {readyItems.length === 0 && items.length === 0 && (
           <p className="text-sm text-muted-foreground">
             Add at least one medication to dispense
           </p>

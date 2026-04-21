@@ -1997,7 +1997,8 @@ model PharmacyDispensing {
   // Cross-DB logical FKs (UUID only, no FK constraint — resolved via Clinical API)
   patientId           String  @map("patient_id") @db.Uuid
   encounterId         String? @map("encounter_id") @db.Uuid // nullable for OTC / paper prescriptions
-  prescriptionOrderId String? @map("prescription_order_id") @db.Uuid // nullable for OTC / paper prescriptions
+  prescriptionId      String? @map("prescription_id") @db.Uuid // link to Prescription header (preferred)
+  prescriptionOrderId String? @map("prescription_order_id") @db.Uuid // legacy: single-drug link (keep for existing rows)
 
   // Dispensing source — how this dispensing was initiated
   // digital_prescription | otc | paper_op | paper_ward
@@ -2061,6 +2062,7 @@ model PharmacyDispensing {
   @@index([tenantId, status], map: "idx_pharmacy_dispensing_tenant_status")
   @@index([tenantId, patientId], map: "idx_pharmacy_dispensing_tenant_patient")
   @@index([tenantId, encounterId], map: "idx_pharmacy_dispensing_tenant_encounter")
+  @@index([tenantId, prescriptionId], map: "idx_pharmacy_dispensing_tenant_prescription")
   @@index([tenantId, prescriptionOrderId], map: "idx_pharmacy_dispensing_tenant_rx")
   @@index([tenantId, dispensingChannel], map: "idx_pharmacy_dispensing_tenant_channel")
   @@index([tenantId, createdAt], map: "idx_pharmacy_dispensing_tenant_created")
@@ -2069,10 +2071,11 @@ model PharmacyDispensing {
 
 /// Line items within a dispense event. Fields are snapshotted at dispense time for immutable audit.
 model PharmacyDispensingItem {
-  id           String @id @default(uuid()) @map("id") @db.Uuid
-  tenantId     String @map("tenant_id") @db.Uuid
-  dispensingId String @map("dispensing_id") @db.Uuid
-  stockId      String @map("stock_id") @db.Uuid
+  id                  String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId            String  @map("tenant_id") @db.Uuid
+  dispensingId        String  @map("dispensing_id") @db.Uuid
+  stockId             String  @map("stock_id") @db.Uuid
+  prescriptionOrderId String? @map("prescription_order_id") @db.Uuid // which drug line from the prescription
 
   // Snapshot of drug details at dispense time (immutable audit)
   drugCode    String   @map("drug_code") @db.VarChar(50)
@@ -2108,5 +2111,6 @@ model PharmacyDispensingItem {
   @@index([tenantId, dispensingId], map: "idx_pharmacy_disp_items_dispensing")
   @@index([tenantId, stockId], map: "idx_pharmacy_disp_items_stock")
   @@index([tenantId, drugCode], map: "idx_pharmacy_disp_items_drug")
+  @@index([tenantId, prescriptionOrderId], map: "idx_pharmacy_disp_items_rx_order")
   @@map("pharmacy_dispensing_items")
 }

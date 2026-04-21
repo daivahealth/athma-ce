@@ -37,7 +37,8 @@ export class PharmacyDispensingService {
   ) {}
 
   async create(tenantId: string, dto: CreateDispensingDto, userId: string, authHeader: string) {
-    const isDigital = !!dto.prescriptionOrderId;
+    const useHeader = !!dto.prescriptionId;
+    const isDigital = useHeader || !!dto.prescriptionOrderId;
 
     // ── Digital prescription path ──────────────────────────────────────────────
     if (isDigital) {
@@ -45,7 +46,11 @@ export class PharmacyDispensingService {
       const existing = await this.prisma.pharmacyDispensing.findFirst({
         where: {
           tenantId,
-          ...(dto.prescriptionOrderId !== undefined && { prescriptionOrderId: dto.prescriptionOrderId }),
+          ...(useHeader && dto.prescriptionId
+            ? { prescriptionId: dto.prescriptionId }
+            : dto.prescriptionOrderId
+              ? { prescriptionOrderId: dto.prescriptionOrderId }
+              : {}),
           status: { notIn: [DispensingStatus.CANCELLED, DispensingStatus.RETURNED] },
         },
       });
@@ -55,38 +60,50 @@ export class PharmacyDispensingService {
         );
       }
 
-      // Fetch encounter + prescription from Clinical API
-      const [encounter, prescription] = await Promise.all([
-        dto.encounterId ? this.fetchEncounter(tenantId, dto.encounterId, authHeader) : null,
-        this.fetchPrescription(tenantId, dto.prescriptionOrderId!, authHeader),
-      ]);
+      // Fetch prescription data from Clinical API
+      const prescription = useHeader
+        ? await this.fetchPrescriptionHeader(tenantId, dto.prescriptionId!, authHeader)
+        : await this.fetchPrescription(tenantId, dto.prescriptionOrderId!, authHeader);
 
-      if (prescription?.status !== 'active') {
+      if (!prescription || prescription.status !== 'active') {
         throw new BadRequestException(
           `Prescription is not active (status: ${prescription?.status ?? 'unknown'})`,
         );
       }
 
+      // Resolve encounter ID (from DTO or from prescription header)
+      const encounterId = dto.encounterId ?? prescription.encounterId ?? null;
+
+      // Fetch encounter for inpatient ward routing (patient data already in prescription header)
+      const encounter = encounterId
+        ? await this.fetchEncounter(tenantId, encounterId, authHeader)
+        : null;
+
+      const encounterType = prescription.encounterType ?? encounter?.encounterType ?? 'outpatient';
+
       let dispensingChannel = dto.dispensingChannel ?? DispensingChannel.OUTPATIENT_COUNTER;
-      if (encounter?.encounterType === 'inpatient' && !dto.dispensingChannel) {
+      if (encounterType === 'inpatient' && !dto.dispensingChannel) {
         dispensingChannel = DispensingChannel.INPATIENT_WARD;
       }
 
       let wardId: string | null = null;
       let wardName: string | null = null;
       let bedNumber: string | null = null;
-      if (encounter?.encounterType === 'inpatient' && dto.encounterId) {
-        const admission = await this.fetchInpatientAdmission(tenantId, dto.encounterId, authHeader);
+      if (encounterType === 'inpatient' && encounterId) {
+        const admission = await this.fetchInpatientAdmission(tenantId, encounterId, authHeader);
         wardId = admission?.currentWardId ?? null;
         wardName = admission?.currentWardName ?? null;
         bedNumber = admission?.currentBedNumber ?? null;
       }
 
-      const drugCode = prescription?.drugCode;
-      if (drugCode) {
-        const availability = await this.stockService.suggestStockForDrug(tenantId, drugCode, 1);
+      // Stock availability check (for header: check first drug; for single order: check its drug)
+      const firstDrugCode = useHeader
+        ? (prescription.items?.[0]?.drugCode ?? null)
+        : prescription.drugCode ?? null;
+      if (firstDrugCode) {
+        const availability = await this.stockService.suggestStockForDrug(tenantId, firstDrugCode, 1);
         if (!availability.canFulfill) {
-          this.logger.warn(`Insufficient stock for ${drugCode}. Creating queued record anyway.`);
+          this.logger.warn(`Insufficient stock for ${firstDrugCode}. Creating queued record anyway.`);
         }
       }
 
@@ -96,14 +113,17 @@ export class PharmacyDispensingService {
           tenantId,
           dispensingNumber,
           patientId: dto.patientId,
-          encounterId: dto.encounterId ?? null,
-          prescriptionOrderId: dto.prescriptionOrderId ?? null,
+          encounterId,
+          prescriptionId: useHeader ? dto.prescriptionId! : null,
+          prescriptionOrderId: useHeader ? null : (dto.prescriptionOrderId ?? null),
           dispensingSource: dto.dispensingSource ?? DispensingSource.DIGITAL_PRESCRIPTION,
-          patientDisplayName: encounter?.patientDisplayName ?? prescription?.patientDisplayName ?? null,
-          mrn: encounter?.mrn ?? prescription?.mrn ?? null,
-          encounterType: encounter?.encounterType ?? 'outpatient',
-          encounterNumber: encounter?.encounterNumber ?? null,
-          prescribedByName: prescription?.prescribedByName ?? null,
+          patientDisplayName: prescription.patientDisplayName ?? null,
+          mrn: prescription.mrn ?? null,
+          patientDateOfBirth: prescription.dateOfBirth ? new Date(prescription.dateOfBirth) : null,
+          patientGender: prescription.gender ?? null,
+          encounterType,
+          encounterNumber: prescription.encounterNumber ?? encounter?.encounterNumber ?? null,
+          prescribedByName: prescription.prescribedByName ?? null,
           status: DispensingStatus.QUEUED,
           dispensingChannel,
           wardId,
@@ -254,6 +274,7 @@ export class PharmacyDispensingService {
             tenantId,
             dispensingId: id,
             stockId: item.stockId,
+            prescriptionOrderId: item.prescriptionOrderId ?? null,
             drugCode: stock.drugCode,
             drugName: stock.drugName,
             dosageForm: stock.dosageForm,
@@ -457,6 +478,19 @@ export class PharmacyDispensingService {
     try {
       const response = await firstValueFrom(
         this.httpService.get(`${this.clinicalServiceUrl}/prescriptions/${prescriptionId}`, {
+          headers: { 'x-tenant-id': tenantId, authorization: authHeader },
+        }),
+      );
+      return response.data;
+    } catch {
+      return null;
+    }
+  }
+
+  private async fetchPrescriptionHeader(tenantId: string, prescriptionId: string, authHeader: string) {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.clinicalServiceUrl}/prescription-headers/${prescriptionId}`, {
           headers: { 'x-tenant-id': tenantId, authorization: authHeader },
         }),
       );

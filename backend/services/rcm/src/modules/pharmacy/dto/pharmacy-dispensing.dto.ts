@@ -37,7 +37,12 @@ export enum DispensingSource {
 }
 
 export class CreateDispensingDto {
-  @ApiPropertyOptional({ description: 'Prescription order UUID (from Clinical DB) — omit for OTC / paper Rx' })
+  @ApiPropertyOptional({ description: 'Prescription header UUID (from Clinical DB) — preferred over prescriptionOrderId' })
+  @IsUUID("loose" as any)
+  @IsOptional()
+  prescriptionId?: string;
+
+  @ApiPropertyOptional({ description: 'Prescription order UUID (from Clinical DB) — legacy single-drug link; use prescriptionId when possible' })
   @IsUUID("loose" as any)
   @IsOptional()
   prescriptionOrderId?: string;
@@ -90,6 +95,11 @@ export class DispenseItemDto {
   @IsUUID("loose" as any)
   @IsNotEmpty()
   stockId!: string;
+
+  @ApiPropertyOptional({ description: 'Prescription order UUID (drug line) this item fulfils — links to PrescriptionOrder in Clinical DB' })
+  @IsUUID("loose" as any)
+  @IsOptional()
+  prescriptionOrderId?: string;
 
   @ApiProperty({ description: 'Quantity to dispense' })
   @IsNumber()

@@ -396,6 +396,22 @@ exports.Prisma.ClinicalOrderScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PrescriptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prescriptionNumber: 'prescriptionNumber',
+  version: 'version',
+  parentId: 'parentId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  status: 'status',
+  prescribedBy: 'prescribedBy',
+  prescribedAt: 'prescribedAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PrescriptionOrderScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -415,6 +431,7 @@ exports.Prisma.PrescriptionOrderScalarFieldEnum = {
   instructions: 'instructions',
   instructionsAr: 'instructionsAr',
   status: 'status',
+  prescriptionId: 'prescriptionId',
   prescribedBy: 'prescribedBy',
   prescribedAt: 'prescribedAt',
   createdAt: 'createdAt',
@@ -2408,6 +2425,7 @@ exports.Prisma.ModelName = {
   EncounterNote: 'EncounterNote',
   EncounterDiagnosis: 'EncounterDiagnosis',
   ClinicalOrder: 'ClinicalOrder',
+  Prescription: 'Prescription',
   PrescriptionOrder: 'PrescriptionOrder',
   AiNoteSuggestion: 'AiNoteSuggestion',
   PatientDocument: 'PatientDocument',

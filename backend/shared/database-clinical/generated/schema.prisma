@@ -587,6 +587,7 @@ model Encounter {
   diagnoses            EncounterDiagnosis[]
   clinicalOrders       ClinicalOrder[]
   prescriptionOrders   PrescriptionOrder[]
+  prescriptions        Prescription[]
   aiNoteSuggestions    AiNoteSuggestion[]
   clinicalObservations ClinicalObservation[]
   clinicalCodings      EncounterClinicalCoding[]
@@ -794,7 +795,41 @@ model ClinicalOrder {
   @@map("clinical_orders")
 }
 
-// Prescription Orders (Medications)
+// Prescription Header (groups multiple drug lines into one clinical document)
+model Prescription {
+  id                 String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String  @map("tenant_id") @db.Uuid
+  prescriptionNumber String  @map("prescription_number") @db.VarChar(50) // e.g. RX-202604-00001
+  version            Int     @default(1) @map("version")
+  parentId           String? @map("parent_id") @db.Uuid // set on amendments
+
+  encounterId String @map("encounter_id") @db.Uuid
+  patientId   String @map("patient_id") @db.Uuid
+
+  // active | completed | cancelled | amended
+  status String @default("active") @map("status") @db.VarChar(20)
+
+  prescribedBy String   @map("prescribed_by") @db.Uuid
+  prescribedAt DateTime @default(now()) @map("prescribed_at") @db.Timestamptz(6)
+  notes        String?  @map("notes") @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  encounter  Encounter           @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  orders     PrescriptionOrder[]
+  parent     Prescription?       @relation("PrescriptionAmendments", fields: [parentId], references: [id])
+  amendments Prescription[]      @relation("PrescriptionAmendments")
+
+  @@unique([tenantId, prescriptionNumber], map: "ux_prescription_number")
+  @@index([tenantId, encounterId], map: "idx_prescription_encounter")
+  @@index([tenantId, patientId], map: "idx_prescription_patient")
+  @@index([tenantId, status], map: "idx_prescription_status")
+  @@map("prescriptions")
+}
+
+// Prescription Orders (Medications — line items under a Prescription header)
 model PrescriptionOrder {
   id          String @id @default(uuid()) @map("id") @db.Uuid
   tenantId    String @map("tenant_id") @db.Uuid
@@ -825,6 +860,9 @@ model PrescriptionOrder {
   // Status
   status String @default("active") @map("status") @db.VarChar(20) // active, completed, cancelled, discontinued
 
+  // Link to Prescription header (nullable for legacy rows)
+  prescriptionId String? @map("prescription_id") @db.Uuid
+
   // Authorship
   prescribedBy String   @map("prescribed_by") @db.Uuid
   prescribedAt DateTime @default(now()) @map("prescribed_at") @db.Timestamptz(6)
@@ -834,12 +872,14 @@ model PrescriptionOrder {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relations
-  encounter Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  encounter    Encounter     @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
 
   @@index([tenantId, encounterId], map: "idx_rx_encounter")
   @@index([tenantId, patientId], map: "idx_rx_patient")
   @@index([tenantId, drugCode], map: "idx_rx_drug_code")
   @@index([tenantId, status], map: "idx_rx_status")
+  @@index([tenantId, prescriptionId], map: "idx_rx_prescription")
   @@map("prescription_orders")
 }
 

@@ -16,11 +16,11 @@ export function usePharmacyQueue(filters?: PharmacyQueueFilters) {
   });
 }
 
-export function usePharmacyQueueItem(prescriptionOrderId?: string) {
+export function usePharmacyQueueItem(prescriptionId?: string) {
   return useQuery({
-    queryKey: QUEUE_KEYS.detail(prescriptionOrderId!),
-    queryFn: () => pharmacyQueueService.getQueueItem(prescriptionOrderId!),
-    enabled: Boolean(prescriptionOrderId),
+    queryKey: QUEUE_KEYS.detail(prescriptionId!),
+    queryFn: () => pharmacyQueueService.getQueueItem(prescriptionId!),
+    enabled: Boolean(prescriptionId),
     staleTime: 30 * 1000,
   });
 }

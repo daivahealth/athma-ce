@@ -8,11 +8,11 @@ class PharmacyQueueService {
     return response.data;
   }
 
-  async getQueueItem(prescriptionOrderId: string): Promise<{
+  async getQueueItem(prescriptionId: string): Promise<{
     prescription: Record<string, unknown> | null;
     dispensing: PharmacyDispensing | null;
   }> {
-    const response = await rcmClient.get(`/pharmacy/queue/${prescriptionOrderId}`);
+    const response = await rcmClient.get(`/pharmacy/queue/${prescriptionId}`);
     return response.data;
   }
 }

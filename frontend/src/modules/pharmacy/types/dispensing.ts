@@ -54,6 +54,7 @@ export interface PharmacyDispensing {
   dispensingNumber: string;
   patientId: string;
   encounterId?: string | null;
+  prescriptionId?: string | null;
   prescriptionOrderId?: string | null;
   dispensingSource: DispensingSource;
   paperPrescriptionRef?: string | null;
@@ -90,6 +91,9 @@ export interface PharmacyDispensing {
 }
 
 export interface CreateDispensingInput {
+  /** Preferred: link to the Prescription header */
+  prescriptionId?: string;
+  /** Legacy: single-drug prescription order link */
   prescriptionOrderId?: string;
   encounterId?: string;
   patientId: string;
@@ -106,6 +110,8 @@ export interface VerifyDispensingInput {
 
 export interface DispenseItemInput {
   stockId: string;
+  /** Which drug line (PrescriptionOrder.id) this item fulfils */
+  prescriptionOrderId?: string;
   quantityDispensed: number;
   dispensingInstructions?: string;
   isSubstituted?: boolean;

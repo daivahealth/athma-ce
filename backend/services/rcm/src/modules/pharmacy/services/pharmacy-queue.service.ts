@@ -15,62 +15,68 @@ export class PharmacyQueueService {
   ) {}
 
   /**
-   * Returns active prescriptions not yet queued/dispensed.
-   * Fetches from Clinical API then filters out already-processed prescriptions.
+   * Returns prescription headers that are active and not yet dispensed.
+   * One queue card per Prescription (header), with all its drug lines.
    */
-  async getQueue(tenantId: string, facilityId: string, userId: string, authHeader: string, filters: PharmacyQueueFiltersDto) {
-    // Fetch active prescriptions from Clinical service
-    const prescriptions = await this.fetchActivePrescriptions(tenantId, facilityId, userId, authHeader, filters);
+  async getQueue(
+    tenantId: string,
+    facilityId: string,
+    userId: string,
+    authHeader: string,
+    filters: PharmacyQueueFiltersDto,
+  ) {
+    // Fetch active prescription headers from Clinical service
+    const headers = await this.fetchActivePrescriptionHeaders(tenantId, facilityId, userId, authHeader, filters);
 
-    if (!prescriptions.length) return [];
+    if (!headers.length) return [];
 
-    const rxIds = prescriptions.map((rx: any) => rx.id);
+    const prescriptionIds = headers.map((p: any) => p.id);
 
-    // Find which ones are already in a non-cancelled dispensing record
+    // Find which prescription headers already have a dispensing record
     const existingDispensings = await this.prisma.pharmacyDispensing.findMany({
       where: {
         tenantId,
-        prescriptionOrderId: { in: rxIds },
+        prescriptionId: { in: prescriptionIds },
         status: { notIn: ['cancelled'] },
       },
-      select: { prescriptionOrderId: true, status: true, id: true, dispensingNumber: true },
+      select: { prescriptionId: true, status: true, id: true, dispensingNumber: true },
     });
 
-    const existingMap = new Map(existingDispensings.map((d) => [d.prescriptionOrderId, d]));
+    const existingMap = new Map(existingDispensings.map((d) => [d.prescriptionId, d]));
 
-    // Enrich prescriptions with dispensing status
-    const queue = prescriptions.map((rx: any) => {
-      const existing = existingMap.get(rx.id);
+    // Build one queue card per prescription header
+    const queue = headers.map((p: any) => {
+      const existing = p.id ? existingMap.get(p.id) : undefined;
       return {
-        prescriptionOrderId: rx.id,
-        patientId: rx.patientId,
-        encounterId: rx.encounterId,
-        mrn: rx.mrn ?? null,
-        patientDisplayName: rx.patientDisplayName ?? null,
-        encounterType: rx.encounterType ?? 'outpatient',
-        encounterNumber: rx.encounterNumber ?? null,
-        drugCode: rx.drugCode,
-        drugName: rx.drugName,
-        dosage: rx.dosage,
-        route: rx.route,
-        frequency: rx.frequency,
-        duration: rx.duration,
-        quantity: rx.quantity,
-        instructions: rx.instructions,
-        prescribedBy: rx.prescribedBy ?? null,
-        prescribedAt: rx.prescribedAt,
-        prescriptionStatus: rx.status,
+        // Prescription header identity
+        prescriptionId: p.id,
+        prescriptionNumber: p.prescriptionNumber,
+        version: p.version,
+        parentId: p.parentId ?? null,
+        // Patient context
+        patientId: p.patientId,
+        encounterId: p.encounterId,
+        mrn: p.mrn ?? null,
+        patientDisplayName: p.patientDisplayName ?? null,
+        dateOfBirth: p.dateOfBirth ?? null,
+        gender: p.gender ?? null,
+        encounterType: p.encounterType ?? 'outpatient',
+        encounterNumber: p.encounterNumber ?? null,
+        // Prescription authorship
+        prescribedBy: p.prescribedBy ?? null,
+        prescribedAt: p.prescribedAt,
+        notes: p.notes ?? null,
+        prescriptionStatus: p.status,
+        // Drug line items
+        items: p.items ?? [],
+        // Dispensing state
         dispensingId: existing?.id ?? null,
         dispensingNumber: existing?.dispensingNumber ?? null,
         dispensingStatus: existing?.status ?? 'pending',
-        // Ward info for inpatient (if available from Clinical API)
-        wardId: rx.wardId ?? null,
-        wardName: rx.wardName ?? null,
-        bedNumber: rx.bedNumber ?? null,
       };
     });
 
-    // Never show already-dispensed items in the active queue
+    // Never show already-dispensed prescriptions in the active queue
     const active = queue.filter(
       (item: any) => !['dispensed', 'partially_dispensed'].includes(item.dispensingStatus ?? ''),
     );
@@ -98,21 +104,36 @@ export class PharmacyQueueService {
     return active;
   }
 
-  async getQueueItem(tenantId: string, prescriptionOrderId: string, facilityId: string, userId: string, authHeader: string) {
-    const rx = await this.fetchPrescription(tenantId, prescriptionOrderId, facilityId, userId, authHeader);
+  /**
+   * Get queue detail for a specific prescription (header + all items + dispensing record).
+   */
+  async getQueueItem(
+    tenantId: string,
+    prescriptionId: string,
+    facilityId: string,
+    userId: string,
+    authHeader: string,
+  ) {
+    const prescription = await this.fetchPrescriptionHeader(tenantId, prescriptionId, facilityId, userId, authHeader);
 
     const existing = await this.prisma.pharmacyDispensing.findFirst({
-      where: { tenantId, prescriptionOrderId, status: { notIn: ['cancelled'] } },
+      where: {
+        tenantId,
+        prescriptionId,
+        status: { notIn: ['cancelled'] },
+      },
       include: { items: true },
     });
 
     return {
-      prescription: rx,
+      prescription,
       dispensing: existing ?? null,
     };
   }
 
-  private async fetchActivePrescriptions(
+  // ── Private helpers ────────────────────────────────────────────────────────
+
+  private async fetchActivePrescriptionHeaders(
     tenantId: string,
     facilityId: string,
     userId: string,
@@ -125,7 +146,7 @@ export class PharmacyQueueService {
       else if (facilityId) params.facilityId = facilityId;
 
       const response = await firstValueFrom(
-        this.httpService.get(`${this.clinicalServiceUrl}/prescriptions`, {
+        this.httpService.get(`${this.clinicalServiceUrl}/prescription-headers`, {
           headers: {
             'x-tenant-id': tenantId,
             'x-user-id': userId,
@@ -138,15 +159,21 @@ export class PharmacyQueueService {
 
       return response.data?.data ?? response.data ?? [];
     } catch (error) {
-      this.logger.error(`Failed to fetch prescriptions from Clinical API: ${(error as Error).message}`);
+      this.logger.error(`Failed to fetch prescription headers from Clinical API: ${(error as Error).message}`);
       return [];
     }
   }
 
-  private async fetchPrescription(tenantId: string, prescriptionId: string, facilityId: string, userId: string, authHeader: string) {
+  private async fetchPrescriptionHeader(
+    tenantId: string,
+    prescriptionId: string,
+    facilityId: string,
+    userId: string,
+    authHeader: string,
+  ) {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`${this.clinicalServiceUrl}/prescriptions/${prescriptionId}`, {
+        this.httpService.get(`${this.clinicalServiceUrl}/prescription-headers/${prescriptionId}`, {
           headers: {
             'x-tenant-id': tenantId,
             'x-user-id': userId,
@@ -157,7 +184,7 @@ export class PharmacyQueueService {
       );
       return response.data;
     } catch (error) {
-      this.logger.error(`Failed to fetch prescription ${prescriptionId}: ${(error as Error).message}`);
+      this.logger.error(`Failed to fetch prescription header ${prescriptionId}: ${(error as Error).message}`);
       return null;
     }
   }
