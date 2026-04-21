@@ -63,7 +63,7 @@ export class PharmacyQueueService {
         encounterType: p.encounterType ?? 'outpatient',
         encounterNumber: p.encounterNumber ?? null,
         // Prescription authorship
-        prescribedBy: p.prescribedBy ?? null,
+        prescribedBy: p.prescribedByName ?? p.prescribedBy ?? null,
         prescribedAt: p.prescribedAt,
         notes: p.notes ?? null,
         prescriptionStatus: p.status,
