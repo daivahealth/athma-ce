@@ -10,7 +10,6 @@ import {
   PackageCheck,
   X,
   ClipboardList,
-  ChevronDown,
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -218,7 +217,7 @@ function MedicationSearchInput({ onSelect }: { onSelect: (stock: PharmacyStock) 
   );
 }
 
-/* ─── Row for each medication ──────────────────────────────────────────── */
+/* ─── Row for each medication (side-by-side prescribed ↔ stock) ───────── */
 function DispensedItemRow({
   item,
   onChange,
@@ -231,137 +230,147 @@ function DispensedItemRow({
   const stock = item.stock;
   const availableQty = stock ? Number(stock.quantityOnHand) : null;
   const isPrescribed = Boolean(item.prescriptionOrderId);
+  const displayName =
+    stock?.billingItemDescription ?? stock?.drugName ?? item.prescribedDrugName ?? '—';
 
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-3 items-start py-4">
-      <div className="space-y-2.5">
-        {/* Drug info */}
-        <div className="flex items-start gap-2 flex-wrap">
-          <Pill className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-medium text-sm">
-                {stock?.billingItemDescription ?? stock?.drugName ?? item.prescribedDrugName ?? '—'}
-              </span>
-              {stock?.strength && (
-                <span className="text-xs text-muted-foreground">{stock.strength}</span>
-              )}
-              {stock && (
-                <Badge variant="outline" className="text-xs">{stock.dosageForm}</Badge>
-              )}
-              {isPrescribed && (
-                <Badge variant="secondary" className="text-xs">Prescribed</Badge>
-              )}
-            </div>
-            {/* Catalog name as subtitle when billing description overrides */}
-            {stock?.billingItemDescription && (
-              <div className="text-xs text-muted-foreground mt-0.5">
-                Catalog: {stock.drugName}
-              </div>
+    <div className="grid grid-cols-[1fr_1fr_36px] gap-4 items-start py-4 px-6">
+      {/* ── Left: Prescribed Medication ───────────────────────── */}
+      <div className="flex items-start gap-2.5 min-w-0">
+        <Pill className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-semibold text-sm">{displayName}</span>
+            {stock?.strength && (
+              <span className="text-xs text-muted-foreground">{stock.strength}</span>
+            )}
+            {stock && (
+              <Badge variant="outline" className="text-xs">{stock.dosageForm}</Badge>
             )}
             {isPrescribed && (
-              <div className="text-xs text-muted-foreground mt-0.5 space-x-2">
-                {item.prescribedDosage && <span>{item.prescribedDosage}</span>}
-                {item.prescribedFrequency && <span>· {item.prescribedFrequency}</span>}
-                {item.prescribedQuantity && <span>· Qty: {item.prescribedQuantity}</span>}
-              </div>
+              <Badge variant="secondary" className="text-xs uppercase tracking-wide">Prescribed</Badge>
             )}
           </div>
+          {stock?.billingItemDescription && (
+            <div className="text-xs text-muted-foreground mt-0.5">Catalog: {stock.drugName}</div>
+          )}
+          {(item.prescribedDosage || item.prescribedFrequency) && (
+            <div className="text-xs text-muted-foreground mt-0.5">
+              {[item.prescribedDosage, item.prescribedFrequency]
+                .filter(Boolean)
+                .join(' · ')}
+              {item.prescribedQuantity && (
+                <span className="ml-1">· Qty: {item.prescribedQuantity}</span>
+              )}
+            </div>
+          )}
         </div>
+      </div>
 
-        {/* Batch selector — shown if no stock yet selected */}
+      {/* ── Right: Stock Batch Selection ──────────────────────── */}
+      <div className="space-y-2">
         {!stock ? (
-          <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Select stock batch</Label>
+          <>
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Select Stock Batch
+            </p>
             <StockSelector
               drugCode={item.prescribedDrugCode}
-              onSelect={(s) => onChange({
-                stock: s,
-                quantityDispensed: item.prescribedQuantity
-                  ? Math.min(parseInt(item.prescribedQuantity) || 1, Number(s.quantityOnHand))
-                  : 1,
-              })}
+              onSelect={(s) =>
+                onChange({
+                  stock: s,
+                  quantityDispensed: item.prescribedQuantity
+                    ? Math.min(parseInt(item.prescribedQuantity) || 1, Number(s.quantityOnHand))
+                    : 1,
+                })
+              }
             />
-          </div>
+          </>
         ) : (
-          <div className="text-xs text-muted-foreground space-x-2 flex items-center gap-1">
-            <span>Batch: {stock.batchNumber}</span>
-            <span>·</span>
-            <span>Exp: {format(new Date(stock.expiryDate), 'MMM yyyy')}</span>
-            <span>·</span>
-            <span>On hand: {Number(stock.quantityOnHand)} {stock.unit}</span>
-            <button
-              type="button"
-              className="text-xs text-primary underline hover:no-underline ml-1"
-              onClick={() => onChange({ stock: null })}
-            >
-              change
-            </button>
-          </div>
-        )}
+          <>
+            {/* Batch identity */}
+            <div className="flex items-center gap-2 flex-wrap text-xs text-muted-foreground">
+              <span className="font-medium text-foreground">{stock.batchNumber}</span>
+              <span>·</span>
+              <span>Exp: {format(new Date(stock.expiryDate), 'MMM yyyy')}</span>
+              <span>·</span>
+              <span>On hand: {Number(stock.quantityOnHand)} {stock.unit}</span>
+              <button
+                type="button"
+                className="text-primary underline hover:no-underline"
+                onClick={() => onChange({ stock: null })}
+              >
+                change
+              </button>
+            </div>
 
-        {/* Qty + instructions (only when batch selected) */}
-        {stock && (
-          <div className="grid grid-cols-[140px_1fr] gap-3">
-            <div className="space-y-1">
-              <Label className="text-xs">
-                Qty <span className="text-muted-foreground">(max {availableQty})</span>
-              </Label>
-              <Input
-                type="number"
-                min={1}
-                max={availableQty ?? undefined}
-                value={item.quantityDispensed}
-                onChange={(e) =>
-                  onChange({ quantityDispensed: Math.max(1, parseInt(e.target.value) || 1) })
-                }
-              />
+            {/* Qty + Instructions */}
+            <div className="grid grid-cols-[120px_1fr] gap-2">
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">
+                  Qty (max {availableQty})
+                </Label>
+                <Input
+                  type="number"
+                  min={1}
+                  max={availableQty ?? undefined}
+                  value={item.quantityDispensed}
+                  className="h-8 text-sm"
+                  onChange={(e) =>
+                    onChange({ quantityDispensed: Math.max(1, parseInt(e.target.value) || 1) })
+                  }
+                />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">Instructions</Label>
+                <Input
+                  placeholder="Take 1 tablet twice daily after food"
+                  value={item.dispensingInstructions}
+                  className="h-8 text-sm"
+                  onChange={(e) => onChange({ dispensingInstructions: e.target.value })}
+                />
+              </div>
             </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Instructions</Label>
-              <Input
-                placeholder="e.g. Take 1 tablet twice daily after food"
-                value={item.dispensingInstructions}
-                onChange={(e) => onChange({ dispensingInstructions: e.target.value })}
-              />
-            </div>
-          </div>
-        )}
 
-        {/* Substitution (only when batch selected) */}
-        {stock && (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id={`sub-${item.rowId}`}
-                checked={item.isSubstituted}
-                onChange={(e) => onChange({ isSubstituted: (e.target as HTMLInputElement).checked })}
-              />
-              <Label htmlFor={`sub-${item.rowId}`} className="text-xs cursor-pointer text-muted-foreground">
-                Generic substitution
-              </Label>
+            {/* Substitution */}
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id={`sub-${item.rowId}`}
+                  checked={item.isSubstituted}
+                  onChange={(e) =>
+                    onChange({ isSubstituted: (e.target as HTMLInputElement).checked })
+                  }
+                />
+                <Label
+                  htmlFor={`sub-${item.rowId}`}
+                  className="text-xs cursor-pointer text-muted-foreground"
+                >
+                  Generic substitution
+                </Label>
+              </div>
+              {item.isSubstituted && (
+                <Input
+                  placeholder="Reason for substitution…"
+                  value={item.substitutionReason}
+                  className="text-sm h-8"
+                  onChange={(e) => onChange({ substitutionReason: e.target.value })}
+                />
+              )}
             </div>
-            {item.isSubstituted && (
-              <Input
-                placeholder="Reason for substitution…"
-                value={item.substitutionReason}
-                onChange={(e) => onChange({ substitutionReason: e.target.value })}
-                className="text-sm"
-              />
-            )}
-          </div>
+          </>
         )}
       </div>
 
-      {/* Remove */}
-      <Button
-        variant="ghost"
-        size="sm"
+      {/* ── Actions ───────────────────────────────────────────── */}
+      <button
+        type="button"
         onClick={onRemove}
-        className="text-muted-foreground hover:text-destructive mt-1"
+        className="text-muted-foreground hover:text-destructive transition-colors mt-1"
+        aria-label="Remove"
       >
         <Trash2 className="h-4 w-4" />
-      </Button>
+      </button>
     </div>
   );
 }
@@ -512,85 +521,55 @@ export default function ExecuteDispensePage() {
       {/* Patient header — same component as the detail page */}
       <DispensingPatientHeader dispensing={dispensing} />
 
-      {/* Ordered Medications (from prescription) */}
-      {prescriptionHeader?.items && prescriptionHeader.items.length > 0 && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <ClipboardList className="h-4 w-4 text-muted-foreground" />
-              Ordered Medications
-              <span className="text-xs font-normal text-muted-foreground">
-                ({prescriptionHeader.items.length} drug{prescriptionHeader.items.length !== 1 ? 's' : ''} prescribed)
-              </span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-0 divide-y p-0 px-6 pb-4">
-            {prescriptionHeader.items.map((drug) => (
-              <div key={drug.id} className="flex items-start justify-between py-2.5">
-                <div className="flex items-start gap-2 min-w-0">
-                  <Pill className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5" />
-                  <div className="min-w-0">
-                    <div className="font-medium text-sm">{drug.drugName}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5 space-x-1">
-                      {drug.dosage && <span>{drug.dosage}</span>}
-                      {drug.frequency && <span>· {drug.frequency}</span>}
-                      {drug.duration && <span>· {drug.duration}</span>}
-                    </div>
-                  </div>
-                </div>
-                {drug.quantity && (
-                  <span className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground flex-shrink-0 ml-3">
-                    Qty: {drug.quantity}
-                  </span>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Medications */}
+      {/* Medication Dispensing Plan */}
       <Card className="overflow-visible">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            Medications to Dispense
-            {hasPrescription && items.length > 0 && (
-              <Badge variant="secondary" className="text-xs font-normal">
-                {readyItems.length} of {items.length} batches selected
-              </Badge>
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Items (pre-populated from prescription or manually added) */}
-          {items.length > 0 && (
-            <div className="divide-y">
-              {items.map((item, index) => (
-                <DispensedItemRow
-                  key={item.rowId}
-                  item={item}
-                  onChange={(patch) => updateItem(index, patch)}
-                  onRemove={() => removeItem(index)}
-                />
-              ))}
-            </div>
-          )}
-
-          {items.length === 0 && !hasPrescription && (
-            <p className="text-sm text-muted-foreground text-center py-6">
-              Use the search below to add medications
-            </p>
-          )}
-
-          {/* Add extra drugs (always available for substitutions / additional items) */}
-          <div className="pt-2">
-            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
-              <ChevronDown className="h-3.5 w-3.5" />
-              {hasPrescription ? 'Add extra / substitution drug' : 'Add medication'}
-            </div>
-            <MedicationSearchInput onSelect={addFreeformItem} />
+        {/* Card header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4 text-muted-foreground" />
+            <span className="font-semibold text-sm">Medication Dispensing Plan</span>
           </div>
-        </CardContent>
+          {items.length > 0 && (
+            <span className="text-xs text-muted-foreground">
+              {readyItems.length} of {items.length} batch{items.length !== 1 ? 'es' : ''} selected
+            </span>
+          )}
+        </div>
+
+        {/* Column headers */}
+        {items.length > 0 && (
+          <div className="grid grid-cols-[1fr_1fr_36px] gap-4 px-6 py-2.5 bg-muted/40 border-b text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <span>Prescribed Medication</span>
+            <span>Stock Batch Selection</span>
+            <span>Actions</span>
+          </div>
+        )}
+
+        {/* Rows */}
+        {items.length > 0 ? (
+          <div className="divide-y">
+            {items.map((item, index) => (
+              <DispensedItemRow
+                key={item.rowId}
+                item={item}
+                onChange={(patch) => updateItem(index, patch)}
+                onRemove={() => removeItem(index)}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground text-center py-10">
+            Use the search below to add medications
+          </p>
+        )}
+
+        {/* Add extra / substitution drug */}
+        <div className="px-6 py-4 border-t">
+          <MedicationSearchInput onSelect={addFreeformItem} />
+          <p className="text-xs text-muted-foreground mt-1.5">
+            + {hasPrescription ? 'Add extra or substitution drug' : 'Add medication'}
+          </p>
+        </div>
       </Card>
 
       {/* Counselling */}
