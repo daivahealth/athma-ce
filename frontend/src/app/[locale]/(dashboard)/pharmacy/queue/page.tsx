@@ -166,6 +166,12 @@ function PrescriptionCard({
               <span>
                 Prescribed: {format(new Date(item.prescribedAt), 'dd MMM yyyy HH:mm')}
               </span>
+              {item.prescribedBy && (
+                <span className="flex items-center gap-1">
+                  <User className="h-3 w-3" />
+                  {item.prescribedBy}
+                </span>
+              )}
               {item.wardName && (
                 <span className="flex items-center gap-1">
                   <Building2 className="h-3 w-3" />
