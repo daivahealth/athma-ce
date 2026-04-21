@@ -31,10 +31,11 @@ export class PharmacyDispensingController {
   async create(
     @Headers('x-tenant-id') tenantId: string,
     @Headers('x-user-id') userId: string,
+    @Headers('x-facility-id') facilityId: string,
     @Headers('authorization') authHeader: string,
     @Body() dto: CreateDispensingDto,
   ) {
-    return this.dispensingService.create(tenantId, dto, userId, authHeader);
+    return this.dispensingService.create(tenantId, dto, userId, facilityId, authHeader);
   }
 
   @Get()

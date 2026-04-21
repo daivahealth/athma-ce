@@ -36,7 +36,7 @@ export class PharmacyDispensingService {
     private readonly chargeService: PharmacyChargeService,
   ) {}
 
-  async create(tenantId: string, dto: CreateDispensingDto, userId: string, authHeader: string) {
+  async create(tenantId: string, dto: CreateDispensingDto, userId: string, facilityId: string, authHeader: string) {
     const useHeader = !!dto.prescriptionId;
     const isDigital = useHeader || !!dto.prescriptionOrderId;
 
@@ -62,7 +62,7 @@ export class PharmacyDispensingService {
 
       // Fetch prescription data from Clinical API
       const prescription = useHeader
-        ? await this.fetchPrescriptionHeader(tenantId, dto.prescriptionId!, authHeader)
+        ? await this.fetchPrescriptionHeader(tenantId, dto.prescriptionId!, userId, facilityId, authHeader)
         : await this.fetchPrescription(tenantId, dto.prescriptionOrderId!, authHeader);
 
       if (!prescription || prescription.status !== 'active') {
@@ -487,11 +487,22 @@ export class PharmacyDispensingService {
     }
   }
 
-  private async fetchPrescriptionHeader(tenantId: string, prescriptionId: string, authHeader: string) {
+  private async fetchPrescriptionHeader(
+    tenantId: string,
+    prescriptionId: string,
+    userId: string,
+    facilityId: string,
+    authHeader: string,
+  ) {
     try {
       const response = await firstValueFrom(
         this.httpService.get(`${this.clinicalServiceUrl}/prescription-headers/${prescriptionId}`, {
-          headers: { 'x-tenant-id': tenantId, authorization: authHeader },
+          headers: {
+            'x-tenant-id': tenantId,
+            'x-user-id': userId,
+            'x-facility-id': facilityId,
+            authorization: authHeader,
+          },
         }),
       );
       return response.data;
