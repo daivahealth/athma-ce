@@ -8,6 +8,7 @@ import { PharmacyQueueFiltersDto } from '../dto/pharmacy-queue.dto';
 export class PharmacyQueueService {
   private readonly logger = new Logger(PharmacyQueueService.name);
   private readonly clinicalServiceUrl = process.env.CLINICAL_SERVICE_URL ?? 'http://localhost:3011/api/v1';
+  private readonly foundationServiceUrl = process.env.FOUNDATION_API_URL ?? 'http://localhost:3010/api/v1';
 
   constructor(
     private readonly prisma: PrismaService,
@@ -44,9 +45,20 @@ export class PharmacyQueueService {
 
     const existingMap = new Map(existingDispensings.map((d) => [d.prescriptionId, d]));
 
+    // Resolve staff display names for prescriptions missing prescribedByName (legacy rows)
+    const missingNameUuids = [
+      ...new Set(
+        headers
+          .filter((p: any) => !p.prescribedByName && p.prescribedBy)
+          .map((p: any) => p.prescribedBy as string),
+      ),
+    ];
+    const staffNameMap = await this.resolveStaffNames(tenantId, facilityId, userId, authHeader, missingNameUuids);
+
     // Build one queue card per prescription header
     const queue = headers.map((p: any) => {
       const existing = p.id ? existingMap.get(p.id) : undefined;
+      const prescribedBy = p.prescribedByName ?? staffNameMap.get(p.prescribedBy) ?? null;
       return {
         // Prescription header identity
         prescriptionId: p.id,
@@ -62,8 +74,8 @@ export class PharmacyQueueService {
         gender: p.gender ?? null,
         encounterType: p.encounterType ?? 'outpatient',
         encounterNumber: p.encounterNumber ?? null,
-        // Prescription authorship
-        prescribedBy: p.prescribedByName ?? p.prescribedBy ?? null,
+        // Prescription authorship — always a human-readable name, never a raw UUID
+        prescribedBy,
         prescribedAt: p.prescribedAt,
         notes: p.notes ?? null,
         prescriptionStatus: p.status,
@@ -162,6 +174,44 @@ export class PharmacyQueueService {
       this.logger.error(`Failed to fetch prescription headers from Clinical API: ${(error as Error).message}`);
       return [];
     }
+  }
+
+  /**
+   * Fetch display names for a list of staff UUIDs from Foundation service.
+   * Returns a Map<uuid, displayName>. Missing/failed lookups are silently skipped.
+   */
+  private async resolveStaffNames(
+    tenantId: string,
+    facilityId: string,
+    userId: string,
+    authHeader: string,
+    staffIds: string[],
+  ): Promise<Map<string, string>> {
+    if (!staffIds.length) return new Map();
+
+    const results = await Promise.allSettled(
+      staffIds.map(async (id) => {
+        const response = await firstValueFrom(
+          this.httpService.get(`${this.foundationServiceUrl}/staff/${id}`, {
+            headers: {
+              'x-tenant-id': tenantId,
+              'x-user-id': userId,
+              'x-facility-id': facilityId,
+              authorization: authHeader,
+            },
+          }),
+        );
+        return { id, displayName: response.data?.displayName as string };
+      }),
+    );
+
+    const map = new Map<string, string>();
+    for (const result of results) {
+      if (result.status === 'fulfilled' && result.value.displayName) {
+        map.set(result.value.id, result.value.displayName);
+      }
+    }
+    return map;
   }
 
   private async fetchPrescriptionHeader(
