@@ -15,6 +15,7 @@ import {
 } from '@/modules/clinical/hooks/use-charting';
 import { useEncounter } from '@/modules/clinical/hooks/use-encounters';
 import { useMedications } from '@/modules/foundation/hooks/use-catalogs';
+import { useStaffMember } from '@/modules/foundation/hooks/use-staff';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { DrugCodeSystem } from '@/modules/clinical/types/charting';
 import type { Medication } from '@/modules/foundation/types/catalog';
@@ -42,6 +43,7 @@ export function PrescriptionBlockView({ deleteNode }: NodeViewProps) {
   const toast = useToast();
 
   const { data: encounter } = useEncounter(encounterId);
+  const { data: prescribingStaff } = useStaffMember(encounter?.primaryStaffId);
   const { data: prescriptions = [], isLoading } = usePrescriptionsByEncounter(encounterId);
   const { data: medications } = useMedications({ search: debouncedSearch || undefined });
   const { mutateAsync: createPrescription } = useCreatePrescription();
@@ -94,6 +96,7 @@ export function PrescriptionBlockView({ deleteNode }: NodeViewProps) {
         route: selection.route,
         frequency: selection.frequency,
         prescribedBy: encounter.primaryStaffId,
+        ...(prescribingStaff?.displayName && { prescribedByName: prescribingStaff.displayName }),
       });
       toast({
         title: 'Prescription added',

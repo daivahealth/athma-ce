@@ -281,6 +281,7 @@ export interface CreatePrescriptionInput {
   quantity?: number;
   refills?: number;
   prescribedBy: string;
+  prescribedByName?: string;
   startDate?: string;
   endDate?: string;
   instructions?: string;

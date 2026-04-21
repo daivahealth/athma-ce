@@ -93,6 +93,11 @@ export class CreatePrescriptionWithItemsDto {
   @IsUUID('loose' as any)
   prescribedBy!: string;
 
+  @ApiPropertyOptional({ description: 'Display name of the prescribing staff member' })
+  @IsOptional()
+  @IsString()
+  prescribedByName?: string;
+
   @ApiPropertyOptional({ description: 'Clinical notes for this prescription' })
   @IsOptional()
   @IsString()
@@ -150,6 +155,7 @@ export class PrescriptionHeaderResponseDto {
   @ApiProperty() patientId!: string;
   @ApiProperty() status!: string;
   @ApiProperty() prescribedBy!: string;
+  @ApiPropertyOptional() prescribedByName?: string | null;
   @ApiProperty() prescribedAt!: Date;
   @ApiPropertyOptional() notes?: string | null;
   @ApiProperty() createdAt!: Date;

@@ -51,6 +51,7 @@ export class PrescriptionHeadersService {
         encounterId: dto.encounterId,
         patientId: dto.patientId,
         prescribedBy: dto.prescribedBy,
+        ...(dto.prescribedByName && { prescribedByName: dto.prescribedByName }),
         ...(dto.notes && { notes: dto.notes }),
         orders: {
           create: dto.items.map((item) => this.mapItemToOrderData(tenantId, dto, item)),
@@ -267,6 +268,7 @@ export class PrescriptionHeadersService {
           encounterId: original.encounterId,
           patientId: original.patientId,
           prescribedBy: original.prescribedBy,
+          ...(original.prescribedByName && { prescribedByName: original.prescribedByName }),
           status: 'active',
           ...(dto.notes !== undefined ? { notes: dto.notes } : original.notes ? { notes: original.notes } : {}),
           orders: {
@@ -380,6 +382,7 @@ export class PrescriptionHeadersService {
       patientId: p.patientId,
       status: p.status,
       prescribedBy: p.prescribedBy,
+      prescribedByName: p.prescribedByName ?? null,
       prescribedAt: p.prescribedAt,
       notes: p.notes ?? null,
       createdAt: p.createdAt,

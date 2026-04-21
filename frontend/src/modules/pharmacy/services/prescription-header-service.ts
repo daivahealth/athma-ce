@@ -28,6 +28,7 @@ export interface PrescriptionHeaderResponse {
   patientId: string;
   status: string;
   prescribedBy: string;
+  prescribedByName?: string | null;
   prescribedAt: string;
   notes?: string | null;
   createdAt: string;

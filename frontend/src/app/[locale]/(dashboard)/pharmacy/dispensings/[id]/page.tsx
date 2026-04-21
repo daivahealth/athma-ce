@@ -126,6 +126,12 @@ export default function DispensingDetailPage() {
               ))}
             </div>
 
+            {prescriptionHeader.prescribedByName && (
+              <p className="text-xs text-muted-foreground">
+                Prescribed by: <span className="font-medium text-foreground">{prescriptionHeader.prescribedByName}</span>
+              </p>
+            )}
+
             {prescriptionHeader.notes && (
               <p className="text-xs text-muted-foreground italic">Note: {prescriptionHeader.notes}</p>
             )}

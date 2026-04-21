@@ -809,9 +809,10 @@ model Prescription {
   // active | completed | cancelled | amended
   status String @default("active") @map("status") @db.VarChar(20)
 
-  prescribedBy String   @map("prescribed_by") @db.Uuid
-  prescribedAt DateTime @default(now()) @map("prescribed_at") @db.Timestamptz(6)
-  notes        String?  @map("notes") @db.Text
+  prescribedBy     String   @map("prescribed_by") @db.Uuid
+  prescribedByName String?  @map("prescribed_by_name") @db.VarChar(255) // denormalized display name
+  prescribedAt     DateTime @default(now()) @map("prescribed_at") @db.Timestamptz(6)
+  notes            String?  @map("notes") @db.Text
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)

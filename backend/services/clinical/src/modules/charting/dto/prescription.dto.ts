@@ -90,6 +90,11 @@ export class CreatePrescriptionDto {
   @ApiProperty({ description: 'Staff ID who prescribed' })
   @IsUUID("loose" as any)
   prescribedBy!: string;
+
+  @ApiPropertyOptional({ description: 'Display name of the prescribing staff member' })
+  @IsOptional()
+  @IsString()
+  prescribedByName?: string;
 }
 
 // DTO for updating a prescription order

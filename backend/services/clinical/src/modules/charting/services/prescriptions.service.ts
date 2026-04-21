@@ -13,12 +13,14 @@ export class PrescriptionsService {
       dto.encounterId,
       dto.patientId,
       dto.prescribedBy,
+      dto.prescribedByName,
     );
 
+    const { prescribedByName: _name, ...orderData } = dto;
     return this.prisma.prescriptionOrder.create({
       data: {
         tenantId,
-        ...dto,
+        ...orderData,
         codeSystem: dto.codeSystem || 'NDC',
         refills: dto.refills || 0,
         prescriptionId: header.id,
@@ -38,6 +40,7 @@ export class PrescriptionsService {
     encounterId: string,
     patientId: string,
     prescribedBy: string,
+    prescribedByName?: string,
   ): Promise<{ id: string }> {
     const existing = await this.prisma.prescription.findFirst({
       where: { tenantId, encounterId, status: 'active' },
@@ -48,7 +51,15 @@ export class PrescriptionsService {
 
     const prescriptionNumber = await this.generatePrescriptionNumber(tenantId);
     return this.prisma.prescription.create({
-      data: { tenantId, prescriptionNumber, encounterId, patientId, prescribedBy, status: 'active' },
+      data: {
+        tenantId,
+        prescriptionNumber,
+        encounterId,
+        patientId,
+        prescribedBy,
+        ...(prescribedByName && { prescribedByName }),
+        status: 'active',
+      },
       select: { id: true },
     });
   }
