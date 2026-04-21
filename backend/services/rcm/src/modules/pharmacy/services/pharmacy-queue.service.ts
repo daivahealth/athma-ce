@@ -47,7 +47,7 @@ export class PharmacyQueueService {
 
     // Resolve staff display names for prescriptions missing prescribedByName (legacy rows)
     const missingNameUuids = [
-      ...new Set(
+      ...new Set<string>(
         headers
           .filter((p: any) => !p.prescribedByName && p.prescribedBy)
           .map((p: any) => p.prescribedBy as string),
