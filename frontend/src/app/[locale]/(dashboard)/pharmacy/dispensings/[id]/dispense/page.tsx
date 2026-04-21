@@ -32,6 +32,7 @@ import {
 import { usePharmacyStock } from '@/modules/pharmacy/hooks/use-pharmacy-stock';
 import { usePrescriptionHeader } from '@/modules/pharmacy/hooks/use-prescription-header';
 import { DispensingStatus, DispensingSource } from '@/modules/pharmacy/types/dispensing';
+import { DispensingPatientHeader } from '@/modules/pharmacy/components/DispensingPatientHeader';
 import type { PharmacyStock } from '@/modules/pharmacy/types/stock';
 import type { PrescriptionDrugItemResponse } from '@/modules/pharmacy/services/prescription-header-service';
 
@@ -508,74 +509,8 @@ export default function ExecuteDispensePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={() => router.back()}>
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back
-        </Button>
-        <div>
-          <h1 className="text-xl font-semibold flex items-center gap-2">
-            <PackageCheck className="h-5 w-5" />
-            Dispense Medication
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {dispensing.dispensingNumber} · {dispensing.patientDisplayName ?? 'Unknown Patient'}
-            {dispensing.mrn ? ` · MRN: ${dispensing.mrn}` : ''}
-          </p>
-        </div>
-      </div>
-
-      {/* Patient summary */}
-      <Card>
-        <CardContent className="pt-4 grid grid-cols-2 gap-3 text-sm">
-          <div>
-            <div className="text-xs text-muted-foreground mb-0.5">Patient</div>
-            <div className="font-medium">{dispensing.patientDisplayName ?? '—'}</div>
-            {dispensing.mrn && (
-              <div className="text-xs text-muted-foreground">MRN: {dispensing.mrn}</div>
-            )}
-          </div>
-          <div>
-            <div className="text-xs text-muted-foreground mb-0.5">Channel</div>
-            <Badge variant="outline" className="capitalize">
-              {dispensing.dispensingChannel.replace(/_/g, ' ')}
-            </Badge>
-          </div>
-          {dispensing.prescribedByName && (
-            <div>
-              <div className="text-xs text-muted-foreground mb-0.5">Prescribed By</div>
-              <div>{dispensing.prescribedByName}</div>
-            </div>
-          )}
-          {dispensing.wardName && (
-            <div>
-              <div className="text-xs text-muted-foreground mb-0.5">Ward</div>
-              <div>
-                {dispensing.wardName}
-                {dispensing.bedNumber ? ` — Bed ${dispensing.bedNumber}` : ''}
-              </div>
-            </div>
-          )}
-          {prescriptionHeader && (
-            <div className="col-span-2">
-              <div className="text-xs text-muted-foreground mb-0.5">Prescription</div>
-              <div className="flex items-center gap-2">
-                <ClipboardList className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="font-mono text-sm font-semibold">
-                  {prescriptionHeader.prescriptionNumber}
-                </span>
-                {prescriptionHeader.version > 1 && (
-                  <Badge variant="secondary" className="text-xs">v{prescriptionHeader.version}</Badge>
-                )}
-                {prescriptionHeader.notes && (
-                  <span className="text-xs text-muted-foreground italic">— {prescriptionHeader.notes}</span>
-                )}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      {/* Patient header — same component as the detail page */}
+      <DispensingPatientHeader dispensing={dispensing} />
 
       {/* Ordered Medications (from prescription) */}
       {prescriptionHeader?.items && prescriptionHeader.items.length > 0 && (
