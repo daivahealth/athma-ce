@@ -7,14 +7,67 @@ export class PrescriptionsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(tenantId: string, dto: CreatePrescriptionDto) {
+    // Auto-create or reuse a Prescription header so this order appears in the pharmacy queue
+    const header = await this.findOrCreateHeader(
+      tenantId,
+      dto.encounterId,
+      dto.patientId,
+      dto.prescribedBy,
+    );
+
     return this.prisma.prescriptionOrder.create({
       data: {
         tenantId,
         ...dto,
         codeSystem: dto.codeSystem || 'NDC',
         refills: dto.refills || 0,
+        prescriptionId: header.id,
       },
     });
+  }
+
+  // ── Private helpers ──────────────────────────────────────────────────────
+
+  /**
+   * Find an existing active Prescription header for the encounter, or create one.
+   * This groups all drugs added in the same encounter session under one prescription
+   * so the pharmacy queue shows a single card.
+   */
+  private async findOrCreateHeader(
+    tenantId: string,
+    encounterId: string,
+    patientId: string,
+    prescribedBy: string,
+  ): Promise<{ id: string }> {
+    const existing = await this.prisma.prescription.findFirst({
+      where: { tenantId, encounterId, status: 'active' },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true },
+    });
+    if (existing) return existing;
+
+    const prescriptionNumber = await this.generatePrescriptionNumber(tenantId);
+    return this.prisma.prescription.create({
+      data: { tenantId, prescriptionNumber, encounterId, patientId, prescribedBy, status: 'active' },
+      select: { id: true },
+    });
+  }
+
+  private async generatePrescriptionNumber(tenantId: string): Promise<string> {
+    const now = new Date();
+    const ym = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const prefix = `RX-${ym}-`;
+    const latest = await this.prisma.prescription.findFirst({
+      where: { tenantId, prescriptionNumber: { startsWith: prefix } },
+      orderBy: { prescriptionNumber: 'desc' },
+      select: { prescriptionNumber: true },
+    });
+    let seq = 1;
+    if (latest) {
+      const match = latest.prescriptionNumber.match(/^RX-(\d{6})-(\d{5})$/);
+      if (match) seq = parseInt(match[2]!, 10) + 1;
+    }
+    return `${prefix}${String(seq).padStart(5, '0')}`;
   }
 
   async findById(tenantId: string, id: string) {
