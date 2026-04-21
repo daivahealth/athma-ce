@@ -52,6 +52,9 @@ export interface PharmacyStock {
   unitCostPrice?: number | null;
   currency: string;
   billingItemId?: string | null;
+  billingItemDescription?: string | null;
+  billingItemCode?: string | null;
+  billingItemListPrice?: number | null;
   status: PharmacyStockStatus;
   isControlled: boolean;
   controlledClass?: string | null;

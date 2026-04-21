@@ -117,10 +117,13 @@ function StockSelector({
                     onMouseDown={() => handleSelect(s)}
                   >
                     <div className="font-medium text-xs">
-                      {s.drugName}
+                      {s.billingItemDescription ?? s.drugName}
                       {s.strength ? ` (${s.strength})` : ''}
                       <Badge variant="outline" className="ml-2 text-xs">{s.dosageForm}</Badge>
                     </div>
+                    {s.billingItemDescription && (
+                      <div className="text-xs text-muted-foreground">{s.drugName}</div>
+                    )}
                     <div className="text-xs text-muted-foreground">
                       Batch: {s.batchNumber} · Exp: {format(new Date(s.expiryDate), 'MMM yyyy')} · On hand: {Number(s.quantityOnHand)} {s.unit}
                     </div>
@@ -193,10 +196,13 @@ function MedicationSearchInput({ onSelect }: { onSelect: (stock: PharmacyStock) 
                     onMouseDown={() => handleSelect(s)}
                   >
                     <div className="font-medium text-sm">
-                      {s.drugName}
+                      {s.billingItemDescription ?? s.drugName}
                       {s.strength ? ` (${s.strength})` : ''}
                       <Badge variant="outline" className="ml-2 text-xs">{s.dosageForm}</Badge>
                     </div>
+                    {s.billingItemDescription && (
+                      <div className="text-xs text-muted-foreground">{s.drugName}</div>
+                    )}
                     <div className="text-xs text-muted-foreground mt-0.5">
                       Batch: {s.batchNumber} · Exp: {format(new Date(s.expiryDate), 'MMM yyyy')} · On hand: {Number(s.quantityOnHand)} {s.unit}
                     </div>
@@ -234,7 +240,7 @@ function DispensedItemRow({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-medium text-sm">
-                {stock?.drugName ?? item.prescribedDrugName ?? '—'}
+                {stock?.billingItemDescription ?? stock?.drugName ?? item.prescribedDrugName ?? '—'}
               </span>
               {stock?.strength && (
                 <span className="text-xs text-muted-foreground">{stock.strength}</span>
@@ -246,6 +252,12 @@ function DispensedItemRow({
                 <Badge variant="secondary" className="text-xs">Prescribed</Badge>
               )}
             </div>
+            {/* Catalog name as subtitle when billing description overrides */}
+            {stock?.billingItemDescription && (
+              <div className="text-xs text-muted-foreground mt-0.5">
+                Catalog: {stock.drugName}
+              </div>
+            )}
             {isPrescribed && (
               <div className="text-xs text-muted-foreground mt-0.5 space-x-2">
                 {item.prescribedDosage && <span>{item.prescribedDosage}</span>}
@@ -564,6 +576,43 @@ export default function ExecuteDispensePage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Ordered Medications (from prescription) */}
+      {prescriptionHeader?.items && prescriptionHeader.items.length > 0 && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <ClipboardList className="h-4 w-4 text-muted-foreground" />
+              Ordered Medications
+              <span className="text-xs font-normal text-muted-foreground">
+                ({prescriptionHeader.items.length} drug{prescriptionHeader.items.length !== 1 ? 's' : ''} prescribed)
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-0 divide-y p-0 px-6 pb-4">
+            {prescriptionHeader.items.map((drug) => (
+              <div key={drug.id} className="flex items-start justify-between py-2.5">
+                <div className="flex items-start gap-2 min-w-0">
+                  <Pill className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <div className="font-medium text-sm">{drug.drugName}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5 space-x-1">
+                      {drug.dosage && <span>{drug.dosage}</span>}
+                      {drug.frequency && <span>· {drug.frequency}</span>}
+                      {drug.duration && <span>· {drug.duration}</span>}
+                    </div>
+                  </div>
+                </div>
+                {drug.quantity && (
+                  <span className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground flex-shrink-0 ml-3">
+                    Qty: {drug.quantity}
+                  </span>
+                )}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Medications */}
       <Card className="overflow-visible">

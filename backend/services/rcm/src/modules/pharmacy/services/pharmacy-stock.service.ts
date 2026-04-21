@@ -136,15 +136,23 @@ export class PharmacyStockService {
     const stocks = await this.prisma.pharmacyStock.findMany({
       where,
       orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }],
+      include: { billingItem: { select: { id: true, billingDescription: true, billingCode: true, listPrice: true } } },
     });
 
+    const mapped = stocks.map((s) => ({
+      ...s,
+      billingItemDescription: s.billingItem?.billingDescription ?? null,
+      billingItemCode: s.billingItem?.billingCode ?? null,
+      billingItemListPrice: s.billingItem?.listPrice ?? null,
+    }));
+
     if (filters.lowStock === 'true') {
-      return stocks.filter(
+      return mapped.filter(
         (s) => s.reorderLevel != null && s.quantityOnHand.lte(s.reorderLevel),
       );
     }
 
-    return stocks;
+    return mapped;
   }
 
   async findById(tenantId: string, id: string) {
