@@ -1,235 +1,147 @@
-# Zeal Healthcare Platform
+# 🚀 Zeal — Open Healthcare Platform
 
-Zeal is an AI-driven, multi-tenant Practice Management System (PMS) + Electronic Health Record (EHR) + Revenue Cycle Management (RCM) SaaS platform designed for healthcare providers in the UAE.
+> **The open-source alternative to legacy hospital systems.**
 
-## Overview
+A modern, modular platform to run hospitals, clinics, and digital health systems.
 
-The platform provides comprehensive healthcare management capabilities including patient registration, clinical encounters, scheduling, billing, and revenue cycle management. Built with strict domain boundaries following a 4-database architecture for security and compliance.
+---
 
-### Key Features
+## 🧠 What is Zeal?
 
-- **Multi-Tenant Architecture**: Complete tenant isolation with Row-Level Security (RLS)
-- **Domain-Driven Design**: Strict boundaries between Foundation, Clinical, RCM, and PRM domains
-- **Healthcare Compliance**: HIPAA, GDPR, UAE PDPL compliant architecture
-- **UAE Integration Ready**: Prepared for NABIDH, Malaffi, Riayati HIE platforms
-- **Internationalization**: Full support for English and Arabic (RTL)
+Zeal is an open-source healthcare platform designed to manage:
 
-## Project Structure
+- 🏥 **Clinical operations** (EMR/EHR)
+- 💰 **Billing & insurance workflows**
+- 📣 **Patient engagement**
+- 🧾 **Diagnostics & reporting**
 
-```
-zeal/
-├── backend/                    # Backend monorepo
-│   ├── services/               # NestJS microservices
-│   │   ├── foundation/         # Tenancy, RBAC, users, facilities (port 3010)
-│   │   ├── clinical/           # Patients, encounters, scheduling (port 3011)
-│   │   ├── rcm/                # Billing, insurance, coding (port 3012)
-│   │   ├── prm/                # Patient relationship management (port 3013)
-│   │   └── pms/                # Pharmacy management (placeholder)
-│   ├── shared/                 # Shared packages
-│   │   ├── database-foundation/ # Prisma client for zeal_foundation
-│   │   ├── database-clinical/   # Prisma client for zeal_clinical
-│   │   ├── database-rcm/        # Prisma client for zeal_rcm
-│   │   ├── database-prm/        # Prisma client for zeal_prm
-│   │   ├── config-client/       # Hierarchical configuration client
-│   │   ├── utils/               # Shared utilities
-│   │   └── types/               # Shared type definitions
-│   └── contracts/              # Shared DTOs and Zod schemas
-├── frontend/                   # Next.js 14 application
-│   └── src/
-│       ├── app/                # App Router pages
-│       ├── components/         # Shared UI components
-│       ├── modules/            # Domain modules (clinical, foundation, rcm, prm)
-│       ├── lib/                # Core utilities and API clients
-│       └── hooks/              # React hooks
-├── docs/                       # Documentation
-│   ├── architecture/           # System architecture
-│   ├── adr/                    # Architecture Decision Records
-│   ├── features/               # Feature documentation
-│   ├── api/                    # API documentation
-│   └── runbooks/               # Operational guides
-├── seed/                       # Database seed files
-│   ├── foundation/             # Foundation DB seeds
-│   ├── clinical/               # Clinical DB seeds
-│   └── rcm/                    # RCM DB seeds
-└── init-scripts/               # Database initialization
-```
+Built for real-world healthcare environments — scalable, flexible, and enterprise-ready.
 
-## Technology Stack
+---
 
-### Backend
-| Component | Technology |
-|-----------|------------|
-| Runtime | Node.js 18+ |
-| Framework | NestJS with TypeScript |
-| Database | PostgreSQL 16 with Prisma ORM |
-| Caching | Redis 7 |
-| Authentication | JWT with refresh tokens |
-| Validation | Zod schemas |
-| API Style | REST with OpenAPI/Swagger |
+## ✨ Why Zeal?
 
-### Frontend
-| Component | Technology |
-|-----------|------------|
-| Framework | Next.js 14 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS + shadcn/ui |
-| State Management | Zustand + React Query |
-| Forms | React Hook Form + Zod |
-| Testing | Vitest + Testing Library |
-| Documentation | Storybook 8 |
+Healthcare systems today are:
 
-### Infrastructure
-| Component | Technology |
-|-----------|------------|
-| Containerization | Docker |
-| Orchestration | Kubernetes (EKS) |
-| CI/CD | GitHub Actions |
-| Monitoring | Prometheus + Grafana |
-| Logging | ELK Stack |
+- Fragmented
+- Expensive
+- Hard to customize
 
-## Quick Start
+**Zeal changes that.**
 
-### Prerequisites
+- 🧩 **Modular** — use only what you need
+- ⚡ **Fast to deploy** — get started in minutes
+- 🔐 **Built for healthcare** — audit, compliance, multi-tenant
+- 🌍 **Open** — no vendor lock-in
 
-- Node.js 18+
-- Docker and Docker Compose
-- npm 9+
+---
 
-### 1. Start Infrastructure
+## 🏥 What You Can Do With Zeal
+
+### Clinical Care
+- Manage patient encounters
+- Record observations and prescriptions
+- Generate discharge summaries
+
+### Financial Operations
+- Billing and invoicing
+- Insurance claims workflows
+- Patient ledger and payments
+
+### Patient Engagement
+- Send messages via SMS / WhatsApp / Email
+- Run targeted patient campaigns
+- Improve follow-ups and retention
+
+### Diagnostics & Reports
+- Create and manage lab/radiology reports
+- Flexible, template-based reporting
+
+---
+
+## 🚀 Getting Started
+
+Zeal is designed to be easy to run locally or in your own environment.
 
 ```bash
-# Start PostgreSQL and Redis
-docker-compose up -d postgres redis
+git clone https://github.com/sajithchandran/zeal.git
+cd zeal
+docker-compose up
 ```
 
-### 2. Setup Backend
+Access the application at: **http://localhost:3000**
 
-```bash
-cd backend
+---
 
-# Install dependencies
-npm install
+## 🌍 Where Zeal Fits
 
-# Generate Prisma clients
-npm run build --workspace=@zeal/database-foundation
-npm run build --workspace=@zeal/database-clinical
-npm run build --workspace=@zeal/database-rcm
-npm run build --workspace=@zeal/database-prm
+Zeal can be used by:
 
-# Push schema to databases
-npx prisma db push --schema shared/database-foundation/prisma/schema.prisma
-npx prisma db push --schema shared/database-clinical/prisma/schema.prisma
-npx prisma db push --schema shared/database-rcm/prisma/schema.prisma
-npx prisma db push --schema shared/database-prm/prisma/schema.prisma
+- 🏥 Hospitals (single or multi-location)
+- 🏢 Clinic chains
+- 🧪 Diagnostic centers
+- 💡 Health-tech startups
+- 🌐 Digital health platforms
 
-# Seed the databases
-./seed/run-seeds.sh foundation
-./seed/run-seeds.sh clinical
-```
+---
 
-### 3. Start Backend Services
+## 🧠 Built for the Future
 
-```bash
-# Start Foundation service (port 3010)
-npm run dev --workspace=@zeal/foundation
+Zeal is designed to support:
 
-# Start Clinical service (port 3011)
-npm run dev --workspace=@zeal/clinical
+- AI-powered workflows
+- Advanced analytics
+- Interoperability (FHIR, APIs)
+- Scalable healthcare ecosystems
 
-# Start RCM service (port 3012)
-npm run dev --workspace=@zeal/rcm
-```
+---
 
-### 4. Setup Frontend
+## 📊 Roadmap
 
-```bash
-cd frontend
+- [ ] Public demo environment
+- [ ] Mobile applications
+- [ ] AI assistants for clinicians & operations
+- [ ] Advanced analytics and dashboards
 
-# Install dependencies
-npm install
+---
 
-# Create .env.local
-cat > .env.local << EOF
-NEXT_PUBLIC_FOUNDATION_BASE_URL=http://localhost:3010
-NEXT_PUBLIC_CLINICAL_BASE_URL=http://localhost:3011
-NEXT_PUBLIC_RCM_BASE_URL=http://localhost:3012
-EOF
+## 🤝 Contributing
 
-# Start development server
-npm run dev
-```
+We welcome contributions from developers, healthcare professionals, and organizations.
 
-### 5. Access the Application
+1. Fork the repository
+2. Create a branch
+3. Submit a pull request
 
-| Service | URL |
-|---------|-----|
-| Frontend | http://localhost:3000 |
-| Foundation API Docs | http://localhost:3010/docs |
-| Clinical API Docs | http://localhost:3011/docs |
-| RCM API Docs | http://localhost:3012/docs |
-| pgAdmin | http://localhost:8080 |
-| RedisInsight | http://localhost:5540 |
+---
 
-## Database Architecture
+## 🛡️ License
 
-The platform uses a 4-database architecture for domain isolation (see [ADR-0013](docs/adr/ADR-0013-service-decomposition.md)):
+Licensed under the [Apache License 2.0](./LICENSE)
 
-| Database | Domain | Purpose |
-|----------|--------|---------|
-| `zeal_foundation` | Foundation | Tenants, users, RBAC, facilities, staff |
-| `zeal_clinical` | Clinical | Patients (PHI), encounters, scheduling |
-| `zeal_rcm` | RCM | Billing, insurance, claims |
-| `zeal_analytics` | Analytics | Audit logs, usage events |
+---
 
-**Important**: Cross-database joins are not allowed. Use REST APIs for inter-domain data access.
+## 💼 Commercial & Enterprise
 
-## Development
+Zeal is open-source.
 
-### Running Tests
+For enterprise deployments, managed hosting, custom development, or support:
 
-```bash
-# Backend tests
-cd backend
-npm test --workspace=@zeal/foundation
-npm test --workspace=@zeal/clinical
+📩 **Contact:** sajithchandran@gmail.com
 
-# Frontend tests
-cd frontend
-npm run test
-```
+---
 
-### Code Style
+## ⭐ Support
 
-- 2-space indentation
-- ESLint + Prettier enforced
-- Conventional commit messages (`feat:`, `fix:`, `docs:`)
+If you find Zeal useful:
 
-### Environment Variables
+- ⭐ Star the repository
+- 🍴 Fork and build on it
+- 🤝 Contribute
 
-Backend services require environment files. See individual service READMEs:
-- [Foundation Service](backend/services/foundation/README.md)
-- [Clinical Service](backend/services/clinical/README.md)
-- [RCM Service](backend/services/rcm/README.md)
+---
 
-## Documentation
+## 👨‍💻 Author
 
-Comprehensive documentation is available in the [docs/](docs/) folder:
-
-- [Architecture Overview](docs/architecture/README.md)
-- [Architecture Decision Records](docs/adr/)
-- [API Documentation](docs/api/README.md)
-- [Feature Documentation](docs/features/README.md)
-- [Development Guides](docs/development/README.md)
-- [Operational Runbooks](docs/runbooks/)
-
-## Contributing
-
-1. Follow the established patterns and [ADRs](docs/adr/)
-2. Ensure TypeScript types are properly defined
-3. Add tests for new functionality
-4. Update documentation for API changes
-5. Use conventional commit messages
-
-## License
-
-Proprietary - All rights reserved.
+**Sajith Chandran**  
+Healthcare IT Architect
