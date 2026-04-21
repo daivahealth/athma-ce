@@ -8,6 +8,8 @@ import {
   Truck,
   ClipboardCheck,
   Pill,
+  ClipboardList,
+  Hash,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -21,6 +23,7 @@ import {
   useCancelDispensing,
   useWardReceive,
 } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
+import { usePrescriptionHeader } from '@/modules/pharmacy/hooks/use-prescription-header';
 import { DispensingStatus, DispensingSource } from '@/modules/pharmacy/types/dispensing';
 import { DispensingPatientHeader } from '@/modules/pharmacy/components/DispensingPatientHeader';
 
@@ -31,11 +34,14 @@ export default function DispensingDetailPage() {
   const id = params.id as string;
 
   const { data: dispensing, isLoading } = usePharmacyDispensing(id);
+  const { data: prescriptionHeader, isLoading: rxLoading } = usePrescriptionHeader(
+    dispensing?.prescriptionId,
+  );
   const verifyMutation = useVerifyDispensing();
   const cancelMutation = useCancelDispensing();
   const wardReceiveMutation = useWardReceive();
 
-  if (isLoading) {
+  if (isLoading || (dispensing?.prescriptionId && rxLoading)) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-28 w-full rounded-xl" />
@@ -61,49 +67,113 @@ export default function DispensingDetailPage() {
     dispensing.dispatchedToWardAt &&
     !dispensing.wardReceivedAt;
 
+  const hasDispensedItems = dispensing.items && dispensing.items.length > 0;
+  const prescribedDrugs = prescriptionHeader?.items ?? [];
+
   return (
     <div className="space-y-4">
-      {/* Patient header — matches Lab Report style */}
+      {/* Patient header */}
       <DispensingPatientHeader dispensing={dispensing} />
 
-      {/* Dispensing Items */}
-      {dispensing.items && dispensing.items.length > 0 && (
+      {/* Prescription header info */}
+      {prescriptionHeader && (
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Medications</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <ClipboardList className="h-4 w-4" />
+              Prescription
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {dispensing.items.map((item) => (
-              <div key={item.id} className="flex items-start justify-between py-2 border-b last:border-0">
-                <div>
-                  <div className="font-medium flex items-center gap-2">
-                    <Pill className="h-4 w-4 text-muted-foreground" />
+            {/* Rx number + version */}
+            <div className="flex items-center gap-2">
+              <Hash className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="font-mono text-sm font-semibold text-primary">
+                {prescriptionHeader.prescriptionNumber}
+              </span>
+              {prescriptionHeader.version > 1 && (
+                <Badge variant="secondary" className="text-xs">v{prescriptionHeader.version}</Badge>
+              )}
+              <Badge variant="outline" className="text-xs capitalize">
+                {prescriptionHeader.status}
+              </Badge>
+            </div>
+
+            {/* Prescribed drug lines */}
+            <div className="border rounded-md divide-y">
+              {prescribedDrugs.map((drug) => (
+                <div key={drug.id} className="flex items-start justify-between px-3 py-2.5">
+                  <div className="flex items-start gap-2 min-w-0">
+                    <Pill className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <div className="font-medium text-sm">{drug.drugName}</div>
+                      <div className="text-xs text-muted-foreground space-x-1 mt-0.5">
+                        {drug.dosage && <span>{drug.dosage}</span>}
+                        {drug.frequency && <span>· {drug.frequency}</span>}
+                        {drug.duration && <span>· {drug.duration}</span>}
+                        {drug.instructions && (
+                          <span className="italic">· {drug.instructions}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {drug.quantity && (
+                    <span className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground flex-shrink-0 ml-3">
+                      Qty: {drug.quantity}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {prescriptionHeader.notes && (
+              <p className="text-xs text-muted-foreground italic">Note: {prescriptionHeader.notes}</p>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Dispensed items (only after dispensing) */}
+      {hasDispensedItems && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Dispensed Medications
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-0 divide-y">
+            {dispensing.items!.map((item) => (
+              <div key={item.id} className="flex items-start justify-between py-3 first:pt-0 last:pb-0">
+                <div className="min-w-0">
+                  <div className="font-medium text-sm flex items-center gap-2">
+                    <Pill className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
                     {item.drugName}
                     {item.strength && (
                       <span className="text-muted-foreground text-xs">{item.strength}</span>
                     )}
+                    {item.dosageForm && (
+                      <Badge variant="outline" className="text-xs">{item.dosageForm}</Badge>
+                    )}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">
+                  <div className="text-xs text-muted-foreground mt-1 pl-5">
                     Batch: {item.batchNumber} · Expires:{' '}
                     {format(new Date(item.expiryDate), 'MMM yyyy')}
                   </div>
                   {item.dispensingInstructions && (
-                    <div className="text-xs text-muted-foreground mt-1 italic">
+                    <div className="text-xs text-muted-foreground mt-0.5 pl-5 italic">
                       {item.dispensingInstructions}
                     </div>
                   )}
                   {item.isSubstituted && (
-                    <Badge variant="outline" className="text-xs mt-1">
-                      Substituted
-                    </Badge>
+                    <Badge variant="outline" className="text-xs mt-1 ml-5">Substituted</Badge>
                   )}
                 </div>
-                <div className="text-right text-sm">
+                <div className="text-right text-sm flex-shrink-0 ml-4">
                   <div className="font-medium">
                     {item.quantityDispensed} {item.unit}
                   </div>
                   {item.lineAmount != null && (
-                    <div className="text-muted-foreground">
+                    <div className="text-muted-foreground text-xs">
                       {Number(item.lineAmount).toFixed(2)} AED
                     </div>
                   )}
@@ -162,14 +232,14 @@ export default function DispensingDetailPage() {
       </Card>
 
       {/* Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         {canVerify && (
           <Button
             onClick={() => verifyMutation.mutate({ id, payload: {} })}
             disabled={verifyMutation.isPending}
           >
             <ClipboardCheck className="h-4 w-4 mr-2" />
-            Verify Prescription
+            {verifyMutation.isPending ? 'Verifying…' : 'Verify Prescription'}
           </Button>
         )}
 
@@ -214,7 +284,7 @@ export default function DispensingDetailPage() {
             disabled={cancelMutation.isPending}
           >
             <XCircle className="h-4 w-4 mr-2" />
-            Cancel
+            {cancelMutation.isPending ? 'Cancelling…' : 'Cancel'}
           </Button>
         )}
       </div>
