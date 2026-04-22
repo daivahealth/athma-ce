@@ -100,6 +100,8 @@ export interface CreateDispensingInput {
   dispensingChannel?: DispensingChannel;
   dispensingSource?: DispensingSource;
   paperPrescriptionRef?: string;
+  /** UUID of an uploaded paper prescription document (from Clinical DB patient_documents) */
+  paperPrescriptionDocumentId?: string;
   patientDisplayName?: string;
   mrn?: string;
 }

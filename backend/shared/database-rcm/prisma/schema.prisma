@@ -2002,8 +2002,9 @@ model PharmacyDispensing {
 
   // Dispensing source — how this dispensing was initiated
   // digital_prescription | otc | paper_op | paper_ward
-  dispensingSource      String    @default("digital_prescription") @map("dispensing_source") @db.VarChar(50)
-  paperPrescriptionRef  String?   @map("paper_prescription_ref") @db.VarChar(100) // paper Rx ref number
+  dispensingSource               String    @default("digital_prescription") @map("dispensing_source") @db.VarChar(50)
+  paperPrescriptionRef           String?   @map("paper_prescription_ref") @db.VarChar(100) // paper Rx ref number
+  paperPrescriptionDocumentId    String?   @map("paper_prescription_document_id") @db.Uuid   // FK to patient_documents in Clinical DB
 
   // Denormalized for display without cross-DB join
   patientDisplayName    String?   @map("patient_display_name") @db.VarChar(255)

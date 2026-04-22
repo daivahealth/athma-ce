@@ -72,6 +72,11 @@ export class CreateDispensingDto {
   @IsOptional()
   paperPrescriptionRef?: string;
 
+  @ApiPropertyOptional({ description: 'UUID of uploaded paper prescription document (from Clinical DB patient_documents)' })
+  @IsUUID("loose" as any)
+  @IsOptional()
+  paperPrescriptionDocumentId?: string;
+
   @ApiPropertyOptional({ description: 'Patient display name (used when no encounterId is provided)' })
   @IsString()
   @IsOptional()

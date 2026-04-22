@@ -1106,6 +1106,7 @@ exports.Prisma.PharmacyDispensingScalarFieldEnum = {
   prescriptionOrderId: 'prescriptionOrderId',
   dispensingSource: 'dispensingSource',
   paperPrescriptionRef: 'paperPrescriptionRef',
+  paperPrescriptionDocumentId: 'paperPrescriptionDocumentId',
   patientDisplayName: 'patientDisplayName',
   mrn: 'mrn',
   patientDateOfBirth: 'patientDateOfBirth',

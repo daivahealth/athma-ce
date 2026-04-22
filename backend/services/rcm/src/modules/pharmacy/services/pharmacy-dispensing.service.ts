@@ -153,6 +153,7 @@ export class PharmacyDispensingService {
         prescriptionOrderId: null,
         dispensingSource: source,
         paperPrescriptionRef: dto.paperPrescriptionRef ?? null,
+        paperPrescriptionDocumentId: dto.paperPrescriptionDocumentId ?? null,
         patientDisplayName: dto.patientDisplayName ?? null,
         mrn: dto.mrn ?? null,
         encounterType: source === DispensingSource.PAPER_WARD ? 'inpatient' : 'outpatient',

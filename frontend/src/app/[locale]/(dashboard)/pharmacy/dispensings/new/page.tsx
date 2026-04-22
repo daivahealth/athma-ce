@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, FileText, ShoppingBag, Activity, Info } from 'lucide-react';
+import { ArrowLeft, FileText, ShoppingBag, Activity, Info, Upload, X, Paperclip } from 'lucide-react';
 import { format } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import { PatientSearchSelect } from '@/components/patient-search-select';
 import { useActivePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { useCreateDispensing } from '@/modules/pharmacy/hooks/use-pharmacy-dispensing';
 import { DispensingSource, DispensingChannel } from '@/modules/pharmacy/types/dispensing';
+import { patientDocumentService } from '@/modules/clinical/services/patient-document-service';
 import type { Encounter } from '@/modules/clinical/types/encounter';
 
 /* ─── Helpers ────────────────────────────────────────────────────────── */
@@ -83,6 +84,13 @@ export default function DirectDispensePage() {
   const [source, setSource] = useState<DispensingSource>(DispensingSource.OTC);
   const [paperRef, setPaperRef] = useState('');
 
+  // File upload state
+  const [prescriptionFile, setPrescriptionFile] = useState<File | null>(null);
+  const [uploadedDocumentId, setUploadedDocumentId] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const createDispensing = useCreateDispensing();
 
   /* ── Active encounters for the selected patient ── */
@@ -132,6 +140,7 @@ export default function DirectDispensePage() {
     setSelectedPatient(patient);
     setSelectedEncounter(null);
     setPaperRef('');
+    clearUpload();
   };
 
   const handlePatientClear = () => {
@@ -139,6 +148,51 @@ export default function DirectDispensePage() {
     setSelectedEncounter(null);
     setPaperRef('');
     setSource(DispensingSource.OTC);
+    clearUpload();
+  };
+
+  /* ── File upload helpers ── */
+  const clearUpload = () => {
+    setPrescriptionFile(null);
+    setUploadedDocumentId(null);
+    setUploadError(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !selectedPatient) return;
+
+    // Validate type and size (max 10MB)
+    const allowed = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      setUploadError('Only PDF, JPEG, PNG, or WebP files are allowed');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('File must be smaller than 10 MB');
+      return;
+    }
+
+    setUploadError(null);
+    setPrescriptionFile(file);
+    setIsUploading(true);
+    setUploadedDocumentId(null);
+
+    try {
+      const doc = await patientDocumentService.uploadDocument(selectedPatient.id, {
+        file,
+        documentType: 'paper_prescription',
+        documentNumber: '',
+        issuingCountry: 'AE',
+      });
+      setUploadedDocumentId(doc.id);
+    } catch {
+      setUploadError('Upload failed. Please try again.');
+      setPrescriptionFile(null);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -153,13 +207,13 @@ export default function DirectDispensePage() {
         `${selectedPatient.firstName} ${selectedPatient.lastName}`.trim(),
       mrn: selectedPatient.mrn,
       ...(isPaperSource && paperRef ? { paperPrescriptionRef: paperRef } : {}),
+      ...(uploadedDocumentId ? { paperPrescriptionDocumentId: uploadedDocumentId } : {}),
     });
 
     router.push(`/${locale}/pharmacy/dispensings/${result.id}`);
   };
 
-  const canSubmit =
-    !!selectedPatient && (!isPaperSource || paperRef.trim().length > 0);
+  const canSubmit = !!selectedPatient && !isUploading;
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -279,21 +333,87 @@ export default function DirectDispensePage() {
               })}
             </div>
 
-            {/* Paper prescription ref */}
+            {/* Paper prescription details — shown for paper sources */}
             {isPaperSource && (
-              <div className="space-y-1.5 pt-2">
-                <Label htmlFor="paper-ref">
-                  Paper Prescription Reference <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="paper-ref"
-                  placeholder="e.g. RX-2024-001234"
-                  value={paperRef}
-                  onChange={(e) => setPaperRef(e.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">
-                  The reference number written on the paper prescription
-                </p>
+              <div className="space-y-4 pt-2">
+                {/* Reference number (optional) */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="paper-ref">
+                    Paper Prescription Reference{' '}
+                    <span className="text-muted-foreground font-normal">(optional)</span>
+                  </Label>
+                  <Input
+                    id="paper-ref"
+                    placeholder="e.g. RX-2024-001234"
+                    value={paperRef}
+                    onChange={(e) => setPaperRef(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    The reference number written on the paper prescription
+                  </p>
+                </div>
+
+                {/* Prescription scan / photo upload (optional) */}
+                <div className="space-y-2">
+                  <Label>
+                    Upload Prescription Scan{' '}
+                    <span className="text-muted-foreground font-normal">(optional)</span>
+                  </Label>
+
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+
+                  {!prescriptionFile ? (
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex w-full items-center gap-3 rounded-lg border border-dashed border-border px-4 py-4 text-sm text-muted-foreground hover:bg-muted/30 transition-colors"
+                    >
+                      <Upload className="h-5 w-5 flex-shrink-0" />
+                      <span>Click to upload a photo or PDF of the prescription</span>
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/20 px-4 py-3">
+                      <Paperclip className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{prescriptionFile.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {isUploading
+                            ? 'Uploading…'
+                            : uploadedDocumentId
+                            ? 'Uploaded successfully'
+                            : 'Pending upload'}
+                        </p>
+                      </div>
+                      {isUploading ? (
+                        <span className="text-xs text-muted-foreground animate-pulse">uploading…</span>
+                      ) : uploadedDocumentId ? (
+                        <Badge variant="secondary" className="text-xs shrink-0">Saved</Badge>
+                      ) : null}
+                      <button
+                        type="button"
+                        onClick={clearUpload}
+                        className="ml-1 rounded p-1 hover:bg-muted text-muted-foreground hover:text-foreground"
+                        aria-label="Remove file"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
+
+                  {uploadError && (
+                    <p className="text-xs text-destructive">{uploadError}</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Accepted: PDF, JPEG, PNG, WebP · Max 10 MB
+                  </p>
+                </div>
               </div>
             )}
 
@@ -322,10 +442,6 @@ export default function DirectDispensePage() {
             Cancel
           </Button>
         </div>
-      )}
-
-      {!canSubmit && selectedPatient && !encountersLoading && isPaperSource && !paperRef.trim() && (
-        <p className="text-sm text-destructive">Paper prescription reference is required</p>
       )}
     </div>
   );
