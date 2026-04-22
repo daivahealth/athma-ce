@@ -33,7 +33,7 @@ export default function PharmacyStockPage() {
 
   const { data: stocks = [], isLoading } = usePharmacyStock({
     ...(statusFilter !== 'all' && { status: statusFilter }),
-    ...(searchCode && { drugCode: searchCode }),
+    ...(searchCode && { search: searchCode }),
   });
 
   const isLowStock = (stock: PharmacyStock) =>
@@ -155,7 +155,7 @@ export default function PharmacyStockPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Input
-            placeholder="Search by drug code..."
+            placeholder="Search by name or code…"
             value={searchCode}
             onChange={(e) => setSearchCode(e.target.value)}
             className="w-52"
