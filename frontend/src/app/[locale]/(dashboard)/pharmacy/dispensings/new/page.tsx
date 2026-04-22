@@ -210,7 +210,7 @@ export default function DirectDispensePage() {
       ...(uploadedDocumentId ? { paperPrescriptionDocumentId: uploadedDocumentId } : {}),
     });
 
-    router.push(`/${locale}/pharmacy/dispensings/${result.id}`);
+    router.push(`/${locale}/pharmacy/dispensings/${result.id}/dispense`);
   };
 
   const canSubmit = !!selectedPatient && !isUploading;
