@@ -33,7 +33,7 @@ function isEmergency(encounterClass: string) {
 function defaultSourceForEncounter(enc: Encounter): DispensingSource {
   if (isInpatient(enc.encounterClass)) return DispensingSource.PAPER_WARD;
   if (isEmergency(enc.encounterClass)) return DispensingSource.OTC;
-  return DispensingSource.OTC; // outpatient default
+  return DispensingSource.PAPER_OP; // outpatient default
 }
 
 function channelForSource(source: DispensingSource): DispensingChannel {
