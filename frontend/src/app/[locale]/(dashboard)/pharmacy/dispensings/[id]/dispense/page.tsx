@@ -521,8 +521,8 @@ export default function ExecuteDispensePage() {
       {/* Patient header — same component as the detail page */}
       <DispensingPatientHeader dispensing={dispensing} />
 
-      {/* Medication Dispensing Plan */}
-      <Card className="overflow-visible">
+      {/* Medication Dispensing Plan — z-10 ensures its dropdown sits above the Counselling card below */}
+      <Card className="overflow-visible relative z-10">
         {/* Card header */}
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div className="flex items-center gap-2">
@@ -573,7 +573,7 @@ export default function ExecuteDispensePage() {
       </Card>
 
       {/* Counselling */}
-      <Card>
+      <Card className="relative z-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium">Patient Counselling</CardTitle>
         </CardHeader>
