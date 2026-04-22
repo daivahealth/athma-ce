@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Plus, AlertTriangle, Clock } from 'lucide-react';
+import { Eye, Plus, AlertTriangle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Badge } from '@/components/ui/badge';
@@ -12,9 +12,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-import { usePharmacyStock } from '@/modules/pharmacy/hooks/use-pharmacy-stock';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { usePharmacyStockPaged } from '@/modules/pharmacy/hooks/use-pharmacy-stock';
 import type { PharmacyStock } from '@/modules/pharmacy/types/stock';
 import { PharmacyStockStatus } from '@/modules/pharmacy/types/stock';
+
+const PAGE_SIZE = 20;
 
 const STATUS_VARIANTS: Record<PharmacyStockStatus, 'default' | 'secondary' | 'outline' | 'destructive'> = {
   [PharmacyStockStatus.ACTIVE]: 'default',
@@ -28,13 +31,34 @@ export default function PharmacyStockPage() {
   const params = useParams();
   const locale = params.locale as string;
   const router = useRouter();
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [searchCode, setSearchCode] = useState('');
 
-  const { data: stocks = [], isLoading } = usePharmacyStock({
+  const [searchInput, setSearchInput] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [page, setPage] = useState(1);
+
+  // Debounce search — only hits the backend 400 ms after the user stops typing
+  const debouncedSearch = useDebouncedValue(searchInput, 400);
+
+  const { data: paged, isLoading, isFetching } = usePharmacyStockPaged({
+    ...(debouncedSearch && { search: debouncedSearch }),
     ...(statusFilter !== 'all' && { status: statusFilter }),
-    ...(searchCode && { search: searchCode }),
+    page,
+    limit: PAGE_SIZE,
   });
+
+  const stocks = paged?.data ?? [];
+  const total  = paged?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  // Reset to page 1 whenever filters change
+  const handleSearch = (value: string) => {
+    setSearchInput(value);
+    setPage(1);
+  };
+  const handleStatus = (value: string) => {
+    setStatusFilter(value);
+    setPage(1);
+  };
 
   const isLowStock = (stock: PharmacyStock) =>
     stock.reorderLevel != null && Number(stock.quantityOnHand) <= Number(stock.reorderLevel);
@@ -58,7 +82,10 @@ export default function PharmacyStockPage() {
               <button
                 type="button"
                 title="View in Medication Catalog"
-                onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/catalogs/medications/${row.original.medicationId}`); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(`/${locale}/catalogs/medications/${row.original.medicationId}`);
+                }}
               >
                 <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">catalog</Badge>
               </button>
@@ -128,7 +155,10 @@ export default function PharmacyStockPage() {
           <button
             type="button"
             title="View Billing Item"
-            onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/rcm-setup/billing-items/${row.original.billingItemId}`); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/${locale}/rcm-setup/billing-items/${row.original.billingItemId}`);
+            }}
           >
             <Badge variant="secondary" className="font-mono text-xs cursor-pointer hover:bg-accent">linked</Badge>
           </button>
@@ -150,17 +180,21 @@ export default function PharmacyStockPage() {
     },
   ];
 
+  const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const to   = Math.min(page * PAGE_SIZE, total);
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      {/* Toolbar */}
+      <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <Input
-            placeholder="Search by name or code…"
-            value={searchCode}
-            onChange={(e) => setSearchCode(e.target.value)}
-            className="w-52"
+            placeholder="Search by name, code or batch…"
+            value={searchInput}
+            onChange={(e) => handleSearch(e.target.value)}
+            className="w-64"
           />
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={statusFilter} onValueChange={handleStatus}>
             <SelectTrigger className="w-40">
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
@@ -178,12 +212,45 @@ export default function PharmacyStockPage() {
         </Button>
       </div>
 
+      {/* Table */}
       <ResourceTable
         columns={columns}
         data={stocks}
         isLoading={isLoading}
-        emptyMessage="No stock batches found"
+        emptyState="No stock batches found"
       />
+
+      {/* Pagination footer */}
+      {!isLoading && total > 0 && (
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span className={isFetching ? 'opacity-50' : ''}>
+            Showing {from}–{to} of {total} batches
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page <= 1 || isFetching}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+            <span className="px-2">
+              Page {page} of {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page >= totalPages || isFetching}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

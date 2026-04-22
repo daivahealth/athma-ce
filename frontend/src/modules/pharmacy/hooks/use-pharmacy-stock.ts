@@ -18,11 +18,29 @@ const STOCK_KEYS = {
   },
 };
 
+/**
+ * Returns a plain PharmacyStock[] — used by inline stock-search dropdowns.
+ * Internally the backend now always returns a paginated envelope; this hook
+ * unwraps `.data` so existing callers don't need to change.
+ */
 export function usePharmacyStock(filters?: StockFilters) {
+  return useQuery({
+    queryKey: STOCK_KEYS.list(filters),
+    queryFn: () => pharmacyStockService.list(filters).then((r) => r.data),
+    staleTime: 60 * 1000,
+  });
+}
+
+/**
+ * Returns the full paginated envelope { data, total, page, limit }.
+ * Use this on list pages that need server-side pagination.
+ */
+export function usePharmacyStockPaged(filters?: StockFilters) {
   return useQuery({
     queryKey: STOCK_KEYS.list(filters),
     queryFn: () => pharmacyStockService.list(filters),
     staleTime: 60 * 1000,
+    placeholderData: (prev) => prev,
   });
 }
 

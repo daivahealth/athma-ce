@@ -115,6 +115,8 @@ export class PharmacyStockService {
       where.OR = [
         { drugName: { contains: filters.search, mode: 'insensitive' } },
         { drugCode: { contains: filters.search, mode: 'insensitive' } },
+        { genericName: { contains: filters.search, mode: 'insensitive' } },
+        { batchNumber: { contains: filters.search, mode: 'insensitive' } },
       ];
     }
     if (filters.drugCode) where.drugCode = filters.drugCode;
@@ -133,26 +135,43 @@ export class PharmacyStockService {
       ];
     }
 
-    const stocks = await this.prisma.pharmacyStock.findMany({
-      where,
-      orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }],
-      include: { billingItem: { select: { id: true, billingDescription: true, billingCode: true, listPrice: true } } },
-    });
+    const orderBy = [{ expiryDate: 'asc' as const }, { createdAt: 'desc' as const }];
+    const include = {
+      billingItem: {
+        select: { id: true, billingDescription: true, billingCode: true, listPrice: true },
+      },
+    };
 
-    const mapped = stocks.map((s) => ({
+    // Low-stock filter requires an in-memory column comparison (qty <= reorderLevel),
+    // so we skip DB-level pagination for that case and return all matching rows.
+    if (filters.lowStock === 'true') {
+      const stocks = await this.prisma.pharmacyStock.findMany({ where, orderBy, include });
+      const mapped = this.mapBillingFields(stocks);
+      const filtered = mapped.filter(
+        (s) => s.reorderLevel != null && (s.quantityOnHand as any).lte(s.reorderLevel),
+      );
+      return { data: filtered, total: filtered.length, page: 1, limit: filtered.length || 1 };
+    }
+
+    const page  = Math.max(1, filters.page  ?? 1);
+    const limit = Math.min(Math.max(1, filters.limit ?? 20), 100);
+    const skip  = (page - 1) * limit;
+
+    const [stocks, total] = await this.prisma.$transaction([
+      this.prisma.pharmacyStock.findMany({ where, orderBy, include, skip, take: limit }),
+      this.prisma.pharmacyStock.count({ where }),
+    ]);
+
+    return { data: this.mapBillingFields(stocks), total, page, limit };
+  }
+
+  private mapBillingFields(stocks: any[]) {
+    return stocks.map((s) => ({
       ...s,
       billingItemDescription: s.billingItem?.billingDescription ?? null,
       billingItemCode: s.billingItem?.billingCode ?? null,
       billingItemListPrice: s.billingItem?.listPrice ?? null,
     }));
-
-    if (filters.lowStock === 'true') {
-      return mapped.filter(
-        (s) => s.reorderLevel != null && s.quantityOnHand.lte(s.reorderLevel),
-      );
-    }
-
-    return mapped;
   }
 
   async findById(tenantId: string, id: string) {

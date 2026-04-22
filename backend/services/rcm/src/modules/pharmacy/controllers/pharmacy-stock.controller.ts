@@ -31,7 +31,9 @@ export class PharmacyStockController {
   @ApiQuery({ name: 'facilityId', required: false })
   @ApiQuery({ name: 'expiringBefore', required: false, description: 'ISO date' })
   @ApiQuery({ name: 'lowStock', required: false, description: 'true to return only low-stock items' })
-  @ApiResponse({ status: 200, description: 'Stock list returned' })
+  @ApiQuery({ name: 'page', required: false, description: 'Page number (1-based, default 1)' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Items per page (default 20, max 100)' })
+  @ApiResponse({ status: 200, description: 'Paginated stock list: { data, total, page, limit }' })
   async findAll(
     @Headers('x-tenant-id') tenantId: string,
     @Query() filters: PharmacyStockFiltersDto,

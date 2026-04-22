@@ -233,7 +233,7 @@ export default function StockDetailPage() {
               columns={movementColumns}
               data={stock.movements}
               isLoading={false}
-              emptyMessage="No movements"
+              emptyState="No movements"
             />
           </CardContent>
         </Card>

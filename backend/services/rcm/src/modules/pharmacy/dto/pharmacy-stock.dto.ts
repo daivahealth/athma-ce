@@ -192,4 +192,18 @@ export class PharmacyStockFiltersDto {
   @ApiPropertyOptional({ description: 'Return only stock at or below reorder level' })
   @IsOptional()
   lowStock?: string;
+
+  @ApiPropertyOptional({ description: 'Page number (1-based, default 1)' })
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  @Type(() => Number)
+  page?: number;
+
+  @ApiPropertyOptional({ description: 'Items per page (default 20, max 100)' })
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  @Type(() => Number)
+  limit?: number;
 }

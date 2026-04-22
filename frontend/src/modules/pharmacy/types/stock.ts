@@ -128,4 +128,13 @@ export interface StockFilters {
   facilityId?: string;
   expiringBefore?: string;
   lowStock?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedStockResponse {
+  data: PharmacyStock[];
+  total: number;
+  page: number;
+  limit: number;
 }

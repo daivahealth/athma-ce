@@ -2,6 +2,7 @@ import { rcmClient } from '@/lib/api/client';
 import type {
   PharmacyStock,
   PharmacyStockMovement,
+  PaginatedStockResponse,
   ResolvedMedication,
   CreateStockInput,
   UpdateStockInput,
@@ -10,7 +11,8 @@ import type {
 } from '../types/stock';
 
 class PharmacyStockService {
-  async list(filters?: StockFilters): Promise<PharmacyStock[]> {
+  /** Returns a paginated envelope { data, total, page, limit } */
+  async list(filters?: StockFilters): Promise<PaginatedStockResponse> {
     const response = await rcmClient.get('/pharmacy/stock', { params: filters });
     return response.data;
   }
