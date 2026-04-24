@@ -20,7 +20,14 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@zeal/database-foundation": ["../../shared/database-foundation/src/index.ts"],
+      "@zeal/database-clinical": ["../../shared/database-clinical/src/index.ts"],
+      "@zeal/database-rcm": ["../../shared/database-rcm/src/index.ts"],
+      "@zeal/database-analytics": ["../../shared/database-analytics/src/index.ts"],
+      "@zeal/observability": ["../../shared/observability/src/index.ts"],
+      "@zeal/shared-utils": ["../../shared/utils/src"],
+      "@zeal/contracts": ["../../contracts/src/index.ts"]
     }
   },
   "include": ["src/**/*"],
