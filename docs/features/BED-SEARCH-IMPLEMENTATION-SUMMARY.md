@@ -96,7 +96,7 @@ Fast occupancy lookups: `WHERE releasedAt IS NULL` indicates currently occupied.
       },
       "facility": {
         "id": "uuid",
-        "name": "Zeal Main Hospital"
+        "name": "athma-ce Main Hospital"
       },
       "isOccupied": false,
       "isAvailable": true,

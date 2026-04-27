@@ -1,6 +1,6 @@
 # Frontend API Clients
 
-This document describes the API client architecture used in the Zeal frontend.
+This document describes the API client architecture used in the athma-ce frontend.
 
 ## Overview
 

@@ -1,6 +1,6 @@
 # Observability Architecture
 
-A comprehensive guide to implementing full-stack observability for the Zeal Healthcare Platform.
+A comprehensive guide to implementing full-stack observability for the athma-ce Healthcare Platform.
 
 ---
 
@@ -20,7 +20,7 @@ A comprehensive guide to implementing full-stack observability for the Zeal Heal
 
 ## Purpose
 
-Observability provides deep insight into the internal state of the Zeal Healthcare Platform through three pillars:
+Observability provides deep insight into the internal state of the athma-ce Healthcare Platform through three pillars:
 
 ### The Three Pillars of Observability
 
@@ -400,7 +400,7 @@ OTEL_SERVICE_NAME=clinical-service
 OTEL_SERVICE_VERSION=1.0.0
 
 # Resource attributes
-OTEL_RESOURCE_ATTRIBUTES=deployment.environment=production,service.namespace=zeal
+OTEL_RESOURCE_ATTRIBUTES=deployment.environment=production,service.namespace=athma-ce
 ```
 
 #### Backend-Specific Configuration
@@ -910,7 +910,7 @@ networks:
 
 - Docker and Docker Compose installed
 - Node.js 18+ installed
-- Existing Zeal services running
+- Existing athma-ce services running
 
 ### Step 1: Start Observability Stack
 

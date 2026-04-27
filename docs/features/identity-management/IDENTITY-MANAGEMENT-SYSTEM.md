@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Zeal platform implements a flexible, country-agnostic identity management system that supports multiple identity document types across different countries. This allows the platform to be deployed globally while respecting local identity requirements.
+The athma-ce platform implements a flexible, country-agnostic identity management system that supports multiple identity document types across different countries. This allows the platform to be deployed globally while respecting local identity requirements.
 
 ## Table of Contents
 
@@ -1087,4 +1087,4 @@ For questions or issues with the identity management system:
 
 **Version:** 1.0.0
 **Last Updated:** 2025-10-23
-**Maintainer:** Zeal Platform Team
+**Maintainer:** athma-ce Platform Team

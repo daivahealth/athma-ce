@@ -1,6 +1,6 @@
 # Frontend Architecture Recommendation
 
-**Project**: Zeal Healthcare Platform
+**Project**: athma-ce Healthcare Platform
 **Date**: 2025-10-25
 **Status**: Proposed Architecture
 
@@ -884,7 +884,7 @@ NEXT_PUBLIC_RCM_API_URL=http://localhost:3012
 NEXT_PUBLIC_FOUNDATION_API_URL=http://localhost:3001
 
 # App Configuration
-NEXT_PUBLIC_APP_NAME=Zeal Healthcare Platform
+NEXT_PUBLIC_APP_NAME=athma-ce Healthcare Platform
 NEXT_PUBLIC_APP_VERSION=1.0.0
 
 # Feature Flags

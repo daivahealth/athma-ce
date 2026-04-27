@@ -1,8 +1,8 @@
-# Deploying Zeal on Azure
+# Deploying athma-ce on Azure
 
 ## 1. Overview
 
-Azure serves as the recommended DR/secondary cloud for Zeal (per ADR-0008) and can also act as the primary cloud for customers who prefer or require Microsoft Azure. The UAE North (`uaenorth`) and UAE Central (`uaecentral`) regions provide data residency compliance for UAE healthcare regulations (DHA, DOH, MOHAP).
+Azure serves as the recommended DR/secondary cloud for athma-ce (per ADR-0008) and can also act as the primary cloud for customers who prefer or require Microsoft Azure. The UAE North (`uaenorth`) and UAE Central (`uaecentral`) regions provide data residency compliance for UAE healthcare regulations (DHA, DOH, MOHAP).
 
 ### Target Architecture
 
@@ -166,7 +166,7 @@ RG_NAME="zeal-${ENVIRONMENT}-rg"
 LOCATION="uaenorth"
 
 az group create --name $RG_NAME --location $LOCATION --tags \
-  Project=zeal Environment=$ENVIRONMENT ManagedBy=terraform
+  Project=athma-ce Environment=$ENVIRONMENT ManagedBy=terraform
 ```
 
 #### VNet Terraform (terraform/modules/vnet/main.tf)
@@ -180,7 +180,7 @@ resource "azurerm_virtual_network" "main" {
 
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 
@@ -421,7 +421,7 @@ az acr config retention update \
 ### 3.7 Azure Blob Storage
 
 ```bash
-STORAGE_NAME="zeal${ENVIRONMENT}docs"
+STORAGE_NAME="athma-ce${ENVIRONMENT}docs"
 
 az storage account create \
   --name $STORAGE_NAME \
@@ -537,7 +537,7 @@ resource "azurerm_application_gateway" "main" {
 
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 ```
@@ -582,7 +582,7 @@ az network front-door waf-policy create \
 
 ## 4. Building and Pushing Container Images
 
-Zeal uses a multi-stage Dockerfile pattern with `node:18-alpine` as the base image. Each service has its own Dockerfile.
+athma-ce uses a multi-stage Dockerfile pattern with `node:18-alpine` as the base image. Each service has its own Dockerfile.
 
 ### Local Build and Push
 
@@ -652,8 +652,8 @@ The namespace and resource quota manifests are documented in `../10-Deployment-&
 kubectl apply -f k8s/namespace.yaml
 
 # Verify
-kubectl get namespace zeal
-kubectl describe resourcequota zeal-quota -n zeal
+kubectl get namespace athma-ce
+kubectl describe resourcequota zeal-quota -n athma-ce
 ```
 
 ### 5.2 ConfigMaps
@@ -666,7 +666,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: zeal-config
-  namespace: zeal
+  namespace: athma-ce
 data:
   NODE_ENV: "production"
   LOG_LEVEL: "info"
@@ -722,7 +722,7 @@ apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
   name: zeal-keyvault-secrets
-  namespace: zeal
+  namespace: athma-ce
 spec:
   provider: azure
   parameters:
@@ -773,7 +773,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zeal-foundation
-  namespace: zeal
+  namespace: athma-ce
   labels:
     app: zeal-foundation
     domain: foundation
@@ -863,7 +863,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-frontend
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: zeal-frontend
@@ -876,7 +876,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-foundation
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: zeal-foundation
@@ -889,7 +889,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-clinical
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: zeal-clinical
@@ -902,7 +902,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-rcm
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: zeal-rcm
@@ -915,7 +915,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-analytics
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: zeal-analytics
@@ -928,7 +928,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-prm
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: zeal-prm
@@ -941,7 +941,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-ai-gateway
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: zeal-ai-gateway
@@ -959,7 +959,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zeal-ingress
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
     appgw.ingress.kubernetes.io/ssl-redirect: "true"
@@ -1029,7 +1029,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: zeal-foundation-hpa
-  namespace: zeal
+  namespace: athma-ce
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -1055,7 +1055,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: zeal-clinical-hpa
-  namespace: zeal
+  namespace: athma-ce
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -1075,7 +1075,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: zeal-frontend-hpa
-  namespace: zeal
+  namespace: athma-ce
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -1098,7 +1098,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: zeal-foundation-pdb
-  namespace: zeal
+  namespace: athma-ce
 spec:
   minAvailable: 1
   selector:
@@ -1109,7 +1109,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: zeal-clinical-pdb
-  namespace: zeal
+  namespace: athma-ce
 spec:
   minAvailable: 1
   selector:
@@ -1120,7 +1120,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: zeal-frontend-pdb
-  namespace: zeal
+  namespace: athma-ce
 spec:
   minAvailable: 1
   selector:
@@ -1198,8 +1198,8 @@ monitoring:
 
 ```bash
 # Deploy all services
-helm upgrade --install zeal ./helm/zeal \
-  --namespace zeal \
+helm upgrade --install athma-ce ./helm/zeal \
+  --namespace athma-ce \
   --create-namespace \
   --values ./helm/zeal/values-azure-prod.yaml \
   --set image.tag=$(git rev-parse --short HEAD) \
@@ -1207,9 +1207,9 @@ helm upgrade --install zeal ./helm/zeal \
   --timeout 10m
 
 # Verify
-helm list -n zeal
-kubectl get pods -n zeal
-kubectl get svc -n zeal
+helm list -n athma-ce
+kubectl get pods -n athma-ce
+kubectl get svc -n athma-ce
 ```
 
 ---
@@ -1336,7 +1336,7 @@ az keyvault set-policy \
 
 # Grant Blob Storage access
 STORAGE_ID=$(az storage account show \
-  --name zeal${ENVIRONMENT}docs \
+  --name athma-ce${ENVIRONMENT}docs \
   --resource-group zeal-${ENVIRONMENT}-rg \
   --query id -o tsv)
 
@@ -1410,8 +1410,8 @@ Push to main/develop
 
       - name: Deploy to Staging
         run: |
-          helm upgrade --install zeal ./helm/zeal \
-            --namespace zeal \
+          helm upgrade --install athma-ce ./helm/zeal \
+            --namespace athma-ce \
             --create-namespace \
             --values ./helm/zeal/values-azure-staging.yaml \
             --set image.tag=${{ github.sha }} \
@@ -1419,9 +1419,9 @@ Push to main/develop
 
       - name: Run integration tests
         run: |
-          kubectl wait --for=condition=ready pod -l app=zeal-foundation -n zeal --timeout=300s
+          kubectl wait --for=condition=ready pod -l app=zeal-foundation -n athma-ce --timeout=300s
           kubectl run integration-test --image=zealacr.azurecr.io/zeal/test-runner:latest \
-            --rm -i --restart=Never -n zeal -- npm run test:integration
+            --rm -i --restart=Never -n athma-ce -- npm run test:integration
 ```
 
 ### Production Pipeline with Manual Approval
@@ -1451,8 +1451,8 @@ Push to main/develop
 
       - name: Deploy to Production
         run: |
-          helm upgrade --install zeal ./helm/zeal \
-            --namespace zeal \
+          helm upgrade --install athma-ce ./helm/zeal \
+            --namespace athma-ce \
             --create-namespace \
             --values ./helm/zeal/values-azure-prod.yaml \
             --set image.tag=${{ github.sha }} \
@@ -1460,10 +1460,10 @@ Push to main/develop
 
       - name: Smoke tests
         run: |
-          kubectl wait --for=condition=ready pod -l app=zeal-foundation -n zeal --timeout=300s
-          kubectl run smoke-test --image=curlimages/curl --rm -i --restart=Never -n zeal -- \
+          kubectl wait --for=condition=ready pod -l app=zeal-foundation -n athma-ce --timeout=300s
+          kubectl run smoke-test --image=curlimages/curl --rm -i --restart=Never -n athma-ce -- \
             curl -sf http://zeal-foundation.zeal.svc.cluster.local/health
-          kubectl run smoke-test-fe --image=curlimages/curl --rm -i --restart=Never -n zeal -- \
+          kubectl run smoke-test-fe --image=curlimages/curl --rm -i --restart=Never -n athma-ce -- \
             curl -sf http://zeal-frontend.zeal.svc.cluster.local:80/
 ```
 
@@ -1538,7 +1538,7 @@ az monitor scheduled-query-rule create \
   --resource-group zeal-${ENVIRONMENT}-rg \
   --scopes $WORKSPACE_ID \
   --condition "count > 3" \
-  --condition-query "KubePodInventory | where Namespace == 'zeal' | where PodRestartCount > 3 | summarize count()" \
+  --condition-query "KubePodInventory | where Namespace == 'athma-ce' | where PodRestartCount > 3 | summarize count()" \
   --evaluation-frequency 5m \
   --window-size 15m \
   --severity 2
@@ -1733,7 +1733,7 @@ The WAF_v2 SKU supports zone-redundant deployment across all three availability 
 
 ### Cross-Cloud Failover (per ADR-0008)
 
-Zeal uses Azure as DR when AWS is primary (or vice versa). The failover strategy:
+athma-ce uses Azure as DR when AWS is primary (or vice versa). The failover strategy:
 
 | Component      | RPO       | RTO       | Mechanism                                    |
 |----------------|-----------|-----------|----------------------------------------------|
@@ -1773,13 +1773,13 @@ az postgres flexible-server geo-restore \
 # Blob Storage is created with Standard_ZRS (Section 3.7).
 # For cross-region DR, upgrade to GRS:
 az storage account update \
-  --name zeal${ENVIRONMENT}docs \
+  --name athma-ce${ENVIRONMENT}docs \
   --resource-group zeal-${ENVIRONMENT}-rg \
   --sku Standard_RAGRS
 
 # Initiate failover (only when primary region is unavailable)
 az storage account failover \
-  --name zeal${ENVIRONMENT}docs \
+  --name athma-ce${ENVIRONMENT}docs \
   --resource-group zeal-${ENVIRONMENT}-rg
 ```
 
@@ -1852,17 +1852,17 @@ az aks nodepool update \
 
 ```bash
 # Pod not starting
-kubectl describe pod <POD_NAME> -n zeal
-kubectl logs <POD_NAME> -n zeal --previous
+kubectl describe pod <POD_NAME> -n athma-ce
+kubectl logs <POD_NAME> -n athma-ce --previous
 
 # Check events
-kubectl get events -n zeal --sort-by='.lastTimestamp' | tail -20
+kubectl get events -n athma-ce --sort-by='.lastTimestamp' | tail -20
 
 # OOMKilled - increase memory limits
-kubectl top pods -n zeal
+kubectl top pods -n athma-ce
 
 # CrashLoopBackOff - check application logs
-kubectl logs <POD_NAME> -n zeal -f
+kubectl logs <POD_NAME> -n athma-ce -f
 
 # Node pressure
 kubectl describe node <NODE_NAME> | grep -A 5 Conditions
@@ -1873,7 +1873,7 @@ kubectl top nodes
 
 ```bash
 # Test connectivity from a pod
-kubectl run pg-test --image=postgres:16-alpine --rm -it --restart=Never -n zeal -- \
+kubectl run pg-test --image=postgres:16-alpine --rm -it --restart=Never -n athma-ce -- \
   psql "host=${ENVIRONMENT}-zeal-postgres.postgres.database.azure.com \
   port=5432 dbname=zeal_foundation user=zeal_admin sslmode=require" \
   -c "SELECT 1;"
@@ -1890,7 +1890,7 @@ az postgres flexible-server firewall-rule list \
   --resource-group zeal-${ENVIRONMENT}-rg -o table
 
 # Private DNS resolution from within AKS
-kubectl run dns-test --image=busybox --rm -it --restart=Never -n zeal -- \
+kubectl run dns-test --image=busybox --rm -it --restart=Never -n athma-ce -- \
   nslookup ${ENVIRONMENT}-zeal-postgres.postgres.database.azure.com
 ```
 
@@ -1970,17 +1970,17 @@ az keyvault show \
 kubectl get pods -n kube-system -l app=secrets-store-csi-driver
 
 # Check SecretProviderClass events
-kubectl describe secretproviderclass zeal-keyvault-secrets -n zeal
+kubectl describe secretproviderclass zeal-keyvault-secrets -n athma-ce
 
 # Verify secrets are synced
-kubectl get secret zeal-secrets -n zeal -o json | jq '.data | keys'
+kubectl get secret zeal-secrets -n athma-ce -o json | jq '.data | keys'
 ```
 
 ### Redis Connectivity
 
 ```bash
 # Test from a pod
-kubectl run redis-test --image=redis:7-alpine --rm -it --restart=Never -n zeal -- \
+kubectl run redis-test --image=redis:7-alpine --rm -it --restart=Never -n athma-ce -- \
   redis-cli -h ${ENVIRONMENT}-zeal-redis.redis.cache.windows.net \
   -p 6380 --tls -a "<ACCESS_KEY>" PING
 
@@ -1997,19 +1997,19 @@ az redis show \
 # Overall cluster health
 kubectl get componentstatuses
 kubectl get nodes -o wide
-kubectl get pods -n zeal -o wide
+kubectl get pods -n athma-ce -o wide
 
 # Resource usage
 kubectl top nodes
-kubectl top pods -n zeal --sort-by=memory
+kubectl top pods -n athma-ce --sort-by=memory
 
 # Check all services have endpoints
-kubectl get endpoints -n zeal
+kubectl get endpoints -n athma-ce
 
 # Helm release status
-helm status zeal -n zeal
-helm history zeal -n zeal
+helm status athma-ce -n athma-ce
+helm history athma-ce -n athma-ce
 
 # Rollback if deployment failed
-helm rollback zeal <REVISION> -n zeal
+helm rollback athma-ce <REVISION> -n athma-ce
 ```

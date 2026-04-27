@@ -1,6 +1,6 @@
 # Patient Change History System
 
-Complete guide to tracking and managing patient data changes in the Zeal platform.
+Complete guide to tracking and managing patient data changes in the athma-ce platform.
 
 ---
 
@@ -767,4 +767,4 @@ WHERE created_by IS NULL;
 
 **Version:** 1.0.0
 **Last Updated:** 2025-10-23
-**Maintainer:** Zeal Platform Team
+**Maintainer:** athma-ce Platform Team

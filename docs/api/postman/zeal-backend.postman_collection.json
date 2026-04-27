@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Zeal Backend API Collection",
+    "name": "athma-ce Backend API Collection",
     "description": "Postman collection covering Auth, Foundation, and Clinical services for local development. Includes patient management, identity verification, consent management (GDPR-compliant), and audit trail endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -457,7 +457,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Zeal Demo\",\n  \"domain\": \"demo.zeal.test\",\n  \"settings\": {\n    \"timezone\": \"Asia/Dubai\"\n  }\n}"
+              "raw": "{\n  \"name\": \"athma-ce Demo\",\n  \"domain\": \"demo.zeal.test\",\n  \"settings\": {\n    \"timezone\": \"Asia/Dubai\"\n  }\n}"
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/tenants",
@@ -510,7 +510,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Zeal Demo Updated\",\n  \"settings\": {\n    \"timezone\": \"Asia/Dubai\",\n    \"currency\": \"AED\"\n  }\n}"
+              "raw": "{\n  \"name\": \"athma-ce Demo Updated\",\n  \"settings\": {\n    \"timezone\": \"Asia/Dubai\",\n    \"currency\": \"AED\"\n  }\n}"
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/tenants/{{tenantId}}",

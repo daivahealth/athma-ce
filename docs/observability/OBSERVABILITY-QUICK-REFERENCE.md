@@ -1,6 +1,6 @@
 # Observability Quick Reference
 
-Developer cheat sheet for Zeal Healthcare Platform observability.
+Developer cheat sheet for athma-ce Healthcare Platform observability.
 
 ---
 

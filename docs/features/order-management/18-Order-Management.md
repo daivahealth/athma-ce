@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Zeal platform supports comprehensive order management for various types of medical orders including medications, laboratory tests, imaging studies, procedures, and referrals. The system uses a flexible design that separates generic order information from order-type-specific details.
+The athma-ce platform supports comprehensive order management for various types of medical orders including medications, laboratory tests, imaging studies, procedures, and referrals. The system uses a flexible design that separates generic order information from order-type-specific details.
 
 ## Data Model Design
 
@@ -457,4 +457,4 @@ ORDER BY (current_stock - minimum_stock);
 - **Local terminology** for procedures
 - **Cultural considerations** in patient instructions
 
-This comprehensive order management system provides the foundation for efficient clinical workflows while maintaining data integrity, regulatory compliance, and integration capabilities across the Zeal platform.
+This comprehensive order management system provides the foundation for efficient clinical workflows while maintaining data integrity, regulatory compliance, and integration capabilities across the athma-ce platform.

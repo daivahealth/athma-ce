@@ -1,6 +1,6 @@
 # Security Implementation Guide
 
-This document provides a comprehensive overview of the security implementation in the Zeal Healthcare Platform, including authentication, authorization (RBAC), and best practices for developers and implementors.
+This document provides a comprehensive overview of the security implementation in the athma-ce Healthcare Platform, including authentication, authorization (RBAC), and best practices for developers and implementors.
 
 ## Table of Contents
 

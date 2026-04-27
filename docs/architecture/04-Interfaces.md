@@ -2,7 +2,7 @@
 
 ## OpenAPI Specification Overview
 
-This document outlines the OpenAPI 3.0 specifications for all major service endpoints in the Zeal PMS/RCM platform. All APIs follow RESTful principles with consistent patterns for authentication, error handling, and response formats.
+This document outlines the OpenAPI 3.0 specifications for all major service endpoints in the athma-ce PMS/RCM platform. All APIs follow RESTful principles with consistent patterns for authentication, error handling, and response formats.
 
 ## Common API Patterns
 

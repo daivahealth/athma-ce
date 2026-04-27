@@ -21,7 +21,7 @@
 
 ## Overview
 
-The Inpatient Module extends Zeal's Clinical service to support **hospital admission clinical workflows**, from admission to discharge. It focuses purely on **clinical data and workflows**, while facility infrastructure (wards, rooms, beds) is managed by the Foundation service.
+The Inpatient Module extends athma-ce's Clinical service to support **hospital admission clinical workflows**, from admission to discharge. It focuses purely on **clinical data and workflows**, while facility infrastructure (wards, rooms, beds) is managed by the Foundation service.
 
 ### Key Capabilities
 
@@ -684,7 +684,7 @@ return enriched;
 
 ## Summary
 
-The Inpatient Module follows Zeal's microservices architecture:
+The Inpatient Module follows athma-ce's microservices architecture:
 
 - **Foundation Service** - Owns facility infrastructure (Facility → Department → Ward → Space → Bed) and Staff
 - **Clinical Service** - Owns clinical workflows (admissions, assessments, care plans, discharge)

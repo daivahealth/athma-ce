@@ -2,7 +2,7 @@
 
 ## AI Services Architecture
 
-The Zeal platform integrates AI capabilities across clinical, operational, and financial workflows with a focus on safety, explainability, and human-in-the-loop validation.
+The athma-ce platform integrates AI capabilities across clinical, operational, and financial workflows with a focus on safety, explainability, and human-in-the-loop validation.
 
 ## AI Service Components
 

@@ -1,8 +1,8 @@
-# Zeal Backend Architecture
+# athma-ce Backend Architecture
 
 **Version:** 1.0
 **Last Updated:** January 2026
-**Maintainers:** Zeal Engineering Team
+**Maintainers:** athma-ce Engineering Team
 
 ---
 
@@ -25,7 +25,7 @@
 
 ## Executive Summary
 
-The Zeal platform is a **multi-tenant, domain-driven healthcare management system** built on a modern, scalable microservices architecture. The backend consists of **5 core domain services** backed by **5 PostgreSQL databases**, designed to handle UAE healthcare compliance while maintaining flexibility for global deployment.
+The athma-ce platform is a **multi-tenant, domain-driven healthcare management system** built on a modern, scalable microservices architecture. The backend consists of **5 core domain services** backed by **5 PostgreSQL databases**, designed to handle UAE healthcare compliance while maintaining flexibility for global deployment.
 
 ### Key Metrics
 - **Services:** 5 core domains + shared packages
@@ -1161,7 +1161,7 @@ async function bootstrap() {
 
 ## Conclusion
 
-The Zeal backend architecture is built on **proven, enterprise-grade technologies** with a focus on:
+The athma-ce backend architecture is built on **proven, enterprise-grade technologies** with a focus on:
 
 ✅ **Type Safety** - TypeScript + Prisma eliminate runtime errors
 ✅ **Scalability** - Stateless services, database read replicas, horizontal scaling

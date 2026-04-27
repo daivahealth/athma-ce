@@ -1,6 +1,6 @@
-# Zeal Services Documentation
+# athma-ce Services Documentation
 
-This directory contains comprehensive documentation for all Zeal backend services.
+This directory contains comprehensive documentation for all athma-ce backend services.
 
 ## Available Services
 

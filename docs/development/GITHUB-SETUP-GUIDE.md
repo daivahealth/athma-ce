@@ -1,6 +1,6 @@
 # GitHub Repository Setup Guide
 
-This guide walks through setting up CI/CD, branch protection, and GitHub governance for the Zeal monorepo.
+This guide walks through setting up CI/CD, branch protection, and GitHub governance for the athma-ce monorepo.
 
 ## 📋 Table of Contents
 
@@ -13,7 +13,7 @@ This guide walks through setting up CI/CD, branch protection, and GitHub governa
 
 ## Overview
 
-The Zeal monorepo uses GitHub Actions for continuous integration and deployment:
+The athma-ce monorepo uses GitHub Actions for continuous integration and deployment:
 
 - **CI Pipeline**: Runs on every PR and push to `main` or `release/**` branches
 - **Staging Deployment**: Triggered by RC tags (e.g., `v1.2.0-rc.1`)

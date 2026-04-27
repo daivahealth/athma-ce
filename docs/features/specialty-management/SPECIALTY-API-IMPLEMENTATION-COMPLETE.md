@@ -373,7 +373,7 @@ GET /staff/doctors/specialty/CARDIO
 
 ## 🎊 **IMPLEMENTATION COMPLETE!**
 
-The Zeal PMS now has:
+The athma-ce PMS now has:
 - ✅ **Proper specialty master table** (instead of JSON)
 - ✅ **Complete API layer** for specialty management
 - ✅ **Primary specialty enforcement** at all levels

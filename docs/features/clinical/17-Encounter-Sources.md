@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Zeal platform supports multiple encounter sources to handle different patient visit scenarios:
+The athma-ce platform supports multiple encounter sources to handle different patient visit scenarios:
 
 - **Appointment-based encounters**: Scheduled visits with pre-booked appointments
 - **Walk-in encounters**: Unscheduled visits where patients arrive without appointments

@@ -7,7 +7,7 @@
 
 ## 🎯 **Executive Summary**
 
-The Zeal PMS now tracks **which specialties are available at each facility** through the `staff_specialties` table with `facility_id` included. This enables:
+The athma-ce PMS now tracks **which specialties are available at each facility** through the `staff_specialties` table with `facility_id` included. This enables:
 
 ✅ **Direct Query**: "What specialties does Facility A offer?"  
 ✅ **Multi-Facility Support**: Staff can practice different specialties at different facilities  

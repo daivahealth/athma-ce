@@ -5,7 +5,7 @@
 
 ## Overview
 
-The Zeal Platform documentation has been reorganized from a flat structure into a logical, hierarchical folder structure for better navigation and maintainability.
+The athma-ce Platform documentation has been reorganized from a flat structure into a logical, hierarchical folder structure for better navigation and maintainability.
 
 ## Changes Made
 

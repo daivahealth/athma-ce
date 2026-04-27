@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the complete AI features roadmap for the Zeal Healthcare Platform, including implemented features, in-progress work, and future enhancements.
+This document outlines the complete AI features roadmap for the athma-ce Healthcare Platform, including implemented features, in-progress work, and future enhancements.
 
 ## Current State Summary
 

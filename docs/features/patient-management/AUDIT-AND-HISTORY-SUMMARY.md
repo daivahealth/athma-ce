@@ -589,4 +589,4 @@ All common queries use indexes:
 
 **Version:** 1.0.0
 **Last Updated:** 2025-10-23
-**Maintainer:** Zeal Platform Team
+**Maintainer:** athma-ce Platform Team

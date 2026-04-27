@@ -1000,4 +1000,4 @@ tail -f logs/prm-worker.log | grep "Processing.*jobs"
 **Database Schema:** `/backend/shared/database-prm/prisma/schema.prisma`
 **Architecture Docs:** `/docs/architecture/BACKEND-ARCHITECTURE.md`
 
-For questions or issues, contact the Zeal Health development team.
+For questions or issues, contact the athma-ce Health development team.

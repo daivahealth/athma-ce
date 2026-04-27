@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the complete billing workflows for the Zeal PMS+RCM platform, covering both cash and insurance-based billing, including cancellations, refunds, adjustments, and reconciliation processes.
+This document describes the complete billing workflows for the athma-ce PMS+RCM platform, covering both cash and insurance-based billing, including cancellations, refunds, adjustments, and reconciliation processes.
 
 ---
 
@@ -1362,4 +1362,4 @@ HAVING :refund_amount <= (COALESCE(SUM(pp.amount), 0) - COALESCE(SUM(r.amount), 
 
 ---
 
-This comprehensive billing workflows document covers all major financial transactions and edge cases in the Zeal PMS+RCM platform, ensuring robust, auditable, and compliant billing operations.
+This comprehensive billing workflows document covers all major financial transactions and edge cases in the athma-ce PMS+RCM platform, ensuring robust, auditable, and compliant billing operations.

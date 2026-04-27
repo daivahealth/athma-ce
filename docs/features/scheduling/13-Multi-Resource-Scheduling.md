@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Zeal platform now includes comprehensive multi-resource scheduling capabilities to support complex healthcare scenarios across clinics, hospitals, diagnostic centers, and surgery centers. This document details the enhancements made to support concurrent resource scheduling, conflict detection, and resolution.
+The athma-ce platform now includes comprehensive multi-resource scheduling capabilities to support complex healthcare scenarios across clinics, hospitals, diagnostic centers, and surgery centers. This document details the enhancements made to support concurrent resource scheduling, conflict detection, and resolution.
 
 ## Enhanced Data Model
 
@@ -435,6 +435,6 @@ CREATE INDEX idx_staff_schedules_time
 
 ## Conclusion
 
-The multi-resource scheduling enhancements enable the Zeal platform to support complex healthcare scenarios across all provider types. The flexible data model, comprehensive conflict detection, and optimization capabilities ensure efficient resource utilization while maintaining high-quality patient care.
+The multi-resource scheduling enhancements enable the athma-ce platform to support complex healthcare scenarios across all provider types. The flexible data model, comprehensive conflict detection, and optimization capabilities ensure efficient resource utilization while maintaining high-quality patient care.
 
 The system scales from simple clinic consultations to complex surgical procedures, diagnostic imaging, and hospital admissions—all with the same underlying architecture and consistent user experience.

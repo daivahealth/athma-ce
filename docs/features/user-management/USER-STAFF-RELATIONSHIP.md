@@ -8,7 +8,7 @@
 
 ## 🎯 **Executive Summary**
 
-The Zeal PMS uses a **dual-identity model** to separate system access from clinical identity:
+The athma-ce PMS uses a **dual-identity model** to separate system access from clinical identity:
 
 - **Users** = System accounts (authentication, authorization, RBAC)
 - **Staff** = Healthcare personnel (clinical/operational identity)

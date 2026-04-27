@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides the **complete entity relationship model** for the Zeal Platform, including:
+This document provides the **complete entity relationship model** for the athma-ce Platform, including:
 
 - **Core Entities**: Tenants, Users, Patients, Staff, Facilities, Spaces, Equipment
 - **RBAC & Security**: Roles, Permissions, MFA Settings, Trusted Devices

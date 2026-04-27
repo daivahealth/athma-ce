@@ -1,6 +1,6 @@
 # Development Commands Reference
 
-This document contains all the essential commands for managing the Zeal PMS development environment.
+This document contains all the essential commands for managing the athma-ce PMS development environment.
 
 ## 🚀 Quick Start Commands
 

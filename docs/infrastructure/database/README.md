@@ -1,6 +1,6 @@
 # Database Documentation
 
-This folder contains database configuration, setup, and administration guides for the Zeal platform.
+This folder contains database configuration, setup, and administration guides for the athma-ce platform.
 
 ## 📚 Documents
 
@@ -39,7 +39,7 @@ This folder contains database configuration, setup, and administration guides fo
 
 ### Four-Database Domain Model
 
-The Zeal platform uses **four PostgreSQL databases** aligned with domain boundaries (ADR-0013):
+The athma-ce platform uses **four PostgreSQL databases** aligned with domain boundaries (ADR-0013):
 
 ```
 ┌─────────────────────────────────────────────────────────┐

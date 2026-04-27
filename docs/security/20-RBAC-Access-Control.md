@@ -1,8 +1,8 @@
-# RBAC (Role-Based Access Control) - Zeal Platform
+# RBAC (Role-Based Access Control) - athma-ce Platform
 
 ## Overview
 
-The Zeal Platform implements a comprehensive **Role-Based Access Control (RBAC)** system to ensure secure, granular, and auditable access to sensitive healthcare data and operations. This document outlines the RBAC architecture, permission model, implementation guidelines, and best practices.
+The athma-ce Platform implements a comprehensive **Role-Based Access Control (RBAC)** system to ensure secure, granular, and auditable access to sensitive healthcare data and operations. This document outlines the RBAC architecture, permission model, implementation guidelines, and best practices.
 
 ---
 
@@ -874,7 +874,7 @@ function hasPermission(userPermissions: string[], required: string): boolean {
 
 ### Overview
 
-The Zeal Platform implements **Multi-Factor Authentication (MFA)** as an additional security layer for user authentication. MFA requires users to provide two or more verification factors to gain access, significantly reducing the risk of unauthorized access.
+The athma-ce Platform implements **Multi-Factor Authentication (MFA)** as an additional security layer for user authentication. MFA requires users to provide two or more verification factors to gain access, significantly reducing the risk of unauthorized access.
 
 ### Supported MFA Methods
 
@@ -967,8 +967,8 @@ async function enrollTOTP(userId: string): Promise<{
 }> {
   // Generate secret
   const secret = speakeasy.generateSecret({
-    name: `Zeal Platform (${userEmail})`,
-    issuer: 'Zeal'
+    name: `athma-ce Platform (${userEmail})`,
+    issuer: 'athma-ce'
   });
   
   // Generate QR code
@@ -1528,7 +1528,7 @@ ORDER BY d.trusted_at DESC;
 
 ## Summary
 
-The Zeal Platform RBAC system provides:
+The athma-ce Platform RBAC system provides:
 
 ✅ **Granular Access Control** — Fine-grained permissions per resource and action  
 ✅ **Multi-Role Support** — Users can have multiple roles  

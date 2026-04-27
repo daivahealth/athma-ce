@@ -2,7 +2,7 @@
 
 ## 🎯 Quick Reference
 
-This guide provides detailed documentation for the new user-facility management endpoints added to the Zeal Backend Postman collection.
+This guide provides detailed documentation for the new user-facility management endpoints added to the athma-ce Backend Postman collection.
 
 ---
 

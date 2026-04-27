@@ -1,4 +1,4 @@
-# Zeal Platform - Technical Architecture
+# athma-ce Platform - Technical Architecture
 
 ![Status](https://img.shields.io/badge/Status-Active-success)
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue)
@@ -30,7 +30,7 @@
 
 ## 1. Executive Summary
 
-Zeal is a comprehensive, multi-tenant SaaS platform for healthcare providers, combining Practice Management (PMS), Electronic Health Records (EHR), and Revenue Cycle Management (RCM) into a unified solution.
+athma-ce is a comprehensive, multi-tenant SaaS platform for healthcare providers, combining Practice Management (PMS), Electronic Health Records (EHR), and Revenue Cycle Management (RCM) into a unified solution.
 
 ### Key Design Principles
 
@@ -694,7 +694,7 @@ sequenceDiagram
 
 ```mermaid
 graph TB
-    subgraph "Zeal Platform"
+    subgraph "athma-ce Platform"
         Clinical[Clinical Service]
         RCM[RCM Service]
         PRM[PRM Service]

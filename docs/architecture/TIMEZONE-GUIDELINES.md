@@ -1,7 +1,7 @@
-# Timezone Strategy for Zeal (Design + Best Practices)
+# Timezone Strategy for athma-ce (Design + Best Practices)
 
 ## Purpose
-This document defines how Zeal handles timezones across backend services, databases, and frontend clients. It explains the design decisions, operational guidelines, and the rationale for choosing UTC storage with facility-local presentation.
+This document defines how athma-ce handles timezones across backend services, databases, and frontend clients. It explains the design decisions, operational guidelines, and the rationale for choosing UTC storage with facility-local presentation.
 
 ## Goals
 - Ensure consistent time storage across tenants and services.

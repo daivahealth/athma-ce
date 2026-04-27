@@ -1,6 +1,6 @@
 # AI Features Architecture Documentation
 
-This document provides comprehensive technical documentation for the AI-powered features in the Zeal Healthcare Platform.
+This document provides comprehensive technical documentation for the AI-powered features in the athma-ce Healthcare Platform.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This document provides comprehensive technical documentation for the AI-powered 
 
 ## Overview
 
-The Zeal AI Gateway service provides two AI-powered features:
+The athma-ce AI Gateway service provides two AI-powered features:
 
 | Feature | Purpose | LLM Provider | Database |
 |---------|---------|--------------|----------|

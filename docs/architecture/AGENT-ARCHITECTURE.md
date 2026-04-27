@@ -1,7 +1,7 @@
 # Agent Architecture & Design Playbook
 
 ## Purpose & Scope
-This document defines how AI agents are designed, deployed, and governed inside the Zeal PMS/RCM platform. It translates platform architecture (docs/02-Architecture-Diagram.md) and AI strategy (docs/06-AI-Design.md) into concrete patterns so every new agent is:
+This document defines how AI agents are designed, deployed, and governed inside the athma-ce PMS/RCM platform. It translates platform architecture (docs/02-Architecture-Diagram.md) and AI strategy (docs/06-AI-Design.md) into concrete patterns so every new agent is:
 - Tenant-aware and compliant with ADR-0003 (multi-tenancy via PostgreSQL RLS)
 - Implemented in Python services per ADR-0001 while interoperating with Node.js transactional APIs via ADR-0002 contracts
 - Deployed according to the hybrid AI model in ADR-0006 with human-in-the-loop safeguards

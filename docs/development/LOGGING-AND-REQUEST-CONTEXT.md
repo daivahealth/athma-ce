@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the implementation of structured logging using Pino with AsyncLocalStorage for request context isolation in Zeal healthcare platform.
+This document describes the implementation of structured logging using Pino with AsyncLocalStorage for request context isolation in athma-ce healthcare platform.
 
 ## Architecture
 

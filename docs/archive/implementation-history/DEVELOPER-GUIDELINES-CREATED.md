@@ -5,7 +5,7 @@
 
 ## Overview
 
-Created comprehensive developer guidelines for backend feature development in the Zeal platform. These guides provide step-by-step instructions, best practices, and checklists for developers building new features.
+Created comprehensive developer guidelines for backend feature development in the athma-ce platform. These guides provide step-by-step instructions, best practices, and checklists for developers building new features.
 
 ## Documents Created
 

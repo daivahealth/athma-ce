@@ -5,7 +5,7 @@
 
 ## Database Schema Overview
 
-The Zeal platform uses PostgreSQL 16 with Row-Level Security (RLS) for multi-tenant data isolation. All tables include tenant scoping, audit fields, and appropriate indexes for performance.
+The athma-ce platform uses PostgreSQL 16 with Row-Level Security (RLS) for multi-tenant data isolation. All tables include tenant scoping, audit fields, and appropriate indexes for performance.
 
 > **Scalability Note**: This data model uses generic table names (`facilities`, `spaces`, `staff`) to scale from clinics to hospitals, diagnostic centers, surgery centers, and other healthcare provider types without requiring structural changes. See [Scalability Guide](../docs/12-Scalability-Healthcare-Providers.md) for detailed expansion strategies.
 
@@ -919,7 +919,7 @@ CREATE TABLE encounter_links (
 -- Code systems (terminology registries)
 CREATE TABLE code_systems (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    system_uri VARCHAR(255) UNIQUE NOT NULL, -- e.g., 'zeal:visit-category'
+    system_uri VARCHAR(255) UNIQUE NOT NULL, -- e.g., 'athma-ce:visit-category'
     name VARCHAR(255) NOT NULL,
     description TEXT,
     version VARCHAR(50) DEFAULT '1.0',

@@ -4,14 +4,14 @@
 
 ```mermaid
 C4Context
-    title System Context Diagram - Zeal PMS/RCM Platform
+    title System Context Diagram - athma-ce PMS/RCM Platform
     
     Person(patient, "Patient", "Healthcare consumer accessing patient portal")
     Person(provider, "Healthcare Provider", "Doctor, nurse, or clinician using clinical features")
     Person(billing, "Billing Staff", "Staff managing revenue cycle and claims")
     Person(admin, "Clinic Administrator", "Administrator managing clinic operations")
     
-    System(zeal, "Zeal PMS/RCM Platform", "AI-driven practice management and revenue cycle management system")
+    System(athma-ce, "athma-ce PMS/RCM Platform", "AI-driven practice management and revenue cycle management system")
     
     System_Ext(dha, "DHA eClaimLink", "Dubai Health Authority claims processing system")
     System_Ext(doh, "DOH Shafafiya", "Department of Health Abu Dhabi system")
@@ -24,35 +24,35 @@ C4Context
     System_Ext(imaging, "Imaging Systems", "Radiology and imaging systems")
     System_Ext(pharmacy, "Pharmacy Systems", "Pharmacy management systems")
     
-    Rel(patient, zeal, "Accesses patient portal, views results, schedules appointments")
-    Rel(provider, zeal, "Manages patients, charts encounters, prescribes medications")
-    Rel(billing, zeal, "Processes claims, manages revenue cycle, handles denials")
-    Rel(admin, zeal, "Configures system, manages users, generates reports")
+    Rel(patient, athma-ce, "Accesses patient portal, views results, schedules appointments")
+    Rel(provider, athma-ce, "Manages patients, charts encounters, prescribes medications")
+    Rel(billing, athma-ce, "Processes claims, manages revenue cycle, handles denials")
+    Rel(admin, athma-ce, "Configures system, manages users, generates reports")
     
-    Rel(zeal, dha, "Submits claims, receives remittances", "XML/HTTPS")
-    Rel(zeal, doh, "Prior authorization, claims processing", "XML/HTTPS")
-    Rel(zeal, nabidh, "Patient data exchange, clinical records", "FHIR/HTTPS")
-    Rel(zeal, malaffi, "Patient data exchange, clinical records", "FHIR/HTTPS")
-    Rel(zeal, riayati, "National patient index, unified records", "FHIR/HTTPS")
-    Rel(zeal, clearinghouse, "Claims submission, status updates", "EDI/HTTPS")
-    Rel(zeal, payer, "Eligibility verification, claims processing", "EDI/HTTPS")
-    Rel(zeal, lab, "Orders lab tests, receives results", "HL7/HTTPS")
-    Rel(zeal, imaging, "Orders imaging, receives reports", "DICOM/HTTPS")
-    Rel(zeal, pharmacy, "e-Prescribing, medication management", "HL7/HTTPS")
+    Rel(athma-ce, dha, "Submits claims, receives remittances", "XML/HTTPS")
+    Rel(athma-ce, doh, "Prior authorization, claims processing", "XML/HTTPS")
+    Rel(athma-ce, nabidh, "Patient data exchange, clinical records", "FHIR/HTTPS")
+    Rel(athma-ce, malaffi, "Patient data exchange, clinical records", "FHIR/HTTPS")
+    Rel(athma-ce, riayati, "National patient index, unified records", "FHIR/HTTPS")
+    Rel(athma-ce, clearinghouse, "Claims submission, status updates", "EDI/HTTPS")
+    Rel(athma-ce, payer, "Eligibility verification, claims processing", "EDI/HTTPS")
+    Rel(athma-ce, lab, "Orders lab tests, receives results", "HL7/HTTPS")
+    Rel(athma-ce, imaging, "Orders imaging, receives reports", "DICOM/HTTPS")
+    Rel(athma-ce, pharmacy, "e-Prescribing, medication management", "HL7/HTTPS")
 ```
 
 ## Container Diagram
 
 ```mermaid
 C4Container
-    title Container Diagram - Zeal PMS/RCM Platform
+    title Container Diagram - athma-ce PMS/RCM Platform
     
     Person(patient, "Patient")
     Person(provider, "Healthcare Provider")
     Person(billing, "Billing Staff")
     Person(admin, "Clinic Administrator")
     
-    System_Boundary(zeal, "Zeal PMS/RCM Platform") {
+    System_Boundary(athma-ce, "athma-ce PMS/RCM Platform") {
         Container(webapp, "Web Application", "React/TypeScript", "Patient portal, provider dashboard, admin console")
         Container(mobile, "Mobile App", "React Native", "Provider mobile app for clinical workflows")
         Container(api_gateway, "API Gateway", "Kong/Envoy", "Authentication, rate limiting, routing")

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the architecture for managing hierarchical configurations across instance, tenant, and facility levels in the Zeal platform.
+This document describes the architecture for managing hierarchical configurations across instance, tenant, and facility levels in the athma-ce platform.
 
 ## Configuration Hierarchy
 

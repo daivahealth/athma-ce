@@ -399,7 +399,7 @@ The **User-Staff relationship** is now:
 - ✅ Seeded with realistic data
 - ✅ Ready for use in application code
 
-**Key Achievement**: The Zeal PMS now properly separates **system identity** (users) from **clinical identity** (staff), matching real-world healthcare operations where not all staff need system access, and not all users are healthcare providers.
+**Key Achievement**: The athma-ce PMS now properly separates **system identity** (users) from **clinical identity** (staff), matching real-world healthcare operations where not all staff need system access, and not all users are healthcare providers.
 
 ---
 

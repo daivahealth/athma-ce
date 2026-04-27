@@ -1,6 +1,6 @@
 # Multi-Tenancy Documentation
 
-This folder contains all documentation related to the multi-tenancy implementation in the Zeal PMS/RCM system.
+This folder contains all documentation related to the multi-tenancy implementation in the athma-ce PMS/RCM system.
 
 ## 📚 Documents
 

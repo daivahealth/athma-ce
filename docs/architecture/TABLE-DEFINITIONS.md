@@ -2,7 +2,7 @@
 
 _Last updated: 21 Nov 2025_
 
-This document provides detailed field-level definitions for all tables across the three Zeal databases. For architectural context and relationships, see [05-Data-Model.md](./05-Data-Model.md).
+This document provides detailed field-level definitions for all tables across the three athma-ce databases. For architectural context and relationships, see [05-Data-Model.md](./05-Data-Model.md).
 
 **Databases:**
 - [Foundation Database (`zeal_foundation`)](#1-foundation-database-zeal_foundation)

@@ -1,6 +1,6 @@
 # Security & Compliance Documentation
 
-This folder contains security, compliance, and access control documentation for the Zeal PMS/RCM system.
+This folder contains security, compliance, and access control documentation for the athma-ce PMS/RCM system.
 
 ## 📚 Documents
 

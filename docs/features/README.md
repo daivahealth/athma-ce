@@ -72,7 +72,7 @@ This folder contains feature-specific documentation organized by domain and modu
 ## 🗺️ Feature Map
 
 ```
-Zeal PMS/RCM System
+athma-ce PMS/RCM System
 │
 ├── Clinical Domain
 │   ├── Patient Management

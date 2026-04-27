@@ -7,7 +7,7 @@
 
 ## 🎯 **Overview**
 
-The Zeal PMS now uses a **proper specialties master table** instead of JSON arrays for storing medical specialties. This provides:
+The athma-ce PMS now uses a **proper specialties master table** instead of JSON arrays for storing medical specialties. This provides:
 
 ✅ Fast queries with indexes  
 ✅ Data quality enforcement  

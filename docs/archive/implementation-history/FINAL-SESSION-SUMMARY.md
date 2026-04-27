@@ -1,7 +1,7 @@
 # Final Session Summary - User-Facility Implementation
 
 ## 🎉 **Session Overview**
-This session focused on implementing comprehensive user-facility mapping for the Zeal PMS, addressing a critical business requirement that users must be mapped to facilities within their tenant.
+This session focused on implementing comprehensive user-facility mapping for the athma-ce PMS, addressing a critical business requirement that users must be mapped to facilities within their tenant.
 
 ---
 

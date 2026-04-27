@@ -1,4 +1,4 @@
-# Zeal PMS - Complete Implementation Index
+# athma-ce PMS - Complete Implementation Index
 
 **Last Updated**: October 8, 2025  
 **Status**: ✅ **ALL SYSTEMS OPERATIONAL**
@@ -231,7 +231,7 @@ docs/
 **Quick Start**:
 1. Import `zeal-backend.postman_collection.json`
 2. Import `zeal-local.postman_environment.json`
-3. Select "Zeal Local" environment
+3. Select "athma-ce Local" environment
 4. Run "Foundation API → Auth/Login"
 5. Test all endpoints
 
@@ -400,7 +400,7 @@ WHERE u.staff_id IS NULL;
 
 ## 🏆 **Summary**
 
-The **Zeal PMS** now has:
+The **athma-ce PMS** now has:
 
 ✅ **Enterprise-grade facility hierarchy** (7 depts, 9 wards, 109 beds, 10 clinics, 162 spaces)  
 ✅ **Proper user-staff separation** (15 staff, 14 users, optional linking)  

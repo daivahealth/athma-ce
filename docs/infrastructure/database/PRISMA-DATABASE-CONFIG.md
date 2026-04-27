@@ -1,6 +1,6 @@
 # 🗄️ Prisma Database Configuration Guide (Domain Split)
 
-The Zeal platform now stores data in **four PostgreSQL databases** that align with the ADR-0013 domain decomposition:
+The athma-ce platform now stores data in **four PostgreSQL databases** that align with the ADR-0013 domain decomposition:
 
 | Domain | Database name | Prisma package |
 | --- | --- | --- |

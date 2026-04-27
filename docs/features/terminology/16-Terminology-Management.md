@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the terminology management system for Zeal PMS+RCM, with a focus on concept-based visit classification (New, Revisit, Follow-up). This approach provides:
+This document describes the terminology management system for athma-ce PMS+RCM, with a focus on concept-based visit classification (New, Revisit, Follow-up). This approach provides:
 
 - **Standardized terminology** via code systems and value sets
 - **Configurable business rules** for classification
@@ -37,7 +37,7 @@ This document describes the terminology management system for Zeal PMS+RCM, with
 -- Code systems (terminology registries)
 CREATE TABLE code_systems (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    system_uri VARCHAR(255) UNIQUE NOT NULL, -- e.g., 'zeal:visit-category'
+    system_uri VARCHAR(255) UNIQUE NOT NULL, -- e.g., 'athma-ce:visit-category'
     name VARCHAR(255) NOT NULL,
     description TEXT,
     version VARCHAR(50) DEFAULT '1.0',
@@ -113,15 +113,15 @@ CREATE INDEX idx_value_set_members_concept ON value_set_members(concept_id);
 -- 1. Create code system
 INSERT INTO code_systems (system_uri, name, description, publisher)
 VALUES (
-    'zeal:visit-category',
-    'Zeal Visit Category',
+    'athma-ce:visit-category',
+    'athma-ce Visit Category',
     'Classification of visits as new, revisit, or follow-up',
-    'Zeal Healthcare Technologies'
+    'athma-ce Healthcare Technologies'
 );
 
 -- 2. Create concepts
 WITH cs AS (
-    SELECT id FROM code_systems WHERE system_uri = 'zeal:visit-category'
+    SELECT id FROM code_systems WHERE system_uri = 'athma-ce:visit-category'
 )
 INSERT INTO concepts (code_system_id, code, display_default, definition, sort_order)
 VALUES
@@ -152,14 +152,14 @@ FROM value_sets vs
 CROSS JOIN concepts c
 JOIN code_systems cs ON cs.id = c.code_system_id
 WHERE vs.name = 'visit-category'
-  AND cs.system_uri = 'zeal:visit-category';
+  AND cs.system_uri = 'athma-ce:visit-category';
 
 -- 5. Add Arabic translations
 WITH visit_concepts AS (
     SELECT c.id, c.code
     FROM concepts c
     JOIN code_systems cs ON cs.id = c.code_system_id
-    WHERE cs.system_uri = 'zeal:visit-category'
+    WHERE cs.system_uri = 'athma-ce:visit-category'
 )
 INSERT INTO concept_translations (concept_id, language_code, display)
 VALUES
@@ -443,7 +443,7 @@ WITH new_concept AS (
     SELECT c.id
     FROM concepts c
     JOIN code_systems cs ON cs.id = c.code_system_id
-    WHERE cs.system_uri = 'zeal:visit-category'
+    WHERE cs.system_uri = 'athma-ce:visit-category'
       AND c.code = 'NEW'
 )
 -- Map NEW visits to new patient CPT codes
@@ -472,7 +472,7 @@ WITH followup_concept AS (
     SELECT c.id
     FROM concepts c
     JOIN code_systems cs ON cs.id = c.code_system_id
-    WHERE cs.system_uri = 'zeal:visit-category'
+    WHERE cs.system_uri = 'athma-ce:visit-category'
       AND c.code = 'FOLLOW_UP'
 )
 INSERT INTO visit_billing_map (
@@ -617,7 +617,7 @@ BEGIN
                 INTO v_result_concept_id, v_result_code, v_result_display
                 FROM concepts c
                 JOIN code_systems cs ON cs.id = c.code_system_id
-                WHERE cs.system_uri = 'zeal:visit-category'
+                WHERE cs.system_uri = 'athma-ce:visit-category'
                   AND c.code = 'FOLLOW_UP';
                 
                 v_result_reason := format(
@@ -681,7 +681,7 @@ BEGIN
         INTO v_result_concept_id, v_result_code, v_result_display
         FROM concepts c
         JOIN code_systems cs ON cs.id = c.code_system_id
-        WHERE cs.system_uri = 'zeal:visit-category'
+        WHERE cs.system_uri = 'athma-ce:visit-category'
           AND c.code = 'NEW';
         
         v_result_reason := CASE
@@ -695,7 +695,7 @@ BEGIN
         INTO v_result_concept_id, v_result_code, v_result_display
         FROM concepts c
         JOIN code_systems cs ON cs.id = c.code_system_id
-        WHERE cs.system_uri = 'zeal:visit-category'
+        WHERE cs.system_uri = 'athma-ce:visit-category'
           AND c.code = 'FOLLOW_UP';
         
         v_result_reason := format(
@@ -710,7 +710,7 @@ BEGIN
         INTO v_result_concept_id, v_result_code, v_result_display
         FROM concepts c
         JOIN code_systems cs ON cs.id = c.code_system_id
-        WHERE cs.system_uri = 'zeal:visit-category'
+        WHERE cs.system_uri = 'athma-ce:visit-category'
           AND c.code = 'REVISIT';
         
         v_result_reason := format(

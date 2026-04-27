@@ -1,10 +1,10 @@
-# Zeal Platform Deployment Overview
+# athma-ce Platform Deployment Overview
 
-This document provides a high-level overview of deploying the Zeal healthcare platform across supported cloud providers and on-premises environments. It serves as the entry point for all deployment guides.
+This document provides a high-level overview of deploying the athma-ce healthcare platform across supported cloud providers and on-premises environments. It serves as the entry point for all deployment guides.
 
 ## Platform Architecture
 
-Zeal consists of multiple microservices, databases, and supporting infrastructure:
+athma-ce consists of multiple microservices, databases, and supporting infrastructure:
 
 ```
                          Internet
@@ -129,7 +129,7 @@ CMD ["npm", "start"]
 
 ## Database Strategy
 
-Zeal uses **4 isolated PostgreSQL databases** on a single cluster (or separate instances for large deployments):
+athma-ce uses **4 isolated PostgreSQL databases** on a single cluster (or separate instances for large deployments):
 
 | Database          | Domain                                | Extensions Required                    |
 |-------------------|---------------------------------------|----------------------------------------|

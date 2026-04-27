@@ -1,8 +1,8 @@
-# UAE Healthcare Software Arabic Compliance Checklist - Zeal Platform
+# UAE Healthcare Software Arabic Compliance Checklist - athma-ce Platform
 
 ## Overview
 
-This document provides a comprehensive checklist for Arabic language compliance in the Zeal Platform, ensuring full adherence to UAE healthcare regulations and DHA/DOH/MOHAP requirements.
+This document provides a comprehensive checklist for Arabic language compliance in the athma-ce Platform, ensuring full adherence to UAE healthcare regulations and DHA/DOH/MOHAP requirements.
 
 **Compliance Standards**: UAE Healthcare Regulations, DHA Guidelines, DOH Standards, MOHAP Requirements  
 **Implementation**: Translations table for multi-language support (English + Arabic + future languages)  
@@ -15,7 +15,7 @@ This document provides a comprehensive checklist for Arabic language compliance 
 
 ### ✅ Translations Table Design
 
-The Zeal Platform uses a centralized translations table for flexible, future-proof multi-language support:
+The athma-ce Platform uses a centralized translations table for flexible, future-proof multi-language support:
 
 ```sql
 CREATE TABLE translations (
@@ -878,7 +878,7 @@ const arabicConfig = {
 
 ## Summary
 
-The Zeal Platform Arabic compliance implementation includes:
+The athma-ce Platform Arabic compliance implementation includes:
 
 ✅ **Centralized translations table** for flexible multi-language support  
 ✅ **Future-proof architecture** supporting English + Arabic + additional languages  
@@ -901,4 +901,4 @@ The Zeal Platform Arabic compliance implementation includes:
 
 ---
 
-**© 2025 Zeal Platform. All rights reserved.**
+**© 2025 athma-ce Platform. All rights reserved.**

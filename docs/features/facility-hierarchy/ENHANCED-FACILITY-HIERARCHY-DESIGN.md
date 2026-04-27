@@ -787,4 +787,4 @@ ORDER BY distance_km;
 - Use Geocoding API to convert addresses to lat/lng
 - Use Maps JavaScript API for frontend map display
 
-This enhanced structure will transform Zeal PMS into a true enterprise healthcare platform with geographic intelligence! 🏥 🗺️
+This enhanced structure will transform athma-ce PMS into a true enterprise healthcare platform with geographic intelligence! 🏥 🗺️

@@ -237,7 +237,7 @@ export async function setupSwagger(app: INestApplication) {
 
 function mergeOpenAPISpecs(specs: any[]): any {
   const baseConfig = new DocumentBuilder()
-    .setTitle('Zeal Healthcare Platform API')
+    .setTitle('athma-ce Healthcare Platform API')
     .setDescription('Unified API documentation for all services')
     .setVersion('1.0')
     .addBearerAuth({

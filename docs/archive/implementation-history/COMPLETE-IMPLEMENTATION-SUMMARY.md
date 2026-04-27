@@ -467,7 +467,7 @@ curl "http://localhost:3010/api/v1/departments/{deptId}/clinics?specialty=cardio
 ```
 1. Import: docs/postman/zeal-backend.postman_collection.json
 2. Import: docs/postman/zeal-local.postman_environment.json
-3. Select: Zeal Local environment
+3. Select: athma-ce Local environment
 4. Run: Foundation Auth → Login
 5. Test: New Department/Ward/Bed/Clinic endpoints
 ```
@@ -530,4 +530,4 @@ curl "http://localhost:3010/api/v1/departments/{deptId}/clinics?specialty=cardio
 **API Endpoints**: 25+ new  
 **Errors**: 0  
 
-🎉 **The Zeal PMS now has enterprise-grade facility hierarchy management!** 🚀
+🎉 **The athma-ce PMS now has enterprise-grade facility hierarchy management!** 🚀

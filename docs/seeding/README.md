@@ -1,6 +1,6 @@
-# Zeal Seed Data (Domain-aware)
+# athma-ce Seed Data (Domain-aware)
 
-This directory contains SQL fixtures for populating the four Zeal domain databases. The seeds are split to mirror the architecture described in ADR-0013:
+This directory contains SQL fixtures for populating the four athma-ce domain databases. The seeds are split to mirror the architecture described in ADR-0013:
 
 | Domain | Database | Purpose |
 | --- | --- | --- |

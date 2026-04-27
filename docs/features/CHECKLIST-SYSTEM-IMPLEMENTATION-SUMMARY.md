@@ -2,7 +2,7 @@
 
 ## Overview
 
-Successfully implemented a comprehensive, template-based checklist system for the Zeal healthcare platform. The system enables auto-creation of configurable checklists (discharge, surgery, admission, etc.) with full verification workflows and Care Channel integration.
+Successfully implemented a comprehensive, template-based checklist system for the athma-ce healthcare platform. The system enables auto-creation of configurable checklists (discharge, surgery, admission, etc.) with full verification workflows and Care Channel integration.
 
 ---
 

@@ -1,8 +1,8 @@
-# Deploying Zeal On-Premises / VPC
+# Deploying athma-ce On-Premises / VPC
 
 ## 1. Overview
 
-This guide covers deploying the Zeal healthcare platform to on-premises servers or
+This guide covers deploying the athma-ce healthcare platform to on-premises servers or
 Virtual Private Cloud (VPC) environments where you control the infrastructure directly.
 
 ### Use Cases
@@ -112,7 +112,7 @@ This section provides a complete, production-ready Docker Compose stack.
 Create `docker-compose.prod.yml` at the repository root:
 
 ```yaml
-# docker-compose.prod.yml -- Zeal Healthcare Platform Production Stack
+# docker-compose.prod.yml -- athma-ce Healthcare Platform Production Stack
 # Usage: docker compose -f docker-compose.prod.yml --env-file .env.prod up -d
 
 version: "3.8"
@@ -637,13 +637,13 @@ Create `scripts/build-all.sh`:
 
 ```bash
 #!/usr/bin/env bash
-# scripts/build-all.sh -- Build all Zeal service images
+# scripts/build-all.sh -- Build all athma-ce service images
 set -euo pipefail
 
 IMAGE_TAG="${1:-latest}"
 REGISTRY="${DOCKER_REGISTRY:-}"   # Empty for local, or "registry.internal:5000/"
 
-echo "==> Building Zeal images with tag: ${IMAGE_TAG}"
+echo "==> Building athma-ce images with tag: ${IMAGE_TAG}"
 
 SERVICES=(
   "foundation:backend/services/foundation/Dockerfile:3010"
@@ -1001,7 +1001,7 @@ openssl req -x509 -nodes -days 365 \
   -newkey rsa:4096 \
   -keyout config/nginx/ssl/privkey.pem \
   -out config/nginx/ssl/fullchain.pem \
-  -subj "/C=AE/ST=Dubai/L=Dubai/O=Zeal Healthcare/CN=zeal.local" \
+  -subj "/C=AE/ST=Dubai/L=Dubai/O=athma-ce Healthcare/CN=zeal.local" \
   -addext "subjectAltName=DNS:zeal.local,DNS:*.zeal.local,IP:10.0.0.100"
 
 chmod 600 config/nginx/ssl/privkey.pem
@@ -1014,7 +1014,7 @@ chmod 600 config/nginx/ssl/privkey.pem
 openssl req -new -newkey rsa:4096 -nodes \
   -keyout config/nginx/ssl/privkey.pem \
   -out config/nginx/ssl/zeal.csr \
-  -subj "/C=AE/ST=Dubai/L=Dubai/O=Zeal Healthcare/CN=zeal.yourdomain.com"
+  -subj "/C=AE/ST=Dubai/L=Dubai/O=athma-ce Healthcare/CN=zeal.yourdomain.com"
 
 # Send zeal.csr to your CA. When you receive the signed cert:
 cp signed-cert.pem config/nginx/ssl/fullchain.pem
@@ -1216,7 +1216,7 @@ helm install zeal-postgres bitnami/postgresql \
   --set primary.resources.limits.memory=4Gi \
   --set primary.resources.limits.cpu=2000m \
   --set primary.initdb.scriptsConfigMap=zeal-init-scripts \
-  --namespace zeal --create-namespace
+  --namespace athma-ce --create-namespace
 ```
 
 Create a ConfigMap from the init script:
@@ -1224,7 +1224,7 @@ Create a ConfigMap from the init script:
 ```bash
 kubectl create configmap zeal-init-scripts \
   --from-file=01-init-database.sql=init-scripts/01-init-database.sql \
-  -n zeal
+  -n athma-ce
 ```
 
 **Option 2: External PostgreSQL server**
@@ -1237,7 +1237,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-external
-  namespace: zeal
+  namespace: athma-ce
 spec:
   type: ExternalName
   externalName: db.internal.yourdomain.com
@@ -1254,25 +1254,25 @@ helm install zeal-redis bitnami/redis \
   --set master.resources.requests.memory=256Mi \
   --set master.resources.limits.memory=1Gi \
   --set replica.replicaCount=0 \
-  --namespace zeal
+  --namespace athma-ce
 ```
 
-### 4.5 Deploying Zeal Services
+### 4.5 Deploying athma-ce Services
 
 Create a namespace and secrets:
 
 ```bash
-kubectl create namespace zeal
+kubectl create namespace athma-ce
 
 # Create secrets
-kubectl create secret generic zeal-db-secrets -n zeal \
+kubectl create secret generic zeal-db-secrets -n athma-ce \
   --from-literal=POSTGRES_USER=zeal_user \
   --from-literal=POSTGRES_PASSWORD=CHANGE_ME \
   --from-literal=REDIS_PASSWORD=CHANGE_ME \
   --from-literal=JWT_SECRET=CHANGE_ME_64_CHARS
 
 # Create ConfigMap for shared environment
-kubectl create configmap zeal-config -n zeal \
+kubectl create configmap zeal-config -n athma-ce \
   --from-literal=NODE_ENV=production \
   --from-literal=LOG_LEVEL=info \
   --from-literal=DEFAULT_LOCALE=en
@@ -1287,7 +1287,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: foundation
-  namespace: zeal
+  namespace: athma-ce
   labels:
     app: foundation
     domain: foundation
@@ -1364,7 +1364,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: foundation
-  namespace: zeal
+  namespace: athma-ce
 spec:
   selector:
     app: foundation
@@ -1382,7 +1382,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zeal-ingress
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /api/v1/$2
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -1580,7 +1580,7 @@ address=/grafana.zeal.local/10.0.0.100
 **Air-gapped (no DNS server) -- use /etc/hosts:**
 
 ```bash
-# On every client machine that needs to reach Zeal
+# On every client machine that needs to reach athma-ce
 echo "10.0.0.100  zeal.local grafana.zeal.local" | sudo tee -a /etc/hosts
 ```
 
@@ -1774,7 +1774,7 @@ kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/downloa
 brew install kubeseal  # or download binary
 
 # Encrypt a secret
-kubectl create secret generic zeal-db-secrets -n zeal \
+kubectl create secret generic zeal-db-secrets -n athma-ce \
   --from-literal=POSTGRES_PASSWORD=CHANGE_ME \
   --dry-run=client -o yaml | \
   kubeseal --format yaml > k8s/sealed-secrets.yaml
@@ -1792,7 +1792,7 @@ Create `scripts/backup-databases.sh`:
 
 ```bash
 #!/usr/bin/env bash
-# scripts/backup-databases.sh -- Backup all 4 Zeal domain databases
+# scripts/backup-databases.sh -- Backup all 4 athma-ce domain databases
 set -euo pipefail
 
 BACKUP_DIR="/var/lib/zeal/backups/$(date +%Y-%m-%d_%H%M%S)"
@@ -2026,14 +2026,14 @@ Create `scripts/deploy.sh`:
 
 ```bash
 #!/usr/bin/env bash
-# scripts/deploy.sh -- Deploy or update Zeal on-premises
+# scripts/deploy.sh -- Deploy or update athma-ce on-premises
 set -euo pipefail
 
 TAG="${1:?Usage: deploy.sh <image-tag>}"
 COMPOSE_FILE="docker-compose.prod.yml"
 ENV_FILE=".env.prod"
 
-echo "==> Deploying Zeal ${TAG}"
+echo "==> Deploying athma-ce ${TAG}"
 
 # Update IMAGE_TAG in .env.prod
 sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=${TAG}/" "${ENV_FILE}"
@@ -2187,7 +2187,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: clinical-hpa
-  namespace: zeal
+  namespace: athma-ce
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -2256,7 +2256,7 @@ helm upgrade zeal-redis bitnami/redis \
   --set sentinel.enabled=true \
   --set sentinel.masterSet=zealmaster \
   --set replica.replicaCount=2 \
-  -n zeal
+  -n athma-ce
 ```
 
 ---
@@ -2415,7 +2415,7 @@ docker exec zeal-postgres psql -U zeal_user -d postgres -c "
 openssl x509 -enddate -noout -in config/nginx/ssl/fullchain.pem
 
 # Set up monitoring alert (check daily via cron)
-echo '0 8 * * * root openssl x509 -enddate -noout -in /opt/zeal/config/nginx/ssl/fullchain.pem | grep -q "$(date -d "+30 days" +%b)" && echo "CERT EXPIRING SOON" | mail -s "Zeal SSL Alert" admin@yourdomain.com' | sudo tee /etc/cron.d/cert-check
+echo '0 8 * * * root openssl x509 -enddate -noout -in /opt/zeal/config/nginx/ssl/fullchain.pem | grep -q "$(date -d "+30 days" +%b)" && echo "CERT EXPIRING SOON" | mail -s "athma-ce SSL Alert" admin@yourdomain.com' | sudo tee /etc/cron.d/cert-check
 ```
 
 ### Network Connectivity Between Services

@@ -5,7 +5,7 @@
 
 ## Overview
 
-All API requests to the Zeal platform require proper authentication context including **tenant ID**, **user ID**, and **facility ID**. These are used for:
+All API requests to the athma-ce platform require proper authentication context including **tenant ID**, **user ID**, and **facility ID**. These are used for:
 
 1. **Multi-tenant isolation** - Ensuring data is isolated per tenant
 2. **Audit trails** - Tracking who created/modified records

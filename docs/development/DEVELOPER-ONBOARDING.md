@@ -1,8 +1,8 @@
 # Developer Onboarding Guide
 
-**Welcome to the Zeal Platform Development Team!** 🎉
+**Welcome to the athma-ce Platform Development Team!** 🎉
 
-This guide will help you get started with backend development on the Zeal healthcare platform.
+This guide will help you get started with backend development on the athma-ce healthcare platform.
 
 ## 🎯 Quick Links
 
@@ -14,7 +14,7 @@ This guide will help you get started with backend development on the Zeal health
    - Read this FIRST before starting development
 
 2. **[Multi-Tenancy Quick Reference](../multitenancy/TENANT-ISOLATION-QUICK-REFERENCE.md)**
-   - How multi-tenancy works in Zeal
+   - How multi-tenancy works in athma-ce
    - Required headers and context
    - Common patterns
 

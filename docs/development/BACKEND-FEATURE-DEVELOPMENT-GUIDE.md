@@ -5,7 +5,7 @@
 
 ## Overview
 
-This guide provides step-by-step instructions for developing new features and entities in the Zeal backend platform. Follow these guidelines to ensure consistency, maintainability, and adherence to architectural principles.
+This guide provides step-by-step instructions for developing new features and entities in the athma-ce backend platform. Follow these guidelines to ensure consistency, maintainability, and adherence to architectural principles.
 
 ## Table of Contents
 

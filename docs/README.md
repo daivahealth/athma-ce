@@ -1,6 +1,6 @@
-# Zeal Documentation
+# athma-ce Documentation
 
-Welcome to the Zeal Healthcare Platform documentation. This folder contains comprehensive documentation for developers, operators, and stakeholders.
+Welcome to the athma-ce Healthcare Platform documentation. This folder contains comprehensive documentation for developers, operators, and stakeholders.
 
 ## 📚 Documentation Structure
 

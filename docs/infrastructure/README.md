@@ -1,6 +1,6 @@
 # Infrastructure Documentation
 
-This folder contains infrastructure, deployment, and operations documentation for the Zeal PMS/RCM system.
+This folder contains infrastructure, deployment, and operations documentation for the athma-ce PMS/RCM system.
 
 ## 📚 Documents
 

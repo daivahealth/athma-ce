@@ -7,7 +7,7 @@
 
 ## 1) Decision
 
-Establish **four PostgreSQL databases** that align with Zeal's major domains, reducing operational overhead while retaining isolation:
+Establish **four PostgreSQL databases** that align with athma-ce's major domains, reducing operational overhead while retaining isolation:
 
 1. **DB-Foundation** – tenancy, identity, RBAC, organisational hierarchy, and shared catalogs (multi-language). This retains the shared cluster from ADR-0003 and remains the source of truth for reference data.
 2. **DB-Clinical** – patient PHI, scheduling, encounters/EHR, clinical notes, vitals, care plans, and orders/results. Tuned for low-latency OLTP.

@@ -1,6 +1,6 @@
 # Development Documentation
 
-This folder contains developer-focused guides and reference materials for working with the Zeal platform.
+This folder contains developer-focused guides and reference materials for working with the athma-ce platform.
 
 ## 📚 Documents
 

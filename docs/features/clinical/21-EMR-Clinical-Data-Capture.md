@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the **Electronic Medical Records (EMR)** and **Clinical Data Capture** architecture for the Zeal Platform. It covers the complete clinical workflow from patient registration through encounter documentation, orders, results, and clinical decision support.
+This document outlines the **Electronic Medical Records (EMR)** and **Clinical Data Capture** architecture for the athma-ce Platform. It covers the complete clinical workflow from patient registration through encounter documentation, orders, results, and clinical decision support.
 
 ---
 
@@ -1392,7 +1392,7 @@ async function suggestICDCodes(
 
 ## Summary
 
-The Zeal Platform EMR/Clinical Data Capture system provides:
+The athma-ce Platform EMR/Clinical Data Capture system provides:
 
 ✅ **Complete Clinical Workflow** — Registration → Encounter → Documentation → Orders → Results  
 ✅ **SOAP Documentation** — Structured clinical notes with templates  

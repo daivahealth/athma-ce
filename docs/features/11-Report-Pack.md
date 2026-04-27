@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a comprehensive KPI library for the Zeal PMS/RCM platform, covering operational, clinical, financial, security, and compliance metrics essential for healthcare practice management and revenue cycle optimization.
+This document provides a comprehensive KPI library for the athma-ce PMS/RCM platform, covering operational, clinical, financial, security, and compliance metrics essential for healthcare practice management and revenue cycle optimization.
 
 **Categories**:
 - Operational KPIs (system performance, scheduling, resource utilization)
@@ -1090,4 +1090,4 @@ interface KPIMetric {
 }
 ```
 
-This comprehensive KPI library provides the foundation for monitoring, measuring, and optimizing the performance of the Zeal PMS/RCM platform across all critical dimensions of healthcare practice management.
+This comprehensive KPI library provides the foundation for monitoring, measuring, and optimizing the performance of the athma-ce PMS/RCM platform across all critical dimensions of healthcare practice management.

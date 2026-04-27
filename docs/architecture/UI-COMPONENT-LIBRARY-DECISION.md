@@ -3,13 +3,13 @@
 **Decision Date:** 2025-10-31
 **Status:** ✅ Decided - Continue with shadcn/ui
 **Decision Maker:** Development Team
-**Project:** Zeal Healthcare Platform
+**Project:** athma-ce Healthcare Platform
 
 ---
 
 ## Executive Summary
 
-After evaluating shadcn/ui and Ant Design for the Zeal healthcare platform, we recommend **continuing with shadcn/ui** due to:
+After evaluating shadcn/ui and Ant Design for the athma-ce healthcare platform, we recommend **continuing with shadcn/ui** due to:
 - Better alignment with healthcare-specific requirements
 - Superior customization for medical data display
 - Lighter bundle size for performance-critical healthcare dashboards
@@ -20,7 +20,7 @@ After evaluating shadcn/ui and Ant Design for the Zeal healthcare platform, we r
 
 ## Context
 
-The Zeal platform is a comprehensive healthcare system with:
+The athma-ce platform is a comprehensive healthcare system with:
 - Multi-tenant architecture (hospitals, clinics, healthcare providers)
 - Multi-language support (English/Arabic with RTL)
 - Complex medical data management (EHR, PMS, ECM)
@@ -94,7 +94,7 @@ node_modules/antd/
 
 ### 3. Technical Stack Alignment
 
-#### Current Zeal Tech Stack:
+#### Current athma-ce Tech Stack:
 ```json
 {
   "framework": "Next.js 14 App Router",
@@ -457,7 +457,7 @@ src/components/medical/
    - Team trained on Ant
    - Existing Ant codebase
 
-**For Zeal:** None of these apply
+**For athma-ce:** None of these apply
 
 ---
 
@@ -491,7 +491,7 @@ src/components/medical/
 
 **Decision: Continue with shadcn/ui**
 
-For the Zeal healthcare platform, shadcn/ui is the superior choice because:
+For the athma-ce healthcare platform, shadcn/ui is the superior choice because:
 
 1. ✅ **Compliance First** - Code ownership for HIPAA audits
 2. ✅ **Performance Critical** - Smaller bundles for faster patient data loads

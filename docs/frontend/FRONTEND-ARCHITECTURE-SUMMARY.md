@@ -12,7 +12,7 @@
 ### ✅ Recommended: Single App with Modules
 
 ```
-Zeal Frontend (Single Next.js App)
+athma-ce Frontend (Single Next.js App)
 ├── /modules/clinical    → Patient, Appointment, Encounter features
 ├── /modules/rcm         → Billing, Claims, Payment features
 ├── /modules/foundation  → Users, Facilities, Settings

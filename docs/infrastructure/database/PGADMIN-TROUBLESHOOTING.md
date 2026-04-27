@@ -59,7 +59,7 @@ Password:          zeal_password
    - Password: `zeal_admin`
 3. Right-click "Servers" → "Register" → "Server..."
 4. **General Tab:**
-   - Name: `Zeal PMS Database`
+   - Name: `athma-ce PMS Database`
 5. **Connection Tab:**
    - Host: `zeal-postgres` ← **USE THIS**
    - Port: `5432`

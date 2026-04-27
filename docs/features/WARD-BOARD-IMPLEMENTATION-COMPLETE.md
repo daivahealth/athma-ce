@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the implementation of the production-ready Ward Board architecture for Zeal's inpatient management system. The design implements an orthogonal status model with comprehensive audit trails.
+This document describes the implementation of the production-ready Ward Board architecture for athma-ce's inpatient management system. The design implements an orthogonal status model with comprehensive audit trails.
 
 **Date:** 2026-01-09
 **Status:** ✅ Database Schema Complete | ⏳ Services In Progress

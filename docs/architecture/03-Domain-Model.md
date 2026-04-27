@@ -2,7 +2,7 @@
 
 _Last updated: 06 Oct 2025_
 
-Zeal’s backend is organised into bounded contexts (ADR-0013). Each context exposes REST endpoints and publishes events via the contracts package. This document outlines the canonical entities and their relationships to guide front-end consumers, integration partners, and downstream services.
+athma-ce’s backend is organised into bounded contexts (ADR-0013). Each context exposes REST endpoints and publishes events via the contracts package. This document outlines the canonical entities and their relationships to guide front-end consumers, integration partners, and downstream services.
 
 ## 1. Context Overview
 
@@ -107,7 +107,7 @@ Notes:
 - **Scheduling ➜ Encounter**: start encounter workflow and update status (e.g., `checked-in`, `complete`).
 - **Encounter ➜ Future Billing**: final coding and charges will feed into the Billing context once implemented.
 
-Every cross-context call must include tenant metadata and propagate the Zeal request context (user ID, facility ID, trace ID) so RLS and audit trails remain consistent.
+Every cross-context call must include tenant metadata and propagate the athma-ce request context (user ID, facility ID, trace ID) so RLS and audit trails remain consistent.
 
 ## 7. Planned Extensions
 

@@ -1,8 +1,8 @@
-# Deploying Zeal on Google Cloud Platform
+# Deploying athma-ce on Google Cloud Platform
 
 ## 1. Overview
 
-This guide covers deploying the Zeal healthcare platform on Google Cloud Platform (GCP). The architecture uses GKE (Google Kubernetes Engine) for container orchestration, Cloud SQL for PostgreSQL databases, Memorystore for Redis caching, and Cloud CDN with HTTPS Load Balancing for traffic management.
+This guide covers deploying the athma-ce healthcare platform on Google Cloud Platform (GCP). The architecture uses GKE (Google Kubernetes Engine) for container orchestration, Cloud SQL for PostgreSQL databases, Memorystore for Redis caching, and Cloud CDN with HTTPS Load Balancing for traffic management.
 
 **Target Architecture:**
 
@@ -76,7 +76,7 @@ export GCP_REGION="me-central2"
 export GCP_ZONE="me-central2-a"
 
 # Create project (or use existing)
-gcloud projects create $GCP_PROJECT_ID --name="Zeal Healthcare"
+gcloud projects create $GCP_PROJECT_ID --name="athma-ce Healthcare"
 gcloud config set project $GCP_PROJECT_ID
 
 # Enable billing (link via console or existing billing account)
@@ -107,7 +107,7 @@ gcloud services enable \
 ```bash
 # Create Terraform service account
 gcloud iam service-accounts create zeal-terraform \
-  --display-name="Zeal Terraform" \
+  --display-name="athma-ce Terraform" \
   --description="Service account for Terraform IaC"
 
 SA_EMAIL="zeal-terraform@${GCP_PROJECT_ID}.iam.gserviceaccount.com"
@@ -436,7 +436,7 @@ variable "environment" { type = string }
 # GKE service account
 resource "google_service_account" "gke_nodes" {
   account_id   = "zeal-gke-nodes-${var.environment}"
-  display_name = "Zeal GKE Node SA"
+  display_name = "athma-ce GKE Node SA"
   project      = var.project_id
 }
 
@@ -541,7 +541,7 @@ resource "google_container_cluster" "primary" {
 
   resource_labels = {
     environment = var.environment
-    platform    = "zeal"
+    platform    = "athma-ce"
     managed-by  = "terraform"
   }
 }
@@ -640,10 +640,10 @@ resource "google_container_node_pool" "spot_nodes" {
   }
 }
 
-# Workload Identity SA for Zeal application pods
+# Workload Identity SA for athma-ce application pods
 resource "google_service_account" "zeal_workload" {
   account_id   = "zeal-workload-${var.environment}"
-  display_name = "Zeal Workload Identity SA"
+  display_name = "athma-ce Workload Identity SA"
   project      = var.project_id
 }
 
@@ -770,7 +770,7 @@ resource "google_sql_database_instance" "zeal_postgres" {
 
     user_labels = {
       environment = var.environment
-      platform    = "zeal"
+      platform    = "athma-ce"
       managed-by  = "terraform"
     }
   }
@@ -881,7 +881,7 @@ resource "google_redis_instance" "zeal_redis" {
   region             = var.region
   project            = var.project_id
   redis_version      = "REDIS_7_0"
-  display_name       = "Zeal Redis ${var.environment}"
+  display_name       = "athma-ce Redis ${var.environment}"
   authorized_network = var.vpc_id
   connect_mode       = "PRIVATE_SERVICE_ACCESS"
 
@@ -905,7 +905,7 @@ resource "google_redis_instance" "zeal_redis" {
 
   labels = {
     environment = var.environment
-    platform    = "zeal"
+    platform    = "athma-ce"
     managed-by  = "terraform"
   }
 
@@ -944,7 +944,7 @@ variable "private_vpc_connection" { type = string }
 resource "google_artifact_registry_repository" "zeal_docker" {
   location      = var.region
   repository_id = "zeal-docker"
-  description   = "Docker images for Zeal healthcare platform"
+  description   = "Docker images for athma-ce healthcare platform"
   format        = "DOCKER"
   project       = var.project_id
 
@@ -967,7 +967,7 @@ resource "google_artifact_registry_repository" "zeal_docker" {
 
   labels = {
     environment = var.environment
-    platform    = "zeal"
+    platform    = "athma-ce"
   }
 }
 
@@ -1392,9 +1392,9 @@ gcloud container clusters get-credentials zeal-gke \
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: zeal
+  name: athma-ce
   labels:
-    app.kubernetes.io/part-of: zeal
+    app.kubernetes.io/part-of: athma-ce
 ---
 apiVersion: v1
 kind: Namespace
@@ -1407,7 +1407,7 @@ apiVersion: v1
 kind: ResourceQuota
 metadata:
   name: zeal-quota
-  namespace: zeal
+  namespace: athma-ce
 spec:
   hard:
     requests.cpu: "16"
@@ -1429,7 +1429,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: zeal-config
-  namespace: zeal
+  namespace: athma-ce
 data:
   NODE_ENV: "production"
   # Database URLs use Cloud SQL Proxy (localhost:5432)
@@ -1494,7 +1494,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: zeal-secrets
-  namespace: zeal
+  namespace: athma-ce
 spec:
   refreshInterval: 1h
   secretStoreRef:
@@ -1547,7 +1547,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zeal-foundation
-  namespace: zeal
+  namespace: athma-ce
   labels:
     app: zeal-foundation
     tier: backend
@@ -1628,7 +1628,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-frontend
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 spec:
@@ -1643,7 +1643,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-foundation
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 spec:
@@ -1658,7 +1658,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-clinical
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 spec:
@@ -1673,7 +1673,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-rcm
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 spec:
@@ -1688,7 +1688,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-analytics
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 spec:
@@ -1706,7 +1706,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zeal-ingress
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.global-static-ip-name: "zeal-lb-ip-production"
@@ -1763,7 +1763,7 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: zeal-cert
-  namespace: zeal
+  namespace: athma-ce
 spec:
   domains:
     - zeal.example.com
@@ -1778,7 +1778,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: zeal-foundation-hpa
-  namespace: zeal
+  namespace: athma-ce
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -1804,7 +1804,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: zeal-foundation-pdb
-  namespace: zeal
+  namespace: athma-ce
 spec:
   minAvailable: 1
   selector:
@@ -1881,8 +1881,8 @@ ingress:
 ```
 
 ```bash
-helm upgrade --install zeal ./helm/zeal-platform \
-  --namespace zeal \
+helm upgrade --install athma-ce ./helm/zeal-platform \
+  --namespace athma-ce \
   --values helm/values-gcp.yaml \
   --set cloudSqlProxy.instanceConnectionName="$(terraform -chdir=terraform output -raw cloudsql_connection_name)" \
   --set redis.host="$(terraform -chdir=terraform output -raw redis_host)" \
@@ -1901,7 +1901,7 @@ Certificates are provisioned automatically via the `ManagedCertificate` resource
 # Create managed zone
 gcloud dns managed-zones create zeal-zone \
   --dns-name="zeal.example.com." \
-  --description="Zeal platform DNS" \
+  --description="athma-ce platform DNS" \
   --visibility=public
 
 # Point domain to LB IP
@@ -1921,7 +1921,7 @@ The Terraform module (section 3.8) creates a RESTRICTED SSL policy enforcing TLS
 ```bash
 # Get the target HTTPS proxy name created by GKE Ingress
 PROXY_NAME=$(gcloud compute target-https-proxies list --format="value(name)" \
-  --filter="name~zeal")
+  --filter="name~athma-ce")
 
 gcloud compute target-https-proxies update $PROXY_NAME \
   --ssl-policy=zeal-ssl-policy-production
@@ -1936,7 +1936,7 @@ Pods authenticate to Secret Manager via Workload Identity (no service account ke
 ```bash
 # Annotate the Kubernetes service account
 kubectl annotate serviceaccount zeal-workload \
-  --namespace=zeal \
+  --namespace=athma-ce \
   iam.gke.io/gcp-service-account=zeal-workload-production@zeal-healthcare-prod.iam.gserviceaccount.com
 ```
 
@@ -1949,7 +1949,7 @@ echo -n "new-password" | gcloud secrets versions add zeal-db-password --data-fil
 # External Secrets Operator polls every refreshInterval (1h by default)
 # Force immediate refresh:
 kubectl annotate externalsecret zeal-secrets \
-  -n zeal force-sync=$(date +%s) --overwrite
+  -n athma-ce force-sync=$(date +%s) --overwrite
 ```
 
 ## 9. CI/CD Pipeline
@@ -2050,8 +2050,8 @@ jobs:
         run: |
           kubectl set image deployment/zeal-${{ matrix.service.name }} \
             ${{ matrix.service.name }}=${REGISTRY}/zeal-${{ matrix.service.name }}:${{ github.sha }} \
-            -n zeal
-          kubectl rollout status deployment/zeal-${{ matrix.service.name }} -n zeal --timeout=300s
+            -n athma-ce
+          kubectl rollout status deployment/zeal-${{ matrix.service.name }} -n athma-ce --timeout=300s
 
   helm-deploy:
     needs: build-and-deploy
@@ -2073,8 +2073,8 @@ jobs:
 
       - name: Deploy via Helm
         run: |
-          helm upgrade --install zeal ./helm/zeal-platform \
-            --namespace zeal \
+          helm upgrade --install athma-ce ./helm/zeal-platform \
+            --namespace athma-ce \
             --values helm/values-gcp.yaml \
             --set global.imageTag=${{ github.sha }} \
             --wait --timeout 10m
@@ -2104,7 +2104,7 @@ Create alerting policies:
 ```bash
 # Alert on high error rate
 gcloud alpha monitoring policies create \
-  --display-name="Zeal High Error Rate" \
+  --display-name="athma-ce High Error Rate" \
   --condition-display-name="5xx error rate > 1%" \
   --condition-filter='resource.type="k8s_container" AND metric.type="logging.googleapis.com/user/zeal_http_5xx"' \
   --condition-threshold-value=0.01 \
@@ -2217,7 +2217,7 @@ Create a service perimeter to isolate PHI-handling services:
 
 ```bash
 gcloud access-context-manager perimeters create zeal-phi-perimeter \
-  --title="Zeal PHI Perimeter" \
+  --title="athma-ce PHI Perimeter" \
   --resources="projects/PROJECT_NUMBER" \
   --restricted-services="sqladmin.googleapis.com,storage.googleapis.com,secretmanager.googleapis.com" \
   --policy=POLICY_ID
@@ -2342,10 +2342,10 @@ Monthly estimates in USD for me-central2 (Doha):
 
 ```bash
 # Check pending pods
-kubectl get pods -n zeal --field-selector=status.phase=Pending
+kubectl get pods -n athma-ce --field-selector=status.phase=Pending
 
 # Describe pod for scheduling failure reason
-kubectl describe pod <pod-name> -n zeal | grep -A 10 Events
+kubectl describe pod <pod-name> -n athma-ce | grep -A 10 Events
 
 # Check node resources
 kubectl top nodes
@@ -2360,13 +2360,13 @@ gcloud container clusters describe zeal-gke --region $GCP_REGION \
 
 ```bash
 # Verify Cloud SQL Proxy sidecar is running
-kubectl get pods -n zeal -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{range .spec.containers[*]}{.name}{" "}{end}{"\n"}{end}'
+kubectl get pods -n athma-ce -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{range .spec.containers[*]}{.name}{" "}{end}{"\n"}{end}'
 
 # Check Cloud SQL Proxy logs
-kubectl logs <pod-name> -n zeal -c cloud-sql-proxy
+kubectl logs <pod-name> -n athma-ce -c cloud-sql-proxy
 
 # Verify the instance is reachable from within the pod
-kubectl exec -it <pod-name> -n zeal -c foundation -- \
+kubectl exec -it <pod-name> -n athma-ce -c foundation -- \
   pg_isready -h localhost -p 5432
 
 # Common error: "connection refused" - check instance connection name
@@ -2378,7 +2378,7 @@ gcloud sql instances describe zeal-postgres-production \
 
 ```bash
 # Verify KSA annotation
-kubectl get serviceaccount zeal-workload -n zeal -o yaml | grep iam.gke.io
+kubectl get serviceaccount zeal-workload -n athma-ce -o yaml | grep iam.gke.io
 
 # Verify GSA IAM binding
 gcloud iam service-accounts get-iam-policy \
@@ -2386,7 +2386,7 @@ gcloud iam service-accounts get-iam-policy \
 
 # Test from inside a pod
 kubectl run test-wi --rm -it --image=google/cloud-sdk:slim \
-  --serviceaccount=zeal-workload -n zeal -- \
+  --serviceaccount=zeal-workload -n athma-ce -- \
   gcloud auth list
 ```
 
@@ -2412,7 +2412,7 @@ gcloud artifacts repositories get-iam-policy zeal-docker \
   --location=$GCP_REGION
 
 # Check for image pull errors
-kubectl get events -n zeal --field-selector reason=Failed | grep -i pull
+kubectl get events -n athma-ce --field-selector reason=Failed | grep -i pull
 
 # Manual pull test from a node
 gcloud compute ssh <node-name> --zone=$GCP_ZONE -- \

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the deployment strategy, environment management, infrastructure as code, and operational procedures for the Zeal PMS/RCM platform.
+This document outlines the deployment strategy, environment management, infrastructure as code, and operational procedures for the athma-ce PMS/RCM platform.
 
 ## Environment Strategy
 
@@ -80,7 +80,7 @@ environments:
 
 ### Cloud Provider Selection
 
-The Zeal platform supports deployment on both AWS and Azure cloud platforms, with configurations optimized for UAE data residency requirements.
+The athma-ce platform supports deployment on both AWS and Azure cloud platforms, with configurations optimized for UAE data residency requirements.
 
 #### Cloud Provider Comparison
 
@@ -132,7 +132,7 @@ provider "aws" {
   
   default_tags {
     tags = {
-      Project     = "zeal"
+      Project     = "athma-ce"
       Environment = var.environment
       ManagedBy   = "terraform"
     }
@@ -199,7 +199,7 @@ provider "azurerm" {
   
   default_tags {
     tags = {
-      Project     = "zeal"
+      Project     = "athma-ce"
       Environment = var.environment
       ManagedBy   = "terraform"
     }
@@ -325,7 +325,7 @@ module "eks" {
   
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 ```
@@ -404,7 +404,7 @@ module "aks" {
   
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 ```
@@ -462,7 +462,7 @@ module "rds" {
   
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 ```
@@ -498,7 +498,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 
@@ -534,7 +534,7 @@ resource "azurerm_postgresql_flexible_server_configuration" "log_min_duration_st
 # modules/redis/main.tf
 resource "aws_elasticache_replication_group" "redis" {
   replication_group_id       = "${var.environment}-zeal-redis"
-  description                = "Redis cluster for Zeal ${var.environment}"
+  description                = "Redis cluster for athma-ce ${var.environment}"
   
   node_type                  = var.node_type
   port                       = 6379
@@ -564,7 +564,7 @@ resource "aws_elasticache_replication_group" "redis" {
   
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 ```
@@ -600,7 +600,7 @@ resource "azurerm_redis_cache" "main" {
   
   tags = {
     Environment = var.environment
-    Project     = "zeal"
+    Project     = "athma-ce"
   }
 }
 
@@ -621,16 +621,16 @@ resource "azurerm_redis_firewall_rule" "main" {
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: zeal
+  name: athma-ce
   labels:
-    name: zeal
+    name: athma-ce
     environment: production
 ---
 apiVersion: v1
 kind: ResourceQuota
 metadata:
   name: zeal-quota
-  namespace: zeal
+  namespace: athma-ce
 spec:
   hard:
     requests.cpu: "20"
@@ -650,7 +650,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: zeal-config
-  namespace: zeal
+  namespace: athma-ce
 data:
   NODE_ENV: "production"
   LOG_LEVEL: "info"
@@ -677,7 +677,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: zeal-secrets
-  namespace: zeal
+  namespace: athma-ce
 type: Opaque
 data:
   DB_PASSWORD: <base64-encoded-password>
@@ -697,7 +697,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zeal-api
-  namespace: zeal
+  namespace: athma-ce
   labels:
     app: zeal-api
     version: v1
@@ -793,7 +793,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-api-service
-  namespace: zeal
+  namespace: athma-ce
   labels:
     app: zeal-api
 spec:
@@ -810,7 +810,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zeal-api-headless
-  namespace: zeal
+  namespace: athma-ce
   labels:
     app: zeal-api
 spec:
@@ -831,7 +831,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zeal-ingress
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
@@ -984,7 +984,7 @@ env:
   AWS_REGION: me-central-1
   EKS_CLUSTER_NAME: zeal-production
   ECR_REGISTRY: 123456789012.dkr.ecr.me-central-1.amazonaws.com
-  ECR_REPOSITORY: zeal
+  ECR_REPOSITORY: athma-ce
 
 jobs:
   test:
@@ -1064,8 +1064,8 @@ jobs:
     
     - name: Deploy to Kubernetes
       run: |
-        helm upgrade --install zeal ./helm/zeal \
-          --namespace zeal \
+        helm upgrade --install athma-ce ./helm/zeal \
+          --namespace athma-ce \
           --create-namespace \
           --set image.tag=${{ github.sha }} \
           --set environment=production \
@@ -1073,7 +1073,7 @@ jobs:
     
     - name: Run smoke tests
       run: |
-        kubectl wait --for=condition=ready pod -l app=zeal-api -n zeal --timeout=300s
+        kubectl wait --for=condition=ready pod -l app=zeal-api -n athma-ce --timeout=300s
         kubectl run smoke-test --image=curlimages/curl --rm -i --restart=Never -- \
           curl -f http://zeal-api-service.zeal.svc.cluster.local/health
 ```
@@ -1095,7 +1095,7 @@ env:
   AZURE_REGION: uaenorth
   AKS_CLUSTER_NAME: zeal-production
   ACR_REGISTRY: zealacr.azurecr.io
-  ACR_REPOSITORY: zeal
+  ACR_REPOSITORY: athma-ce
 
 jobs:
   test:
@@ -1176,8 +1176,8 @@ jobs:
     
     - name: Deploy to Kubernetes
       run: |
-        helm upgrade --install zeal ./helm/zeal \
-          --namespace zeal \
+        helm upgrade --install athma-ce ./helm/zeal \
+          --namespace athma-ce \
           --create-namespace \
           --set image.tag=${{ github.sha }} \
           --set environment=production \
@@ -1185,7 +1185,7 @@ jobs:
     
     - name: Run smoke tests
       run: |
-        kubectl wait --for=condition=ready pod -l app=zeal-api -n zeal --timeout=300s
+        kubectl wait --for=condition=ready pod -l app=zeal-api -n athma-ce --timeout=300s
         kubectl run smoke-test --image=curlimages/curl --rm -i --restart=Never -- \
           curl -f http://zeal-api-service.zeal.svc.cluster.local/health
 ```
@@ -1275,7 +1275,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: zeal-api-rollout
-  namespace: zeal
+  namespace: athma-ce
 spec:
   replicas: 3
   strategy:
@@ -1325,7 +1325,7 @@ spec:
 
 set -e
 
-NAMESPACE="zeal"
+NAMESPACE="athma-ce"
 ROLLOUT_NAME="zeal-api-rollout"
 
 echo "Promoting blue-green deployment..."
@@ -1354,7 +1354,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: zeal-api-canary
-  namespace: zeal
+  namespace: athma-ce
 spec:
   replicas: 5
   strategy:
@@ -1436,7 +1436,7 @@ kubectl apply -f k8s/configmaps/$TARGET_ENV.yaml
 kubectl apply -f k8s/secrets/$TARGET_ENV.yaml
 
 # Deploy application
-helm upgrade --install zeal ./helm/zeal \
+helm upgrade --install athma-ce ./helm/zeal \
   --namespace zeal-$TARGET_ENV \
   --create-namespace \
   --values ./helm/zeal/values-$TARGET_ENV.yaml \
@@ -1493,7 +1493,7 @@ echo "Starting backup process..."
 
 # Database backup
 echo "Backing up database..."
-kubectl exec -it postgres-0 -n zeal -- pg_dump -h localhost -U zeal_admin -d zeal_production > db_backup_$BACKUP_DATE.sql
+kubectl exec -it postgres-0 -n athma-ce -- pg_dump -h localhost -U zeal_admin -d zeal_production > db_backup_$BACKUP_DATE.sql
 gzip db_backup_$BACKUP_DATE.sql
 
 # Upload to S3
@@ -1501,7 +1501,7 @@ aws s3 cp db_backup_$BACKUP_DATE.sql.gz s3://$BACKUP_BUCKET/database/
 
 # Redis backup
 echo "Backing up Redis..."
-kubectl exec -it redis-0 -n zeal -- redis-cli BGSAVE
+kubectl exec -it redis-0 -n athma-ce -- redis-cli BGSAVE
 kubectl cp zeal/redis-0:/data/dump.rdb redis_backup_$BACKUP_DATE.rdb
 gzip redis_backup_$BACKUP_DATE.rdb
 
@@ -1510,7 +1510,7 @@ aws s3 cp redis_backup_$BACKUP_DATE.rdb.gz s3://$BACKUP_BUCKET/redis/
 
 # Application data backup
 echo "Backing up application data..."
-kubectl exec -it zeal-api-0 -n zeal -- tar -czf /tmp/app_data_$BACKUP_DATE.tar.gz /app/data
+kubectl exec -it zeal-api-0 -n athma-ce -- tar -czf /tmp/app_data_$BACKUP_DATE.tar.gz /app/data
 kubectl cp zeal/zeal-api-0:/tmp/app_data_$BACKUP_DATE.tar.gz app_data_$BACKUP_DATE.tar.gz
 
 # Upload to S3
@@ -1551,18 +1551,18 @@ gunzip redis_backup_$BACKUP_DATE.rdb.gz
 
 # Restore database
 echo "Restoring database..."
-kubectl exec -i postgres-0 -n zeal -- psql -h localhost -U zeal_admin -d zeal_production < db_backup_$BACKUP_DATE.sql
+kubectl exec -i postgres-0 -n athma-ce -- psql -h localhost -U zeal_admin -d zeal_production < db_backup_$BACKUP_DATE.sql
 
 # Restore Redis
 echo "Restoring Redis..."
 kubectl cp redis_backup_$BACKUP_DATE.rdb zeal/redis-0:/data/dump.rdb
-kubectl exec -it redis-0 -n zeal -- redis-cli FLUSHALL
-kubectl exec -it redis-0 -n zeal -- redis-cli RESTORE dump.rdb 0
+kubectl exec -it redis-0 -n athma-ce -- redis-cli FLUSHALL
+kubectl exec -it redis-0 -n athma-ce -- redis-cli RESTORE dump.rdb 0
 
 # Restore application data
 echo "Restoring application data..."
 kubectl cp app_data_$BACKUP_DATE.tar.gz zeal/zeal-api-0:/tmp/
-kubectl exec -it zeal-api-0 -n zeal -- tar -xzf /tmp/app_data_$BACKUP_DATE.tar.gz -C /
+kubectl exec -it zeal-api-0 -n athma-ce -- tar -xzf /tmp/app_data_$BACKUP_DATE.tar.gz -C /
 
 # Clean up local files
 rm -f db_backup_$BACKUP_DATE.sql redis_backup_$BACKUP_DATE.rdb app_data_$BACKUP_DATE.tar.gz
@@ -1576,7 +1576,7 @@ echo "Restore completed successfully!"
 ```yaml
 # monitoring/cloudwatch-config.yaml
 cloudwatch:
-  namespace: "Zeal/Platform"
+  namespace: "athma-ce/Platform"
   metrics:
     - "RequestCount"
     - "ResponseTime"
@@ -1650,7 +1650,7 @@ scrape_configs:
     - role: endpoints
       namespaces:
         names:
-        - zeal
+        - athma-ce
     relabel_configs:
     - source_labels: [__meta_kubernetes_service_name]
       action: keep
@@ -1676,7 +1676,7 @@ scrape_configs:
 ```json
 {
   "dashboard": {
-    "title": "Zeal Platform Overview",
+    "title": "athma-ce Platform Overview",
     "panels": [
       {
         "title": "Request Rate",
@@ -1849,8 +1849,8 @@ set -e
 echo "Analyzing resource utilization..."
 
 # Get current resource usage
-kubectl top pods -n zeal --sort-by=cpu
-kubectl top pods -n zeal --sort-by=memory
+kubectl top pods -n athma-ce --sort-by=cpu
+kubectl top pods -n athma-ce --sort-by=memory
 
 # Analyze metrics from Prometheus
 curl -G 'http://prometheus:9090/api/v1/query' \
@@ -1860,4 +1860,4 @@ curl -G 'http://prometheus:9090/api/v1/query' \
 echo "Resource analysis completed. Review recommendations above."
 ```
 
-This comprehensive deployment and operations framework provides the foundation for reliable, scalable, and compliant operations of the Zeal PMS/RCM platform in the UAE.
+This comprehensive deployment and operations framework provides the foundation for reliable, scalable, and compliant operations of the athma-ce PMS/RCM platform in the UAE.

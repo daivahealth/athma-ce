@@ -1,4 +1,4 @@
-# 🚀 Zeal PMS - Quick Reference Card
+# 🚀 athma-ce PMS - Quick Reference Card
 
 **Status**: ✅ Production Ready  
 **Last Updated**: October 12, 2025, 6:00 PM

@@ -1,6 +1,6 @@
-# 🐘 pgAdmin Connection Guide for Zeal PostgreSQL
+# 🐘 pgAdmin Connection Guide for athma-ce PostgreSQL
 
-> **Domain-aware update:** Zeal now uses four databases (`zeal_foundation`, `zeal_clinical`, `zeal_rcm`, `zeal_analytics`). References to `zeal_pms` below map to the legacy monolith and should be replaced with the domain database that matches the service you are inspecting.
+> **Domain-aware update:** athma-ce now uses four databases (`zeal_foundation`, `zeal_clinical`, `zeal_rcm`, `zeal_analytics`). References to `zeal_pms` below map to the legacy monolith and should be replaced with the domain database that matches the service you are inspecting.
 
 ## ✅ **pgAdmin is Running Successfully!**
 
@@ -14,7 +14,7 @@ pgAdmin has been successfully deployed and is accessible at: **http://localhost:
 
 ## 🗄️ **PostgreSQL Connection Details**
 
-### **Zeal PMS Database Connection**
+### **athma-ce PMS Database Connection**
 - **Host**: `zeal-postgres` (when connecting from within Docker network)
 - **Port**: `5432`
 - **Database**: `zeal_pms`
@@ -50,7 +50,7 @@ pgAdmin has been successfully deployed and is accessible at: **http://localhost:
 3. Fill in the connection details:
 
 #### **General Tab**
-- **Name**: `Zeal PMS Database`
+- **Name**: `athma-ce PMS Database`
 
 #### **Connection Tab**
 - **Host name/address**: `localhost` (or `127.0.0.1`)
@@ -211,7 +211,7 @@ Once connected to pgAdmin, you can:
 You'll know the connection is working when:
 - ✅ pgAdmin loads at `http://localhost:8080`
 - ✅ You can login with the provided credentials
-- ✅ The "Zeal PMS Database" server appears in the left panel
+- ✅ The "athma-ce PMS Database" server appears in the left panel
 - ✅ You can expand and see the `zeal_pms` database
 - ✅ You can see the `patients` and `appointments` tables
 - ✅ You can run queries and see the sample data

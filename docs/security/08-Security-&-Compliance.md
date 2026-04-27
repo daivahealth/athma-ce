@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the comprehensive security and compliance framework for the Zeal PMS/RCM platform, covering UAE PDPL compliance, GDPR alignment, OWASP ASVS controls, and VAPT readiness.
+This document outlines the comprehensive security and compliance framework for the athma-ce PMS/RCM platform, covering UAE PDPL compliance, GDPR alignment, OWASP ASVS controls, and VAPT readiness.
 
 ## Regulatory Compliance Framework
 

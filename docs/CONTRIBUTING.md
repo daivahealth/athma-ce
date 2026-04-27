@@ -1,6 +1,6 @@
 # Documentation Contribution Guidelines
 
-This guide outlines standards and best practices for contributing to Zeal documentation.
+This guide outlines standards and best practices for contributing to athma-ce documentation.
 
 ## 📝 Writing Standards
 

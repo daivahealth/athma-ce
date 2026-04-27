@@ -1,10 +1,10 @@
 # Frontend Documentation
 
-This folder contains documentation specific to the Zeal frontend application.
+This folder contains documentation specific to the athma-ce frontend application.
 
 ## Overview
 
-The Zeal frontend is a Next.js 14 application built with TypeScript, providing the user interface for the healthcare platform. It follows a domain-driven module structure aligned with the backend services.
+The athma-ce frontend is a Next.js 14 application built with TypeScript, providing the user interface for the healthcare platform. It follows a domain-driven module structure aligned with the backend services.
 
 ## Contents
 

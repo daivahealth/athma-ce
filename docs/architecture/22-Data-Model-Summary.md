@@ -1,8 +1,8 @@
-# Data Model Summary - Zeal Platform
+# Data Model Summary - athma-ce Platform
 
 ## Overview
 
-This document provides a **high-level summary** of the Zeal Platform data model, highlighting key tables, relationships, and design decisions.
+This document provides a **high-level summary** of the athma-ce Platform data model, highlighting key tables, relationships, and design decisions.
 
 **Total Tables**: 100+  
 **Total Indexes**: 300+  
@@ -735,5 +735,5 @@ SELECT cron.schedule('archive-old-data', '0 0 1 * *', 'SELECT archive_old_data()
 
 ---
 
-**© 2025 Zeal Platform. All rights reserved.**
+**© 2025 athma-ce Platform. All rights reserved.**
 

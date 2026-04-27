@@ -473,6 +473,6 @@ For questions or issues:
 
 ---
 
-**Implementation Team:** Zeal Platform
+**Implementation Team:** athma-ce Platform
 **Version:** 1.0.0
 **Last Updated:** 2025-10-23

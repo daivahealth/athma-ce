@@ -1,6 +1,6 @@
-# Zeal Services - Ports & Health Endpoints
+# athma-ce Services - Ports & Health Endpoints
 
-This document lists all microservices in the Zeal platform with their assigned ports and health check endpoints.
+This document lists all microservices in the athma-ce platform with their assigned ports and health check endpoints.
 
 ## Service Port Assignments
 

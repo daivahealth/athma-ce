@@ -1,8 +1,8 @@
-# Deploying Zeal on AWS
+# Deploying athma-ce on AWS
 
 ## 1. Overview
 
-Amazon Web Services is the recommended primary cloud provider for the Zeal healthcare platform, offering UAE-local regions that satisfy data residency requirements mandated by DHA, DOH, and MOHAP.
+Amazon Web Services is the recommended primary cloud provider for the athma-ce healthcare platform, offering UAE-local regions that satisfy data residency requirements mandated by DHA, DOH, and MOHAP.
 
 **Target regions:**
 
@@ -169,7 +169,7 @@ aws dynamodb create-table \
 
 ### 3.2 VPC and Networking
 
-The Zeal VPC uses three subnet tiers across two or more availability zones:
+The athma-ce VPC uses three subnet tiers across two or more availability zones:
 
 | Tier | Subnet Type | Purpose |
 |------|-------------|---------|
@@ -239,7 +239,7 @@ Expected output should show 2-3 nodes in `Ready` state.
 
 ### 3.4 RDS PostgreSQL
 
-Zeal uses a **single Multi-AZ RDS instance** running PostgreSQL 16, with four logical databases created inside it. The full RDS Terraform module is in [`../10-Deployment-&-Ops.md`](../10-Deployment-&-Ops.md).
+athma-ce uses a **single Multi-AZ RDS instance** running PostgreSQL 16, with four logical databases created inside it. The full RDS Terraform module is in [`../10-Deployment-&-Ops.md`](../10-Deployment-&-Ops.md).
 
 Key configuration values for production:
 
@@ -444,10 +444,10 @@ RUN npm run build --workspace=@zeal/foundation
 
 FROM node:18-alpine AS runner
 WORKDIR /app
-RUN addgroup -g 1001 -S zeal && adduser -S zeal -u 1001
+RUN addgroup -g 1001 -S athma-ce && adduser -S athma-ce -u 1001
 COPY --from=builder /app/backend/services/foundation/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
-USER zeal
+USER athma-ce
 EXPOSE 3010
 CMD ["node", "dist/main.js"]
 ```
@@ -506,8 +506,8 @@ The namespace and quota manifests are in [`../10-Deployment-&-Ops.md`](../10-Dep
 kubectl apply -f k8s/namespace.yaml
 
 # Verify
-kubectl get namespace zeal
-kubectl describe resourcequota zeal-quota -n zeal
+kubectl get namespace athma-ce
+kubectl describe resourcequota zeal-quota -n athma-ce
 ```
 
 ### 5.2 ConfigMaps
@@ -518,7 +518,7 @@ Create environment-specific ConfigMaps. The template is in [`../10-Deployment-&-
 RDS_ENDPOINT=$(terraform output -raw rds_endpoint)
 REDIS_ENDPOINT=$(terraform output -raw redis_primary_endpoint)
 
-kubectl create configmap zeal-config -n zeal \
+kubectl create configmap zeal-config -n athma-ce \
   --from-literal=NODE_ENV=production \
   --from-literal=LOG_LEVEL=info \
   --from-literal=FOUNDATION_DATABASE_URL="postgresql://zeal_admin@${RDS_ENDPOINT}:5432/zeal_foundation" \
@@ -584,7 +584,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: SecretStore
 metadata:
   name: aws-secrets-manager
-  namespace: zeal
+  namespace: athma-ce
 spec:
   provider:
     aws:
@@ -600,7 +600,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: zeal-secrets
-  namespace: zeal
+  namespace: athma-ce
 spec:
   refreshInterval: 1h
   secretStoreRef:
@@ -629,8 +629,8 @@ kubectl apply -f k8s/external-secret-store.yaml
 kubectl apply -f k8s/external-secrets.yaml
 
 # Verify secrets synced
-kubectl get externalsecret zeal-secrets -n zeal
-kubectl get secret zeal-secrets -n zeal
+kubectl get externalsecret zeal-secrets -n athma-ce
+kubectl get secret zeal-secrets -n athma-ce
 ```
 
 ### 5.4 Deployments for Each Service
@@ -643,7 +643,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: foundation
-  namespace: zeal
+  namespace: athma-ce
   labels:
     app: foundation
     tier: backend
@@ -720,7 +720,7 @@ kubectl apply -f k8s/deployments/ai-gateway.yaml
 kubectl apply -f k8s/deployments/frontend.yaml
 
 # Verify all pods are running
-kubectl get pods -n zeal -o wide
+kubectl get pods -n athma-ce -o wide
 ```
 
 ### 5.5 Services and Ingress (ALB Ingress Controller)
@@ -746,7 +746,7 @@ for svc_name in foundation:3010 clinical:3020 rcm:3030 analytics:3040 prm:3013 a
   NAME=$(echo $svc_name | cut -d: -f1)
   PORT=$(echo $svc_name | cut -d: -f2)
 
-  kubectl create service clusterip ${NAME}-service -n zeal \
+  kubectl create service clusterip ${NAME}-service -n athma-ce \
     --tcp=80:${PORT} \
     --dry-run=client -o yaml | \
     kubectl label --local -f - app=${NAME} -o yaml | \
@@ -762,7 +762,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zeal-alb-ingress
-  namespace: zeal
+  namespace: athma-ce
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -771,7 +771,7 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: /health
-    alb.ingress.kubernetes.io/group.name: zeal
+    alb.ingress.kubernetes.io/group.name: athma-ce
 spec:
   rules:
     - host: api.zeal.health
@@ -821,7 +821,7 @@ spec:
 kubectl apply -f k8s/ingress-alb.yaml
 
 # Verify ALB is provisioned
-kubectl get ingress zeal-alb-ingress -n zeal
+kubectl get ingress zeal-alb-ingress -n athma-ce
 ```
 
 ### 5.6 HPA and Pod Disruption Budgets
@@ -832,7 +832,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: foundation-hpa
-  namespace: zeal
+  namespace: athma-ce
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -859,7 +859,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: foundation-pdb
-  namespace: zeal
+  namespace: athma-ce
 spec:
   minAvailable: 1
   selector:
@@ -933,8 +933,8 @@ resources:
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 TAG=$(git rev-parse --short HEAD)
 
-helm upgrade --install zeal ./helm/zeal \
-  --namespace zeal \
+helm upgrade --install athma-ce ./helm/zeal \
+  --namespace athma-ce \
   --create-namespace \
   --values ./helm/zeal/values-production.yaml \
   --set image.tag=${TAG} \
@@ -943,19 +943,19 @@ helm upgrade --install zeal ./helm/zeal \
   --timeout 10m
 
 # Verify
-helm list -n zeal
-helm status zeal -n zeal
-kubectl get pods -n zeal
+helm list -n athma-ce
+helm status athma-ce -n athma-ce
+kubectl get pods -n athma-ce
 ```
 
 ### 6.3 Rollback
 
 ```bash
 # List release history
-helm history zeal -n zeal
+helm history athma-ce -n athma-ce
 
 # Rollback to previous release
-helm rollback zeal 1 -n zeal --wait
+helm rollback athma-ce 1 -n athma-ce --wait
 ```
 
 ---
@@ -991,7 +991,7 @@ aws route53 create-hosted-zone \
   --caller-reference "zeal-$(date +%s)"
 
 # Get the ALB DNS name
-ALB_DNS=$(kubectl get ingress zeal-alb-ingress -n zeal \
+ALB_DNS=$(kubectl get ingress zeal-alb-ingress -n athma-ce \
   -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 
 # Create alias records for api.zeal.health and app.zeal.health
@@ -1074,7 +1074,7 @@ Create a customer-managed KMS key for encrypting secrets:
 
 ```bash
 KMS_KEY_ID=$(aws kms create-key \
-  --description "Zeal production encryption key" \
+  --description "athma-ce production encryption key" \
   --key-usage ENCRYPT_DECRYPT \
   --region me-central-1 \
   --query 'KeyMetadata.KeyId' --output text)
@@ -1239,7 +1239,7 @@ helm install otel-collector open-telemetry/opentelemetry-collector \
 # High error rate alarm
 aws cloudwatch put-metric-alarm \
   --alarm-name "zeal-high-error-rate" \
-  --namespace "Zeal/Platform" \
+  --namespace "athma-ce/Platform" \
   --metric-name "ErrorRate" \
   --statistic Average \
   --period 300 \
@@ -1252,7 +1252,7 @@ aws cloudwatch put-metric-alarm \
 # High response time alarm
 aws cloudwatch put-metric-alarm \
   --alarm-name "zeal-high-latency" \
-  --namespace "Zeal/Platform" \
+  --namespace "athma-ce/Platform" \
   --metric-name "ResponseTime" \
   --statistic p99 \
   --period 300 \
@@ -1531,7 +1531,7 @@ Monthly cost estimates in USD (as of 2026, me-central-1 pricing includes regiona
 
 ```bash
 # Check events
-kubectl describe pod <POD_NAME> -n zeal | grep -A5 Events
+kubectl describe pod <POD_NAME> -n athma-ce | grep -A5 Events
 
 # Common causes:
 # 1. ECR authentication expired
@@ -1542,7 +1542,7 @@ aws ecr get-login-password --region me-central-1 | \
 aws ecr describe-images --repository-name zeal/foundation --region me-central-1
 
 # 3. Missing imagePullSecret -- create one
-kubectl create secret docker-registry ecr-secret -n zeal \
+kubectl create secret docker-registry ecr-secret -n athma-ce \
   --docker-server=<ACCOUNT_ID>.dkr.ecr.me-central-1.amazonaws.com \
   --docker-username=AWS \
   --docker-password=$(aws ecr get-login-password --region me-central-1)
@@ -1552,15 +1552,15 @@ kubectl create secret docker-registry ecr-secret -n zeal \
 
 ```bash
 # Check logs for the crashing container
-kubectl logs <POD_NAME> -n zeal --previous
+kubectl logs <POD_NAME> -n athma-ce --previous
 
 # Common causes:
 # 1. Missing environment variables -- check ConfigMap and Secrets
-kubectl get configmap zeal-config -n zeal -o yaml
-kubectl get secret zeal-secrets -n zeal -o yaml
+kubectl get configmap zeal-config -n athma-ce -o yaml
+kubectl get secret zeal-secrets -n athma-ce -o yaml
 
 # 2. Database not reachable -- test from a debug pod
-kubectl run debug --rm -it --restart=Never -n zeal \
+kubectl run debug --rm -it --restart=Never -n athma-ce \
   --image=postgres:16-alpine \
   --env="PGPASSWORD=${DB_PASSWORD}" \
   -- psql -h <RDS_ENDPOINT> -U zeal_admin -d zeal_foundation -c "SELECT 1;"
@@ -1572,10 +1572,10 @@ kubectl run debug --rm -it --restart=Never -n zeal \
 
 ```bash
 # Check which container was killed
-kubectl describe pod <POD_NAME> -n zeal | grep -A2 "Last State"
+kubectl describe pod <POD_NAME> -n athma-ce | grep -A2 "Last State"
 
 # Increase memory limits
-kubectl patch deployment foundation -n zeal -p \
+kubectl patch deployment foundation -n athma-ce -p \
   '{"spec":{"template":{"spec":{"containers":[{"name":"foundation","resources":{"limits":{"memory":"2Gi"}}}]}}}}'
 ```
 
@@ -1606,7 +1606,7 @@ aws ec2 authorize-security-group-ingress \
 
 ```bash
 # Verify AUTH token matches
-kubectl exec -it debug-pod -n zeal -- \
+kubectl exec -it debug-pod -n athma-ce -- \
   redis-cli -h <REDIS_ENDPOINT> -p 6379 --tls -a <AUTH_TOKEN> PING
 
 # Common issues:
@@ -1620,7 +1620,7 @@ kubectl exec -it debug-pod -n zeal -- \
 ```bash
 # Check target group health
 ALB_ARN=$(aws elbv2 describe-load-balancers \
-  --query "LoadBalancers[?contains(LoadBalancerName, 'zeal')].LoadBalancerArn" --output text)
+  --query "LoadBalancers[?contains(LoadBalancerName, 'athma-ce')].LoadBalancerArn" --output text)
 
 TG_ARNS=$(aws elbv2 describe-target-groups \
   --load-balancer-arn ${ALB_ARN} \
@@ -1641,7 +1641,7 @@ done
 
 ```bash
 # If Prisma db push fails, check the connection from a temporary pod
-kubectl run prisma-debug --rm -it --restart=Never -n zeal \
+kubectl run prisma-debug --rm -it --restart=Never -n athma-ce \
   --image=node:18-alpine -- sh
 
 # Inside the pod:

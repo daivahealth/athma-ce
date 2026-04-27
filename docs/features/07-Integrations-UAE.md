@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Zeal platform integrates with UAE healthcare systems to enable seamless claims processing, eligibility verification, regulatory compliance, and health information exchange. This document outlines the integration architecture and specifications for DHA eClaimLink, DOH Shafafiya, UAE HIE platforms, and other UAE-specific systems.
+The athma-ce platform integrates with UAE healthcare systems to enable seamless claims processing, eligibility verification, regulatory compliance, and health information exchange. This document outlines the integration architecture and specifications for DHA eClaimLink, DOH Shafafiya, UAE HIE platforms, and other UAE-specific systems.
 
 ## Integration Architecture
 
@@ -10,7 +10,7 @@ The Zeal platform integrates with UAE healthcare systems to enable seamless clai
 
 ```mermaid
 graph TB
-    subgraph "Zeal Platform"
+    subgraph "athma-ce Platform"
         RCM[RCM Service]
         PMS[PMS Service]
         Rules[Rules Engine]
@@ -821,7 +821,7 @@ The UAE has established three major HIE platforms to enable seamless health info
 
 ```mermaid
 sequenceDiagram
-    participant PMS as Zeal PMS
+    participant PMS as athma-ce PMS
     participant HIE as HIE Service
     participant FHIR as FHIR Gateway
     participant NABIDH as NABIDH

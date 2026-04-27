@@ -1,6 +1,6 @@
 # Seed Execution Guide (Domain Split)
 
-Zeal now stores data in four domain databases. Use `run-seeds.sh` to apply the relevant SQL fixtures to each domain. Run these seeds **after** Prisma has created the schemas (`npx prisma db push` per domain).
+athma-ce now stores data in four domain databases. Use `run-seeds.sh` to apply the relevant SQL fixtures to each domain. Run these seeds **after** Prisma has created the schemas (`npx prisma db push` per domain).
 
 ## Quick Summary
 

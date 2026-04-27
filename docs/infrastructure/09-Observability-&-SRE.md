@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the comprehensive observability and Site Reliability Engineering (SRE) framework for the Zeal platform, including SLOs/SLAs, monitoring, logging, tracing, runbooks, and disaster recovery procedures.
+This document outlines the comprehensive observability and Site Reliability Engineering (SRE) framework for the athma-ce platform, including SLOs/SLAs, monitoring, logging, tracing, runbooks, and disaster recovery procedures.
 
 ## Service Level Objectives (SLOs) and Service Level Agreements (SLAs)
 
@@ -249,7 +249,7 @@ groups:
 ```json
 {
   "dashboard": {
-    "title": "Zeal Platform Overview",
+    "title": "athma-ce Platform Overview",
     "panels": [
       {
         "title": "Request Rate",
@@ -535,7 +535,7 @@ trace_sampling:
 1. **Check System Health**
    ```bash
    # Check service status
-   kubectl get pods -n zeal
+   kubectl get pods -n athma-ce
    kubectl describe pod <pod-name>
    
    # Check logs

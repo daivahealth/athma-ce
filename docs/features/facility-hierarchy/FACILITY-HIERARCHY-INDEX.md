@@ -320,7 +320,7 @@ The **Enhanced Facility Hierarchy** is now:
 - ✅ Documentation comprehensive
 - ✅ Ready for production use
 
-**The Zeal PMS now supports healthcare facilities from small clinics to large hospital networks with complete IPD/OPD management!**
+**The athma-ce PMS now supports healthcare facilities from small clinics to large hospital networks with complete IPD/OPD management!**
 
 ---
 

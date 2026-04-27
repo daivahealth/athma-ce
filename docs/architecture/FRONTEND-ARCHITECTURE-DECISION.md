@@ -10,7 +10,7 @@
 
 ## Context
 
-The Zeal platform has:
+The athma-ce platform has:
 - 4 separate backend databases (Foundation, Clinical, RCM, Analytics)
 - 3 NestJS microservices with clear domain boundaries
 - Multi-tenant architecture requiring consistent context across all operations

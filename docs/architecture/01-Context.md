@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document outlines the architecture and technology design for **Zeal**, an AI-driven, multi-tenant Practice Management System (PMS) + Revenue Cycle Management (RCM) SaaS platform specifically designed for healthcare clinics in the UAE.
+This document outlines the architecture and technology design for **athma-ce**, an AI-driven, multi-tenant Practice Management System (PMS) + Revenue Cycle Management (RCM) SaaS platform specifically designed for healthcare clinics in the UAE.
 
 ## Business Scope
 

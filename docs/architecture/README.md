@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-This folder contains the core architecture and design documentation for the Zeal PMS/RCM system.
+This folder contains the core architecture and design documentation for the athma-ce PMS/RCM system.
 
 ## 📚 Core Documents
 

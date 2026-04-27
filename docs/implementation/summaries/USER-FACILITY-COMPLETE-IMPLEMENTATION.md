@@ -2,7 +2,7 @@
 
 ## 🎉 **COMPLETE! All Components Implemented**
 
-This document summarizes the **complete end-to-end implementation** of user-facility mapping in the Zeal PMS system.
+This document summarizes the **complete end-to-end implementation** of user-facility mapping in the athma-ce PMS system.
 
 ---
 

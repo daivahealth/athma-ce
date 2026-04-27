@@ -1,6 +1,6 @@
 # Observability Documentation
 
-This folder contains documentation for the Zeal Healthcare Platform observability stack.
+This folder contains documentation for the athma-ce Healthcare Platform observability stack.
 
 ## Documents
 

@@ -1,7 +1,7 @@
 # User-Facility Mapping Design
 
 ## Overview
-This document defines the user-facility relationship model for the Zeal PMS, ensuring users are properly mapped to facilities within their tenant context.
+This document defines the user-facility relationship model for the athma-ce PMS, ensuring users are properly mapped to facilities within their tenant context.
 
 ## Business Requirements
 

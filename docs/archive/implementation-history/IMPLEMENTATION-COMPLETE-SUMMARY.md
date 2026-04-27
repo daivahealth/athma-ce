@@ -599,7 +599,7 @@ facility.manager@armc.ae    - Facility Manager
 
 ### **🚀 SYSTEM IS FULLY OPERATIONAL**
 
-The Zeal PMS now has:
+The athma-ce PMS now has:
 - ✅ Complete user management system
 - ✅ Comprehensive RBAC with 50 granular permissions
 - ✅ User-staff relationship (optional 1:1)

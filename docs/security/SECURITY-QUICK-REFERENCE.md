@@ -1,6 +1,6 @@
 # Security Quick Reference
 
-A developer cheat sheet for implementing security in Zeal Healthcare Platform.
+A developer cheat sheet for implementing security in athma-ce Healthcare Platform.
 
 ---
 
