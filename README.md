@@ -1,25 +1,25 @@
-# 🚀 Zeal — Open Healthcare Platform
+# Athma CE — Community Edition
 
-> **The open-source alternative to legacy hospital systems.**
+> **The open-source community edition of [Athma](https://athma.health/) — a modern healthcare platform.**
 
-A modern, modular platform to run hospitals, clinics, and digital health systems.
+A modular, open platform to run hospitals, clinics, and digital health systems.
 
 ---
 
-## 🧠 What is Zeal?
+## What is Athma CE?
 
-Zeal is an open-source healthcare platform designed to manage:
+Athma CE is the community edition of [Athma](https://athma.health/), an open-source healthcare platform designed to manage:
 
-- 🏥 **Clinical operations** (EMR/EHR)
-- 💰 **Billing & insurance workflows**
-- 📣 **Patient engagement**
-- 🧾 **Diagnostics & reporting**
+- **Clinical operations** (EMR/EHR)
+- **Billing & insurance workflows**
+- **Patient engagement**
+- **Diagnostics & reporting**
 
 Built for real-world healthcare environments — scalable, flexible, and enterprise-ready.
 
 ---
 
-## ✨ Why Zeal?
+## Why Athma CE?
 
 Healthcare systems today are:
 
@@ -27,16 +27,16 @@ Healthcare systems today are:
 - Expensive
 - Hard to customize
 
-**Zeal changes that.**
+**Athma CE changes that.**
 
-- 🧩 **Modular** — use only what you need
-- ⚡ **Fast to deploy** — get started in minutes
-- 🔐 **Built for healthcare** — audit, compliance, multi-tenant
-- 🌍 **Open** — no vendor lock-in
+- **Modular** — use only what you need
+- **Fast to deploy** — get started in minutes
+- **Built for healthcare** — audit, compliance, multi-tenant
+- **Open** — no vendor lock-in
 
 ---
 
-## 🏥 What You Can Do With Zeal
+## What You Can Do With Athma CE
 
 ### Clinical Care
 - Manage patient encounters
@@ -59,13 +59,13 @@ Healthcare systems today are:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
-Zeal is designed to be easy to run locally or in your own environment.
+Athma CE is designed to be easy to run locally or in your own environment.
 
 ```bash
-git clone https://github.com/sajithchandran/zeal.git
-cd zeal
+git clone https://github.com/daiva-health/athma-ce.git
+cd athma-ce
 docker-compose up
 ```
 
@@ -73,21 +73,21 @@ Access the application at: **http://localhost:3000**
 
 ---
 
-## 🌍 Where Zeal Fits
+## Where Athma CE Fits
 
-Zeal can be used by:
+Athma CE can be used by:
 
-- 🏥 Hospitals (single or multi-location)
-- 🏢 Clinic chains
-- 🧪 Diagnostic centers
-- 💡 Health-tech startups
-- 🌐 Digital health platforms
+- Hospitals (single or multi-location)
+- Clinic chains
+- Diagnostic centers
+- Health-tech startups
+- Digital health platforms
 
 ---
 
-## 🧠 Built for the Future
+## Built for the Future
 
-Zeal is designed to support:
+Athma CE is designed to support:
 
 - AI-powered workflows
 - Advanced analytics
@@ -96,7 +96,7 @@ Zeal is designed to support:
 
 ---
 
-## 📊 Roadmap
+## Roadmap
 
 - [ ] Public demo environment
 - [ ] Mobile applications
@@ -105,7 +105,7 @@ Zeal is designed to support:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions from developers, healthcare professionals, and organizations.
 
@@ -115,33 +115,31 @@ We welcome contributions from developers, healthcare professionals, and organiza
 
 ---
 
-## 🛡️ License
+## License
 
 Licensed under the [Apache License 2.0](./LICENSE)
 
 ---
 
-## 💼 Commercial & Enterprise
+## Commercial & Enterprise
 
-Zeal is open-source.
-
-For enterprise deployments, managed hosting, custom development, or support:
+Athma CE is the open-source community edition. For the full-featured product, managed hosting, enterprise deployments, or support, visit [athma.health](https://athma.health/).
 
 📩 **Contact:** sajithchandran@gmail.com
 
 ---
 
-## ⭐ Support
+## Support
 
-If you find Zeal useful:
+If you find Athma CE useful:
 
-- ⭐ Star the repository
-- 🍴 Fork and build on it
-- 🤝 Contribute
+- Star the repository
+- Fork and build on it
+- Contribute
 
 ---
 
-## 👨‍💻 Author
+## Author
 
-**Sajith Chandran**  
+**Sajith Chandran**
 Healthcare IT Architect
