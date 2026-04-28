@@ -29,14 +29,14 @@ function getDocumentTypeColor(type: DocumentType): string {
   const colors: Record<DocumentType, string> = {
     encounter_note: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
     discharge_summary: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
-    clinical_note: 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
+    clinical_note: 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary',
     progress_note: 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
     consultation_note: 'bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-300',
     procedure_note: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900 dark:text-cyan-300',
     operative_note: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
     radiology_report: 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
     lab_report: 'bg-lime-100 text-lime-700 dark:bg-lime-900 dark:text-lime-300',
-    pathology_report: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300',
+    pathology_report: 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
   };
   return colors[type] || 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
 }

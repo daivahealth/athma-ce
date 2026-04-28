@@ -148,5 +148,9 @@ body {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.6));
+  background-image: linear-gradient(
+    90deg,
+    hsl(var(--primary)) 0%,
+    hsl(var(--warning)) 100%
+  );
 }

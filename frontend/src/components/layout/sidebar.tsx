@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
@@ -502,16 +503,53 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       )}
     >
       {/* Header */}
-      <div className="flex h-16 items-center justify-between px-4 border-b border-border/40">
-        <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 transition-all group-hover:scale-105 group-hover:shadow-primary/30">
-            <span className="text-xl font-bold font-heading">Z</span>
-          </div>
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="text-lg font-bold leading-none font-heading tracking-tight">Zeal</span>
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mt-0.5">Care Platform</span>
-            </div>
+      <div
+        className={cn(
+          'relative flex h-16 items-center border-b border-border/40',
+          isCollapsed ? 'justify-center px-3' : 'px-4'
+        )}
+      >
+        <Link
+          href={`/${locale}/dashboard`}
+          className={cn(
+            'flex items-center hover:opacity-80 transition-opacity group',
+            isCollapsed ? 'justify-center' : 'gap-3'
+          )}
+        >
+          {isCollapsed ? (
+            <>
+              <Image
+                src="/athma-mark.svg"
+                alt="Athma"
+                width={40}
+                height={40}
+                className="h-10 w-10 transition-all group-hover:scale-105 dark:hidden"
+              />
+              <Image
+                src="/athma-mark-dark.svg"
+                alt="Athma"
+                width={40}
+                height={40}
+                className="hidden h-10 w-10 transition-all group-hover:scale-105 dark:block"
+              />
+            </>
+          ) : (
+            <>
+              <Image
+                src="/athma-logo.svg"
+                alt="Athma"
+                width={145}
+                height={42}
+                className="h-7 w-auto dark:hidden"
+              />
+              <Image
+                src="/athma-logo-dark.svg"
+                alt="Athma"
+                width={145}
+                height={42}
+                className="hidden h-7 w-auto dark:block"
+              />
+            </>
           )}
         </Link>
 
@@ -523,7 +561,9 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
             e.stopPropagation();
             onToggle();
           }}
-          className={cn("h-8 w-8 text-muted-foreground hover:bg-accent hover:text-foreground", isCollapsed && "mx-auto")}
+          className={cn(
+            'absolute right-0 top-1/2 z-10 h-8 w-8 -translate-y-1/2 translate-x-1/3 rounded-full border border-border/60 bg-background text-muted-foreground shadow-sm hover:bg-accent hover:text-foreground'
+          )}
         >
           {isCollapsed ? (
             <ChevronRight className="h-4 w-4" />

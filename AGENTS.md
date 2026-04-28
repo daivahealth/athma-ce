@@ -1,162 +1,225 @@
-# AGENTS.md - Zeal Healthcare Platform
+# AGENTS.md - athma-ce
 
-Guidelines for AI coding agents working in this repository.
+Operating contract for AI coding agents working in this repository.
 
-## Project Structure
+This file is intentionally policy-heavy. It defines how agents should work, which documents are authoritative, when documentation updates are mandatory, and which engineering constraints must not be violated.
 
-```
-zeal/
+## Companion File Sync
+
+- `AGENTS.md` and `CLAUDE.md` must stay materially aligned.
+- Any update to one file must be reflected in the other in the same session.
+- Do not change agent operating rules in only one of these files.
+
+## Purpose
+
+- Use this file as the top-level ruleset for agent behavior in `athma-ce`.
+- Use the `docs/` tree as the detailed source of truth for architecture, APIs, workflows, runbooks, and developer guidance.
+- Do not treat this file as the place to restate all architecture or feature detail already documented elsewhere.
+
+## Documentation Hierarchy
+
+The repository already has an extensive documentation system. Agents must use it instead of inventing parallel documentation.
+
+- Root `AGENTS.md`: operating rules for agents.
+- [docs/README.md](docs/README.md): documentation entrypoint and navigation.
+- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md): documentation writing standards and contribution guidance.
+- [docs/architecture/](docs/architecture): system architecture, technical design, and cross-cutting design references.
+- [docs/ADR/](docs/ADR): architecture decisions and decision history.
+- [docs/api/](docs/api): API contracts, endpoint behavior, and integration references.
+- [docs/features/](docs/features): feature behavior, workflows, and user-facing implementation detail.
+- [docs/development/](docs/development): engineering workflow, commands, and implementation guidance.
+- [docs/runbooks/](docs/runbooks): operational procedures and service triage steps.
+- [docs/troubleshooting/](docs/troubleshooting): recurring issue diagnosis and remediation guidance.
+- [docs/multitenancy/](docs/multitenancy): tenant isolation and identity configuration references.
+- [docs/security/](docs/security): security and compliance references.
+- [docs/services/](docs/services): service-specific orientation and interaction patterns.
+
+## Documentation First Policy
+
+Agents must treat documentation updates as part of the implementation, not optional follow-up.
+
+- Any change affecting architecture, API contracts, workflows, developer expectations, operational behavior, or security assumptions must update the appropriate docs in the same session.
+- If a code change does not require a doc update, the agent should be able to justify that clearly.
+- If code and docs already disagree, the agent must call it out explicitly and either reconcile them or stop and surface the mismatch.
+- Agents must check existing documentation before creating new docs.
+- Prefer updating an existing canonical doc over creating a new file.
+
+## Documentation Routing Rules
+
+When a change is made, update the correct documentation family.
+
+- Architecture, service boundaries, integration patterns, or system design changes:
+  - `docs/ADR/`
+  - `docs/architecture/`
+- API shape, endpoint semantics, auth/header expectations, request/response changes:
+  - `docs/api/`
+- Feature behavior, workflows, data-entry flows, domain-specific UX behavior:
+  - `docs/features/`
+- Developer setup, local workflow, commands, coding patterns, implementation guidance:
+  - `docs/development/`
+- Runtime operations, triage, service recovery, support procedures:
+  - `docs/runbooks/`
+- Recurrent defects, root-cause writeups, break/fix guidance:
+  - `docs/troubleshooting/`
+- Tenant isolation, tenant-aware identity/config rules:
+  - `docs/multitenancy/`
+- Security/compliance expectations:
+  - `docs/security/`
+
+## No Silent Drift
+
+- Do not leave behavior-changing code without aligned documentation.
+- Do not change an API, workflow, or architecture rule and leave older docs misleading.
+- Do not cite docs as authoritative if the implementation now contradicts them.
+- If a mismatch is too large to safely reconcile in the current task, stop and report it.
+
+## No Documentation Sprawl
+
+- Do not create one-off summary docs, completion reports, or fix-status docs by default.
+- Do not create a new markdown file if an existing canonical doc can absorb the change.
+- Do not duplicate the same content across `features`, `api`, `implementation`, and `troubleshooting`.
+- Use new docs only when the topic is genuinely new and does not already have a natural home.
+
+## Repository Orientation
+
+```text
+athma-ce/
 ├── backend/
-│   ├── services/           # NestJS microservices
-│   │   ├── foundation/     # Auth, RBAC, tenants, users (port 3010)
-│   │   ├── clinical/       # Patients, encounters, scheduling (port 3011)
-│   │   ├── rcm/            # Billing, claims, insurance (port 3012)
-│   │   └── prm/            # Patient engagement (port 3013)
-│   ├── shared/             # Shared packages
-│   │   ├── database-*/     # Prisma clients per domain
-│   │   ├── utils/          # RequestContext, middleware
-│   │   └── types/          # Shared type definitions
-│   └── contracts/          # Shared DTOs and Zod schemas (@zeal/contracts)
-├── frontend/               # Next.js 14 App Router
-│   └── src/
-│       ├── app/            # Route segments: (auth), (clinical), (dashboard)
-│       ├── modules/        # Domain modules: clinical/, foundation/, rcm/, prm/
-│       ├── components/     # Shared UI (shadcn/ui)
-│       └── lib/            # API clients, stores, utilities
-├── seed/                   # SQL seed files per database
-└── docs/                   # Architecture, ADRs, runbooks
+│   ├── services/           # NestJS services
+│   ├── shared/             # Shared packages and Prisma clients
+│   └── contracts/          # Shared DTOs and schemas
+├── frontend/               # Next.js App Router app
+├── docs/                   # Canonical documentation tree
+├── seed/                   # Database seeding scripts and data
+└── infrastructure/         # Infra-related assets
 ```
 
-## Build & Development Commands
+Key code locations:
 
-### Backend (run from `backend/`)
+- Backend services: `backend/services/`
+- Shared database/schema packages: `backend/shared/`
+- Shared contracts: `backend/contracts/`
+- Frontend app and modules: `frontend/src/`
+
+## Core Engineering Rules
+
+- Explore before editing. Read the relevant code and the relevant docs first.
+- Follow existing patterns unless there is a strong documented reason to change them.
+- Prefer small, coherent changes over broad speculative refactors.
+- Keep service boundaries explicit. Do not blur backend domain ownership.
+- Preserve multi-tenant safety, auth expectations, and auditability.
+- Do not invent new abstractions if an existing shared client, hook, service, DTO, or utility already covers the use case.
+
+## Backend Rules
+
+- Follow NestJS patterns already used in the repo.
+- Use existing DTOs and shared contracts where possible.
+- Keep tenant-aware filters and request context intact on all domain operations.
+- Use service-local database boundaries. Do not introduce implicit cross-service joins.
+- Document any change to:
+  - endpoint behavior
+  - DTO/schema shape
+  - auth/header expectations
+  - multitenancy rules
+  - database migration impact
+
+## Frontend Rules
+
+- Use existing API clients, query hooks, stores, and UI primitives before adding new ones.
+- Keep branding, theme, and interaction changes aligned with shared theme tokens and shared components.
+- Do not hardcode new API access paths if the existing service/client layer is the correct seam.
+- Document any change to:
+  - route behavior
+  - form workflow
+  - user-facing feature behavior
+  - API usage expectations
+
+## Database, Security, and Multitenancy Rules
+
+- Patient/clinical data isolation must remain intact.
+- No cross-database joins as a shortcut for feature delivery.
+- Required headers and tenant/facility context rules must be preserved.
+- Schema changes must include:
+  - impact awareness
+  - affected services/modules
+  - seed or migration implications
+  - documentation updates in the correct doc family
+- Security-sensitive changes must be reflected in `docs/security/` or related canonical docs.
+
+## Development Workflow
+
+Use existing docs for detailed commands and workflows:
+
+- [docs/development/DEVELOPMENT-COMMANDS.md](docs/development/DEVELOPMENT-COMMANDS.md)
+- [docs/development/DEVELOPER-ONBOARDING.md](docs/development/DEVELOPER-ONBOARDING.md)
+- [docs/services/README.md](docs/services/README.md)
+
+Common local commands:
+
+### Backend
 ```bash
-docker-compose up -d postgres redis           # Start infrastructure
-npm install                                   # Install dependencies
-npm run build --workspace=@zeal/database-foundation  # Regenerate Prisma after schema changes
-npx prisma db push --schema prisma/schema.prisma     # Push schema (run in database pkg dir)
-npm run dev --workspace=@zeal/foundation      # Start Foundation (port 3010)
-npm run dev --workspace=@zeal/clinical        # Start Clinical (port 3011)
-npm run type-check --workspace=@zeal/foundation      # Type checking
+cd backend
+docker-compose up -d postgres redis
+npm install
+npm run dev --workspace=@zeal/foundation
+npm run dev --workspace=@zeal/clinical
+npm run type-check --workspace=@zeal/foundation
 ```
 
-### Frontend (run from `frontend/`)
+### Frontend
 ```bash
-npm run dev          # Port 3000
-npm run build        # Production build
-npm run lint:fix     # Auto-fix linting issues
-npm run format       # Prettier
+cd frontend
+npm run dev
+npm run build
+npm run lint:fix
+npm run format
 ```
 
 ### Testing
 ```bash
-# Frontend (Vitest)
-npm run test                           # Run all tests once
-npm run test:watch                     # Watch mode
-npx vitest run src/path/to/file.test.ts  # Single test file
-npx vitest run -t "test name"          # Single test by name
+cd frontend
+npm run test
 
-# Backend (Jest) - currently minimal test coverage
+cd backend
 npm run test --workspace=@zeal/foundation
 ```
 
-### Database Seeding
-```bash
-./seed/run-seeds.sh foundation   # Seed zeal_foundation
-./seed/run-seeds.sh clinical     # Seed zeal_clinical
-```
+## Dos
 
-## Code Style Guidelines
+- Do inspect relevant docs before implementing.
+- Do update the correct canonical docs in the same session when behavior changes.
+- Do preserve existing service boundaries, shared contracts, and tenant context patterns.
+- Do prefer existing shared utilities, clients, hooks, and components.
+- Do mention any discovered code/doc mismatch in your final report.
+- Do document migration, schema, or operational impact when relevant.
 
-### General
-- **Indentation**: 2 spaces
-- **Quotes**: Single quotes
-- **Semicolons**: Required
-- **Trailing commas**: Required (ES5 style)
-- **Line length**: 100 characters max
-- **File naming**: kebab-case (`patient-service.ts`, `use-patients.ts`)
+## Don'ts
 
-### TypeScript
-- **Strict mode** enabled with `noImplicitAny`, `strictNullChecks`
-- Use `type` imports: `import type { Patient } from './types'`
-- Prefer interfaces for object shapes, types for unions/intersections
-- Avoid `any`; use `unknown` and narrow with type guards
-- Use nullish coalescing (`??`) over logical OR for defaults
+- Don’t duplicate architecture or feature detail already covered in `docs/`.
+- Don’t create summary/status/completion markdown files by default.
+- Don’t invent new architecture when ADRs or architecture docs already define the direction.
+- Don’t bypass shared API clients, request-context patterns, DTOs, or theme tokens without strong reason.
+- Don’t make auth, tenant-safety, API-shape, or schema changes without aligned documentation.
+- Don’t leave code and docs in a contradictory state without explicitly surfacing it.
 
-### Naming Conventions
-| Entity | Convention | Example |
-|--------|------------|---------|
-| Files | kebab-case | `patient-service.ts` |
-| Classes | PascalCase | `PatientService` |
-| Interfaces/Types | PascalCase | `CreatePatientDto` |
-| Functions/Variables | camelCase | `getPatientById` |
-| Constants | UPPER_SNAKE_CASE | `MAX_RETRY_COUNT` |
-| React Components | PascalCase | `PatientForm` |
-| React Hooks | camelCase with `use` prefix | `usePatients` |
+## Verification and Documentation Checklist
 
-### Imports Order
-```typescript
-// 1. External packages
-import { Injectable } from '@nestjs/common';
-// 2. Internal packages (@zeal/*)
-import type { Patient } from '@zeal/contracts';
-// 3. Relative imports (parent first, then siblings)
-import { RequestContext } from '../../common/context';
-```
+Before closing a task, the agent should verify:
 
-## Backend Patterns (NestJS)
+- What behavior changed?
+- Which existing docs were checked before implementation?
+- Which canonical docs were updated?
+- What was verified locally?
+- Does any known code/doc mismatch remain?
 
-- Use `@ApiTags`, `@ApiOperation`, `@ApiResponse` decorators on controllers
-- DTOs reference `@zeal/contracts` for shared types
-- Use context decorators (`@TenantId()`, `@FacilityId()`, `@UserId()`) instead of manual header parsing
-- Services inject `PrismaService` and always filter by `tenantId`
-- Use NestJS exceptions: `BadRequestException`, `NotFoundException`, `UnauthorizedException`
-- Global exception filter handles Prisma errors automatically
-- Log errors with context: `logger.error({ tenantId, userId }, 'Error message')`
+If the change affects architecture, APIs, workflows, or operations, the final response should mention the doc updates explicitly.
 
-## Frontend Patterns (Next.js + React Query)
+## Key References
 
-- Services extend `BaseApiService` and export singleton instances
-- Use query key factories: `PATIENT_KEYS.list(params)`, `PATIENT_KEYS.detail(id)`
-- React Query hooks wrap services with `useQuery`/`useMutation`
-- Set appropriate `staleTime` (30s for lists, 60s for details)
-- Invalidate queries on mutations using `queryClient.invalidateQueries()`
-- API clients (`foundationApi`, `clinicalApi`, `rcmApi`) already attach auth headers
-
-## Error Handling
-
-- **Backend**: NestJS exceptions auto-handled by global filter; Prisma errors mapped to HTTP
-- **Frontend**: API interceptors handle 401 (redirect to login), mutations use `onError` for toasts
-
-## Security & Multi-Tenancy
-
-### Critical Rules
-1. **PHI isolation**: Patient data only in `zeal_clinical` database
-2. **No cross-database joins**: Use REST APIs for inter-service data
-3. **Required headers**: `Authorization`, `x-tenant-id`, `x-facility-id` on all requests
-4. **Use existing API clients** - they already attach required headers
-
-### Row-Level Security
-All tables include `tenant_id` with RLS policies enforced at database level.
-
-## Commit & PR Guidelines
-
-### Commit Messages
-Use conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`
-```
-feat(clinical): add patient history tracking
-fix(foundation): resolve RBAC permission caching issue
-```
-
-### Pull Requests
-- Explain intent and list impacted services
-- Note schema changes and required seed updates
-- Include API responses or UI screenshots
-- Link issues: `Fixes #123`
-
-## Key Files Reference
-- **Prisma schemas**: `backend/shared/database-*/prisma/schema.prisma`
-- **API clients**: `frontend/src/lib/api/client.ts`
-- **Auth store**: `frontend/src/lib/stores/auth-store.ts`
-- **Shared types**: `backend/contracts/src/types/`
-- **ADRs**: `docs/adr/` (especially ADR-0013 for service decomposition)
+- [docs/README.md](docs/README.md)
+- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
+- [docs/architecture/TECHNICAL-ARCHITECTURE.md](docs/architecture/TECHNICAL-ARCHITECTURE.md)
+- [docs/development/README.md](docs/development/README.md)
+- [docs/services/README.md](docs/services/README.md)
+- [docs/multitenancy/README.md](docs/multitenancy/README.md)
+- [docs/security/README.md](docs/security/README.md)

@@ -249,9 +249,9 @@ export default function DischargeDetailPage() {
         </div>
       </div>
 
-      <Card className="relative overflow-hidden border-indigo-200/50 shadow-md transition-all hover:shadow-lg dark:border-indigo-800/50 bg-gradient-to-br from-indigo-500/10 via-background to-blue-500/10 dark:from-indigo-500/20 dark:via-background dark:to-blue-500/20">
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-400/10" />
-        <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-400/10" />
+      <Card className="relative overflow-hidden border-primary/20 shadow-md transition-all hover:shadow-lg dark:border-primary/25 bg-gradient-to-br from-primary/10 via-background to-warning/10 dark:from-primary/20 dark:via-background dark:to-warning/15">
+        <div className="absolute top-0 right-0 -mt-8 -mr-8 h-48 w-48 rounded-full bg-warning/10 blur-3xl dark:bg-warning/10" />
+        <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-48 w-48 rounded-full bg-primary/10 blur-3xl dark:bg-primary/10" />
         <CardContent className="pt-6 relative">
           <div className="grid gap-4 md:grid-cols-[2fr_1fr]">
             <div>

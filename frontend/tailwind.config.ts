@@ -119,58 +119,58 @@ export default {
   plugins: [require('tailwindcss-animate'), plugin(({ addBase }) => {
     addBase({
       ':root': {
-        '--background': '224 71% 98%', // Light blue-tinted white for richness
-        '--foreground': '224 71% 4%', // Deep dark blue-black
+        '--background': '30 33% 98%', // Warm off-white
+        '--foreground': '18 20% 12%', // Warm graphite
         '--card': '0 0% 100%',
-        '--card-foreground': '224 71% 4%',
+        '--card-foreground': '18 20% 12%',
         '--popover': '0 0% 100%',
-        '--popover-foreground': '224 71% 4%',
-        '--primary': '262 83% 58%', // Vibrant Purple/Indigo
-        '--primary-foreground': '210 40% 98%',
-        '--secondary': '220 14% 96%', // Cool gray
-        '--secondary-foreground': '220.9 39.3% 11%',
-        '--muted': '220 14% 96%',
-        '--muted-foreground': '220 8.9% 46.1%',
-        '--accent': '262 83% 97%', // Light purple tint
-        '--accent-foreground': '262 83% 58%',
+        '--popover-foreground': '18 20% 12%',
+        '--primary': '14 100% 52%', // Athma orange-red
+        '--primary-foreground': '24 100% 98%',
+        '--secondary': '31 56% 95%', // Warm sand
+        '--secondary-foreground': '18 20% 16%',
+        '--muted': '30 24% 95%',
+        '--muted-foreground': '22 10% 43%',
+        '--accent': '35 100% 96%', // Soft amber tint
+        '--accent-foreground': '14 100% 44%',
         '--destructive': '0 84.2% 60.2%',
         '--destructive-foreground': '210 40% 98%',
-        '--border': '220 13% 91%',
-        '--input': '220 13% 91%',
-        '--ring': '262 83% 58%',
+        '--border': '28 35% 88%',
+        '--input': '28 35% 88%',
+        '--ring': '24 100% 50%',
         '--radius': '1rem', // More rounded
         '--success': '142 76% 36%',
         '--success-foreground': '355 100% 100%',
-        '--warning': '38 92% 50%',
-        '--warning-foreground': '0 0% 100%',
+        '--warning': '36 100% 50%',
+        '--warning-foreground': '24 100% 98%',
         '--info': '199 89% 48%',
         '--info-foreground': '0 0% 100%',
         '--error': '0 84.2% 60.2%',
         '--error-foreground': '0 0% 100%',
       },
       '.dark': {
-        '--background': '224 71% 4%', // Deepest blue-black
-        '--foreground': '210 40% 98%',
-        '--card': '224 71% 6%', // Slightly lighter than bg
-        '--card-foreground': '210 40% 98%',
-        '--popover': '224 71% 6%',
-        '--popover-foreground': '210 40% 98%',
-        '--primary': '263 70% 65%', // Lighter purple for dark mode
-        '--primary-foreground': '210 40% 98%',
-        '--secondary': '215 27.9% 16.9%',
-        '--secondary-foreground': '210 40% 98%',
-        '--muted': '215 27.9% 16.9%',
-        '--muted-foreground': '217.9 10.6% 64.9%',
-        '--accent': '215 27.9% 16.9%',
-        '--accent-foreground': '210 40% 98%',
+        '--background': '230 28% 8%', // Charcoal navy
+        '--foreground': '30 30% 96%',
+        '--card': '228 24% 11%', // Soft charcoal
+        '--card-foreground': '30 30% 96%',
+        '--popover': '228 24% 11%',
+        '--popover-foreground': '30 30% 96%',
+        '--primary': '24 100% 60%', // Brighter Athma orange for dark mode
+        '--primary-foreground': '18 25% 10%',
+        '--secondary': '226 18% 18%',
+        '--secondary-foreground': '30 30% 96%',
+        '--muted': '226 18% 18%',
+        '--muted-foreground': '28 12% 68%',
+        '--accent': '226 18% 18%',
+        '--accent-foreground': '30 30% 96%',
         '--destructive': '0 62.8% 30.6%',
         '--destructive-foreground': '210 40% 98%',
-        '--border': '215 27.9% 16.9%',
-        '--input': '215 27.9% 16.9%',
-        '--ring': '263 70% 65%',
+        '--border': '226 16% 22%',
+        '--input': '226 16% 22%',
+        '--ring': '24 100% 60%',
         '--success': '142 70% 45%',
         '--success-foreground': '144 70% 10%',
-        '--warning': '48 96% 53%',
+        '--warning': '36 100% 56%',
         '--warning-foreground': '222.2 47.4% 11.2%',
         '--info': '199 89% 48%',
         '--info-foreground': '0 0% 100%',

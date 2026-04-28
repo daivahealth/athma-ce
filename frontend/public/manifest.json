@@ -1,11 +1,11 @@
 {
-  "name": "Zeal Care Platform",
-  "short_name": "Zeal",
-  "description": "Unified PMS, EHR, and ECM for modern healthcare teams",
+  "name": "Athma",
+  "short_name": "Athma",
+  "description": "Athma",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#667eea",
+  "theme_color": "#ff6707",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -7,15 +7,15 @@ const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit', display: 
 
 export const metadata: Metadata = {
   title: {
-    default: 'Zeal Care Platform',
-    template: '%s | Zeal Care',
+    default: 'Athma',
+    template: '%s | Athma',
   },
   description: 'Unified PMS, EHR, and ECM for modern healthcare teams.',
-  applicationName: 'Zeal Care Platform',
+  applicationName: 'Athma',
   keywords: ['healthcare', 'PMS', 'EHR', 'ECM', 'patient management', 'medical records'],
-  authors: [{ name: 'Zeal Care' }],
-  creator: 'Zeal Care',
-  publisher: 'Zeal Care',
+  authors: [{ name: 'Athma' }],
+  creator: 'Athma',
+  publisher: 'Athma',
   formatDetection: {
     email: false,
     address: false,

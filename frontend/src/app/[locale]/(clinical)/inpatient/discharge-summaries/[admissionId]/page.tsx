@@ -219,7 +219,10 @@ export default function DischargeSummaryPage() {
                   MRN: {patientDisplay.mrn || '—'} · {patientDisplay.gender || '—'} / {patientDisplay.age || '—'}y
                 </span>
               )}
-              <span className="ml-2">· Admission {admissionQuery.data?.admissionNumber ?? admissionId}</span>
+              <span className="ml-2">
+                · Admission{' '}
+                {String(admissionQuery.data?.admissionNumber ?? admissionId)}
+              </span>
             </div>
           </div>
         </div>
@@ -231,7 +234,7 @@ export default function DischargeSummaryPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <FileText className="h-5 w-5 text-purple-500" />
+            <FileText className="h-5 w-5 text-primary" />
             Load Template
           </CardTitle>
           <CardDescription>Select a discharge summary template from the catalog to pre-populate the document.</CardDescription>

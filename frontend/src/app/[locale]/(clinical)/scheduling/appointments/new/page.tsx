@@ -387,7 +387,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                       </Label>
                       <div className="flex flex-wrap items-center gap-3">
                         <Select value={slotViewMode} onValueChange={(value) => setSlotViewMode(value as 'available' | 'all')}>
-                          <SelectTrigger className="h-9 w-[160px] text-xs border-slate-300 bg-white shadow-sm hover:border-indigo-400 focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800">
+                          <SelectTrigger className="h-9 w-[160px] text-xs border-slate-300 bg-white shadow-sm hover:border-primary/50 focus:border-primary dark:border-slate-700 dark:bg-slate-800">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -410,7 +410,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                     {isSlotsLoading ? (
                       <div className="flex items-center justify-center rounded-xl border border-slate-200/60 bg-gradient-to-br from-slate-50/50 to-white p-8 shadow-sm dark:border-slate-800/60 dark:from-slate-950/50 dark:to-slate-900">
                         <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-500 dark:border-slate-600 dark:border-t-indigo-400" />
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-primary dark:border-slate-600 dark:border-t-primary" />
                           <p className="text-sm font-medium">Loading available slots...</p>
                         </div>
                       </div>
@@ -454,9 +454,9 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                                   'relative rounded-lg px-3 py-2.5 text-xs font-semibold transition-all duration-200',
                                   'focus:outline-none focus:ring-2 focus:ring-offset-1',
                                   isSelected
-                                    ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30 border-2 border-indigo-400 scale-105 ring-2 ring-indigo-200/50 dark:from-indigo-600 dark:to-purple-700 dark:border-indigo-500 dark:shadow-indigo-600/40 dark:ring-indigo-400/30'
+                                    ? 'bg-gradient-to-br from-primary to-warning text-primary-foreground shadow-lg shadow-primary/30 border-2 border-primary/60 scale-105 ring-2 ring-primary/20 dark:shadow-primary/30 dark:ring-primary/30'
                                     : isAvailable
-                                      ? 'bg-white border border-slate-200 text-slate-700 shadow-sm hover:border-indigo-300 hover:bg-gradient-to-br hover:from-indigo-50 hover:to-purple-50/30 hover:text-indigo-700 hover:shadow-md hover:scale-105 hover:border-indigo-400 dark:bg-slate-800/50 dark:border-slate-700/50 dark:text-slate-200 dark:hover:border-indigo-600 dark:hover:from-indigo-950/30 dark:hover:to-purple-950/20 dark:hover:text-indigo-300 focus:ring-indigo-400/50'
+                                      ? 'bg-white border border-slate-200 text-slate-700 shadow-sm hover:border-primary/40 hover:bg-gradient-to-br hover:from-primary/5 hover:to-warning/10 hover:text-primary hover:shadow-md hover:scale-105 dark:bg-slate-800/50 dark:border-slate-700/50 dark:text-slate-200 dark:hover:border-primary/50 dark:hover:from-primary/10 dark:hover:to-warning/10 dark:hover:text-primary focus:ring-primary/30'
                                       : 'bg-slate-100/50 border border-slate-200/50 text-slate-400 cursor-not-allowed opacity-50 dark:bg-slate-800/30 dark:border-slate-700/30 dark:text-slate-600'
                                 )}
                               >

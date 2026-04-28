@@ -1,426 +1,226 @@
-# CLAUDE.md
+# CLAUDE.md - athma-ce
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Operating contract for Claude and other AI coding agents working in this repository.
 
-## Project Overview
+This file is intentionally policy-heavy. It defines how agents should work, which documents are authoritative, when documentation updates are mandatory, and which engineering constraints must not be violated.
 
-Zeal is a comprehensive healthcare platform providing Practice Management System (PMS), Electronic Health Record (EHR), and Electronic Content Management (ECM) capabilities for UAE healthcare providers. The system is built as a multi-tenant, multi-language (English/Arabic) platform with domain-driven architecture.
+## Companion File Sync
 
-## Architecture
+- `AGENTS.md` and `CLAUDE.md` must stay materially aligned.
+- Any update to one file must be reflected in the other in the same session.
+- Do not change agent operating rules in only one of these files.
 
-### Four-Database Domain Architecture (ADR-0013)
+## Purpose
 
-The system uses four PostgreSQL databases aligned with major business domains:
+- Use this file as the top-level ruleset for agent behavior in `athma-ce`.
+- Use the `docs/` tree as the detailed source of truth for architecture, APIs, workflows, runbooks, and developer guidance.
+- Do not treat this file as the place to restate all architecture or feature detail already documented elsewhere.
 
-1. **zeal_foundation** - Tenancy, identity, RBAC, organizational hierarchy, facilities, staff, catalogs
-2. **zeal_clinical** - Patient PHI, appointments, encounters, EHR, clinical notes, vitals, care plans
-3. **zeal_rcm** - Revenue Cycle Management, billing, pharmacy, claims, payers, financial data
-4. **zeal_analytics** - Audit logs, usage metrics, reporting aggregates (append-only)
+## Documentation Hierarchy
 
-**Critical Rules:**
-- Direct SQL joins across databases are prohibited
-- Cross-domain communication uses REST APIs or events
-- Foundation database is the source of truth for master data (tenants, staff, facilities, catalogs)
-- All services reference Foundation via IDs/events
+The repository already has an extensive documentation system. Agents must use it instead of inventing parallel documentation.
 
-### Service Structure
+- Root `AGENTS.md`: operating rules for agents.
+- Root `CLAUDE.md`: same operating rules for Claude-oriented workflows.
+- [docs/README.md](docs/README.md): documentation entrypoint and navigation.
+- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md): documentation writing standards and contribution guidance.
+- [docs/architecture/](docs/architecture): system architecture, technical design, and cross-cutting design references.
+- [docs/ADR/](docs/ADR): architecture decisions and decision history.
+- [docs/api/](docs/api): API contracts, endpoint behavior, and integration references.
+- [docs/features/](docs/features): feature behavior, workflows, and user-facing implementation detail.
+- [docs/development/](docs/development): engineering workflow, commands, and implementation guidance.
+- [docs/runbooks/](docs/runbooks): operational procedures and service triage steps.
+- [docs/troubleshooting/](docs/troubleshooting): recurring issue diagnosis and remediation guidance.
+- [docs/multitenancy/](docs/multitenancy): tenant isolation and identity configuration references.
+- [docs/security/](docs/security): security and compliance references.
+- [docs/services/](docs/services): service-specific orientation and interaction patterns.
 
+## Documentation First Policy
+
+Agents must treat documentation updates as part of the implementation, not optional follow-up.
+
+- Any change affecting architecture, API contracts, workflows, developer expectations, operational behavior, or security assumptions must update the appropriate docs in the same session.
+- If a code change does not require a doc update, the agent should be able to justify that clearly.
+- If code and docs already disagree, the agent must call it out explicitly and either reconcile them or stop and surface the mismatch.
+- Agents must check existing documentation before creating new docs.
+- Prefer updating an existing canonical doc over creating a new file.
+
+## Documentation Routing Rules
+
+When a change is made, update the correct documentation family.
+
+- Architecture, service boundaries, integration patterns, or system design changes:
+  - `docs/ADR/`
+  - `docs/architecture/`
+- API shape, endpoint semantics, auth/header expectations, request/response changes:
+  - `docs/api/`
+- Feature behavior, workflows, data-entry flows, domain-specific UX behavior:
+  - `docs/features/`
+- Developer setup, local workflow, commands, coding patterns, implementation guidance:
+  - `docs/development/`
+- Runtime operations, triage, service recovery, support procedures:
+  - `docs/runbooks/`
+- Recurrent defects, root-cause writeups, break/fix guidance:
+  - `docs/troubleshooting/`
+- Tenant isolation, tenant-aware identity/config rules:
+  - `docs/multitenancy/`
+- Security/compliance expectations:
+  - `docs/security/`
+
+## No Silent Drift
+
+- Do not leave behavior-changing code without aligned documentation.
+- Do not change an API, workflow, or architecture rule and leave older docs misleading.
+- Do not cite docs as authoritative if the implementation now contradicts them.
+- If a mismatch is too large to safely reconcile in the current task, stop and report it.
+
+## No Documentation Sprawl
+
+- Do not create one-off summary docs, completion reports, or fix-status docs by default.
+- Do not create a new markdown file if an existing canonical doc can absorb the change.
+- Do not duplicate the same content across `features`, `api`, `implementation`, and `troubleshooting`.
+- Use new docs only when the topic is genuinely new and does not already have a natural home.
+
+## Repository Orientation
+
+```text
+athma-ce/
+├── backend/
+│   ├── services/           # NestJS services
+│   ├── shared/             # Shared packages and Prisma clients
+│   └── contracts/          # Shared DTOs and schemas
+├── frontend/               # Next.js App Router app
+├── docs/                   # Canonical documentation tree
+├── seed/                   # Database seeding scripts and data
+└── infrastructure/         # Infra-related assets
 ```
-backend/
-├── services/                    # Domain services (NestJS)
-│   ├── foundation/              # Tenants, users, facilities, staff, RBAC
-│   ├── clinical/                # Patient management, appointments, encounters
-│   ├── pms/                     # Practice Management Service (minimal)
-│   ├── rcm/                     # Revenue Cycle Management
-│   └── [ai, audit, billing, integrations, notifications, reporting]/
-├── shared/                      # Shared packages
-│   ├── database-foundation/     # Prisma schema for Foundation DB
-│   ├── database-clinical/       # Prisma schema for Clinical DB
-│   ├── database-rcm/            # Prisma schema for RCM DB
-│   ├── database-analytics/      # Prisma schema for Analytics DB
-│   ├── utils/                   # Shared utilities
-│   ├── middleware/              # Common middleware
-│   └── types/                   # Shared TypeScript types
-└── contracts/                   # Data Transfer Objects (DTOs) for cross-service communication
 
-frontend/                        # Next.js 14 application (Single monolithic app with domain modules)
-├── src/
-│   ├── app/                     # App Router pages
-│   │   ├── (clinical)/          # Clinical domain routes (patients, appointments, encounters)
-│   │   ├── (rcm)/               # RCM domain routes (billing, claims, payments)
-│   │   └── (foundation)/        # Foundation domain routes (users, facilities, settings)
-│   ├── modules/                 # Domain-specific modules
-│   │   ├── clinical/            # Clinical components, services, hooks, types
-│   │   ├── rcm/                 # RCM components, services, hooks, types
-│   │   └── foundation/          # Foundation components, services, hooks, types
-│   ├── shared/                  # Shared across all domains
-│   │   ├── components/          # Reusable UI components (shadcn/ui)
-│   │   ├── lib/
-│   │   │   ├── api/             # API clients (clinicalApi, rcmApi, foundationApi)
-│   │   │   ├── auth/            # Authentication & JWT handling
-│   │   │   └── tenant/          # Multi-tenancy context & management
-│   │   ├── hooks/               # Shared custom hooks
-│   │   └── types/               # Shared TypeScript types
-│   └── store/                   # Global state (Zustand)
-```
+Key code locations:
 
-### Frontend Architecture (Monolithic with Domain Modules)
+- Backend services: `backend/services/`
+- Shared database/schema packages: `backend/shared/`
+- Shared contracts: `backend/contracts/`
+- Frontend app and modules: `frontend/src/`
 
-**Decision:** Single Next.js application with domain-based module structure (not micro-frontends)
+## Core Engineering Rules
 
-**Rationale:**
-- Healthcare workflows span multiple domains (Patient → Appointment → Bill)
-- Unified user experience with seamless navigation
-- Simplified authentication and multi-tenancy management
-- Shared component library across all modules
-- Faster development with single codebase
-- Can evolve to micro-frontends later if needed
+- Explore before editing. Read the relevant code and the relevant docs first.
+- Follow existing patterns unless there is a strong documented reason to change them.
+- Prefer small, coherent changes over broad speculative refactors.
+- Keep service boundaries explicit. Do not blur backend domain ownership.
+- Preserve multi-tenant safety, auth expectations, and auditability.
+- Do not invent new abstractions if an existing shared client, hook, service, DTO, or utility already covers the use case.
 
-**Multi-Tenancy in Frontend:**
-- TenantContext provider manages current tenant and facility
-- API interceptors automatically inject headers to all requests:
-  - `x-tenant-id`: Current tenant UUID
-  - `x-user-id`: Logged-in user UUID (from JWT)
-  - `x-facility-id`: Current facility UUID
-  - `Authorization`: Bearer JWT token
-- useTenant() hook provides tenant context throughout app
-- Three separate API clients: clinicalApi, rcmApi, foundationApi
+## Backend Rules
 
-**Service-Specific API Clients:**
-```typescript
-clinicalApi    → http://localhost:3011/api/v1  (Patient, Appointment, Encounter)
-rcmApi         → http://localhost:3012/api/v1  (Billing, Claims, Payment)
-foundationApi  → http://localhost:3001/api/v1  (Users, Facilities, Settings)
-```
+- Follow NestJS patterns already used in the repo.
+- Use existing DTOs and shared contracts where possible.
+- Keep tenant-aware filters and request context intact on all domain operations.
+- Use service-local database boundaries. Do not introduce implicit cross-service joins.
+- Document any change to:
+  - endpoint behavior
+  - DTO/schema shape
+  - auth/header expectations
+  - multitenancy rules
+  - database migration impact
 
-**See:** `/docs/architecture/FRONTEND-ARCHITECTURE-RECOMMENDATION.md` for complete details
+## Frontend Rules
 
-### Multi-Language Support (ADR-0004)
+- Use existing API clients, query hooks, stores, and UI primitives before adding new ones.
+- Keep branding, theme, and interaction changes aligned with shared theme tokens and shared components.
+- Do not hardcode new API access paths if the existing service/client layer is the correct seam.
+- Document any change to:
+  - route behavior
+  - form workflow
+  - user-facing feature behavior
+  - API usage expectations
 
-- Single `translations` table with entity-type mapping
-- ISO 639-1 language codes (`en`, `ar`, `fr`)
-- Fallback mechanism to English when translations missing
-- Applies to patient data, staff info, clinical content, master data
-- Frontend uses next-intl for UI translations
+## Database, Security, and Multitenancy Rules
 
-### Identity Management System
+- Patient/clinical data isolation must remain intact.
+- No cross-database joins as a shortcut for feature delivery.
+- Required headers and tenant/facility context rules must be preserved.
+- Schema changes must include:
+  - impact awareness
+  - affected services/modules
+  - seed or migration implications
+  - documentation updates in the correct doc family
+- Security-sensitive changes must be reflected in `docs/security/` or related canonical docs.
 
-**Key Insight:** The platform uses a **country-agnostic identity system** to support global deployment.
+## Development Workflow
 
-**Database Schema:**
-- `patients` table has generic identity fields:
-  - `national_id` - Primary identity number (replaces UAE-specific `emirates_id`)
-  - `national_id_type` - Type: 'emirates_id', 'aadhaar', 'passport', 'nric', etc.
-  - `issuing_country` - ISO 3166-1 alpha-2 code (AE, IN, GB, SG, etc.)
-- `patient_documents` table tracks all identity documents with verification status
+Use existing docs for detailed commands and workflows:
 
-**Tenant Configuration (Foundation DB):**
-- Identity labels and requirements configured per tenant in `tenants.settings.identity_config`
-- Allows customization: "Emirates ID" for UAE, "Aadhaar" for India, "Passport" for international
-- Frontend automatically renders correct labels based on tenant config + i18n
+- [docs/development/DEVELOPMENT-COMMANDS.md](docs/development/DEVELOPMENT-COMMANDS.md)
+- [docs/development/DEVELOPER-ONBOARDING.md](docs/development/DEVELOPER-ONBOARDING.md)
+- [docs/services/README.md](docs/services/README.md)
 
-**Validation Framework:**
-- Pluggable validators in `backend/shared/validators/src/identity/`
-- Registry pattern: `IdentityValidationRegistry.validate(country, type, value)`
-- Country-specific rules:
-  - UAE Emirates ID: Luhn checksum, format 784-YYYY-NNNNNNN-C
-  - India Aadhaar: Verhoeff algorithm, 12 digits
-  - Passport: Country-specific format validation
+Common local commands:
 
-**See:** `/docs/IDENTITY-MANAGEMENT-SYSTEM.md` for complete documentation
-
-## Development Commands
-
-### Starting Services
-
-**Full development environment:**
+### Backend
 ```bash
-# Terminal 1 - Database
-docker-compose up -d postgres
-
-# Terminal 2 - Backend (Foundation service)
-cd backend/services/foundation
-npm run dev
-
-# Terminal 3 - Backend (Clinical service)
-cd backend/services/clinical
-npm run dev
-
-# Terminal 4 - Backend (RCM service) - optional
-cd backend/services/rcm
-npm run dev
-
-# Terminal 5 - Frontend (when ready)
-cd frontend
-npm run dev
-```
-
-**Start specific services:**
-```bash
-# Foundation service (Users, Facilities, Auth)
+cd backend
+docker-compose up -d postgres redis
+npm install
 npm run dev --workspace=@zeal/foundation
-
-# Clinical service (Patients, Appointments, Encounters)
 npm run dev --workspace=@zeal/clinical
-
-# RCM service (Billing, Claims, Payments)
-npm run dev --workspace=@zeal/rcm
+npm run type-check --workspace=@zeal/foundation
 ```
 
-### Service Ports
-- Frontend: http://localhost:3000
-- Backend (Foundation): http://localhost:3010
-- Backend (Clinical): http://localhost:3011
-- Backend (RCM): http://localhost:3012
-- API Endpoints:
-  - Foundation API: http://localhost:3010/api/v1
-  - Clinical API: http://localhost:3011/api/v1
-  - RCM API: http://localhost:3012/api/v1
-- Prisma Studio: http://localhost:5555 (when running)
-- pgAdmin: http://localhost:8080 (credentials in docker-compose.yml)
-
-### Killing Processes
-
-```bash
-# Kill backend
-pkill -f "tsx watch"
-
-# Kill frontend
-pkill -f "next dev"
-
-# Kill both
-pkill -f "tsx watch" && pkill -f "next dev"
-
-# Force kill by port
-lsof -ti:3002 | xargs kill -9  # backend
-lsof -ti:3000 | xargs kill -9  # frontend
-```
-
-### Database Operations
-
-**Prisma workflows:**
-```bash
-cd backend/shared/database-foundation  # or database-clinical, database-rcm, database-analytics
-npx prisma generate                     # Generate Prisma Client
-npx prisma db push                      # Push schema to database
-npx prisma studio                       # Open Prisma Studio GUI
-```
-
-**Database seeding:**
-```bash
-cd seed
-./run-seeds.sh foundation    # Master data & RBAC
-./run-seeds.sh clinical      # Patient fixtures
-./run-seeds.sh rcm           # Payer data
-./run-seeds.sh analytics     # Audit data
-```
-
-**Environment variables required:**
-- `FOUNDATION_DATABASE_URL`
-- `CLINICAL_DATABASE_URL`
-- `RCM_DATABASE_URL`
-- `ANALYTICS_DATABASE_URL`
-
-### Frontend Development
-
+### Frontend
 ```bash
 cd frontend
-npm run dev           # Start development server
-npm run build         # Production build
-npm run lint          # ESLint
-npm run lint:fix      # Fix linting issues
-npm run format        # Prettier formatting
-npm run test          # Run Vitest tests
-npm run test:watch    # Watch mode
-npm run storybook     # Start Storybook
-npm run mock          # Generate mock data
+npm run dev
+npm run build
+npm run lint:fix
+npm run format
 ```
 
-### Backend Development
-
+### Testing
 ```bash
-cd backend/services/[service-name]
-npm run dev           # Start with ts-node and hot reload
-npm run build         # Compile TypeScript
-npm run start         # Run compiled code
-npm run type-check    # Type checking without emitting
-npm run clean         # Remove dist directory
+cd frontend
+npm run test
+
+cd backend
+npm run test --workspace=@zeal/foundation
 ```
 
-## Key Technologies
+## Dos
 
-**Backend:**
-- NestJS (v7-10) - Framework for domain services
-- Prisma - Database ORM (separate client per domain database)
-- PostgreSQL 16 - Primary database
-- Redis 7 - Caching layer
-- TypeScript - Language
-- Argon2 - Password hashing
+- Do inspect relevant docs before implementing.
+- Do update the correct canonical docs in the same session when behavior changes.
+- Do preserve existing service boundaries, shared contracts, and tenant context patterns.
+- Do prefer existing shared utilities, clients, hooks, and components.
+- Do mention any discovered code/doc mismatch in your final report.
+- Do document migration, schema, or operational impact when relevant.
 
-**Frontend:**
-- Next.js 14 - App Router (single monolithic app with domain modules)
-- React 18 - UI library
-- TypeScript - Type safety
-- TanStack Query (React Query) - Server state management, caching
-- Zustand - Client state management (lightweight, simple)
-- Axios - HTTP client with interceptors for auth/tenant headers
-- next-intl - Internationalization (English/Arabic UI)
-- shadcn/ui - Component library (built on Radix UI primitives)
-- Tailwind CSS - Utility-first styling
-- Zod - Schema validation
-- React Hook Form - Form state and validation
-- Vitest - Unit testing framework
+## Don'ts
 
-## Critical Development Patterns
+- Don’t duplicate architecture or feature detail already covered in `docs/`.
+- Don’t create summary/status/completion markdown files by default.
+- Don’t invent new architecture when ADRs or architecture docs already define the direction.
+- Don’t bypass shared API clients, request-context patterns, DTOs, or theme tokens without strong reason.
+- Don’t make auth, tenant-safety, API-shape, or schema changes without aligned documentation.
+- Don’t leave code and docs in a contradictory state without explicitly surfacing it.
 
-### Database Isolation
-When working with databases, always identify which domain database you're targeting:
-- Foundation: Tenants, users, facilities, staff, roles, permissions
-- Clinical: Patients, appointments, encounters, clinical notes
-- RCM: Billing, claims, payers, pharmacy
-- Analytics: Audit logs, metrics
+## Verification and Documentation Checklist
 
-### Cross-Service Communication
-Never directly join across database boundaries. Instead:
-1. Use REST APIs to fetch data from other domains
-2. Cache frequently accessed reference data (e.g., facility names)
-3. Use events for async workflows
-4. Store foreign keys as UUIDs but resolve via API calls
+Before closing a task, the agent should verify:
 
-### Multi-Tenancy (ADR-0003)
+- What behavior changed?
+- Which existing docs were checked before implementation?
+- Which canonical docs were updated?
+- What was verified locally?
+- Does any known code/doc mismatch remain?
 
-**Backend:**
-All queries must be tenant-scoped:
-- Every table (except Foundation master tables) includes `tenant_id`
-- Prisma middleware automatically injects `tenantId` into all queries
-- HTTP middleware validates and extracts tenant context from headers
-- Required headers: `x-tenant-id`, `x-user-id`, `x-facility-id` (all must be valid UUIDs)
-- Never expose cross-tenant data
+If the change affects architecture, APIs, workflows, or operations, the final response should mention the doc updates explicitly.
 
-**Frontend:**
-All API requests automatically include tenant context:
-- TenantContext provider manages current tenant/facility state
-- API interceptors inject headers: `x-tenant-id`, `x-user-id`, `x-facility-id`, `Authorization`
-- Use `useTenant()` hook to access current tenant context
-- Tenant switcher component for multi-tenant users
-- Three domain-specific API clients (clinicalApi, rcmApi, foundationApi) with automatic header injection
+## Key References
 
-### RBAC (ADR-0005)
-- Roles and permissions managed in Foundation database
-- Services verify permissions via JWT claims or Foundation API
-- Staff-User linking: Users may have `staff_id` for clinical staff associations
-
-### Identity Document Management
-When working with patient identity:
-1. **Primary Identity**: Store in `patients.national_id` for fast lookups
-2. **All Documents**: Track in `patient_documents` table with verification status
-3. **Validation**: Always use `IdentityValidationRegistry` before saving
-4. **Normalization**: Store validated, formatted values (e.g., `784-1990-1234567-8` not `784199012345678`)
-5. **Labels**: Fetch from tenant config first, fallback to i18n translations
-6. **Multi-Document**: Support multiple identity types per patient (national ID + passport + visa)
-
-## Common Workflows
-
-### Adding a New Backend Entity
-1. Identify which domain database it belongs to
-2. Add Prisma model to `backend/shared/database-{domain}/prisma/schema.prisma`
-3. Add model to `TENANT_ISOLATED_MODELS` in tenant middleware
-4. Run `npx prisma generate && npx prisma db push`
-5. Create DTOs in service's `dto/` folder with validation
-6. Implement service layer with CRUD operations
-7. Create controller with decorators (`@TenantId()`, `@Context()`)
-8. Register module in `app.module.ts`
-9. Write tests (unit + integration)
-10. Document API endpoints
-
-**See:** `/docs/development/BACKEND-FEATURE-DEVELOPMENT-GUIDE.md` for detailed steps
-
-### Adding a New Frontend Feature
-1. Identify domain (Clinical, RCM, or Foundation)
-2. Create API service in `src/modules/{domain}/services/`:
-   ```typescript
-   class EntityService extends BaseApiService<Entity> {
-     constructor() {
-       super(clinicalApi, '/entities');
-     }
-   }
-   ```
-3. Add TypeScript types in `src/modules/{domain}/types/`
-4. Create components in `src/modules/{domain}/components/`
-5. Add routes in `src/app/(domain)/entities/`
-6. Use TanStack Query for data fetching:
-   ```typescript
-   const { data } = useQuery({
-     queryKey: ['entities'],
-     queryFn: () => entityService.findAll(),
-   });
-   ```
-7. Forms use React Hook Form + Zod validation
-8. All API calls automatically include tenant headers via interceptors
-
-**See:** `/docs/architecture/FRONTEND-ARCHITECTURE-RECOMMENDATION.md` for examples
-
-### Adding Translations
-For any user-facing content requiring Arabic translation:
-1. Store base text in English in the entity's primary table
-2. Use `translations` table (in Foundation DB) for Arabic/other languages
-3. Entity types: `patient`, `staff`, `facility`, `medication`, `clinical_note`, etc.
-4. Use helper functions `get_translation()` and `set_translation()`
-
-### Testing Database Connections
-```bash
-node test-connection.js
-```
-
-## Healthcare Compliance
-
-### UAE
-- Arabic language support mandatory (DHA/DOH/MOHAP regulations)
-- Emirates ID validation for UAE nationals (Luhn checksum)
-- PHI resides only in Clinical and RCM databases
-- Audit logging in Analytics database for all clinical data access
-- Monetary values in AED (UAE Dirham)
-
-### Multi-Country Support
-- Platform supports global deployment with country-specific identity validation
-- Configurable per tenant: identity types, labels, validation rules
-- See `/docs/IDENTITY-MANAGEMENT-SYSTEM.md` for adding new countries
-
-## Documentation
-
-### Architecture & Design (`/docs/architecture/`)
-- **ADR-0001**: Language Split (English/Arabic)
-- **ADR-0003**: Multi-Tenancy
-- **ADR-0004**: Multi-Language Support
-- **ADR-0005**: RBAC Access Control
-- **ADR-0013**: Service Decomposition & Database Strategy
-- **FRONTEND-ARCHITECTURE-RECOMMENDATION.md**: ⭐ Complete frontend architecture guide
-- **FRONTEND-ARCHITECTURE-DECISION.md**: Frontend architecture decision rationale
-
-### Multi-Tenancy (`/docs/multitenancy/`)
-- **TENANT-ISOLATION-IMPLEMENTATION.md**: Backend tenant isolation (3-layer approach)
-- **TENANT-ISOLATION-QUICK-REFERENCE.md**: Developer quick reference
-- **API-AUTHENTICATION-CONTEXT.md**: Required headers and JWT structure
-
-### Developer Guides (`/docs/development/`)
-- **DEVELOPER-ONBOARDING.md**: ⭐ New developer onboarding (start here)
-- **BACKEND-FEATURE-DEVELOPMENT-GUIDE.md**: ⭐ Step-by-step guide for new backend features
-- **NEW-FEATURE-CHECKLIST.md**: Printable checklist for feature development
-- **DEVELOPMENT-COMMANDS.md**: Common development commands
-
-### Identity Management (`/docs/`)
-- **IDENTITY-MANAGEMENT-SYSTEM.md**: Complete identity system (validation, labels, multi-country support)
-
-### Database & Infrastructure (`/docs/infrastructure/database/`)
-- **PRISMA-DATABASE-CONFIG.md**: Prisma configuration details
-- **PGADMIN-CONNECTION-GUIDE.md**: Database GUI setup
-- **seed/README.md**: Data seeding instructions
-
-## Notes for Claude Code
-
-- **Never use hardcoded paths**: Use relative paths from project root
-- **Database changes**: Always run `npx prisma generate` after schema changes
-- **Service dependencies**: Services depend on shared database packages via `file:../../shared/database-{domain}`
-- **Port conflicts**: Check running processes with `lsof -i :PORT` before starting services
-- **Cache issues**: Clear Next.js cache with `rm -rf frontend/.next` if frontend behaves unexpectedly
-- **Seed data**: All seed UUIDs are fixed for consistent relationships across environments
+- [docs/README.md](docs/README.md)
+- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
+- [docs/architecture/TECHNICAL-ARCHITECTURE.md](docs/architecture/TECHNICAL-ARCHITECTURE.md)
+- [docs/development/README.md](docs/development/README.md)
+- [docs/services/README.md](docs/services/README.md)
+- [docs/multitenancy/README.md](docs/multitenancy/README.md)
+- [docs/security/README.md](docs/security/README.md)

@@ -325,7 +325,7 @@ export function ChecklistForm({ instanceId, onComplete, onVerify }: ChecklistFor
         );
       case 'VERIFIED':
         return (
-          <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
             <FileCheck className="w-3 h-3 mr-1" />
             Verified
           </Badge>

@@ -557,9 +557,9 @@ export default function WardBoardAdmissionDetailPage() {
         </div>
       ) : (
         <>
-          <Card className="relative overflow-hidden border-indigo-200/50 shadow-md transition-all hover:shadow-lg dark:border-indigo-800/50 bg-gradient-to-br from-indigo-500/10 via-background to-blue-500/10 dark:from-indigo-500/20 dark:via-background dark:to-blue-500/20">
-            <div className="absolute top-0 right-0 -mt-8 -mr-8 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-400/10" />
-            <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-400/10" />
+          <Card className="relative overflow-hidden border-primary/20 shadow-md transition-all hover:shadow-lg dark:border-primary/25 bg-gradient-to-br from-primary/10 via-background to-warning/10 dark:from-primary/20 dark:via-background dark:to-warning/15">
+            <div className="absolute top-0 right-0 -mt-8 -mr-8 h-48 w-48 rounded-full bg-warning/10 blur-3xl dark:bg-warning/10" />
+            <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-48 w-48 rounded-full bg-primary/10 blur-3xl dark:bg-primary/10" />
             <CardHeader className="pb-4">
               <div className="flex items-start justify-between">
                 <div className="flex gap-4">
@@ -587,7 +587,7 @@ export default function WardBoardAdmissionDetailPage() {
               <div className="space-y-1">
                 <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Location</p>
                 <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-primary/15 dark:text-primary">
                     <MapPin className="h-4 w-4" />
                   </div>
                   <div>
@@ -993,7 +993,7 @@ export default function WardBoardAdmissionDetailPage() {
               <Card className="flex flex-col border-slate-200 shadow-sm dark:border-slate-800">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <Pill className="h-5 w-5 text-indigo-500" />
+                    <Pill className="h-5 w-5 text-primary" />
                     Active Medications
                   </CardTitle>
                 </CardHeader>

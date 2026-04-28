@@ -13,6 +13,7 @@ import { login, setSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useToast } from '@/components/ui/use-toast';
 
 const loginSchema = z.object({
@@ -73,11 +74,29 @@ function LoginPageContent({ params }: { params: { locale: string } }) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-muted/40 p-6">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 via-background to-amber-50 p-6">
+      <Card className="w-full max-w-md border-orange-100/80 shadow-xl shadow-orange-100/40">
         <CardHeader className="space-y-2 text-center">
-          <CardTitle className="text-2xl font-bold">Zeal Care Platform</CardTitle>
-          <CardDescription>Secure access to PMS · EHR · ECM</CardDescription>
+          <div className="flex justify-center">
+            <>
+              <Image
+                src="/athma-logo.svg"
+                alt="Athma"
+                width={220}
+                height={64}
+                className="h-14 w-auto dark:hidden"
+                priority
+              />
+              <Image
+                src="/athma-logo-dark.svg"
+                alt="Athma"
+                width={220}
+                height={64}
+                className="hidden h-14 w-auto dark:block"
+                priority
+              />
+            </>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>

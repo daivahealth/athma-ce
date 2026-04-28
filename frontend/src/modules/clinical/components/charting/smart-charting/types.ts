@@ -58,6 +58,6 @@ export const BLOCK_COLORS: Record<SmartChartingBlockType, string> = {
   history: 'border-l-amber-500',
   notes: 'border-l-slate-400',
   diagnosis: 'border-l-rose-500',
-  orders: 'border-l-violet-500',
+  orders: 'border-l-primary',
   prescription: 'border-l-emerald-500',
 };

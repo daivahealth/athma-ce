@@ -113,7 +113,7 @@ function getFlagBadges(flags?: WardBoardFlags) {
   if (flags.isolation) {
     badges.push({
       label: 'Isolation',
-      className: 'bg-purple-500/15 text-purple-200 ring-1 ring-purple-500/30',
+      className: 'bg-primary/15 text-primary ring-1 ring-primary/30',
     });
   }
   if (flags.allergies?.length) {

@@ -84,7 +84,7 @@ function SuggestionCard({
             className={`font-mono text-xs ${
               isIcd
                 ? 'border-blue-300 text-blue-700 bg-blue-50'
-                : 'border-purple-300 text-purple-700 bg-purple-50'
+                : 'border-primary/30 text-primary bg-primary/10'
             }`}
           >
             {suggestion.code}
@@ -103,7 +103,7 @@ function SuggestionCard({
                     : suggestion.codingType === 'finding'
                       ? 'border-teal-300 text-teal-700 bg-teal-50'
                       : suggestion.codingType === 'procedure'
-                        ? 'border-indigo-300 text-indigo-700 bg-indigo-50'
+                        ? 'border-warning/30 text-warning bg-warning/10'
                         : 'border-gray-300 text-gray-700 bg-gray-50'
               }`}
             >

@@ -313,7 +313,12 @@ export default function TriagePage() {
               <div className="text-sm text-muted-foreground flex flex-wrap gap-4">
                 <span>Age: {encounter.patientDisplay?.age ? `${encounter.patientDisplay.age}y` : formatAge(encounter.patientDisplay?.dateOfBirth || encounter.patient?.dateOfBirth)}</span>
                 <span>Gender: {encounter.patientDisplay?.gender || (encounter.patient?.gender ? encounter.patient.gender[0].toUpperCase() + encounter.patient.gender.slice(1) : '—')}</span>
-                <span>MRN: <span className="font-mono">{encounter.patientDisplay?.mrn || encounter.patient?.mrn ?? '—'}</span></span>
+                <span>
+                  MRN:{' '}
+                  <span className="font-mono">
+                    {encounter.patientDisplay?.mrn ?? encounter.patient?.mrn ?? '—'}
+                  </span>
+                </span>
               </div>
             </CardDescription>
           </CardHeader>

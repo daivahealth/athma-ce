@@ -49,7 +49,7 @@ export function ChecklistMessage({ message, onViewChecklist }: ChecklistMessageP
         );
       case 'checklist_verified':
         return (
-          <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
             <FileCheck className="w-3 h-3 mr-1" />
             Verified
           </Badge>
@@ -74,7 +74,7 @@ export function ChecklistMessage({ message, onViewChecklist }: ChecklistMessageP
       case 'checklist_completed':
         return <CheckCircle2 className="w-5 h-5 text-green-600" />;
       case 'checklist_verified':
-        return <FileCheck className="w-5 h-5 text-purple-600" />;
+        return <FileCheck className="w-5 h-5 text-primary" />;
       default:
         return <AlertCircle className="w-5 h-5 text-gray-600" />;
     }
@@ -91,7 +91,7 @@ export function ChecklistMessage({ message, onViewChecklist }: ChecklistMessageP
 
   const getCategoryColor = (category?: string) => {
     const colors: Record<string, string> = {
-      DISCHARGE: 'bg-purple-100 text-purple-800',
+      DISCHARGE: 'bg-primary/10 text-primary',
       SURGERY: 'bg-red-100 text-red-800',
       ADMISSION: 'bg-blue-100 text-blue-800',
       TRANSFER: 'bg-yellow-100 text-yellow-800',
@@ -107,7 +107,7 @@ export function ChecklistMessage({ message, onViewChecklist }: ChecklistMessageP
   };
 
   return (
-    <Card className="p-4 border-l-4 border-l-blue-500">
+    <Card className="p-4 border-l-4 border-l-primary">
       <div className="flex items-start gap-3">
         {/* Icon */}
         <div className="mt-0.5">{getStatusIcon(message.messageSubtype)}</div>

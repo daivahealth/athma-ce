@@ -109,12 +109,12 @@ function ClinicalEventMessage({ message }: { message: ChannelMessage }) {
   };
 
   return (
-    <Card className="p-4 border-l-4 border-l-purple-500">
+    <Card className="p-4 border-l-4 border-l-primary">
       <div className="flex items-start gap-3">
-        <Activity className="w-5 h-5 text-purple-600 mt-0.5" />
+        <Activity className="w-5 h-5 text-primary mt-0.5" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <Badge variant="secondary" className="bg-purple-100 text-purple-800 text-xs">
+            <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
               Clinical Event
             </Badge>
             {message.messageSubtype && (

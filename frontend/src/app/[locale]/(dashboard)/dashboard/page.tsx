@@ -108,8 +108,8 @@ export default function DashboardPage() {
         label: 'Clinical Load',
         value: `${metrics.appointmentsToday} appts`,
         delta: `${metrics.encountersToday} encounters today`,
-        tone: 'text-violet-500',
-        bg: 'bg-violet-500/10',
+        tone: 'text-primary',
+        bg: 'bg-primary/10',
         icon: Activity,
       },
     ];
