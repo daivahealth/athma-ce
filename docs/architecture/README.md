@@ -1,113 +1,41 @@
 # Architecture Documentation
 
-This folder contains the core architecture and design documentation for the athma-ce PMS/RCM system.
+This folder contains architecture documentation for `athma-ce`.
 
-## 📚 Core Documents
+Use these documents with one rule in mind: documents in this folder should describe the implemented system unless they explicitly say a section is planned or recommended.
 
-| File | Description |
-|------|-------------|
-| [01-Context.md](./01-Context.md) | System context and business requirements |
-| [02-Architecture-Diagram.md](./02-Architecture-Diagram.md) | High-level architecture diagrams |
-| [03-Domain-Model.md](./03-Domain-Model.md) | Domain-driven design models |
-| [BACKEND-ARCHITECTURE.md](./BACKEND-ARCHITECTURE.md) | Backend service architecture |
-| [FRONTEND-ARCHITECTURE-RECOMMENDATION.md](./FRONTEND-ARCHITECTURE-RECOMMENDATION.md) | Frontend architecture guide |
+## Start Here
 
-## 🎯 Quick Links
+- [TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md)
+  Current-state system architecture across frontend, backend, services, databases, and local infrastructure.
+- [BACKEND-ARCHITECTURE.md](./BACKEND-ARCHITECTURE.md)
+  Backend-specific service and platform guidance.
+- [FRONTEND-ARCHITECTURE-RECOMMENDATION.md](./FRONTEND-ARCHITECTURE-RECOMMENDATION.md)
+  Frontend structure guidance updated to the current single-app, domain-module model.
 
-- [ADR Index](../ADR/) — Architecture Decision Records
-- [Security & Compliance](../security/) — Security controls
-- [API Documentation](../api/) — API specs
+## Core Reference Documents
 
-**Start here:** [01-Context.md](./01-Context.md) for system overview
+- [01-Context.md](./01-Context.md)
+- [02-Architecture-Diagram.md](./02-Architecture-Diagram.md)
+- [03-Domain-Model.md](./03-Domain-Model.md)
+- [04-Interfaces.md](./04-Interfaces.md)
+- [05-Data-Model.md](./05-Data-Model.md)
+- [06-AI-Design.md](./06-AI-Design.md)
+- [24-Service-Database-Interaction.md](./24-Service-Database-Interaction.md)
 
-### Domain & Data Models
+## Architecture Standards for This Folder
 
-3. **[03-Domain-Model.md](./03-Domain-Model.md)**
-   - Domain-driven design models
-   - Core entities and aggregates
-   - Business logic boundaries
+- Prefer updating an existing canonical document over creating a new one.
+- Mark planned or target-state architecture explicitly.
+- Do not describe deprecated topology as if it were deployed.
+- Keep service, port, and database ownership details aligned with the repository.
+- Update related ADRs when current implementation materially diverges from an earlier decision record.
 
-4. **[Complete-Domain-Model.md](./Complete-Domain-Model.md)**
-   - Comprehensive domain model reference
-   - All entities, relationships, and business rules
+## Related Documentation
 
-5. **[05-Data-Model.md](./05-Data-Model.md)**
-   - Database schema design
-   - Entity-relationship diagrams
-   - Data modeling decisions
-
-6. **[22-Data-Model-Summary.md](./22-Data-Model-Summary.md)**
-   - Data model summary and quick reference
-   - Key entities and relationships
-
-7. **[Complete-Data-Model.md](./Complete-Data-Model.md)**
-   - Complete database schema reference
-   - All tables, columns, and constraints
-
-### Technical Architecture
-
-8. **[04-Interfaces.md](./04-Interfaces.md)**
-   - System interfaces and APIs
-   - Integration patterns
-   - Communication protocols
-
-9. **[24-Service-Database-Interaction.md](./24-Service-Database-Interaction.md)**
-   - Service-to-database interaction patterns
-   - Data access layer design
-   - Connection pooling and optimization
-
-10. **[06-AI-Design.md](./06-AI-Design.md)**
-    - AI/ML architecture and design
-    - Model deployment strategy
-    - AI-powered features
-
-## 🏗️ Architecture Principles
-
-### Microservices Architecture
-- **Clinical Domain**: Patient management, encounters, clinical workflows
-- **RCM Domain**: Billing, claims, revenue cycle management
-- **Foundation Domain**: Facility management, scheduling, identity
-- **Analytics Domain**: Reporting, dashboards, business intelligence
-
-### Design Patterns
-- Domain-Driven Design (DDD)
-- Event-Driven Architecture
-- CQRS for complex queries
-- Repository pattern for data access
-
-### Technology Stack
-- **Backend**: Node.js, NestJS, TypeScript
-- **Database**: PostgreSQL with Prisma ORM
-- **API**: REST with OpenAPI/Swagger
-- **Real-time**: WebSockets for live updates
-- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
-
-## 🎨 Frontend Architecture
-
-11. **[FRONTEND-ARCHITECTURE-RECOMMENDATION.md](./FRONTEND-ARCHITECTURE-RECOMMENDATION.md)** ⭐
-    - Complete frontend architecture guide
-    - Monolithic app with domain modules approach
-    - Multi-tenancy and authentication implementation
-    - Component structure and organization
-    - Code examples and best practices
-    - **Read this before starting frontend development**
-
-12. **[FRONTEND-ARCHITECTURE-DECISION.md](./FRONTEND-ARCHITECTURE-DECISION.md)**
-    - Architecture decision rationale
-    - Options considered (monolith vs micro-frontends)
-    - Technology choices and justification
-    - Implementation roadmap
-    - Evolution path and future considerations
-
-## 📖 Related Documentation
-
-- [Security & Compliance](../security/)
+- [ADR Index](../ADR/)
+- [Services Overview](../services/README.md)
+- [Security](../security/)
 - [Multi-Tenancy](../multitenancy/)
 - [Infrastructure](../infrastructure/)
-- [Architecture Decision Records](../ADR/)
-
-## 🔗 Quick Links
-
-- [Main README](../README.md)
-- [Implementation Summaries](../implementation/summaries/)
-- [Feature Documentation](../features/)
+- [Main Docs Index](../README.md)

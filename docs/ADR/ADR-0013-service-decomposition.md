@@ -1,86 +1,107 @@
-# ADR-0013: Domain Service Decomposition & Database Strategy
+# ADR-0013: Domain Service Decomposition and Database Ownership
 
-- **Status**: Proposed
+- **Status**: Accepted and Partially Implemented
 - **Date**: 2025-10-06
+- **Last Reviewed**: 2026-04-29
 - **Authors**: Platform Architecture
-- **Related**: ADR-0001 (Language Split), ADR-0003 (Multi-Tenancy), ADR-0010 (Data Architecture)
+- **Related**: ADR-0001, ADR-0002, ADR-0003, ADR-0010
 
-## 1) Decision
+## Context
 
-Establish **four PostgreSQL databases** that align with athma-ce's major domains, reducing operational overhead while retaining isolation:
+Earlier platform planning described a simplified four-database topology. The repository has since evolved beyond that model:
 
-1. **DB-Foundation** – tenancy, identity, RBAC, organisational hierarchy, and shared catalogs (multi-language). This retains the shared cluster from ADR-0003 and remains the source of truth for reference data.
-2. **DB-Clinical** – patient PHI, scheduling, encounters/EHR, clinical notes, vitals, care plans, and orders/results. Tuned for low-latency OLTP.
-3. **DB-RCM** – billing/RCM, pharmacy inventory & dispensing, eligibility, pre-auth, claims, remittances, payments, fee schedules.
-4. **DB-Analytics** – append-only audit logs, usage metrics, curated aggregates feeding BI/ML pipelines (may later move to a warehouse).
+- PRM is implemented as a separate service with a dedicated database package.
+- AI workloads are implemented as a separate `ai-gateway` service.
+- Shared analytical concerns exist in `backend/shared/database-analytics`.
 
-Services are grouped accordingly:
-- **Foundation Services** (Auth, Tenant/Org, Catalog) read/write DB-Foundation.
-- **Clinical Services** (Patient, Scheduling, Encounter, Care Plan) operate on DB-Clinical while referencing DB-Foundation for master data.
-- **RCM Services** (Billing, Claims, Pharmacy, Finance) own DB-RCM but consult Foundation for tenants/staff catalogs.
-- **Analytics Services** (Audit, Reporting, Insights) consume DB-Analytics and warehouse outputs.
+This ADR is updated to reflect the implemented domain decomposition rather than the earlier transitional plan.
 
-Data contracts are published via `@zeal/contracts`; cross-domain workflows use REST (ADR-0002) and events. Direct SQL joins across databases are prohibited; data sharing occurs through service APIs/events or CDC feeds.
+## Decision
 
-## 2) Drivers
+athma-ce uses domain-oriented service boundaries with database ownership aligned to those domains.
 
-- **Operational simplicity**: Four databases are manageable for the platform team while still providing domain isolation.
-- **Performance**: Clinical workloads (low latency) and RCM workloads (batch) are separated so spikes do not interfere.
-- **Compliance**: PHI resides only in DB-Clinical and DB-RCM; catalogs remain in DB-Foundation. Analytics/audit data is isolated for long-term retention.
-- **Scalability**: Each database can be tuned and scaled independently (read replicas, partitioning) without coupling all tenants.
+### Services
 
-## 3) Scope
+1. **Foundation**
+   - tenancy, authentication, RBAC, users, facilities, staff, organizational structure, shared reference/configuration data
+2. **Clinical**
+   - patient-facing and PHI-heavy workflows including scheduling, encounters, charting, observations, inpatient workflows, and related care operations
+3. **RCM**
+   - billing, claims, remittance, eligibility, insurance, payer contracts, charge and ledger workflows, and related financial operations
+4. **PRM**
+   - patient engagement, workflow rules, communication templates, tasks, and event-driven outreach
+5. **AI Gateway**
+   - report builder, semantic search, and AI-specific orchestration and audit-oriented flows
 
-- All existing services must migrate to one of the four databases; new services must declare their home database during design.
-- Foundation remains the source of truth for tenancy, staff, RBAC, and catalogs; other databases reference it via IDs/events.
-- Warehouse/BI tooling consumes CDC streams primarily from DB-Clinical and DB-RCM into DB-Analytics or external systems.
+### Database Ownership
 
-## 4) Non-Goals
+1. **DB-Foundation**
+   - identity, tenancy, RBAC, facilities, staff, shared reference data
+2. **DB-Clinical**
+   - patients, appointments, encounters, charting, observations, inpatient workflows, and other PHI-centric records
+3. **DB-RCM**
+   - billing, claims, remittance, coverage, contracts, and financial workflows
+4. **DB-PRM**
+   - engagement rules, templates, provider callbacks, PRM tasks, and PRM workflow state
+5. **DB-Analytics**
+   - analytics or AI/reporting-oriented data structures where required by platform capabilities
 
-- Does not prescribe tenant-per-database sharding (still a future option).
-- Does not define warehouse technology (handled in ADR-0010 updates).
-- Does not change the language split from ADR-0001.
+## Rules
 
-## 5) Options Considered
+- Each service owns the write path for its database.
+- Cross-database joins are not an approved integration pattern.
+- Cross-domain workflows must use APIs, events, shared identifiers, or explicitly designed synchronization paths.
+- Foundation remains the anchor for tenant and identity context.
+- Shared clients/contracts should be updated alongside service boundary changes.
 
-| Option | Pros | Cons | Verdict |
-| --- | --- | --- | --- |
-| **Single Foundation monolith + DB** | Simpler operations, transactional joins | High blast radius; limited scalability; harder to enforce domain ownership | ❌ |
-| **Per-domain services sharing single DB** | Domain deploy independence; simple reporting | Shared DB still bottleneck; migration risk remains | ❌ |
-| **Four-database topology (chosen)** | Balance between isolation & manageability; aligns with domain boundaries; clear PHI zones | Requires coordination across services; cross-db transactions unavailable | ✅ |
+## Why This Decision
 
-## 6) Implementation Plan
+- It matches the architecture that is actually implemented in the repository.
+- It preserves clear separation between PHI-heavy clinical workflows, financial workflows, engagement workflows, and identity/reference data.
+- It allows frontend and backend teams to reason about ownership boundaries without relying on a stale four-database abstraction.
+- It keeps room for analytics and AI workloads without collapsing them back into the primary transactional domains.
 
-1. **Phase 1 – DB Provisioning**
-   - Instantiate four managed Postgres clusters (Foundation, Clinical, RCM, Analytics) with RLS templates.
-   - Update infrastructure-as-code (ADR-0008) to treat each database as a first-class resource.
-2. **Phase 2 – Service Alignment**
-   - Migrate existing tables into their target database (patients/appointments/encounters to Clinical; claims/billing/pharmacy to RCM; audit logs to Analytics).
-   - Adjust Prisma clients / connection strings per service.
-   - Expand `@zeal/contracts` to include any new DTOs required for cross-database interactions.
-3. **Phase 3 – CDC & Analytics**
-   - Configure CDC pipelines from Clinical & RCM into Analytics warehouse feeds (ADR-0010 follow-up).
-   - Implement data quality monitoring for cross-database event flows.
-4. **Phase 4 – Optimisation**
-   - Introduce read replicas/partitioning per database based on workload.
-   - Evaluate service-level autoscaling and failure domains (multi-region, blue/green).
+## Consequences
 
-## 7) Consequences
+### Positive
 
-- **Operational Complexity**: Four databases are manageable but still require IaC, monitoring, and backup automation.
-- **Consistency Model**: Cross-database transactions are unavailable; services must rely on events/sagas.
-- **Analytics**: Data warehouse becomes the integration layer; Analytics DB should be treated as append-only.
-- **Team Structure**: Encourages domain squads with clear ownership per database.
+- Clearer service and schema ownership
+- Better isolation between operational domains
+- Easier incremental evolution of PRM and AI capabilities
+- More accurate architecture documentation for onboarding and agent work
 
-## 8) Risk & Mitigations
+### Negative
 
-- **Eventual Consistency Bugs** → Establish clear event schemas, idempotent handlers, contract testing.
-- **Schema Drift** → Use `@zeal/contracts`, OpenAPI generation, and automated validation across services.
-- **Operational Overhead** → Platform team to provide service templates, shared CI/CD, and managed database provisioning.
-- **Analytics Lag** → Ensure CDC jobs are monitored; fail open with alerts for BI stakeholders.
+- More coordination is required for cross-domain workflows
+- Eventual consistency remains a concern where workflows span services
+- Documentation must stay disciplined to avoid drifting back to the older topology description
 
-## 9) Follow-Up ADRs
+## Implementation Notes
 
-- Update ADR-0010 (Data Architecture) with warehouse/CDC details.
-- Draft service-specific ADRs (Patient, Scheduling, etc.) as they are implemented.
-- Extend ADR-0008 (Deployment Infrastructure) to cover multi-database provisioning strategy.
+The current repository already reflects this decomposition through:
+
+- `backend/services/foundation`
+- `backend/services/clinical`
+- `backend/services/rcm`
+- `backend/services/prm`
+- `backend/services/ai-gateway`
+
+and through:
+
+- `backend/shared/database-foundation`
+- `backend/shared/database-clinical`
+- `backend/shared/database-rcm`
+- `backend/shared/database-prm`
+- `backend/shared/database-analytics`
+
+## What This ADR Does Not Claim
+
+- It does not claim that a unified API gateway is currently required in local development.
+- It does not claim that all analytics architecture is finalized.
+- It does not prescribe tenant-per-database sharding.
+
+## Follow-Up Expectations
+
+- Update related architecture docs whenever service ownership changes.
+- Keep `docs/architecture/TECHNICAL-ARCHITECTURE.md` aligned with the implemented service/database layout.
+- Update data and integration ADRs if the analytics or cross-service communication model changes materially.

@@ -1,10 +1,16 @@
 # API Gateway with Unified Swagger Documentation
 
+> Status note
+> This document is a design proposal for a future or optional API gateway. The current repository does not use this gateway as the default runtime path, and the frontend currently talks directly to service-specific APIs.
+
 ## Overview
 
-This document describes the implementation approach for an API Gateway that consolidates all microservices (Foundation, Clinical, RCM) behind a single entry point with unified Swagger documentation.
+This document describes the implementation approach for an API Gateway that could consolidate backend services behind a single entry point with unified Swagger documentation.
 
 ## Architecture
+
+> Current-state clarification
+> In the implemented repo, `localhost:3000` is the Next.js frontend, not an API gateway process.
 
 ```
 ┌─────────────────────────────────────────────────────────┐

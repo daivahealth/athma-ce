@@ -2,14 +2,24 @@
 
 - **Status**: Accepted
 - **Date**: 2025-09-29
+- **Last Reviewed**: 2026-04-29
 - **Owners**: Architecture Team
 - **Related**: ADR-0001 (Language Split), ADR-0003 (Multi-Tenancy)
+
+> Implementation note
+> This ADR describes the intended target-state communication model. The current repository primarily uses direct REST calls between the frontend and backend services, and does not yet implement the full API gateway, gRPC, or message-bus topology described below.
 
 ## 1) Decision
 - **Edge + external** synchronous calls remain **HTTP/REST + JSON** (via API Gateway/BFF) with **OpenAPI** contracts and idempotency guarantees.
 - **Service-to-service synchronous** calls inside the VPC use **gRPC** as the primary transport to provide schema safety, streaming, and lower latency; REST remains available for backward compatibility or when gRPC libraries are unavailable.
 - **Asynchronous workflows** (long-running, fan-out, retries) use the **message bus (Kafka)** with the **Transactional Outbox** pattern for publish reliability.
 - **GraphQL** is reserved for external developer APIs only (post-GA), not for service-to-service.
+
+### Current Repository State
+
+- Frontend calls backend services directly through shared Axios clients.
+- Backend services expose REST APIs only in the implemented repo.
+- Gateway/BFF, gRPC, and message-bus layers should be treated as planned architecture unless corresponding runtime assets are added.
 
 ## 2) Drivers
 - Clear, debuggable, browser-friendly interfaces for edge users → HTTP/REST + OpenAPI remains the public contract.
@@ -66,3 +76,5 @@
 - Shared proto repo (or mono-module) with generated NestJS/Go/Python gRPC clients for core domains.
 - Outbox/Inbox libs integrated in two services (rcm-core, remittance).
 - k6 load + chaos tests validating REST/gRPC timeout propagation, retries, and DLQ processing.
+
+These acceptance criteria remain roadmap-oriented and should not be read as completed implementation milestones.

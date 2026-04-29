@@ -4,6 +4,9 @@
 **Last Updated:** January 2026
 **Maintainers:** athma-ce Engineering Team
 
+> Status note
+> This document contains a mix of current-state backend architecture and target-state platform design. Where it conflicts with the implemented repository, `TECHNICAL-ARCHITECTURE.md` and the service code are the source of truth.
+
 ---
 
 ## Table of Contents
@@ -25,12 +28,12 @@
 
 ## Executive Summary
 
-The athma-ce platform is a **multi-tenant, domain-driven healthcare management system** built on a modern, scalable microservices architecture. The backend consists of **5 core domain services** backed by **5 PostgreSQL databases**, designed to handle UAE healthcare compliance while maintaining flexibility for global deployment.
+The athma-ce platform is a **multi-tenant, domain-driven healthcare management system** built on a service-oriented backend. The implemented repository currently contains **5 backend services** and **5 domain database packages**, with analytics-related capabilities represented through shared packages and AI/reporting components rather than a fully independent analytics service.
 
 ### Key Metrics
 - **Services:** 5 core domains + shared packages
 - **Databases:** 5 PostgreSQL databases (foundation, clinical, rcm, prm, analytics)
-- **Framework:** NestJS (primary) with Express (legacy/lightweight services)
+- **Framework:** NestJS in the implemented backend services
 - **ORM:** Prisma 5.7+
 - **Runtime:** Node.js 18+
 - **Language:** TypeScript 5.3+
@@ -44,7 +47,7 @@ The athma-ce platform is a **multi-tenant, domain-driven healthcare management s
 ✅ **Database-per-Service** - Independent scaling and schema evolution
 ✅ **Type Safety** - End-to-end TypeScript with Prisma type generation
 ✅ **Multi-Tenant by Default** - Built-in isolation, no afterthought
-✅ **Proven Frameworks** - NestJS for complex services, Express for simplicity
+✅ **Proven Frameworks** - NestJS across the implemented service set
 ✅ **Healthcare Compliant** - PHI segregation, audit logging, consent enforcement
 ✅ **Horizontally Scalable** - Stateless services, database read replicas
 ✅ **Developer Experience** - Auto-generated docs, type-safe APIs, hot reload
@@ -74,14 +77,14 @@ The backend is organized around **business domains**, not technical layers:
 │  └──────────────┘  └──────────────┘  └──────────────┘      │
 │                                                               │
 │  ┌──────────────┐                    ┌──────────────┐       │
-│  │     PRM      │                    │  Analytics   │       │
-│  │   Service    │                    │   Service    │       │
+│  │     PRM      │                    │ Analytics /  │       │
+│  │   Service    │                    │ AI Packages  │       │
 │  └──────┬───────┘                    └──────┬───────┘       │
 │         │                                    │               │
 │  ┌──────▼───────┐                    ┌──────▼───────┐       │
 │  │ zeal_prm     │                    │ zeal_        │       │
 │  │ (DB)         │                    │ analytics    │       │
-│  │              │                    │ (DB)         │       │
+│  │              │                    │ (DB/pkg)     │       │
 │  └──────────────┘                    └──────────────┘       │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -91,7 +94,7 @@ The backend is organized around **business domains**, not technical layers:
 - **Clinical** - Patients, appointments, encounters, EHR, clinical workflows
 - **RCM** - Billing, claims, payments, payers, revenue cycle
 - **PRM** - Patient engagement events, rules engine, communications, tasks, job worker
-- **Analytics** - Audit logs, metrics, reporting (append-only)
+- **Analytics / AI data** - shared analytical and AI/reporting-oriented data structures
 
 ### 2. Database-Per-Service Pattern
 
@@ -127,7 +130,6 @@ No runtime surprises - types validated at compile time.
 | **Runtime** | Node.js | 18+ LTS | Server runtime |
 | **Language** | TypeScript | 5.3+ | Type-safe development |
 | **Framework (Primary)** | NestJS | 10.3+ | Enterprise microservices |
-| **Framework (Alternative)** | Express.js | 4.18+ | Lightweight services |
 | **Database** | PostgreSQL | 16+ | Primary data store |
 | **ORM** | Prisma | 5.7+ | Type-safe database access |
 | **Validation** | class-validator | 0.14+ | DTO validation (NestJS) |
@@ -147,7 +149,7 @@ No runtime surprises - types validated at compile time.
 | **Clinical** | NestJS | class-validator | - | Complex workflows |
 | **RCM** | NestJS | class-validator | - | Financial operations |
 | **PRM** | NestJS | class-validator | @nestjs/schedule | Job runner needed |
-| **Analytics** | NestJS | class-validator | @nestjs/schedule | Append-only writes |
+| **AI Gateway** | NestJS | class-validator | - | AI/reporting gateway |
 
 ### Shared Packages
 
@@ -161,9 +163,7 @@ backend/shared/
 ├── database-analytics/      # Prisma schema + client for Analytics DB
 ├── database-prm/            # Prisma schema + client for PRM DB
 ├── utils/                   # Shared utility functions
-├── middleware/              # Common middleware (CORS, helmet, etc.)
 ├── types/                   # Shared TypeScript types
-├── validators/              # Shared validation logic (e.g., Emirates ID)
 └── config-client/           # Configuration utilities
 ```
 

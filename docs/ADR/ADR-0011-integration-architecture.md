@@ -2,9 +2,13 @@
 
 - **Status**: Accepted
 - **Date**: 2025-10-01
+- **Last Reviewed**: 2026-04-29
 - **Owners**: Architecture Team, Integration Team, Compliance Team
 - **Related**: ADR-0001 (Language Split), ADR-0007 (Security & Compliance)
 - **Context**: UAE healthcare systems require integration with multiple government and private systems for compliance and interoperability
+
+> Implementation note
+> This ADR is a target-state integration design. It should not be read as evidence that every connector, gateway component, or message-driven integration described below already exists in the repository.
 
 ## 1) Decision
 
@@ -16,6 +20,11 @@ Implement a **comprehensive integration architecture** with:
 - **Clearinghouse Integration**: Multiple clearinghouse and post-office connectors
 - **API Gateway**: Centralized API management and security
 - **Event-Driven Architecture**: Asynchronous integration patterns
+
+### Current Repository State
+
+- The repository contains domain services and supporting architecture documents, but not a complete implemented connector platform matching every element in this ADR.
+- API gateway and event-driven integration references in this document should be interpreted as design direction unless backed by concrete service, infra, or runtime assets.
 
 ## 2) Drivers
 
@@ -268,6 +277,9 @@ class EmiratesClearinghouseConnector implements ClearinghouseConnector {
 ```
 
 ## 9) API Gateway
+
+> Current-state clarification
+> A local or repo-implemented API gateway is not currently part of the default runtime described in `TECHNICAL-ARCHITECTURE.md`.
 
 ### Gateway Configuration
 ```yaml

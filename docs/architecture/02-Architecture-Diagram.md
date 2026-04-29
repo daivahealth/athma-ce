@@ -1,5 +1,25 @@
 # Architecture Diagrams
 
+> Status note
+> Several diagrams in this file describe broader target-state architecture rather than the exact local runtime currently implemented in the repository. For the current implemented topology, use `TECHNICAL-ARCHITECTURE.md` as the primary reference.
+
+## Current Implemented Topology Snapshot
+
+```text
+Frontend (Next.js, :3000)
+  -> Foundation (:3010)
+  -> Clinical (:3011)
+  -> RCM (:3012)
+  -> PRM (:3013)
+  -> AI Gateway (:3015)
+
+Shared local infrastructure
+  - PostgreSQL
+  - Redis
+  - pgAdmin
+  - RedisInsight
+```
+
 ## System Context Diagram
 
 ```mermaid
@@ -42,6 +62,9 @@ C4Context
 ```
 
 ## Container Diagram
+
+> Target-state note
+> The container diagram below includes planned components such as a dedicated API gateway, multiple specialized AI services, Kafka, object storage, and a broader connector estate. Those should not be interpreted as the default current repo runtime unless separately implemented.
 
 ```mermaid
 C4Container

@@ -1,5 +1,8 @@
 # Service ↔ Database Interaction Map
 
+> Status note
+> This document mixes current-state and target-state patterns. Where it differs from the live repository, `TECHNICAL-ARCHITECTURE.md` is the canonical current-state reference.
+
 ## Purpose
 This document captures how athma-ce's core services interact with persistence layers across the platform. It highlights the domain boundaries, summarizes data ownership, and visualizes synchronous and asynchronous flows so teams can evaluate cross-service dependencies quickly.
 
@@ -7,10 +10,11 @@ This document captures how athma-ce's core services interact with persistence la
 - **Foundation**: Auth, tenant/org, and catalog capabilities backed by `DB-FOUNDATION`; shared identity and reference data lives here with role-based access controls.
 - **Clinical**: Patient, scheduling, encounter, and care plan modules backed by `DB-CLINICAL`; row-level security (RLS) protects PHI.
 - **Revenue Cycle (RCM)**: Billing, claims, eligibility, accounts receivable, and pharmacy flows backed by `DB-RCM`; financial artifacts snapshot catalog references for auditability.
-- **Analytics & Audit**: Audit, reporting, and ML features backed by `DB-ANALYTICS`; downstream stores receive CDC/ETL streams.
-- **Shared Infrastructure**: Event bus, cache, secret manager, and observability tooling reused by services across domains.
+- **PRM**: Patient engagement, rules, templates, tasks, and callback/event workflows backed by `DB-PRM`.
+- **AI / Analytics**: AI gateway and analytics-oriented workflows use `DB-ANALYTICS` and related shared packages where applicable.
+- **Shared Infrastructure**: PostgreSQL, Redis, and observability tooling are implemented in-repo; event-bus and secret-manager references in this document should be read as target-state unless backed by repo infrastructure.
 
-Each domain is currently deployed as a single NestJS service containing multiple modules. This keeps delivery velocity high while the architecture stabilises, yet the database and package boundaries allow future decomposition when teams or scale require it.
+Each major domain is currently deployed as a single NestJS service containing multiple modules. This keeps delivery velocity high while the architecture stabilises, yet the database and package boundaries allow future decomposition when teams or scale require it.
 
 ## Service ↔ Database Map
 The diagram below shows how client-facing channels reach backend services, which in turn interact with their respective domain databases and shared infrastructure. Cross-domain reads occur through service APIs rather than SQL joins to preserve ownership boundaries.
@@ -96,10 +100,11 @@ flowchart LR
 ```
 
 ### Interaction Notes
-- Client traffic terminates at the API gateway/BFF, which routes requests to the domain APIs.
+- In the current repository, the frontend typically calls domain services directly via shared Axios clients rather than going through an implemented local API gateway/BFF.
 - The Foundation API centralizes identity, tenancy, and reference catalogs to support other domains; catalog reads are cached and versioned.
 - Clinical and RCM APIs apply RLS to protect tenant-scoped PHI and financial data; cross-domain workflows happen via service APIs and the event bus.
-- The Analytics API ingests events from the bus and CDC pipelines rather than querying operational stores directly.
+- PRM handles engagement workflows as its own service and database boundary.
+- Analytics and AI capabilities exist in shared packages and the AI gateway; a standalone analytics API should be treated as target-state unless explicitly implemented.
 
 ```mermaid
 flowchart LR
@@ -151,16 +156,17 @@ sequenceDiagram
 | Foundation | `DB-FOUNDATION` | `services/foundation` (Auth, Tenant, Catalog modules) | Foundation Platform Team<br/>PagerDuty: `foundation-platform`<br/>Slack: `#team-foundation` | [Foundation Platform Runbook](runbooks/foundation-platform.md) |
 | Clinical | `DB-CLINICAL` | `services/clinical` (Patients, Scheduling, Encounters, Care Plans) | Clinical Experience Team<br/>PagerDuty: `clinical-core`<br/>Slack: `#team-clinical` | [Clinical Core Runbook](runbooks/clinical-core.md) |
 | Revenue Cycle | `DB-RCM` | `services/rcm` (Billing, Claims, Eligibility, AR, Pharmacy) | Revenue Cycle Team<br/>PagerDuty: `rcm-primary`<br/>Slack: `#team-rcm` | [RCM Services Runbook](runbooks/rcm-services.md) |
-| Analytics & Audit | `DB-ANALYTICS` | `services/analytics` (planned; batch jobs handle ingestion today) | Insights & Compliance Team<br/>PagerDuty: `analytics-oncall`<br/>Slack: `#team-analytics` | [Analytics & Audit Runbook](runbooks/analytics-audit.md) |
-| Shared Infra | Event Bus, Redis, Secret Manager, Observability | Kafka, Redis, Secret Manager, Metrics/Logs/Tracing stack, API Gateway | Platform Infrastructure Team<br/>PagerDuty: `infra-primary`<br/>Slack: `#team-infra` | [Shared Infrastructure Runbook](runbooks/shared-infra.md) |
+| PRM | `DB-PRM` | `services/prm` | PRM / Patient Engagement Team | See service documentation and PRM-specific runbooks |
+| Analytics & Audit | `DB-ANALYTICS` | shared analytics and AI packages; standalone analytics deployable is still target-state | Insights / Platform Engineering | Update with concrete runbook links when they exist |
+| Shared Infra | PostgreSQL, Redis, Observability | repo-local compose and shared packages; gateway/event-bus/secret-manager details are target-state unless implemented elsewhere | Platform Engineering | Use current infra/runbook docs, not this table alone |
 
-> The Analytics deployable is on the roadmap; until it ships, ETL jobs publish to `DB-ANALYTICS` and the runbook covers operational hand-offs.
+> The analytics deployable and richer platform infrastructure described here should be treated as roadmap-oriented unless the corresponding service and runtime assets are present in the repository.
 
 ## Communication Playbook
 
 ### Synchronous Request/Response
 - Use when the caller must render or validate immediately (for example, "create superbill from encounter").
-- Edge traffic flows over REST via the API Gateway/BFF; internal service-to-service calls prefer gRPC (schema contracts, lower latency) with REST as a fallback.
+- Frontend traffic currently uses shared REST clients; API Gateway/BFF and gRPC references in this section are target-state guidance, not current local-runtime guarantees.
 - Apply tight timeouts (300–1000 ms), retries only on idempotent GET/PUT, and circuit breakers that open after repeated failures (e.g., five) with 30 s half-open probes.
 - Propagate authentication and tenancy by forwarding the JWT, `X-Tenant-Id`, and request context headers.
 - NestJS tip: use `axios` (REST) or `@grpc/grpc-js` (gRPC) with `timeout`, `maxRedirects: 0`, `validateStatus`, and a narrow retry handler (e.g., `ECONNRESET`).

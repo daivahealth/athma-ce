@@ -1,7 +1,10 @@
 # Agent Architecture & Design Playbook
 
+> Status note
+> This document is primarily a target-state design playbook for AI capabilities. The current implemented AI surface in this repository is the `backend/services/ai-gateway` service plus related frontend modules. Do not read every component below as already deployed.
+
 ## Purpose & Scope
-This document defines how AI agents are designed, deployed, and governed inside the athma-ce PMS/RCM platform. It translates platform architecture (docs/02-Architecture-Diagram.md) and AI strategy (docs/06-AI-Design.md) into concrete patterns so every new agent is:
+This document defines how AI agents are designed, deployed, and governed inside the athma-ce platform. It translates platform architecture and AI strategy into concrete patterns so every new agent is:
 - Tenant-aware and compliant with ADR-0003 (multi-tenancy via PostgreSQL RLS)
 - Implemented in Python services per ADR-0001 while interoperating with Node.js transactional APIs via ADR-0002 contracts
 - Deployed according to the hybrid AI model in ADR-0006 with human-in-the-loop safeguards
@@ -15,7 +18,7 @@ This document defines how AI agents are designed, deployed, and governed inside 
 - **Observability baked in**: emit metrics/traces per docs/09-Observability-&-SRE.md (`zeal_ai_prediction_duration_seconds`, `zeal_ai_prediction_accuracy`).
 
 ## Agent Topology
-Agents run inside dedicated Python/FastAPI services fronted by the AI gateway. Common components:
+Agents may run behind the AI gateway or within dedicated AI services as the platform evolves. In the current repository, the implemented AI entry point is the NestJS `ai-gateway` service. Common components for the broader target architecture:
 - **Agent Orchestrator**: validates input, fetches context, routes to specialized workers, applies guardrails.
 - **Tooling Layer**: typed adapters for transactional APIs (`pms-core`, `billing-service`, `rules-engine`), vector search, document retrieval, and third-party connectors.
 - **Policy Engine**: checks RBAC scopes (docs/20-RBAC-Access-Control.md) and compliance policies before executing tool calls.
@@ -34,7 +37,7 @@ Agents run inside dedicated Python/FastAPI services fronted by the AI gateway. C
 Each agent exposes REST endpoints (`POST /v1/agents/{agent_id}/run`) plus async triggers via Kafka/RabbitMQ topics (e.g., `note.draft.requested`, `claim.review.flagged`).
 
 ## Lifecycle & Interaction Flow
-1. **Ingestion**: API gateway authenticates caller, injects `tenant_id`, device/user metadata, and forwards to the AI gateway with OIDC service token.
+1. **Ingestion**: In the current app, authenticated frontend or service clients call the AI gateway directly. A separate edge API gateway may be introduced as platform infrastructure evolves.
 2. **Context Assembly**:
    - Fetch structured data through read-only contracts (`/patients/{id}`, `/encounters/{id}`) from Node services.
    - Retrieve unstructured artifacts (documents, transcripts) from object storage using signed URLs.
