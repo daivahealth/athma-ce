@@ -12,6 +12,8 @@ import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { userService } from '@/modules/foundation/services/user-service';
 import { useNavFeatureFlags } from '@/modules/foundation/hooks/use-nav-feature-flags';
+import { usePluginNavSections } from '@/lib/plugins/use-plugin-nav';
+import { pluginIconMap } from '@/lib/plugins/icon-map';
 import {
   LayoutDashboard,
   Users,
@@ -274,14 +276,45 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const session = getSession();
   const claims = decodeAccessToken(session.accessToken);
   const { flags: navFlags, isLoading: isLoadingNavFlags } = useNavFeatureFlags();
+  const { sections: pluginSections } = usePluginNavSections();
 
   const visibleSections = React.useMemo(() => {
-    if (isLoadingNavFlags) return navSections;
-    return navSections.filter((section) => {
-      if (!section.featureFlag) return true;
-      return navFlags[section.featureFlag] === true;
-    });
-  }, [navFlags, isLoadingNavFlags]);
+    const coreSections = isLoadingNavFlags
+      ? navSections
+      : navSections.filter((section) => {
+          if (!section.featureFlag) return true;
+          return navFlags[section.featureFlag] === true;
+        });
+
+    if (pluginSections.length === 0) return coreSections;
+
+    const adminIdx = coreSections.findIndex(
+      (s) => s.items[0]?.labelKey === 'nav.administration',
+    );
+
+    const pluginNavSections: NavSection[] = pluginSections.map((ps) => ({
+      featureFlag: ps.featureFlag,
+      items: ps.navigation.map((nav) => ({
+        icon: pluginIconMap[nav.icon] || Stethoscope,
+        labelKey: nav.labelKey,
+        children: nav.children.map((child) => ({
+          href: child.href,
+          icon: pluginIconMap[child.icon] || Stethoscope,
+          labelKey: child.labelKey,
+        })),
+      })),
+    }));
+
+    if (adminIdx >= 0) {
+      return [
+        ...coreSections.slice(0, adminIdx),
+        ...pluginNavSections,
+        ...coreSections.slice(adminIdx),
+      ];
+    }
+
+    return [...coreSections, ...pluginNavSections];
+  }, [navFlags, isLoadingNavFlags, pluginSections]);
 
   React.useEffect(() => {
     let isActive = true;

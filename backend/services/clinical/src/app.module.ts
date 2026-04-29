@@ -20,6 +20,7 @@ import { LifestyleModule } from './modules/lifestyle/lifestyle.module';
 import { DeviceSyncModule } from './modules/device-sync/device-sync.module';
 import { ReportingModule } from './modules/reporting/reporting.module';
 import { StorageModule } from './common/storage/storage.module';
+import { PluginLoaderModule } from './common/plugins/plugin-loader.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
@@ -49,6 +50,7 @@ import { LoggerService } from './common/logger/logger.service';
     LifestyleModule,
     DeviceSyncModule,
     ReportingModule,
+    PluginLoaderModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService, LoggerService],

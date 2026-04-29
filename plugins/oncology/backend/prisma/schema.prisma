@@ -1,0 +1,145 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema", "postgresqlExtensions"]
+  output          = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("CLINICAL_DATABASE_URL")
+  schemas  = ["plugin_oncology"]
+}
+
+model TumorStaging {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  patientId       String   @map("patient_id") @db.Uuid
+  encounterId     String?  @map("encounter_id") @db.Uuid
+  providerId      String?  @map("provider_id") @db.Uuid
+
+  cancerType      String   @map("cancer_type") @db.VarChar(200)
+  icdCode         String?  @map("icd_code") @db.VarChar(20)
+  snomedCode      String?  @map("snomed_code") @db.VarChar(20)
+  bodySite        String?  @map("body_site") @db.VarChar(200)
+
+  stagingSystem   String   @map("staging_system") @db.VarChar(50) // TNM, FIGO, Ann Arbor, etc.
+  stageGroup      String?  @map("stage_group") @db.VarChar(20) // I, II, III, IV, etc.
+  tCategory       String?  @map("t_category") @db.VarChar(20)
+  nCategory       String?  @map("n_category") @db.VarChar(20)
+  mCategory       String?  @map("m_category") @db.VarChar(20)
+
+  grade           String?  @db.VarChar(50)
+  histology       String?  @db.VarChar(200)
+  biomarkers      Json     @default("{}") // ER, PR, HER2, Ki67, etc.
+
+  stagingDate     DateTime @map("staging_date") @db.Date
+  diagnosisDate   DateTime? @map("diagnosis_date") @db.Date
+  isRecurrence    Boolean  @default(false) @map("is_recurrence")
+  status          String   @default("active") @db.VarChar(20)
+  notes           String?  @db.Text
+
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, cancerType])
+  @@index([stagingDate])
+  @@map("tumor_staging")
+  @@schema("plugin_oncology")
+}
+
+model ChemoProtocol {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+
+  code            String   @db.VarChar(50)
+  name            String   @db.VarChar(200)
+  description     String?  @db.Text
+  cancerType      String   @map("cancer_type") @db.VarChar(200)
+  intent          String   @db.VarChar(50) // curative, palliative, adjuvant, neoadjuvant
+  regimen         Json     // Array of { drug, dose, route, day, cycle }
+  totalCycles     Int      @map("total_cycles")
+  cycleDurationDays Int    @map("cycle_duration_days")
+  premedications  Json     @default("[]")
+  supportiveCare  Json     @default("[]")
+  emetogenicRisk  String?  @map("emetogenic_risk") @db.VarChar(20) // high, moderate, low, minimal
+
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy       String?  @map("created_by") @db.Uuid
+
+  orders          ChemoOrder[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, cancerType])
+  @@map("chemo_protocols")
+  @@schema("plugin_oncology")
+}
+
+model ChemoOrder {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  patientId       String    @map("patient_id") @db.Uuid
+  encounterId     String?   @map("encounter_id") @db.Uuid
+  protocolId      String    @map("protocol_id") @db.Uuid
+  orderingProvider String   @map("ordering_provider") @db.Uuid
+
+  cycleNumber     Int       @map("cycle_number")
+  dayNumber       Int       @map("day_number")
+  scheduledDate   DateTime  @map("scheduled_date") @db.Date
+  administeredAt  DateTime? @map("administered_at") @db.Timestamptz(6)
+
+  bsa             Decimal?  @db.Decimal(5, 2) // Body Surface Area
+  weight          Decimal?  @db.Decimal(5, 1)
+  height          Decimal?  @db.Decimal(5, 1)
+  creatinineClearance Decimal? @map("creatinine_clearance") @db.Decimal(6, 2)
+
+  doseAdjustments Json     @default("[]") @map("dose_adjustments")
+  preChemoChecklist Json   @default("{}") @map("pre_chemo_checklist")
+
+  status          String   @default("pending") @db.VarChar(30) // pending, approved, in_progress, completed, cancelled, held
+  verifiedBy      String?  @map("verified_by") @db.Uuid
+  verifiedAt      DateTime? @map("verified_at") @db.Timestamptz(6)
+  administeredBy  String?  @map("administered_by") @db.Uuid
+  notes           String?  @db.Text
+
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  protocol        ChemoProtocol @relation(fields: [protocolId], references: [id])
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, scheduledDate])
+  @@index([tenantId, status])
+  @@map("chemo_orders")
+  @@schema("plugin_oncology")
+}
+
+model TumorBoardCase {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  patientId       String    @map("patient_id") @db.Uuid
+  stagingId       String?   @map("staging_id") @db.Uuid
+
+  meetingDate     DateTime  @map("meeting_date") @db.Date
+  presentedBy     String    @map("presented_by") @db.Uuid
+  attendees       Json      @default("[]") // Array of { staffId, role, specialty }
+  clinicalSummary String?   @map("clinical_summary") @db.Text
+  imagingFindings String?   @map("imaging_findings") @db.Text
+  pathologyReport String?   @map("pathology_report") @db.Text
+  recommendation  String?   @db.Text
+  treatmentPlan   Json      @default("{}") @map("treatment_plan")
+  decision        String?   @db.VarChar(100)
+  followUpActions Json      @default("[]") @map("follow_up_actions")
+  status          String    @default("scheduled") @db.VarChar(30) // scheduled, in_review, completed, deferred
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, meetingDate])
+  @@index([tenantId, patientId])
+  @@index([tenantId, status])
+  @@map("tumor_board_cases")
+  @@schema("plugin_oncology")
+}

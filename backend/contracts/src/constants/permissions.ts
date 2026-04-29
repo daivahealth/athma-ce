@@ -329,6 +329,14 @@ export const NOTIFICATION_TEMPLATE_MANAGE = 'notification_template.manage';
 export const NOTIFICATION_RULE_MANAGE = 'notification_rule.manage';
 
 // ============================================
+// PLUGIN MANAGEMENT PERMISSIONS
+// ============================================
+export const PLUGIN_READ = 'plugin.read';
+export const PLUGIN_INSTALL = 'plugin.install';
+export const PLUGIN_ACTIVATE = 'plugin.activate';
+export const PLUGIN_DEACTIVATE = 'plugin.deactivate';
+
+// ============================================
 // PERMISSION GROUPS (for convenience)
 // ============================================
 
@@ -677,6 +685,12 @@ export const ALL_PERMISSIONS = [
   { code: NOTIFICATION_CREATE, name: 'Create Notifications', resource: 'notification', action: 'create' },
   { code: NOTIFICATION_TEMPLATE_MANAGE, name: 'Manage Notification Templates', resource: 'notification_template', action: 'manage' },
   { code: NOTIFICATION_RULE_MANAGE, name: 'Manage Notification Rules', resource: 'notification_rule', action: 'manage' },
+
+  // Plugin Management
+  { code: PLUGIN_READ, name: 'View Plugins', resource: 'plugin', action: 'read' },
+  { code: PLUGIN_INSTALL, name: 'Install Plugins', resource: 'plugin', action: 'install' },
+  { code: PLUGIN_ACTIVATE, name: 'Activate Plugins', resource: 'plugin', action: 'activate' },
+  { code: PLUGIN_DEACTIVATE, name: 'Deactivate Plugins', resource: 'plugin', action: 'deactivate' },
 ];
 
 /**

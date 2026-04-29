@@ -18,6 +18,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule as AppConfigModule } from './modules/config/config.module';
 import { SpaceModule } from './modules/space/space.module';
 import { RbacModule } from './modules/rbac/rbac.module';
+import { PluginModule } from './modules/plugin/plugin.module';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
 
@@ -45,6 +46,7 @@ import { LoggerService } from './common/logger/logger.service';
     AppConfigModule,
     SpaceModule,
     RbacModule,
+    PluginModule,
     // CatalogModule removed - catalog models moved to Clinical database
     // ValueSetModule removed - valueset models moved to Clinical database
   ],

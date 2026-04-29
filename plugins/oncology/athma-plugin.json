@@ -1,0 +1,83 @@
+{
+  "id": "oncology",
+  "name": "Oncology",
+  "version": "0.1.0",
+  "description": "Comprehensive oncology specialty module with tumor staging, chemotherapy protocols, and tumor board management",
+  "author": "athma-ce",
+  "license": "Apache-2.0",
+  "athmaVersion": ">=1.0.0",
+  "specialty": {
+    "code": "ONCOLOGY",
+    "snomed": "394593009",
+    "displayName": "Clinical Oncology"
+  },
+  "backend": {
+    "targetService": "clinical",
+    "moduleEntrypoint": "./backend/src/oncology.module.js",
+    "prismaSchema": "./backend/prisma/schema.prisma",
+    "migrationDir": "./backend/prisma/migrations",
+    "permissions": [
+      "oncology.staging.read",
+      "oncology.staging.write",
+      "oncology.chemo_protocol.read",
+      "oncology.chemo_protocol.write",
+      "oncology.chemo_order.read",
+      "oncology.chemo_order.write",
+      "oncology.tumor_board.read",
+      "oncology.tumor_board.manage"
+    ],
+    "extensionPoints": {
+      "encounterTypes": ["oncology_consult", "chemotherapy_session"],
+      "noteTemplates": [],
+      "orderCatalogs": [],
+      "observationCodes": []
+    }
+  },
+  "frontend": {
+    "moduleEntrypoint": "./frontend/index.ts",
+    "navigation": [
+      {
+        "section": "oncology",
+        "labelKey": "nav.oncology",
+        "icon": "Radiation",
+        "children": [
+          { "href": "/oncology/patients", "labelKey": "nav.oncologyPatients", "icon": "Users" },
+          { "href": "/oncology/staging", "labelKey": "nav.tumorStaging", "icon": "Target" },
+          { "href": "/oncology/protocols", "labelKey": "nav.chemoProtocols", "icon": "FlaskConical" },
+          { "href": "/oncology/orders", "labelKey": "nav.chemoOrders", "icon": "Syringe" },
+          { "href": "/oncology/tumor-board", "labelKey": "nav.tumorBoard", "icon": "Users" }
+        ]
+      }
+    ],
+    "routes": [
+      { "path": "/oncology/*", "component": "./frontend/pages/index.tsx" }
+    ],
+    "encounterExtensions": {
+      "chartingPanels": ["./frontend/components/StagingSummaryPanel.tsx"],
+      "encounterSidebarWidgets": []
+    }
+  },
+  "configKeys": [
+    {
+      "key": "feature.nav.oncology",
+      "defaultValue": false,
+      "valueType": "boolean",
+      "category": "feature",
+      "description": "Enable Oncology module navigation",
+      "isOverridable": true
+    },
+    {
+      "key": "oncology.chemo.requireDualSign",
+      "defaultValue": true,
+      "valueType": "boolean",
+      "category": "oncology",
+      "description": "Require dual sign-off for chemotherapy orders",
+      "isOverridable": true
+    }
+  ],
+  "dependencies": [],
+  "i18n": {
+    "en": "./i18n/en.json",
+    "ar": "./i18n/ar.json"
+  }
+}
