@@ -274,7 +274,152 @@ Your panel component receives `{ encounterId, patientId, encounterType }` props.
 
 Navigation icons reference Lucide icon names as strings. Available icons include: `Activity`, `BarChart3`, `Bell`, `Brain`, `Bone`, `ClipboardList`, `Eye`, `FlaskConical`, `Heart`, `HeartPulse`, `Microscope`, `Pill`, `Radiation`, `Stethoscope`, `Syringe`, `Target`, `TestTube`, `Users`, and more. See `frontend/src/lib/plugins/icon-map.ts` for the full list.
 
-## Installation
+## Deployment & Running
+
+### Prerequisites
+
+- Docker (for PostgreSQL and Redis)
+- Node.js 20+
+- npm
+
+### Step 1: Start Infrastructure
+
+```bash
+cd backend
+docker-compose up -d postgres redis
+```
+
+This starts PostgreSQL 16 (port 5432) and Redis 7 (port 6379). The init script creates the `zeal_foundation`, `zeal_clinical`, `zeal_rcm`, and `zeal_analytics` databases automatically.
+
+### Step 2: Create the Plugin Database Schema
+
+Each plugin uses an isolated PostgreSQL schema inside the target service's database. Create it before running migrations:
+
+```bash
+docker exec -it athma-postgres psql -U postgres -d zeal_clinical \
+  -c "CREATE SCHEMA IF NOT EXISTS plugin_my_specialty;"
+```
+
+For the oncology plugin:
+
+```bash
+docker exec -it athma-postgres psql -U postgres -d zeal_clinical \
+  -c "CREATE SCHEMA IF NOT EXISTS plugin_oncology;"
+```
+
+### Step 3: Run Foundation DB Migration
+
+The `PluginRegistry` and `PluginActivation` tables must exist in the Foundation database:
+
+```bash
+cd backend/shared/database-foundation
+npx prisma db push
+```
+
+### Step 4: Run Plugin DB Migration
+
+Push the plugin's Prisma schema to create its tables inside the plugin schema:
+
+```bash
+cd plugins/my-specialty/backend/prisma
+CLINICAL_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/zeal_clinical" \
+  npx prisma db push
+```
+
+For the oncology plugin, this creates `tumor_staging`, `chemo_protocols`, `chemo_orders`, and `tumor_board_cases` tables in the `plugin_oncology` schema.
+
+### Step 5: Start Backend Services
+
+Start Foundation first (it manages the plugin registry), then Clinical (it auto-discovers plugins):
+
+```bash
+cd backend
+
+# Foundation service (port 3010)
+npm run dev --workspace=@zeal/foundation
+
+# Clinical service (port 3011) — discovers and loads plugins at startup
+npm run dev --workspace=@zeal/clinical
+```
+
+When the clinical service starts, the `PluginLoaderModule` will:
+1. Scan the `plugins/` directory at the project root
+2. Find any `athma-plugin.json` manifests
+3. Filter for plugins targeting the `clinical` service
+4. Load each plugin's NestJS module via `require()`
+5. Call `onPluginInit()` to register extension points (encounter types, observation codes, charting panels)
+
+You should see logs like:
+
+```
+[PluginLoaderModule] Discovered 1 clinical plugin(s)
+[PluginLoaderModule] Loaded plugin 'oncology' v0.1.0
+[PluginLoaderModule] Plugin extension summary: { "encounterTypes": 2, "observationCodes": 6, "chartingPanels": 1 }
+```
+
+### Step 6: Register the Plugin
+
+Register the plugin in the Foundation service so it can be activated per tenant:
+
+```bash
+curl -X POST http://localhost:3010/api/v1/plugins/install \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <admin-jwt-token>" \
+  -d '{"packagePath": "./plugins/my-specialty"}'
+```
+
+This does the following:
+- Stores the manifest in the `PluginRegistry` table
+- Seeds `configKeys` into `InstanceConfig` (e.g., `feature.nav.my-specialty = false`)
+- Registers plugin permissions into the RBAC permission list
+
+### Step 7: Activate for a Tenant
+
+Enable the plugin for a specific tenant:
+
+```bash
+curl -X PUT http://localhost:3010/api/v1/plugins/my-specialty/activate \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <admin-jwt-token>" \
+  -d '{"tenantId": "<tenant-uuid>"}'
+```
+
+This sets `feature.nav.my-specialty = true` in the tenant's config, making the module visible to users in that tenant.
+
+### Step 8: Assign Permissions to Roles
+
+Use the existing RBAC system to grant plugin permissions to the appropriate roles. For oncology:
+
+| Permission | Description |
+|---|---|
+| `oncology.staging.read` | View tumor staging records |
+| `oncology.staging.write` | Create/edit tumor staging |
+| `oncology.chemo_protocol.read` | View chemo protocols |
+| `oncology.chemo_protocol.write` | Create/edit chemo protocols |
+| `oncology.chemo_order.read` | View chemo orders |
+| `oncology.chemo_order.write` | Create/submit chemo orders |
+| `oncology.tumor_board.read` | View tumor board cases |
+| `oncology.tumor_board.manage` | Create/manage tumor board cases |
+
+### Step 9: Start the Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Once the `feature.nav.my-specialty` flag is enabled for the tenant, the plugin's navigation section will appear in the sidebar. Plugin pages are served via the catch-all route at `/plugins/[...pluginPath]`.
+
+### Verification
+
+After completing all steps, verify the plugin is working:
+
+1. **Backend loaded**: Check clinical service startup logs for `Loaded plugin 'my-specialty'`
+2. **API accessible**: `GET http://localhost:3011/api/v1/plugins/my-specialty/...` returns data (with valid auth headers)
+3. **Frontend visible**: Log in as a user in the activated tenant — the plugin's sidebar section should appear
+4. **Permissions enforced**: Users without assigned plugin permissions should receive 403 responses
+
+## Installation Methods
 
 ### Local Development
 
@@ -294,21 +439,28 @@ Publish as `@athma-plugins/my-specialty`, then install:
 npm install @athma-plugins/my-specialty
 ```
 
-### Activation
+The loader also scans `node_modules/@athma-plugins/` for published plugins.
 
-1. **Install** the plugin via the Foundation API:
-   ```
-   POST /api/v1/plugins/install
-   { "packagePath": "./plugins/my-specialty" }
-   ```
+### Custom Directory
 
-2. **Activate** for a tenant:
-   ```
-   PUT /api/v1/plugins/my-specialty/activate
-   { "tenantId": "..." }
-   ```
+Set the `ATHMA_PLUGIN_DIR` environment variable to load plugins from an arbitrary location:
 
-3. **Assign permissions** to roles via the RBAC system
+```bash
+ATHMA_PLUGIN_DIR=/path/to/my-plugins npm run dev --workspace=@zeal/clinical
+```
+
+## Deactivation
+
+To disable a plugin for a tenant:
+
+```bash
+curl -X PUT http://localhost:3010/api/v1/plugins/my-specialty/deactivate \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <admin-jwt-token>" \
+  -d '{"tenantId": "<tenant-uuid>"}'
+```
+
+This sets `feature.nav.my-specialty = false` for the tenant. The plugin's sidebar section will disappear and API endpoints will return 403. Plugin data is preserved in the database.
 
 ## Multi-Tenancy
 
@@ -328,6 +480,17 @@ Your plugin automatically inherits athma-ce's three-layer tenant isolation:
 - [ ] No raw SQL references to core schema tables
 - [ ] No secrets or credentials in manifest or code
 - [ ] Input validation on all endpoints
+
+## Troubleshooting
+
+| Problem | Cause | Fix |
+|---|---|---|
+| Plugin not discovered at startup | Wrong directory or missing `athma-plugin.json` | Ensure the plugin is in `plugins/`, `node_modules/@athma-plugins/`, or `ATHMA_PLUGIN_DIR` with a valid manifest |
+| `Skipping plugin` warning in logs | Manifest parse error or module import failure | Check the manifest JSON is valid and the `moduleEntrypoint` path is correct |
+| Sidebar section not showing | Feature flag not enabled for tenant | Activate the plugin via `PUT /plugins/:id/activate` with the tenant ID |
+| 403 on plugin API endpoints | Plugin not activated or permissions not assigned | Check tenant activation and role permissions |
+| Database errors (relation does not exist) | Plugin schema or tables not created | Run `CREATE SCHEMA` and `prisma db push` for the plugin |
+| Module import errors (`Cannot find module`) | Path alias not configured | Ensure `@athma/plugin-sdk` is mapped in the clinical service's `tsconfig.json` |
 
 ## Reference Implementation
 

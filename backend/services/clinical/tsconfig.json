@@ -28,6 +28,9 @@
       ],
       "@zeal/observability": [
         "../../../shared/observability/src/index.ts"
+      ],
+      "@athma/plugin-sdk": [
+        "../../../shared/plugin-sdk/src/index.ts"
       ]
     }
   },

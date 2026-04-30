@@ -13,7 +13,7 @@
   },
   "backend": {
     "targetService": "clinical",
-    "moduleEntrypoint": "./backend/src/oncology.module.js",
+    "moduleEntrypoint": "./backend/src/oncology.module.ts",
     "prismaSchema": "./backend/prisma/schema.prisma",
     "migrationDir": "./backend/prisma/migrations",
     "permissions": [

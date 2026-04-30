@@ -134,9 +134,16 @@ export class PluginLoaderModule {
     );
     paths.push(nodeModulesPath);
 
-    // Check local plugins/ directory
-    const localPluginsPath = path.resolve(process.cwd(), 'plugins');
+    // Check local plugins/ directory at project root (3 levels up from backend/services/clinical/)
+    const projectRoot = path.resolve(__dirname, '..', '..', '..', '..', '..', '..');
+    const localPluginsPath = path.resolve(projectRoot, 'plugins');
     paths.push(localPluginsPath);
+
+    // Also check cwd-relative plugins/ as fallback
+    const cwdPluginsPath = path.resolve(process.cwd(), 'plugins');
+    if (cwdPluginsPath !== localPluginsPath) {
+      paths.push(cwdPluginsPath);
+    }
 
     // Check env-configured plugin path
     if (process.env.ATHMA_PLUGIN_DIR) {
