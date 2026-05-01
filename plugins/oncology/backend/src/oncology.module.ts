@@ -19,6 +19,14 @@ export class OncologyModule implements AthmaPluginModule {
     });
 
     context.extensionRegistry.registerEncounterType({
+      code: 'oncology_care_plan_review',
+      display: 'Oncology Care Plan Review',
+      encounterClass: 'AMB',
+      pluginId: context.pluginId,
+      description: 'Review and update of oncology care plan',
+    });
+
+    context.extensionRegistry.registerEncounterType({
       code: 'chemotherapy_session',
       display: 'Chemotherapy Session',
       encounterClass: 'AMB',
@@ -83,10 +91,19 @@ export class OncologyModule implements AthmaPluginModule {
     ]);
 
     context.extensionRegistry.registerChartingPanel({
+      id: 'oncology-diagnosis-summary',
+      name: 'Cancer Diagnosis Summary',
+      pluginId: context.pluginId,
+      encounterTypes: ['oncology_consult', 'chemotherapy_session', 'oncology_care_plan_review'],
+      priority: 5,
+      componentPath: 'oncology/CancerDiagnosisSummaryCard',
+    });
+
+    context.extensionRegistry.registerChartingPanel({
       id: 'oncology-staging-summary',
       name: 'Oncology Staging Summary',
       pluginId: context.pluginId,
-      encounterTypes: ['oncology_consult', 'chemotherapy_session'],
+      encounterTypes: ['oncology_consult', 'chemotherapy_session', 'oncology_care_plan_review'],
       priority: 10,
       componentPath: 'oncology/StagingSummaryPanel',
     });

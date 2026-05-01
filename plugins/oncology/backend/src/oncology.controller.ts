@@ -1,6 +1,7 @@
 import {
   Get,
   Post,
+  Put,
   Body,
   Param,
   Query,
@@ -18,6 +19,127 @@ export class OncologyController {
   constructor(private readonly oncologyService: OncologyService) {}
 
   // ============================================
+  // Cancer Diagnosis
+  // ============================================
+
+  @Get('diagnoses')
+  @Permissions('oncology.diagnosis.read')
+  async listDiagnoses(
+    @Query('patientId') patientId?: string,
+    @Query('clinicalStatus') clinicalStatus?: string,
+    @Query('cancerType') cancerType?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listCancerDiagnoses(
+      { patientId, clinicalStatus, cancerType },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 20,
+    );
+    return { success: true, ...result };
+  }
+
+  @Get('diagnoses/:id')
+  @Permissions('oncology.diagnosis.read')
+  async getDiagnosis(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getCancerDiagnosis(id) };
+  }
+
+  @Post('diagnoses')
+  @Permissions('oncology.diagnosis.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createDiagnosis(@Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.createCancerDiagnosis(body) };
+  }
+
+  @Put('diagnoses/:id')
+  @Permissions('oncology.diagnosis.write')
+  async updateDiagnosis(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateCancerDiagnosis(id, body) };
+  }
+
+  // ============================================
+  // Oncology Registry
+  // ============================================
+
+  @Get('registry')
+  @Permissions('oncology.registry.read')
+  async listRegistry(
+    @Query('cancerType') cancerType?: string,
+    @Query('clinicalStatus') clinicalStatus?: string,
+    @Query('search') search?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listRegistry(
+      { cancerType, clinicalStatus, search },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 20,
+    );
+    return { success: true, ...result };
+  }
+
+  @Get('registry/:patientId/summary')
+  @Permissions('oncology.registry.read')
+  async getPatientSummary(@Param('patientId') patientId: string) {
+    return { success: true, data: await this.oncologyService.getPatientCancerSummary(patientId) };
+  }
+
+  // ============================================
+  // Oncology Care Plans
+  // ============================================
+
+  @Get('care-plans')
+  @Permissions('oncology.care_plan.read')
+  async listCarePlans(
+    @Query('patientId') patientId?: string,
+    @Query('status') status?: string,
+    @Query('treatmentIntent') treatmentIntent?: string,
+    @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listCarePlans(
+      { patientId, status, treatmentIntent, cancerDiagnosisId },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 20,
+    );
+    return { success: true, ...result };
+  }
+
+  @Get('care-plans/:id')
+  @Permissions('oncology.care_plan.read')
+  async getCarePlan(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getCarePlan(id) };
+  }
+
+  @Post('care-plans')
+  @Permissions('oncology.care_plan.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createCarePlan(@Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.createCarePlan(body) };
+  }
+
+  @Put('care-plans/:id')
+  @Permissions('oncology.care_plan.write')
+  async updateCarePlan(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateCarePlan(id, body) };
+  }
+
+  @Post('care-plans/:id/approve')
+  @Permissions('oncology.care_plan.approve')
+  async approveCarePlan(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.approveCarePlan(id, body.approvedBy as string) };
+  }
+
+  @Post('care-plans/:id/revise')
+  @Permissions('oncology.care_plan.write')
+  @HttpCode(HttpStatus.CREATED)
+  async reviseCarePlan(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.reviseCarePlan(id, body) };
+  }
+
+  // ============================================
   // Tumor Staging
   // ============================================
 
@@ -25,11 +147,12 @@ export class OncologyController {
   @Permissions('oncology.staging.read')
   async listStagings(
     @Query('patientId') patientId?: string,
+    @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
     const result = await this.oncologyService.listStagings(
-      patientId,
+      { patientId, cancerDiagnosisId },
       page ? parseInt(page, 10) : 1,
       limit ? parseInt(limit, 10) : 20,
     );
@@ -50,7 +173,35 @@ export class OncologyController {
   }
 
   // ============================================
-  // Chemo Protocols
+  // Tumor Board
+  // ============================================
+
+  @Get('tumor-board')
+  @Permissions('oncology.tumor_board.read')
+  async listTumorBoardCases(
+    @Query('status') status?: string,
+    @Query('date') date?: string,
+    @Query('patientId') patientId?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listTumorBoardCases(
+      { status, date, patientId },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 20,
+    );
+    return { success: true, ...result };
+  }
+
+  @Post('tumor-board')
+  @Permissions('oncology.tumor_board.manage')
+  @HttpCode(HttpStatus.CREATED)
+  async createTumorBoardCase(@Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.createTumorBoardCase(body) };
+  }
+
+  // ============================================
+  // Chemo Protocols (Phase 2 — kept for backward compat)
   // ============================================
 
   @Get('protocols')
@@ -82,7 +233,7 @@ export class OncologyController {
   }
 
   // ============================================
-  // Chemo Orders
+  // Chemo Orders (Phase 2 — kept for backward compat)
   // ============================================
 
   @Get('orders')
@@ -107,32 +258,5 @@ export class OncologyController {
   @HttpCode(HttpStatus.CREATED)
   async createChemoOrder(@Body() body: Record<string, unknown>) {
     return { success: true, data: await this.oncologyService.createChemoOrder(body) };
-  }
-
-  // ============================================
-  // Tumor Board
-  // ============================================
-
-  @Get('tumor-board')
-  @Permissions('oncology.tumor_board.read')
-  async listTumorBoardCases(
-    @Query('status') status?: string,
-    @Query('date') date?: string,
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
-  ) {
-    const result = await this.oncologyService.listTumorBoardCases(
-      { status, date },
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
-    );
-    return { success: true, ...result };
-  }
-
-  @Post('tumor-board')
-  @Permissions('oncology.tumor_board.manage')
-  @HttpCode(HttpStatus.CREATED)
-  async createTumorBoardCase(@Body() body: Record<string, unknown>) {
-    return { success: true, data: await this.oncologyService.createTumorBoardCase(body) };
   }
 }

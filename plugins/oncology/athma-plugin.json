@@ -1,8 +1,8 @@
 {
   "id": "oncology",
   "name": "Oncology",
-  "version": "0.1.0",
-  "description": "Comprehensive oncology specialty module with tumor staging, chemotherapy protocols, and tumor board management",
+  "version": "0.2.0",
+  "description": "Comprehensive oncology specialty module with cancer diagnosis registry, tumor staging, tumor board, and care plan management",
   "author": "athma-ce",
   "license": "Apache-2.0",
   "athmaVersion": ">=1.0.0",
@@ -17,17 +17,23 @@
     "prismaSchema": "./backend/prisma/schema.prisma",
     "migrationDir": "./backend/prisma/migrations",
     "permissions": [
+      "oncology.diagnosis.read",
+      "oncology.diagnosis.write",
       "oncology.staging.read",
       "oncology.staging.write",
+      "oncology.tumor_board.read",
+      "oncology.tumor_board.manage",
+      "oncology.care_plan.read",
+      "oncology.care_plan.write",
+      "oncology.care_plan.approve",
+      "oncology.registry.read",
       "oncology.chemo_protocol.read",
       "oncology.chemo_protocol.write",
       "oncology.chemo_order.read",
-      "oncology.chemo_order.write",
-      "oncology.tumor_board.read",
-      "oncology.tumor_board.manage"
+      "oncology.chemo_order.write"
     ],
     "extensionPoints": {
-      "encounterTypes": ["oncology_consult", "chemotherapy_session"],
+      "encounterTypes": ["oncology_consult", "oncology_care_plan_review", "chemotherapy_session"],
       "noteTemplates": [],
       "orderCatalogs": [],
       "observationCodes": []
@@ -41,11 +47,10 @@
         "labelKey": "nav.oncology",
         "icon": "Radiation",
         "children": [
-          { "href": "/oncology/patients", "labelKey": "nav.oncologyPatients", "icon": "Users" },
+          { "href": "/oncology/registry", "labelKey": "nav.oncologyRegistry", "icon": "ClipboardList" },
           { "href": "/oncology/staging", "labelKey": "nav.tumorStaging", "icon": "Target" },
-          { "href": "/oncology/protocols", "labelKey": "nav.chemoProtocols", "icon": "FlaskConical" },
-          { "href": "/oncology/orders", "labelKey": "nav.chemoOrders", "icon": "Syringe" },
-          { "href": "/oncology/tumor-board", "labelKey": "nav.tumorBoard", "icon": "Users" }
+          { "href": "/oncology/tumor-board", "labelKey": "nav.tumorBoard", "icon": "Users" },
+          { "href": "/oncology/care-plans", "labelKey": "nav.carePlans", "icon": "FileText" }
         ]
       }
     ],

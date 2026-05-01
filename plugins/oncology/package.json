@@ -1,0 +1,17 @@
+{
+  "name": "@athma-plugins/oncology",
+  "version": "0.1.0",
+  "description": "Oncology specialty plugin for athma-ce",
+  "private": true,
+  "license": "Apache-2.0",
+  "scripts": {
+    "db:push": "prisma db push --schema backend/prisma/schema.prisma",
+    "db:generate": "prisma generate --schema backend/prisma/schema.prisma"
+  },
+  "devDependencies": {
+    "prisma": "~6.19.0"
+  },
+  "dependencies": {
+    "@prisma/client": "~6.19.0"
+  }
+}

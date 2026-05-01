@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema", "postgresqlExtensions"]
+  previewFeatures = ["postgresqlExtensions"]
   output          = "../generated"
 }
 
@@ -10,39 +10,83 @@ datasource db {
   schemas  = ["plugin_oncology"]
 }
 
-model TumorStaging {
-  id              String   @id @default(uuid()) @db.Uuid
-  tenantId        String   @map("tenant_id") @db.Uuid
-  patientId       String   @map("patient_id") @db.Uuid
-  encounterId     String?  @map("encounter_id") @db.Uuid
-  providerId      String?  @map("provider_id") @db.Uuid
+model CancerDiagnosis {
+  id                    String   @id @default(uuid()) @db.Uuid
+  tenantId              String   @map("tenant_id") @db.Uuid
+  patientId             String   @map("patient_id") @db.Uuid
+  encounterId           String?  @map("encounter_id") @db.Uuid
+  encounterDiagnosisId  String?  @map("encounter_diagnosis_id") @db.Uuid
 
-  cancerType      String   @map("cancer_type") @db.VarChar(200)
-  icdCode         String?  @map("icd_code") @db.VarChar(20)
-  snomedCode      String?  @map("snomed_code") @db.VarChar(20)
-  bodySite        String?  @map("body_site") @db.VarChar(200)
+  cancerType            String   @map("cancer_type") @db.VarChar(200)
+  primarySite           String   @map("primary_site") @db.VarChar(200)
+  primarySiteCode       String?  @map("primary_site_code") @db.VarChar(20)
+  laterality            String?  @db.VarChar(20)
+  histologyMorphology   String?  @map("histology_morphology") @db.VarChar(200)
+  morphologyCode        String?  @map("morphology_code") @db.VarChar(20)
 
-  stagingSystem   String   @map("staging_system") @db.VarChar(50) // TNM, FIGO, Ann Arbor, etc.
-  stageGroup      String?  @map("stage_group") @db.VarChar(20) // I, II, III, IV, etc.
-  tCategory       String?  @map("t_category") @db.VarChar(20)
-  nCategory       String?  @map("n_category") @db.VarChar(20)
-  mCategory       String?  @map("m_category") @db.VarChar(20)
+  icdCode               String?  @map("icd_code") @db.VarChar(20)
+  snomedCode            String?  @map("snomed_code") @db.VarChar(20)
 
-  grade           String?  @db.VarChar(50)
-  histology       String?  @db.VarChar(200)
-  biomarkers      Json     @default("{}") // ER, PR, HER2, Ki67, etc.
+  diagnosisDate         DateTime @map("diagnosis_date") @db.Date
+  clinicalStatus        String   @default("active") @map("clinical_status") @db.VarChar(30)
+  verificationStatus    String   @default("confirmed") @map("verification_status") @db.VarChar(30)
+  grade                 String?  @db.VarChar(50)
+  metastaticStatus      String   @default("unknown") @map("metastatic_status") @db.VarChar(20)
+  isRecurrence          Boolean  @default(false) @map("is_recurrence")
 
-  stagingDate     DateTime @map("staging_date") @db.Date
-  diagnosisDate   DateTime? @map("diagnosis_date") @db.Date
-  isRecurrence    Boolean  @default(false) @map("is_recurrence")
-  status          String   @default("active") @db.VarChar(20)
-  notes           String?  @db.Text
+  biomarkers            Json     @default("{}")
+  ecogAtDiagnosis       Int?     @map("ecog_at_diagnosis")
 
-  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  diagnosedBy           String   @map("diagnosed_by") @db.Uuid
+  notes                 String?  @db.Text
+
+  createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  stagings              TumorStaging[]
+  tumorBoardCases       TumorBoardCase[]
+  carePlans             OncologyCarePlan[]
 
   @@index([tenantId, patientId])
   @@index([tenantId, cancerType])
+  @@index([tenantId, clinicalStatus])
+  @@index([tenantId, diagnosisDate])
+  @@map("cancer_diagnoses")
+  @@schema("plugin_oncology")
+}
+
+model TumorStaging {
+  id                  String   @id @default(uuid()) @db.Uuid
+  tenantId            String   @map("tenant_id") @db.Uuid
+  cancerDiagnosisId   String   @map("cancer_diagnosis_id") @db.Uuid
+  patientId           String   @map("patient_id") @db.Uuid
+  encounterId         String?  @map("encounter_id") @db.Uuid
+  providerId          String?  @map("provider_id") @db.Uuid
+
+  stagingSystem       String   @map("staging_system") @db.VarChar(50)
+  stagingEdition      String?  @map("staging_edition") @db.VarChar(20)
+  stagingType         String   @default("clinical") @map("staging_type") @db.VarChar(20)
+
+  stageGroup          String?  @map("stage_group") @db.VarChar(20)
+  tCategory           String?  @map("t_category") @db.VarChar(20)
+  nCategory           String?  @map("n_category") @db.VarChar(20)
+  mCategory           String?  @map("m_category") @db.VarChar(20)
+
+  bodySite            String?  @map("body_site") @db.VarChar(200)
+  grade               String?  @db.VarChar(50)
+  histology           String?  @db.VarChar(200)
+
+  stagingDate         DateTime @map("staging_date") @db.Date
+  status              String   @default("active") @db.VarChar(20)
+  notes               String?  @db.Text
+
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  cancerDiagnosis     CancerDiagnosis @relation(fields: [cancerDiagnosisId], references: [id])
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, cancerDiagnosisId])
   @@index([stagingDate])
   @@map("tumor_staging")
   @@schema("plugin_oncology")
@@ -56,13 +100,13 @@ model ChemoProtocol {
   name            String   @db.VarChar(200)
   description     String?  @db.Text
   cancerType      String   @map("cancer_type") @db.VarChar(200)
-  intent          String   @db.VarChar(50) // curative, palliative, adjuvant, neoadjuvant
-  regimen         Json     // Array of { drug, dose, route, day, cycle }
+  intent          String   @db.VarChar(50)
+  regimen         Json
   totalCycles     Int      @map("total_cycles")
   cycleDurationDays Int    @map("cycle_duration_days")
   premedications  Json     @default("[]")
   supportiveCare  Json     @default("[]")
-  emetogenicRisk  String?  @map("emetogenic_risk") @db.VarChar(20) // high, moderate, low, minimal
+  emetogenicRisk  String?  @map("emetogenic_risk") @db.VarChar(20)
 
   isActive        Boolean  @default(true) @map("is_active")
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -90,7 +134,7 @@ model ChemoOrder {
   scheduledDate   DateTime  @map("scheduled_date") @db.Date
   administeredAt  DateTime? @map("administered_at") @db.Timestamptz(6)
 
-  bsa             Decimal?  @db.Decimal(5, 2) // Body Surface Area
+  bsa             Decimal?  @db.Decimal(5, 2)
   weight          Decimal?  @db.Decimal(5, 1)
   height          Decimal?  @db.Decimal(5, 1)
   creatinineClearance Decimal? @map("creatinine_clearance") @db.Decimal(6, 2)
@@ -98,7 +142,7 @@ model ChemoOrder {
   doseAdjustments Json     @default("[]") @map("dose_adjustments")
   preChemoChecklist Json   @default("{}") @map("pre_chemo_checklist")
 
-  status          String   @default("pending") @db.VarChar(30) // pending, approved, in_progress, completed, cancelled, held
+  status          String   @default("pending") @db.VarChar(30)
   verifiedBy      String?  @map("verified_by") @db.Uuid
   verifiedAt      DateTime? @map("verified_at") @db.Timestamptz(6)
   administeredBy  String?  @map("administered_by") @db.Uuid
@@ -117,29 +161,82 @@ model ChemoOrder {
 }
 
 model TumorBoardCase {
-  id              String    @id @default(uuid()) @db.Uuid
-  tenantId        String    @map("tenant_id") @db.Uuid
-  patientId       String    @map("patient_id") @db.Uuid
-  stagingId       String?   @map("staging_id") @db.Uuid
+  id                    String    @id @default(uuid()) @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  patientId             String    @map("patient_id") @db.Uuid
+  cancerDiagnosisId     String    @map("cancer_diagnosis_id") @db.Uuid
+  stagingId             String?   @map("staging_id") @db.Uuid
 
-  meetingDate     DateTime  @map("meeting_date") @db.Date
-  presentedBy     String    @map("presented_by") @db.Uuid
-  attendees       Json      @default("[]") // Array of { staffId, role, specialty }
-  clinicalSummary String?   @map("clinical_summary") @db.Text
-  imagingFindings String?   @map("imaging_findings") @db.Text
-  pathologyReport String?   @map("pathology_report") @db.Text
-  recommendation  String?   @db.Text
-  treatmentPlan   Json      @default("{}") @map("treatment_plan")
-  decision        String?   @db.VarChar(100)
-  followUpActions Json      @default("[]") @map("follow_up_actions")
-  status          String    @default("scheduled") @db.VarChar(30) // scheduled, in_review, completed, deferred
+  meetingDate           DateTime  @map("meeting_date") @db.Date
+  presentedBy           String    @map("presented_by") @db.Uuid
+  attendees             Json      @default("[]")
+  clinicalSummary       String?   @map("clinical_summary") @db.Text
+  imagingFindings       String?   @map("imaging_findings") @db.Text
+  pathologyReport       String?   @map("pathology_report") @db.Text
+  molecularProfile      String?   @map("molecular_profile") @db.Text
 
-  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  mdtRecommendation     String?   @map("mdt_recommendation") @db.Text
+  treatmentIntent       String?   @map("treatment_intent") @db.VarChar(50)
+  recommendedPathway    Json      @default("[]") @map("recommended_pathway")
+  treatmentPlan         Json      @default("{}") @map("treatment_plan")
+  decision              String?   @db.VarChar(100)
+  reviewOutcome         String?   @map("review_outcome") @db.VarChar(50)
+
+  followUpActions       Json      @default("[]") @map("follow_up_actions")
+  status                String    @default("scheduled") @db.VarChar(30)
+
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  cancerDiagnosis       CancerDiagnosis @relation(fields: [cancerDiagnosisId], references: [id])
 
   @@index([tenantId, meetingDate])
   @@index([tenantId, patientId])
+  @@index([tenantId, cancerDiagnosisId])
   @@index([tenantId, status])
   @@map("tumor_board_cases")
+  @@schema("plugin_oncology")
+}
+
+model OncologyCarePlan {
+  id                    String    @id @default(uuid()) @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  patientId             String    @map("patient_id") @db.Uuid
+  cancerDiagnosisId     String    @map("cancer_diagnosis_id") @db.Uuid
+  tumorBoardCaseId      String?   @map("tumor_board_case_id") @db.Uuid
+
+  planNumber            String    @map("plan_number") @db.VarChar(50)
+  version               Int       @default(1)
+  parentPlanId          String?   @map("parent_plan_id") @db.Uuid
+
+  treatmentIntent       String    @map("treatment_intent") @db.VarChar(50)
+  oncologySubspecialty   String?   @map("oncology_subspecialty") @db.VarChar(50)
+
+  plannedModalities     Json      @default("[]") @map("planned_modalities")
+  plannedCycles         Int?      @map("planned_cycles")
+  cycleDurationDays     Int?      @map("cycle_duration_days")
+  milestones            Json      @default("[]")
+  followUpSchedule      Json      @default("[]") @map("follow_up_schedule")
+
+  status                String    @default("draft") @db.VarChar(30)
+  startDate             DateTime? @map("start_date") @db.Date
+  endDate               DateTime? @map("end_date") @db.Date
+
+  createdBy             String    @map("created_by") @db.Uuid
+  approvedBy            String?   @map("approved_by") @db.Uuid
+  approvedAt            DateTime? @map("approved_at") @db.Timestamptz(6)
+
+  notes                 String?   @db.Text
+
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  cancerDiagnosis       CancerDiagnosis @relation(fields: [cancerDiagnosisId], references: [id])
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, cancerDiagnosisId])
+  @@index([tenantId, status])
+  @@index([tenantId, treatmentIntent])
+  @@map("oncology_care_plans")
   @@schema("plugin_oncology")
 }
