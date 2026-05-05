@@ -8,6 +8,9 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Logger,
+  HttpException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { PluginController } from '@athma/plugin-sdk';
 import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
@@ -16,6 +19,8 @@ import { OncologyService } from './oncology.service';
 @PluginController('oncology')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class OncologyController {
+  private readonly logger = new Logger(OncologyController.name);
+
   constructor(private readonly oncologyService: OncologyService) {}
 
   // ============================================
@@ -49,7 +54,12 @@ export class OncologyController {
   @Permissions('oncology.diagnosis.write')
   @HttpCode(HttpStatus.CREATED)
   async createDiagnosis(@Body() body: Record<string, unknown>) {
-    return { success: true, data: await this.oncologyService.createCancerDiagnosis(body) };
+    try {
+      const data = await this.oncologyService.createCancerDiagnosis(body);
+      return { success: true, data };
+    } catch (err: unknown) {
+      this.handleError('createDiagnosis', err);
+    }
   }
 
   @Put('diagnoses/:id')
@@ -172,6 +182,12 @@ export class OncologyController {
     return { success: true, data: await this.oncologyService.createStaging(body) };
   }
 
+  @Put('staging/:id')
+  @Permissions('oncology.staging.write')
+  async updateStaging(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateStaging(id, body) };
+  }
+
   // ============================================
   // Tumor Board
   // ============================================
@@ -193,11 +209,23 @@ export class OncologyController {
     return { success: true, ...result };
   }
 
+  @Get('tumor-board/:id')
+  @Permissions('oncology.tumor_board.read')
+  async getTumorBoardCase(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getTumorBoardCase(id) };
+  }
+
   @Post('tumor-board')
   @Permissions('oncology.tumor_board.manage')
   @HttpCode(HttpStatus.CREATED)
   async createTumorBoardCase(@Body() body: Record<string, unknown>) {
     return { success: true, data: await this.oncologyService.createTumorBoardCase(body) };
+  }
+
+  @Put('tumor-board/:id')
+  @Permissions('oncology.tumor_board.manage')
+  async updateTumorBoardCase(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateTumorBoardCase(id, body) };
   }
 
   // ============================================
@@ -258,5 +286,13 @@ export class OncologyController {
   @HttpCode(HttpStatus.CREATED)
   async createChemoOrder(@Body() body: Record<string, unknown>) {
     return { success: true, data: await this.oncologyService.createChemoOrder(body) };
+  }
+
+  private handleError(method: string, err: unknown): never {
+    if (err instanceof HttpException) throw err;
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    this.logger.error(`[oncology.${method}] ${message}`, stack);
+    throw new InternalServerErrorException(message);
   }
 }
