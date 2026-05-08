@@ -30,7 +30,12 @@
       "oncology.chemo_protocol.read",
       "oncology.chemo_protocol.write",
       "oncology.chemo_order.read",
-      "oncology.chemo_order.write"
+      "oncology.chemo_order.write",
+      "oncology.chemo_order.approve",
+      "oncology.chemo_order.verify",
+      "oncology.chemo_order.administer",
+      "oncology.catalog.read",
+      "oncology.catalog.write"
     ],
     "extensionPoints": {
       "encounterTypes": ["oncology_consult", "oncology_care_plan_review", "chemotherapy_session"],
@@ -50,7 +55,9 @@
           { "href": "/oncology/registry", "labelKey": "nav.oncologyRegistry", "icon": "ClipboardList" },
           { "href": "/oncology/staging", "labelKey": "nav.tumorStaging", "icon": "Target" },
           { "href": "/oncology/tumor-board", "labelKey": "nav.tumorBoard", "icon": "Users" },
-          { "href": "/oncology/care-plans", "labelKey": "nav.carePlans", "icon": "FileText" }
+          { "href": "/oncology/care-plans", "labelKey": "nav.carePlans", "icon": "FileText" },
+          { "href": "/oncology/protocols", "labelKey": "nav.chemoProtocols", "icon": "FlaskConical" },
+          { "href": "/oncology/orders", "labelKey": "nav.chemoOrders", "icon": "Syringe" }
         ]
       }
     ],

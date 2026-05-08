@@ -23,6 +23,7 @@ import {
   Stethoscope,
   SquareStack,
   ShieldCheck,
+  Puzzle,
   Check,
   Plus,
 } from 'lucide-react';
@@ -149,22 +150,24 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
       {/* Mobile Menu Button */}
       <MobileMenuButton onToggle={onSidebarToggle} />
 
-      <div className="flex flex-1 items-center gap-3">
-        <div className="flex flex-1 justify-center">
-          <div className="flex w-full max-w-2xl items-center gap-2">
-            <div className="flex-1">
-              <PatientSearch locale={locale} />
-            </div>
-            <Button asChild className="whitespace-nowrap">
-              <Link href={`/${locale}/patients/new`}>
-                <Plus className="mr-2 h-4 w-4" />
-                New Patient
-              </Link>
-            </Button>
+      <div className="flex flex-1 items-center justify-between gap-4">
+        {/* Spacer for left side balance */}
+        <div className="hidden lg:flex flex-1" />
+
+        {/* Center Search Area */}
+        <div className="flex flex-1 lg:flex-none w-full lg:w-auto items-center justify-center gap-2">
+          <div className="w-full lg:w-[450px]">
+            <PatientSearch locale={locale} />
           </div>
+          <Button asChild className="whitespace-nowrap bg-gradient-to-b from-primary/90 to-primary shadow-sm border border-primary/20 hover:shadow-md transition-all">
+            <Link href={`/${locale}/patients/new`}>
+              <Plus className="mr-2 h-4 w-4" />
+              New Patient
+            </Link>
+          </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-1 items-center justify-end gap-2">
           {/* Theme Toggle */}
           <ThemeToggle />
 
@@ -220,6 +223,13 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
                 <Link href={`/${locale}/rbac/roles`} className="flex items-center gap-2 cursor-pointer">
                   <ShieldCheck className="h-4 w-4" />
                   {t('nav.rbac')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/plugin-management`} className="flex items-center gap-2 cursor-pointer">
+                  <Puzzle className="h-4 w-4" />
+                  {t('nav.pluginManagement')}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>

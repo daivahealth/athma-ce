@@ -260,8 +260,20 @@ export class OncologyController {
     return { success: true, data: await this.oncologyService.createProtocol(body) };
   }
 
+  @Put('protocols/:id')
+  @Permissions('oncology.chemo_protocol.write')
+  async updateProtocol(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateProtocol(id, body) };
+  }
+
+  @Put('protocols/:id/deactivate')
+  @Permissions('oncology.chemo_protocol.write')
+  async deactivateProtocol(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.deactivateProtocol(id) };
+  }
+
   // ============================================
-  // Chemo Orders (Phase 2 — kept for backward compat)
+  // Chemo Orders
   // ============================================
 
   @Get('orders')
@@ -270,15 +282,27 @@ export class OncologyController {
     @Query('patientId') patientId?: string,
     @Query('status') status?: string,
     @Query('date') date?: string,
+    @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
     const result = await this.oncologyService.listChemoOrders(
-      { patientId, status, date },
+      {
+        ...(patientId !== undefined && { patientId }),
+        ...(status !== undefined && { status }),
+        ...(date !== undefined && { date }),
+        ...(cancerDiagnosisId !== undefined && { cancerDiagnosisId }),
+      },
       page ? parseInt(page, 10) : 1,
       limit ? parseInt(limit, 10) : 20,
     );
     return { success: true, ...result };
+  }
+
+  @Get('orders/:id')
+  @Permissions('oncology.chemo_order.read')
+  async getChemoOrder(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getChemoOrder(id) };
   }
 
   @Post('orders')
@@ -286,6 +310,225 @@ export class OncologyController {
   @HttpCode(HttpStatus.CREATED)
   async createChemoOrder(@Body() body: Record<string, unknown>) {
     return { success: true, data: await this.oncologyService.createChemoOrder(body) };
+  }
+
+  @Put('orders/:id')
+  @Permissions('oncology.chemo_order.write')
+  async updateChemoOrder(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateChemoOrder(id, body) };
+  }
+
+  @Post('orders/:id/approve')
+  @Permissions('oncology.chemo_order.approve')
+  async approveChemoOrder(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.approveChemoOrder(id) };
+  }
+
+  @Post('orders/:id/verify')
+  @Permissions('oncology.chemo_order.verify')
+  async verifyChemoOrder(@Param('id') id: string, @Body() body: { secondVerifiedBy?: string; nurseVerificationChecklist?: Record<string, unknown>; drugPreparationDetails?: unknown[] }) {
+    return { success: true, data: await this.oncologyService.verifyChemoOrder(id, body.secondVerifiedBy, body.nurseVerificationChecklist, body.drugPreparationDetails) };
+  }
+
+  @Post('orders/:id/progress')
+  @Permissions('oncology.chemo_order.administer')
+  async updateAdministrationProgress(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateAdministrationProgress(id, body) };
+  }
+
+  @Post('orders/:id/start')
+  @Permissions('oncology.chemo_order.administer')
+  async startAdministration(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.startAdministration(id) };
+  }
+
+  @Post('orders/:id/complete')
+  @Permissions('oncology.chemo_order.administer')
+  async completeAdministration(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.completeAdministration(id, body) };
+  }
+
+  @Post('orders/:id/hold')
+  @Permissions('oncology.chemo_order.write')
+  async holdChemoOrder(@Param('id') id: string, @Body() body: { reason?: string }) {
+    return { success: true, data: await this.oncologyService.holdChemoOrder(id, body.reason ?? '') };
+  }
+
+  @Post('orders/:id/cancel')
+  @Permissions('oncology.chemo_order.write')
+  async cancelChemoOrder(@Param('id') id: string, @Body() body: { reason?: string }) {
+    return { success: true, data: await this.oncologyService.cancelChemoOrder(id, body.reason ?? '') };
+  }
+
+  // ============================================
+  // Catalog: Cancer Types
+  // ============================================
+
+  @Get('catalogs/cancer-types')
+  @Permissions('oncology.catalog.read')
+  async listCancerTypes(
+    @Query('search') search?: string,
+    @Query('active') active?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listCancerTypes(
+      { ...(search !== undefined && { search }), ...(active !== undefined && { active }) },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 50,
+    );
+    return { success: true, ...result };
+  }
+
+  @Get('catalogs/cancer-types/:id')
+  @Permissions('oncology.catalog.read')
+  async getCancerType(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getCancerType(id) };
+  }
+
+  @Post('catalogs/cancer-types')
+  @Permissions('oncology.catalog.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createCancerType(@Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.createCancerType(body) };
+  }
+
+  @Put('catalogs/cancer-types/:id')
+  @Permissions('oncology.catalog.write')
+  async updateCancerType(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateCancerType(id, body) };
+  }
+
+  // ============================================
+  // Catalog: Primary Sites
+  // ============================================
+
+  @Get('catalogs/primary-sites')
+  @Permissions('oncology.catalog.read')
+  async listPrimarySites(
+    @Query('search') search?: string,
+    @Query('bodySystem') bodySystem?: string,
+    @Query('active') active?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listPrimarySites(
+      {
+        ...(search !== undefined && { search }),
+        ...(bodySystem !== undefined && { bodySystem }),
+        ...(active !== undefined && { active }),
+      },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 50,
+    );
+    return { success: true, ...result };
+  }
+
+  @Get('catalogs/primary-sites/:id')
+  @Permissions('oncology.catalog.read')
+  async getPrimarySite(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getPrimarySite(id) };
+  }
+
+  @Post('catalogs/primary-sites')
+  @Permissions('oncology.catalog.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createPrimarySite(@Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.createPrimarySite(body) };
+  }
+
+  @Put('catalogs/primary-sites/:id')
+  @Permissions('oncology.catalog.write')
+  async updatePrimarySite(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updatePrimarySite(id, body) };
+  }
+
+  // ============================================
+  // Catalog: Cancer Type ↔ Site Mappings
+  // ============================================
+
+  @Get('catalogs/site-mappings')
+  @Permissions('oncology.catalog.read')
+  async listSiteMappings(
+    @Query('cancerTypeId') cancerTypeId?: string,
+    @Query('primarySiteId') primarySiteId?: string,
+    @Query('active') active?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listSiteMappings(
+      {
+        ...(cancerTypeId !== undefined && { cancerTypeId }),
+        ...(primarySiteId !== undefined && { primarySiteId }),
+        ...(active !== undefined && { active }),
+      },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 100,
+    );
+    return { success: true, ...result };
+  }
+
+  @Post('catalogs/site-mappings')
+  @Permissions('oncology.catalog.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createSiteMapping(@Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.createSiteMapping(body) };
+  }
+
+  @Put('catalogs/site-mappings/:id')
+  @Permissions('oncology.catalog.write')
+  async updateSiteMapping(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateSiteMapping(id, body) };
+  }
+
+  @Put('catalogs/site-mappings/:id/delete')
+  @Permissions('oncology.catalog.write')
+  async deleteSiteMapping(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.deleteSiteMapping(id) };
+  }
+
+  // ============================================
+  // Catalog: Histologies
+  // ============================================
+
+  @Get('catalogs/histologies')
+  @Permissions('oncology.catalog.read')
+  async listHistologies(
+    @Query('search') search?: string,
+    @Query('behaviorCode') behaviorCode?: string,
+    @Query('active') active?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listHistologies(
+      {
+        ...(search !== undefined && { search }),
+        ...(behaviorCode !== undefined && { behaviorCode }),
+        ...(active !== undefined && { active }),
+      },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 50,
+    );
+    return { success: true, ...result };
+  }
+
+  @Get('catalogs/histologies/:id')
+  @Permissions('oncology.catalog.read')
+  async getHistology(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getHistology(id) };
+  }
+
+  @Post('catalogs/histologies')
+  @Permissions('oncology.catalog.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createHistology(@Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.createHistology(body) };
+  }
+
+  @Put('catalogs/histologies/:id')
+  @Permissions('oncology.catalog.write')
+  async updateHistology(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateHistology(id, body) };
   }
 
   private handleError(method: string, err: unknown): never {

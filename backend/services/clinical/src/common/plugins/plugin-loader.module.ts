@@ -1,5 +1,4 @@
 import { DynamicModule, Global, Logger, Module } from '@nestjs/common';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ExtensionPointService } from './extension-point.service';
 import { PluginManifest, PluginContext, AthmaPluginModule } from '@athma/plugin-sdk';
 import * as fs from 'fs';
@@ -34,9 +33,13 @@ export class PluginLoaderModule {
       }
     }
 
+    PluginLoaderModule.logger.log(
+      `Registering ${pluginModules.length} plugin module(s): ${pluginModules.map((m) => m?.name).join(', ')}`,
+    );
+
     const dynamicModule: DynamicModule = {
       module: PluginLoaderModule,
-      imports: [EventEmitterModule.forRoot(), ...pluginModules],
+      imports: [...pluginModules],
       providers: [
         {
           provide: ExtensionPointService,
@@ -53,13 +56,13 @@ export class PluginLoaderModule {
     // Initialize plugins after module creation
     for (const plugin of plugins) {
       try {
-        const instance = Object.create(plugin.moduleClass.prototype);
-        if (typeof (instance as AthmaPluginModule).onPluginInit === 'function') {
+        const instance = Object.create(plugin.moduleClass.prototype) as AthmaPluginModule;
+        if (typeof instance.onPluginInit === 'function') {
           const context: PluginContext = {
             pluginId: plugin.manifest.id,
             extensionRegistry: extensionPointService,
           };
-          await (instance as AthmaPluginModule).onPluginInit(context);
+          await instance.onPluginInit!(context);
         }
       } catch (error) {
         PluginLoaderModule.logger.error(
@@ -102,16 +105,21 @@ export class PluginLoaderModule {
             manifest.backend.moduleEntrypoint,
           );
 
+          PluginLoaderModule.logger.log(`Loading plugin module from: ${modulePath}`);
           const moduleExports = require(modulePath);
           const moduleClass =
             moduleExports.default || Object.values(moduleExports)[0];
+
+          PluginLoaderModule.logger.log(
+            `Plugin '${manifest.id}' moduleClass: ${moduleClass?.name ?? 'undefined'} (keys: ${Object.keys(moduleExports).join(', ')})`,
+          );
 
           if (moduleClass) {
             discovered.push({ manifest, moduleClass });
           }
         } catch (error) {
           PluginLoaderModule.logger.warn(
-            `Skipping plugin in '${entry.name}': ${error}`,
+            `Skipping plugin in '${entry.name}': ${error instanceof Error ? error.stack : error}`,
           );
         }
       }

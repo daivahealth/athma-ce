@@ -221,10 +221,10 @@ export default function DashboardPage() {
     <div className="space-y-6 page-transition theme-transition">
       <Card className="border-primary/40 bg-gradient-to-br from-primary/5 via-background to-background">
         <CardHeader className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-3 text-primary">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5" />
-              <CardTitle className="text-3xl">Health AI+</CardTitle>
+              <Sparkles className="h-6 w-6 text-primary" />
+              <CardTitle className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Health AI+</CardTitle>
             </div>
             <div className="flex items-center gap-2">
               <Button

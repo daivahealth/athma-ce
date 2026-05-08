@@ -1,8 +1,9 @@
-import { IsUUID, IsOptional, IsObject } from 'class-validator';
+import { IsUUID, IsOptional, IsObject, ValidateIf } from 'class-validator';
 
 export class ActivatePluginDto {
+  @ValidateIf((o) => o.tenantId !== undefined && o.tenantId !== '')
   @IsUUID()
-  tenantId: string;
+  tenantId?: string;
 
   @IsOptional()
   @IsObject()

@@ -16,7 +16,8 @@ export class PluginGuard implements CanActivate {
   private configClient: ConfigClient;
 
   constructor(private readonly reflector: Reflector) {
-    this.configClient = new ConfigClient();
+    const foundationUrl = process.env.FOUNDATION_BASE_URL || 'http://localhost:3010';
+    this.configClient = new ConfigClient({ foundationBaseUrl: foundationUrl });
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -38,8 +39,8 @@ export class PluginGuard implements CanActivate {
 
     try {
       const featureFlag = `feature.nav.${pluginId}`;
-      const config = await this.configClient.resolve(featureFlag, { tenantId });
-      const isEnabled = config === true || config === 'true';
+      const value = await this.configClient.get(featureFlag as any, { tenantId });
+      const isEnabled = value === true || value === 'true';
 
       if (!isEnabled) {
         this.logger.warn(

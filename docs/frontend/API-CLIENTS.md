@@ -87,6 +87,12 @@ All clients automatically include:
 - **403 Forbidden**: Redirects to access denied
 - **Network errors**: Throws with user-friendly message
 
+### Protected Route Guarding
+
+- Dashboard and clinical layouts call `useAuthGuard(locale)` before mounting protected route content.
+- When the current session is missing or expired, those layouts return `null` and redirect to `/${locale}/login?redirect=...`.
+- This prevents shared layout queries and page-level React Query hooks from firing unauthenticated requests during the client-side redirect window.
+
 ## Enhanced Client (`lib/api/enhanced-client.ts`)
 
 Wrapper class providing typed HTTP methods:

@@ -6,6 +6,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
+import { ServiceUnavailableException } from '@nestjs/common';
 import {
   LLMProvider,
   EmbeddingProvider,
@@ -15,35 +16,25 @@ import {
   EmbeddingResponse,
   EMBEDDING_MODELS,
 } from './types';
+import { ConfigClientService } from './config-client.service';
 import { logger } from '../../common/logger/logger.config';
 
 @Injectable()
 export class OpenAIProvider implements LLMProvider, EmbeddingProvider {
   name = 'openai';
-  private client: OpenAI;
-  private embeddingModel: string;
-  private embeddingDimensions: number;
+  private readonly clientCache = new Map<string, OpenAI>();
 
-  constructor(private configService: ConfigService) {
-    const apiKey = this.configService.get<string>('OPENAI_API_KEY');
-    if (!apiKey) {
-      logger.warn('OPENAI_API_KEY not configured');
-    }
-    this.client = new OpenAI({ apiKey: apiKey || '' });
-    this.embeddingModel = this.configService.get<string>(
-      'EMBEDDING_MODEL',
-      EMBEDDING_MODELS.TEXT_EMBEDDING_3_SMALL,
-    );
-    const dimensionsStr = this.configService.get<string>('EMBEDDING_DIMENSIONS', '1536');
-    this.embeddingDimensions = parseInt(dimensionsStr, 10);
-  }
+  constructor(
+    private configService: ConfigService,
+    private configClient: ConfigClientService,
+  ) {}
 
   async completion(request: LLMCompletionRequest): Promise<LLMCompletionResponse> {
     const startTime = Date.now();
-    const model = this.configService.get<string>('OPENAI_MODEL', 'gpt-4o');
+    const { client, model } = await this.getCompletionSettings();
 
     try {
-      const response = await this.client.chat.completions.create({
+      const response = await client.chat.completions.create({
         model,
         messages: request.messages.map((m) => ({
           role: m.role,
@@ -80,13 +71,14 @@ export class OpenAIProvider implements LLMProvider, EmbeddingProvider {
 
   async embed(request: EmbeddingRequest): Promise<EmbeddingResponse> {
     const startTime = Date.now();
-    const model = request.model || this.embeddingModel;
+    const { client, defaultModel, dimensions } = await this.getEmbeddingSettings();
+    const model = request.model || defaultModel;
 
     try {
-      const response = await this.client.embeddings.create({
+      const response = await client.embeddings.create({
         model,
         input: request.texts,
-        dimensions: this.embeddingDimensions,
+        dimensions,
       });
 
       const duration = Date.now() - startTime;
@@ -103,12 +95,69 @@ export class OpenAIProvider implements LLMProvider, EmbeddingProvider {
       return {
         embeddings: response.data.map((d) => d.embedding),
         model: response.model,
-        dimensions: response.data[0]?.embedding.length || this.embeddingDimensions,
+        dimensions: response.data[0]?.embedding.length || dimensions,
         totalTokens: response.usage.total_tokens,
       };
     } catch (error) {
       logger.error({ error, model }, 'OpenAI embedding failed');
       throw error;
     }
+  }
+
+  private async getCompletionSettings(): Promise<{ client: OpenAI; model: string }> {
+    const apiKey = await this.resolveApiKey();
+    const model = await this.configClient.resolveString(
+      'ai.openai_model',
+      this.configService.get<string>('OPENAI_MODEL', 'gpt-4o'),
+    );
+    return { client: this.getClient(apiKey), model };
+  }
+
+  private async getEmbeddingSettings(): Promise<{
+    client: OpenAI;
+    defaultModel: string;
+    dimensions: number;
+  }> {
+    const apiKey = await this.resolveApiKey();
+    const defaultModel = await this.configClient.resolveString(
+      'ai.embedding_model',
+      this.configService.get<string>(
+        'EMBEDDING_MODEL',
+        EMBEDDING_MODELS.TEXT_EMBEDDING_3_SMALL,
+      ),
+    );
+    const dimensions = await this.configClient.resolveNumber(
+      'ai.embedding_dimensions',
+      parseInt(this.configService.get<string>('EMBEDDING_DIMENSIONS', '1536'), 10),
+    );
+
+    return {
+      client: this.getClient(apiKey),
+      defaultModel,
+      dimensions,
+    };
+  }
+
+  private async resolveApiKey(): Promise<string> {
+    const apiKey = await this.configClient.resolveString(
+      'ai.openai_api_key',
+      this.configService.get<string>('OPENAI_API_KEY', ''),
+    );
+    if (!apiKey.trim()) {
+      logger.error('OpenAI provider is unavailable: missing ai.openai_api_key / OPENAI_API_KEY');
+      throw new ServiceUnavailableException(
+        'OpenAI-backed AI features are unavailable because the AI Gateway is missing an OpenAI API key in Foundation config or OPENAI_API_KEY.',
+      );
+    }
+    return apiKey;
+  }
+
+  private getClient(apiKey: string): OpenAI {
+    let client = this.clientCache.get(apiKey);
+    if (!client) {
+      client = new OpenAI({ apiKey });
+      this.clientCache.set(apiKey, client);
+    }
+    return client;
   }
 }

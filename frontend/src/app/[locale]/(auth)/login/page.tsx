@@ -74,9 +74,12 @@ function LoginPageContent({ params }: { params: { locale: string } }) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 via-background to-amber-50 p-6">
-      <Card className="w-full max-w-md border-orange-100/80 shadow-xl shadow-orange-100/40">
-        <CardHeader className="space-y-2 text-center">
+    <div className="relative flex min-h-screen items-center justify-center bg-slate-50 dark:bg-[#08090c] p-6 overflow-hidden">
+      {/* Subtle ambient background glow */}
+      <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[800px] rounded-full bg-primary/10 dark:bg-primary/5 opacity-50 blur-[100px] pointer-events-none" />
+      
+      <Card className="relative z-10 w-full max-w-[400px] border-border/40 bg-white/70 dark:bg-card/40 backdrop-blur-2xl shadow-2xl shadow-black/5 dark:shadow-black/50">
+        <CardHeader className="space-y-2 text-center pb-8 pt-8">
           <div className="flex justify-center">
             <>
               <Image
@@ -100,18 +103,19 @@ function LoginPageContent({ params }: { params: { locale: string } }) {
         </CardHeader>
         <CardContent className="space-y-6">
           <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" {...form.register('email')} required autoComplete="email" />
+            <div className="space-y-2 text-left">
+              <Label htmlFor="email" className="text-muted-foreground">Email</Label>
+              <Input id="email" type="email" {...form.register('email')} required autoComplete="email" className="bg-background/50 focus-visible:ring-primary/30" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-2 text-left">
+              <Label htmlFor="password" className="text-muted-foreground">Password</Label>
               <Input
                 id="password"
                 type="password"
                 {...form.register('password')}
                 required
                 autoComplete="current-password"
+                className="bg-background/50 focus-visible:ring-primary/30"
               />
             </div>
             {form.watch('mfaCode') && (
@@ -120,10 +124,12 @@ function LoginPageContent({ params }: { params: { locale: string } }) {
                 <Input id="mfaCode" {...form.register('mfaCode')} inputMode="numeric" />
               </div>
             )}
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full">
-              {t('login')}
-            </Button>
+            {error && <p className="text-sm text-destructive font-medium">{error}</p>}
+            <div className="pt-2">
+              <Button type="submit" className="w-full h-11 text-base shadow-lg shadow-primary/20">
+                {t('login')}
+              </Button>
+            </div>
           </form>
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <Link href={`/${params.locale}/reset-password`} className="hover:text-primary">

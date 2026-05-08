@@ -138,6 +138,11 @@ Refer to individual service documentation:
 - [Specialty APIs](../features/specialty-management/)
 - [User APIs](../features/user-management/)
 
+### Plugin Endpoints
+
+Specialty plugins extend the clinical service under `/api/v1/plugins/{pluginId}/`:
+- [Oncology Plugin API](./ONCOLOGY-API-ENDPOINTS.md) — Cancer diagnosis, registry, staging, tumor board, care plans
+
 ## 🧪 Testing with Postman
 
 ### Setup

@@ -8,8 +8,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "start": "node --enable-source-maps dist/main.js",
-    "dev": "NODE_ENV=development ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
-    "dev:debug": "NODE_ENV=development LOG_LEVEL=debug ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
+    "dev": "NODE_ENV=development NODE_PATH=node_modules ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
+    "dev:debug": "NODE_ENV=development NODE_PATH=node_modules LOG_LEVEL=debug ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
     "type-check": "tsc --noEmit -p tsconfig.build.json",
     "clean": "rm -rf dist"
   },

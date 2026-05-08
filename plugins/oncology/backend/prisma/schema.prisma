@@ -107,6 +107,9 @@ model ChemoProtocol {
   premedications  Json     @default("[]")
   supportiveCare  Json     @default("[]")
   emetogenicRisk  String?  @map("emetogenic_risk") @db.VarChar(20)
+  doseFormula     String   @default("bsa") @map("dose_formula") @db.VarChar(10)
+  labPrerequisites Json    @default("[]") @map("lab_prerequisites")
+  hydration        Json    @default("[]")
 
   isActive        Boolean  @default(true) @map("is_active")
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -139,13 +142,26 @@ model ChemoOrder {
   height          Decimal?  @db.Decimal(5, 1)
   creatinineClearance Decimal? @map("creatinine_clearance") @db.Decimal(6, 2)
 
+  cancerDiagnosisId   String?  @map("cancer_diagnosis_id") @db.Uuid
+  oncologyCarePlanId  String?  @map("oncology_care_plan_id") @db.Uuid
+
+  hepaticAdjustmentGrade String? @map("hepatic_adjustment_grade") @db.VarChar(10)
+  renalAdjustmentGrade   String? @map("renal_adjustment_grade") @db.VarChar(10)
+
   doseAdjustments Json     @default("[]") @map("dose_adjustments")
   preChemoChecklist Json   @default("{}") @map("pre_chemo_checklist")
 
   status          String   @default("pending") @db.VarChar(30)
   verifiedBy      String?  @map("verified_by") @db.Uuid
   verifiedAt      DateTime? @map("verified_at") @db.Timestamptz(6)
+  secondVerifiedBy String? @map("second_verified_by") @db.Uuid
+  approvedBy      String?  @map("approved_by") @db.Uuid
+  approvedAt      DateTime? @map("approved_at") @db.Timestamptz(6)
   administeredBy  String?  @map("administered_by") @db.Uuid
+  adverseReactions            Json @default("[]") @map("adverse_reactions")
+  administrationDetails       Json @default("[]") @map("administration_details")
+  drugPreparationDetails      Json @default("[]") @map("drug_preparation_details")
+  nurseVerificationChecklist  Json @default("{}") @map("nurse_verification_checklist")
   notes           String?  @db.Text
 
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -156,6 +172,8 @@ model ChemoOrder {
   @@index([tenantId, patientId])
   @@index([tenantId, scheduledDate])
   @@index([tenantId, status])
+  @@index([tenantId, cancerDiagnosisId])
+  @@index([tenantId, oncologyCarePlanId])
   @@map("chemo_orders")
   @@schema("plugin_oncology")
 }
@@ -195,6 +213,98 @@ model TumorBoardCase {
   @@index([tenantId, cancerDiagnosisId])
   @@index([tenantId, status])
   @@map("tumor_board_cases")
+  @@schema("plugin_oncology")
+}
+
+// ============================================================
+// Oncology Catalog / Master Data
+// ============================================================
+
+model OncologyCancerTypeMaster {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+
+  code        String   @db.VarChar(50)
+  name        String   @db.VarChar(255)
+  category    String?  @db.VarChar(100)   // Solid Tumor / Hematologic / CNS / Skin
+  description String?  @db.Text
+  active      Boolean  @default(true)
+
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  siteMappings OncologyCancerTypeSiteMapping[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, active])
+  @@map("oncology_cancer_type_master")
+  @@schema("plugin_oncology")
+}
+
+model OncologyPrimarySiteMaster {
+  id                   String   @id @default(uuid()) @db.Uuid
+  tenantId             String   @map("tenant_id") @db.Uuid
+
+  icdoSiteCode         String   @map("icdo_site_code") @db.VarChar(20)
+  icdoSiteName         String   @map("icdo_site_name") @db.VarChar(255)
+  bodySystem           String?  @map("body_system") @db.VarChar(100)
+  lateralityApplicable Boolean  @default(false) @map("laterality_applicable")
+  mappingType          String?  @map("mapping_type") @db.VarChar(30) // EXACT / APPROXIMATE / MULTIPLE / UNKNOWN / SYSTEMIC
+  active               Boolean  @default(true)
+
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  siteMappings OncologyCancerTypeSiteMapping[]
+
+  @@unique([tenantId, icdoSiteCode])
+  @@index([tenantId, active])
+  @@index([tenantId, bodySystem])
+  @@map("oncology_primary_site_master")
+  @@schema("plugin_oncology")
+}
+
+model OncologyCancerTypeSiteMapping {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+
+  cancerTypeId  String   @map("cancer_type_id") @db.Uuid
+  primarySiteId String   @map("primary_site_id") @db.Uuid
+
+  isDefault     Boolean  @default(false) @map("is_default")
+  active        Boolean  @default(true)
+
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  cancerType    OncologyCancerTypeMaster  @relation(fields: [cancerTypeId], references: [id])
+  primarySite   OncologyPrimarySiteMaster @relation(fields: [primarySiteId], references: [id])
+
+  @@unique([tenantId, cancerTypeId, primarySiteId])
+  @@index([tenantId, cancerTypeId])
+  @@index([tenantId, primarySiteId])
+  @@map("oncology_cancer_type_site_mapping")
+  @@schema("plugin_oncology")
+}
+
+model OncologyHistologyMaster {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+
+  morphologyCode String   @map("morphology_code") @db.VarChar(20)
+  morphologyName String   @map("morphology_name") @db.VarChar(255)
+  behaviorCode   String?  @map("behavior_code") @db.VarChar(10)   // /0 /1 /2 /3
+  behaviorName   String?  @map("behavior_name") @db.VarChar(100)  // Benign / Borderline / In situ / Malignant
+  description    String?  @db.Text
+  active         Boolean  @default(true)
+
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, morphologyCode])
+  @@index([tenantId, active])
+  @@index([tenantId, behaviorCode])
+  @@map("oncology_histology_master")
   @@schema("plugin_oncology")
 }
 

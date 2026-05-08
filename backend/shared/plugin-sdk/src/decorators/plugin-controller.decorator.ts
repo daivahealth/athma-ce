@@ -2,9 +2,11 @@ import { applyDecorators, Controller, SetMetadata, UseGuards } from '@nestjs/com
 import { PluginGuard, PLUGIN_ID_KEY } from '../guards/plugin.guard';
 
 export function PluginController(pluginId: string, path?: string): ClassDecorator {
+  // NestJS setGlobalPrefix('api/v1') in main.ts prepends the prefix automatically.
+  // Do NOT include 'api/v1' here or the route registers at /api/v1/api/v1/plugins/...
   const controllerPath = path
-    ? `api/v1/plugins/${pluginId}/${path}`
-    : `api/v1/plugins/${pluginId}`;
+    ? `plugins/${pluginId}/${path}`
+    : `plugins/${pluginId}`;
 
   return applyDecorators(
     Controller(controllerPath),

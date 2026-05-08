@@ -426,10 +426,10 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
                   type="button"
                   aria-label={t(item.labelKey)}
                   className={cn(
-                    "flex w-full items-center justify-center gap-3 rounded-md px-2 py-2 text-sm font-medium transition-colors",
+                    "flex w-full items-center justify-center gap-3 rounded-md px-2 py-2 text-sm transition-colors",
                     isChildActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                      ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
+                      : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground"
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -451,10 +451,10 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
                         key={child.href}
                         href={childPath}
                         className={cn(
-                          "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                          "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                           childActive
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                            ? "bg-primary/10 text-primary font-semibold"
+                            : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground"
                         )}
                       >
                         <ChildIcon className="h-4 w-4" />
@@ -479,10 +479,10 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
                 }))
               }
               className={cn(
-                "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                 isChildActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
+                  : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground",
                 isCollapsed && "justify-center px-2"
               )}
               aria-expanded={isOpen}
@@ -515,10 +515,10 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
           key={itemKey}
           href={fullPath}
           className={cn(
-            "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+            "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
             isActive
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+              ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
+              : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground",
             isCollapsed && "justify-center px-2"
           )}
         >
@@ -531,14 +531,14 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   return (
     <div
       className={cn(
-        "flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out shadow-lg border-r border-border/40",
+        "relative z-20 flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out shadow-lg border-r border-border/40",
         isCollapsed ? "w-20" : "w-72"
       )}
     >
       {/* Header */}
       <div
         className={cn(
-          'relative flex h-16 items-center border-b border-border/40',
+          'relative flex h-16 items-center',
           isCollapsed ? 'justify-center px-3' : 'px-4'
         )}
       >
@@ -586,24 +586,6 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
           )}
         </Link>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onToggle();
-          }}
-          className={cn(
-            'absolute right-0 top-1/2 z-10 h-8 w-8 -translate-y-1/2 translate-x-1/3 rounded-full border border-border/60 bg-background text-muted-foreground shadow-sm hover:bg-accent hover:text-foreground'
-          )}
-        >
-          {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <ChevronLeft className="h-4 w-4" />
-          )}
-        </Button>
       </div>
 
       {/* Navigation */}
@@ -645,6 +627,26 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
           </div>
         )}
       </div>
+
+      {/* Toggle Button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onToggle();
+        }}
+        className={cn(
+          'absolute -right-4 top-1/2 z-50 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-md hover:bg-accent hover:text-foreground hover:scale-105 transition-all'
+        )}
+      >
+        {isCollapsed ? (
+          <ChevronRight className="h-4 w-4" />
+        ) : (
+          <ChevronLeft className="h-4 w-4" />
+        )}
+      </Button>
     </div>
   );
 }

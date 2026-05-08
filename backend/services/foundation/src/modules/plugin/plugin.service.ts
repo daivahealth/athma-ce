@@ -6,6 +6,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-foundation';
+import type { Prisma } from '@zeal/database-foundation';
 import { PluginManifest } from '@athma/plugin-sdk';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -69,12 +70,12 @@ export class PluginService {
           pluginId: manifest.id,
           name: manifest.name,
           version: manifest.version,
-          description: manifest.description,
-          author: manifest.author,
-          license: manifest.license,
-          specialtyCode: manifest.specialty?.code,
+          description: manifest.description ?? null,
+          author: manifest.author ?? null,
+          license: manifest.license ?? null,
+          specialtyCode: manifest.specialty?.code ?? null,
           targetService: manifest.backend.targetService,
-          manifest: manifest as unknown as Record<string, unknown>,
+          manifest: JSON.parse(JSON.stringify(manifest)) as Prisma.InputJsonValue,
           packagePath,
           status: 'installed',
         },
@@ -90,7 +91,7 @@ export class PluginService {
             await tx.instanceConfig.create({
               data: {
                 configKey: configKey.key,
-                value: configKey.defaultValue as unknown as Record<string, unknown>,
+                value: configKey.defaultValue as Prisma.InputJsonValue,
                 valueType: configKey.valueType,
                 category: configKey.category,
                 description: configKey.description,
@@ -108,7 +109,9 @@ export class PluginService {
           });
 
           if (!existingPerm) {
-            const [resource, action] = permCode.split('.');
+            const parts = permCode.split('.');
+            const resource = parts[0] ?? null;
+            const action = parts.slice(1).join('.') || null;
             await tx.permission.create({
               data: {
                 code: permCode,
@@ -146,7 +149,6 @@ export class PluginService {
       );
     }
 
-    const manifest = plugin.manifest as unknown as PluginManifest;
     const featureFlagKey = `feature.nav.${pluginId}`;
 
     const activation = await this.prisma.$transaction(async (tx) => {
@@ -157,8 +159,8 @@ export class PluginService {
               isEnabled: true,
               enabledAt: new Date(),
               disabledAt: null,
-              enabledBy,
-              settings: settings ?? {},
+              enabledBy: enabledBy ?? null,
+              settings: (settings ?? {}) as Prisma.InputJsonValue,
             },
           })
         : await tx.pluginActivation.create({
@@ -166,8 +168,8 @@ export class PluginService {
               pluginId: plugin.id,
               tenantId,
               isEnabled: true,
-              enabledBy,
-              settings: settings ?? {},
+              enabledBy: enabledBy ?? null,
+              settings: (settings ?? {}) as Prisma.InputJsonValue,
             },
           });
 
@@ -239,8 +241,16 @@ export class PluginService {
     });
   }
 
+  private resolvePluginPath(packagePath: string): string {
+    if (path.isAbsolute(packagePath)) return packagePath;
+    // Resolve relative to project root (3 levels up from backend/services/foundation/)
+    const projectRoot = path.resolve(__dirname, '..', '..', '..', '..', '..', '..');
+    return path.resolve(projectRoot, packagePath);
+  }
+
   private loadManifest(packagePath: string): PluginManifest {
-    const manifestPath = path.resolve(packagePath, 'athma-plugin.json');
+    const resolved = this.resolvePluginPath(packagePath);
+    const manifestPath = path.resolve(resolved, 'athma-plugin.json');
     if (!fs.existsSync(manifestPath)) {
       throw new BadRequestException(
         `No athma-plugin.json found at '${manifestPath}'`,

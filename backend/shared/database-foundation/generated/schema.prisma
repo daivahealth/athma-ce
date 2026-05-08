@@ -567,3 +567,50 @@ model ConfigAuditLog {
   @@index([changedBy])
   @@map("config_audit_log")
 }
+
+// ============================================
+// Plugin System Models
+// ============================================
+
+model PluginRegistry {
+  id            String   @id @default(uuid()) @map("id") @db.Uuid
+  pluginId      String   @unique @map("plugin_id") @db.VarChar(100)
+  name          String   @db.VarChar(200)
+  version       String   @db.VarChar(50)
+  description   String?  @db.Text
+  author        String?  @db.VarChar(200)
+  license       String?  @db.VarChar(50)
+  specialtyCode String?  @map("specialty_code") @db.VarChar(50)
+  targetService String   @map("target_service") @db.VarChar(50)
+  manifest      Json
+  packagePath   String?  @map("package_path") @db.VarChar(500)
+  status        String   @default("installed") // installed, active, disabled, error
+  installedAt   DateTime @default(now()) @map("installed_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  installedBy   String?  @map("installed_by") @db.Uuid
+
+  activations PluginActivation[]
+
+  @@index([specialtyCode])
+  @@index([status])
+  @@index([targetService])
+  @@map("plugin_registry")
+}
+
+model PluginActivation {
+  id         String    @id @default(uuid()) @map("id") @db.Uuid
+  pluginId   String    @map("plugin_id") @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  isEnabled  Boolean   @default(true) @map("is_enabled")
+  enabledAt  DateTime  @default(now()) @map("enabled_at") @db.Timestamptz(6)
+  disabledAt DateTime? @map("disabled_at") @db.Timestamptz(6)
+  enabledBy  String?   @map("enabled_by") @db.Uuid
+  settings   Json      @default("{}")
+
+  plugin PluginRegistry @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+
+  @@unique([pluginId, tenantId])
+  @@index([tenantId])
+  @@index([pluginId, isEnabled])
+  @@map("plugin_activations")
+}

@@ -39,6 +39,26 @@ export type ChemoOrder = $Result.DefaultSelection<Prisma.$ChemoOrderPayload>
  */
 export type TumorBoardCase = $Result.DefaultSelection<Prisma.$TumorBoardCasePayload>
 /**
+ * Model OncologyCancerTypeMaster
+ * 
+ */
+export type OncologyCancerTypeMaster = $Result.DefaultSelection<Prisma.$OncologyCancerTypeMasterPayload>
+/**
+ * Model OncologyPrimarySiteMaster
+ * 
+ */
+export type OncologyPrimarySiteMaster = $Result.DefaultSelection<Prisma.$OncologyPrimarySiteMasterPayload>
+/**
+ * Model OncologyCancerTypeSiteMapping
+ * 
+ */
+export type OncologyCancerTypeSiteMapping = $Result.DefaultSelection<Prisma.$OncologyCancerTypeSiteMappingPayload>
+/**
+ * Model OncologyHistologyMaster
+ * 
+ */
+export type OncologyHistologyMaster = $Result.DefaultSelection<Prisma.$OncologyHistologyMasterPayload>
+/**
  * Model OncologyCarePlan
  * 
  */
@@ -211,6 +231,46 @@ export class PrismaClient<
     * ```
     */
   get tumorBoardCase(): Prisma.TumorBoardCaseDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.oncologyCancerTypeMaster`: Exposes CRUD operations for the **OncologyCancerTypeMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OncologyCancerTypeMasters
+    * const oncologyCancerTypeMasters = await prisma.oncologyCancerTypeMaster.findMany()
+    * ```
+    */
+  get oncologyCancerTypeMaster(): Prisma.OncologyCancerTypeMasterDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.oncologyPrimarySiteMaster`: Exposes CRUD operations for the **OncologyPrimarySiteMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OncologyPrimarySiteMasters
+    * const oncologyPrimarySiteMasters = await prisma.oncologyPrimarySiteMaster.findMany()
+    * ```
+    */
+  get oncologyPrimarySiteMaster(): Prisma.OncologyPrimarySiteMasterDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.oncologyCancerTypeSiteMapping`: Exposes CRUD operations for the **OncologyCancerTypeSiteMapping** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OncologyCancerTypeSiteMappings
+    * const oncologyCancerTypeSiteMappings = await prisma.oncologyCancerTypeSiteMapping.findMany()
+    * ```
+    */
+  get oncologyCancerTypeSiteMapping(): Prisma.OncologyCancerTypeSiteMappingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.oncologyHistologyMaster`: Exposes CRUD operations for the **OncologyHistologyMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OncologyHistologyMasters
+    * const oncologyHistologyMasters = await prisma.oncologyHistologyMaster.findMany()
+    * ```
+    */
+  get oncologyHistologyMaster(): Prisma.OncologyHistologyMasterDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.oncologyCarePlan`: Exposes CRUD operations for the **OncologyCarePlan** model.
@@ -667,6 +727,10 @@ export namespace Prisma {
     ChemoProtocol: 'ChemoProtocol',
     ChemoOrder: 'ChemoOrder',
     TumorBoardCase: 'TumorBoardCase',
+    OncologyCancerTypeMaster: 'OncologyCancerTypeMaster',
+    OncologyPrimarySiteMaster: 'OncologyPrimarySiteMaster',
+    OncologyCancerTypeSiteMapping: 'OncologyCancerTypeSiteMapping',
+    OncologyHistologyMaster: 'OncologyHistologyMaster',
     OncologyCarePlan: 'OncologyCarePlan'
   };
 
@@ -686,7 +750,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "cancerDiagnosis" | "tumorStaging" | "chemoProtocol" | "chemoOrder" | "tumorBoardCase" | "oncologyCarePlan"
+      modelProps: "cancerDiagnosis" | "tumorStaging" | "chemoProtocol" | "chemoOrder" | "tumorBoardCase" | "oncologyCancerTypeMaster" | "oncologyPrimarySiteMaster" | "oncologyCancerTypeSiteMapping" | "oncologyHistologyMaster" | "oncologyCarePlan"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1060,6 +1124,302 @@ export namespace Prisma {
           }
         }
       }
+      OncologyCancerTypeMaster: {
+        payload: Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>
+        fields: Prisma.OncologyCancerTypeMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OncologyCancerTypeMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OncologyCancerTypeMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.OncologyCancerTypeMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OncologyCancerTypeMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>
+          }
+          findMany: {
+            args: Prisma.OncologyCancerTypeMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>[]
+          }
+          create: {
+            args: Prisma.OncologyCancerTypeMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>
+          }
+          createMany: {
+            args: Prisma.OncologyCancerTypeMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OncologyCancerTypeMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.OncologyCancerTypeMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>
+          }
+          update: {
+            args: Prisma.OncologyCancerTypeMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.OncologyCancerTypeMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OncologyCancerTypeMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OncologyCancerTypeMasterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>[]
+          }
+          upsert: {
+            args: Prisma.OncologyCancerTypeMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.OncologyCancerTypeMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOncologyCancerTypeMaster>
+          }
+          groupBy: {
+            args: Prisma.OncologyCancerTypeMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OncologyCancerTypeMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OncologyCancerTypeMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<OncologyCancerTypeMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      OncologyPrimarySiteMaster: {
+        payload: Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>
+        fields: Prisma.OncologyPrimarySiteMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OncologyPrimarySiteMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OncologyPrimarySiteMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.OncologyPrimarySiteMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OncologyPrimarySiteMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>
+          }
+          findMany: {
+            args: Prisma.OncologyPrimarySiteMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>[]
+          }
+          create: {
+            args: Prisma.OncologyPrimarySiteMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>
+          }
+          createMany: {
+            args: Prisma.OncologyPrimarySiteMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OncologyPrimarySiteMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.OncologyPrimarySiteMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>
+          }
+          update: {
+            args: Prisma.OncologyPrimarySiteMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.OncologyPrimarySiteMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OncologyPrimarySiteMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OncologyPrimarySiteMasterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>[]
+          }
+          upsert: {
+            args: Prisma.OncologyPrimarySiteMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyPrimarySiteMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.OncologyPrimarySiteMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOncologyPrimarySiteMaster>
+          }
+          groupBy: {
+            args: Prisma.OncologyPrimarySiteMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OncologyPrimarySiteMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OncologyPrimarySiteMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<OncologyPrimarySiteMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      OncologyCancerTypeSiteMapping: {
+        payload: Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>
+        fields: Prisma.OncologyCancerTypeSiteMappingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OncologyCancerTypeSiteMappingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OncologyCancerTypeSiteMappingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>
+          }
+          findFirst: {
+            args: Prisma.OncologyCancerTypeSiteMappingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OncologyCancerTypeSiteMappingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>
+          }
+          findMany: {
+            args: Prisma.OncologyCancerTypeSiteMappingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>[]
+          }
+          create: {
+            args: Prisma.OncologyCancerTypeSiteMappingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>
+          }
+          createMany: {
+            args: Prisma.OncologyCancerTypeSiteMappingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OncologyCancerTypeSiteMappingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>[]
+          }
+          delete: {
+            args: Prisma.OncologyCancerTypeSiteMappingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>
+          }
+          update: {
+            args: Prisma.OncologyCancerTypeSiteMappingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>
+          }
+          deleteMany: {
+            args: Prisma.OncologyCancerTypeSiteMappingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OncologyCancerTypeSiteMappingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OncologyCancerTypeSiteMappingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>[]
+          }
+          upsert: {
+            args: Prisma.OncologyCancerTypeSiteMappingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyCancerTypeSiteMappingPayload>
+          }
+          aggregate: {
+            args: Prisma.OncologyCancerTypeSiteMappingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOncologyCancerTypeSiteMapping>
+          }
+          groupBy: {
+            args: Prisma.OncologyCancerTypeSiteMappingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OncologyCancerTypeSiteMappingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OncologyCancerTypeSiteMappingCountArgs<ExtArgs>
+            result: $Utils.Optional<OncologyCancerTypeSiteMappingCountAggregateOutputType> | number
+          }
+        }
+      }
+      OncologyHistologyMaster: {
+        payload: Prisma.$OncologyHistologyMasterPayload<ExtArgs>
+        fields: Prisma.OncologyHistologyMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OncologyHistologyMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OncologyHistologyMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.OncologyHistologyMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OncologyHistologyMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>
+          }
+          findMany: {
+            args: Prisma.OncologyHistologyMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>[]
+          }
+          create: {
+            args: Prisma.OncologyHistologyMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>
+          }
+          createMany: {
+            args: Prisma.OncologyHistologyMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OncologyHistologyMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.OncologyHistologyMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>
+          }
+          update: {
+            args: Prisma.OncologyHistologyMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.OncologyHistologyMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OncologyHistologyMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OncologyHistologyMasterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>[]
+          }
+          upsert: {
+            args: Prisma.OncologyHistologyMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OncologyHistologyMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.OncologyHistologyMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOncologyHistologyMaster>
+          }
+          groupBy: {
+            args: Prisma.OncologyHistologyMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OncologyHistologyMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OncologyHistologyMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<OncologyHistologyMasterCountAggregateOutputType> | number
+          }
+        }
+      }
       OncologyCarePlan: {
         payload: Prisma.$OncologyCarePlanPayload<ExtArgs>
         fields: Prisma.OncologyCarePlanFieldRefs
@@ -1235,6 +1595,10 @@ export namespace Prisma {
     chemoProtocol?: ChemoProtocolOmit
     chemoOrder?: ChemoOrderOmit
     tumorBoardCase?: TumorBoardCaseOmit
+    oncologyCancerTypeMaster?: OncologyCancerTypeMasterOmit
+    oncologyPrimarySiteMaster?: OncologyPrimarySiteMasterOmit
+    oncologyCancerTypeSiteMapping?: OncologyCancerTypeSiteMappingOmit
+    oncologyHistologyMaster?: OncologyHistologyMasterOmit
     oncologyCarePlan?: OncologyCarePlanOmit
   }
 
@@ -1388,6 +1752,68 @@ export namespace Prisma {
    */
   export type ChemoProtocolCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ChemoOrderWhereInput
+  }
+
+
+  /**
+   * Count Type OncologyCancerTypeMasterCountOutputType
+   */
+
+  export type OncologyCancerTypeMasterCountOutputType = {
+    siteMappings: number
+  }
+
+  export type OncologyCancerTypeMasterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    siteMappings?: boolean | OncologyCancerTypeMasterCountOutputTypeCountSiteMappingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OncologyCancerTypeMasterCountOutputType without action
+   */
+  export type OncologyCancerTypeMasterCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMasterCountOutputType
+     */
+    select?: OncologyCancerTypeMasterCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OncologyCancerTypeMasterCountOutputType without action
+   */
+  export type OncologyCancerTypeMasterCountOutputTypeCountSiteMappingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OncologyCancerTypeSiteMappingWhereInput
+  }
+
+
+  /**
+   * Count Type OncologyPrimarySiteMasterCountOutputType
+   */
+
+  export type OncologyPrimarySiteMasterCountOutputType = {
+    siteMappings: number
+  }
+
+  export type OncologyPrimarySiteMasterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    siteMappings?: boolean | OncologyPrimarySiteMasterCountOutputTypeCountSiteMappingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OncologyPrimarySiteMasterCountOutputType without action
+   */
+  export type OncologyPrimarySiteMasterCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMasterCountOutputType
+     */
+    select?: OncologyPrimarySiteMasterCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OncologyPrimarySiteMasterCountOutputType without action
+   */
+  export type OncologyPrimarySiteMasterCountOutputTypeCountSiteMappingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OncologyCancerTypeSiteMappingWhereInput
   }
 
 
@@ -4110,6 +4536,7 @@ export namespace Prisma {
     totalCycles: number | null
     cycleDurationDays: number | null
     emetogenicRisk: string | null
+    doseFormula: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4127,6 +4554,7 @@ export namespace Prisma {
     totalCycles: number | null
     cycleDurationDays: number | null
     emetogenicRisk: string | null
+    doseFormula: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4147,6 +4575,9 @@ export namespace Prisma {
     premedications: number
     supportiveCare: number
     emetogenicRisk: number
+    doseFormula: number
+    labPrerequisites: number
+    hydration: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -4176,6 +4607,7 @@ export namespace Prisma {
     totalCycles?: true
     cycleDurationDays?: true
     emetogenicRisk?: true
+    doseFormula?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -4193,6 +4625,7 @@ export namespace Prisma {
     totalCycles?: true
     cycleDurationDays?: true
     emetogenicRisk?: true
+    doseFormula?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -4213,6 +4646,9 @@ export namespace Prisma {
     premedications?: true
     supportiveCare?: true
     emetogenicRisk?: true
+    doseFormula?: true
+    labPrerequisites?: true
+    hydration?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -4320,6 +4756,9 @@ export namespace Prisma {
     premedications: JsonValue
     supportiveCare: JsonValue
     emetogenicRisk: string | null
+    doseFormula: string
+    labPrerequisites: JsonValue
+    hydration: JsonValue
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -4359,6 +4798,9 @@ export namespace Prisma {
     premedications?: boolean
     supportiveCare?: boolean
     emetogenicRisk?: boolean
+    doseFormula?: boolean
+    labPrerequisites?: boolean
+    hydration?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4381,6 +4823,9 @@ export namespace Prisma {
     premedications?: boolean
     supportiveCare?: boolean
     emetogenicRisk?: boolean
+    doseFormula?: boolean
+    labPrerequisites?: boolean
+    hydration?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4401,6 +4846,9 @@ export namespace Prisma {
     premedications?: boolean
     supportiveCare?: boolean
     emetogenicRisk?: boolean
+    doseFormula?: boolean
+    labPrerequisites?: boolean
+    hydration?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4421,13 +4869,16 @@ export namespace Prisma {
     premedications?: boolean
     supportiveCare?: boolean
     emetogenicRisk?: boolean
+    doseFormula?: boolean
+    labPrerequisites?: boolean
+    hydration?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
   }
 
-  export type ChemoProtocolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "code" | "name" | "description" | "cancerType" | "intent" | "regimen" | "totalCycles" | "cycleDurationDays" | "premedications" | "supportiveCare" | "emetogenicRisk" | "isActive" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["chemoProtocol"]>
+  export type ChemoProtocolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "code" | "name" | "description" | "cancerType" | "intent" | "regimen" | "totalCycles" | "cycleDurationDays" | "premedications" | "supportiveCare" | "emetogenicRisk" | "doseFormula" | "labPrerequisites" | "hydration" | "isActive" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["chemoProtocol"]>
   export type ChemoProtocolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orders?: boolean | ChemoProtocol$ordersArgs<ExtArgs>
     _count?: boolean | ChemoProtocolCountOutputTypeDefaultArgs<ExtArgs>
@@ -4454,6 +4905,9 @@ export namespace Prisma {
       premedications: Prisma.JsonValue
       supportiveCare: Prisma.JsonValue
       emetogenicRisk: string | null
+      doseFormula: string
+      labPrerequisites: Prisma.JsonValue
+      hydration: Prisma.JsonValue
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -4895,6 +5349,9 @@ export namespace Prisma {
     readonly premedications: FieldRef<"ChemoProtocol", 'Json'>
     readonly supportiveCare: FieldRef<"ChemoProtocol", 'Json'>
     readonly emetogenicRisk: FieldRef<"ChemoProtocol", 'String'>
+    readonly doseFormula: FieldRef<"ChemoProtocol", 'String'>
+    readonly labPrerequisites: FieldRef<"ChemoProtocol", 'Json'>
+    readonly hydration: FieldRef<"ChemoProtocol", 'Json'>
     readonly isActive: FieldRef<"ChemoProtocol", 'Boolean'>
     readonly createdAt: FieldRef<"ChemoProtocol", 'DateTime'>
     readonly updatedAt: FieldRef<"ChemoProtocol", 'DateTime'>
@@ -5374,9 +5831,16 @@ export namespace Prisma {
     weight: Decimal | null
     height: Decimal | null
     creatinineClearance: Decimal | null
+    cancerDiagnosisId: string | null
+    oncologyCarePlanId: string | null
+    hepaticAdjustmentGrade: string | null
+    renalAdjustmentGrade: string | null
     status: string | null
     verifiedBy: string | null
     verifiedAt: Date | null
+    secondVerifiedBy: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
     administeredBy: string | null
     notes: string | null
     createdAt: Date | null
@@ -5398,9 +5862,16 @@ export namespace Prisma {
     weight: Decimal | null
     height: Decimal | null
     creatinineClearance: Decimal | null
+    cancerDiagnosisId: string | null
+    oncologyCarePlanId: string | null
+    hepaticAdjustmentGrade: string | null
+    renalAdjustmentGrade: string | null
     status: string | null
     verifiedBy: string | null
     verifiedAt: Date | null
+    secondVerifiedBy: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
     administeredBy: string | null
     notes: string | null
     createdAt: Date | null
@@ -5422,12 +5893,23 @@ export namespace Prisma {
     weight: number
     height: number
     creatinineClearance: number
+    cancerDiagnosisId: number
+    oncologyCarePlanId: number
+    hepaticAdjustmentGrade: number
+    renalAdjustmentGrade: number
     doseAdjustments: number
     preChemoChecklist: number
     status: number
     verifiedBy: number
     verifiedAt: number
+    secondVerifiedBy: number
+    approvedBy: number
+    approvedAt: number
     administeredBy: number
+    adverseReactions: number
+    administrationDetails: number
+    drugPreparationDetails: number
+    nurseVerificationChecklist: number
     notes: number
     createdAt: number
     updatedAt: number
@@ -5468,9 +5950,16 @@ export namespace Prisma {
     weight?: true
     height?: true
     creatinineClearance?: true
+    cancerDiagnosisId?: true
+    oncologyCarePlanId?: true
+    hepaticAdjustmentGrade?: true
+    renalAdjustmentGrade?: true
     status?: true
     verifiedBy?: true
     verifiedAt?: true
+    secondVerifiedBy?: true
+    approvedBy?: true
+    approvedAt?: true
     administeredBy?: true
     notes?: true
     createdAt?: true
@@ -5492,9 +5981,16 @@ export namespace Prisma {
     weight?: true
     height?: true
     creatinineClearance?: true
+    cancerDiagnosisId?: true
+    oncologyCarePlanId?: true
+    hepaticAdjustmentGrade?: true
+    renalAdjustmentGrade?: true
     status?: true
     verifiedBy?: true
     verifiedAt?: true
+    secondVerifiedBy?: true
+    approvedBy?: true
+    approvedAt?: true
     administeredBy?: true
     notes?: true
     createdAt?: true
@@ -5516,12 +6012,23 @@ export namespace Prisma {
     weight?: true
     height?: true
     creatinineClearance?: true
+    cancerDiagnosisId?: true
+    oncologyCarePlanId?: true
+    hepaticAdjustmentGrade?: true
+    renalAdjustmentGrade?: true
     doseAdjustments?: true
     preChemoChecklist?: true
     status?: true
     verifiedBy?: true
     verifiedAt?: true
+    secondVerifiedBy?: true
+    approvedBy?: true
+    approvedAt?: true
     administeredBy?: true
+    adverseReactions?: true
+    administrationDetails?: true
+    drugPreparationDetails?: true
+    nurseVerificationChecklist?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -5629,12 +6136,23 @@ export namespace Prisma {
     weight: Decimal | null
     height: Decimal | null
     creatinineClearance: Decimal | null
+    cancerDiagnosisId: string | null
+    oncologyCarePlanId: string | null
+    hepaticAdjustmentGrade: string | null
+    renalAdjustmentGrade: string | null
     doseAdjustments: JsonValue
     preChemoChecklist: JsonValue
     status: string
     verifiedBy: string | null
     verifiedAt: Date | null
+    secondVerifiedBy: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
     administeredBy: string | null
+    adverseReactions: JsonValue
+    administrationDetails: JsonValue
+    drugPreparationDetails: JsonValue
+    nurseVerificationChecklist: JsonValue
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -5674,12 +6192,23 @@ export namespace Prisma {
     weight?: boolean
     height?: boolean
     creatinineClearance?: boolean
+    cancerDiagnosisId?: boolean
+    oncologyCarePlanId?: boolean
+    hepaticAdjustmentGrade?: boolean
+    renalAdjustmentGrade?: boolean
     doseAdjustments?: boolean
     preChemoChecklist?: boolean
     status?: boolean
     verifiedBy?: boolean
     verifiedAt?: boolean
+    secondVerifiedBy?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
     administeredBy?: boolean
+    adverseReactions?: boolean
+    administrationDetails?: boolean
+    drugPreparationDetails?: boolean
+    nurseVerificationChecklist?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5701,12 +6230,23 @@ export namespace Prisma {
     weight?: boolean
     height?: boolean
     creatinineClearance?: boolean
+    cancerDiagnosisId?: boolean
+    oncologyCarePlanId?: boolean
+    hepaticAdjustmentGrade?: boolean
+    renalAdjustmentGrade?: boolean
     doseAdjustments?: boolean
     preChemoChecklist?: boolean
     status?: boolean
     verifiedBy?: boolean
     verifiedAt?: boolean
+    secondVerifiedBy?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
     administeredBy?: boolean
+    adverseReactions?: boolean
+    administrationDetails?: boolean
+    drugPreparationDetails?: boolean
+    nurseVerificationChecklist?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5728,12 +6268,23 @@ export namespace Prisma {
     weight?: boolean
     height?: boolean
     creatinineClearance?: boolean
+    cancerDiagnosisId?: boolean
+    oncologyCarePlanId?: boolean
+    hepaticAdjustmentGrade?: boolean
+    renalAdjustmentGrade?: boolean
     doseAdjustments?: boolean
     preChemoChecklist?: boolean
     status?: boolean
     verifiedBy?: boolean
     verifiedAt?: boolean
+    secondVerifiedBy?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
     administeredBy?: boolean
+    adverseReactions?: boolean
+    administrationDetails?: boolean
+    drugPreparationDetails?: boolean
+    nurseVerificationChecklist?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5755,18 +6306,29 @@ export namespace Prisma {
     weight?: boolean
     height?: boolean
     creatinineClearance?: boolean
+    cancerDiagnosisId?: boolean
+    oncologyCarePlanId?: boolean
+    hepaticAdjustmentGrade?: boolean
+    renalAdjustmentGrade?: boolean
     doseAdjustments?: boolean
     preChemoChecklist?: boolean
     status?: boolean
     verifiedBy?: boolean
     verifiedAt?: boolean
+    secondVerifiedBy?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
     administeredBy?: boolean
+    adverseReactions?: boolean
+    administrationDetails?: boolean
+    drugPreparationDetails?: boolean
+    nurseVerificationChecklist?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ChemoOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "patientId" | "encounterId" | "protocolId" | "orderingProvider" | "cycleNumber" | "dayNumber" | "scheduledDate" | "administeredAt" | "bsa" | "weight" | "height" | "creatinineClearance" | "doseAdjustments" | "preChemoChecklist" | "status" | "verifiedBy" | "verifiedAt" | "administeredBy" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["chemoOrder"]>
+  export type ChemoOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "patientId" | "encounterId" | "protocolId" | "orderingProvider" | "cycleNumber" | "dayNumber" | "scheduledDate" | "administeredAt" | "bsa" | "weight" | "height" | "creatinineClearance" | "cancerDiagnosisId" | "oncologyCarePlanId" | "hepaticAdjustmentGrade" | "renalAdjustmentGrade" | "doseAdjustments" | "preChemoChecklist" | "status" | "verifiedBy" | "verifiedAt" | "secondVerifiedBy" | "approvedBy" | "approvedAt" | "administeredBy" | "adverseReactions" | "administrationDetails" | "drugPreparationDetails" | "nurseVerificationChecklist" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["chemoOrder"]>
   export type ChemoOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     protocol?: boolean | ChemoProtocolDefaultArgs<ExtArgs>
   }
@@ -5797,12 +6359,23 @@ export namespace Prisma {
       weight: Prisma.Decimal | null
       height: Prisma.Decimal | null
       creatinineClearance: Prisma.Decimal | null
+      cancerDiagnosisId: string | null
+      oncologyCarePlanId: string | null
+      hepaticAdjustmentGrade: string | null
+      renalAdjustmentGrade: string | null
       doseAdjustments: Prisma.JsonValue
       preChemoChecklist: Prisma.JsonValue
       status: string
       verifiedBy: string | null
       verifiedAt: Date | null
+      secondVerifiedBy: string | null
+      approvedBy: string | null
+      approvedAt: Date | null
       administeredBy: string | null
+      adverseReactions: Prisma.JsonValue
+      administrationDetails: Prisma.JsonValue
+      drugPreparationDetails: Prisma.JsonValue
+      nurseVerificationChecklist: Prisma.JsonValue
       notes: string | null
       createdAt: Date
       updatedAt: Date
@@ -6244,12 +6817,23 @@ export namespace Prisma {
     readonly weight: FieldRef<"ChemoOrder", 'Decimal'>
     readonly height: FieldRef<"ChemoOrder", 'Decimal'>
     readonly creatinineClearance: FieldRef<"ChemoOrder", 'Decimal'>
+    readonly cancerDiagnosisId: FieldRef<"ChemoOrder", 'String'>
+    readonly oncologyCarePlanId: FieldRef<"ChemoOrder", 'String'>
+    readonly hepaticAdjustmentGrade: FieldRef<"ChemoOrder", 'String'>
+    readonly renalAdjustmentGrade: FieldRef<"ChemoOrder", 'String'>
     readonly doseAdjustments: FieldRef<"ChemoOrder", 'Json'>
     readonly preChemoChecklist: FieldRef<"ChemoOrder", 'Json'>
     readonly status: FieldRef<"ChemoOrder", 'String'>
     readonly verifiedBy: FieldRef<"ChemoOrder", 'String'>
     readonly verifiedAt: FieldRef<"ChemoOrder", 'DateTime'>
+    readonly secondVerifiedBy: FieldRef<"ChemoOrder", 'String'>
+    readonly approvedBy: FieldRef<"ChemoOrder", 'String'>
+    readonly approvedAt: FieldRef<"ChemoOrder", 'DateTime'>
     readonly administeredBy: FieldRef<"ChemoOrder", 'String'>
+    readonly adverseReactions: FieldRef<"ChemoOrder", 'Json'>
+    readonly administrationDetails: FieldRef<"ChemoOrder", 'Json'>
+    readonly drugPreparationDetails: FieldRef<"ChemoOrder", 'Json'>
+    readonly nurseVerificationChecklist: FieldRef<"ChemoOrder", 'Json'>
     readonly notes: FieldRef<"ChemoOrder", 'String'>
     readonly createdAt: FieldRef<"ChemoOrder", 'DateTime'>
     readonly updatedAt: FieldRef<"ChemoOrder", 'DateTime'>
@@ -7931,6 +8515,4428 @@ export namespace Prisma {
 
 
   /**
+   * Model OncologyCancerTypeMaster
+   */
+
+  export type AggregateOncologyCancerTypeMaster = {
+    _count: OncologyCancerTypeMasterCountAggregateOutputType | null
+    _min: OncologyCancerTypeMasterMinAggregateOutputType | null
+    _max: OncologyCancerTypeMasterMaxAggregateOutputType | null
+  }
+
+  export type OncologyCancerTypeMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    code: string | null
+    name: string | null
+    category: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyCancerTypeMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    code: string | null
+    name: string | null
+    category: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyCancerTypeMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    code: number
+    name: number
+    category: number
+    description: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OncologyCancerTypeMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    code?: true
+    name?: true
+    category?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyCancerTypeMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    code?: true
+    name?: true
+    category?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyCancerTypeMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    code?: true
+    name?: true
+    category?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OncologyCancerTypeMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyCancerTypeMaster to aggregate.
+     */
+    where?: OncologyCancerTypeMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeMasters to fetch.
+     */
+    orderBy?: OncologyCancerTypeMasterOrderByWithRelationInput | OncologyCancerTypeMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OncologyCancerTypeMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OncologyCancerTypeMasters
+    **/
+    _count?: true | OncologyCancerTypeMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OncologyCancerTypeMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OncologyCancerTypeMasterMaxAggregateInputType
+  }
+
+  export type GetOncologyCancerTypeMasterAggregateType<T extends OncologyCancerTypeMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateOncologyCancerTypeMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOncologyCancerTypeMaster[P]>
+      : GetScalarType<T[P], AggregateOncologyCancerTypeMaster[P]>
+  }
+
+
+
+
+  export type OncologyCancerTypeMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OncologyCancerTypeMasterWhereInput
+    orderBy?: OncologyCancerTypeMasterOrderByWithAggregationInput | OncologyCancerTypeMasterOrderByWithAggregationInput[]
+    by: OncologyCancerTypeMasterScalarFieldEnum[] | OncologyCancerTypeMasterScalarFieldEnum
+    having?: OncologyCancerTypeMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OncologyCancerTypeMasterCountAggregateInputType | true
+    _min?: OncologyCancerTypeMasterMinAggregateInputType
+    _max?: OncologyCancerTypeMasterMaxAggregateInputType
+  }
+
+  export type OncologyCancerTypeMasterGroupByOutputType = {
+    id: string
+    tenantId: string
+    code: string
+    name: string
+    category: string | null
+    description: string | null
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: OncologyCancerTypeMasterCountAggregateOutputType | null
+    _min: OncologyCancerTypeMasterMinAggregateOutputType | null
+    _max: OncologyCancerTypeMasterMaxAggregateOutputType | null
+  }
+
+  type GetOncologyCancerTypeMasterGroupByPayload<T extends OncologyCancerTypeMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OncologyCancerTypeMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OncologyCancerTypeMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OncologyCancerTypeMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], OncologyCancerTypeMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OncologyCancerTypeMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    code?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    siteMappings?: boolean | OncologyCancerTypeMaster$siteMappingsArgs<ExtArgs>
+    _count?: boolean | OncologyCancerTypeMasterCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oncologyCancerTypeMaster"]>
+
+  export type OncologyCancerTypeMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    code?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["oncologyCancerTypeMaster"]>
+
+  export type OncologyCancerTypeMasterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    code?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["oncologyCancerTypeMaster"]>
+
+  export type OncologyCancerTypeMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    code?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OncologyCancerTypeMasterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "code" | "name" | "category" | "description" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["oncologyCancerTypeMaster"]>
+  export type OncologyCancerTypeMasterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    siteMappings?: boolean | OncologyCancerTypeMaster$siteMappingsArgs<ExtArgs>
+    _count?: boolean | OncologyCancerTypeMasterCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OncologyCancerTypeMasterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type OncologyCancerTypeMasterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $OncologyCancerTypeMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OncologyCancerTypeMaster"
+    objects: {
+      siteMappings: Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      code: string
+      name: string
+      category: string | null
+      description: string | null
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["oncologyCancerTypeMaster"]>
+    composites: {}
+  }
+
+  type OncologyCancerTypeMasterGetPayload<S extends boolean | null | undefined | OncologyCancerTypeMasterDefaultArgs> = $Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload, S>
+
+  type OncologyCancerTypeMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OncologyCancerTypeMasterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OncologyCancerTypeMasterCountAggregateInputType | true
+    }
+
+  export interface OncologyCancerTypeMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OncologyCancerTypeMaster'], meta: { name: 'OncologyCancerTypeMaster' } }
+    /**
+     * Find zero or one OncologyCancerTypeMaster that matches the filter.
+     * @param {OncologyCancerTypeMasterFindUniqueArgs} args - Arguments to find a OncologyCancerTypeMaster
+     * @example
+     * // Get one OncologyCancerTypeMaster
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OncologyCancerTypeMasterFindUniqueArgs>(args: SelectSubset<T, OncologyCancerTypeMasterFindUniqueArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OncologyCancerTypeMaster that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OncologyCancerTypeMasterFindUniqueOrThrowArgs} args - Arguments to find a OncologyCancerTypeMaster
+     * @example
+     * // Get one OncologyCancerTypeMaster
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OncologyCancerTypeMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, OncologyCancerTypeMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyCancerTypeMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeMasterFindFirstArgs} args - Arguments to find a OncologyCancerTypeMaster
+     * @example
+     * // Get one OncologyCancerTypeMaster
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OncologyCancerTypeMasterFindFirstArgs>(args?: SelectSubset<T, OncologyCancerTypeMasterFindFirstArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyCancerTypeMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeMasterFindFirstOrThrowArgs} args - Arguments to find a OncologyCancerTypeMaster
+     * @example
+     * // Get one OncologyCancerTypeMaster
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OncologyCancerTypeMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, OncologyCancerTypeMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OncologyCancerTypeMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OncologyCancerTypeMasters
+     * const oncologyCancerTypeMasters = await prisma.oncologyCancerTypeMaster.findMany()
+     * 
+     * // Get first 10 OncologyCancerTypeMasters
+     * const oncologyCancerTypeMasters = await prisma.oncologyCancerTypeMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const oncologyCancerTypeMasterWithIdOnly = await prisma.oncologyCancerTypeMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OncologyCancerTypeMasterFindManyArgs>(args?: SelectSubset<T, OncologyCancerTypeMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OncologyCancerTypeMaster.
+     * @param {OncologyCancerTypeMasterCreateArgs} args - Arguments to create a OncologyCancerTypeMaster.
+     * @example
+     * // Create one OncologyCancerTypeMaster
+     * const OncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.create({
+     *   data: {
+     *     // ... data to create a OncologyCancerTypeMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends OncologyCancerTypeMasterCreateArgs>(args: SelectSubset<T, OncologyCancerTypeMasterCreateArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OncologyCancerTypeMasters.
+     * @param {OncologyCancerTypeMasterCreateManyArgs} args - Arguments to create many OncologyCancerTypeMasters.
+     * @example
+     * // Create many OncologyCancerTypeMasters
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OncologyCancerTypeMasterCreateManyArgs>(args?: SelectSubset<T, OncologyCancerTypeMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OncologyCancerTypeMasters and returns the data saved in the database.
+     * @param {OncologyCancerTypeMasterCreateManyAndReturnArgs} args - Arguments to create many OncologyCancerTypeMasters.
+     * @example
+     * // Create many OncologyCancerTypeMasters
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OncologyCancerTypeMasters and only return the `id`
+     * const oncologyCancerTypeMasterWithIdOnly = await prisma.oncologyCancerTypeMaster.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OncologyCancerTypeMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, OncologyCancerTypeMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OncologyCancerTypeMaster.
+     * @param {OncologyCancerTypeMasterDeleteArgs} args - Arguments to delete one OncologyCancerTypeMaster.
+     * @example
+     * // Delete one OncologyCancerTypeMaster
+     * const OncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.delete({
+     *   where: {
+     *     // ... filter to delete one OncologyCancerTypeMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OncologyCancerTypeMasterDeleteArgs>(args: SelectSubset<T, OncologyCancerTypeMasterDeleteArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OncologyCancerTypeMaster.
+     * @param {OncologyCancerTypeMasterUpdateArgs} args - Arguments to update one OncologyCancerTypeMaster.
+     * @example
+     * // Update one OncologyCancerTypeMaster
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OncologyCancerTypeMasterUpdateArgs>(args: SelectSubset<T, OncologyCancerTypeMasterUpdateArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OncologyCancerTypeMasters.
+     * @param {OncologyCancerTypeMasterDeleteManyArgs} args - Arguments to filter OncologyCancerTypeMasters to delete.
+     * @example
+     * // Delete a few OncologyCancerTypeMasters
+     * const { count } = await prisma.oncologyCancerTypeMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OncologyCancerTypeMasterDeleteManyArgs>(args?: SelectSubset<T, OncologyCancerTypeMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyCancerTypeMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OncologyCancerTypeMasters
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OncologyCancerTypeMasterUpdateManyArgs>(args: SelectSubset<T, OncologyCancerTypeMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyCancerTypeMasters and returns the data updated in the database.
+     * @param {OncologyCancerTypeMasterUpdateManyAndReturnArgs} args - Arguments to update many OncologyCancerTypeMasters.
+     * @example
+     * // Update many OncologyCancerTypeMasters
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OncologyCancerTypeMasters and only return the `id`
+     * const oncologyCancerTypeMasterWithIdOnly = await prisma.oncologyCancerTypeMaster.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OncologyCancerTypeMasterUpdateManyAndReturnArgs>(args: SelectSubset<T, OncologyCancerTypeMasterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OncologyCancerTypeMaster.
+     * @param {OncologyCancerTypeMasterUpsertArgs} args - Arguments to update or create a OncologyCancerTypeMaster.
+     * @example
+     * // Update or create a OncologyCancerTypeMaster
+     * const oncologyCancerTypeMaster = await prisma.oncologyCancerTypeMaster.upsert({
+     *   create: {
+     *     // ... data to create a OncologyCancerTypeMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OncologyCancerTypeMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OncologyCancerTypeMasterUpsertArgs>(args: SelectSubset<T, OncologyCancerTypeMasterUpsertArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OncologyCancerTypeMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeMasterCountArgs} args - Arguments to filter OncologyCancerTypeMasters to count.
+     * @example
+     * // Count the number of OncologyCancerTypeMasters
+     * const count = await prisma.oncologyCancerTypeMaster.count({
+     *   where: {
+     *     // ... the filter for the OncologyCancerTypeMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends OncologyCancerTypeMasterCountArgs>(
+      args?: Subset<T, OncologyCancerTypeMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OncologyCancerTypeMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OncologyCancerTypeMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OncologyCancerTypeMasterAggregateArgs>(args: Subset<T, OncologyCancerTypeMasterAggregateArgs>): Prisma.PrismaPromise<GetOncologyCancerTypeMasterAggregateType<T>>
+
+    /**
+     * Group by OncologyCancerTypeMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OncologyCancerTypeMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OncologyCancerTypeMasterGroupByArgs['orderBy'] }
+        : { orderBy?: OncologyCancerTypeMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OncologyCancerTypeMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOncologyCancerTypeMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OncologyCancerTypeMaster model
+   */
+  readonly fields: OncologyCancerTypeMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OncologyCancerTypeMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OncologyCancerTypeMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    siteMappings<T extends OncologyCancerTypeMaster$siteMappingsArgs<ExtArgs> = {}>(args?: Subset<T, OncologyCancerTypeMaster$siteMappingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OncologyCancerTypeMaster model
+   */
+  interface OncologyCancerTypeMasterFieldRefs {
+    readonly id: FieldRef<"OncologyCancerTypeMaster", 'String'>
+    readonly tenantId: FieldRef<"OncologyCancerTypeMaster", 'String'>
+    readonly code: FieldRef<"OncologyCancerTypeMaster", 'String'>
+    readonly name: FieldRef<"OncologyCancerTypeMaster", 'String'>
+    readonly category: FieldRef<"OncologyCancerTypeMaster", 'String'>
+    readonly description: FieldRef<"OncologyCancerTypeMaster", 'String'>
+    readonly active: FieldRef<"OncologyCancerTypeMaster", 'Boolean'>
+    readonly createdAt: FieldRef<"OncologyCancerTypeMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"OncologyCancerTypeMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OncologyCancerTypeMaster findUnique
+   */
+  export type OncologyCancerTypeMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeMaster to fetch.
+     */
+    where: OncologyCancerTypeMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeMaster findUniqueOrThrow
+   */
+  export type OncologyCancerTypeMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeMaster to fetch.
+     */
+    where: OncologyCancerTypeMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeMaster findFirst
+   */
+  export type OncologyCancerTypeMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeMaster to fetch.
+     */
+    where?: OncologyCancerTypeMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeMasters to fetch.
+     */
+    orderBy?: OncologyCancerTypeMasterOrderByWithRelationInput | OncologyCancerTypeMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyCancerTypeMasters.
+     */
+    cursor?: OncologyCancerTypeMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyCancerTypeMasters.
+     */
+    distinct?: OncologyCancerTypeMasterScalarFieldEnum | OncologyCancerTypeMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyCancerTypeMaster findFirstOrThrow
+   */
+  export type OncologyCancerTypeMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeMaster to fetch.
+     */
+    where?: OncologyCancerTypeMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeMasters to fetch.
+     */
+    orderBy?: OncologyCancerTypeMasterOrderByWithRelationInput | OncologyCancerTypeMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyCancerTypeMasters.
+     */
+    cursor?: OncologyCancerTypeMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyCancerTypeMasters.
+     */
+    distinct?: OncologyCancerTypeMasterScalarFieldEnum | OncologyCancerTypeMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyCancerTypeMaster findMany
+   */
+  export type OncologyCancerTypeMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeMasters to fetch.
+     */
+    where?: OncologyCancerTypeMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeMasters to fetch.
+     */
+    orderBy?: OncologyCancerTypeMasterOrderByWithRelationInput | OncologyCancerTypeMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OncologyCancerTypeMasters.
+     */
+    cursor?: OncologyCancerTypeMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeMasters.
+     */
+    skip?: number
+    distinct?: OncologyCancerTypeMasterScalarFieldEnum | OncologyCancerTypeMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyCancerTypeMaster create
+   */
+  export type OncologyCancerTypeMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OncologyCancerTypeMaster.
+     */
+    data: XOR<OncologyCancerTypeMasterCreateInput, OncologyCancerTypeMasterUncheckedCreateInput>
+  }
+
+  /**
+   * OncologyCancerTypeMaster createMany
+   */
+  export type OncologyCancerTypeMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OncologyCancerTypeMasters.
+     */
+    data: OncologyCancerTypeMasterCreateManyInput | OncologyCancerTypeMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OncologyCancerTypeMaster createManyAndReturn
+   */
+  export type OncologyCancerTypeMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * The data used to create many OncologyCancerTypeMasters.
+     */
+    data: OncologyCancerTypeMasterCreateManyInput | OncologyCancerTypeMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OncologyCancerTypeMaster update
+   */
+  export type OncologyCancerTypeMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OncologyCancerTypeMaster.
+     */
+    data: XOR<OncologyCancerTypeMasterUpdateInput, OncologyCancerTypeMasterUncheckedUpdateInput>
+    /**
+     * Choose, which OncologyCancerTypeMaster to update.
+     */
+    where: OncologyCancerTypeMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeMaster updateMany
+   */
+  export type OncologyCancerTypeMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OncologyCancerTypeMasters.
+     */
+    data: XOR<OncologyCancerTypeMasterUpdateManyMutationInput, OncologyCancerTypeMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyCancerTypeMasters to update
+     */
+    where?: OncologyCancerTypeMasterWhereInput
+    /**
+     * Limit how many OncologyCancerTypeMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyCancerTypeMaster updateManyAndReturn
+   */
+  export type OncologyCancerTypeMasterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * The data used to update OncologyCancerTypeMasters.
+     */
+    data: XOR<OncologyCancerTypeMasterUpdateManyMutationInput, OncologyCancerTypeMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyCancerTypeMasters to update
+     */
+    where?: OncologyCancerTypeMasterWhereInput
+    /**
+     * Limit how many OncologyCancerTypeMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyCancerTypeMaster upsert
+   */
+  export type OncologyCancerTypeMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OncologyCancerTypeMaster to update in case it exists.
+     */
+    where: OncologyCancerTypeMasterWhereUniqueInput
+    /**
+     * In case the OncologyCancerTypeMaster found by the `where` argument doesn't exist, create a new OncologyCancerTypeMaster with this data.
+     */
+    create: XOR<OncologyCancerTypeMasterCreateInput, OncologyCancerTypeMasterUncheckedCreateInput>
+    /**
+     * In case the OncologyCancerTypeMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OncologyCancerTypeMasterUpdateInput, OncologyCancerTypeMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * OncologyCancerTypeMaster delete
+   */
+  export type OncologyCancerTypeMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+    /**
+     * Filter which OncologyCancerTypeMaster to delete.
+     */
+    where: OncologyCancerTypeMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeMaster deleteMany
+   */
+  export type OncologyCancerTypeMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyCancerTypeMasters to delete
+     */
+    where?: OncologyCancerTypeMasterWhereInput
+    /**
+     * Limit how many OncologyCancerTypeMasters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyCancerTypeMaster.siteMappings
+   */
+  export type OncologyCancerTypeMaster$siteMappingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    orderBy?: OncologyCancerTypeSiteMappingOrderByWithRelationInput | OncologyCancerTypeSiteMappingOrderByWithRelationInput[]
+    cursor?: OncologyCancerTypeSiteMappingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OncologyCancerTypeSiteMappingScalarFieldEnum | OncologyCancerTypeSiteMappingScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyCancerTypeMaster without action
+   */
+  export type OncologyCancerTypeMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeMaster
+     */
+    select?: OncologyCancerTypeMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeMaster
+     */
+    omit?: OncologyCancerTypeMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeMasterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OncologyPrimarySiteMaster
+   */
+
+  export type AggregateOncologyPrimarySiteMaster = {
+    _count: OncologyPrimarySiteMasterCountAggregateOutputType | null
+    _min: OncologyPrimarySiteMasterMinAggregateOutputType | null
+    _max: OncologyPrimarySiteMasterMaxAggregateOutputType | null
+  }
+
+  export type OncologyPrimarySiteMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    icdoSiteCode: string | null
+    icdoSiteName: string | null
+    bodySystem: string | null
+    lateralityApplicable: boolean | null
+    mappingType: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyPrimarySiteMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    icdoSiteCode: string | null
+    icdoSiteName: string | null
+    bodySystem: string | null
+    lateralityApplicable: boolean | null
+    mappingType: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyPrimarySiteMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    icdoSiteCode: number
+    icdoSiteName: number
+    bodySystem: number
+    lateralityApplicable: number
+    mappingType: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OncologyPrimarySiteMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    icdoSiteCode?: true
+    icdoSiteName?: true
+    bodySystem?: true
+    lateralityApplicable?: true
+    mappingType?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyPrimarySiteMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    icdoSiteCode?: true
+    icdoSiteName?: true
+    bodySystem?: true
+    lateralityApplicable?: true
+    mappingType?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyPrimarySiteMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    icdoSiteCode?: true
+    icdoSiteName?: true
+    bodySystem?: true
+    lateralityApplicable?: true
+    mappingType?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OncologyPrimarySiteMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyPrimarySiteMaster to aggregate.
+     */
+    where?: OncologyPrimarySiteMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyPrimarySiteMasters to fetch.
+     */
+    orderBy?: OncologyPrimarySiteMasterOrderByWithRelationInput | OncologyPrimarySiteMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OncologyPrimarySiteMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyPrimarySiteMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyPrimarySiteMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OncologyPrimarySiteMasters
+    **/
+    _count?: true | OncologyPrimarySiteMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OncologyPrimarySiteMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OncologyPrimarySiteMasterMaxAggregateInputType
+  }
+
+  export type GetOncologyPrimarySiteMasterAggregateType<T extends OncologyPrimarySiteMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateOncologyPrimarySiteMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOncologyPrimarySiteMaster[P]>
+      : GetScalarType<T[P], AggregateOncologyPrimarySiteMaster[P]>
+  }
+
+
+
+
+  export type OncologyPrimarySiteMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OncologyPrimarySiteMasterWhereInput
+    orderBy?: OncologyPrimarySiteMasterOrderByWithAggregationInput | OncologyPrimarySiteMasterOrderByWithAggregationInput[]
+    by: OncologyPrimarySiteMasterScalarFieldEnum[] | OncologyPrimarySiteMasterScalarFieldEnum
+    having?: OncologyPrimarySiteMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OncologyPrimarySiteMasterCountAggregateInputType | true
+    _min?: OncologyPrimarySiteMasterMinAggregateInputType
+    _max?: OncologyPrimarySiteMasterMaxAggregateInputType
+  }
+
+  export type OncologyPrimarySiteMasterGroupByOutputType = {
+    id: string
+    tenantId: string
+    icdoSiteCode: string
+    icdoSiteName: string
+    bodySystem: string | null
+    lateralityApplicable: boolean
+    mappingType: string | null
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: OncologyPrimarySiteMasterCountAggregateOutputType | null
+    _min: OncologyPrimarySiteMasterMinAggregateOutputType | null
+    _max: OncologyPrimarySiteMasterMaxAggregateOutputType | null
+  }
+
+  type GetOncologyPrimarySiteMasterGroupByPayload<T extends OncologyPrimarySiteMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OncologyPrimarySiteMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OncologyPrimarySiteMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OncologyPrimarySiteMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], OncologyPrimarySiteMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OncologyPrimarySiteMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    icdoSiteCode?: boolean
+    icdoSiteName?: boolean
+    bodySystem?: boolean
+    lateralityApplicable?: boolean
+    mappingType?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    siteMappings?: boolean | OncologyPrimarySiteMaster$siteMappingsArgs<ExtArgs>
+    _count?: boolean | OncologyPrimarySiteMasterCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oncologyPrimarySiteMaster"]>
+
+  export type OncologyPrimarySiteMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    icdoSiteCode?: boolean
+    icdoSiteName?: boolean
+    bodySystem?: boolean
+    lateralityApplicable?: boolean
+    mappingType?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["oncologyPrimarySiteMaster"]>
+
+  export type OncologyPrimarySiteMasterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    icdoSiteCode?: boolean
+    icdoSiteName?: boolean
+    bodySystem?: boolean
+    lateralityApplicable?: boolean
+    mappingType?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["oncologyPrimarySiteMaster"]>
+
+  export type OncologyPrimarySiteMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    icdoSiteCode?: boolean
+    icdoSiteName?: boolean
+    bodySystem?: boolean
+    lateralityApplicable?: boolean
+    mappingType?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OncologyPrimarySiteMasterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "icdoSiteCode" | "icdoSiteName" | "bodySystem" | "lateralityApplicable" | "mappingType" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["oncologyPrimarySiteMaster"]>
+  export type OncologyPrimarySiteMasterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    siteMappings?: boolean | OncologyPrimarySiteMaster$siteMappingsArgs<ExtArgs>
+    _count?: boolean | OncologyPrimarySiteMasterCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OncologyPrimarySiteMasterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type OncologyPrimarySiteMasterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $OncologyPrimarySiteMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OncologyPrimarySiteMaster"
+    objects: {
+      siteMappings: Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      icdoSiteCode: string
+      icdoSiteName: string
+      bodySystem: string | null
+      lateralityApplicable: boolean
+      mappingType: string | null
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["oncologyPrimarySiteMaster"]>
+    composites: {}
+  }
+
+  type OncologyPrimarySiteMasterGetPayload<S extends boolean | null | undefined | OncologyPrimarySiteMasterDefaultArgs> = $Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload, S>
+
+  type OncologyPrimarySiteMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OncologyPrimarySiteMasterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OncologyPrimarySiteMasterCountAggregateInputType | true
+    }
+
+  export interface OncologyPrimarySiteMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OncologyPrimarySiteMaster'], meta: { name: 'OncologyPrimarySiteMaster' } }
+    /**
+     * Find zero or one OncologyPrimarySiteMaster that matches the filter.
+     * @param {OncologyPrimarySiteMasterFindUniqueArgs} args - Arguments to find a OncologyPrimarySiteMaster
+     * @example
+     * // Get one OncologyPrimarySiteMaster
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OncologyPrimarySiteMasterFindUniqueArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterFindUniqueArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OncologyPrimarySiteMaster that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OncologyPrimarySiteMasterFindUniqueOrThrowArgs} args - Arguments to find a OncologyPrimarySiteMaster
+     * @example
+     * // Get one OncologyPrimarySiteMaster
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OncologyPrimarySiteMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyPrimarySiteMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyPrimarySiteMasterFindFirstArgs} args - Arguments to find a OncologyPrimarySiteMaster
+     * @example
+     * // Get one OncologyPrimarySiteMaster
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OncologyPrimarySiteMasterFindFirstArgs>(args?: SelectSubset<T, OncologyPrimarySiteMasterFindFirstArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyPrimarySiteMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyPrimarySiteMasterFindFirstOrThrowArgs} args - Arguments to find a OncologyPrimarySiteMaster
+     * @example
+     * // Get one OncologyPrimarySiteMaster
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OncologyPrimarySiteMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, OncologyPrimarySiteMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OncologyPrimarySiteMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyPrimarySiteMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OncologyPrimarySiteMasters
+     * const oncologyPrimarySiteMasters = await prisma.oncologyPrimarySiteMaster.findMany()
+     * 
+     * // Get first 10 OncologyPrimarySiteMasters
+     * const oncologyPrimarySiteMasters = await prisma.oncologyPrimarySiteMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const oncologyPrimarySiteMasterWithIdOnly = await prisma.oncologyPrimarySiteMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OncologyPrimarySiteMasterFindManyArgs>(args?: SelectSubset<T, OncologyPrimarySiteMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OncologyPrimarySiteMaster.
+     * @param {OncologyPrimarySiteMasterCreateArgs} args - Arguments to create a OncologyPrimarySiteMaster.
+     * @example
+     * // Create one OncologyPrimarySiteMaster
+     * const OncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.create({
+     *   data: {
+     *     // ... data to create a OncologyPrimarySiteMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends OncologyPrimarySiteMasterCreateArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterCreateArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OncologyPrimarySiteMasters.
+     * @param {OncologyPrimarySiteMasterCreateManyArgs} args - Arguments to create many OncologyPrimarySiteMasters.
+     * @example
+     * // Create many OncologyPrimarySiteMasters
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OncologyPrimarySiteMasterCreateManyArgs>(args?: SelectSubset<T, OncologyPrimarySiteMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OncologyPrimarySiteMasters and returns the data saved in the database.
+     * @param {OncologyPrimarySiteMasterCreateManyAndReturnArgs} args - Arguments to create many OncologyPrimarySiteMasters.
+     * @example
+     * // Create many OncologyPrimarySiteMasters
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OncologyPrimarySiteMasters and only return the `id`
+     * const oncologyPrimarySiteMasterWithIdOnly = await prisma.oncologyPrimarySiteMaster.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OncologyPrimarySiteMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, OncologyPrimarySiteMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OncologyPrimarySiteMaster.
+     * @param {OncologyPrimarySiteMasterDeleteArgs} args - Arguments to delete one OncologyPrimarySiteMaster.
+     * @example
+     * // Delete one OncologyPrimarySiteMaster
+     * const OncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.delete({
+     *   where: {
+     *     // ... filter to delete one OncologyPrimarySiteMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OncologyPrimarySiteMasterDeleteArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterDeleteArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OncologyPrimarySiteMaster.
+     * @param {OncologyPrimarySiteMasterUpdateArgs} args - Arguments to update one OncologyPrimarySiteMaster.
+     * @example
+     * // Update one OncologyPrimarySiteMaster
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OncologyPrimarySiteMasterUpdateArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterUpdateArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OncologyPrimarySiteMasters.
+     * @param {OncologyPrimarySiteMasterDeleteManyArgs} args - Arguments to filter OncologyPrimarySiteMasters to delete.
+     * @example
+     * // Delete a few OncologyPrimarySiteMasters
+     * const { count } = await prisma.oncologyPrimarySiteMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OncologyPrimarySiteMasterDeleteManyArgs>(args?: SelectSubset<T, OncologyPrimarySiteMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyPrimarySiteMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyPrimarySiteMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OncologyPrimarySiteMasters
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OncologyPrimarySiteMasterUpdateManyArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyPrimarySiteMasters and returns the data updated in the database.
+     * @param {OncologyPrimarySiteMasterUpdateManyAndReturnArgs} args - Arguments to update many OncologyPrimarySiteMasters.
+     * @example
+     * // Update many OncologyPrimarySiteMasters
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OncologyPrimarySiteMasters and only return the `id`
+     * const oncologyPrimarySiteMasterWithIdOnly = await prisma.oncologyPrimarySiteMaster.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OncologyPrimarySiteMasterUpdateManyAndReturnArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OncologyPrimarySiteMaster.
+     * @param {OncologyPrimarySiteMasterUpsertArgs} args - Arguments to update or create a OncologyPrimarySiteMaster.
+     * @example
+     * // Update or create a OncologyPrimarySiteMaster
+     * const oncologyPrimarySiteMaster = await prisma.oncologyPrimarySiteMaster.upsert({
+     *   create: {
+     *     // ... data to create a OncologyPrimarySiteMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OncologyPrimarySiteMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OncologyPrimarySiteMasterUpsertArgs>(args: SelectSubset<T, OncologyPrimarySiteMasterUpsertArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OncologyPrimarySiteMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyPrimarySiteMasterCountArgs} args - Arguments to filter OncologyPrimarySiteMasters to count.
+     * @example
+     * // Count the number of OncologyPrimarySiteMasters
+     * const count = await prisma.oncologyPrimarySiteMaster.count({
+     *   where: {
+     *     // ... the filter for the OncologyPrimarySiteMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends OncologyPrimarySiteMasterCountArgs>(
+      args?: Subset<T, OncologyPrimarySiteMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OncologyPrimarySiteMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OncologyPrimarySiteMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyPrimarySiteMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OncologyPrimarySiteMasterAggregateArgs>(args: Subset<T, OncologyPrimarySiteMasterAggregateArgs>): Prisma.PrismaPromise<GetOncologyPrimarySiteMasterAggregateType<T>>
+
+    /**
+     * Group by OncologyPrimarySiteMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyPrimarySiteMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OncologyPrimarySiteMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OncologyPrimarySiteMasterGroupByArgs['orderBy'] }
+        : { orderBy?: OncologyPrimarySiteMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OncologyPrimarySiteMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOncologyPrimarySiteMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OncologyPrimarySiteMaster model
+   */
+  readonly fields: OncologyPrimarySiteMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OncologyPrimarySiteMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OncologyPrimarySiteMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    siteMappings<T extends OncologyPrimarySiteMaster$siteMappingsArgs<ExtArgs> = {}>(args?: Subset<T, OncologyPrimarySiteMaster$siteMappingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OncologyPrimarySiteMaster model
+   */
+  interface OncologyPrimarySiteMasterFieldRefs {
+    readonly id: FieldRef<"OncologyPrimarySiteMaster", 'String'>
+    readonly tenantId: FieldRef<"OncologyPrimarySiteMaster", 'String'>
+    readonly icdoSiteCode: FieldRef<"OncologyPrimarySiteMaster", 'String'>
+    readonly icdoSiteName: FieldRef<"OncologyPrimarySiteMaster", 'String'>
+    readonly bodySystem: FieldRef<"OncologyPrimarySiteMaster", 'String'>
+    readonly lateralityApplicable: FieldRef<"OncologyPrimarySiteMaster", 'Boolean'>
+    readonly mappingType: FieldRef<"OncologyPrimarySiteMaster", 'String'>
+    readonly active: FieldRef<"OncologyPrimarySiteMaster", 'Boolean'>
+    readonly createdAt: FieldRef<"OncologyPrimarySiteMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"OncologyPrimarySiteMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OncologyPrimarySiteMaster findUnique
+   */
+  export type OncologyPrimarySiteMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyPrimarySiteMaster to fetch.
+     */
+    where: OncologyPrimarySiteMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyPrimarySiteMaster findUniqueOrThrow
+   */
+  export type OncologyPrimarySiteMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyPrimarySiteMaster to fetch.
+     */
+    where: OncologyPrimarySiteMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyPrimarySiteMaster findFirst
+   */
+  export type OncologyPrimarySiteMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyPrimarySiteMaster to fetch.
+     */
+    where?: OncologyPrimarySiteMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyPrimarySiteMasters to fetch.
+     */
+    orderBy?: OncologyPrimarySiteMasterOrderByWithRelationInput | OncologyPrimarySiteMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyPrimarySiteMasters.
+     */
+    cursor?: OncologyPrimarySiteMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyPrimarySiteMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyPrimarySiteMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyPrimarySiteMasters.
+     */
+    distinct?: OncologyPrimarySiteMasterScalarFieldEnum | OncologyPrimarySiteMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyPrimarySiteMaster findFirstOrThrow
+   */
+  export type OncologyPrimarySiteMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyPrimarySiteMaster to fetch.
+     */
+    where?: OncologyPrimarySiteMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyPrimarySiteMasters to fetch.
+     */
+    orderBy?: OncologyPrimarySiteMasterOrderByWithRelationInput | OncologyPrimarySiteMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyPrimarySiteMasters.
+     */
+    cursor?: OncologyPrimarySiteMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyPrimarySiteMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyPrimarySiteMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyPrimarySiteMasters.
+     */
+    distinct?: OncologyPrimarySiteMasterScalarFieldEnum | OncologyPrimarySiteMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyPrimarySiteMaster findMany
+   */
+  export type OncologyPrimarySiteMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyPrimarySiteMasters to fetch.
+     */
+    where?: OncologyPrimarySiteMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyPrimarySiteMasters to fetch.
+     */
+    orderBy?: OncologyPrimarySiteMasterOrderByWithRelationInput | OncologyPrimarySiteMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OncologyPrimarySiteMasters.
+     */
+    cursor?: OncologyPrimarySiteMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyPrimarySiteMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyPrimarySiteMasters.
+     */
+    skip?: number
+    distinct?: OncologyPrimarySiteMasterScalarFieldEnum | OncologyPrimarySiteMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyPrimarySiteMaster create
+   */
+  export type OncologyPrimarySiteMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OncologyPrimarySiteMaster.
+     */
+    data: XOR<OncologyPrimarySiteMasterCreateInput, OncologyPrimarySiteMasterUncheckedCreateInput>
+  }
+
+  /**
+   * OncologyPrimarySiteMaster createMany
+   */
+  export type OncologyPrimarySiteMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OncologyPrimarySiteMasters.
+     */
+    data: OncologyPrimarySiteMasterCreateManyInput | OncologyPrimarySiteMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OncologyPrimarySiteMaster createManyAndReturn
+   */
+  export type OncologyPrimarySiteMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * The data used to create many OncologyPrimarySiteMasters.
+     */
+    data: OncologyPrimarySiteMasterCreateManyInput | OncologyPrimarySiteMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OncologyPrimarySiteMaster update
+   */
+  export type OncologyPrimarySiteMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OncologyPrimarySiteMaster.
+     */
+    data: XOR<OncologyPrimarySiteMasterUpdateInput, OncologyPrimarySiteMasterUncheckedUpdateInput>
+    /**
+     * Choose, which OncologyPrimarySiteMaster to update.
+     */
+    where: OncologyPrimarySiteMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyPrimarySiteMaster updateMany
+   */
+  export type OncologyPrimarySiteMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OncologyPrimarySiteMasters.
+     */
+    data: XOR<OncologyPrimarySiteMasterUpdateManyMutationInput, OncologyPrimarySiteMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyPrimarySiteMasters to update
+     */
+    where?: OncologyPrimarySiteMasterWhereInput
+    /**
+     * Limit how many OncologyPrimarySiteMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyPrimarySiteMaster updateManyAndReturn
+   */
+  export type OncologyPrimarySiteMasterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * The data used to update OncologyPrimarySiteMasters.
+     */
+    data: XOR<OncologyPrimarySiteMasterUpdateManyMutationInput, OncologyPrimarySiteMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyPrimarySiteMasters to update
+     */
+    where?: OncologyPrimarySiteMasterWhereInput
+    /**
+     * Limit how many OncologyPrimarySiteMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyPrimarySiteMaster upsert
+   */
+  export type OncologyPrimarySiteMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OncologyPrimarySiteMaster to update in case it exists.
+     */
+    where: OncologyPrimarySiteMasterWhereUniqueInput
+    /**
+     * In case the OncologyPrimarySiteMaster found by the `where` argument doesn't exist, create a new OncologyPrimarySiteMaster with this data.
+     */
+    create: XOR<OncologyPrimarySiteMasterCreateInput, OncologyPrimarySiteMasterUncheckedCreateInput>
+    /**
+     * In case the OncologyPrimarySiteMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OncologyPrimarySiteMasterUpdateInput, OncologyPrimarySiteMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * OncologyPrimarySiteMaster delete
+   */
+  export type OncologyPrimarySiteMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+    /**
+     * Filter which OncologyPrimarySiteMaster to delete.
+     */
+    where: OncologyPrimarySiteMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyPrimarySiteMaster deleteMany
+   */
+  export type OncologyPrimarySiteMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyPrimarySiteMasters to delete
+     */
+    where?: OncologyPrimarySiteMasterWhereInput
+    /**
+     * Limit how many OncologyPrimarySiteMasters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyPrimarySiteMaster.siteMappings
+   */
+  export type OncologyPrimarySiteMaster$siteMappingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    orderBy?: OncologyCancerTypeSiteMappingOrderByWithRelationInput | OncologyCancerTypeSiteMappingOrderByWithRelationInput[]
+    cursor?: OncologyCancerTypeSiteMappingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OncologyCancerTypeSiteMappingScalarFieldEnum | OncologyCancerTypeSiteMappingScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyPrimarySiteMaster without action
+   */
+  export type OncologyPrimarySiteMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyPrimarySiteMaster
+     */
+    select?: OncologyPrimarySiteMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyPrimarySiteMaster
+     */
+    omit?: OncologyPrimarySiteMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyPrimarySiteMasterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OncologyCancerTypeSiteMapping
+   */
+
+  export type AggregateOncologyCancerTypeSiteMapping = {
+    _count: OncologyCancerTypeSiteMappingCountAggregateOutputType | null
+    _min: OncologyCancerTypeSiteMappingMinAggregateOutputType | null
+    _max: OncologyCancerTypeSiteMappingMaxAggregateOutputType | null
+  }
+
+  export type OncologyCancerTypeSiteMappingMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    cancerTypeId: string | null
+    primarySiteId: string | null
+    isDefault: boolean | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyCancerTypeSiteMappingMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    cancerTypeId: string | null
+    primarySiteId: string | null
+    isDefault: boolean | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyCancerTypeSiteMappingCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    cancerTypeId: number
+    primarySiteId: number
+    isDefault: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OncologyCancerTypeSiteMappingMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    cancerTypeId?: true
+    primarySiteId?: true
+    isDefault?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyCancerTypeSiteMappingMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    cancerTypeId?: true
+    primarySiteId?: true
+    isDefault?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyCancerTypeSiteMappingCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    cancerTypeId?: true
+    primarySiteId?: true
+    isDefault?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OncologyCancerTypeSiteMappingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyCancerTypeSiteMapping to aggregate.
+     */
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeSiteMappings to fetch.
+     */
+    orderBy?: OncologyCancerTypeSiteMappingOrderByWithRelationInput | OncologyCancerTypeSiteMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OncologyCancerTypeSiteMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeSiteMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeSiteMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OncologyCancerTypeSiteMappings
+    **/
+    _count?: true | OncologyCancerTypeSiteMappingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OncologyCancerTypeSiteMappingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OncologyCancerTypeSiteMappingMaxAggregateInputType
+  }
+
+  export type GetOncologyCancerTypeSiteMappingAggregateType<T extends OncologyCancerTypeSiteMappingAggregateArgs> = {
+        [P in keyof T & keyof AggregateOncologyCancerTypeSiteMapping]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOncologyCancerTypeSiteMapping[P]>
+      : GetScalarType<T[P], AggregateOncologyCancerTypeSiteMapping[P]>
+  }
+
+
+
+
+  export type OncologyCancerTypeSiteMappingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    orderBy?: OncologyCancerTypeSiteMappingOrderByWithAggregationInput | OncologyCancerTypeSiteMappingOrderByWithAggregationInput[]
+    by: OncologyCancerTypeSiteMappingScalarFieldEnum[] | OncologyCancerTypeSiteMappingScalarFieldEnum
+    having?: OncologyCancerTypeSiteMappingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OncologyCancerTypeSiteMappingCountAggregateInputType | true
+    _min?: OncologyCancerTypeSiteMappingMinAggregateInputType
+    _max?: OncologyCancerTypeSiteMappingMaxAggregateInputType
+  }
+
+  export type OncologyCancerTypeSiteMappingGroupByOutputType = {
+    id: string
+    tenantId: string
+    cancerTypeId: string
+    primarySiteId: string
+    isDefault: boolean
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: OncologyCancerTypeSiteMappingCountAggregateOutputType | null
+    _min: OncologyCancerTypeSiteMappingMinAggregateOutputType | null
+    _max: OncologyCancerTypeSiteMappingMaxAggregateOutputType | null
+  }
+
+  type GetOncologyCancerTypeSiteMappingGroupByPayload<T extends OncologyCancerTypeSiteMappingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OncologyCancerTypeSiteMappingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OncologyCancerTypeSiteMappingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OncologyCancerTypeSiteMappingGroupByOutputType[P]>
+            : GetScalarType<T[P], OncologyCancerTypeSiteMappingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OncologyCancerTypeSiteMappingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    cancerTypeId?: boolean
+    primarySiteId?: boolean
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    cancerType?: boolean | OncologyCancerTypeMasterDefaultArgs<ExtArgs>
+    primarySite?: boolean | OncologyPrimarySiteMasterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oncologyCancerTypeSiteMapping"]>
+
+  export type OncologyCancerTypeSiteMappingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    cancerTypeId?: boolean
+    primarySiteId?: boolean
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    cancerType?: boolean | OncologyCancerTypeMasterDefaultArgs<ExtArgs>
+    primarySite?: boolean | OncologyPrimarySiteMasterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oncologyCancerTypeSiteMapping"]>
+
+  export type OncologyCancerTypeSiteMappingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    cancerTypeId?: boolean
+    primarySiteId?: boolean
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    cancerType?: boolean | OncologyCancerTypeMasterDefaultArgs<ExtArgs>
+    primarySite?: boolean | OncologyPrimarySiteMasterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oncologyCancerTypeSiteMapping"]>
+
+  export type OncologyCancerTypeSiteMappingSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    cancerTypeId?: boolean
+    primarySiteId?: boolean
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OncologyCancerTypeSiteMappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "cancerTypeId" | "primarySiteId" | "isDefault" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["oncologyCancerTypeSiteMapping"]>
+  export type OncologyCancerTypeSiteMappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cancerType?: boolean | OncologyCancerTypeMasterDefaultArgs<ExtArgs>
+    primarySite?: boolean | OncologyPrimarySiteMasterDefaultArgs<ExtArgs>
+  }
+  export type OncologyCancerTypeSiteMappingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cancerType?: boolean | OncologyCancerTypeMasterDefaultArgs<ExtArgs>
+    primarySite?: boolean | OncologyPrimarySiteMasterDefaultArgs<ExtArgs>
+  }
+  export type OncologyCancerTypeSiteMappingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cancerType?: boolean | OncologyCancerTypeMasterDefaultArgs<ExtArgs>
+    primarySite?: boolean | OncologyPrimarySiteMasterDefaultArgs<ExtArgs>
+  }
+
+  export type $OncologyCancerTypeSiteMappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OncologyCancerTypeSiteMapping"
+    objects: {
+      cancerType: Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>
+      primarySite: Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      cancerTypeId: string
+      primarySiteId: string
+      isDefault: boolean
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["oncologyCancerTypeSiteMapping"]>
+    composites: {}
+  }
+
+  type OncologyCancerTypeSiteMappingGetPayload<S extends boolean | null | undefined | OncologyCancerTypeSiteMappingDefaultArgs> = $Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload, S>
+
+  type OncologyCancerTypeSiteMappingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OncologyCancerTypeSiteMappingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OncologyCancerTypeSiteMappingCountAggregateInputType | true
+    }
+
+  export interface OncologyCancerTypeSiteMappingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OncologyCancerTypeSiteMapping'], meta: { name: 'OncologyCancerTypeSiteMapping' } }
+    /**
+     * Find zero or one OncologyCancerTypeSiteMapping that matches the filter.
+     * @param {OncologyCancerTypeSiteMappingFindUniqueArgs} args - Arguments to find a OncologyCancerTypeSiteMapping
+     * @example
+     * // Get one OncologyCancerTypeSiteMapping
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OncologyCancerTypeSiteMappingFindUniqueArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingFindUniqueArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OncologyCancerTypeSiteMapping that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OncologyCancerTypeSiteMappingFindUniqueOrThrowArgs} args - Arguments to find a OncologyCancerTypeSiteMapping
+     * @example
+     * // Get one OncologyCancerTypeSiteMapping
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OncologyCancerTypeSiteMappingFindUniqueOrThrowArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyCancerTypeSiteMapping that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeSiteMappingFindFirstArgs} args - Arguments to find a OncologyCancerTypeSiteMapping
+     * @example
+     * // Get one OncologyCancerTypeSiteMapping
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OncologyCancerTypeSiteMappingFindFirstArgs>(args?: SelectSubset<T, OncologyCancerTypeSiteMappingFindFirstArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyCancerTypeSiteMapping that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeSiteMappingFindFirstOrThrowArgs} args - Arguments to find a OncologyCancerTypeSiteMapping
+     * @example
+     * // Get one OncologyCancerTypeSiteMapping
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OncologyCancerTypeSiteMappingFindFirstOrThrowArgs>(args?: SelectSubset<T, OncologyCancerTypeSiteMappingFindFirstOrThrowArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OncologyCancerTypeSiteMappings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeSiteMappingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OncologyCancerTypeSiteMappings
+     * const oncologyCancerTypeSiteMappings = await prisma.oncologyCancerTypeSiteMapping.findMany()
+     * 
+     * // Get first 10 OncologyCancerTypeSiteMappings
+     * const oncologyCancerTypeSiteMappings = await prisma.oncologyCancerTypeSiteMapping.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const oncologyCancerTypeSiteMappingWithIdOnly = await prisma.oncologyCancerTypeSiteMapping.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OncologyCancerTypeSiteMappingFindManyArgs>(args?: SelectSubset<T, OncologyCancerTypeSiteMappingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OncologyCancerTypeSiteMapping.
+     * @param {OncologyCancerTypeSiteMappingCreateArgs} args - Arguments to create a OncologyCancerTypeSiteMapping.
+     * @example
+     * // Create one OncologyCancerTypeSiteMapping
+     * const OncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.create({
+     *   data: {
+     *     // ... data to create a OncologyCancerTypeSiteMapping
+     *   }
+     * })
+     * 
+     */
+    create<T extends OncologyCancerTypeSiteMappingCreateArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingCreateArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OncologyCancerTypeSiteMappings.
+     * @param {OncologyCancerTypeSiteMappingCreateManyArgs} args - Arguments to create many OncologyCancerTypeSiteMappings.
+     * @example
+     * // Create many OncologyCancerTypeSiteMappings
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OncologyCancerTypeSiteMappingCreateManyArgs>(args?: SelectSubset<T, OncologyCancerTypeSiteMappingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OncologyCancerTypeSiteMappings and returns the data saved in the database.
+     * @param {OncologyCancerTypeSiteMappingCreateManyAndReturnArgs} args - Arguments to create many OncologyCancerTypeSiteMappings.
+     * @example
+     * // Create many OncologyCancerTypeSiteMappings
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OncologyCancerTypeSiteMappings and only return the `id`
+     * const oncologyCancerTypeSiteMappingWithIdOnly = await prisma.oncologyCancerTypeSiteMapping.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OncologyCancerTypeSiteMappingCreateManyAndReturnArgs>(args?: SelectSubset<T, OncologyCancerTypeSiteMappingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OncologyCancerTypeSiteMapping.
+     * @param {OncologyCancerTypeSiteMappingDeleteArgs} args - Arguments to delete one OncologyCancerTypeSiteMapping.
+     * @example
+     * // Delete one OncologyCancerTypeSiteMapping
+     * const OncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.delete({
+     *   where: {
+     *     // ... filter to delete one OncologyCancerTypeSiteMapping
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OncologyCancerTypeSiteMappingDeleteArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingDeleteArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OncologyCancerTypeSiteMapping.
+     * @param {OncologyCancerTypeSiteMappingUpdateArgs} args - Arguments to update one OncologyCancerTypeSiteMapping.
+     * @example
+     * // Update one OncologyCancerTypeSiteMapping
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OncologyCancerTypeSiteMappingUpdateArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingUpdateArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OncologyCancerTypeSiteMappings.
+     * @param {OncologyCancerTypeSiteMappingDeleteManyArgs} args - Arguments to filter OncologyCancerTypeSiteMappings to delete.
+     * @example
+     * // Delete a few OncologyCancerTypeSiteMappings
+     * const { count } = await prisma.oncologyCancerTypeSiteMapping.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OncologyCancerTypeSiteMappingDeleteManyArgs>(args?: SelectSubset<T, OncologyCancerTypeSiteMappingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyCancerTypeSiteMappings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeSiteMappingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OncologyCancerTypeSiteMappings
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OncologyCancerTypeSiteMappingUpdateManyArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyCancerTypeSiteMappings and returns the data updated in the database.
+     * @param {OncologyCancerTypeSiteMappingUpdateManyAndReturnArgs} args - Arguments to update many OncologyCancerTypeSiteMappings.
+     * @example
+     * // Update many OncologyCancerTypeSiteMappings
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OncologyCancerTypeSiteMappings and only return the `id`
+     * const oncologyCancerTypeSiteMappingWithIdOnly = await prisma.oncologyCancerTypeSiteMapping.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OncologyCancerTypeSiteMappingUpdateManyAndReturnArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OncologyCancerTypeSiteMapping.
+     * @param {OncologyCancerTypeSiteMappingUpsertArgs} args - Arguments to update or create a OncologyCancerTypeSiteMapping.
+     * @example
+     * // Update or create a OncologyCancerTypeSiteMapping
+     * const oncologyCancerTypeSiteMapping = await prisma.oncologyCancerTypeSiteMapping.upsert({
+     *   create: {
+     *     // ... data to create a OncologyCancerTypeSiteMapping
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OncologyCancerTypeSiteMapping we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OncologyCancerTypeSiteMappingUpsertArgs>(args: SelectSubset<T, OncologyCancerTypeSiteMappingUpsertArgs<ExtArgs>>): Prisma__OncologyCancerTypeSiteMappingClient<$Result.GetResult<Prisma.$OncologyCancerTypeSiteMappingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OncologyCancerTypeSiteMappings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeSiteMappingCountArgs} args - Arguments to filter OncologyCancerTypeSiteMappings to count.
+     * @example
+     * // Count the number of OncologyCancerTypeSiteMappings
+     * const count = await prisma.oncologyCancerTypeSiteMapping.count({
+     *   where: {
+     *     // ... the filter for the OncologyCancerTypeSiteMappings we want to count
+     *   }
+     * })
+    **/
+    count<T extends OncologyCancerTypeSiteMappingCountArgs>(
+      args?: Subset<T, OncologyCancerTypeSiteMappingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OncologyCancerTypeSiteMappingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OncologyCancerTypeSiteMapping.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeSiteMappingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OncologyCancerTypeSiteMappingAggregateArgs>(args: Subset<T, OncologyCancerTypeSiteMappingAggregateArgs>): Prisma.PrismaPromise<GetOncologyCancerTypeSiteMappingAggregateType<T>>
+
+    /**
+     * Group by OncologyCancerTypeSiteMapping.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyCancerTypeSiteMappingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OncologyCancerTypeSiteMappingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OncologyCancerTypeSiteMappingGroupByArgs['orderBy'] }
+        : { orderBy?: OncologyCancerTypeSiteMappingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OncologyCancerTypeSiteMappingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOncologyCancerTypeSiteMappingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OncologyCancerTypeSiteMapping model
+   */
+  readonly fields: OncologyCancerTypeSiteMappingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OncologyCancerTypeSiteMapping.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OncologyCancerTypeSiteMappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    cancerType<T extends OncologyCancerTypeMasterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OncologyCancerTypeMasterDefaultArgs<ExtArgs>>): Prisma__OncologyCancerTypeMasterClient<$Result.GetResult<Prisma.$OncologyCancerTypeMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    primarySite<T extends OncologyPrimarySiteMasterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OncologyPrimarySiteMasterDefaultArgs<ExtArgs>>): Prisma__OncologyPrimarySiteMasterClient<$Result.GetResult<Prisma.$OncologyPrimarySiteMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OncologyCancerTypeSiteMapping model
+   */
+  interface OncologyCancerTypeSiteMappingFieldRefs {
+    readonly id: FieldRef<"OncologyCancerTypeSiteMapping", 'String'>
+    readonly tenantId: FieldRef<"OncologyCancerTypeSiteMapping", 'String'>
+    readonly cancerTypeId: FieldRef<"OncologyCancerTypeSiteMapping", 'String'>
+    readonly primarySiteId: FieldRef<"OncologyCancerTypeSiteMapping", 'String'>
+    readonly isDefault: FieldRef<"OncologyCancerTypeSiteMapping", 'Boolean'>
+    readonly active: FieldRef<"OncologyCancerTypeSiteMapping", 'Boolean'>
+    readonly createdAt: FieldRef<"OncologyCancerTypeSiteMapping", 'DateTime'>
+    readonly updatedAt: FieldRef<"OncologyCancerTypeSiteMapping", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OncologyCancerTypeSiteMapping findUnique
+   */
+  export type OncologyCancerTypeSiteMappingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeSiteMapping to fetch.
+     */
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping findUniqueOrThrow
+   */
+  export type OncologyCancerTypeSiteMappingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeSiteMapping to fetch.
+     */
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping findFirst
+   */
+  export type OncologyCancerTypeSiteMappingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeSiteMapping to fetch.
+     */
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeSiteMappings to fetch.
+     */
+    orderBy?: OncologyCancerTypeSiteMappingOrderByWithRelationInput | OncologyCancerTypeSiteMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyCancerTypeSiteMappings.
+     */
+    cursor?: OncologyCancerTypeSiteMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeSiteMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeSiteMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyCancerTypeSiteMappings.
+     */
+    distinct?: OncologyCancerTypeSiteMappingScalarFieldEnum | OncologyCancerTypeSiteMappingScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping findFirstOrThrow
+   */
+  export type OncologyCancerTypeSiteMappingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeSiteMapping to fetch.
+     */
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeSiteMappings to fetch.
+     */
+    orderBy?: OncologyCancerTypeSiteMappingOrderByWithRelationInput | OncologyCancerTypeSiteMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyCancerTypeSiteMappings.
+     */
+    cursor?: OncologyCancerTypeSiteMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeSiteMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeSiteMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyCancerTypeSiteMappings.
+     */
+    distinct?: OncologyCancerTypeSiteMappingScalarFieldEnum | OncologyCancerTypeSiteMappingScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping findMany
+   */
+  export type OncologyCancerTypeSiteMappingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which OncologyCancerTypeSiteMappings to fetch.
+     */
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyCancerTypeSiteMappings to fetch.
+     */
+    orderBy?: OncologyCancerTypeSiteMappingOrderByWithRelationInput | OncologyCancerTypeSiteMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OncologyCancerTypeSiteMappings.
+     */
+    cursor?: OncologyCancerTypeSiteMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyCancerTypeSiteMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyCancerTypeSiteMappings.
+     */
+    skip?: number
+    distinct?: OncologyCancerTypeSiteMappingScalarFieldEnum | OncologyCancerTypeSiteMappingScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping create
+   */
+  export type OncologyCancerTypeSiteMappingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OncologyCancerTypeSiteMapping.
+     */
+    data: XOR<OncologyCancerTypeSiteMappingCreateInput, OncologyCancerTypeSiteMappingUncheckedCreateInput>
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping createMany
+   */
+  export type OncologyCancerTypeSiteMappingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OncologyCancerTypeSiteMappings.
+     */
+    data: OncologyCancerTypeSiteMappingCreateManyInput | OncologyCancerTypeSiteMappingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping createManyAndReturn
+   */
+  export type OncologyCancerTypeSiteMappingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * The data used to create many OncologyCancerTypeSiteMappings.
+     */
+    data: OncologyCancerTypeSiteMappingCreateManyInput | OncologyCancerTypeSiteMappingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping update
+   */
+  export type OncologyCancerTypeSiteMappingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OncologyCancerTypeSiteMapping.
+     */
+    data: XOR<OncologyCancerTypeSiteMappingUpdateInput, OncologyCancerTypeSiteMappingUncheckedUpdateInput>
+    /**
+     * Choose, which OncologyCancerTypeSiteMapping to update.
+     */
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping updateMany
+   */
+  export type OncologyCancerTypeSiteMappingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OncologyCancerTypeSiteMappings.
+     */
+    data: XOR<OncologyCancerTypeSiteMappingUpdateManyMutationInput, OncologyCancerTypeSiteMappingUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyCancerTypeSiteMappings to update
+     */
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    /**
+     * Limit how many OncologyCancerTypeSiteMappings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping updateManyAndReturn
+   */
+  export type OncologyCancerTypeSiteMappingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * The data used to update OncologyCancerTypeSiteMappings.
+     */
+    data: XOR<OncologyCancerTypeSiteMappingUpdateManyMutationInput, OncologyCancerTypeSiteMappingUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyCancerTypeSiteMappings to update
+     */
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    /**
+     * Limit how many OncologyCancerTypeSiteMappings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping upsert
+   */
+  export type OncologyCancerTypeSiteMappingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OncologyCancerTypeSiteMapping to update in case it exists.
+     */
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+    /**
+     * In case the OncologyCancerTypeSiteMapping found by the `where` argument doesn't exist, create a new OncologyCancerTypeSiteMapping with this data.
+     */
+    create: XOR<OncologyCancerTypeSiteMappingCreateInput, OncologyCancerTypeSiteMappingUncheckedCreateInput>
+    /**
+     * In case the OncologyCancerTypeSiteMapping was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OncologyCancerTypeSiteMappingUpdateInput, OncologyCancerTypeSiteMappingUncheckedUpdateInput>
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping delete
+   */
+  export type OncologyCancerTypeSiteMappingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+    /**
+     * Filter which OncologyCancerTypeSiteMapping to delete.
+     */
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping deleteMany
+   */
+  export type OncologyCancerTypeSiteMappingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyCancerTypeSiteMappings to delete
+     */
+    where?: OncologyCancerTypeSiteMappingWhereInput
+    /**
+     * Limit how many OncologyCancerTypeSiteMappings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyCancerTypeSiteMapping without action
+   */
+  export type OncologyCancerTypeSiteMappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyCancerTypeSiteMapping
+     */
+    select?: OncologyCancerTypeSiteMappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyCancerTypeSiteMapping
+     */
+    omit?: OncologyCancerTypeSiteMappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OncologyCancerTypeSiteMappingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OncologyHistologyMaster
+   */
+
+  export type AggregateOncologyHistologyMaster = {
+    _count: OncologyHistologyMasterCountAggregateOutputType | null
+    _min: OncologyHistologyMasterMinAggregateOutputType | null
+    _max: OncologyHistologyMasterMaxAggregateOutputType | null
+  }
+
+  export type OncologyHistologyMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    morphologyCode: string | null
+    morphologyName: string | null
+    behaviorCode: string | null
+    behaviorName: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyHistologyMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    morphologyCode: string | null
+    morphologyName: string | null
+    behaviorCode: string | null
+    behaviorName: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OncologyHistologyMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    morphologyCode: number
+    morphologyName: number
+    behaviorCode: number
+    behaviorName: number
+    description: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OncologyHistologyMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    morphologyCode?: true
+    morphologyName?: true
+    behaviorCode?: true
+    behaviorName?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyHistologyMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    morphologyCode?: true
+    morphologyName?: true
+    behaviorCode?: true
+    behaviorName?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OncologyHistologyMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    morphologyCode?: true
+    morphologyName?: true
+    behaviorCode?: true
+    behaviorName?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OncologyHistologyMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyHistologyMaster to aggregate.
+     */
+    where?: OncologyHistologyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyHistologyMasters to fetch.
+     */
+    orderBy?: OncologyHistologyMasterOrderByWithRelationInput | OncologyHistologyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OncologyHistologyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyHistologyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyHistologyMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OncologyHistologyMasters
+    **/
+    _count?: true | OncologyHistologyMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OncologyHistologyMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OncologyHistologyMasterMaxAggregateInputType
+  }
+
+  export type GetOncologyHistologyMasterAggregateType<T extends OncologyHistologyMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateOncologyHistologyMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOncologyHistologyMaster[P]>
+      : GetScalarType<T[P], AggregateOncologyHistologyMaster[P]>
+  }
+
+
+
+
+  export type OncologyHistologyMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OncologyHistologyMasterWhereInput
+    orderBy?: OncologyHistologyMasterOrderByWithAggregationInput | OncologyHistologyMasterOrderByWithAggregationInput[]
+    by: OncologyHistologyMasterScalarFieldEnum[] | OncologyHistologyMasterScalarFieldEnum
+    having?: OncologyHistologyMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OncologyHistologyMasterCountAggregateInputType | true
+    _min?: OncologyHistologyMasterMinAggregateInputType
+    _max?: OncologyHistologyMasterMaxAggregateInputType
+  }
+
+  export type OncologyHistologyMasterGroupByOutputType = {
+    id: string
+    tenantId: string
+    morphologyCode: string
+    morphologyName: string
+    behaviorCode: string | null
+    behaviorName: string | null
+    description: string | null
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: OncologyHistologyMasterCountAggregateOutputType | null
+    _min: OncologyHistologyMasterMinAggregateOutputType | null
+    _max: OncologyHistologyMasterMaxAggregateOutputType | null
+  }
+
+  type GetOncologyHistologyMasterGroupByPayload<T extends OncologyHistologyMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OncologyHistologyMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OncologyHistologyMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OncologyHistologyMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], OncologyHistologyMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OncologyHistologyMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    morphologyCode?: boolean
+    morphologyName?: boolean
+    behaviorCode?: boolean
+    behaviorName?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["oncologyHistologyMaster"]>
+
+  export type OncologyHistologyMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    morphologyCode?: boolean
+    morphologyName?: boolean
+    behaviorCode?: boolean
+    behaviorName?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["oncologyHistologyMaster"]>
+
+  export type OncologyHistologyMasterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    morphologyCode?: boolean
+    morphologyName?: boolean
+    behaviorCode?: boolean
+    behaviorName?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["oncologyHistologyMaster"]>
+
+  export type OncologyHistologyMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    morphologyCode?: boolean
+    morphologyName?: boolean
+    behaviorCode?: boolean
+    behaviorName?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OncologyHistologyMasterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "morphologyCode" | "morphologyName" | "behaviorCode" | "behaviorName" | "description" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["oncologyHistologyMaster"]>
+
+  export type $OncologyHistologyMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OncologyHistologyMaster"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      morphologyCode: string
+      morphologyName: string
+      behaviorCode: string | null
+      behaviorName: string | null
+      description: string | null
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["oncologyHistologyMaster"]>
+    composites: {}
+  }
+
+  type OncologyHistologyMasterGetPayload<S extends boolean | null | undefined | OncologyHistologyMasterDefaultArgs> = $Result.GetResult<Prisma.$OncologyHistologyMasterPayload, S>
+
+  type OncologyHistologyMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OncologyHistologyMasterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OncologyHistologyMasterCountAggregateInputType | true
+    }
+
+  export interface OncologyHistologyMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OncologyHistologyMaster'], meta: { name: 'OncologyHistologyMaster' } }
+    /**
+     * Find zero or one OncologyHistologyMaster that matches the filter.
+     * @param {OncologyHistologyMasterFindUniqueArgs} args - Arguments to find a OncologyHistologyMaster
+     * @example
+     * // Get one OncologyHistologyMaster
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OncologyHistologyMasterFindUniqueArgs>(args: SelectSubset<T, OncologyHistologyMasterFindUniqueArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OncologyHistologyMaster that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OncologyHistologyMasterFindUniqueOrThrowArgs} args - Arguments to find a OncologyHistologyMaster
+     * @example
+     * // Get one OncologyHistologyMaster
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OncologyHistologyMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, OncologyHistologyMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyHistologyMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyHistologyMasterFindFirstArgs} args - Arguments to find a OncologyHistologyMaster
+     * @example
+     * // Get one OncologyHistologyMaster
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OncologyHistologyMasterFindFirstArgs>(args?: SelectSubset<T, OncologyHistologyMasterFindFirstArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OncologyHistologyMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyHistologyMasterFindFirstOrThrowArgs} args - Arguments to find a OncologyHistologyMaster
+     * @example
+     * // Get one OncologyHistologyMaster
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OncologyHistologyMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, OncologyHistologyMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OncologyHistologyMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyHistologyMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OncologyHistologyMasters
+     * const oncologyHistologyMasters = await prisma.oncologyHistologyMaster.findMany()
+     * 
+     * // Get first 10 OncologyHistologyMasters
+     * const oncologyHistologyMasters = await prisma.oncologyHistologyMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const oncologyHistologyMasterWithIdOnly = await prisma.oncologyHistologyMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OncologyHistologyMasterFindManyArgs>(args?: SelectSubset<T, OncologyHistologyMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OncologyHistologyMaster.
+     * @param {OncologyHistologyMasterCreateArgs} args - Arguments to create a OncologyHistologyMaster.
+     * @example
+     * // Create one OncologyHistologyMaster
+     * const OncologyHistologyMaster = await prisma.oncologyHistologyMaster.create({
+     *   data: {
+     *     // ... data to create a OncologyHistologyMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends OncologyHistologyMasterCreateArgs>(args: SelectSubset<T, OncologyHistologyMasterCreateArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OncologyHistologyMasters.
+     * @param {OncologyHistologyMasterCreateManyArgs} args - Arguments to create many OncologyHistologyMasters.
+     * @example
+     * // Create many OncologyHistologyMasters
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OncologyHistologyMasterCreateManyArgs>(args?: SelectSubset<T, OncologyHistologyMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OncologyHistologyMasters and returns the data saved in the database.
+     * @param {OncologyHistologyMasterCreateManyAndReturnArgs} args - Arguments to create many OncologyHistologyMasters.
+     * @example
+     * // Create many OncologyHistologyMasters
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OncologyHistologyMasters and only return the `id`
+     * const oncologyHistologyMasterWithIdOnly = await prisma.oncologyHistologyMaster.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OncologyHistologyMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, OncologyHistologyMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OncologyHistologyMaster.
+     * @param {OncologyHistologyMasterDeleteArgs} args - Arguments to delete one OncologyHistologyMaster.
+     * @example
+     * // Delete one OncologyHistologyMaster
+     * const OncologyHistologyMaster = await prisma.oncologyHistologyMaster.delete({
+     *   where: {
+     *     // ... filter to delete one OncologyHistologyMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OncologyHistologyMasterDeleteArgs>(args: SelectSubset<T, OncologyHistologyMasterDeleteArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OncologyHistologyMaster.
+     * @param {OncologyHistologyMasterUpdateArgs} args - Arguments to update one OncologyHistologyMaster.
+     * @example
+     * // Update one OncologyHistologyMaster
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OncologyHistologyMasterUpdateArgs>(args: SelectSubset<T, OncologyHistologyMasterUpdateArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OncologyHistologyMasters.
+     * @param {OncologyHistologyMasterDeleteManyArgs} args - Arguments to filter OncologyHistologyMasters to delete.
+     * @example
+     * // Delete a few OncologyHistologyMasters
+     * const { count } = await prisma.oncologyHistologyMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OncologyHistologyMasterDeleteManyArgs>(args?: SelectSubset<T, OncologyHistologyMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyHistologyMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyHistologyMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OncologyHistologyMasters
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OncologyHistologyMasterUpdateManyArgs>(args: SelectSubset<T, OncologyHistologyMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OncologyHistologyMasters and returns the data updated in the database.
+     * @param {OncologyHistologyMasterUpdateManyAndReturnArgs} args - Arguments to update many OncologyHistologyMasters.
+     * @example
+     * // Update many OncologyHistologyMasters
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OncologyHistologyMasters and only return the `id`
+     * const oncologyHistologyMasterWithIdOnly = await prisma.oncologyHistologyMaster.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OncologyHistologyMasterUpdateManyAndReturnArgs>(args: SelectSubset<T, OncologyHistologyMasterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OncologyHistologyMaster.
+     * @param {OncologyHistologyMasterUpsertArgs} args - Arguments to update or create a OncologyHistologyMaster.
+     * @example
+     * // Update or create a OncologyHistologyMaster
+     * const oncologyHistologyMaster = await prisma.oncologyHistologyMaster.upsert({
+     *   create: {
+     *     // ... data to create a OncologyHistologyMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OncologyHistologyMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OncologyHistologyMasterUpsertArgs>(args: SelectSubset<T, OncologyHistologyMasterUpsertArgs<ExtArgs>>): Prisma__OncologyHistologyMasterClient<$Result.GetResult<Prisma.$OncologyHistologyMasterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OncologyHistologyMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyHistologyMasterCountArgs} args - Arguments to filter OncologyHistologyMasters to count.
+     * @example
+     * // Count the number of OncologyHistologyMasters
+     * const count = await prisma.oncologyHistologyMaster.count({
+     *   where: {
+     *     // ... the filter for the OncologyHistologyMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends OncologyHistologyMasterCountArgs>(
+      args?: Subset<T, OncologyHistologyMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OncologyHistologyMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OncologyHistologyMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyHistologyMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OncologyHistologyMasterAggregateArgs>(args: Subset<T, OncologyHistologyMasterAggregateArgs>): Prisma.PrismaPromise<GetOncologyHistologyMasterAggregateType<T>>
+
+    /**
+     * Group by OncologyHistologyMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OncologyHistologyMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OncologyHistologyMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OncologyHistologyMasterGroupByArgs['orderBy'] }
+        : { orderBy?: OncologyHistologyMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OncologyHistologyMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOncologyHistologyMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OncologyHistologyMaster model
+   */
+  readonly fields: OncologyHistologyMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OncologyHistologyMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OncologyHistologyMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OncologyHistologyMaster model
+   */
+  interface OncologyHistologyMasterFieldRefs {
+    readonly id: FieldRef<"OncologyHistologyMaster", 'String'>
+    readonly tenantId: FieldRef<"OncologyHistologyMaster", 'String'>
+    readonly morphologyCode: FieldRef<"OncologyHistologyMaster", 'String'>
+    readonly morphologyName: FieldRef<"OncologyHistologyMaster", 'String'>
+    readonly behaviorCode: FieldRef<"OncologyHistologyMaster", 'String'>
+    readonly behaviorName: FieldRef<"OncologyHistologyMaster", 'String'>
+    readonly description: FieldRef<"OncologyHistologyMaster", 'String'>
+    readonly active: FieldRef<"OncologyHistologyMaster", 'Boolean'>
+    readonly createdAt: FieldRef<"OncologyHistologyMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"OncologyHistologyMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OncologyHistologyMaster findUnique
+   */
+  export type OncologyHistologyMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * Filter, which OncologyHistologyMaster to fetch.
+     */
+    where: OncologyHistologyMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyHistologyMaster findUniqueOrThrow
+   */
+  export type OncologyHistologyMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * Filter, which OncologyHistologyMaster to fetch.
+     */
+    where: OncologyHistologyMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyHistologyMaster findFirst
+   */
+  export type OncologyHistologyMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * Filter, which OncologyHistologyMaster to fetch.
+     */
+    where?: OncologyHistologyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyHistologyMasters to fetch.
+     */
+    orderBy?: OncologyHistologyMasterOrderByWithRelationInput | OncologyHistologyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyHistologyMasters.
+     */
+    cursor?: OncologyHistologyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyHistologyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyHistologyMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyHistologyMasters.
+     */
+    distinct?: OncologyHistologyMasterScalarFieldEnum | OncologyHistologyMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyHistologyMaster findFirstOrThrow
+   */
+  export type OncologyHistologyMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * Filter, which OncologyHistologyMaster to fetch.
+     */
+    where?: OncologyHistologyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyHistologyMasters to fetch.
+     */
+    orderBy?: OncologyHistologyMasterOrderByWithRelationInput | OncologyHistologyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OncologyHistologyMasters.
+     */
+    cursor?: OncologyHistologyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyHistologyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyHistologyMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OncologyHistologyMasters.
+     */
+    distinct?: OncologyHistologyMasterScalarFieldEnum | OncologyHistologyMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyHistologyMaster findMany
+   */
+  export type OncologyHistologyMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * Filter, which OncologyHistologyMasters to fetch.
+     */
+    where?: OncologyHistologyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OncologyHistologyMasters to fetch.
+     */
+    orderBy?: OncologyHistologyMasterOrderByWithRelationInput | OncologyHistologyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OncologyHistologyMasters.
+     */
+    cursor?: OncologyHistologyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OncologyHistologyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OncologyHistologyMasters.
+     */
+    skip?: number
+    distinct?: OncologyHistologyMasterScalarFieldEnum | OncologyHistologyMasterScalarFieldEnum[]
+  }
+
+  /**
+   * OncologyHistologyMaster create
+   */
+  export type OncologyHistologyMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * The data needed to create a OncologyHistologyMaster.
+     */
+    data: XOR<OncologyHistologyMasterCreateInput, OncologyHistologyMasterUncheckedCreateInput>
+  }
+
+  /**
+   * OncologyHistologyMaster createMany
+   */
+  export type OncologyHistologyMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OncologyHistologyMasters.
+     */
+    data: OncologyHistologyMasterCreateManyInput | OncologyHistologyMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OncologyHistologyMaster createManyAndReturn
+   */
+  export type OncologyHistologyMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * The data used to create many OncologyHistologyMasters.
+     */
+    data: OncologyHistologyMasterCreateManyInput | OncologyHistologyMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OncologyHistologyMaster update
+   */
+  export type OncologyHistologyMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * The data needed to update a OncologyHistologyMaster.
+     */
+    data: XOR<OncologyHistologyMasterUpdateInput, OncologyHistologyMasterUncheckedUpdateInput>
+    /**
+     * Choose, which OncologyHistologyMaster to update.
+     */
+    where: OncologyHistologyMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyHistologyMaster updateMany
+   */
+  export type OncologyHistologyMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OncologyHistologyMasters.
+     */
+    data: XOR<OncologyHistologyMasterUpdateManyMutationInput, OncologyHistologyMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyHistologyMasters to update
+     */
+    where?: OncologyHistologyMasterWhereInput
+    /**
+     * Limit how many OncologyHistologyMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyHistologyMaster updateManyAndReturn
+   */
+  export type OncologyHistologyMasterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * The data used to update OncologyHistologyMasters.
+     */
+    data: XOR<OncologyHistologyMasterUpdateManyMutationInput, OncologyHistologyMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which OncologyHistologyMasters to update
+     */
+    where?: OncologyHistologyMasterWhereInput
+    /**
+     * Limit how many OncologyHistologyMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyHistologyMaster upsert
+   */
+  export type OncologyHistologyMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * The filter to search for the OncologyHistologyMaster to update in case it exists.
+     */
+    where: OncologyHistologyMasterWhereUniqueInput
+    /**
+     * In case the OncologyHistologyMaster found by the `where` argument doesn't exist, create a new OncologyHistologyMaster with this data.
+     */
+    create: XOR<OncologyHistologyMasterCreateInput, OncologyHistologyMasterUncheckedCreateInput>
+    /**
+     * In case the OncologyHistologyMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OncologyHistologyMasterUpdateInput, OncologyHistologyMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * OncologyHistologyMaster delete
+   */
+  export type OncologyHistologyMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+    /**
+     * Filter which OncologyHistologyMaster to delete.
+     */
+    where: OncologyHistologyMasterWhereUniqueInput
+  }
+
+  /**
+   * OncologyHistologyMaster deleteMany
+   */
+  export type OncologyHistologyMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OncologyHistologyMasters to delete
+     */
+    where?: OncologyHistologyMasterWhereInput
+    /**
+     * Limit how many OncologyHistologyMasters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OncologyHistologyMaster without action
+   */
+  export type OncologyHistologyMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OncologyHistologyMaster
+     */
+    select?: OncologyHistologyMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OncologyHistologyMaster
+     */
+    omit?: OncologyHistologyMasterOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model OncologyCarePlan
    */
 
@@ -9351,6 +14357,9 @@ export namespace Prisma {
     premedications: 'premedications',
     supportiveCare: 'supportiveCare',
     emetogenicRisk: 'emetogenicRisk',
+    doseFormula: 'doseFormula',
+    labPrerequisites: 'labPrerequisites',
+    hydration: 'hydration',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -9375,12 +14384,23 @@ export namespace Prisma {
     weight: 'weight',
     height: 'height',
     creatinineClearance: 'creatinineClearance',
+    cancerDiagnosisId: 'cancerDiagnosisId',
+    oncologyCarePlanId: 'oncologyCarePlanId',
+    hepaticAdjustmentGrade: 'hepaticAdjustmentGrade',
+    renalAdjustmentGrade: 'renalAdjustmentGrade',
     doseAdjustments: 'doseAdjustments',
     preChemoChecklist: 'preChemoChecklist',
     status: 'status',
     verifiedBy: 'verifiedBy',
     verifiedAt: 'verifiedAt',
+    secondVerifiedBy: 'secondVerifiedBy',
+    approvedBy: 'approvedBy',
+    approvedAt: 'approvedAt',
     administeredBy: 'administeredBy',
+    adverseReactions: 'adverseReactions',
+    administrationDetails: 'administrationDetails',
+    drugPreparationDetails: 'drugPreparationDetails',
+    nurseVerificationChecklist: 'nurseVerificationChecklist',
     notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -9415,6 +14435,67 @@ export namespace Prisma {
   };
 
   export type TumorBoardCaseScalarFieldEnum = (typeof TumorBoardCaseScalarFieldEnum)[keyof typeof TumorBoardCaseScalarFieldEnum]
+
+
+  export const OncologyCancerTypeMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    code: 'code',
+    name: 'name',
+    category: 'category',
+    description: 'description',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OncologyCancerTypeMasterScalarFieldEnum = (typeof OncologyCancerTypeMasterScalarFieldEnum)[keyof typeof OncologyCancerTypeMasterScalarFieldEnum]
+
+
+  export const OncologyPrimarySiteMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    icdoSiteCode: 'icdoSiteCode',
+    icdoSiteName: 'icdoSiteName',
+    bodySystem: 'bodySystem',
+    lateralityApplicable: 'lateralityApplicable',
+    mappingType: 'mappingType',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OncologyPrimarySiteMasterScalarFieldEnum = (typeof OncologyPrimarySiteMasterScalarFieldEnum)[keyof typeof OncologyPrimarySiteMasterScalarFieldEnum]
+
+
+  export const OncologyCancerTypeSiteMappingScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    cancerTypeId: 'cancerTypeId',
+    primarySiteId: 'primarySiteId',
+    isDefault: 'isDefault',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OncologyCancerTypeSiteMappingScalarFieldEnum = (typeof OncologyCancerTypeSiteMappingScalarFieldEnum)[keyof typeof OncologyCancerTypeSiteMappingScalarFieldEnum]
+
+
+  export const OncologyHistologyMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    morphologyCode: 'morphologyCode',
+    morphologyName: 'morphologyName',
+    behaviorCode: 'behaviorCode',
+    behaviorName: 'behaviorName',
+    description: 'description',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OncologyHistologyMasterScalarFieldEnum = (typeof OncologyHistologyMasterScalarFieldEnum)[keyof typeof OncologyHistologyMasterScalarFieldEnum]
 
 
   export const OncologyCarePlanScalarFieldEnum: {
@@ -9901,6 +14982,9 @@ export namespace Prisma {
     premedications?: JsonFilter<"ChemoProtocol">
     supportiveCare?: JsonFilter<"ChemoProtocol">
     emetogenicRisk?: StringNullableFilter<"ChemoProtocol"> | string | null
+    doseFormula?: StringFilter<"ChemoProtocol"> | string
+    labPrerequisites?: JsonFilter<"ChemoProtocol">
+    hydration?: JsonFilter<"ChemoProtocol">
     isActive?: BoolFilter<"ChemoProtocol"> | boolean
     createdAt?: DateTimeFilter<"ChemoProtocol"> | Date | string
     updatedAt?: DateTimeFilter<"ChemoProtocol"> | Date | string
@@ -9922,6 +15006,9 @@ export namespace Prisma {
     premedications?: SortOrder
     supportiveCare?: SortOrder
     emetogenicRisk?: SortOrderInput | SortOrder
+    doseFormula?: SortOrder
+    labPrerequisites?: SortOrder
+    hydration?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9947,6 +15034,9 @@ export namespace Prisma {
     premedications?: JsonFilter<"ChemoProtocol">
     supportiveCare?: JsonFilter<"ChemoProtocol">
     emetogenicRisk?: StringNullableFilter<"ChemoProtocol"> | string | null
+    doseFormula?: StringFilter<"ChemoProtocol"> | string
+    labPrerequisites?: JsonFilter<"ChemoProtocol">
+    hydration?: JsonFilter<"ChemoProtocol">
     isActive?: BoolFilter<"ChemoProtocol"> | boolean
     createdAt?: DateTimeFilter<"ChemoProtocol"> | Date | string
     updatedAt?: DateTimeFilter<"ChemoProtocol"> | Date | string
@@ -9968,6 +15058,9 @@ export namespace Prisma {
     premedications?: SortOrder
     supportiveCare?: SortOrder
     emetogenicRisk?: SortOrderInput | SortOrder
+    doseFormula?: SortOrder
+    labPrerequisites?: SortOrder
+    hydration?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9996,6 +15089,9 @@ export namespace Prisma {
     premedications?: JsonWithAggregatesFilter<"ChemoProtocol">
     supportiveCare?: JsonWithAggregatesFilter<"ChemoProtocol">
     emetogenicRisk?: StringNullableWithAggregatesFilter<"ChemoProtocol"> | string | null
+    doseFormula?: StringWithAggregatesFilter<"ChemoProtocol"> | string
+    labPrerequisites?: JsonWithAggregatesFilter<"ChemoProtocol">
+    hydration?: JsonWithAggregatesFilter<"ChemoProtocol">
     isActive?: BoolWithAggregatesFilter<"ChemoProtocol"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ChemoProtocol"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ChemoProtocol"> | Date | string
@@ -10020,12 +15116,23 @@ export namespace Prisma {
     weight?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     height?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: UuidNullableFilter<"ChemoOrder"> | string | null
+    oncologyCarePlanId?: UuidNullableFilter<"ChemoOrder"> | string | null
+    hepaticAdjustmentGrade?: StringNullableFilter<"ChemoOrder"> | string | null
+    renalAdjustmentGrade?: StringNullableFilter<"ChemoOrder"> | string | null
     doseAdjustments?: JsonFilter<"ChemoOrder">
     preChemoChecklist?: JsonFilter<"ChemoOrder">
     status?: StringFilter<"ChemoOrder"> | string
     verifiedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
     verifiedAt?: DateTimeNullableFilter<"ChemoOrder"> | Date | string | null
+    secondVerifiedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    approvedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    approvedAt?: DateTimeNullableFilter<"ChemoOrder"> | Date | string | null
     administeredBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    adverseReactions?: JsonFilter<"ChemoOrder">
+    administrationDetails?: JsonFilter<"ChemoOrder">
+    drugPreparationDetails?: JsonFilter<"ChemoOrder">
+    nurseVerificationChecklist?: JsonFilter<"ChemoOrder">
     notes?: StringNullableFilter<"ChemoOrder"> | string | null
     createdAt?: DateTimeFilter<"ChemoOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ChemoOrder"> | Date | string
@@ -10047,12 +15154,23 @@ export namespace Prisma {
     weight?: SortOrderInput | SortOrder
     height?: SortOrderInput | SortOrder
     creatinineClearance?: SortOrderInput | SortOrder
+    cancerDiagnosisId?: SortOrderInput | SortOrder
+    oncologyCarePlanId?: SortOrderInput | SortOrder
+    hepaticAdjustmentGrade?: SortOrderInput | SortOrder
+    renalAdjustmentGrade?: SortOrderInput | SortOrder
     doseAdjustments?: SortOrder
     preChemoChecklist?: SortOrder
     status?: SortOrder
     verifiedBy?: SortOrderInput | SortOrder
     verifiedAt?: SortOrderInput | SortOrder
+    secondVerifiedBy?: SortOrderInput | SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     administeredBy?: SortOrderInput | SortOrder
+    adverseReactions?: SortOrder
+    administrationDetails?: SortOrder
+    drugPreparationDetails?: SortOrder
+    nurseVerificationChecklist?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10077,12 +15195,23 @@ export namespace Prisma {
     weight?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     height?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: UuidNullableFilter<"ChemoOrder"> | string | null
+    oncologyCarePlanId?: UuidNullableFilter<"ChemoOrder"> | string | null
+    hepaticAdjustmentGrade?: StringNullableFilter<"ChemoOrder"> | string | null
+    renalAdjustmentGrade?: StringNullableFilter<"ChemoOrder"> | string | null
     doseAdjustments?: JsonFilter<"ChemoOrder">
     preChemoChecklist?: JsonFilter<"ChemoOrder">
     status?: StringFilter<"ChemoOrder"> | string
     verifiedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
     verifiedAt?: DateTimeNullableFilter<"ChemoOrder"> | Date | string | null
+    secondVerifiedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    approvedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    approvedAt?: DateTimeNullableFilter<"ChemoOrder"> | Date | string | null
     administeredBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    adverseReactions?: JsonFilter<"ChemoOrder">
+    administrationDetails?: JsonFilter<"ChemoOrder">
+    drugPreparationDetails?: JsonFilter<"ChemoOrder">
+    nurseVerificationChecklist?: JsonFilter<"ChemoOrder">
     notes?: StringNullableFilter<"ChemoOrder"> | string | null
     createdAt?: DateTimeFilter<"ChemoOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ChemoOrder"> | Date | string
@@ -10104,12 +15233,23 @@ export namespace Prisma {
     weight?: SortOrderInput | SortOrder
     height?: SortOrderInput | SortOrder
     creatinineClearance?: SortOrderInput | SortOrder
+    cancerDiagnosisId?: SortOrderInput | SortOrder
+    oncologyCarePlanId?: SortOrderInput | SortOrder
+    hepaticAdjustmentGrade?: SortOrderInput | SortOrder
+    renalAdjustmentGrade?: SortOrderInput | SortOrder
     doseAdjustments?: SortOrder
     preChemoChecklist?: SortOrder
     status?: SortOrder
     verifiedBy?: SortOrderInput | SortOrder
     verifiedAt?: SortOrderInput | SortOrder
+    secondVerifiedBy?: SortOrderInput | SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     administeredBy?: SortOrderInput | SortOrder
+    adverseReactions?: SortOrder
+    administrationDetails?: SortOrder
+    drugPreparationDetails?: SortOrder
+    nurseVerificationChecklist?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10138,12 +15278,23 @@ export namespace Prisma {
     weight?: DecimalNullableWithAggregatesFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     height?: DecimalNullableWithAggregatesFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: DecimalNullableWithAggregatesFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: UuidNullableWithAggregatesFilter<"ChemoOrder"> | string | null
+    oncologyCarePlanId?: UuidNullableWithAggregatesFilter<"ChemoOrder"> | string | null
+    hepaticAdjustmentGrade?: StringNullableWithAggregatesFilter<"ChemoOrder"> | string | null
+    renalAdjustmentGrade?: StringNullableWithAggregatesFilter<"ChemoOrder"> | string | null
     doseAdjustments?: JsonWithAggregatesFilter<"ChemoOrder">
     preChemoChecklist?: JsonWithAggregatesFilter<"ChemoOrder">
     status?: StringWithAggregatesFilter<"ChemoOrder"> | string
     verifiedBy?: UuidNullableWithAggregatesFilter<"ChemoOrder"> | string | null
     verifiedAt?: DateTimeNullableWithAggregatesFilter<"ChemoOrder"> | Date | string | null
+    secondVerifiedBy?: UuidNullableWithAggregatesFilter<"ChemoOrder"> | string | null
+    approvedBy?: UuidNullableWithAggregatesFilter<"ChemoOrder"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"ChemoOrder"> | Date | string | null
     administeredBy?: UuidNullableWithAggregatesFilter<"ChemoOrder"> | string | null
+    adverseReactions?: JsonWithAggregatesFilter<"ChemoOrder">
+    administrationDetails?: JsonWithAggregatesFilter<"ChemoOrder">
+    drugPreparationDetails?: JsonWithAggregatesFilter<"ChemoOrder">
+    nurseVerificationChecklist?: JsonWithAggregatesFilter<"ChemoOrder">
     notes?: StringNullableWithAggregatesFilter<"ChemoOrder"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ChemoOrder"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ChemoOrder"> | Date | string
@@ -10287,6 +15438,315 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"TumorBoardCase"> | string
     createdAt?: DateTimeWithAggregatesFilter<"TumorBoardCase"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TumorBoardCase"> | Date | string
+  }
+
+  export type OncologyCancerTypeMasterWhereInput = {
+    AND?: OncologyCancerTypeMasterWhereInput | OncologyCancerTypeMasterWhereInput[]
+    OR?: OncologyCancerTypeMasterWhereInput[]
+    NOT?: OncologyCancerTypeMasterWhereInput | OncologyCancerTypeMasterWhereInput[]
+    id?: UuidFilter<"OncologyCancerTypeMaster"> | string
+    tenantId?: UuidFilter<"OncologyCancerTypeMaster"> | string
+    code?: StringFilter<"OncologyCancerTypeMaster"> | string
+    name?: StringFilter<"OncologyCancerTypeMaster"> | string
+    category?: StringNullableFilter<"OncologyCancerTypeMaster"> | string | null
+    description?: StringNullableFilter<"OncologyCancerTypeMaster"> | string | null
+    active?: BoolFilter<"OncologyCancerTypeMaster"> | boolean
+    createdAt?: DateTimeFilter<"OncologyCancerTypeMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyCancerTypeMaster"> | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingListRelationFilter
+  }
+
+  export type OncologyCancerTypeMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    siteMappings?: OncologyCancerTypeSiteMappingOrderByRelationAggregateInput
+  }
+
+  export type OncologyCancerTypeMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_code?: OncologyCancerTypeMasterTenantIdCodeCompoundUniqueInput
+    AND?: OncologyCancerTypeMasterWhereInput | OncologyCancerTypeMasterWhereInput[]
+    OR?: OncologyCancerTypeMasterWhereInput[]
+    NOT?: OncologyCancerTypeMasterWhereInput | OncologyCancerTypeMasterWhereInput[]
+    tenantId?: UuidFilter<"OncologyCancerTypeMaster"> | string
+    code?: StringFilter<"OncologyCancerTypeMaster"> | string
+    name?: StringFilter<"OncologyCancerTypeMaster"> | string
+    category?: StringNullableFilter<"OncologyCancerTypeMaster"> | string | null
+    description?: StringNullableFilter<"OncologyCancerTypeMaster"> | string | null
+    active?: BoolFilter<"OncologyCancerTypeMaster"> | boolean
+    createdAt?: DateTimeFilter<"OncologyCancerTypeMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyCancerTypeMaster"> | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingListRelationFilter
+  }, "id" | "tenantId_code">
+
+  export type OncologyCancerTypeMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OncologyCancerTypeMasterCountOrderByAggregateInput
+    _max?: OncologyCancerTypeMasterMaxOrderByAggregateInput
+    _min?: OncologyCancerTypeMasterMinOrderByAggregateInput
+  }
+
+  export type OncologyCancerTypeMasterScalarWhereWithAggregatesInput = {
+    AND?: OncologyCancerTypeMasterScalarWhereWithAggregatesInput | OncologyCancerTypeMasterScalarWhereWithAggregatesInput[]
+    OR?: OncologyCancerTypeMasterScalarWhereWithAggregatesInput[]
+    NOT?: OncologyCancerTypeMasterScalarWhereWithAggregatesInput | OncologyCancerTypeMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"OncologyCancerTypeMaster"> | string
+    tenantId?: UuidWithAggregatesFilter<"OncologyCancerTypeMaster"> | string
+    code?: StringWithAggregatesFilter<"OncologyCancerTypeMaster"> | string
+    name?: StringWithAggregatesFilter<"OncologyCancerTypeMaster"> | string
+    category?: StringNullableWithAggregatesFilter<"OncologyCancerTypeMaster"> | string | null
+    description?: StringNullableWithAggregatesFilter<"OncologyCancerTypeMaster"> | string | null
+    active?: BoolWithAggregatesFilter<"OncologyCancerTypeMaster"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"OncologyCancerTypeMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OncologyCancerTypeMaster"> | Date | string
+  }
+
+  export type OncologyPrimarySiteMasterWhereInput = {
+    AND?: OncologyPrimarySiteMasterWhereInput | OncologyPrimarySiteMasterWhereInput[]
+    OR?: OncologyPrimarySiteMasterWhereInput[]
+    NOT?: OncologyPrimarySiteMasterWhereInput | OncologyPrimarySiteMasterWhereInput[]
+    id?: UuidFilter<"OncologyPrimarySiteMaster"> | string
+    tenantId?: UuidFilter<"OncologyPrimarySiteMaster"> | string
+    icdoSiteCode?: StringFilter<"OncologyPrimarySiteMaster"> | string
+    icdoSiteName?: StringFilter<"OncologyPrimarySiteMaster"> | string
+    bodySystem?: StringNullableFilter<"OncologyPrimarySiteMaster"> | string | null
+    lateralityApplicable?: BoolFilter<"OncologyPrimarySiteMaster"> | boolean
+    mappingType?: StringNullableFilter<"OncologyPrimarySiteMaster"> | string | null
+    active?: BoolFilter<"OncologyPrimarySiteMaster"> | boolean
+    createdAt?: DateTimeFilter<"OncologyPrimarySiteMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyPrimarySiteMaster"> | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingListRelationFilter
+  }
+
+  export type OncologyPrimarySiteMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    icdoSiteCode?: SortOrder
+    icdoSiteName?: SortOrder
+    bodySystem?: SortOrderInput | SortOrder
+    lateralityApplicable?: SortOrder
+    mappingType?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    siteMappings?: OncologyCancerTypeSiteMappingOrderByRelationAggregateInput
+  }
+
+  export type OncologyPrimarySiteMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_icdoSiteCode?: OncologyPrimarySiteMasterTenantIdIcdoSiteCodeCompoundUniqueInput
+    AND?: OncologyPrimarySiteMasterWhereInput | OncologyPrimarySiteMasterWhereInput[]
+    OR?: OncologyPrimarySiteMasterWhereInput[]
+    NOT?: OncologyPrimarySiteMasterWhereInput | OncologyPrimarySiteMasterWhereInput[]
+    tenantId?: UuidFilter<"OncologyPrimarySiteMaster"> | string
+    icdoSiteCode?: StringFilter<"OncologyPrimarySiteMaster"> | string
+    icdoSiteName?: StringFilter<"OncologyPrimarySiteMaster"> | string
+    bodySystem?: StringNullableFilter<"OncologyPrimarySiteMaster"> | string | null
+    lateralityApplicable?: BoolFilter<"OncologyPrimarySiteMaster"> | boolean
+    mappingType?: StringNullableFilter<"OncologyPrimarySiteMaster"> | string | null
+    active?: BoolFilter<"OncologyPrimarySiteMaster"> | boolean
+    createdAt?: DateTimeFilter<"OncologyPrimarySiteMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyPrimarySiteMaster"> | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingListRelationFilter
+  }, "id" | "tenantId_icdoSiteCode">
+
+  export type OncologyPrimarySiteMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    icdoSiteCode?: SortOrder
+    icdoSiteName?: SortOrder
+    bodySystem?: SortOrderInput | SortOrder
+    lateralityApplicable?: SortOrder
+    mappingType?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OncologyPrimarySiteMasterCountOrderByAggregateInput
+    _max?: OncologyPrimarySiteMasterMaxOrderByAggregateInput
+    _min?: OncologyPrimarySiteMasterMinOrderByAggregateInput
+  }
+
+  export type OncologyPrimarySiteMasterScalarWhereWithAggregatesInput = {
+    AND?: OncologyPrimarySiteMasterScalarWhereWithAggregatesInput | OncologyPrimarySiteMasterScalarWhereWithAggregatesInput[]
+    OR?: OncologyPrimarySiteMasterScalarWhereWithAggregatesInput[]
+    NOT?: OncologyPrimarySiteMasterScalarWhereWithAggregatesInput | OncologyPrimarySiteMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"OncologyPrimarySiteMaster"> | string
+    tenantId?: UuidWithAggregatesFilter<"OncologyPrimarySiteMaster"> | string
+    icdoSiteCode?: StringWithAggregatesFilter<"OncologyPrimarySiteMaster"> | string
+    icdoSiteName?: StringWithAggregatesFilter<"OncologyPrimarySiteMaster"> | string
+    bodySystem?: StringNullableWithAggregatesFilter<"OncologyPrimarySiteMaster"> | string | null
+    lateralityApplicable?: BoolWithAggregatesFilter<"OncologyPrimarySiteMaster"> | boolean
+    mappingType?: StringNullableWithAggregatesFilter<"OncologyPrimarySiteMaster"> | string | null
+    active?: BoolWithAggregatesFilter<"OncologyPrimarySiteMaster"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"OncologyPrimarySiteMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OncologyPrimarySiteMaster"> | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingWhereInput = {
+    AND?: OncologyCancerTypeSiteMappingWhereInput | OncologyCancerTypeSiteMappingWhereInput[]
+    OR?: OncologyCancerTypeSiteMappingWhereInput[]
+    NOT?: OncologyCancerTypeSiteMappingWhereInput | OncologyCancerTypeSiteMappingWhereInput[]
+    id?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    tenantId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    cancerTypeId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    primarySiteId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    isDefault?: BoolFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    active?: BoolFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    createdAt?: DateTimeFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+    cancerType?: XOR<OncologyCancerTypeMasterScalarRelationFilter, OncologyCancerTypeMasterWhereInput>
+    primarySite?: XOR<OncologyPrimarySiteMasterScalarRelationFilter, OncologyPrimarySiteMasterWhereInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cancerTypeId?: SortOrder
+    primarySiteId?: SortOrder
+    isDefault?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    cancerType?: OncologyCancerTypeMasterOrderByWithRelationInput
+    primarySite?: OncologyPrimarySiteMasterOrderByWithRelationInput
+  }
+
+  export type OncologyCancerTypeSiteMappingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_cancerTypeId_primarySiteId?: OncologyCancerTypeSiteMappingTenantIdCancerTypeIdPrimarySiteIdCompoundUniqueInput
+    AND?: OncologyCancerTypeSiteMappingWhereInput | OncologyCancerTypeSiteMappingWhereInput[]
+    OR?: OncologyCancerTypeSiteMappingWhereInput[]
+    NOT?: OncologyCancerTypeSiteMappingWhereInput | OncologyCancerTypeSiteMappingWhereInput[]
+    tenantId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    cancerTypeId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    primarySiteId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    isDefault?: BoolFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    active?: BoolFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    createdAt?: DateTimeFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+    cancerType?: XOR<OncologyCancerTypeMasterScalarRelationFilter, OncologyCancerTypeMasterWhereInput>
+    primarySite?: XOR<OncologyPrimarySiteMasterScalarRelationFilter, OncologyPrimarySiteMasterWhereInput>
+  }, "id" | "tenantId_cancerTypeId_primarySiteId">
+
+  export type OncologyCancerTypeSiteMappingOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cancerTypeId?: SortOrder
+    primarySiteId?: SortOrder
+    isDefault?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OncologyCancerTypeSiteMappingCountOrderByAggregateInput
+    _max?: OncologyCancerTypeSiteMappingMaxOrderByAggregateInput
+    _min?: OncologyCancerTypeSiteMappingMinOrderByAggregateInput
+  }
+
+  export type OncologyCancerTypeSiteMappingScalarWhereWithAggregatesInput = {
+    AND?: OncologyCancerTypeSiteMappingScalarWhereWithAggregatesInput | OncologyCancerTypeSiteMappingScalarWhereWithAggregatesInput[]
+    OR?: OncologyCancerTypeSiteMappingScalarWhereWithAggregatesInput[]
+    NOT?: OncologyCancerTypeSiteMappingScalarWhereWithAggregatesInput | OncologyCancerTypeSiteMappingScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | string
+    tenantId?: UuidWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | string
+    cancerTypeId?: UuidWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | string
+    primarySiteId?: UuidWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | string
+    isDefault?: BoolWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    active?: BoolWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+  }
+
+  export type OncologyHistologyMasterWhereInput = {
+    AND?: OncologyHistologyMasterWhereInput | OncologyHistologyMasterWhereInput[]
+    OR?: OncologyHistologyMasterWhereInput[]
+    NOT?: OncologyHistologyMasterWhereInput | OncologyHistologyMasterWhereInput[]
+    id?: UuidFilter<"OncologyHistologyMaster"> | string
+    tenantId?: UuidFilter<"OncologyHistologyMaster"> | string
+    morphologyCode?: StringFilter<"OncologyHistologyMaster"> | string
+    morphologyName?: StringFilter<"OncologyHistologyMaster"> | string
+    behaviorCode?: StringNullableFilter<"OncologyHistologyMaster"> | string | null
+    behaviorName?: StringNullableFilter<"OncologyHistologyMaster"> | string | null
+    description?: StringNullableFilter<"OncologyHistologyMaster"> | string | null
+    active?: BoolFilter<"OncologyHistologyMaster"> | boolean
+    createdAt?: DateTimeFilter<"OncologyHistologyMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyHistologyMaster"> | Date | string
+  }
+
+  export type OncologyHistologyMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    morphologyCode?: SortOrder
+    morphologyName?: SortOrder
+    behaviorCode?: SortOrderInput | SortOrder
+    behaviorName?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyHistologyMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_morphologyCode?: OncologyHistologyMasterTenantIdMorphologyCodeCompoundUniqueInput
+    AND?: OncologyHistologyMasterWhereInput | OncologyHistologyMasterWhereInput[]
+    OR?: OncologyHistologyMasterWhereInput[]
+    NOT?: OncologyHistologyMasterWhereInput | OncologyHistologyMasterWhereInput[]
+    tenantId?: UuidFilter<"OncologyHistologyMaster"> | string
+    morphologyCode?: StringFilter<"OncologyHistologyMaster"> | string
+    morphologyName?: StringFilter<"OncologyHistologyMaster"> | string
+    behaviorCode?: StringNullableFilter<"OncologyHistologyMaster"> | string | null
+    behaviorName?: StringNullableFilter<"OncologyHistologyMaster"> | string | null
+    description?: StringNullableFilter<"OncologyHistologyMaster"> | string | null
+    active?: BoolFilter<"OncologyHistologyMaster"> | boolean
+    createdAt?: DateTimeFilter<"OncologyHistologyMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyHistologyMaster"> | Date | string
+  }, "id" | "tenantId_morphologyCode">
+
+  export type OncologyHistologyMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    morphologyCode?: SortOrder
+    morphologyName?: SortOrder
+    behaviorCode?: SortOrderInput | SortOrder
+    behaviorName?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OncologyHistologyMasterCountOrderByAggregateInput
+    _max?: OncologyHistologyMasterMaxOrderByAggregateInput
+    _min?: OncologyHistologyMasterMinOrderByAggregateInput
+  }
+
+  export type OncologyHistologyMasterScalarWhereWithAggregatesInput = {
+    AND?: OncologyHistologyMasterScalarWhereWithAggregatesInput | OncologyHistologyMasterScalarWhereWithAggregatesInput[]
+    OR?: OncologyHistologyMasterScalarWhereWithAggregatesInput[]
+    NOT?: OncologyHistologyMasterScalarWhereWithAggregatesInput | OncologyHistologyMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"OncologyHistologyMaster"> | string
+    tenantId?: UuidWithAggregatesFilter<"OncologyHistologyMaster"> | string
+    morphologyCode?: StringWithAggregatesFilter<"OncologyHistologyMaster"> | string
+    morphologyName?: StringWithAggregatesFilter<"OncologyHistologyMaster"> | string
+    behaviorCode?: StringNullableWithAggregatesFilter<"OncologyHistologyMaster"> | string | null
+    behaviorName?: StringNullableWithAggregatesFilter<"OncologyHistologyMaster"> | string | null
+    description?: StringNullableWithAggregatesFilter<"OncologyHistologyMaster"> | string | null
+    active?: BoolWithAggregatesFilter<"OncologyHistologyMaster"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"OncologyHistologyMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OncologyHistologyMaster"> | Date | string
   }
 
   export type OncologyCarePlanWhereInput = {
@@ -10830,6 +16290,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: string | null
+    doseFormula?: string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10851,6 +16314,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: string | null
+    doseFormula?: string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10872,6 +16338,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    doseFormula?: StringFieldUpdateOperationsInput | string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10893,6 +16362,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    doseFormula?: StringFieldUpdateOperationsInput | string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10914,6 +16386,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: string | null
+    doseFormula?: string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10934,6 +16409,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    doseFormula?: StringFieldUpdateOperationsInput | string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10954,6 +16432,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    doseFormula?: StringFieldUpdateOperationsInput | string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10974,12 +16455,23 @@ export namespace Prisma {
     weight?: Decimal | DecimalJsLike | number | string | null
     height?: Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: string | null
+    oncologyCarePlanId?: string | null
+    hepaticAdjustmentGrade?: string | null
+    renalAdjustmentGrade?: string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: string
     verifiedBy?: string | null
     verifiedAt?: Date | string | null
+    secondVerifiedBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
     administeredBy?: string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11001,12 +16493,23 @@ export namespace Prisma {
     weight?: Decimal | DecimalJsLike | number | string | null
     height?: Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: string | null
+    oncologyCarePlanId?: string | null
+    hepaticAdjustmentGrade?: string | null
+    renalAdjustmentGrade?: string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: string
     verifiedBy?: string | null
     verifiedAt?: Date | string | null
+    secondVerifiedBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
     administeredBy?: string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11026,12 +16529,23 @@ export namespace Prisma {
     weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     height?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    oncologyCarePlanId?: NullableStringFieldUpdateOperationsInput | string | null
+    hepaticAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    renalAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    secondVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     administeredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11053,12 +16567,23 @@ export namespace Prisma {
     weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     height?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    oncologyCarePlanId?: NullableStringFieldUpdateOperationsInput | string | null
+    hepaticAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    renalAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    secondVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     administeredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11079,12 +16604,23 @@ export namespace Prisma {
     weight?: Decimal | DecimalJsLike | number | string | null
     height?: Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: string | null
+    oncologyCarePlanId?: string | null
+    hepaticAdjustmentGrade?: string | null
+    renalAdjustmentGrade?: string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: string
     verifiedBy?: string | null
     verifiedAt?: Date | string | null
+    secondVerifiedBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
     administeredBy?: string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11104,12 +16640,23 @@ export namespace Prisma {
     weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     height?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    oncologyCarePlanId?: NullableStringFieldUpdateOperationsInput | string | null
+    hepaticAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    renalAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    secondVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     administeredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11130,12 +16677,23 @@ export namespace Prisma {
     weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     height?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    oncologyCarePlanId?: NullableStringFieldUpdateOperationsInput | string | null
+    hepaticAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    renalAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    secondVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     administeredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11311,6 +16869,355 @@ export namespace Prisma {
     reviewOutcome?: NullableStringFieldUpdateOperationsInput | string | null
     followUpActions?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeMasterCreateInput = {
+    id?: string
+    tenantId: string
+    code: string
+    name: string
+    category?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingCreateNestedManyWithoutCancerTypeInput
+  }
+
+  export type OncologyCancerTypeMasterUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    code: string
+    name: string
+    category?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingUncheckedCreateNestedManyWithoutCancerTypeInput
+  }
+
+  export type OncologyCancerTypeMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingUpdateManyWithoutCancerTypeNestedInput
+  }
+
+  export type OncologyCancerTypeMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutCancerTypeNestedInput
+  }
+
+  export type OncologyCancerTypeMasterCreateManyInput = {
+    id?: string
+    tenantId: string
+    code: string
+    name: string
+    category?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyPrimarySiteMasterCreateInput = {
+    id?: string
+    tenantId: string
+    icdoSiteCode: string
+    icdoSiteName: string
+    bodySystem?: string | null
+    lateralityApplicable?: boolean
+    mappingType?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingCreateNestedManyWithoutPrimarySiteInput
+  }
+
+  export type OncologyPrimarySiteMasterUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    icdoSiteCode: string
+    icdoSiteName: string
+    bodySystem?: string | null
+    lateralityApplicable?: boolean
+    mappingType?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingUncheckedCreateNestedManyWithoutPrimarySiteInput
+  }
+
+  export type OncologyPrimarySiteMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    icdoSiteCode?: StringFieldUpdateOperationsInput | string
+    icdoSiteName?: StringFieldUpdateOperationsInput | string
+    bodySystem?: NullableStringFieldUpdateOperationsInput | string | null
+    lateralityApplicable?: BoolFieldUpdateOperationsInput | boolean
+    mappingType?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingUpdateManyWithoutPrimarySiteNestedInput
+  }
+
+  export type OncologyPrimarySiteMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    icdoSiteCode?: StringFieldUpdateOperationsInput | string
+    icdoSiteName?: StringFieldUpdateOperationsInput | string
+    bodySystem?: NullableStringFieldUpdateOperationsInput | string | null
+    lateralityApplicable?: BoolFieldUpdateOperationsInput | boolean
+    mappingType?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    siteMappings?: OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutPrimarySiteNestedInput
+  }
+
+  export type OncologyPrimarySiteMasterCreateManyInput = {
+    id?: string
+    tenantId: string
+    icdoSiteCode: string
+    icdoSiteName: string
+    bodySystem?: string | null
+    lateralityApplicable?: boolean
+    mappingType?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyPrimarySiteMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    icdoSiteCode?: StringFieldUpdateOperationsInput | string
+    icdoSiteName?: StringFieldUpdateOperationsInput | string
+    bodySystem?: NullableStringFieldUpdateOperationsInput | string | null
+    lateralityApplicable?: BoolFieldUpdateOperationsInput | boolean
+    mappingType?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyPrimarySiteMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    icdoSiteCode?: StringFieldUpdateOperationsInput | string
+    icdoSiteName?: StringFieldUpdateOperationsInput | string
+    bodySystem?: NullableStringFieldUpdateOperationsInput | string | null
+    lateralityApplicable?: BoolFieldUpdateOperationsInput | boolean
+    mappingType?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateInput = {
+    id?: string
+    tenantId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cancerType: OncologyCancerTypeMasterCreateNestedOneWithoutSiteMappingsInput
+    primarySite: OncologyPrimarySiteMasterCreateNestedOneWithoutSiteMappingsInput
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    cancerTypeId: string
+    primarySiteId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancerType?: OncologyCancerTypeMasterUpdateOneRequiredWithoutSiteMappingsNestedInput
+    primarySite?: OncologyPrimarySiteMasterUpdateOneRequiredWithoutSiteMappingsNestedInput
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cancerTypeId?: StringFieldUpdateOperationsInput | string
+    primarySiteId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateManyInput = {
+    id?: string
+    tenantId: string
+    cancerTypeId: string
+    primarySiteId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cancerTypeId?: StringFieldUpdateOperationsInput | string
+    primarySiteId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyHistologyMasterCreateInput = {
+    id?: string
+    tenantId: string
+    morphologyCode: string
+    morphologyName: string
+    behaviorCode?: string | null
+    behaviorName?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyHistologyMasterUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    morphologyCode: string
+    morphologyName: string
+    behaviorCode?: string | null
+    behaviorName?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyHistologyMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    morphologyCode?: StringFieldUpdateOperationsInput | string
+    morphologyName?: StringFieldUpdateOperationsInput | string
+    behaviorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    behaviorName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyHistologyMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    morphologyCode?: StringFieldUpdateOperationsInput | string
+    morphologyName?: StringFieldUpdateOperationsInput | string
+    behaviorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    behaviorName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyHistologyMasterCreateManyInput = {
+    id?: string
+    tenantId: string
+    morphologyCode: string
+    morphologyName: string
+    behaviorCode?: string | null
+    behaviorName?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyHistologyMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    morphologyCode?: StringFieldUpdateOperationsInput | string
+    morphologyName?: StringFieldUpdateOperationsInput | string
+    behaviorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    behaviorName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyHistologyMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    morphologyCode?: StringFieldUpdateOperationsInput | string
+    morphologyName?: StringFieldUpdateOperationsInput | string
+    behaviorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    behaviorName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11979,6 +17886,9 @@ export namespace Prisma {
     premedications?: SortOrder
     supportiveCare?: SortOrder
     emetogenicRisk?: SortOrder
+    doseFormula?: SortOrder
+    labPrerequisites?: SortOrder
+    hydration?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12001,6 +17911,7 @@ export namespace Prisma {
     totalCycles?: SortOrder
     cycleDurationDays?: SortOrder
     emetogenicRisk?: SortOrder
+    doseFormula?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12018,6 +17929,7 @@ export namespace Prisma {
     totalCycles?: SortOrder
     cycleDurationDays?: SortOrder
     emetogenicRisk?: SortOrder
+    doseFormula?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12087,12 +17999,23 @@ export namespace Prisma {
     weight?: SortOrder
     height?: SortOrder
     creatinineClearance?: SortOrder
+    cancerDiagnosisId?: SortOrder
+    oncologyCarePlanId?: SortOrder
+    hepaticAdjustmentGrade?: SortOrder
+    renalAdjustmentGrade?: SortOrder
     doseAdjustments?: SortOrder
     preChemoChecklist?: SortOrder
     status?: SortOrder
     verifiedBy?: SortOrder
     verifiedAt?: SortOrder
+    secondVerifiedBy?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
     administeredBy?: SortOrder
+    adverseReactions?: SortOrder
+    administrationDetails?: SortOrder
+    drugPreparationDetails?: SortOrder
+    nurseVerificationChecklist?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12122,9 +18045,16 @@ export namespace Prisma {
     weight?: SortOrder
     height?: SortOrder
     creatinineClearance?: SortOrder
+    cancerDiagnosisId?: SortOrder
+    oncologyCarePlanId?: SortOrder
+    hepaticAdjustmentGrade?: SortOrder
+    renalAdjustmentGrade?: SortOrder
     status?: SortOrder
     verifiedBy?: SortOrder
     verifiedAt?: SortOrder
+    secondVerifiedBy?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
     administeredBy?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -12146,9 +18076,16 @@ export namespace Prisma {
     weight?: SortOrder
     height?: SortOrder
     creatinineClearance?: SortOrder
+    cancerDiagnosisId?: SortOrder
+    oncologyCarePlanId?: SortOrder
+    hepaticAdjustmentGrade?: SortOrder
+    renalAdjustmentGrade?: SortOrder
     status?: SortOrder
     verifiedBy?: SortOrder
     verifiedAt?: SortOrder
+    secondVerifiedBy?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
     administeredBy?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -12257,6 +18194,194 @@ export namespace Prisma {
     decision?: SortOrder
     reviewOutcome?: SortOrder
     status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyCancerTypeSiteMappingListRelationFilter = {
+    every?: OncologyCancerTypeSiteMappingWhereInput
+    some?: OncologyCancerTypeSiteMappingWhereInput
+    none?: OncologyCancerTypeSiteMappingWhereInput
+  }
+
+  export type OncologyCancerTypeSiteMappingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OncologyCancerTypeMasterTenantIdCodeCompoundUniqueInput = {
+    tenantId: string
+    code: string
+  }
+
+  export type OncologyCancerTypeMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyCancerTypeMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyCancerTypeMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyPrimarySiteMasterTenantIdIcdoSiteCodeCompoundUniqueInput = {
+    tenantId: string
+    icdoSiteCode: string
+  }
+
+  export type OncologyPrimarySiteMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    icdoSiteCode?: SortOrder
+    icdoSiteName?: SortOrder
+    bodySystem?: SortOrder
+    lateralityApplicable?: SortOrder
+    mappingType?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyPrimarySiteMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    icdoSiteCode?: SortOrder
+    icdoSiteName?: SortOrder
+    bodySystem?: SortOrder
+    lateralityApplicable?: SortOrder
+    mappingType?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyPrimarySiteMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    icdoSiteCode?: SortOrder
+    icdoSiteName?: SortOrder
+    bodySystem?: SortOrder
+    lateralityApplicable?: SortOrder
+    mappingType?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyCancerTypeMasterScalarRelationFilter = {
+    is?: OncologyCancerTypeMasterWhereInput
+    isNot?: OncologyCancerTypeMasterWhereInput
+  }
+
+  export type OncologyPrimarySiteMasterScalarRelationFilter = {
+    is?: OncologyPrimarySiteMasterWhereInput
+    isNot?: OncologyPrimarySiteMasterWhereInput
+  }
+
+  export type OncologyCancerTypeSiteMappingTenantIdCancerTypeIdPrimarySiteIdCompoundUniqueInput = {
+    tenantId: string
+    cancerTypeId: string
+    primarySiteId: string
+  }
+
+  export type OncologyCancerTypeSiteMappingCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cancerTypeId?: SortOrder
+    primarySiteId?: SortOrder
+    isDefault?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyCancerTypeSiteMappingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cancerTypeId?: SortOrder
+    primarySiteId?: SortOrder
+    isDefault?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyCancerTypeSiteMappingMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cancerTypeId?: SortOrder
+    primarySiteId?: SortOrder
+    isDefault?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyHistologyMasterTenantIdMorphologyCodeCompoundUniqueInput = {
+    tenantId: string
+    morphologyCode: string
+  }
+
+  export type OncologyHistologyMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    morphologyCode?: SortOrder
+    morphologyName?: SortOrder
+    behaviorCode?: SortOrder
+    behaviorName?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyHistologyMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    morphologyCode?: SortOrder
+    morphologyName?: SortOrder
+    behaviorCode?: SortOrder
+    behaviorName?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OncologyHistologyMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    morphologyCode?: SortOrder
+    morphologyName?: SortOrder
+    behaviorCode?: SortOrder
+    behaviorName?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12600,6 +18725,118 @@ export namespace Prisma {
     upsert?: CancerDiagnosisUpsertWithoutTumorBoardCasesInput
     connect?: CancerDiagnosisWhereUniqueInput
     update?: XOR<XOR<CancerDiagnosisUpdateToOneWithWhereWithoutTumorBoardCasesInput, CancerDiagnosisUpdateWithoutTumorBoardCasesInput>, CancerDiagnosisUncheckedUpdateWithoutTumorBoardCasesInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateNestedManyWithoutCancerTypeInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput> | OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyCancerTypeInputEnvelope
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedCreateNestedManyWithoutCancerTypeInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput> | OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyCancerTypeInputEnvelope
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateManyWithoutCancerTypeNestedInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput> | OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput[]
+    upsert?: OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutCancerTypeInput | OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutCancerTypeInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyCancerTypeInputEnvelope
+    set?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    disconnect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    delete?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    update?: OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutCancerTypeInput | OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutCancerTypeInput[]
+    updateMany?: OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutCancerTypeInput | OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutCancerTypeInput[]
+    deleteMany?: OncologyCancerTypeSiteMappingScalarWhereInput | OncologyCancerTypeSiteMappingScalarWhereInput[]
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutCancerTypeNestedInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput> | OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput[]
+    upsert?: OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutCancerTypeInput | OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutCancerTypeInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyCancerTypeInputEnvelope
+    set?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    disconnect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    delete?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    update?: OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutCancerTypeInput | OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutCancerTypeInput[]
+    updateMany?: OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutCancerTypeInput | OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutCancerTypeInput[]
+    deleteMany?: OncologyCancerTypeSiteMappingScalarWhereInput | OncologyCancerTypeSiteMappingScalarWhereInput[]
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateNestedManyWithoutPrimarySiteInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput> | OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyPrimarySiteInputEnvelope
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedCreateNestedManyWithoutPrimarySiteInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput> | OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyPrimarySiteInputEnvelope
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateManyWithoutPrimarySiteNestedInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput> | OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput[]
+    upsert?: OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutPrimarySiteInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyPrimarySiteInputEnvelope
+    set?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    disconnect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    delete?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    update?: OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutPrimarySiteInput[]
+    updateMany?: OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutPrimarySiteInput[]
+    deleteMany?: OncologyCancerTypeSiteMappingScalarWhereInput | OncologyCancerTypeSiteMappingScalarWhereInput[]
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutPrimarySiteNestedInput = {
+    create?: XOR<OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput> | OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput[] | OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput[]
+    connectOrCreate?: OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput[]
+    upsert?: OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutPrimarySiteInput[]
+    createMany?: OncologyCancerTypeSiteMappingCreateManyPrimarySiteInputEnvelope
+    set?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    disconnect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    delete?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    connect?: OncologyCancerTypeSiteMappingWhereUniqueInput | OncologyCancerTypeSiteMappingWhereUniqueInput[]
+    update?: OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutPrimarySiteInput[]
+    updateMany?: OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutPrimarySiteInput | OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutPrimarySiteInput[]
+    deleteMany?: OncologyCancerTypeSiteMappingScalarWhereInput | OncologyCancerTypeSiteMappingScalarWhereInput[]
+  }
+
+  export type OncologyCancerTypeMasterCreateNestedOneWithoutSiteMappingsInput = {
+    create?: XOR<OncologyCancerTypeMasterCreateWithoutSiteMappingsInput, OncologyCancerTypeMasterUncheckedCreateWithoutSiteMappingsInput>
+    connectOrCreate?: OncologyCancerTypeMasterCreateOrConnectWithoutSiteMappingsInput
+    connect?: OncologyCancerTypeMasterWhereUniqueInput
+  }
+
+  export type OncologyPrimarySiteMasterCreateNestedOneWithoutSiteMappingsInput = {
+    create?: XOR<OncologyPrimarySiteMasterCreateWithoutSiteMappingsInput, OncologyPrimarySiteMasterUncheckedCreateWithoutSiteMappingsInput>
+    connectOrCreate?: OncologyPrimarySiteMasterCreateOrConnectWithoutSiteMappingsInput
+    connect?: OncologyPrimarySiteMasterWhereUniqueInput
+  }
+
+  export type OncologyCancerTypeMasterUpdateOneRequiredWithoutSiteMappingsNestedInput = {
+    create?: XOR<OncologyCancerTypeMasterCreateWithoutSiteMappingsInput, OncologyCancerTypeMasterUncheckedCreateWithoutSiteMappingsInput>
+    connectOrCreate?: OncologyCancerTypeMasterCreateOrConnectWithoutSiteMappingsInput
+    upsert?: OncologyCancerTypeMasterUpsertWithoutSiteMappingsInput
+    connect?: OncologyCancerTypeMasterWhereUniqueInput
+    update?: XOR<XOR<OncologyCancerTypeMasterUpdateToOneWithWhereWithoutSiteMappingsInput, OncologyCancerTypeMasterUpdateWithoutSiteMappingsInput>, OncologyCancerTypeMasterUncheckedUpdateWithoutSiteMappingsInput>
+  }
+
+  export type OncologyPrimarySiteMasterUpdateOneRequiredWithoutSiteMappingsNestedInput = {
+    create?: XOR<OncologyPrimarySiteMasterCreateWithoutSiteMappingsInput, OncologyPrimarySiteMasterUncheckedCreateWithoutSiteMappingsInput>
+    connectOrCreate?: OncologyPrimarySiteMasterCreateOrConnectWithoutSiteMappingsInput
+    upsert?: OncologyPrimarySiteMasterUpsertWithoutSiteMappingsInput
+    connect?: OncologyPrimarySiteMasterWhereUniqueInput
+    update?: XOR<XOR<OncologyPrimarySiteMasterUpdateToOneWithWhereWithoutSiteMappingsInput, OncologyPrimarySiteMasterUpdateWithoutSiteMappingsInput>, OncologyPrimarySiteMasterUncheckedUpdateWithoutSiteMappingsInput>
   }
 
   export type CancerDiagnosisCreateNestedOneWithoutCarePlansInput = {
@@ -13376,12 +19613,23 @@ export namespace Prisma {
     weight?: Decimal | DecimalJsLike | number | string | null
     height?: Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: string | null
+    oncologyCarePlanId?: string | null
+    hepaticAdjustmentGrade?: string | null
+    renalAdjustmentGrade?: string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: string
     verifiedBy?: string | null
     verifiedAt?: Date | string | null
+    secondVerifiedBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
     administeredBy?: string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13401,12 +19649,23 @@ export namespace Prisma {
     weight?: Decimal | DecimalJsLike | number | string | null
     height?: Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: string | null
+    oncologyCarePlanId?: string | null
+    hepaticAdjustmentGrade?: string | null
+    renalAdjustmentGrade?: string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: string
     verifiedBy?: string | null
     verifiedAt?: Date | string | null
+    secondVerifiedBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
     administeredBy?: string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13456,12 +19715,23 @@ export namespace Prisma {
     weight?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     height?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: DecimalNullableFilter<"ChemoOrder"> | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: UuidNullableFilter<"ChemoOrder"> | string | null
+    oncologyCarePlanId?: UuidNullableFilter<"ChemoOrder"> | string | null
+    hepaticAdjustmentGrade?: StringNullableFilter<"ChemoOrder"> | string | null
+    renalAdjustmentGrade?: StringNullableFilter<"ChemoOrder"> | string | null
     doseAdjustments?: JsonFilter<"ChemoOrder">
     preChemoChecklist?: JsonFilter<"ChemoOrder">
     status?: StringFilter<"ChemoOrder"> | string
     verifiedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
     verifiedAt?: DateTimeNullableFilter<"ChemoOrder"> | Date | string | null
+    secondVerifiedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    approvedBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    approvedAt?: DateTimeNullableFilter<"ChemoOrder"> | Date | string | null
     administeredBy?: UuidNullableFilter<"ChemoOrder"> | string | null
+    adverseReactions?: JsonFilter<"ChemoOrder">
+    administrationDetails?: JsonFilter<"ChemoOrder">
+    drugPreparationDetails?: JsonFilter<"ChemoOrder">
+    nurseVerificationChecklist?: JsonFilter<"ChemoOrder">
     notes?: StringNullableFilter<"ChemoOrder"> | string | null
     createdAt?: DateTimeFilter<"ChemoOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ChemoOrder"> | Date | string
@@ -13481,6 +19751,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: string | null
+    doseFormula?: string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13501,6 +19774,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: string | null
+    doseFormula?: string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13537,6 +19813,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    doseFormula?: StringFieldUpdateOperationsInput | string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13557,6 +19836,9 @@ export namespace Prisma {
     premedications?: JsonNullValueInput | InputJsonValue
     supportiveCare?: JsonNullValueInput | InputJsonValue
     emetogenicRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    doseFormula?: StringFieldUpdateOperationsInput | string
+    labPrerequisites?: JsonNullValueInput | InputJsonValue
+    hydration?: JsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13697,6 +19979,244 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     stagings?: TumorStagingUncheckedUpdateManyWithoutCancerDiagnosisNestedInput
     carePlans?: OncologyCarePlanUncheckedUpdateManyWithoutCancerDiagnosisNestedInput
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput = {
+    id?: string
+    tenantId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    primarySite: OncologyPrimarySiteMasterCreateNestedOneWithoutSiteMappingsInput
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput = {
+    id?: string
+    tenantId: string
+    primarySiteId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateOrConnectWithoutCancerTypeInput = {
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+    create: XOR<OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateManyCancerTypeInputEnvelope = {
+    data: OncologyCancerTypeSiteMappingCreateManyCancerTypeInput | OncologyCancerTypeSiteMappingCreateManyCancerTypeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutCancerTypeInput = {
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+    update: XOR<OncologyCancerTypeSiteMappingUpdateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedUpdateWithoutCancerTypeInput>
+    create: XOR<OncologyCancerTypeSiteMappingCreateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutCancerTypeInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutCancerTypeInput = {
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+    data: XOR<OncologyCancerTypeSiteMappingUpdateWithoutCancerTypeInput, OncologyCancerTypeSiteMappingUncheckedUpdateWithoutCancerTypeInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutCancerTypeInput = {
+    where: OncologyCancerTypeSiteMappingScalarWhereInput
+    data: XOR<OncologyCancerTypeSiteMappingUpdateManyMutationInput, OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutCancerTypeInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingScalarWhereInput = {
+    AND?: OncologyCancerTypeSiteMappingScalarWhereInput | OncologyCancerTypeSiteMappingScalarWhereInput[]
+    OR?: OncologyCancerTypeSiteMappingScalarWhereInput[]
+    NOT?: OncologyCancerTypeSiteMappingScalarWhereInput | OncologyCancerTypeSiteMappingScalarWhereInput[]
+    id?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    tenantId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    cancerTypeId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    primarySiteId?: UuidFilter<"OncologyCancerTypeSiteMapping"> | string
+    isDefault?: BoolFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    active?: BoolFilter<"OncologyCancerTypeSiteMapping"> | boolean
+    createdAt?: DateTimeFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"OncologyCancerTypeSiteMapping"> | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput = {
+    id?: string
+    tenantId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cancerType: OncologyCancerTypeMasterCreateNestedOneWithoutSiteMappingsInput
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput = {
+    id?: string
+    tenantId: string
+    cancerTypeId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateOrConnectWithoutPrimarySiteInput = {
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+    create: XOR<OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateManyPrimarySiteInputEnvelope = {
+    data: OncologyCancerTypeSiteMappingCreateManyPrimarySiteInput | OncologyCancerTypeSiteMappingCreateManyPrimarySiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OncologyCancerTypeSiteMappingUpsertWithWhereUniqueWithoutPrimarySiteInput = {
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+    update: XOR<OncologyCancerTypeSiteMappingUpdateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedUpdateWithoutPrimarySiteInput>
+    create: XOR<OncologyCancerTypeSiteMappingCreateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedCreateWithoutPrimarySiteInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateWithWhereUniqueWithoutPrimarySiteInput = {
+    where: OncologyCancerTypeSiteMappingWhereUniqueInput
+    data: XOR<OncologyCancerTypeSiteMappingUpdateWithoutPrimarySiteInput, OncologyCancerTypeSiteMappingUncheckedUpdateWithoutPrimarySiteInput>
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateManyWithWhereWithoutPrimarySiteInput = {
+    where: OncologyCancerTypeSiteMappingScalarWhereInput
+    data: XOR<OncologyCancerTypeSiteMappingUpdateManyMutationInput, OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutPrimarySiteInput>
+  }
+
+  export type OncologyCancerTypeMasterCreateWithoutSiteMappingsInput = {
+    id?: string
+    tenantId: string
+    code: string
+    name: string
+    category?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeMasterUncheckedCreateWithoutSiteMappingsInput = {
+    id?: string
+    tenantId: string
+    code: string
+    name: string
+    category?: string | null
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeMasterCreateOrConnectWithoutSiteMappingsInput = {
+    where: OncologyCancerTypeMasterWhereUniqueInput
+    create: XOR<OncologyCancerTypeMasterCreateWithoutSiteMappingsInput, OncologyCancerTypeMasterUncheckedCreateWithoutSiteMappingsInput>
+  }
+
+  export type OncologyPrimarySiteMasterCreateWithoutSiteMappingsInput = {
+    id?: string
+    tenantId: string
+    icdoSiteCode: string
+    icdoSiteName: string
+    bodySystem?: string | null
+    lateralityApplicable?: boolean
+    mappingType?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyPrimarySiteMasterUncheckedCreateWithoutSiteMappingsInput = {
+    id?: string
+    tenantId: string
+    icdoSiteCode: string
+    icdoSiteName: string
+    bodySystem?: string | null
+    lateralityApplicable?: boolean
+    mappingType?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyPrimarySiteMasterCreateOrConnectWithoutSiteMappingsInput = {
+    where: OncologyPrimarySiteMasterWhereUniqueInput
+    create: XOR<OncologyPrimarySiteMasterCreateWithoutSiteMappingsInput, OncologyPrimarySiteMasterUncheckedCreateWithoutSiteMappingsInput>
+  }
+
+  export type OncologyCancerTypeMasterUpsertWithoutSiteMappingsInput = {
+    update: XOR<OncologyCancerTypeMasterUpdateWithoutSiteMappingsInput, OncologyCancerTypeMasterUncheckedUpdateWithoutSiteMappingsInput>
+    create: XOR<OncologyCancerTypeMasterCreateWithoutSiteMappingsInput, OncologyCancerTypeMasterUncheckedCreateWithoutSiteMappingsInput>
+    where?: OncologyCancerTypeMasterWhereInput
+  }
+
+  export type OncologyCancerTypeMasterUpdateToOneWithWhereWithoutSiteMappingsInput = {
+    where?: OncologyCancerTypeMasterWhereInput
+    data: XOR<OncologyCancerTypeMasterUpdateWithoutSiteMappingsInput, OncologyCancerTypeMasterUncheckedUpdateWithoutSiteMappingsInput>
+  }
+
+  export type OncologyCancerTypeMasterUpdateWithoutSiteMappingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeMasterUncheckedUpdateWithoutSiteMappingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyPrimarySiteMasterUpsertWithoutSiteMappingsInput = {
+    update: XOR<OncologyPrimarySiteMasterUpdateWithoutSiteMappingsInput, OncologyPrimarySiteMasterUncheckedUpdateWithoutSiteMappingsInput>
+    create: XOR<OncologyPrimarySiteMasterCreateWithoutSiteMappingsInput, OncologyPrimarySiteMasterUncheckedCreateWithoutSiteMappingsInput>
+    where?: OncologyPrimarySiteMasterWhereInput
+  }
+
+  export type OncologyPrimarySiteMasterUpdateToOneWithWhereWithoutSiteMappingsInput = {
+    where?: OncologyPrimarySiteMasterWhereInput
+    data: XOR<OncologyPrimarySiteMasterUpdateWithoutSiteMappingsInput, OncologyPrimarySiteMasterUncheckedUpdateWithoutSiteMappingsInput>
+  }
+
+  export type OncologyPrimarySiteMasterUpdateWithoutSiteMappingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    icdoSiteCode?: StringFieldUpdateOperationsInput | string
+    icdoSiteName?: StringFieldUpdateOperationsInput | string
+    bodySystem?: NullableStringFieldUpdateOperationsInput | string | null
+    lateralityApplicable?: BoolFieldUpdateOperationsInput | boolean
+    mappingType?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyPrimarySiteMasterUncheckedUpdateWithoutSiteMappingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    icdoSiteCode?: StringFieldUpdateOperationsInput | string
+    icdoSiteName?: StringFieldUpdateOperationsInput | string
+    bodySystem?: NullableStringFieldUpdateOperationsInput | string | null
+    lateralityApplicable?: BoolFieldUpdateOperationsInput | boolean
+    mappingType?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CancerDiagnosisCreateWithoutCarePlansInput = {
@@ -14141,12 +20661,23 @@ export namespace Prisma {
     weight?: Decimal | DecimalJsLike | number | string | null
     height?: Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: string | null
+    oncologyCarePlanId?: string | null
+    hepaticAdjustmentGrade?: string | null
+    renalAdjustmentGrade?: string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: string
     verifiedBy?: string | null
     verifiedAt?: Date | string | null
+    secondVerifiedBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
     administeredBy?: string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14166,12 +20697,23 @@ export namespace Prisma {
     weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     height?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    oncologyCarePlanId?: NullableStringFieldUpdateOperationsInput | string | null
+    hepaticAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    renalAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    secondVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     administeredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14191,12 +20733,23 @@ export namespace Prisma {
     weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     height?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    oncologyCarePlanId?: NullableStringFieldUpdateOperationsInput | string | null
+    hepaticAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    renalAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    secondVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     administeredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14216,13 +20769,104 @@ export namespace Prisma {
     weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     height?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creatinineClearance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    oncologyCarePlanId?: NullableStringFieldUpdateOperationsInput | string | null
+    hepaticAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    renalAdjustmentGrade?: NullableStringFieldUpdateOperationsInput | string | null
     doseAdjustments?: JsonNullValueInput | InputJsonValue
     preChemoChecklist?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    secondVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     administeredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adverseReactions?: JsonNullValueInput | InputJsonValue
+    administrationDetails?: JsonNullValueInput | InputJsonValue
+    drugPreparationDetails?: JsonNullValueInput | InputJsonValue
+    nurseVerificationChecklist?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateManyCancerTypeInput = {
+    id?: string
+    tenantId: string
+    primarySiteId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateWithoutCancerTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    primarySite?: OncologyPrimarySiteMasterUpdateOneRequiredWithoutSiteMappingsNestedInput
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateWithoutCancerTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    primarySiteId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutCancerTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    primarySiteId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingCreateManyPrimarySiteInput = {
+    id?: string
+    tenantId: string
+    cancerTypeId: string
+    isDefault?: boolean
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingUpdateWithoutPrimarySiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancerType?: OncologyCancerTypeMasterUpdateOneRequiredWithoutSiteMappingsNestedInput
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateWithoutPrimarySiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cancerTypeId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OncologyCancerTypeSiteMappingUncheckedUpdateManyWithoutPrimarySiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cancerTypeId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

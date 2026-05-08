@@ -25,16 +25,20 @@ export default function ClinicalLayout({
   const { isCollapsed, toggleSidebar } = useSidebar();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  useAuthGuard(locale);
+  const isAuthorized = useAuthGuard(locale);
 
   const handleMobileToggle = () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen);
   };
 
+  if (!isAuthorized) {
+    return null;
+  }
+
   return (
     <div className="flex min-h-screen w-full bg-muted/20">
       {/* Desktop Sidebar */}
-      <div className="hidden md:block">
+      <div className="hidden md:block sticky top-0 h-screen">
         <Sidebar
           locale={locale}
           isCollapsed={isCollapsed}
@@ -49,12 +53,12 @@ export default function ClinicalLayout({
         onClose={() => setIsMobileSidebarOpen(false)}
       />
 
-      <div className="flex flex-1 flex-col bg-background">
+      <div className="flex flex-1 flex-col bg-background/50">
         <Topbar
           locale={locale}
           onSidebarToggle={handleMobileToggle}
         />
-        <main className="flex-1 space-y-6 p-6 bg-background theme-transition">
+        <main className="flex-1 space-y-6 p-6 bg-slate-50/50 dark:bg-transparent theme-transition">
           <Suspense fallback={null}>
             <NavigationProgress />
           </Suspense>

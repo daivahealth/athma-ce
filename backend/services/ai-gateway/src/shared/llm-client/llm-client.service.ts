@@ -3,10 +3,16 @@
  * Unified service for LLM completions and embeddings
  */
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AnthropicProvider } from './anthropic.provider';
 import { OpenAIProvider } from './openai.provider';
+import {
+  OPENAI_COMPATIBLE_PROVIDERS,
+  OpenAICompatibleProvider,
+  type OpenAICompatibleProviderName,
+} from './openai-compatible.provider';
+import { ConfigClientService } from './config-client.service';
 import {
   LLMCompletionRequest,
   LLMCompletionResponse,
@@ -17,26 +23,44 @@ import { logger } from '../../common/logger/logger.config';
 
 @Injectable()
 export class LLMClientService {
-  private readonly llmProvider: string;
+  private readonly defaultProvider: string;
 
   constructor(
     private configService: ConfigService,
+    private configClient: ConfigClientService,
     private anthropicProvider: AnthropicProvider,
     private openaiProvider: OpenAIProvider,
+    private openaiCompatibleProvider: OpenAICompatibleProvider,
   ) {
-    this.llmProvider = this.configService.get<string>('LLM_PROVIDER', 'anthropic');
-    logger.info({ llmProvider: this.llmProvider }, 'LLM Client initialized');
+    this.defaultProvider = this.configService.get<string>('LLM_PROVIDER', 'anthropic');
+    logger.info({ llmProvider: this.defaultProvider }, 'LLM Client initialized');
   }
 
   /**
    * Generate a completion using the configured LLM provider
    */
   async completion(request: LLMCompletionRequest): Promise<LLMCompletionResponse> {
-    if (this.llmProvider === 'anthropic') {
+    const llmProvider = await this.resolveProviderName();
+
+    if (llmProvider === 'anthropic') {
       return this.anthropicProvider.completion(request);
-    } else {
+    }
+
+    if (llmProvider === 'openai') {
       return this.openaiProvider.completion(request);
     }
+
+    if (OPENAI_COMPATIBLE_PROVIDERS.includes(llmProvider as OpenAICompatibleProviderName)) {
+      return this.openaiCompatibleProvider.completion(
+        request,
+        llmProvider as OpenAICompatibleProviderName,
+      );
+    }
+
+    logger.error({ llmProvider }, 'Unsupported LLM provider configured');
+    throw new ServiceUnavailableException(
+      `Report generation is unavailable because the AI Gateway does not support LLM provider "${llmProvider}".`,
+    );
   }
 
   /**
@@ -74,7 +98,12 @@ export class LLMClientService {
   /**
    * Get the current LLM provider name
    */
-  getProviderName(): string {
-    return this.llmProvider;
+  async getProviderName(): Promise<string> {
+    return this.resolveProviderName();
+  }
+
+  private async resolveProviderName(): Promise<string> {
+    const provider = await this.configClient.resolveString('ai.provider', this.defaultProvider);
+    return provider.trim().toLowerCase();
   }
 }

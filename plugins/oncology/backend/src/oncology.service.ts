@@ -33,8 +33,9 @@ export class OncologyService {
     return store.tenantId;
   }
 
-  private getCurrentUserId(): string {
-    return RequestContext.getUserId() ?? 'system';
+  private getCurrentUserId(): string | null {
+    const id = RequestContext.getUserId();
+    return id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) ? id : null;
   }
 
   private calculateAge(dateOfBirth: Date | string): number {
@@ -821,6 +822,7 @@ export class OncologyService {
 
     // patient_id is always derived from the linked diagnosis
     const patientId = data.patientId ?? diagExists[0].patient_id;
+    const presentedBy = data.presentedBy ?? this.getCurrentUserId();
 
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `INSERT INTO plugin_oncology.tumor_board_cases (
@@ -832,7 +834,7 @@ export class OncologyService {
         follow_up_actions, status, created_at, updated_at
       ) VALUES (
         gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, $4::uuid,
-        $5::date, $6, $7::jsonb,
+        $5::date, $6::uuid, $7::jsonb,
         $8, $9, $10, $11,
         $12, $13, $14::jsonb,
         $15::jsonb, $16, $17,
@@ -843,7 +845,7 @@ export class OncologyService {
       data.cancerDiagnosisId,
       data.stagingId ?? null,
       data.meetingDate,
-      data.presentedBy,
+      presentedBy,
       JSON.stringify(data.attendees ?? []),
       data.clinicalSummary ?? null,
       data.imagingFindings ?? null,
@@ -938,11 +940,13 @@ export class OncologyService {
       `INSERT INTO plugin_oncology.chemo_protocols (
         id, tenant_id, code, name, description, cancer_type, intent,
         regimen, total_cycles, cycle_duration_days, premedications,
-        supportive_care, emetogenic_risk, is_active, created_at, updated_at, created_by
+        supportive_care, emetogenic_risk, dose_formula, lab_prerequisites, hydration,
+        is_active, created_at, updated_at, created_by
       ) VALUES (
         gen_random_uuid(), $1::uuid, $2, $3, $4, $5, $6,
         $7::jsonb, $8, $9, $10::jsonb,
-        $11::jsonb, $12, $13, NOW(), NOW(), $14
+        $11::jsonb, $12, $13, $14::jsonb, $15::jsonb,
+        $16, NOW(), NOW(), $17::uuid
       ) RETURNING *`,
       tenantId,
       data.code,
@@ -950,72 +954,186 @@ export class OncologyService {
       data.description ?? null,
       data.cancerType,
       data.intent,
-      JSON.stringify(data.regimen),
+      JSON.stringify(data.regimen ?? []),
       data.totalCycles,
       data.cycleDurationDays,
       JSON.stringify(data.premedications ?? []),
       JSON.stringify(data.supportiveCare ?? []),
       data.emetogenicRisk ?? null,
+      data.doseFormula ?? 'bsa',
+      JSON.stringify(data.labPrerequisites ?? []),
+      JSON.stringify(data.hydration ?? []),
       data.isActive ?? true,
-      data.createdBy ?? null,
+      this.getCurrentUserId(),
     );
     return results[0];
   }
 
+  async updateProtocol(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id FROM plugin_oncology.chemo_protocols WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Protocol '${id}' not found`);
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_protocols SET
+        name                = COALESCE($3, name),
+        description         = COALESCE($4, description),
+        cancer_type         = COALESCE($5, cancer_type),
+        intent              = COALESCE($6, intent),
+        regimen             = COALESCE($7::jsonb, regimen),
+        total_cycles        = COALESCE($8, total_cycles),
+        cycle_duration_days = COALESCE($9, cycle_duration_days),
+        premedications      = COALESCE($10::jsonb, premedications),
+        supportive_care     = COALESCE($11::jsonb, supportive_care),
+        emetogenic_risk     = COALESCE($12, emetogenic_risk),
+        dose_formula        = COALESCE($13, dose_formula),
+        lab_prerequisites   = COALESCE($14::jsonb, lab_prerequisites),
+        hydration           = COALESCE($15::jsonb, hydration),
+        updated_at          = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid
+      RETURNING *`,
+      id,
+      tenantId,
+      data.name ?? null,
+      data.description ?? null,
+      data.cancerType ?? null,
+      data.intent ?? null,
+      data.regimen ? JSON.stringify(data.regimen) : null,
+      data.totalCycles ?? null,
+      data.cycleDurationDays ?? null,
+      data.premedications ? JSON.stringify(data.premedications) : null,
+      data.supportiveCare ? JSON.stringify(data.supportiveCare) : null,
+      data.emetogenicRisk ?? null,
+      data.doseFormula ?? null,
+      data.labPrerequisites ? JSON.stringify(data.labPrerequisites) : null,
+      data.hydration ? JSON.stringify(data.hydration) : null,
+    );
+    return results[0];
+  }
+
+  async deactivateProtocol(id: string) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_protocols SET is_active = false, updated_at = NOW()
+       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+    );
+    if (!results.length) throw new NotFoundException(`Protocol '${id}' not found`);
+    return results[0];
+  }
+
   // ============================================
-  // Chemo Orders (Phase 2 — kept for backward compat)
+  // Chemo Orders
   // ============================================
 
-  async listChemoOrders(filters: { patientId?: string | undefined; status?: string | undefined; date?: string | undefined } = {}, page = 1, limit = 20) {
+  async listChemoOrders(filters: { patientId?: string; status?: string; date?: string; cancerDiagnosisId?: string } = {}, page = 1, limit = 20) {
     const tenantId = this.getTenantId();
-    let query = `SELECT co.*, cp.name as protocol_name, cp.code as protocol_code
+    const baseJoin = `
+      SELECT co.*, cp.name as protocol_name, cp.code as protocol_code,
+        p.mrn as patient_mrn, p.first_name as patient_first_name, p.last_name as patient_last_name,
+        p.display_name as patient_display_name, p.date_of_birth as patient_date_of_birth,
+        p.gender as patient_gender, p.phone_number as patient_phone_number,
+        p.email as patient_email, p.national_id as patient_national_id,
+        p.national_id_type as patient_national_id_type, p.nationality as patient_nationality,
+        p.preferred_language as patient_preferred_language
       FROM plugin_oncology.chemo_orders co
       JOIN plugin_oncology.chemo_protocols cp ON co.protocol_id = cp.id
+      LEFT JOIN public.patients p ON p.id = co.patient_id
       WHERE co.tenant_id = $1::uuid`;
     const params: unknown[] = [tenantId];
     let paramIdx = 2;
+    let filterClause = '';
 
-    if (filters.patientId) {
-      query += ` AND co.patient_id = $${paramIdx++}::uuid`;
-      params.push(filters.patientId);
-    }
-    if (filters.status) {
-      query += ` AND co.status = $${paramIdx++}`;
-      params.push(filters.status);
-    }
-    if (filters.date) {
-      query += ` AND co.scheduled_date = $${paramIdx++}::date`;
-      params.push(filters.date);
-    }
+    if (filters.patientId) { filterClause += ` AND co.patient_id = $${paramIdx++}::uuid`; params.push(filters.patientId); }
+    if (filters.status) { filterClause += ` AND co.status = $${paramIdx++}`; params.push(filters.status); }
+    if (filters.date) { filterClause += ` AND co.scheduled_date = $${paramIdx++}::date`; params.push(filters.date); }
+    if (filters.cancerDiagnosisId) { filterClause += ` AND co.cancer_diagnosis_id = $${paramIdx++}::uuid`; params.push(filters.cancerDiagnosisId); }
 
-    query += ` ORDER BY co.scheduled_date DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
+    const dataQuery = baseJoin + filterClause + ` ORDER BY co.scheduled_date DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
     params.push(limit, (page - 1) * limit);
 
-    const results = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(dataQuery, ...params);
+    const results = rows.map((r) => {
+      const pd = this.buildPatientDisplay(r);
+      const clean = { ...r };
+      for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_'))) delete clean[k];
+      return { ...clean, patientDisplay: pd };
+    });
     return { data: results };
+  }
+
+  async getChemoOrder(id: string) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT co.*, cp.name as protocol_name, cp.code as protocol_code,
+        cp.regimen as protocol_regimen, cp.premedications as protocol_premedications,
+        cp.hydration as protocol_hydration, cp.lab_prerequisites as protocol_lab_prerequisites,
+        cp.emetogenic_risk as protocol_emetogenic_risk, cp.total_cycles as protocol_total_cycles,
+        cp.cycle_duration_days as protocol_cycle_duration_days, cp.dose_formula as protocol_dose_formula,
+        cd.cancer_type, cd.primary_site,
+        p.mrn as patient_mrn, p.first_name as patient_first_name, p.last_name as patient_last_name,
+        p.display_name as patient_display_name, p.date_of_birth as patient_date_of_birth,
+        p.gender as patient_gender, p.phone_number as patient_phone_number,
+        p.email as patient_email, p.national_id as patient_national_id,
+        p.national_id_type as patient_national_id_type, p.nationality as patient_nationality,
+        p.preferred_language as patient_preferred_language
+      FROM plugin_oncology.chemo_orders co
+      JOIN plugin_oncology.chemo_protocols cp ON co.protocol_id = cp.id
+      LEFT JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = co.cancer_diagnosis_id
+      LEFT JOIN public.patients p ON p.id = co.patient_id
+      WHERE co.id = $1::uuid AND co.tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    const r = results[0];
+    const pd = this.buildPatientDisplay(r);
+    const clean = { ...r };
+    for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_'))) delete clean[k];
+    return { ...clean, patientDisplay: pd };
   }
 
   async createChemoOrder(data: Record<string, unknown>) {
     const tenantId = this.getTenantId();
+
+    // Derive patientId from cancerDiagnosis if not provided
+    let patientId = data.patientId as string | undefined;
+    if (!patientId && data.cancerDiagnosisId) {
+      const diag = await this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT patient_id FROM plugin_oncology.cancer_diagnoses WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+        data.cancerDiagnosisId, tenantId,
+      );
+      if (diag.length) patientId = diag[0].patient_id;
+    }
+    if (!patientId) throw new BadRequestException('patientId or cancerDiagnosisId is required');
+
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `INSERT INTO plugin_oncology.chemo_orders (
         id, tenant_id, patient_id, encounter_id, protocol_id, ordering_provider,
+        cancer_diagnosis_id, oncology_care_plan_id,
         cycle_number, day_number, scheduled_date,
         bsa, weight, height, creatinine_clearance,
+        hepatic_adjustment_grade, renal_adjustment_grade,
         dose_adjustments, pre_chemo_checklist,
         status, notes, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, $4::uuid, $5,
-        $6, $7, $8::date,
-        $9, $10, $11, $12,
-        $13::jsonb, $14::jsonb,
-        $15, $16, NOW(), NOW()
+        gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, $4::uuid, $5::uuid,
+        $6::uuid, $7::uuid,
+        $8, $9, $10::date,
+        $11, $12, $13, $14,
+        $15, $16,
+        $17::jsonb, $18::jsonb,
+        $19, $20, NOW(), NOW()
       ) RETURNING *`,
       tenantId,
-      data.patientId,
+      patientId,
       data.encounterId ?? null,
       data.protocolId,
-      data.orderingProvider,
+      (data.orderingProvider as string) || this.getCurrentUserId(),
+      data.cancerDiagnosisId ?? null,
+      data.oncologyCarePlanId ?? null,
       data.cycleNumber,
       data.dayNumber,
       data.scheduledDate,
@@ -1023,11 +1141,563 @@ export class OncologyService {
       data.weight ?? null,
       data.height ?? null,
       data.creatinineClearance ?? null,
+      data.hepaticAdjustmentGrade ?? null,
+      data.renalAdjustmentGrade ?? null,
       JSON.stringify(data.doseAdjustments ?? []),
       JSON.stringify(data.preChemoChecklist ?? {}),
       data.status ?? 'pending',
       data.notes ?? null,
     );
+    return results[0];
+  }
+
+  async updateChemoOrder(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (!['pending', 'draft'].includes(existing[0].status)) {
+      throw new BadRequestException('Only pending orders can be edited');
+    }
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        scheduled_date          = COALESCE($3::date, scheduled_date),
+        cycle_number            = COALESCE($4, cycle_number),
+        day_number              = COALESCE($5, day_number),
+        bsa                     = COALESCE($6, bsa),
+        weight                  = COALESCE($7, weight),
+        height                  = COALESCE($8, height),
+        creatinine_clearance    = COALESCE($9, creatinine_clearance),
+        hepatic_adjustment_grade = COALESCE($10, hepatic_adjustment_grade),
+        renal_adjustment_grade  = COALESCE($11, renal_adjustment_grade),
+        dose_adjustments        = COALESCE($12::jsonb, dose_adjustments),
+        pre_chemo_checklist     = COALESCE($13::jsonb, pre_chemo_checklist),
+        notes                   = COALESCE($14, notes),
+        updated_at              = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid
+      RETURNING *`,
+      id, tenantId,
+      data.scheduledDate ?? null,
+      data.cycleNumber ?? null,
+      data.dayNumber ?? null,
+      data.bsa ?? null,
+      data.weight ?? null,
+      data.height ?? null,
+      data.creatinineClearance ?? null,
+      data.hepaticAdjustmentGrade ?? null,
+      data.renalAdjustmentGrade ?? null,
+      data.doseAdjustments ? JSON.stringify(data.doseAdjustments) : null,
+      data.preChemoChecklist ? JSON.stringify(data.preChemoChecklist) : null,
+      data.notes ?? null,
+    );
+    return results[0];
+  }
+
+  async approveChemoOrder(id: string) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (existing[0].status !== 'pending') throw new BadRequestException('Only pending orders can be approved');
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        status = 'approved', approved_by = $3::uuid, approved_at = NOW(), updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId, this.getCurrentUserId(),
+    );
+    return results[0];
+  }
+
+  async verifyChemoOrder(id: string, secondVerifiedBy?: string, nurseVerificationChecklist?: Record<string, unknown>, drugPreparationDetails?: unknown[]) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (existing[0].status !== 'approved') throw new BadRequestException('Only approved orders can be verified');
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        status = 'verified', verified_by = $3::uuid, verified_at = NOW(),
+        second_verified_by = $4::uuid,
+        nurse_verification_checklist = $5::jsonb,
+        drug_preparation_details = $6::jsonb,
+        updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId, this.getCurrentUserId(), secondVerifiedBy ?? null,
+      JSON.stringify(nurseVerificationChecklist ?? {}),
+      JSON.stringify(drugPreparationDetails ?? []),
+    );
+    return results[0];
+  }
+
+  async updateAdministrationProgress(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (existing[0].status !== 'in_progress') throw new BadRequestException('Order must be in progress to update administration');
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        administration_details = $3::jsonb,
+        adverse_reactions = $4::jsonb,
+        updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      JSON.stringify(data.administrationDetails ?? []),
+      JSON.stringify(data.adverseReactions ?? []),
+    );
+    return results[0];
+  }
+
+  async startAdministration(id: string) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (!['verified', 'approved'].includes(existing[0].status)) {
+      throw new BadRequestException('Order must be verified or approved before starting administration');
+    }
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        status = 'in_progress', administered_at = NOW(), administered_by = $3::uuid, updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId, this.getCurrentUserId(),
+    );
+    return results[0];
+  }
+
+  async completeAdministration(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (existing[0].status !== 'in_progress') throw new BadRequestException('Order must be in progress to complete');
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        status = 'completed',
+        administration_details = $3::jsonb,
+        adverse_reactions = $4::jsonb,
+        notes = COALESCE($5, notes),
+        updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      JSON.stringify(data.administrationDetails ?? []),
+      JSON.stringify(data.adverseReactions ?? []),
+      data.notes ?? null,
+    );
+    return results[0];
+  }
+
+  async holdChemoOrder(id: string, reason: string) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        status = 'held',
+        notes = CONCAT(COALESCE(notes, ''), $3),
+        updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      reason ? `\n[HELD] ${reason}` : '\n[HELD]',
+    );
+    if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    return results[0];
+  }
+
+  async cancelChemoOrder(id: string, reason: string) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        status = 'cancelled',
+        notes = CONCAT(COALESCE(notes, ''), $3),
+        updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      reason ? `\n[CANCELLED] ${reason}` : '\n[CANCELLED]',
+    );
+    if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    return results[0];
+  }
+
+  // ============================================================
+  // Catalog: Cancer Types
+  // ============================================================
+
+  async listCancerTypes(
+    filters: { search?: string | undefined; active?: string | undefined } = {},
+    page = 1,
+    limit = 50,
+  ) {
+    const tenantId = this.getTenantId();
+    const offset = (page - 1) * limit;
+    const conditions: string[] = ['tenant_id = $1::uuid'];
+    const params: unknown[] = [tenantId];
+
+    if (filters.active !== undefined) {
+      params.push(filters.active === 'false' ? false : true);
+      conditions.push(`active = $${params.length}`);
+    }
+    if (filters.search) {
+      params.push(`%${filters.search}%`);
+      conditions.push(`(name ILIKE $${params.length} OR code ILIKE $${params.length})`);
+    }
+
+    const where = conditions.join(' AND ');
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT * FROM plugin_oncology.oncology_cancer_type_master
+         WHERE ${where} ORDER BY name ASC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+        ...params, limit, offset,
+      ),
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT COUNT(*)::int AS total FROM plugin_oncology.oncology_cancer_type_master WHERE ${where}`,
+        ...params,
+      ),
+    ]);
+    return { data: rows, total: countRows[0]?.total ?? 0, page, limit };
+  }
+
+  async getCancerType(id: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.oncology_cancer_type_master
+       WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Cancer type '${id}' not found`);
+    return rows[0];
+  }
+
+  async createCancerType(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.oncology_cancer_type_master
+         (id, tenant_id, code, name, category, description, active, created_at, updated_at)
+       VALUES (gen_random_uuid(), $1::uuid, $2, $3, $4, $5, $6, NOW(), NOW())
+       RETURNING *`,
+      tenantId,
+      data.code,
+      data.name,
+      data.category ?? null,
+      data.description ?? null,
+      data.active ?? true,
+    );
+    return results[0];
+  }
+
+  async updateCancerType(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.oncology_cancer_type_master SET
+        name        = COALESCE($3, name),
+        category    = COALESCE($4, category),
+        description = COALESCE($5, description),
+        active      = COALESCE($6, active),
+        updated_at  = NOW()
+       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.name ?? null,
+      data.category ?? null,
+      data.description ?? null,
+      data.active ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`Cancer type '${id}' not found`);
+    return results[0];
+  }
+
+  // ============================================================
+  // Catalog: Primary Sites
+  // ============================================================
+
+  async listPrimarySites(
+    filters: { search?: string | undefined; bodySystem?: string | undefined; active?: string | undefined } = {},
+    page = 1,
+    limit = 50,
+  ) {
+    const tenantId = this.getTenantId();
+    const offset = (page - 1) * limit;
+    const conditions: string[] = ['tenant_id = $1::uuid'];
+    const params: unknown[] = [tenantId];
+
+    if (filters.active !== undefined) {
+      params.push(filters.active === 'false' ? false : true);
+      conditions.push(`active = $${params.length}`);
+    }
+    if (filters.bodySystem) {
+      params.push(filters.bodySystem);
+      conditions.push(`body_system = $${params.length}`);
+    }
+    if (filters.search) {
+      params.push(`%${filters.search}%`);
+      conditions.push(`(icdo_site_name ILIKE $${params.length} OR icdo_site_code ILIKE $${params.length})`);
+    }
+
+    const where = conditions.join(' AND ');
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT * FROM plugin_oncology.oncology_primary_site_master
+         WHERE ${where} ORDER BY icdo_site_name ASC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+        ...params, limit, offset,
+      ),
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT COUNT(*)::int AS total FROM plugin_oncology.oncology_primary_site_master WHERE ${where}`,
+        ...params,
+      ),
+    ]);
+    return { data: rows, total: countRows[0]?.total ?? 0, page, limit };
+  }
+
+  async getPrimarySite(id: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.oncology_primary_site_master
+       WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Primary site '${id}' not found`);
+    return rows[0];
+  }
+
+  async createPrimarySite(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.oncology_primary_site_master
+         (id, tenant_id, icdo_site_code, icdo_site_name, body_system, laterality_applicable, mapping_type, active, created_at, updated_at)
+       VALUES (gen_random_uuid(), $1::uuid, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+       RETURNING *`,
+      tenantId,
+      data.icdoSiteCode,
+      data.icdoSiteName,
+      data.bodySystem ?? null,
+      data.lateralityApplicable ?? false,
+      data.mappingType ?? null,
+      data.active ?? true,
+    );
+    return results[0];
+  }
+
+  async updatePrimarySite(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.oncology_primary_site_master SET
+        icdo_site_name       = COALESCE($3, icdo_site_name),
+        body_system          = COALESCE($4, body_system),
+        laterality_applicable = COALESCE($5, laterality_applicable),
+        mapping_type         = COALESCE($6, mapping_type),
+        active               = COALESCE($7, active),
+        updated_at           = NOW()
+       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.icdoSiteName ?? null,
+      data.bodySystem ?? null,
+      data.lateralityApplicable ?? null,
+      data.mappingType ?? null,
+      data.active ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`Primary site '${id}' not found`);
+    return results[0];
+  }
+
+  // ============================================================
+  // Catalog: Cancer Type ↔ Primary Site Mappings
+  // ============================================================
+
+  async listSiteMappings(
+    filters: { cancerTypeId?: string | undefined; primarySiteId?: string | undefined; active?: string | undefined } = {},
+    page = 1,
+    limit = 100,
+  ) {
+    const tenantId = this.getTenantId();
+    const offset = (page - 1) * limit;
+    const conditions: string[] = ['m.tenant_id = $1::uuid'];
+    const params: unknown[] = [tenantId];
+
+    if (filters.active !== undefined) {
+      params.push(filters.active === 'false' ? false : true);
+      conditions.push(`m.active = $${params.length}`);
+    }
+    if (filters.cancerTypeId) {
+      params.push(filters.cancerTypeId);
+      conditions.push(`m.cancer_type_id = $${params.length}::uuid`);
+    }
+    if (filters.primarySiteId) {
+      params.push(filters.primarySiteId);
+      conditions.push(`m.primary_site_id = $${params.length}::uuid`);
+    }
+
+    const where = conditions.join(' AND ');
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT m.*,
+                ct.code AS cancer_type_code, ct.name AS cancer_type_name,
+                ps.icdo_site_code, ps.icdo_site_name
+         FROM plugin_oncology.oncology_cancer_type_site_mapping m
+         JOIN plugin_oncology.oncology_cancer_type_master ct ON ct.id = m.cancer_type_id
+         JOIN plugin_oncology.oncology_primary_site_master ps ON ps.id = m.primary_site_id
+         WHERE ${where}
+         ORDER BY ct.name ASC, ps.icdo_site_name ASC
+         LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+        ...params, limit, offset,
+      ),
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT COUNT(*)::int AS total
+         FROM plugin_oncology.oncology_cancer_type_site_mapping m
+         WHERE ${where}`,
+        ...params,
+      ),
+    ]);
+    return { data: rows, total: countRows[0]?.total ?? 0, page, limit };
+  }
+
+  async createSiteMapping(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.oncology_cancer_type_site_mapping
+         (id, tenant_id, cancer_type_id, primary_site_id, is_default, active, created_at, updated_at)
+       VALUES (gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, $4, $5, NOW(), NOW())
+       RETURNING *`,
+      tenantId,
+      data.cancerTypeId,
+      data.primarySiteId,
+      data.isDefault ?? false,
+      data.active ?? true,
+    );
+    return results[0];
+  }
+
+  async updateSiteMapping(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.oncology_cancer_type_site_mapping SET
+        is_default = COALESCE($3, is_default),
+        active     = COALESCE($4, active),
+        updated_at = NOW()
+       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.isDefault ?? null,
+      data.active ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`Site mapping '${id}' not found`);
+    return results[0];
+  }
+
+  async deleteSiteMapping(id: string) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `DELETE FROM plugin_oncology.oncology_cancer_type_site_mapping
+       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING id`,
+      id, tenantId,
+    );
+    if (!results.length) throw new NotFoundException(`Site mapping '${id}' not found`);
+    return { deleted: true, id };
+  }
+
+  // ============================================================
+  // Catalog: Histologies
+  // ============================================================
+
+  async listHistologies(
+    filters: { search?: string | undefined; behaviorCode?: string | undefined; active?: string | undefined } = {},
+    page = 1,
+    limit = 50,
+  ) {
+    const tenantId = this.getTenantId();
+    const offset = (page - 1) * limit;
+    const conditions: string[] = ['tenant_id = $1::uuid'];
+    const params: unknown[] = [tenantId];
+
+    if (filters.active !== undefined) {
+      params.push(filters.active === 'false' ? false : true);
+      conditions.push(`active = $${params.length}`);
+    }
+    if (filters.behaviorCode) {
+      params.push(filters.behaviorCode);
+      conditions.push(`behavior_code = $${params.length}`);
+    }
+    if (filters.search) {
+      params.push(`%${filters.search}%`);
+      conditions.push(`(morphology_name ILIKE $${params.length} OR morphology_code ILIKE $${params.length})`);
+    }
+
+    const where = conditions.join(' AND ');
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT * FROM plugin_oncology.oncology_histology_master
+         WHERE ${where} ORDER BY morphology_name ASC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+        ...params, limit, offset,
+      ),
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT COUNT(*)::int AS total FROM plugin_oncology.oncology_histology_master WHERE ${where}`,
+        ...params,
+      ),
+    ]);
+    return { data: rows, total: countRows[0]?.total ?? 0, page, limit };
+  }
+
+  async getHistology(id: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.oncology_histology_master
+       WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Histology '${id}' not found`);
+    return rows[0];
+  }
+
+  async createHistology(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.oncology_histology_master
+         (id, tenant_id, morphology_code, morphology_name, behavior_code, behavior_name, description, active, created_at, updated_at)
+       VALUES (gen_random_uuid(), $1::uuid, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+       RETURNING *`,
+      tenantId,
+      data.morphologyCode,
+      data.morphologyName,
+      data.behaviorCode ?? null,
+      data.behaviorName ?? null,
+      data.description ?? null,
+      data.active ?? true,
+    );
+    return results[0];
+  }
+
+  async updateHistology(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.oncology_histology_master SET
+        morphology_name = COALESCE($3, morphology_name),
+        behavior_code   = COALESCE($4, behavior_code),
+        behavior_name   = COALESCE($5, behavior_name),
+        description     = COALESCE($6, description),
+        active          = COALESCE($7, active),
+        updated_at      = NOW()
+       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.morphologyName ?? null,
+      data.behaviorCode ?? null,
+      data.behaviorName ?? null,
+      data.description ?? null,
+      data.active ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`Histology '${id}' not found`);
     return results[0];
   }
 }

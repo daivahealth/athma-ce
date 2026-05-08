@@ -17,7 +17,7 @@ export function Toaster() {
   }, [toasts, dismiss]);
 
   return (
-    <div className="fixed top-4 right-4 z-[100] flex flex-col items-end gap-3 p-4 sm:max-w-[420px] pointer-events-none">
+    <div className="fixed bottom-4 right-4 z-[100] flex flex-col items-end gap-3 p-4 sm:max-w-[420px] pointer-events-none">
       {toasts.map((toast) => {
         const Icon =
           toast.variant === 'success' ? CheckCircle2 :
@@ -29,7 +29,7 @@ export function Toaster() {
             key={toast.id}
             className={cn(
               'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border p-4 shadow-xl transition-all',
-              'animate-in slide-in-from-right-full duration-300 ease-out',
+              'animate-in slide-in-from-bottom-5 duration-300 ease-out',
               // Base Glassmorphism & Colors
               'bg-background/95 backdrop-blur-lg border-border',
               // Variants

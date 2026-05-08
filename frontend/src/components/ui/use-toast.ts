@@ -17,9 +17,10 @@ type ToastStore = {
 export const useToastStore = create<ToastStore>((set) => ({
   toasts: [],
   publish: (toast) =>
-    set((state) => ({
-      toasts: [...state.toasts, { id: crypto.randomUUID(), ...toast }],
-    })),
+    set((state) => {
+      const newToasts = [...state.toasts, { id: crypto.randomUUID(), ...toast }];
+      return { toasts: newToasts.slice(-3) }; // Limit to max 3 toasts to prevent screen clutter
+    }),
   dismiss: (id) =>
     set((state) => ({
       toasts: state.toasts.filter((toast) => toast.id !== id),

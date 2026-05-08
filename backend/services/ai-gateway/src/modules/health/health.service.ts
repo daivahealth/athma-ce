@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ConfigClientService } from '../../shared/llm-client/config-client.service';
+import { OPENAI_COMPATIBLE_PROVIDERS } from '../../shared/llm-client/openai-compatible.provider';
 
 export interface HealthStatus {
   status: 'healthy' | 'unhealthy' | 'degraded';
@@ -16,19 +18,51 @@ export interface HealthStatus {
 export class HealthService {
   private readonly startTime: number;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly configClient: ConfigClientService,
+  ) {
     this.startTime = Date.now();
   }
 
   async check(): Promise<HealthStatus> {
-    const llmProvider = this.configService.get<string>('LLM_PROVIDER', 'anthropic');
-    const embeddingModel = this.configService.get<string>('EMBEDDING_MODEL', 'text-embedding-3-small');
+    const llmProvider = (
+      await this.configClient.resolveString(
+        'ai.provider',
+        this.configService.get<string>('LLM_PROVIDER', 'anthropic'),
+      )
+    )
+      .trim()
+      .toLowerCase();
+    const embeddingModel = await this.configClient.resolveString(
+      'ai.embedding_model',
+      this.configService.get<string>('EMBEDDING_MODEL', 'text-embedding-3-small'),
+    );
 
     // Check if API keys are configured
-    const hasAnthropicKey = !!this.configService.get<string>('ANTHROPIC_API_KEY');
-    const hasOpenAIKey = !!this.configService.get<string>('OPENAI_API_KEY');
+    const hasAnthropicKey = !!(
+      await this.configClient.resolveString(
+        'ai.anthropic_api_key',
+        this.configService.get<string>('ANTHROPIC_API_KEY', ''),
+      )
+    ).trim();
+    const hasOpenAIKey = !!(
+      await this.configClient.resolveString(
+        'ai.openai_api_key',
+        this.configService.get<string>('OPENAI_API_KEY', ''),
+      )
+    ).trim();
 
-    const llmStatus = llmProvider === 'anthropic' ? (hasAnthropicKey ? 'configured' : 'missing_key') : (hasOpenAIKey ? 'configured' : 'missing_key');
+    const llmStatus =
+      llmProvider === 'anthropic'
+        ? hasAnthropicKey
+          ? 'configured'
+          : 'missing_key'
+        : llmProvider === 'openai' || OPENAI_COMPATIBLE_PROVIDERS.includes(llmProvider as any)
+          ? hasOpenAIKey
+            ? 'configured'
+            : 'missing_key'
+          : 'unsupported_provider';
     const embeddingStatus = hasOpenAIKey ? 'configured' : 'missing_key';
 
     return {

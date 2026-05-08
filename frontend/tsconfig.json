@@ -43,6 +43,12 @@
       ],
       "@/styles/*": [
         "src/styles/*"
+      ],
+      "@/plugins": [
+        "src/plugins/index.ts"
+      ],
+      "@/plugins/*": [
+        "src/plugins/*"
       ]
     },
     "plugins": [

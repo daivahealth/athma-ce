@@ -187,6 +187,9 @@ exports.Prisma.ChemoProtocolScalarFieldEnum = {
   premedications: 'premedications',
   supportiveCare: 'supportiveCare',
   emetogenicRisk: 'emetogenicRisk',
+  doseFormula: 'doseFormula',
+  labPrerequisites: 'labPrerequisites',
+  hydration: 'hydration',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -208,12 +211,23 @@ exports.Prisma.ChemoOrderScalarFieldEnum = {
   weight: 'weight',
   height: 'height',
   creatinineClearance: 'creatinineClearance',
+  cancerDiagnosisId: 'cancerDiagnosisId',
+  oncologyCarePlanId: 'oncologyCarePlanId',
+  hepaticAdjustmentGrade: 'hepaticAdjustmentGrade',
+  renalAdjustmentGrade: 'renalAdjustmentGrade',
   doseAdjustments: 'doseAdjustments',
   preChemoChecklist: 'preChemoChecklist',
   status: 'status',
   verifiedBy: 'verifiedBy',
   verifiedAt: 'verifiedAt',
+  secondVerifiedBy: 'secondVerifiedBy',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
   administeredBy: 'administeredBy',
+  adverseReactions: 'adverseReactions',
+  administrationDetails: 'administrationDetails',
+  drugPreparationDetails: 'drugPreparationDetails',
+  nurseVerificationChecklist: 'nurseVerificationChecklist',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -240,6 +254,55 @@ exports.Prisma.TumorBoardCaseScalarFieldEnum = {
   reviewOutcome: 'reviewOutcome',
   followUpActions: 'followUpActions',
   status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OncologyCancerTypeMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OncologyPrimarySiteMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  icdoSiteCode: 'icdoSiteCode',
+  icdoSiteName: 'icdoSiteName',
+  bodySystem: 'bodySystem',
+  lateralityApplicable: 'lateralityApplicable',
+  mappingType: 'mappingType',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OncologyCancerTypeSiteMappingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  cancerTypeId: 'cancerTypeId',
+  primarySiteId: 'primarySiteId',
+  isDefault: 'isDefault',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OncologyHistologyMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  morphologyCode: 'morphologyCode',
+  morphologyName: 'morphologyName',
+  behaviorCode: 'behaviorCode',
+  behaviorName: 'behaviorName',
+  description: 'description',
+  active: 'active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -303,6 +366,10 @@ exports.Prisma.ModelName = {
   ChemoProtocol: 'ChemoProtocol',
   ChemoOrder: 'ChemoOrder',
   TumorBoardCase: 'TumorBoardCase',
+  OncologyCancerTypeMaster: 'OncologyCancerTypeMaster',
+  OncologyPrimarySiteMaster: 'OncologyPrimarySiteMaster',
+  OncologyCancerTypeSiteMapping: 'OncologyCancerTypeSiteMapping',
+  OncologyHistologyMaster: 'OncologyHistologyMaster',
   OncologyCarePlan: 'OncologyCarePlan'
 };
 

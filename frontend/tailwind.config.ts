@@ -125,7 +125,7 @@ export default {
         '--card-foreground': '18 20% 12%',
         '--popover': '0 0% 100%',
         '--popover-foreground': '18 20% 12%',
-        '--primary': '14 100% 52%', // Athma orange-red
+        '--primary': '20 85% 48%', // Softer burnt orange/terracotta (less eye fatigue)
         '--primary-foreground': '24 100% 98%',
         '--secondary': '31 56% 95%', // Warm sand
         '--secondary-foreground': '18 20% 16%',
@@ -137,7 +137,7 @@ export default {
         '--destructive-foreground': '210 40% 98%',
         '--border': '28 35% 88%',
         '--input': '28 35% 88%',
-        '--ring': '24 100% 50%',
+        '--ring': '20 85% 48%',
         '--radius': '1rem', // More rounded
         '--success': '142 76% 36%',
         '--success-foreground': '355 100% 100%',
@@ -155,7 +155,7 @@ export default {
         '--card-foreground': '30 30% 96%',
         '--popover': '228 24% 11%',
         '--popover-foreground': '30 30% 96%',
-        '--primary': '24 100% 60%', // Brighter Athma orange for dark mode
+        '--primary': '24 85% 55%', // Softer orange for dark mode
         '--primary-foreground': '18 25% 10%',
         '--secondary': '226 18% 18%',
         '--secondary-foreground': '30 30% 96%',

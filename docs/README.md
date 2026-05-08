@@ -30,6 +30,12 @@ Welcome to the athma-ce Healthcare Platform documentation. This folder contains 
 - **[Development Guide](./development/README.md)** — Setting up your dev environment
 - **[Runbooks](./runbooks/)** — Operational procedures
 
+## 🔌 Specialty Plugins
+
+| Plugin | Feature Doc | API Doc | ADR |
+|--------|-------------|---------|-----|
+| Oncology | [Oncology Plugin](./features/oncology/ONCOLOGY-PLUGIN.md) | [Oncology API](./api/ONCOLOGY-API-ENDPOINTS.md) | [ADR-0014](./ADR/ADR-0014-specialty-plugin-architecture.md) |
+
 ## 📖 Related Documentation
 
 - [Main README](../README.md) — Project overview

@@ -47,6 +47,7 @@ CLINICAL_FILES=(
   "clinical/16-lifestyle-templates.sql"
   "clinical/17-membership-plans.sql"
   "clinical/18-pgvector-setup.sql"    # pgvector extension for semantic search
+  "clinical/23-oncology-catalogs.sql" # Oncology catalog master data (cancer types, primary sites, histologies, mappings)
 )
 
 RCM_FILES=(

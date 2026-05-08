@@ -2,7 +2,7 @@ import { IsString, IsOptional, IsObject } from 'class-validator';
 
 export class InstallPluginDto {
   @IsString()
-  packagePath: string;
+  packagePath!: string;
 
   @IsOptional()
   @IsObject()

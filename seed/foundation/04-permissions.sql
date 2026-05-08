@@ -327,3 +327,26 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0036-000000000003', 'procedure_result.verify', 'Verify Procedure Results', 'Verify and sign off procedure results', 'procedure_result', 'verify', NOW(), NOW()),
   ('00000000-0000-0000-0036-000000000004', 'procedure_result.amend', 'Amend Procedure Results', 'Amend finalized procedure results', 'procedure_result', 'amend', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
+
+-- Oncology Plugin Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0037-000000000001', 'oncology.diagnosis.read',    'Oncology: Read Cancer Diagnoses',  'View cancer diagnosis records',          'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000002', 'oncology.diagnosis.write',   'Oncology: Write Cancer Diagnoses', 'Create and update cancer diagnoses',     'oncology', 'write',  NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000003', 'oncology.registry.read',     'Oncology: Read Registry',          'View oncology patient registry',         'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000004', 'oncology.care_plan.read',    'Oncology: Read Care Plans',        'View oncology care plans',               'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000005', 'oncology.care_plan.write',   'Oncology: Write Care Plans',       'Create and update oncology care plans',  'oncology', 'write',  NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000006', 'oncology.care_plan.approve', 'Oncology: Approve Care Plans',     'Approve oncology care plans',            'oncology', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000007', 'oncology.staging.read',      'Oncology: Read Staging',           'View tumor staging records',             'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000008', 'oncology.staging.write',     'Oncology: Write Staging',          'Create and update tumor staging',        'oncology', 'write',  NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000009', 'oncology.tumor_board.read',  'Oncology: Read Tumor Board',       'View tumor board cases',                 'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000010', 'oncology.tumor_board.manage','Oncology: Manage Tumor Board',     'Create and manage tumor board cases',    'oncology', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000011', 'oncology.chemo_protocol.read', 'Oncology: Read Chemo Protocols', 'View chemotherapy protocols',            'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000012', 'oncology.chemo_protocol.write','Oncology: Write Chemo Protocols','Create and update chemo protocols',      'oncology', 'write',  NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000013', 'oncology.chemo_order.read',      'Oncology: Read Chemo Orders',       'View chemotherapy orders',               'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000014', 'oncology.chemo_order.write',     'Oncology: Write Chemo Orders',      'Create and update chemo orders',         'oncology', 'write',  NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000015', 'oncology.chemo_order.approve',   'Oncology: Approve Chemo Orders',    'Pharmacist/physician sign-off on orders',    'oncology', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000016', 'oncology.chemo_order.verify',    'Oncology: Verify Chemo Orders',     'Nurse bedside verification of orders',       'oncology', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000017', 'oncology.chemo_order.administer','Oncology: Administer Chemo Orders', 'Start and complete chemo administration',     'oncology', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000018', 'oncology.catalog.read',          'Oncology: Read Catalogs',           'View oncology master catalogs (cancer types, sites, histologies)', 'oncology', 'read',   NOW(), NOW()),
+  ('00000000-0000-0000-0037-000000000019', 'oncology.catalog.write',         'Oncology: Write Catalogs',          'Create and update oncology master catalog entries',                'oncology', 'write',  NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;

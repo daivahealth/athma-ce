@@ -179,6 +179,28 @@ model MyRecord {
 - Do not create foreign keys to core tables — use UUID references
 - Use raw SQL via `prisma.$queryRawUnsafe` since the plugin schema is separate from the core Prisma client
 
+#### Critical: UUID Parameters in `$queryRawUnsafe`
+
+`$queryRawUnsafe` sends JavaScript string values with PostgreSQL's `text` OID (25). PostgreSQL has **no** implicit `uuid = text` operator, so every UUID parameter must be explicitly cast in the SQL string:
+
+```sql
+-- WHERE clauses
+WHERE tenant_id = $1::uuid
+AND patient_id = $2::uuid
+
+-- INSERT VALUES
+VALUES (gen_random_uuid(), $1::uuid, $2::uuid, ...)
+
+-- UPDATE SET ... WHERE
+WHERE id = $1::uuid AND tenant_id = $2::uuid
+```
+
+This applies to **all** UUID parameters in every clause — WHERE comparisons, INSERT values, and UPDATE assignments. Forgetting a single `::uuid` cast produces:
+- `ERROR 42883: operator does not exist: uuid = text` (in WHERE)
+- `ERROR 42804: column "X" is of type uuid but expression is of type text` (in INSERT/UPDATE)
+
+**Alternative:** Use `$queryRaw` with template literal syntax. Template literal parameters are sent with OID 0 (unknown), which PostgreSQL coerces from context — no explicit `::uuid` casts needed. See [Prisma docs on queryRawUnsafe vs queryRaw](https://www.prisma.io/docs/orm/prisma-client/using-raw-sql/raw-queries).
+
 ### Event Handling
 
 Subscribe to core lifecycle events:
@@ -318,15 +340,26 @@ npx prisma db push
 
 ### Step 4: Run Plugin DB Migration
 
-Push the plugin's Prisma schema to create its tables inside the plugin schema:
+Push the plugin's Prisma schema to create its tables inside the plugin schema.
+
+**Option A — from the plugin directory** (requires `npm install` first to get Prisma 6.19):
 
 ```bash
-cd plugins/my-specialty/backend/prisma
-CLINICAL_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/zeal_clinical" \
-  npx prisma db push
+cd plugins/my-specialty
+npm install
+npm run db:push
 ```
 
-For the oncology plugin, this creates `tumor_staging`, `chemo_protocols`, `chemo_orders`, and `tumor_board_cases` tables in the `plugin_oncology` schema.
+**Option B — from the backend directory** (uses the backend's Prisma CLI):
+
+```bash
+cd backend
+npx prisma db push --schema ../plugins/my-specialty/backend/prisma/schema.prisma
+```
+
+> **Important:** Do not run bare `npx prisma db push` from a directory without a local Prisma installation. `npx` will download the latest Prisma (v7+), which is incompatible with the project's v6.19 schema format.
+
+For the oncology plugin, this creates `cancer_diagnoses`, `tumor_stagings`, `tumor_board_cases`, `oncology_care_plans`, `chemo_protocols`, and `chemo_orders` tables in the `plugin_oncology` schema.
 
 ### Step 5: Start Backend Services
 
@@ -392,14 +425,20 @@ Use the existing RBAC system to grant plugin permissions to the appropriate role
 
 | Permission | Description |
 |---|---|
+| `oncology.diagnosis.read` | View cancer diagnoses |
+| `oncology.diagnosis.write` | Create/edit cancer diagnoses |
+| `oncology.registry.read` | View oncology registry (aggregated patient view) |
 | `oncology.staging.read` | View tumor staging records |
 | `oncology.staging.write` | Create/edit tumor staging |
-| `oncology.chemo_protocol.read` | View chemo protocols |
-| `oncology.chemo_protocol.write` | Create/edit chemo protocols |
-| `oncology.chemo_order.read` | View chemo orders |
-| `oncology.chemo_order.write` | Create/submit chemo orders |
 | `oncology.tumor_board.read` | View tumor board cases |
 | `oncology.tumor_board.manage` | Create/manage tumor board cases |
+| `oncology.care_plan.read` | View oncology care plans |
+| `oncology.care_plan.write` | Create/edit care plans |
+| `oncology.care_plan.approve` | Approve care plans (sets status to active) |
+| `oncology.chemo_protocol.read` | View chemo protocols (Phase 2) |
+| `oncology.chemo_protocol.write` | Create/edit chemo protocols (Phase 2) |
+| `oncology.chemo_order.read` | View chemo orders (Phase 2) |
+| `oncology.chemo_order.write` | Create/submit chemo orders (Phase 2) |
 
 ### Step 9: Start the Frontend
 
@@ -486,17 +525,24 @@ Your plugin automatically inherits athma-ce's three-layer tenant isolation:
 | Problem | Cause | Fix |
 |---|---|---|
 | Plugin not discovered at startup | Wrong directory or missing `athma-plugin.json` | Ensure the plugin is in `plugins/`, `node_modules/@athma-plugins/`, or `ATHMA_PLUGIN_DIR` with a valid manifest |
-| `Skipping plugin` warning in logs | Manifest parse error or module import failure | Check the manifest JSON is valid and the `moduleEntrypoint` path is correct |
+| `Skipping plugin` warning in logs | Manifest parse error, module import failure, or TypeScript compile error during `require()` | Check the manifest JSON, the `moduleEntrypoint` path, and for any `tsc` type errors in the plugin (`npm run type-check`) — the loader swallows all exceptions silently |
+| All plugin routes return 404 | TypeScript error in plugin code caused `require()` to throw, and the loader skipped the plugin silently | Run `npm run type-check --workspace=@zeal/clinical` (or `tsc --noEmit` from the plugin's backend dir) to surface compile errors |
 | Sidebar section not showing | Feature flag not enabled for tenant | Activate the plugin via `PUT /plugins/:id/activate` with the tenant ID |
 | 403 on plugin API endpoints | Plugin not activated or permissions not assigned | Check tenant activation and role permissions |
 | Database errors (relation does not exist) | Plugin schema or tables not created | Run `CREATE SCHEMA` and `prisma db push` for the plugin |
 | Module import errors (`Cannot find module`) | Path alias not configured | Ensure `@athma/plugin-sdk` is mapped in the clinical service's `tsconfig.json` |
+| `ERROR 42883: operator does not exist: uuid = text` | `$queryRawUnsafe` sends strings as text OID — PostgreSQL has no `uuid = text` operator | Add `::uuid` to every UUID parameter in WHERE clauses: `WHERE tenant_id = $1::uuid AND id = $2::uuid` |
+| `ERROR 42804: column "X" is of type uuid but expression is of type text` | Same root cause in INSERT VALUES or UPDATE SET positions | Add `::uuid` to every UUID parameter in INSERT/UPDATE: `VALUES ($1::uuid, $2::uuid, ...)` |
+| TypeScript error `Type 'string \| undefined' is not assignable` | `exactOptionalPropertyTypes: true` — `@Query()` returns `string \| undefined` but the service filter type uses `prop?: string` | Add `\| undefined` to all optional filter properties: `{ patientId?: string \| undefined }` |
 
 ## Reference Implementation
 
 See `plugins/oncology/` for a complete reference plugin with:
-- Tumor staging, chemo protocols, chemo orders, tumor board
-- Backend NestJS module with extension point registration
-- Frontend pages with tabbed UI, data tables, and status badges
-- Charting panel extension (staging summary)
+- Cancer Diagnosis (anchor record), Tumor Staging, Tumor Board, Oncology Care Plan (Phase 1)
+- Chemo Protocols, Chemo Orders (Phase 2 — in schema, hidden from nav)
+- Backend NestJS module with extension point registration and raw SQL via `$queryRawUnsafe` with `::uuid` casts
+- Frontend pages with data tables, slide-over forms, and status/intent badges
+- Charting panel extension (oncology diagnosis summary card in encounter charting)
 - English and Arabic translations
+
+See [ONCOLOGY-PLUGIN.md](../features/oncology/ONCOLOGY-PLUGIN.md) for detailed feature documentation and [ONCOLOGY-API-ENDPOINTS.md](../api/ONCOLOGY-API-ENDPOINTS.md) for the full API reference.

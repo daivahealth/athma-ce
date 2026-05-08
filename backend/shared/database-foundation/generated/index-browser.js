@@ -470,6 +470,35 @@ exports.Prisma.ConfigAuditLogScalarFieldEnum = {
   changeReason: 'changeReason'
 };
 
+exports.Prisma.PluginRegistryScalarFieldEnum = {
+  id: 'id',
+  pluginId: 'pluginId',
+  name: 'name',
+  version: 'version',
+  description: 'description',
+  author: 'author',
+  license: 'license',
+  specialtyCode: 'specialtyCode',
+  targetService: 'targetService',
+  manifest: 'manifest',
+  packagePath: 'packagePath',
+  status: 'status',
+  installedAt: 'installedAt',
+  updatedAt: 'updatedAt',
+  installedBy: 'installedBy'
+};
+
+exports.Prisma.PluginActivationScalarFieldEnum = {
+  id: 'id',
+  pluginId: 'pluginId',
+  tenantId: 'tenantId',
+  isEnabled: 'isEnabled',
+  enabledAt: 'enabledAt',
+  disabledAt: 'disabledAt',
+  enabledBy: 'enabledBy',
+  settings: 'settings'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -527,7 +556,9 @@ exports.Prisma.ModelName = {
   InstanceConfig: 'InstanceConfig',
   TenantConfig: 'TenantConfig',
   FacilityConfig: 'FacilityConfig',
-  ConfigAuditLog: 'ConfigAuditLog'
+  ConfigAuditLog: 'ConfigAuditLog',
+  PluginRegistry: 'PluginRegistry',
+  PluginActivation: 'PluginActivation'
 };
 
 /**

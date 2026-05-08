@@ -74,6 +74,24 @@ Billing, claims, and financial operations.
 
 ---
 
+### AI Gateway Service
+
+**Port:** 3015 | **Databases:** `zeal_analytics` + domain read access
+
+AI-powered report generation and semantic search.
+
+**Key Features:**
+- Natural-language report builder (`/api/v1/reports/*`)
+- Clinical semantic search and embedding sync
+- AI audit logging and usage tracking
+
+**Operational Notes:**
+- `GET /api/v1/health` reports whether the active LLM provider is configured.
+- Report generation resolves provider and credentials from Foundation config first (`ai.provider`, provider-specific API key/model), then falls back to process env.
+- Embedding and semantic-search indexing resolve `ai.openai_api_key` / `OPENAI_API_KEY`.
+
+---
+
 ## Service Interaction Patterns
 
 ### Cross-Service Communication
@@ -161,6 +179,7 @@ npm run dev
 | Clinical | http://localhost:3011 | http://localhost:3011/api-docs |
 | RCM | http://localhost:3012 | http://localhost:3012/api-docs |
 | PRM | http://localhost:3013 | http://localhost:3013/api-docs |
+| AI Gateway | http://localhost:3015 | http://localhost:3015/api/docs |
 | Frontend | http://localhost:3000 | - |
 
 ---
