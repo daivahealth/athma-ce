@@ -243,6 +243,58 @@ enum NoteTemplateType {
 }
 
 // ============================================================================
+// ENUMS - OT MODULE
+// ============================================================================
+
+enum OTRequestPriority {
+  ELECTIVE
+  URGENT
+  EMERGENCY
+}
+
+enum OTRequestStatus {
+  DRAFT
+  REQUESTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  SCHEDULED
+  CANCELLED
+  COMPLETED
+}
+
+enum OTScheduleStatus {
+  PLANNED
+  CONFIRMED
+  PATIENT_READY
+  PATIENT_IN_OT
+  ANAESTHESIA_STARTED
+  SURGERY_STARTED
+  SURGERY_COMPLETED
+  PATIENT_SHIFTED_TO_RECOVERY
+  CANCELLED
+  POSTPONED
+}
+
+enum OTTeamRole {
+  PRIMARY_SURGEON
+  ASSISTANT_SURGEON
+  ANAESTHETIST
+  SCRUB_NURSE
+  CIRCULATING_NURSE
+  OT_TECHNICIAN
+  PERFUSIONIST
+  RADIOLOGY_TECHNICIAN
+}
+
+enum OTReportStatus {
+  DRAFT
+  SIGNED
+  AMENDED
+  CANCELLED
+}
+
+// ============================================================================
 // MODELS - Generic Checklist System
 // ============================================================================
 
@@ -4173,4 +4225,216 @@ model ProcedureReport {
   @@index([tenantId, reportStatus], map: "idx_procedure_report_status")
   @@index([tenantId, patientId, reportStatus], map: "idx_procedure_report_patient_status")
   @@map("procedure_reports")
+}
+
+model OtRequest {
+  id                        String            @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String            @map("tenant_id") @db.Uuid
+  patientId                 String            @map("patient_id") @db.Uuid
+  encounterId               String            @map("encounter_id") @db.Uuid
+  requestedBy               String            @map("requested_by") @db.Uuid
+  requestedAt               DateTime          @default(now()) @map("requested_at") @db.Timestamptz(6)
+  surgeryType               String?           @map("surgery_type") @db.VarChar(100)
+  procedureCode             String?           @map("procedure_code") @db.VarChar(100)
+  procedureName             String            @map("procedure_name") @db.VarChar(255)
+  diagnosis                 String?           @map("diagnosis") @db.Text
+  priority                  OTRequestPriority @default(ELECTIVE) @map("priority")
+  expectedDurationMinutes   Int?              @map("expected_duration_minutes")
+  preferredDate             DateTime?         @map("preferred_date") @db.Date
+  preferredOtRoomSpaceId    String?           @map("preferred_ot_room_space_id") @db.Uuid
+  primarySurgeonId          String?           @map("primary_surgeon_id") @db.Uuid
+  anaesthetistRequired      Boolean           @default(false) @map("anaesthetist_required")
+  anaesthesiaTypePlanned    String?           @map("anaesthesia_type_planned") @db.VarChar(100)
+  specialEquipmentRequired  Json?             @map("special_equipment_required") @db.JsonB
+  bloodRequired             Boolean           @default(false) @map("blood_required")
+  implantsRequired          Json?             @map("implants_required") @db.JsonB
+  remarks                   String?           @map("remarks") @db.Text
+  status                    OTRequestStatus   @default(DRAFT) @map("status")
+  activeScheduleId          String?           @map("active_schedule_id") @db.Uuid
+  approvedBy                String?           @map("approved_by") @db.Uuid
+  approvedAt                DateTime?         @map("approved_at") @db.Timestamptz(6)
+  rejectedBy                String?           @map("rejected_by") @db.Uuid
+  rejectedAt                DateTime?         @map("rejected_at") @db.Timestamptz(6)
+  rejectionReason           String?           @map("rejection_reason") @db.Text
+  cancelledBy               String?           @map("cancelled_by") @db.Uuid
+  cancelledAt               DateTime?         @map("cancelled_at") @db.Timestamptz(6)
+  cancellationReason        String?           @map("cancellation_reason") @db.Text
+  completedBy               String?           @map("completed_by") @db.Uuid
+  completedAt               DateTime?         @map("completed_at") @db.Timestamptz(6)
+  createdAt                 DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy                 String?           @map("created_by") @db.Uuid
+  updatedBy                 String?           @map("updated_by") @db.Uuid
+
+  schedules                 OtSchedule[]
+  reports                   OtReport[]
+  statusEvents              OtRequestStatusEvent[]
+
+  @@index([tenantId, status], map: "idx_ot_requests_tenant_status")
+  @@index([tenantId, patientId], map: "idx_ot_requests_tenant_patient")
+  @@index([tenantId, encounterId], map: "idx_ot_requests_tenant_encounter")
+  @@index([tenantId, preferredDate], map: "idx_ot_requests_tenant_preferred_date")
+  @@index([tenantId, primarySurgeonId], map: "idx_ot_requests_tenant_primary_surgeon")
+  @@index([tenantId, activeScheduleId], map: "idx_ot_requests_tenant_active_schedule")
+  @@map("ot_requests")
+}
+
+model OtSchedule {
+  id                        String             @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String             @map("tenant_id") @db.Uuid
+  otRequestId               String             @map("ot_request_id") @db.Uuid
+  patientId                 String             @map("patient_id") @db.Uuid
+  encounterId               String             @map("encounter_id") @db.Uuid
+  otRoomSpaceId             String             @map("ot_room_space_id") @db.Uuid
+  scheduledStartTime        DateTime           @map("scheduled_start_time") @db.Timestamptz(6)
+  scheduledEndTime          DateTime           @map("scheduled_end_time") @db.Timestamptz(6)
+  actualStartTime           DateTime?          @map("actual_start_time") @db.Timestamptz(6)
+  actualEndTime             DateTime?          @map("actual_end_time") @db.Timestamptz(6)
+  primarySurgeonId          String?            @map("primary_surgeon_id") @db.Uuid
+  assistantSurgeonIds       String[]           @default([]) @map("assistant_surgeon_ids") @db.Uuid
+  anaesthetistId            String?            @map("anaesthetist_id") @db.Uuid
+  scrubNurseId              String?            @map("scrub_nurse_id") @db.Uuid
+  circulatingNurseId        String?            @map("circulating_nurse_id") @db.Uuid
+  technicianId              String?            @map("technician_id") @db.Uuid
+  anaesthesiaType           String?            @map("anaesthesia_type") @db.VarChar(100)
+  status                    OTScheduleStatus   @default(PLANNED) @map("schedule_status")
+  isCurrent                 Boolean            @default(true) @map("is_current")
+  postponedReason           String?            @map("postponed_reason") @db.Text
+  cancelledReason           String?            @map("cancelled_reason") @db.Text
+  createdAt                 DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy                 String?            @map("created_by") @db.Uuid
+  updatedBy                 String?            @map("updated_by") @db.Uuid
+
+  otRequest                 OtRequest          @relation(fields: [otRequestId], references: [id], onDelete: Cascade)
+  teamMembers               OtTeamMember[]
+  reports                   OtReport[]
+  statusEvents              OtScheduleStatusEvent[]
+
+  @@index([tenantId, otRequestId], map: "idx_ot_schedules_tenant_request")
+  @@index([tenantId, patientId], map: "idx_ot_schedules_tenant_patient")
+  @@index([tenantId, encounterId], map: "idx_ot_schedules_tenant_encounter")
+  @@index([tenantId, otRoomSpaceId, scheduledStartTime], map: "idx_ot_schedules_tenant_room_start")
+  @@index([tenantId, status, scheduledStartTime], map: "idx_ot_schedules_tenant_status_start")
+  @@index([tenantId, isCurrent], map: "idx_ot_schedules_tenant_current")
+  @@map("ot_schedules")
+}
+
+model OtRoomConfig {
+  id                        String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String    @map("tenant_id") @db.Uuid
+  spaceId                   String    @map("space_id") @db.Uuid
+  specialty                 String?   @map("specialty") @db.VarChar(100)
+  isActive                  Boolean   @default(true) @map("is_active")
+  notes                     String?   @map("notes") @db.Text
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy                 String?   @map("created_by") @db.Uuid
+  updatedBy                 String?   @map("updated_by") @db.Uuid
+
+  @@unique([tenantId, spaceId], map: "ot_room_configs_tenant_space_unique")
+  @@index([tenantId, isActive], map: "idx_ot_room_configs_tenant_active")
+  @@map("ot_room_configs")
+}
+
+model OtTeamMember {
+  id                        String      @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String      @map("tenant_id") @db.Uuid
+  scheduleId                String      @map("schedule_id") @db.Uuid
+  staffId                   String      @map("staff_id") @db.Uuid
+  role                      OTTeamRole  @map("role")
+  isPrimary                 Boolean     @default(false) @map("is_primary")
+  displayOrder              Int?        @map("display_order")
+  createdAt                 DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy                 String?     @map("created_by") @db.Uuid
+  updatedBy                 String?     @map("updated_by") @db.Uuid
+
+  schedule                  OtSchedule  @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@index([scheduleId, role], map: "idx_ot_team_members_schedule_role")
+  @@index([tenantId, staffId], map: "idx_ot_team_members_tenant_staff")
+  @@map("ot_team_members")
+}
+
+model OtReport {
+  id                        String           @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String           @map("tenant_id") @db.Uuid
+  scheduleId                String           @map("schedule_id") @db.Uuid
+  otRequestId               String           @map("ot_request_id") @db.Uuid
+  patientId                 String           @map("patient_id") @db.Uuid
+  encounterId               String           @map("encounter_id") @db.Uuid
+  reportNumber              String           @map("report_number") @db.VarChar(50)
+  reportStatus              OTReportStatus   @default(DRAFT) @map("report_status")
+  signedBy                  String?          @map("signed_by") @db.Uuid
+  signedAt                  DateTime?        @map("signed_at") @db.Timestamptz(6)
+  remarks                   String?          @map("remarks") @db.Text
+  createdAt                 DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy                 String?          @map("created_by") @db.Uuid
+  updatedBy                 String?          @map("updated_by") @db.Uuid
+
+  schedule                  OtSchedule       @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  otRequest                 OtRequest        @relation(fields: [otRequestId], references: [id], onDelete: Cascade)
+  versions                  OtReportVersion[]
+
+  @@unique([tenantId, reportNumber], map: "ot_reports_tenant_report_number_unique")
+  @@index([tenantId, reportStatus], map: "idx_ot_reports_tenant_status")
+  @@index([tenantId, patientId], map: "idx_ot_reports_tenant_patient")
+  @@index([scheduleId], map: "idx_ot_reports_schedule")
+  @@map("ot_reports")
+}
+
+model OtReportVersion {
+  id                        String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String    @map("tenant_id") @db.Uuid
+  reportId                  String    @map("report_id") @db.Uuid
+  versionNo                 Int       @map("version_no")
+  reportData                Json      @map("report_data") @db.JsonB
+  createdBy                 String    @map("created_by") @db.Uuid
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  isCurrent                 Boolean   @default(true) @map("is_current")
+
+  report                    OtReport  @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@unique([reportId, versionNo], map: "ot_report_versions_report_version_unique")
+  @@index([reportId, createdAt], map: "idx_ot_report_versions_report_created_at")
+  @@index([tenantId, isCurrent], map: "idx_ot_report_versions_tenant_current")
+  @@map("ot_report_versions")
+}
+
+model OtRequestStatusEvent {
+  id                        String            @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String            @map("tenant_id") @db.Uuid
+  otRequestId               String            @map("ot_request_id") @db.Uuid
+  fromStatus                OTRequestStatus?  @map("from_status")
+  toStatus                  OTRequestStatus   @map("to_status")
+  changedBy                 String            @map("changed_by") @db.Uuid
+  changedAt                 DateTime          @default(now()) @map("changed_at") @db.Timestamptz(6)
+  reason                    String?           @map("reason") @db.Text
+  remarks                   String?           @map("remarks") @db.Text
+
+  otRequest                 OtRequest         @relation(fields: [otRequestId], references: [id], onDelete: Cascade)
+
+  @@index([otRequestId, changedAt], map: "idx_ot_request_status_events_request_changed_at")
+  @@index([tenantId, toStatus], map: "idx_ot_request_status_events_tenant_status")
+  @@map("ot_request_status_events")
+}
+
+model OtScheduleStatusEvent {
+  id                        String             @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String             @map("tenant_id") @db.Uuid
+  otScheduleId              String             @map("ot_schedule_id") @db.Uuid
+  fromStatus                OTScheduleStatus?  @map("from_status")
+  toStatus                  OTScheduleStatus   @map("to_status")
+  changedBy                 String             @map("changed_by") @db.Uuid
+  changedAt                 DateTime           @default(now()) @map("changed_at") @db.Timestamptz(6)
+  reason                    String?            @map("reason") @db.Text
+  remarks                   String?            @map("remarks") @db.Text
+
+  otSchedule                OtSchedule         @relation(fields: [otScheduleId], references: [id], onDelete: Cascade)
+
+  @@index([otScheduleId, changedAt], map: "idx_ot_schedule_status_events_schedule_changed_at")
+  @@index([tenantId, toStatus], map: "idx_ot_schedule_status_events_tenant_status")
+  @@map("ot_schedule_status_events")
 }

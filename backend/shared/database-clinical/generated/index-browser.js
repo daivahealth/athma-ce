@@ -21,12 +21,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.2
- * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+ * Prisma Client JS version: 6.19.0
+ * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
  */
 Prisma.prismaVersion = {
-  client: "6.19.2",
-  engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
+  client: "6.19.0",
+  engine: "2ba551f319ab1df4bc874a89965d8b3641056773"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -2115,6 +2115,154 @@ exports.Prisma.ProcedureReportScalarFieldEnum = {
   updatedBy: 'updatedBy'
 };
 
+exports.Prisma.OtRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  requestedBy: 'requestedBy',
+  requestedAt: 'requestedAt',
+  surgeryType: 'surgeryType',
+  procedureCode: 'procedureCode',
+  procedureName: 'procedureName',
+  diagnosis: 'diagnosis',
+  priority: 'priority',
+  expectedDurationMinutes: 'expectedDurationMinutes',
+  preferredDate: 'preferredDate',
+  preferredOtRoomSpaceId: 'preferredOtRoomSpaceId',
+  primarySurgeonId: 'primarySurgeonId',
+  anaesthetistRequired: 'anaesthetistRequired',
+  anaesthesiaTypePlanned: 'anaesthesiaTypePlanned',
+  specialEquipmentRequired: 'specialEquipmentRequired',
+  bloodRequired: 'bloodRequired',
+  implantsRequired: 'implantsRequired',
+  remarks: 'remarks',
+  status: 'status',
+  activeScheduleId: 'activeScheduleId',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  rejectedBy: 'rejectedBy',
+  rejectedAt: 'rejectedAt',
+  rejectionReason: 'rejectionReason',
+  cancelledBy: 'cancelledBy',
+  cancelledAt: 'cancelledAt',
+  cancellationReason: 'cancellationReason',
+  completedBy: 'completedBy',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.OtScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  otRequestId: 'otRequestId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  otRoomSpaceId: 'otRoomSpaceId',
+  scheduledStartTime: 'scheduledStartTime',
+  scheduledEndTime: 'scheduledEndTime',
+  actualStartTime: 'actualStartTime',
+  actualEndTime: 'actualEndTime',
+  primarySurgeonId: 'primarySurgeonId',
+  assistantSurgeonIds: 'assistantSurgeonIds',
+  anaesthetistId: 'anaesthetistId',
+  scrubNurseId: 'scrubNurseId',
+  circulatingNurseId: 'circulatingNurseId',
+  technicianId: 'technicianId',
+  anaesthesiaType: 'anaesthesiaType',
+  status: 'status',
+  isCurrent: 'isCurrent',
+  postponedReason: 'postponedReason',
+  cancelledReason: 'cancelledReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.OtRoomConfigScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  specialty: 'specialty',
+  isActive: 'isActive',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.OtTeamMemberScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  scheduleId: 'scheduleId',
+  staffId: 'staffId',
+  role: 'role',
+  isPrimary: 'isPrimary',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.OtReportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  scheduleId: 'scheduleId',
+  otRequestId: 'otRequestId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  reportNumber: 'reportNumber',
+  reportStatus: 'reportStatus',
+  signedBy: 'signedBy',
+  signedAt: 'signedAt',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.OtReportVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  reportId: 'reportId',
+  versionNo: 'versionNo',
+  reportData: 'reportData',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  isCurrent: 'isCurrent'
+};
+
+exports.Prisma.OtRequestStatusEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  otRequestId: 'otRequestId',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
+  changedBy: 'changedBy',
+  changedAt: 'changedAt',
+  reason: 'reason',
+  remarks: 'remarks'
+};
+
+exports.Prisma.OtScheduleStatusEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  otScheduleId: 'otScheduleId',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
+  changedBy: 'changedBy',
+  changedAt: 'changedAt',
+  reason: 'reason',
+  remarks: 'remarks'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2414,6 +2562,54 @@ exports.DeviceSyncStatus = exports.$Enums.DeviceSyncStatus = {
   PARTIAL: 'PARTIAL'
 };
 
+exports.OTRequestPriority = exports.$Enums.OTRequestPriority = {
+  ELECTIVE: 'ELECTIVE',
+  URGENT: 'URGENT',
+  EMERGENCY: 'EMERGENCY'
+};
+
+exports.OTRequestStatus = exports.$Enums.OTRequestStatus = {
+  DRAFT: 'DRAFT',
+  REQUESTED: 'REQUESTED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SCHEDULED: 'SCHEDULED',
+  CANCELLED: 'CANCELLED',
+  COMPLETED: 'COMPLETED'
+};
+
+exports.OTScheduleStatus = exports.$Enums.OTScheduleStatus = {
+  PLANNED: 'PLANNED',
+  CONFIRMED: 'CONFIRMED',
+  PATIENT_READY: 'PATIENT_READY',
+  PATIENT_IN_OT: 'PATIENT_IN_OT',
+  ANAESTHESIA_STARTED: 'ANAESTHESIA_STARTED',
+  SURGERY_STARTED: 'SURGERY_STARTED',
+  SURGERY_COMPLETED: 'SURGERY_COMPLETED',
+  PATIENT_SHIFTED_TO_RECOVERY: 'PATIENT_SHIFTED_TO_RECOVERY',
+  CANCELLED: 'CANCELLED',
+  POSTPONED: 'POSTPONED'
+};
+
+exports.OTTeamRole = exports.$Enums.OTTeamRole = {
+  PRIMARY_SURGEON: 'PRIMARY_SURGEON',
+  ASSISTANT_SURGEON: 'ASSISTANT_SURGEON',
+  ANAESTHETIST: 'ANAESTHETIST',
+  SCRUB_NURSE: 'SCRUB_NURSE',
+  CIRCULATING_NURSE: 'CIRCULATING_NURSE',
+  OT_TECHNICIAN: 'OT_TECHNICIAN',
+  PERFUSIONIST: 'PERFUSIONIST',
+  RADIOLOGY_TECHNICIAN: 'RADIOLOGY_TECHNICIAN'
+};
+
+exports.OTReportStatus = exports.$Enums.OTReportStatus = {
+  DRAFT: 'DRAFT',
+  SIGNED: 'SIGNED',
+  AMENDED: 'AMENDED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Prisma.ModelName = {
   ChecklistTemplate: 'ChecklistTemplate',
   ChecklistTemplateItem: 'ChecklistTemplateItem',
@@ -2502,7 +2698,15 @@ exports.Prisma.ModelName = {
   LabReport: 'LabReport',
   LabResultItem: 'LabResultItem',
   ImagingReport: 'ImagingReport',
-  ProcedureReport: 'ProcedureReport'
+  ProcedureReport: 'ProcedureReport',
+  OtRequest: 'OtRequest',
+  OtSchedule: 'OtSchedule',
+  OtRoomConfig: 'OtRoomConfig',
+  OtTeamMember: 'OtTeamMember',
+  OtReport: 'OtReport',
+  OtReportVersion: 'OtReportVersion',
+  OtRequestStatusEvent: 'OtRequestStatusEvent',
+  OtScheduleStatusEvent: 'OtScheduleStatusEvent'
 };
 
 /**

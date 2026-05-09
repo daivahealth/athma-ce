@@ -19,6 +19,7 @@ import { LongevityModule } from './modules/longevity/longevity.module';
 import { LifestyleModule } from './modules/lifestyle/lifestyle.module';
 import { DeviceSyncModule } from './modules/device-sync/device-sync.module';
 import { ReportingModule } from './modules/reporting/reporting.module';
+import { OtModule } from './modules/ot/ot.module';
 import { StorageModule } from './common/storage/storage.module';
 import { PluginLoaderModule } from './common/plugins/plugin-loader.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
@@ -50,6 +51,7 @@ import { LoggerService } from './common/logger/logger.service';
     LifestyleModule,
     DeviceSyncModule,
     ReportingModule,
+    OtModule,
     PluginLoaderModule.forRoot(),
   ],
   controllers: [AppController],

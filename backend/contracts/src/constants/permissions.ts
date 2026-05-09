@@ -121,6 +121,32 @@ export const PROCEDURE_RESULT_VERIFY = 'procedure_result.verify';
 export const PROCEDURE_RESULT_AMEND = 'procedure_result.amend';
 
 // ============================================
+// OT PERMISSIONS
+// ============================================
+export const OT_REQUEST_READ = 'ot_request.read';
+export const OT_REQUEST_CREATE = 'ot_request.create';
+export const OT_REQUEST_UPDATE = 'ot_request.update';
+export const OT_REQUEST_REVIEW = 'ot_request.review';
+export const OT_REQUEST_APPROVE = 'ot_request.approve';
+export const OT_REQUEST_CANCEL = 'ot_request.cancel';
+
+export const OT_SCHEDULE_READ = 'ot_schedule.read';
+export const OT_SCHEDULE_CREATE = 'ot_schedule.create';
+export const OT_SCHEDULE_UPDATE = 'ot_schedule.update';
+export const OT_SCHEDULE_ADVANCE = 'ot_schedule.advance';
+export const OT_SCHEDULE_CANCEL = 'ot_schedule.cancel';
+
+export const OT_ROOM_READ = 'ot_room.read';
+export const OT_ROOM_MANAGE = 'ot_room.manage';
+
+export const OT_REPORT_READ = 'ot_report.read';
+export const OT_REPORT_CREATE = 'ot_report.create';
+export const OT_REPORT_UPDATE = 'ot_report.update';
+export const OT_REPORT_SIGN = 'ot_report.sign';
+export const OT_REPORT_AMEND = 'ot_report.amend';
+export const OT_REPORT_CANCEL = 'ot_report.cancel';
+
+// ============================================
 // SCHEDULING PERMISSIONS
 // ============================================
 export const SCHEDULE_READ = 'schedule.read';
@@ -401,6 +427,15 @@ export const CLINICAL_ALL = [
   IMAGING_ORDER_CREATE,
   IMAGING_RESULT_READ,
   PROCEDURE_RESULT_READ,
+  OT_REQUEST_READ,
+  OT_REQUEST_CREATE,
+  OT_REQUEST_UPDATE,
+  OT_SCHEDULE_READ,
+  OT_SCHEDULE_CREATE,
+  OT_SCHEDULE_UPDATE,
+  OT_REPORT_READ,
+  OT_REPORT_CREATE,
+  OT_REPORT_UPDATE,
 ];
 
 /**
@@ -519,6 +554,33 @@ export const ALL_PERMISSIONS = [
   { code: IMAGING_RESULT_ENTER, name: 'Enter Imaging Results', resource: 'imaging_result', action: 'enter' },
   { code: IMAGING_RESULT_VERIFY, name: 'Verify Imaging Results', resource: 'imaging_result', action: 'verify' },
   { code: IMAGING_RESULT_AMEND, name: 'Amend Imaging Results', resource: 'imaging_result', action: 'amend' },
+
+  // OT Requests
+  { code: OT_REQUEST_READ, name: 'Read OT Requests', resource: 'ot_request', action: 'read' },
+  { code: OT_REQUEST_CREATE, name: 'Create OT Requests', resource: 'ot_request', action: 'create' },
+  { code: OT_REQUEST_UPDATE, name: 'Update OT Requests', resource: 'ot_request', action: 'update' },
+  { code: OT_REQUEST_REVIEW, name: 'Review OT Requests', resource: 'ot_request', action: 'review' },
+  { code: OT_REQUEST_APPROVE, name: 'Approve OT Requests', resource: 'ot_request', action: 'approve' },
+  { code: OT_REQUEST_CANCEL, name: 'Cancel OT Requests', resource: 'ot_request', action: 'cancel' },
+
+  // OT Schedules
+  { code: OT_SCHEDULE_READ, name: 'Read OT Schedules', resource: 'ot_schedule', action: 'read' },
+  { code: OT_SCHEDULE_CREATE, name: 'Create OT Schedules', resource: 'ot_schedule', action: 'create' },
+  { code: OT_SCHEDULE_UPDATE, name: 'Update OT Schedules', resource: 'ot_schedule', action: 'update' },
+  { code: OT_SCHEDULE_ADVANCE, name: 'Advance OT Schedules', resource: 'ot_schedule', action: 'advance' },
+  { code: OT_SCHEDULE_CANCEL, name: 'Cancel OT Schedules', resource: 'ot_schedule', action: 'cancel' },
+
+  // OT Rooms
+  { code: OT_ROOM_READ, name: 'Read OT Rooms', resource: 'ot_room', action: 'read' },
+  { code: OT_ROOM_MANAGE, name: 'Manage OT Rooms', resource: 'ot_room', action: 'manage' },
+
+  // OT Reports
+  { code: OT_REPORT_READ, name: 'Read OT Reports', resource: 'ot_report', action: 'read' },
+  { code: OT_REPORT_CREATE, name: 'Create OT Reports', resource: 'ot_report', action: 'create' },
+  { code: OT_REPORT_UPDATE, name: 'Update OT Reports', resource: 'ot_report', action: 'update' },
+  { code: OT_REPORT_SIGN, name: 'Sign OT Reports', resource: 'ot_report', action: 'sign' },
+  { code: OT_REPORT_AMEND, name: 'Amend OT Reports', resource: 'ot_report', action: 'amend' },
+  { code: OT_REPORT_CANCEL, name: 'Cancel OT Reports', resource: 'ot_report', action: 'cancel' },
 
   // Procedure Results
   { code: PROCEDURE_RESULT_READ, name: 'Read Procedure Results', resource: 'procedure_result', action: 'read' },
