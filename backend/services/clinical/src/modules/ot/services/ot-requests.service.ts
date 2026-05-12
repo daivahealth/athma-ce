@@ -9,12 +9,14 @@ import {
   ListOtRequestsDto,
   UpdateOtRequestDto,
 } from '../dto/ot-request.dto';
+import { STANDARD_PATIENT_SELECT } from '../../common/constants/patient-select.constant';
 import {
   OtRequestStatus,
   REQUEST_MUTABLE_STATUSES,
   REQUEST_TRANSITIONS,
   OtScheduleStatus,
 } from '../ot.constants';
+import { buildOtPatientDisplay } from '../ot-patient-display.util';
 
 @Injectable()
 export class OtRequestsService {
@@ -23,7 +25,7 @@ export class OtRequestsService {
   async create(tenantId: string, userId: string, dto: CreateOtRequestDto) {
     await this.assertPatientEncounterContext(tenantId, dto.patientId, dto.encounterId);
 
-    return this.prisma.$transaction(async (tx) => {
+    const requestId = await this.prisma.$transaction(async (tx) => {
       const request = await tx.otRequest.create({
         data: {
           tenantId,
@@ -55,14 +57,17 @@ export class OtRequestsService {
       });
 
       await this.recordStatusEvent(tx, tenantId, request.id, null, OtRequestStatus.DRAFT, userId);
-      return request;
+      return request.id;
     });
+    return this.findById(tenantId, requestId);
   }
 
   async list(tenantId: string, query: ListOtRequestsDto) {
-    return this.prisma.otRequest.findMany({
+    const patientIds = await this.resolvePatientIdsBySearch(tenantId, query.search);
+    const requests = await this.prisma.otRequest.findMany({
       where: {
         tenantId,
+        ...(query.search ? { patientId: { in: patientIds } } : {}),
         ...(query.status ? { status: query.status as any } : {}),
         ...(query.patientId ? { patientId: query.patientId } : {}),
         ...(query.encounterId ? { encounterId: query.encounterId } : {}),
@@ -77,6 +82,11 @@ export class OtRequestsService {
       },
       orderBy: [{ requestedAt: 'desc' }],
     });
+    const patientDisplayMap = await this.fetchPatientDisplayMap(
+      tenantId,
+      requests.map((request) => request.patientId)
+    );
+    return requests.map((request) => this.serializeRequest(request, patientDisplayMap));
   }
 
   async findById(tenantId: string, id: string) {
@@ -99,7 +109,13 @@ export class OtRequestsService {
       throw new NotFoundException(`OT request ${id} not found`);
     }
 
-    return request;
+    const patientDisplayMap = await this.fetchPatientDisplayMap(tenantId, [
+      request.patientId,
+      ...request.schedules.map((schedule) => schedule.patientId),
+      ...request.reports.map((report) => report.patientId),
+    ]);
+
+    return this.serializeRequest(request, patientDisplayMap);
   }
 
   async update(tenantId: string, id: string, userId: string, dto: UpdateOtRequestDto) {
@@ -139,10 +155,11 @@ export class OtRequestsService {
       ...(dto.remarks !== undefined ? { remarks: dto.remarks } : {}),
     };
 
-    return this.prisma.otRequest.update({
+    await this.prisma.otRequest.update({
       where: { id },
       data,
     });
+    return this.findById(tenantId, id);
   }
 
   async submit(tenantId: string, id: string, userId: string, reason?: string, remarks?: string) {
@@ -167,7 +184,11 @@ export class OtRequestsService {
   async cancel(tenantId: string, id: string, userId: string, reason?: string, remarks?: string) {
     const request = await this.findById(tenantId, id);
     const activeSchedule = request.schedules.find(
-      (schedule) => schedule.isCurrent && ![OtScheduleStatus.CANCELLED, OtScheduleStatus.POSTPONED].includes(schedule.status as OtScheduleStatus),
+      (schedule: any) =>
+        schedule.isCurrent &&
+        ![OtScheduleStatus.CANCELLED, OtScheduleStatus.POSTPONED].includes(
+          schedule.status as OtScheduleStatus
+        ),
     );
     if (activeSchedule) {
       throw new BadRequestException('Cancel the active OT schedule before cancelling the OT request');
@@ -177,7 +198,9 @@ export class OtRequestsService {
 
   async complete(tenantId: string, id: string, userId: string, reason?: string, remarks?: string) {
     const request = await this.findById(tenantId, id);
-    const activeSchedule = request.schedules.find((schedule) => schedule.id === request.activeScheduleId);
+    const activeSchedule = request.schedules.find(
+      (schedule: any) => schedule.id === request.activeScheduleId
+    );
 
     if (!activeSchedule) {
       throw new BadRequestException('OT request has no active schedule to complete');
@@ -214,8 +237,8 @@ export class OtRequestsService {
     const fromStatus = request.status as OtRequestStatus;
     this.assertTransition(fromStatus, toStatus);
 
-    return this.prisma.$transaction(async (tx) => {
-      const updated = await tx.otRequest.update({
+    await this.prisma.$transaction(async (tx) => {
+      await tx.otRequest.update({
         where: { id },
         data: {
           status: toStatus,
@@ -234,8 +257,8 @@ export class OtRequestsService {
       });
 
       await this.recordStatusEvent(tx, tenantId, id, fromStatus, toStatus, userId, reason, remarks);
-      return updated;
     });
+    return this.findById(tenantId, id);
   }
 
   private assertTransition(fromStatus: OtRequestStatus, toStatus: OtRequestStatus) {
@@ -279,5 +302,78 @@ export class OtRequestsService {
         remarks: remarks ?? null,
       },
     });
+  }
+
+  private async fetchPatientDisplayMap(tenantId: string, patientIds: string[]) {
+    const uniquePatientIds = [...new Set(patientIds.filter(Boolean))];
+    if (uniquePatientIds.length === 0) {
+      return new Map<string, ReturnType<typeof buildOtPatientDisplay>>();
+    }
+
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        tenantId,
+        id: { in: uniquePatientIds },
+      },
+      select: STANDARD_PATIENT_SELECT,
+    });
+
+    return new Map(
+      patients.map((patient) => [patient.id, buildOtPatientDisplay(patient)])
+    );
+  }
+
+  private async resolvePatientIdsBySearch(tenantId: string, search?: string) {
+    const term = search?.trim();
+    if (!term) {
+      return [];
+    }
+
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        tenantId,
+        OR: [
+          { firstName: { contains: term, mode: 'insensitive' } },
+          { lastName: { contains: term, mode: 'insensitive' } },
+          { displayName: { contains: term, mode: 'insensitive' } },
+          { mrn: { contains: term, mode: 'insensitive' } },
+          { phoneNumber: { contains: term } },
+        ],
+      },
+      select: { id: true },
+    });
+
+    return patients.map((patient) => patient.id);
+  }
+
+  private serializeRequest(
+    request: any,
+    patientDisplayMap: Map<string, ReturnType<typeof buildOtPatientDisplay>>
+  ) {
+    const { schedules, reports, ...rest } = request;
+    return {
+      ...rest,
+      patientDisplay: patientDisplayMap.get(request.patientId) ?? null,
+      ...(schedules
+        ? {
+            schedules: schedules.map((schedule: any) => {
+              return {
+                ...schedule,
+                patientDisplay: patientDisplayMap.get(schedule.patientId) ?? null,
+              };
+            }),
+          }
+        : {}),
+      ...(reports
+        ? {
+            reports: reports.map((report: any) => {
+              return {
+                ...report,
+                patientDisplay: patientDisplayMap.get(report.patientId) ?? null,
+              };
+            }),
+          }
+        : {}),
+    };
   }
 }

@@ -134,6 +134,7 @@ Response: { "version": "1.0.0", "build": "..." }
 
 Refer to individual service documentation:
 - [Clinical APIs](../features/patient-management/)
+- [OT APIs](./OT-API-ENDPOINTS.md)
 - [Facility APIs](./postman/FACILITY-ENDPOINTS-GUIDE.md)
 - [Specialty APIs](../features/specialty-management/)
 - [User APIs](../features/user-management/)

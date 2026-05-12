@@ -366,3 +366,138 @@ export interface OncologyHistology {
   created_at: string;
   updated_at: string;
 }
+
+// ============================================================
+// Radiation Oncology Types
+// ============================================================
+
+export type RadiationStatus = 'DRAFT' | 'APPROVED' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
+export type FractionStatus = 'SCHEDULED' | 'DELIVERED' | 'MISSED' | 'CANCELLED' | 'RESCHEDULED';
+export type PlanningStatus = 'NOT_STARTED' | 'CONTOURING' | 'DOSIMETRY' | 'QA' | 'READY_FOR_APPROVAL' | 'APPROVED';
+
+export interface RadiationPrescription {
+  id: string;
+  tenant_id: string;
+  patient_id: string;
+  encounter_id: string;
+  cancer_profile_id?: string;
+  prescription_number?: string;
+  treatment_intent?: string;
+  treatment_site_id?: string;
+  laterality?: string;
+  modality?: string;
+  technique?: string;
+  total_dose_gy?: number;
+  dose_per_fraction_gy?: number;
+  planned_fractions?: number;
+  concurrent_chemo: boolean;
+  planned_start_date?: string;
+  planned_end_date?: string;
+  prescription_notes?: string;
+  prescribed_by?: string;
+  prescribed_at?: string;
+  status: RadiationStatus;
+  created_at: string;
+  updated_at: string;
+  patientDisplay?: OncologyPatientDisplay;
+  simulations?: RadiationSimulation[];
+  treatment_plans?: RadiationTreatmentPlan[];
+  reviews?: RadiationOnTreatmentReview[];
+  completion_summary?: RadiationCompletionSummary;
+}
+
+export interface RadiationSimulation {
+  id: string;
+  tenant_id: string;
+  prescription_id: string;
+  simulation_date?: string;
+  patient_position?: string;
+  immobilization_device?: string;
+  contrast_used: boolean;
+  scan_region?: string;
+  setup_reference?: string;
+  tattoo_marking_done: boolean;
+  simulation_notes?: string;
+  performed_by?: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  treatment_plans?: RadiationTreatmentPlan[];
+}
+
+export interface RadiationTreatmentPlan {
+  id: string;
+  tenant_id: string;
+  prescription_id: string;
+  simulation_id?: string;
+  external_plan_reference?: string;
+  planning_system?: string;
+  planning_status?: PlanningStatus;
+  planner_id?: string;
+  physicist_id?: string;
+  radiation_oncologist_id?: string;
+  contouring_completed: boolean;
+  physics_qa_completed: boolean;
+  treatment_machine?: string;
+  plan_notes?: string;
+  approved_by?: string;
+  approved_at?: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  fractions?: RadiationFraction[];
+  prescription?: RadiationPrescription;
+}
+
+export interface RadiationFraction {
+  id: string;
+  tenant_id: string;
+  treatment_plan_id: string;
+  fraction_number: number;
+  planned_date?: string;
+  actual_date?: string;
+  planned_dose_gy?: number;
+  delivered_dose_gy?: number;
+  treatment_machine?: string;
+  radiation_therapist_id?: string;
+  status: FractionStatus;
+  interruption_reason?: string;
+  verification_completed: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RadiationOnTreatmentReview {
+  id: string;
+  tenant_id: string;
+  prescription_id: string;
+  review_date: string;
+  week_number?: number;
+  toxicity_grade?: string;
+  pain_score?: number;
+  weight_kg?: number;
+  treatment_break_required: boolean;
+  review_notes?: string;
+  reviewed_by?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RadiationCompletionSummary {
+  id: string;
+  tenant_id: string;
+  prescription_id: string;
+  completion_date?: string;
+  planned_total_dose_gy?: number;
+  delivered_total_dose_gy?: number;
+  planned_fractions?: number;
+  delivered_fractions?: number;
+  interruptions: boolean;
+  interruption_notes?: string;
+  acute_toxicity_summary?: string;
+  response_assessment_plan?: string;
+  followup_plan?: string;
+  completed_by?: string;
+  created_at: string;
+  updated_at: string;
+}

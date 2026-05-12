@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, PrismaService } from '@zeal/database-clinical';
+import { STANDARD_PATIENT_SELECT } from '../../common/constants/patient-select.constant';
 import {
   CheckOtScheduleConflictsDto,
   CreateOtScheduleDto,
@@ -18,6 +19,7 @@ import {
   OtTeamRole,
   SCHEDULE_TRANSITIONS,
 } from '../ot.constants';
+import { buildOtPatientDisplay } from '../ot-patient-display.util';
 import { OtRoomsService } from './ot-rooms.service';
 
 type ConflictItem = {
@@ -68,7 +70,7 @@ export class OtSchedulesService {
 
     this.validateTeamMembers(dto.teamMembers);
 
-    return this.prisma.$transaction(async (tx) => {
+    const scheduleId = await this.prisma.$transaction(async (tx) => {
       const currentSchedule = await tx.otSchedule.findFirst({
         where: {
           tenantId,
@@ -148,17 +150,17 @@ export class OtSchedulesService {
 
       await this.recordStatusEvent(tx, tenantId, schedule.id, null, OtScheduleStatus.PLANNED, userId);
 
-      return tx.otSchedule.findUnique({
-        where: { id: schedule.id },
-        include: { teamMembers: true },
-      });
+      return schedule.id;
     });
+    return this.findById(tenantId, scheduleId);
   }
 
   async list(tenantId: string, query: ListOtSchedulesDto) {
-    return this.prisma.otSchedule.findMany({
+    const patientIds = await this.resolvePatientIdsBySearch(tenantId, query.search);
+    const schedules = await this.prisma.otSchedule.findMany({
       where: {
         tenantId,
+        ...(query.search ? { patientId: { in: patientIds } } : {}),
         ...(query.status ? { status: query.status as any } : {}),
         ...(query.patientId ? { patientId: query.patientId } : {}),
         ...(query.encounterId ? { encounterId: query.encounterId } : {}),
@@ -170,6 +172,15 @@ export class OtSchedulesService {
       },
       orderBy: [{ scheduledStartTime: 'asc' }],
     });
+    const patientDisplayMap = await this.fetchPatientDisplayMap(
+      tenantId,
+      schedules.map((schedule) => schedule.patientId)
+    );
+    const roomMap = await this.otRoomsService.getBySpaceIds(
+      tenantId,
+      schedules.map((schedule) => schedule.otRoomSpaceId)
+    );
+    return schedules.map((schedule) => this.serializeSchedule(schedule, patientDisplayMap, roomMap));
   }
 
   async findById(tenantId: string, id: string) {
@@ -185,7 +196,12 @@ export class OtSchedulesService {
       throw new NotFoundException(`OT schedule ${id} not found`);
     }
 
-    return schedule;
+    const patientDisplayMap = await this.fetchPatientDisplayMap(tenantId, [
+      schedule.patientId,
+      ...schedule.reports.map((report) => report.patientId),
+    ]);
+    const roomMap = await this.otRoomsService.getBySpaceIds(tenantId, [schedule.otRoomSpaceId]);
+    return this.serializeSchedule(schedule, patientDisplayMap, roomMap);
   }
 
   async update(tenantId: string, id: string, userId: string, dto: UpdateOtScheduleDto) {
@@ -262,11 +278,9 @@ export class OtSchedulesService {
         await this.syncTeamMembers(tx, tenantId, id, userId, dto.teamMembers);
       }
 
-      return tx.otSchedule.findUnique({
-        where: { id: updated.id },
-        include: { teamMembers: true, reports: true },
-      });
+      return updated.id;
     });
+    return this.findById(tenantId, id);
   }
 
   async transition(
@@ -302,7 +316,7 @@ export class OtSchedulesService {
           : {}),
       };
 
-      const updated = await tx.otSchedule.update({
+      await tx.otSchedule.update({
         where: { id },
         data,
       });
@@ -354,8 +368,88 @@ export class OtSchedulesService {
         });
       }
 
-      return updated;
+      return id;
     });
+    return this.findById(tenantId, id);
+  }
+
+  private async fetchPatientDisplayMap(tenantId: string, patientIds: string[]) {
+    const uniquePatientIds = [...new Set(patientIds.filter(Boolean))];
+    if (uniquePatientIds.length === 0) {
+      return new Map<string, ReturnType<typeof buildOtPatientDisplay>>();
+    }
+
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        tenantId,
+        id: { in: uniquePatientIds },
+      },
+      select: STANDARD_PATIENT_SELECT,
+    });
+
+    return new Map(
+      patients.map((patient) => [patient.id, buildOtPatientDisplay(patient)])
+    );
+  }
+
+  private async resolvePatientIdsBySearch(tenantId: string, search?: string) {
+    const term = search?.trim();
+    if (!term) {
+      return [];
+    }
+
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        tenantId,
+        OR: [
+          { firstName: { contains: term, mode: 'insensitive' } },
+          { lastName: { contains: term, mode: 'insensitive' } },
+          { displayName: { contains: term, mode: 'insensitive' } },
+          { mrn: { contains: term, mode: 'insensitive' } },
+          { phoneNumber: { contains: term } },
+        ],
+      },
+      select: { id: true },
+    });
+
+    return patients.map((patient) => patient.id);
+  }
+
+  private serializeSchedule(
+    schedule: any,
+    patientDisplayMap: Map<string, ReturnType<typeof buildOtPatientDisplay>>,
+    roomMap: Map<string, any>
+  ) {
+    const room = roomMap.get(schedule.otRoomSpaceId) ?? null;
+    const roomDisplayName =
+      room?.space?.name ||
+      room?.specialty ||
+      room?.notes ||
+      'Configured OT Room';
+    const roomDisplayDescription =
+      room?.space?.spaceNumber ||
+      room?.space?.spaceType ||
+      room?.notes ||
+      room?.specialty ||
+      null;
+
+    return {
+      ...schedule,
+      patientDisplay: patientDisplayMap.get(schedule.patientId) ?? null,
+      room,
+      roomDisplayName,
+      roomDisplayDescription,
+      ...(schedule.reports
+        ? {
+            reports: schedule.reports.map((report: any) => {
+              return {
+                ...report,
+                patientDisplay: patientDisplayMap.get(report.patientId) ?? null,
+              };
+            }),
+          }
+        : {}),
+    };
   }
 
   async getHistory(tenantId: string, id: string) {

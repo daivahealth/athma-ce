@@ -36,10 +36,11 @@ WHERE p.resource IN (
   'vitals', 'prescription', 'lab_order', 'lab_result', 'imaging_order',
   'imaging_result', 'procedure_result', 'schedule', 'calendar', 'admission', 'discharge',
   'ward', 'triage', 'consent', 'clinical_order', 'availability',
+  'ot_request', 'ot_schedule', 'ot_room', 'ot_report',
   'care_channel', 'care_team', 'care_message', 'checklist',
   'discharge_summary', 'note_template', 'catalog', 'valueset'
 )
-AND p.action IN ('read', 'create', 'update', 'sign', 'close', 'add', 'enter', 'verify', 'amend')
+AND p.action IN ('read', 'create', 'update', 'sign', 'close', 'add', 'enter', 'verify', 'amend', 'review', 'approve', 'cancel', 'advance')
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
 -- Nurse gets nursing-specific permissions
@@ -61,6 +62,8 @@ WHERE (
   OR (p.resource IN ('ward', 'bed', 'admission') AND p.action IN ('read'))
   -- Schedule/calendar/availability read
   OR (p.resource IN ('schedule', 'calendar', 'availability') AND p.action = 'read')
+  -- OT tracking access
+  OR (p.resource IN ('ot_request', 'ot_schedule', 'ot_room', 'ot_report') AND p.action = 'read')
   -- Consent management
   OR (p.resource IN ('consent', 'consent_template') AND p.action IN ('read', 'create'))
   -- Care channel access (read, create messages, view team)

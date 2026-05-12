@@ -1033,6 +1033,7 @@ export class OncologyService {
     const tenantId = this.getTenantId();
     const baseJoin = `
       SELECT co.*, cp.name as protocol_name, cp.code as protocol_code,
+        cd.cancer_type, cd.primary_site,
         p.mrn as patient_mrn, p.first_name as patient_first_name, p.last_name as patient_last_name,
         p.display_name as patient_display_name, p.date_of_birth as patient_date_of_birth,
         p.gender as patient_gender, p.phone_number as patient_phone_number,
@@ -1041,6 +1042,7 @@ export class OncologyService {
         p.preferred_language as patient_preferred_language
       FROM plugin_oncology.chemo_orders co
       JOIN plugin_oncology.chemo_protocols cp ON co.protocol_id = cp.id
+      LEFT JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = co.cancer_diagnosis_id
       LEFT JOIN public.patients p ON p.id = co.patient_id
       WHERE co.tenant_id = $1::uuid`;
     const params: unknown[] = [tenantId];
@@ -1698,6 +1700,669 @@ export class OncologyService {
       data.active ?? null,
     );
     if (!results.length) throw new NotFoundException(`Histology '${id}' not found`);
+    return results[0];
+  }
+
+  // ============================================================
+  // Radiation Oncology — Prescriptions
+  // ============================================================
+
+  async listRadiationPrescriptions(
+    filters: { patientId?: string; status?: string } = {},
+    page = 1,
+    limit = 20,
+  ) {
+    const tenantId = this.getTenantId();
+    let where = `WHERE rp.tenant_id = $1::uuid`;
+    const params: unknown[] = [tenantId];
+    let idx = 2;
+
+    if (filters.patientId) {
+      where += ` AND rp.patient_id = $${idx++}::uuid`;
+      params.push(filters.patientId);
+    }
+    if (filters.status) {
+      where += ` AND rp.status = $${idx++}`;
+      params.push(filters.status);
+    }
+
+    const countQuery = `SELECT COUNT(*) as count FROM plugin_oncology.radiation_prescriptions rp ${where}`;
+    const dataQuery = `
+      SELECT rp.*,
+        p.mrn as patient_mrn, p.first_name as patient_first_name,
+        p.last_name as patient_last_name, p.display_name as patient_display_name,
+        p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,
+        p.phone_number as patient_phone_number, p.email as patient_email
+      FROM plugin_oncology.radiation_prescriptions rp
+      LEFT JOIN public.patients p ON p.id = rp.patient_id
+      ${where}
+      ORDER BY rp.created_at DESC LIMIT $${idx++} OFFSET $${idx++}`;
+    params.push(limit, (page - 1) * limit);
+
+    const [rows, total] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(dataQuery, ...params),
+      this.prisma.$queryRawUnsafe<[{ count: bigint }]>(countQuery, ...params.slice(0, -2)),
+    ]);
+
+    const data = rows.map((row) => {
+      const patientDisplay = this.buildPatientDisplay(row);
+      const { patient_mrn, patient_first_name, patient_last_name, patient_display_name,
+        patient_gender, patient_date_of_birth, patient_phone_number, patient_email, ...rest } = row;
+      return { ...rest, patientDisplay };
+    });
+
+    return { data, pagination: { page, limit, total: Number(total[0]?.count ?? 0) } };
+  }
+
+  async getRadiationPrescription(id: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT rp.*,
+        p.mrn as patient_mrn, p.first_name as patient_first_name,
+        p.last_name as patient_last_name, p.display_name as patient_display_name,
+        p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,
+        (SELECT json_agg(s ORDER BY s.simulation_date)
+         FROM plugin_oncology.radiation_simulations s WHERE s.prescription_id = rp.id) as simulations,
+        (SELECT json_agg(tp ORDER BY tp.created_at)
+         FROM plugin_oncology.radiation_treatment_plans tp WHERE tp.prescription_id = rp.id) as treatment_plans,
+        (SELECT json_agg(r ORDER BY r.review_date)
+         FROM plugin_oncology.radiation_on_treatment_reviews r WHERE r.prescription_id = rp.id) as reviews,
+        (SELECT row_to_json(cs) FROM plugin_oncology.radiation_completion_summaries cs
+         WHERE cs.prescription_id = rp.id LIMIT 1) as completion_summary
+      FROM plugin_oncology.radiation_prescriptions rp
+      LEFT JOIN public.patients p ON p.id = rp.patient_id
+      WHERE rp.id = $1::uuid AND rp.tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Radiation prescription '${id}' not found`);
+    const row = rows[0];
+    const patientDisplay = this.buildPatientDisplay(row);
+    const { patient_mrn, patient_first_name, patient_last_name, patient_display_name,
+      patient_gender, patient_date_of_birth, ...rest } = row;
+    return { ...rest, patientDisplay };
+  }
+
+  async createRadiationPrescription(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.radiation_prescriptions (
+        id, tenant_id, patient_id, encounter_id, cancer_profile_id,
+        prescription_number, treatment_intent, treatment_site_id, laterality,
+        modality, technique, total_dose_gy, dose_per_fraction_gy, planned_fractions,
+        concurrent_chemo, planned_start_date, planned_end_date,
+        prescription_notes, prescribed_by, prescribed_at, status,
+        created_at, updated_at
+      ) VALUES (
+        gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, $4::uuid,
+        $5, $6, $7::uuid, $8,
+        $9, $10, $11::numeric, $12::numeric, $13,
+        $14, $15::date, $16::date,
+        $17, $18::uuid, NOW(), $19,
+        NOW(), NOW()
+      ) RETURNING *`,
+      tenantId,
+      data.patientId,
+      data.encounterId,
+      data.cancerProfileId ?? null,
+      data.prescriptionNumber ?? null,
+      data.treatmentIntent ?? null,
+      data.treatmentSiteId ?? null,
+      data.laterality ?? null,
+      data.modality ?? null,
+      data.technique ?? null,
+      data.totalDoseGy ?? null,
+      data.dosePerFractionGy ?? null,
+      data.plannedFractions ?? null,
+      data.concurrentChemo ?? false,
+      data.plannedStartDate ?? null,
+      data.plannedEndDate ?? null,
+      data.prescriptionNotes ?? null,
+      (data.prescribedBy as string) || userId,
+      data.status ?? 'DRAFT',
+    );
+    return results[0];
+  }
+
+  async updateRadiationPrescription(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    await this.getRadiationPrescription(id);
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_prescriptions SET
+        treatment_intent    = COALESCE($3, treatment_intent),
+        laterality          = COALESCE($4, laterality),
+        modality            = COALESCE($5, modality),
+        technique           = COALESCE($6, technique),
+        total_dose_gy       = COALESCE($7::numeric, total_dose_gy),
+        dose_per_fraction_gy = COALESCE($8::numeric, dose_per_fraction_gy),
+        planned_fractions   = COALESCE($9, planned_fractions),
+        concurrent_chemo    = COALESCE($10, concurrent_chemo),
+        planned_start_date  = COALESCE($11::date, planned_start_date),
+        planned_end_date    = COALESCE($12::date, planned_end_date),
+        prescription_notes  = COALESCE($13, prescription_notes),
+        status              = COALESCE($14, status),
+        updated_at          = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.treatmentIntent ?? null,
+      data.laterality ?? null,
+      data.modality ?? null,
+      data.technique ?? null,
+      data.totalDoseGy ?? null,
+      data.dosePerFractionGy ?? null,
+      data.plannedFractions ?? null,
+      data.concurrentChemo ?? null,
+      data.plannedStartDate ?? null,
+      data.plannedEndDate ?? null,
+      data.prescriptionNotes ?? null,
+      data.status ?? null,
+    );
+    return results[0];
+  }
+
+  async approveRadiationPrescription(id: string) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_prescriptions SET
+        status = 'APPROVED', prescribed_by = COALESCE($3::uuid, prescribed_by),
+        prescribed_at = NOW(), updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'DRAFT' RETURNING *`,
+      id, tenantId, userId,
+    );
+    if (!results.length) throw new BadRequestException('Prescription not found or not in DRAFT status');
+    return results[0];
+  }
+
+  async activateRadiationPrescription(id: string) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_prescriptions SET
+        status = 'ACTIVE', updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'APPROVED' RETURNING *`,
+      id, tenantId,
+    );
+    if (!results.length) throw new BadRequestException('Prescription not found or not in APPROVED status');
+    return results[0];
+  }
+
+  // ============================================================
+  // Radiation Oncology — Simulations
+  // ============================================================
+
+  async listRadiationSimulations(prescriptionId: string, page = 1, limit = 20) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.radiation_simulations
+       WHERE prescription_id = $1::uuid AND tenant_id = $2::uuid
+       ORDER BY simulation_date DESC LIMIT $3 OFFSET $4`,
+      prescriptionId, tenantId, limit, (page - 1) * limit,
+    );
+    return { data: rows };
+  }
+
+  async getRadiationSimulation(id: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT s.*,
+        (SELECT json_agg(tp ORDER BY tp.created_at)
+         FROM plugin_oncology.radiation_treatment_plans tp WHERE tp.simulation_id = s.id) as treatment_plans
+       FROM plugin_oncology.radiation_simulations s
+       WHERE s.id = $1::uuid AND s.tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Radiation simulation '${id}' not found`);
+    return rows[0];
+  }
+
+  async createRadiationSimulation(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.radiation_simulations (
+        id, tenant_id, prescription_id, simulation_date, patient_position,
+        immobilization_device, contrast_used, scan_region, setup_reference,
+        tattoo_marking_done, simulation_notes, performed_by, status,
+        created_at, updated_at
+      ) VALUES (
+        gen_random_uuid(), $1::uuid, $2::uuid, $3::timestamptz, $4,
+        $5, $6, $7, $8,
+        $9, $10, $11::uuid, $12,
+        NOW(), NOW()
+      ) RETURNING *`,
+      tenantId,
+      data.prescriptionId,
+      data.simulationDate ?? null,
+      data.patientPosition ?? null,
+      data.immobilizationDevice ?? null,
+      data.contrastUsed ?? false,
+      data.scanRegion ?? null,
+      data.setupReference ?? null,
+      data.tattooMarkingDone ?? false,
+      data.simulationNotes ?? null,
+      (data.performedBy as string) || userId,
+      data.status ?? 'COMPLETED',
+    );
+    return results[0];
+  }
+
+  async updateRadiationSimulation(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_simulations SET
+        simulation_date      = COALESCE($3::timestamptz, simulation_date),
+        patient_position     = COALESCE($4, patient_position),
+        immobilization_device = COALESCE($5, immobilization_device),
+        contrast_used        = COALESCE($6, contrast_used),
+        scan_region          = COALESCE($7, scan_region),
+        setup_reference      = COALESCE($8, setup_reference),
+        tattoo_marking_done  = COALESCE($9, tattoo_marking_done),
+        simulation_notes     = COALESCE($10, simulation_notes),
+        status               = COALESCE($11, status),
+        updated_at           = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.simulationDate ?? null,
+      data.patientPosition ?? null,
+      data.immobilizationDevice ?? null,
+      data.contrastUsed ?? null,
+      data.scanRegion ?? null,
+      data.setupReference ?? null,
+      data.tattooMarkingDone ?? null,
+      data.simulationNotes ?? null,
+      data.status ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`Radiation simulation '${id}' not found`);
+    return results[0];
+  }
+
+  // ============================================================
+  // Radiation Oncology — Treatment Plans
+  // ============================================================
+
+  async listRadiationPlans(filters: { prescriptionId?: string; status?: string } = {}, page = 1, limit = 20) {
+    const tenantId = this.getTenantId();
+    let where = `WHERE tp.tenant_id = $1::uuid`;
+    const params: unknown[] = [tenantId];
+    let idx = 2;
+
+    if (filters.prescriptionId) {
+      where += ` AND tp.prescription_id = $${idx++}::uuid`;
+      params.push(filters.prescriptionId);
+    }
+    if (filters.status) {
+      where += ` AND tp.status = $${idx++}`;
+      params.push(filters.status);
+    }
+
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT tp.*, rp.patient_id, rp.total_dose_gy, rp.planned_fractions
+       FROM plugin_oncology.radiation_treatment_plans tp
+       JOIN plugin_oncology.radiation_prescriptions rp ON rp.id = tp.prescription_id
+       ${where} ORDER BY tp.created_at DESC LIMIT $${idx++} OFFSET $${idx++}`,
+      ...params, limit, (page - 1) * limit,
+    );
+    return { data: rows };
+  }
+
+  async getRadiationPlan(id: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT tp.*,
+        (SELECT json_agg(f ORDER BY f.fraction_number)
+         FROM plugin_oncology.radiation_fractions f WHERE f.treatment_plan_id = tp.id) as fractions,
+        row_to_json(rp.*) as prescription
+       FROM plugin_oncology.radiation_treatment_plans tp
+       JOIN plugin_oncology.radiation_prescriptions rp ON rp.id = tp.prescription_id
+       WHERE tp.id = $1::uuid AND tp.tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Radiation treatment plan '${id}' not found`);
+    return rows[0];
+  }
+
+  async createRadiationPlan(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.radiation_treatment_plans (
+        id, tenant_id, prescription_id, simulation_id,
+        external_plan_reference, planning_system, planning_status,
+        planner_id, physicist_id, radiation_oncologist_id,
+        contouring_completed, physics_qa_completed,
+        treatment_machine, plan_notes, status,
+        created_at, updated_at
+      ) VALUES (
+        gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid,
+        $4, $5, $6,
+        $7::uuid, $8::uuid, $9::uuid,
+        $10, $11,
+        $12, $13, $14,
+        NOW(), NOW()
+      ) RETURNING *`,
+      tenantId,
+      data.prescriptionId,
+      data.simulationId ?? null,
+      data.externalPlanReference ?? null,
+      data.planningSystem ?? null,
+      data.planningStatus ?? 'NOT_STARTED',
+      (data.plannerId as string) || userId,
+      data.physicistId ?? null,
+      data.radiationOncologistId ?? null,
+      data.contouringCompleted ?? false,
+      data.physicsQaCompleted ?? false,
+      data.treatmentMachine ?? null,
+      data.planNotes ?? null,
+      data.status ?? 'ACTIVE',
+    );
+    return results[0];
+  }
+
+  async updateRadiationPlan(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_treatment_plans SET
+        simulation_id           = COALESCE($3::uuid, simulation_id),
+        external_plan_reference = COALESCE($4, external_plan_reference),
+        planning_system         = COALESCE($5, planning_system),
+        planning_status         = COALESCE($6, planning_status),
+        planner_id              = COALESCE($7::uuid, planner_id),
+        physicist_id            = COALESCE($8::uuid, physicist_id),
+        radiation_oncologist_id = COALESCE($9::uuid, radiation_oncologist_id),
+        contouring_completed    = COALESCE($10, contouring_completed),
+        physics_qa_completed    = COALESCE($11, physics_qa_completed),
+        treatment_machine       = COALESCE($12, treatment_machine),
+        plan_notes              = COALESCE($13, plan_notes),
+        status                  = COALESCE($14, status),
+        updated_at              = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.simulationId ?? null,
+      data.externalPlanReference ?? null,
+      data.planningSystem ?? null,
+      data.planningStatus ?? null,
+      data.plannerId ?? null,
+      data.physicistId ?? null,
+      data.radiationOncologistId ?? null,
+      data.contouringCompleted ?? null,
+      data.physicsQaCompleted ?? null,
+      data.treatmentMachine ?? null,
+      data.planNotes ?? null,
+      data.status ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`Radiation treatment plan '${id}' not found`);
+    return results[0];
+  }
+
+  async approveRadiationPlan(id: string) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_treatment_plans SET
+        planning_status = 'APPROVED', approved_by = $3::uuid, approved_at = NOW(), updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND planning_status != 'APPROVED' RETURNING *`,
+      id, tenantId, userId,
+    );
+    if (!results.length) throw new BadRequestException('Plan not found or already approved');
+    return results[0];
+  }
+
+  // ============================================================
+  // Radiation Oncology — Fractions
+  // ============================================================
+
+  async listRadiationFractions(planId: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.radiation_fractions
+       WHERE treatment_plan_id = $1::uuid AND tenant_id = $2::uuid
+       ORDER BY fraction_number`,
+      planId, tenantId,
+    );
+    return { data: rows };
+  }
+
+  async bulkCreateFractions(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const planId = data.treatmentPlanId as string;
+    const count = data.fractionCount as number;
+    const dosePerFraction = data.dosePerFractionGy ?? null;
+    const startDate = data.startDate ? new Date(data.startDate as string) : null;
+    const machine = data.treatmentMachine ?? null;
+
+    const insertValues: string[] = [];
+    const params: unknown[] = [tenantId, planId];
+    let idx = 3;
+
+    for (let i = 1; i <= count; i++) {
+      let plannedDate: string | null = null;
+      if (startDate) {
+        const d = new Date(startDate);
+        d.setDate(d.getDate() + (i - 1));
+        plannedDate = d.toISOString().substring(0, 10);
+      }
+      insertValues.push(
+        `(gen_random_uuid(), $1::uuid, $2::uuid, $${idx++}, $${idx++}::date, $${idx++}::numeric, $${idx++}, 'SCHEDULED', NOW(), NOW())`,
+      );
+      params.push(i, plannedDate, dosePerFraction, machine);
+    }
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.radiation_fractions
+         (id, tenant_id, treatment_plan_id, fraction_number, planned_date, planned_dose_gy, treatment_machine, status, created_at, updated_at)
+       VALUES ${insertValues.join(', ')}
+       ON CONFLICT (treatment_plan_id, fraction_number) DO NOTHING
+       RETURNING *`,
+      ...params,
+    );
+    return results;
+  }
+
+  async updateRadiationFraction(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_fractions SET
+        planned_date          = COALESCE($3::date, planned_date),
+        actual_date           = COALESCE($4::timestamptz, actual_date),
+        planned_dose_gy       = COALESCE($5::numeric, planned_dose_gy),
+        delivered_dose_gy     = COALESCE($6::numeric, delivered_dose_gy),
+        treatment_machine     = COALESCE($7, treatment_machine),
+        radiation_therapist_id = COALESCE($8::uuid, radiation_therapist_id),
+        status                = COALESCE($9, status),
+        interruption_reason   = COALESCE($10, interruption_reason),
+        verification_completed = COALESCE($11, verification_completed),
+        updated_at            = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.plannedDate ?? null,
+      data.actualDate ?? null,
+      data.plannedDoseGy ?? null,
+      data.deliveredDoseGy ?? null,
+      data.treatmentMachine ?? null,
+      data.radiationTherapistId ?? null,
+      data.status ?? null,
+      data.interruptionReason ?? null,
+      data.verificationCompleted ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`Radiation fraction '${id}' not found`);
+    return results[0];
+  }
+
+  async deliverFraction(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_fractions SET
+        status                  = 'DELIVERED',
+        actual_date             = COALESCE($3::timestamptz, NOW()),
+        delivered_dose_gy       = $4::numeric,
+        treatment_machine       = COALESCE($5, treatment_machine),
+        radiation_therapist_id  = COALESCE($6::uuid, $7::uuid),
+        verification_completed  = COALESCE($8, verification_completed),
+        updated_at              = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status IN ('SCHEDULED','RESCHEDULED') RETURNING *`,
+      id, tenantId,
+      data.actualDate ?? null,
+      data.deliveredDoseGy,
+      data.treatmentMachine ?? null,
+      data.radiationTherapistId ?? null,
+      userId,
+      data.verificationCompleted ?? null,
+    );
+    if (!results.length) throw new BadRequestException('Fraction not found or not in SCHEDULED/RESCHEDULED status');
+    return results[0];
+  }
+
+  // ============================================================
+  // Radiation Oncology — On-Treatment Reviews
+  // ============================================================
+
+  async listOnTreatmentReviews(prescriptionId: string, page = 1, limit = 50) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.radiation_on_treatment_reviews
+       WHERE prescription_id = $1::uuid AND tenant_id = $2::uuid
+       ORDER BY review_date DESC LIMIT $3 OFFSET $4`,
+      prescriptionId, tenantId, limit, (page - 1) * limit,
+    );
+    return { data: rows };
+  }
+
+  async getOnTreatmentReview(id: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.radiation_on_treatment_reviews
+       WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`On-treatment review '${id}' not found`);
+    return rows[0];
+  }
+
+  async createOnTreatmentReview(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.radiation_on_treatment_reviews (
+        id, tenant_id, prescription_id, review_date, week_number,
+        toxicity_grade, pain_score, weight_kg,
+        treatment_break_required, review_notes, reviewed_by,
+        created_at, updated_at
+      ) VALUES (
+        gen_random_uuid(), $1::uuid, $2::uuid, $3::timestamptz, $4,
+        $5, $6, $7::numeric,
+        $8, $9, $10::uuid,
+        NOW(), NOW()
+      ) RETURNING *`,
+      tenantId,
+      data.prescriptionId,
+      data.reviewDate,
+      data.weekNumber ?? null,
+      data.toxicityGrade ?? null,
+      data.painScore ?? null,
+      data.weightKg ?? null,
+      data.treatmentBreakRequired ?? false,
+      data.reviewNotes ?? null,
+      (data.reviewedBy as string) || userId,
+    );
+    return results[0];
+  }
+
+  async updateOnTreatmentReview(id: string, data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.radiation_on_treatment_reviews SET
+        review_date              = COALESCE($3::timestamptz, review_date),
+        week_number              = COALESCE($4, week_number),
+        toxicity_grade           = COALESCE($5, toxicity_grade),
+        pain_score               = COALESCE($6, pain_score),
+        weight_kg                = COALESCE($7::numeric, weight_kg),
+        treatment_break_required = COALESCE($8, treatment_break_required),
+        review_notes             = COALESCE($9, review_notes),
+        updated_at               = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      id, tenantId,
+      data.reviewDate ?? null,
+      data.weekNumber ?? null,
+      data.toxicityGrade ?? null,
+      data.painScore ?? null,
+      data.weightKg ?? null,
+      data.treatmentBreakRequired ?? null,
+      data.reviewNotes ?? null,
+    );
+    if (!results.length) throw new NotFoundException(`On-treatment review '${id}' not found`);
+    return results[0];
+  }
+
+  // ============================================================
+  // Radiation Oncology — Completion Summaries
+  // ============================================================
+
+  async getCompletionSummary(prescriptionId: string) {
+    const tenantId = this.getTenantId();
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT * FROM plugin_oncology.radiation_completion_summaries
+       WHERE prescription_id = $1::uuid AND tenant_id = $2::uuid`,
+      prescriptionId, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Completion summary for prescription '${prescriptionId}' not found`);
+    return rows[0];
+  }
+
+  async createCompletionSummary(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.radiation_completion_summaries (
+        id, tenant_id, prescription_id, completion_date,
+        planned_total_dose_gy, delivered_total_dose_gy,
+        planned_fractions, delivered_fractions,
+        interruptions, interruption_notes,
+        acute_toxicity_summary, response_assessment_plan, followup_plan,
+        completed_by, created_at, updated_at
+      ) VALUES (
+        gen_random_uuid(), $1::uuid, $2::uuid, $3::date,
+        $4::numeric, $5::numeric,
+        $6, $7,
+        $8, $9,
+        $10, $11, $12,
+        $13::uuid, NOW(), NOW()
+      ) ON CONFLICT (prescription_id) DO UPDATE SET
+        completion_date          = EXCLUDED.completion_date,
+        planned_total_dose_gy    = EXCLUDED.planned_total_dose_gy,
+        delivered_total_dose_gy  = EXCLUDED.delivered_total_dose_gy,
+        planned_fractions        = EXCLUDED.planned_fractions,
+        delivered_fractions      = EXCLUDED.delivered_fractions,
+        interruptions            = EXCLUDED.interruptions,
+        interruption_notes       = EXCLUDED.interruption_notes,
+        acute_toxicity_summary   = EXCLUDED.acute_toxicity_summary,
+        response_assessment_plan = EXCLUDED.response_assessment_plan,
+        followup_plan            = EXCLUDED.followup_plan,
+        completed_by             = EXCLUDED.completed_by,
+        updated_at               = NOW()
+      RETURNING *`,
+      tenantId,
+      data.prescriptionId,
+      data.completionDate ?? null,
+      data.plannedTotalDoseGy ?? null,
+      data.deliveredTotalDoseGy ?? null,
+      data.plannedFractions ?? null,
+      data.deliveredFractions ?? null,
+      data.interruptions ?? false,
+      data.interruptionNotes ?? null,
+      data.acuteToxicitySummary ?? null,
+      data.responseAssessmentPlan ?? null,
+      data.followupPlan ?? null,
+      (data.completedBy as string) || userId,
+    );
+
+    // Also mark prescription as COMPLETED
+    await this.prisma.$queryRawUnsafe(
+      `UPDATE plugin_oncology.radiation_prescriptions SET status = 'COMPLETED', updated_at = NOW()
+       WHERE id = $1::uuid AND tenant_id = $2::uuid AND status != 'CANCELLED'`,
+      data.prescriptionId, tenantId,
+    );
+
     return results[0];
   }
 }

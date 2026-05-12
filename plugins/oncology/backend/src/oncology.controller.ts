@@ -531,6 +531,248 @@ export class OncologyController {
     return { success: true, data: await this.oncologyService.updateHistology(id, body) };
   }
 
+  // ============================================
+  // Radiation Oncology — Prescriptions
+  // ============================================
+
+  @Get('radiation/prescriptions')
+  @Permissions('oncology.radiation.read')
+  async listRadiationPrescriptions(
+    @Query('patientId') patientId?: string,
+    @Query('status') status?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.oncologyService.listRadiationPrescriptions(
+      {
+        ...(patientId !== undefined && { patientId }),
+        ...(status !== undefined && { status }),
+      },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 20,
+    );
+    return { success: true, ...result };
+  }
+
+  @Get('radiation/prescriptions/:id')
+  @Permissions('oncology.radiation.read')
+  async getRadiationPrescription(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getRadiationPrescription(id) };
+  }
+
+  @Post('radiation/prescriptions')
+  @Permissions('oncology.radiation.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createRadiationPrescription(@Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.createRadiationPrescription(body) };
+    } catch (err: unknown) { this.handleError('createRadiationPrescription', err); }
+  }
+
+  @Put('radiation/prescriptions/:id')
+  @Permissions('oncology.radiation.write')
+  async updateRadiationPrescription(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateRadiationPrescription(id, body) };
+  }
+
+  @Post('radiation/prescriptions/:id/approve')
+  @Permissions('oncology.radiation.approve')
+  async approveRadiationPrescription(@Param('id') id: string) {
+    try {
+      return { success: true, data: await this.oncologyService.approveRadiationPrescription(id) };
+    } catch (err: unknown) { this.handleError('approveRadiationPrescription', err); }
+  }
+
+  @Post('radiation/prescriptions/:id/activate')
+  @Permissions('oncology.radiation.write')
+  async activateRadiationPrescription(@Param('id') id: string) {
+    try {
+      return { success: true, data: await this.oncologyService.activateRadiationPrescription(id) };
+    } catch (err: unknown) { this.handleError('activateRadiationPrescription', err); }
+  }
+
+  // ============================================
+  // Radiation Oncology — Simulations
+  // ============================================
+
+  @Get('radiation/prescriptions/:prescriptionId/simulations')
+  @Permissions('oncology.radiation.read')
+  async listRadiationSimulations(
+    @Param('prescriptionId') prescriptionId: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return { success: true, ...(await this.oncologyService.listRadiationSimulations(
+      prescriptionId,
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 20,
+    )) };
+  }
+
+  @Get('radiation/simulations/:id')
+  @Permissions('oncology.radiation.read')
+  async getRadiationSimulation(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getRadiationSimulation(id) };
+  }
+
+  @Post('radiation/simulations')
+  @Permissions('oncology.radiation.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createRadiationSimulation(@Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.createRadiationSimulation(body) };
+    } catch (err: unknown) { this.handleError('createRadiationSimulation', err); }
+  }
+
+  @Put('radiation/simulations/:id')
+  @Permissions('oncology.radiation.write')
+  async updateRadiationSimulation(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateRadiationSimulation(id, body) };
+  }
+
+  // ============================================
+  // Radiation Oncology — Treatment Plans
+  // ============================================
+
+  @Get('radiation/plans')
+  @Permissions('oncology.radiation.read')
+  async listRadiationPlans(
+    @Query('prescriptionId') prescriptionId?: string,
+    @Query('status') status?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return { success: true, ...(await this.oncologyService.listRadiationPlans(
+      {
+        ...(prescriptionId !== undefined && { prescriptionId }),
+        ...(status !== undefined && { status }),
+      },
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 20,
+    )) };
+  }
+
+  @Get('radiation/plans/:id')
+  @Permissions('oncology.radiation.read')
+  async getRadiationPlan(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getRadiationPlan(id) };
+  }
+
+  @Post('radiation/plans')
+  @Permissions('oncology.radiation.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createRadiationPlan(@Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.createRadiationPlan(body) };
+    } catch (err: unknown) { this.handleError('createRadiationPlan', err); }
+  }
+
+  @Put('radiation/plans/:id')
+  @Permissions('oncology.radiation.write')
+  async updateRadiationPlan(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateRadiationPlan(id, body) };
+  }
+
+  @Post('radiation/plans/:id/approve')
+  @Permissions('oncology.radiation.approve')
+  async approveRadiationPlan(@Param('id') id: string) {
+    try {
+      return { success: true, data: await this.oncologyService.approveRadiationPlan(id) };
+    } catch (err: unknown) { this.handleError('approveRadiationPlan', err); }
+  }
+
+  // ============================================
+  // Radiation Oncology — Fractions
+  // ============================================
+
+  @Get('radiation/plans/:planId/fractions')
+  @Permissions('oncology.radiation.read')
+  async listRadiationFractions(@Param('planId') planId: string) {
+    return { success: true, ...(await this.oncologyService.listRadiationFractions(planId)) };
+  }
+
+  @Post('radiation/plans/:planId/fractions/bulk')
+  @Permissions('oncology.radiation.write')
+  @HttpCode(HttpStatus.CREATED)
+  async bulkCreateFractions(@Param('planId') planId: string, @Body() body: Record<string, unknown>) {
+    try {
+      const data = await this.oncologyService.bulkCreateFractions({ ...body, treatmentPlanId: planId });
+      return { success: true, data };
+    } catch (err: unknown) { this.handleError('bulkCreateFractions', err); }
+  }
+
+  @Put('radiation/fractions/:id')
+  @Permissions('oncology.radiation.write')
+  async updateRadiationFraction(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateRadiationFraction(id, body) };
+  }
+
+  @Post('radiation/fractions/:id/deliver')
+  @Permissions('oncology.radiation.deliver')
+  async deliverFraction(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.deliverFraction(id, body) };
+    } catch (err: unknown) { this.handleError('deliverFraction', err); }
+  }
+
+  // ============================================
+  // Radiation Oncology — On-Treatment Reviews
+  // ============================================
+
+  @Get('radiation/prescriptions/:prescriptionId/reviews')
+  @Permissions('oncology.radiation.read')
+  async listOnTreatmentReviews(
+    @Param('prescriptionId') prescriptionId: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return { success: true, ...(await this.oncologyService.listOnTreatmentReviews(
+      prescriptionId,
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 50,
+    )) };
+  }
+
+  @Get('radiation/reviews/:id')
+  @Permissions('oncology.radiation.read')
+  async getOnTreatmentReview(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.getOnTreatmentReview(id) };
+  }
+
+  @Post('radiation/reviews')
+  @Permissions('oncology.radiation.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createOnTreatmentReview(@Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.createOnTreatmentReview(body) };
+    } catch (err: unknown) { this.handleError('createOnTreatmentReview', err); }
+  }
+
+  @Put('radiation/reviews/:id')
+  @Permissions('oncology.radiation.write')
+  async updateOnTreatmentReview(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return { success: true, data: await this.oncologyService.updateOnTreatmentReview(id, body) };
+  }
+
+  // ============================================
+  // Radiation Oncology — Completion Summary
+  // ============================================
+
+  @Get('radiation/prescriptions/:prescriptionId/completion')
+  @Permissions('oncology.radiation.read')
+  async getCompletionSummary(@Param('prescriptionId') prescriptionId: string) {
+    return { success: true, data: await this.oncologyService.getCompletionSummary(prescriptionId) };
+  }
+
+  @Post('radiation/completions')
+  @Permissions('oncology.radiation.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createCompletionSummary(@Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.createCompletionSummary(body) };
+    } catch (err: unknown) { this.handleError('createCompletionSummary', err); }
+  }
+
   private handleError(method: string, err: unknown): never {
     if (err instanceof HttpException) throw err;
     const message = err instanceof Error ? err.message : String(err);

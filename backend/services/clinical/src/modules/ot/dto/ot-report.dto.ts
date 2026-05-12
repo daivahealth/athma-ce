@@ -60,6 +60,11 @@ export class ListOtReportsDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  search?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   reportStatus?: string;
 
   @ApiPropertyOptional()

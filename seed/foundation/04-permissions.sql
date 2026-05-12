@@ -201,8 +201,8 @@ ON CONFLICT (code) DO NOTHING;
 
 -- Audit Permissions
 INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
-  ('00000000-0000-0000-0020-000000000001', 'audit.read', 'Read Audit Logs', 'View audit logs', 'audit', 'read', NOW(), NOW()),
-  ('00000000-0000-0000-0020-000000000002', 'audit.export', 'Export Audit Logs', 'Export audit logs', 'audit', 'export', NOW(), NOW())
+  ('00000000-0000-0000-0040-000000000001', 'audit.read', 'Read Audit Logs', 'View audit logs', 'audit', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0040-000000000002', 'audit.export', 'Export Audit Logs', 'Export audit logs', 'audit', 'export', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
 
 -- Report Permissions
@@ -326,6 +326,29 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0036-000000000002', 'procedure_result.enter', 'Enter Procedure Results', 'Enter and update procedure results', 'procedure_result', 'enter', NOW(), NOW()),
   ('00000000-0000-0000-0036-000000000003', 'procedure_result.verify', 'Verify Procedure Results', 'Verify and sign off procedure results', 'procedure_result', 'verify', NOW(), NOW()),
   ('00000000-0000-0000-0036-000000000004', 'procedure_result.amend', 'Amend Procedure Results', 'Amend finalized procedure results', 'procedure_result', 'amend', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- OT Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0038-000000000001', 'ot_request.read', 'Read OT Requests', 'View operating theatre requests', 'ot_request', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000002', 'ot_request.create', 'Create OT Requests', 'Create operating theatre requests', 'ot_request', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000003', 'ot_request.update', 'Update OT Requests', 'Modify operating theatre requests', 'ot_request', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000004', 'ot_request.review', 'Review OT Requests', 'Mark operating theatre requests under review', 'ot_request', 'review', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000005', 'ot_request.approve', 'Approve OT Requests', 'Approve operating theatre requests', 'ot_request', 'approve', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000006', 'ot_request.cancel', 'Cancel OT Requests', 'Cancel operating theatre requests', 'ot_request', 'cancel', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000007', 'ot_schedule.read', 'Read OT Schedules', 'View operating theatre schedules', 'ot_schedule', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000008', 'ot_schedule.create', 'Create OT Schedules', 'Create operating theatre schedules', 'ot_schedule', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000009', 'ot_schedule.update', 'Update OT Schedules', 'Modify operating theatre schedules', 'ot_schedule', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000010', 'ot_schedule.advance', 'Advance OT Schedules', 'Advance operating theatre workflow status', 'ot_schedule', 'advance', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000011', 'ot_schedule.cancel', 'Cancel OT Schedules', 'Cancel or postpone operating theatre schedules', 'ot_schedule', 'cancel', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000012', 'ot_room.read', 'Read OT Rooms', 'View operating theatre room configurations', 'ot_room', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000013', 'ot_room.manage', 'Manage OT Rooms', 'Create and update operating theatre room configurations', 'ot_room', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000014', 'ot_report.read', 'Read OT Reports', 'View operating theatre reports', 'ot_report', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000015', 'ot_report.create', 'Create OT Reports', 'Create operating theatre reports', 'ot_report', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000016', 'ot_report.update', 'Update OT Reports', 'Modify operating theatre reports', 'ot_report', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000017', 'ot_report.sign', 'Sign OT Reports', 'Sign operating theatre reports', 'ot_report', 'sign', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000018', 'ot_report.amend', 'Amend OT Reports', 'Amend operating theatre reports', 'ot_report', 'amend', NOW(), NOW()),
+  ('00000000-0000-0000-0038-000000000019', 'ot_report.cancel', 'Cancel OT Reports', 'Cancel operating theatre reports', 'ot_report', 'cancel', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
 
 -- Oncology Plugin Permissions

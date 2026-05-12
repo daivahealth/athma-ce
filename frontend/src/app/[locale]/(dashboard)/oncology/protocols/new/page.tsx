@@ -10,8 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { useCreateProtocol } from '@/plugins/oncology/hooks/use-oncology';
-import type { RegimenItem, LabPrerequisite, HydrationOrder } from '@/plugins/oncology/types';
+import { useCreateProtocol, useCancerTypes } from '@/plugins/oncology/hooks/use-oncology';
+import type { RegimenItem, LabPrerequisite, HydrationOrder, OncologyCancerType } from '@/plugins/oncology/types';
 
 interface RegimenRow extends RegimenItem { day: number }
 
@@ -24,6 +24,8 @@ export default function NewProtocolPage({ params }: { params: { locale: string }
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/protocols`);
   const createProtocol = useCreateProtocol();
+  const { data: cancerTypesData } = useCancerTypes({ active: 'true' });
+  const cancerTypes: OncologyCancerType[] = cancerTypesData?.data ?? [];
 
   const [code, setCode] = useState('');
   const [name, setName] = useState('');
@@ -66,7 +68,7 @@ export default function NewProtocolPage({ params }: { params: { locale: string }
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={back}>
-          <ArrowLeft className="mr-2 h-4 w-4" />Back
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
           <h1 className="text-2xl font-bold">Create Chemo Protocol</h1>
@@ -92,7 +94,23 @@ export default function NewProtocolPage({ params }: { params: { locale: string }
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Cancer Type *</Label>
-                <Input placeholder="e.g. Breast Cancer, NSCLC" value={cancerType} onChange={(e) => setCancerType(e.target.value)} />
+                <Select
+                  value={cancerType || '__none'}
+                  onValueChange={(v) => setCancerType(v === '__none' ? '' : v)}
+                >
+                  <SelectTrigger><SelectValue placeholder="Select cancer type..." /></SelectTrigger>
+                  <SelectContent className="max-h-72 overflow-y-auto">
+                    <SelectItem value="__none">— Select cancer type —</SelectItem>
+                    {cancerTypes.map((ct) => (
+                      <SelectItem key={ct.id} value={ct.name}>
+                        {ct.name}
+                        {ct.category && (
+                          <span className="ml-2 text-xs text-muted-foreground">({ct.category})</span>
+                        )}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label>Treatment Intent *</Label>

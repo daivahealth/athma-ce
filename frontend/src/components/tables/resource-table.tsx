@@ -13,6 +13,8 @@ interface ResourceTableProps<TData extends { id: string }> {
   columns: ColumnDef<TData>[];
   data?: TData[];
   isLoading?: boolean;
+  error?: Error | null;
+  emptyMessage?: string;
   emptyState?: string;
   onRowClick?: (row: TData) => void;
 }
@@ -23,10 +25,13 @@ export function ResourceTable<TData extends { id: string }>({
   columns,
   data = [],
   isLoading,
+  error,
+  emptyMessage,
   emptyState = 'No records found.',
   onRowClick,
 }: ResourceTableProps<TData>) {
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
+  const resolvedEmptyState = emptyMessage ?? emptyState;
 
   const showDefaultCta = cta === undefined;
   const hasHeader = !!(title || showDefaultCta || cta);
@@ -62,6 +67,12 @@ export function ResourceTable<TData extends { id: string }>({
                     </td>
                   </tr>
                 ))
+              ) : error ? (
+                <tr>
+                  <td colSpan={columns.length} className="px-4 py-6 text-center text-destructive">
+                    {error.message || 'Unable to load records.'}
+                  </td>
+                </tr>
               ) : data.length ? (
                 table.getRowModel().rows.map((row) => (
                   <tr
@@ -79,7 +90,7 @@ export function ResourceTable<TData extends { id: string }>({
               ) : (
                 <tr>
                   <td colSpan={columns.length} className="px-4 py-6 text-center text-muted-foreground">
-                    {emptyState}
+                    {resolvedEmptyState}
                   </td>
                 </tr>
               )}

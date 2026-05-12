@@ -133,8 +133,8 @@ export function SearchFiltersPanel({
                       <Checkbox
                         id={`doctype-${type}`}
                         checked={filters.documentTypes?.includes(type) || false}
-                        onCheckedChange={(checked) =>
-                          handleDocumentTypeToggle(type, checked as boolean)
+                        onChange={(event) =>
+                          handleDocumentTypeToggle(type, event.target.checked)
                         }
                       />
                       <Label

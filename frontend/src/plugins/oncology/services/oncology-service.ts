@@ -2,6 +2,8 @@ import { clinicalClient } from '@/lib/api/client';
 import type {
   CancerDiagnosis, TumorStaging, ChemoProtocol, ChemoOrder, TumorBoardCase, OncologyCarePlan,
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
+  RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan,
+  RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
 } from '../types';
 
 const BASE_URL = '/plugins/oncology';
@@ -263,6 +265,110 @@ export const oncologyService = {
   },
   async updateHistology(id: string, body: Partial<OncologyHistology>): Promise<OncologyHistology> {
     const { data } = await clinicalClient.put(`${BASE_URL}/catalogs/histologies/${id}`, body);
+    return data.data;
+  },
+
+  // ── Radiation Oncology ─────────────────────────────────────
+
+  async listRadiationPrescriptions(params?: { patientId?: string; status?: string; page?: number; limit?: number }) {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/prescriptions`, { params });
+    return data;
+  },
+  async getRadiationPrescription(id: string): Promise<RadiationPrescription> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/prescriptions/${id}`);
+    return data.data;
+  },
+  async createRadiationPrescription(body: Record<string, unknown>): Promise<RadiationPrescription> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/prescriptions`, body);
+    return data.data;
+  },
+  async updateRadiationPrescription(id: string, body: Record<string, unknown>): Promise<RadiationPrescription> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/radiation/prescriptions/${id}`, body);
+    return data.data;
+  },
+  async approveRadiationPrescription(id: string): Promise<RadiationPrescription> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/prescriptions/${id}/approve`, {});
+    return data.data;
+  },
+  async activateRadiationPrescription(id: string): Promise<RadiationPrescription> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/prescriptions/${id}/activate`, {});
+    return data.data;
+  },
+
+  async listRadiationSimulations(prescriptionId: string): Promise<{ data: RadiationSimulation[] }> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/prescriptions/${prescriptionId}/simulations`);
+    return data;
+  },
+  async getRadiationSimulation(id: string): Promise<RadiationSimulation> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/simulations/${id}`);
+    return data.data;
+  },
+  async createRadiationSimulation(body: Record<string, unknown>): Promise<RadiationSimulation> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/simulations`, body);
+    return data.data;
+  },
+  async updateRadiationSimulation(id: string, body: Record<string, unknown>): Promise<RadiationSimulation> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/radiation/simulations/${id}`, body);
+    return data.data;
+  },
+
+  async listRadiationPlans(params?: { prescriptionId?: string; status?: string }): Promise<{ data: RadiationTreatmentPlan[] }> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/plans`, { params });
+    return data;
+  },
+  async getRadiationPlan(id: string): Promise<RadiationTreatmentPlan> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/plans/${id}`);
+    return data.data;
+  },
+  async createRadiationPlan(body: Record<string, unknown>): Promise<RadiationTreatmentPlan> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/plans`, body);
+    return data.data;
+  },
+  async updateRadiationPlan(id: string, body: Record<string, unknown>): Promise<RadiationTreatmentPlan> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/radiation/plans/${id}`, body);
+    return data.data;
+  },
+  async approveRadiationPlan(id: string): Promise<RadiationTreatmentPlan> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/plans/${id}/approve`, {});
+    return data.data;
+  },
+
+  async listRadiationFractions(planId: string): Promise<{ data: RadiationFraction[] }> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/plans/${planId}/fractions`);
+    return data;
+  },
+  async bulkCreateFractions(planId: string, body: Record<string, unknown>): Promise<RadiationFraction[]> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/plans/${planId}/fractions/bulk`, body);
+    return data.data;
+  },
+  async updateRadiationFraction(id: string, body: Record<string, unknown>): Promise<RadiationFraction> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/radiation/fractions/${id}`, body);
+    return data.data;
+  },
+  async deliverFraction(id: string, body: Record<string, unknown>): Promise<RadiationFraction> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/fractions/${id}/deliver`, body);
+    return data.data;
+  },
+
+  async listOnTreatmentReviews(prescriptionId: string): Promise<{ data: RadiationOnTreatmentReview[] }> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/prescriptions/${prescriptionId}/reviews`);
+    return data;
+  },
+  async createOnTreatmentReview(body: Record<string, unknown>): Promise<RadiationOnTreatmentReview> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/reviews`, body);
+    return data.data;
+  },
+  async updateOnTreatmentReview(id: string, body: Record<string, unknown>): Promise<RadiationOnTreatmentReview> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/radiation/reviews/${id}`, body);
+    return data.data;
+  },
+
+  async getCompletionSummary(prescriptionId: string): Promise<RadiationCompletionSummary> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/radiation/prescriptions/${prescriptionId}/completion`);
+    return data.data;
+  },
+  async createCompletionSummary(body: Record<string, unknown>): Promise<RadiationCompletionSummary> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/radiation/completions`, body);
     return data.data;
   },
 };

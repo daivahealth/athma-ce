@@ -20,6 +20,7 @@ FOUNDATION_FILES=(
   "foundation/10-beds.sql"           # beds
   "foundation/11-clinics.sql"        # clinics
   "foundation/12-spaces.sql"         # spaces
+  "foundation/18-ot-spaces.sql"      # operating theatre spaces
   "foundation/13-user-roles.sql"     # user role assignments
   "foundation/14-staff.sql"          # clinical staff
   "foundation/15-staff-specialties.sql" # staff specialty mappings
@@ -48,6 +49,8 @@ CLINICAL_FILES=(
   "clinical/17-membership-plans.sql"
   "clinical/18-pgvector-setup.sql"    # pgvector extension for semantic search
   "clinical/23-oncology-catalogs.sql" # Oncology catalog master data (cancer types, primary sites, histologies, mappings)
+  "clinical/24-chemo-protocols.sql"  # Chemotherapy protocol library (22 protocols across 12 cancer types)
+  "clinical/25-ot-room-configs.sql"  # OT room configuration data
 )
 
 RCM_FILES=(

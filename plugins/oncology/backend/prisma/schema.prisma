@@ -308,6 +308,178 @@ model OncologyHistologyMaster {
   @@schema("plugin_oncology")
 }
 
+// ============================================================
+// Radiation Oncology
+// ============================================================
+
+model RadiationPrescription {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  patientId          String    @map("patient_id") @db.Uuid
+  encounterId        String    @map("encounter_id") @db.Uuid
+  cancerProfileId    String?   @map("cancer_profile_id") @db.Uuid
+  prescriptionNumber String?   @map("prescription_number") @db.VarChar(50)
+  treatmentIntent    String?   @map("treatment_intent") @db.VarChar(50)
+  treatmentSiteId    String?   @map("treatment_site_id") @db.Uuid
+  laterality         String?   @db.VarChar(30)
+  modality           String?   @db.VarChar(50)
+  technique          String?   @db.VarChar(50)
+  totalDoseGy        Decimal?  @map("total_dose_gy") @db.Decimal(10, 2)
+  dosePerFractionGy  Decimal?  @map("dose_per_fraction_gy") @db.Decimal(10, 2)
+  plannedFractions   Int?      @map("planned_fractions")
+  concurrentChemo    Boolean   @default(false) @map("concurrent_chemo")
+  plannedStartDate   DateTime? @map("planned_start_date") @db.Date
+  plannedEndDate     DateTime? @map("planned_end_date") @db.Date
+  prescriptionNotes  String?   @map("prescription_notes") @db.Text
+  prescribedBy       String?   @map("prescribed_by") @db.Uuid
+  prescribedAt       DateTime? @map("prescribed_at") @db.Timestamptz(6)
+  status             String    @default("DRAFT") @db.VarChar(50)
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  simulations         RadiationSimulation[]
+  treatmentPlans      RadiationTreatmentPlan[]
+  reviews             RadiationOnTreatmentReview[]
+  completionSummaries RadiationCompletionSummary[]
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, status])
+  @@index([tenantId, plannedStartDate])
+  @@map("radiation_prescriptions")
+  @@schema("plugin_oncology")
+}
+
+model RadiationSimulation {
+  id                   String    @id @default(uuid()) @db.Uuid
+  tenantId             String    @map("tenant_id") @db.Uuid
+  prescriptionId       String    @map("prescription_id") @db.Uuid
+  simulationDate       DateTime? @map("simulation_date") @db.Timestamptz(6)
+  patientPosition      String?   @map("patient_position") @db.VarChar(100)
+  immobilizationDevice String?   @map("immobilization_device") @db.VarChar(255)
+  contrastUsed         Boolean   @default(false) @map("contrast_used")
+  scanRegion           String?   @map("scan_region") @db.VarChar(255)
+  setupReference       String?   @map("setup_reference") @db.Text
+  tattooMarkingDone    Boolean   @default(false) @map("tattoo_marking_done")
+  simulationNotes      String?   @map("simulation_notes") @db.Text
+  performedBy          String?   @map("performed_by") @db.Uuid
+  status               String    @default("COMPLETED") @db.VarChar(50)
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  prescription  RadiationPrescription  @relation(fields: [prescriptionId], references: [id])
+  treatmentPlans RadiationTreatmentPlan[]
+
+  @@index([tenantId, prescriptionId])
+  @@map("radiation_simulations")
+  @@schema("plugin_oncology")
+}
+
+model RadiationTreatmentPlan {
+  id                    String    @id @default(uuid()) @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  prescriptionId        String    @map("prescription_id") @db.Uuid
+  simulationId          String?   @map("simulation_id") @db.Uuid
+  externalPlanReference String?   @map("external_plan_reference") @db.VarChar(255)
+  planningSystem        String?   @map("planning_system") @db.VarChar(100)
+  planningStatus        String?   @map("planning_status") @db.VarChar(50)
+  plannerId             String?   @map("planner_id") @db.Uuid
+  physicistId           String?   @map("physicist_id") @db.Uuid
+  radiationOncologistId String?   @map("radiation_oncologist_id") @db.Uuid
+  contouringCompleted   Boolean   @default(false) @map("contouring_completed")
+  physicsQaCompleted    Boolean   @default(false) @map("physics_qa_completed")
+  treatmentMachine      String?   @map("treatment_machine") @db.VarChar(100)
+  planNotes             String?   @map("plan_notes") @db.Text
+  approvedBy            String?   @map("approved_by") @db.Uuid
+  approvedAt            DateTime? @map("approved_at") @db.Timestamptz(6)
+  status                String    @default("ACTIVE") @db.VarChar(50)
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  prescription RadiationPrescription  @relation(fields: [prescriptionId], references: [id])
+  simulation   RadiationSimulation?   @relation(fields: [simulationId], references: [id])
+  fractions    RadiationFraction[]
+
+  @@index([tenantId, prescriptionId])
+  @@index([tenantId, status])
+  @@map("radiation_treatment_plans")
+  @@schema("plugin_oncology")
+}
+
+model RadiationFraction {
+  id                    String    @id @default(uuid()) @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  treatmentPlanId       String    @map("treatment_plan_id") @db.Uuid
+  fractionNumber        Int       @map("fraction_number")
+  plannedDate           DateTime? @map("planned_date") @db.Date
+  actualDate            DateTime? @map("actual_date") @db.Timestamptz(6)
+  plannedDoseGy         Decimal?  @map("planned_dose_gy") @db.Decimal(10, 2)
+  deliveredDoseGy       Decimal?  @map("delivered_dose_gy") @db.Decimal(10, 2)
+  treatmentMachine      String?   @map("treatment_machine") @db.VarChar(100)
+  radiationTherapistId  String?   @map("radiation_therapist_id") @db.Uuid
+  status                String    @default("SCHEDULED") @db.VarChar(50)
+  interruptionReason    String?   @map("interruption_reason") @db.Text
+  verificationCompleted Boolean   @default(false) @map("verification_completed")
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  treatmentPlan RadiationTreatmentPlan @relation(fields: [treatmentPlanId], references: [id])
+
+  @@unique([treatmentPlanId, fractionNumber])
+  @@index([tenantId, treatmentPlanId])
+  @@index([tenantId, status])
+  @@map("radiation_fractions")
+  @@schema("plugin_oncology")
+}
+
+model RadiationOnTreatmentReview {
+  id                     String    @id @default(uuid()) @db.Uuid
+  tenantId               String    @map("tenant_id") @db.Uuid
+  prescriptionId         String    @map("prescription_id") @db.Uuid
+  reviewDate             DateTime  @map("review_date") @db.Timestamptz(6)
+  weekNumber             Int?      @map("week_number")
+  toxicityGrade          String?   @map("toxicity_grade") @db.VarChar(50)
+  painScore              Int?      @map("pain_score")
+  weightKg               Decimal?  @map("weight_kg") @db.Decimal(10, 2)
+  treatmentBreakRequired Boolean   @default(false) @map("treatment_break_required")
+  reviewNotes            String?   @map("review_notes") @db.Text
+  reviewedBy             String?   @map("reviewed_by") @db.Uuid
+  createdAt              DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  prescription RadiationPrescription @relation(fields: [prescriptionId], references: [id])
+
+  @@index([tenantId, prescriptionId])
+  @@index([tenantId, reviewDate])
+  @@map("radiation_on_treatment_reviews")
+  @@schema("plugin_oncology")
+}
+
+model RadiationCompletionSummary {
+  id                     String    @id @default(uuid()) @db.Uuid
+  tenantId               String    @map("tenant_id") @db.Uuid
+  prescriptionId         String    @map("prescription_id") @db.Uuid
+  completionDate         DateTime? @map("completion_date") @db.Date
+  plannedTotalDoseGy     Decimal?  @map("planned_total_dose_gy") @db.Decimal(10, 2)
+  deliveredTotalDoseGy   Decimal?  @map("delivered_total_dose_gy") @db.Decimal(10, 2)
+  plannedFractions       Int?      @map("planned_fractions")
+  deliveredFractions     Int?      @map("delivered_fractions")
+  interruptions          Boolean   @default(false)
+  interruptionNotes      String?   @map("interruption_notes") @db.Text
+  acuteToxicitySummary   String?   @map("acute_toxicity_summary") @db.Text
+  responseAssessmentPlan String?   @map("response_assessment_plan") @db.Text
+  followupPlan           String?   @map("followup_plan") @db.Text
+  completedBy            String?   @map("completed_by") @db.Uuid
+  createdAt              DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  prescription RadiationPrescription @relation(fields: [prescriptionId], references: [id])
+
+  @@unique([prescriptionId])
+  @@index([tenantId, prescriptionId])
+  @@map("radiation_completion_summaries")
+  @@schema("plugin_oncology")
+}
+
 model OncologyCarePlan {
   id                    String    @id @default(uuid()) @db.Uuid
   tenantId              String    @map("tenant_id") @db.Uuid

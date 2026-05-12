@@ -59,6 +59,36 @@ export type OncologyCancerTypeSiteMapping = $Result.DefaultSelection<Prisma.$Onc
  */
 export type OncologyHistologyMaster = $Result.DefaultSelection<Prisma.$OncologyHistologyMasterPayload>
 /**
+ * Model RadiationPrescription
+ * 
+ */
+export type RadiationPrescription = $Result.DefaultSelection<Prisma.$RadiationPrescriptionPayload>
+/**
+ * Model RadiationSimulation
+ * 
+ */
+export type RadiationSimulation = $Result.DefaultSelection<Prisma.$RadiationSimulationPayload>
+/**
+ * Model RadiationTreatmentPlan
+ * 
+ */
+export type RadiationTreatmentPlan = $Result.DefaultSelection<Prisma.$RadiationTreatmentPlanPayload>
+/**
+ * Model RadiationFraction
+ * 
+ */
+export type RadiationFraction = $Result.DefaultSelection<Prisma.$RadiationFractionPayload>
+/**
+ * Model RadiationOnTreatmentReview
+ * 
+ */
+export type RadiationOnTreatmentReview = $Result.DefaultSelection<Prisma.$RadiationOnTreatmentReviewPayload>
+/**
+ * Model RadiationCompletionSummary
+ * 
+ */
+export type RadiationCompletionSummary = $Result.DefaultSelection<Prisma.$RadiationCompletionSummaryPayload>
+/**
  * Model OncologyCarePlan
  * 
  */
@@ -271,6 +301,66 @@ export class PrismaClient<
     * ```
     */
   get oncologyHistologyMaster(): Prisma.OncologyHistologyMasterDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.radiationPrescription`: Exposes CRUD operations for the **RadiationPrescription** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RadiationPrescriptions
+    * const radiationPrescriptions = await prisma.radiationPrescription.findMany()
+    * ```
+    */
+  get radiationPrescription(): Prisma.RadiationPrescriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.radiationSimulation`: Exposes CRUD operations for the **RadiationSimulation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RadiationSimulations
+    * const radiationSimulations = await prisma.radiationSimulation.findMany()
+    * ```
+    */
+  get radiationSimulation(): Prisma.RadiationSimulationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.radiationTreatmentPlan`: Exposes CRUD operations for the **RadiationTreatmentPlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RadiationTreatmentPlans
+    * const radiationTreatmentPlans = await prisma.radiationTreatmentPlan.findMany()
+    * ```
+    */
+  get radiationTreatmentPlan(): Prisma.RadiationTreatmentPlanDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.radiationFraction`: Exposes CRUD operations for the **RadiationFraction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RadiationFractions
+    * const radiationFractions = await prisma.radiationFraction.findMany()
+    * ```
+    */
+  get radiationFraction(): Prisma.RadiationFractionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.radiationOnTreatmentReview`: Exposes CRUD operations for the **RadiationOnTreatmentReview** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RadiationOnTreatmentReviews
+    * const radiationOnTreatmentReviews = await prisma.radiationOnTreatmentReview.findMany()
+    * ```
+    */
+  get radiationOnTreatmentReview(): Prisma.RadiationOnTreatmentReviewDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.radiationCompletionSummary`: Exposes CRUD operations for the **RadiationCompletionSummary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RadiationCompletionSummaries
+    * const radiationCompletionSummaries = await prisma.radiationCompletionSummary.findMany()
+    * ```
+    */
+  get radiationCompletionSummary(): Prisma.RadiationCompletionSummaryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.oncologyCarePlan`: Exposes CRUD operations for the **OncologyCarePlan** model.
@@ -731,6 +821,12 @@ export namespace Prisma {
     OncologyPrimarySiteMaster: 'OncologyPrimarySiteMaster',
     OncologyCancerTypeSiteMapping: 'OncologyCancerTypeSiteMapping',
     OncologyHistologyMaster: 'OncologyHistologyMaster',
+    RadiationPrescription: 'RadiationPrescription',
+    RadiationSimulation: 'RadiationSimulation',
+    RadiationTreatmentPlan: 'RadiationTreatmentPlan',
+    RadiationFraction: 'RadiationFraction',
+    RadiationOnTreatmentReview: 'RadiationOnTreatmentReview',
+    RadiationCompletionSummary: 'RadiationCompletionSummary',
     OncologyCarePlan: 'OncologyCarePlan'
   };
 
@@ -750,7 +846,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "cancerDiagnosis" | "tumorStaging" | "chemoProtocol" | "chemoOrder" | "tumorBoardCase" | "oncologyCancerTypeMaster" | "oncologyPrimarySiteMaster" | "oncologyCancerTypeSiteMapping" | "oncologyHistologyMaster" | "oncologyCarePlan"
+      modelProps: "cancerDiagnosis" | "tumorStaging" | "chemoProtocol" | "chemoOrder" | "tumorBoardCase" | "oncologyCancerTypeMaster" | "oncologyPrimarySiteMaster" | "oncologyCancerTypeSiteMapping" | "oncologyHistologyMaster" | "radiationPrescription" | "radiationSimulation" | "radiationTreatmentPlan" | "radiationFraction" | "radiationOnTreatmentReview" | "radiationCompletionSummary" | "oncologyCarePlan"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1420,6 +1516,450 @@ export namespace Prisma {
           }
         }
       }
+      RadiationPrescription: {
+        payload: Prisma.$RadiationPrescriptionPayload<ExtArgs>
+        fields: Prisma.RadiationPrescriptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RadiationPrescriptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RadiationPrescriptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>
+          }
+          findFirst: {
+            args: Prisma.RadiationPrescriptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RadiationPrescriptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>
+          }
+          findMany: {
+            args: Prisma.RadiationPrescriptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>[]
+          }
+          create: {
+            args: Prisma.RadiationPrescriptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>
+          }
+          createMany: {
+            args: Prisma.RadiationPrescriptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RadiationPrescriptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>[]
+          }
+          delete: {
+            args: Prisma.RadiationPrescriptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>
+          }
+          update: {
+            args: Prisma.RadiationPrescriptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.RadiationPrescriptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RadiationPrescriptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RadiationPrescriptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.RadiationPrescriptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationPrescriptionPayload>
+          }
+          aggregate: {
+            args: Prisma.RadiationPrescriptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRadiationPrescription>
+          }
+          groupBy: {
+            args: Prisma.RadiationPrescriptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RadiationPrescriptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RadiationPrescriptionCountArgs<ExtArgs>
+            result: $Utils.Optional<RadiationPrescriptionCountAggregateOutputType> | number
+          }
+        }
+      }
+      RadiationSimulation: {
+        payload: Prisma.$RadiationSimulationPayload<ExtArgs>
+        fields: Prisma.RadiationSimulationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RadiationSimulationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RadiationSimulationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>
+          }
+          findFirst: {
+            args: Prisma.RadiationSimulationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RadiationSimulationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>
+          }
+          findMany: {
+            args: Prisma.RadiationSimulationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>[]
+          }
+          create: {
+            args: Prisma.RadiationSimulationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>
+          }
+          createMany: {
+            args: Prisma.RadiationSimulationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RadiationSimulationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>[]
+          }
+          delete: {
+            args: Prisma.RadiationSimulationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>
+          }
+          update: {
+            args: Prisma.RadiationSimulationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>
+          }
+          deleteMany: {
+            args: Prisma.RadiationSimulationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RadiationSimulationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RadiationSimulationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>[]
+          }
+          upsert: {
+            args: Prisma.RadiationSimulationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationSimulationPayload>
+          }
+          aggregate: {
+            args: Prisma.RadiationSimulationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRadiationSimulation>
+          }
+          groupBy: {
+            args: Prisma.RadiationSimulationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RadiationSimulationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RadiationSimulationCountArgs<ExtArgs>
+            result: $Utils.Optional<RadiationSimulationCountAggregateOutputType> | number
+          }
+        }
+      }
+      RadiationTreatmentPlan: {
+        payload: Prisma.$RadiationTreatmentPlanPayload<ExtArgs>
+        fields: Prisma.RadiationTreatmentPlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RadiationTreatmentPlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RadiationTreatmentPlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>
+          }
+          findFirst: {
+            args: Prisma.RadiationTreatmentPlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RadiationTreatmentPlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>
+          }
+          findMany: {
+            args: Prisma.RadiationTreatmentPlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>[]
+          }
+          create: {
+            args: Prisma.RadiationTreatmentPlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>
+          }
+          createMany: {
+            args: Prisma.RadiationTreatmentPlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RadiationTreatmentPlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>[]
+          }
+          delete: {
+            args: Prisma.RadiationTreatmentPlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>
+          }
+          update: {
+            args: Prisma.RadiationTreatmentPlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.RadiationTreatmentPlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RadiationTreatmentPlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RadiationTreatmentPlanUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>[]
+          }
+          upsert: {
+            args: Prisma.RadiationTreatmentPlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationTreatmentPlanPayload>
+          }
+          aggregate: {
+            args: Prisma.RadiationTreatmentPlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRadiationTreatmentPlan>
+          }
+          groupBy: {
+            args: Prisma.RadiationTreatmentPlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RadiationTreatmentPlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RadiationTreatmentPlanCountArgs<ExtArgs>
+            result: $Utils.Optional<RadiationTreatmentPlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      RadiationFraction: {
+        payload: Prisma.$RadiationFractionPayload<ExtArgs>
+        fields: Prisma.RadiationFractionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RadiationFractionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RadiationFractionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>
+          }
+          findFirst: {
+            args: Prisma.RadiationFractionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RadiationFractionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>
+          }
+          findMany: {
+            args: Prisma.RadiationFractionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>[]
+          }
+          create: {
+            args: Prisma.RadiationFractionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>
+          }
+          createMany: {
+            args: Prisma.RadiationFractionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RadiationFractionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>[]
+          }
+          delete: {
+            args: Prisma.RadiationFractionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>
+          }
+          update: {
+            args: Prisma.RadiationFractionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>
+          }
+          deleteMany: {
+            args: Prisma.RadiationFractionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RadiationFractionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RadiationFractionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>[]
+          }
+          upsert: {
+            args: Prisma.RadiationFractionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationFractionPayload>
+          }
+          aggregate: {
+            args: Prisma.RadiationFractionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRadiationFraction>
+          }
+          groupBy: {
+            args: Prisma.RadiationFractionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RadiationFractionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RadiationFractionCountArgs<ExtArgs>
+            result: $Utils.Optional<RadiationFractionCountAggregateOutputType> | number
+          }
+        }
+      }
+      RadiationOnTreatmentReview: {
+        payload: Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>
+        fields: Prisma.RadiationOnTreatmentReviewFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RadiationOnTreatmentReviewFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RadiationOnTreatmentReviewFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>
+          }
+          findFirst: {
+            args: Prisma.RadiationOnTreatmentReviewFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RadiationOnTreatmentReviewFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>
+          }
+          findMany: {
+            args: Prisma.RadiationOnTreatmentReviewFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>[]
+          }
+          create: {
+            args: Prisma.RadiationOnTreatmentReviewCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>
+          }
+          createMany: {
+            args: Prisma.RadiationOnTreatmentReviewCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RadiationOnTreatmentReviewCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>[]
+          }
+          delete: {
+            args: Prisma.RadiationOnTreatmentReviewDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>
+          }
+          update: {
+            args: Prisma.RadiationOnTreatmentReviewUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>
+          }
+          deleteMany: {
+            args: Prisma.RadiationOnTreatmentReviewDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RadiationOnTreatmentReviewUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RadiationOnTreatmentReviewUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>[]
+          }
+          upsert: {
+            args: Prisma.RadiationOnTreatmentReviewUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationOnTreatmentReviewPayload>
+          }
+          aggregate: {
+            args: Prisma.RadiationOnTreatmentReviewAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRadiationOnTreatmentReview>
+          }
+          groupBy: {
+            args: Prisma.RadiationOnTreatmentReviewGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RadiationOnTreatmentReviewGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RadiationOnTreatmentReviewCountArgs<ExtArgs>
+            result: $Utils.Optional<RadiationOnTreatmentReviewCountAggregateOutputType> | number
+          }
+        }
+      }
+      RadiationCompletionSummary: {
+        payload: Prisma.$RadiationCompletionSummaryPayload<ExtArgs>
+        fields: Prisma.RadiationCompletionSummaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RadiationCompletionSummaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RadiationCompletionSummaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>
+          }
+          findFirst: {
+            args: Prisma.RadiationCompletionSummaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RadiationCompletionSummaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>
+          }
+          findMany: {
+            args: Prisma.RadiationCompletionSummaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>[]
+          }
+          create: {
+            args: Prisma.RadiationCompletionSummaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>
+          }
+          createMany: {
+            args: Prisma.RadiationCompletionSummaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RadiationCompletionSummaryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>[]
+          }
+          delete: {
+            args: Prisma.RadiationCompletionSummaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>
+          }
+          update: {
+            args: Prisma.RadiationCompletionSummaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.RadiationCompletionSummaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RadiationCompletionSummaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RadiationCompletionSummaryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>[]
+          }
+          upsert: {
+            args: Prisma.RadiationCompletionSummaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RadiationCompletionSummaryPayload>
+          }
+          aggregate: {
+            args: Prisma.RadiationCompletionSummaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRadiationCompletionSummary>
+          }
+          groupBy: {
+            args: Prisma.RadiationCompletionSummaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RadiationCompletionSummaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RadiationCompletionSummaryCountArgs<ExtArgs>
+            result: $Utils.Optional<RadiationCompletionSummaryCountAggregateOutputType> | number
+          }
+        }
+      }
       OncologyCarePlan: {
         payload: Prisma.$OncologyCarePlanPayload<ExtArgs>
         fields: Prisma.OncologyCarePlanFieldRefs
@@ -1599,6 +2139,12 @@ export namespace Prisma {
     oncologyPrimarySiteMaster?: OncologyPrimarySiteMasterOmit
     oncologyCancerTypeSiteMapping?: OncologyCancerTypeSiteMappingOmit
     oncologyHistologyMaster?: OncologyHistologyMasterOmit
+    radiationPrescription?: RadiationPrescriptionOmit
+    radiationSimulation?: RadiationSimulationOmit
+    radiationTreatmentPlan?: RadiationTreatmentPlanOmit
+    radiationFraction?: RadiationFractionOmit
+    radiationOnTreatmentReview?: RadiationOnTreatmentReviewOmit
+    radiationCompletionSummary?: RadiationCompletionSummaryOmit
     oncologyCarePlan?: OncologyCarePlanOmit
   }
 
@@ -1814,6 +2360,126 @@ export namespace Prisma {
    */
   export type OncologyPrimarySiteMasterCountOutputTypeCountSiteMappingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OncologyCancerTypeSiteMappingWhereInput
+  }
+
+
+  /**
+   * Count Type RadiationPrescriptionCountOutputType
+   */
+
+  export type RadiationPrescriptionCountOutputType = {
+    simulations: number
+    treatmentPlans: number
+    reviews: number
+    completionSummaries: number
+  }
+
+  export type RadiationPrescriptionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    simulations?: boolean | RadiationPrescriptionCountOutputTypeCountSimulationsArgs
+    treatmentPlans?: boolean | RadiationPrescriptionCountOutputTypeCountTreatmentPlansArgs
+    reviews?: boolean | RadiationPrescriptionCountOutputTypeCountReviewsArgs
+    completionSummaries?: boolean | RadiationPrescriptionCountOutputTypeCountCompletionSummariesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RadiationPrescriptionCountOutputType without action
+   */
+  export type RadiationPrescriptionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescriptionCountOutputType
+     */
+    select?: RadiationPrescriptionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RadiationPrescriptionCountOutputType without action
+   */
+  export type RadiationPrescriptionCountOutputTypeCountSimulationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationSimulationWhereInput
+  }
+
+  /**
+   * RadiationPrescriptionCountOutputType without action
+   */
+  export type RadiationPrescriptionCountOutputTypeCountTreatmentPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationTreatmentPlanWhereInput
+  }
+
+  /**
+   * RadiationPrescriptionCountOutputType without action
+   */
+  export type RadiationPrescriptionCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationOnTreatmentReviewWhereInput
+  }
+
+  /**
+   * RadiationPrescriptionCountOutputType without action
+   */
+  export type RadiationPrescriptionCountOutputTypeCountCompletionSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationCompletionSummaryWhereInput
+  }
+
+
+  /**
+   * Count Type RadiationSimulationCountOutputType
+   */
+
+  export type RadiationSimulationCountOutputType = {
+    treatmentPlans: number
+  }
+
+  export type RadiationSimulationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    treatmentPlans?: boolean | RadiationSimulationCountOutputTypeCountTreatmentPlansArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RadiationSimulationCountOutputType without action
+   */
+  export type RadiationSimulationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulationCountOutputType
+     */
+    select?: RadiationSimulationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RadiationSimulationCountOutputType without action
+   */
+  export type RadiationSimulationCountOutputTypeCountTreatmentPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationTreatmentPlanWhereInput
+  }
+
+
+  /**
+   * Count Type RadiationTreatmentPlanCountOutputType
+   */
+
+  export type RadiationTreatmentPlanCountOutputType = {
+    fractions: number
+  }
+
+  export type RadiationTreatmentPlanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fractions?: boolean | RadiationTreatmentPlanCountOutputTypeCountFractionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RadiationTreatmentPlanCountOutputType without action
+   */
+  export type RadiationTreatmentPlanCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlanCountOutputType
+     */
+    select?: RadiationTreatmentPlanCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RadiationTreatmentPlanCountOutputType without action
+   */
+  export type RadiationTreatmentPlanCountOutputTypeCountFractionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationFractionWhereInput
   }
 
 
@@ -12937,6 +13603,7632 @@ export namespace Prisma {
 
 
   /**
+   * Model RadiationPrescription
+   */
+
+  export type AggregateRadiationPrescription = {
+    _count: RadiationPrescriptionCountAggregateOutputType | null
+    _avg: RadiationPrescriptionAvgAggregateOutputType | null
+    _sum: RadiationPrescriptionSumAggregateOutputType | null
+    _min: RadiationPrescriptionMinAggregateOutputType | null
+    _max: RadiationPrescriptionMaxAggregateOutputType | null
+  }
+
+  export type RadiationPrescriptionAvgAggregateOutputType = {
+    totalDoseGy: Decimal | null
+    dosePerFractionGy: Decimal | null
+    plannedFractions: number | null
+  }
+
+  export type RadiationPrescriptionSumAggregateOutputType = {
+    totalDoseGy: Decimal | null
+    dosePerFractionGy: Decimal | null
+    plannedFractions: number | null
+  }
+
+  export type RadiationPrescriptionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    encounterId: string | null
+    cancerProfileId: string | null
+    prescriptionNumber: string | null
+    treatmentIntent: string | null
+    treatmentSiteId: string | null
+    laterality: string | null
+    modality: string | null
+    technique: string | null
+    totalDoseGy: Decimal | null
+    dosePerFractionGy: Decimal | null
+    plannedFractions: number | null
+    concurrentChemo: boolean | null
+    plannedStartDate: Date | null
+    plannedEndDate: Date | null
+    prescriptionNotes: string | null
+    prescribedBy: string | null
+    prescribedAt: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationPrescriptionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    encounterId: string | null
+    cancerProfileId: string | null
+    prescriptionNumber: string | null
+    treatmentIntent: string | null
+    treatmentSiteId: string | null
+    laterality: string | null
+    modality: string | null
+    technique: string | null
+    totalDoseGy: Decimal | null
+    dosePerFractionGy: Decimal | null
+    plannedFractions: number | null
+    concurrentChemo: boolean | null
+    plannedStartDate: Date | null
+    plannedEndDate: Date | null
+    prescriptionNotes: string | null
+    prescribedBy: string | null
+    prescribedAt: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationPrescriptionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    encounterId: number
+    cancerProfileId: number
+    prescriptionNumber: number
+    treatmentIntent: number
+    treatmentSiteId: number
+    laterality: number
+    modality: number
+    technique: number
+    totalDoseGy: number
+    dosePerFractionGy: number
+    plannedFractions: number
+    concurrentChemo: number
+    plannedStartDate: number
+    plannedEndDate: number
+    prescriptionNotes: number
+    prescribedBy: number
+    prescribedAt: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RadiationPrescriptionAvgAggregateInputType = {
+    totalDoseGy?: true
+    dosePerFractionGy?: true
+    plannedFractions?: true
+  }
+
+  export type RadiationPrescriptionSumAggregateInputType = {
+    totalDoseGy?: true
+    dosePerFractionGy?: true
+    plannedFractions?: true
+  }
+
+  export type RadiationPrescriptionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    encounterId?: true
+    cancerProfileId?: true
+    prescriptionNumber?: true
+    treatmentIntent?: true
+    treatmentSiteId?: true
+    laterality?: true
+    modality?: true
+    technique?: true
+    totalDoseGy?: true
+    dosePerFractionGy?: true
+    plannedFractions?: true
+    concurrentChemo?: true
+    plannedStartDate?: true
+    plannedEndDate?: true
+    prescriptionNotes?: true
+    prescribedBy?: true
+    prescribedAt?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationPrescriptionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    encounterId?: true
+    cancerProfileId?: true
+    prescriptionNumber?: true
+    treatmentIntent?: true
+    treatmentSiteId?: true
+    laterality?: true
+    modality?: true
+    technique?: true
+    totalDoseGy?: true
+    dosePerFractionGy?: true
+    plannedFractions?: true
+    concurrentChemo?: true
+    plannedStartDate?: true
+    plannedEndDate?: true
+    prescriptionNotes?: true
+    prescribedBy?: true
+    prescribedAt?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationPrescriptionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    encounterId?: true
+    cancerProfileId?: true
+    prescriptionNumber?: true
+    treatmentIntent?: true
+    treatmentSiteId?: true
+    laterality?: true
+    modality?: true
+    technique?: true
+    totalDoseGy?: true
+    dosePerFractionGy?: true
+    plannedFractions?: true
+    concurrentChemo?: true
+    plannedStartDate?: true
+    plannedEndDate?: true
+    prescriptionNotes?: true
+    prescribedBy?: true
+    prescribedAt?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RadiationPrescriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationPrescription to aggregate.
+     */
+    where?: RadiationPrescriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationPrescriptions to fetch.
+     */
+    orderBy?: RadiationPrescriptionOrderByWithRelationInput | RadiationPrescriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RadiationPrescriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationPrescriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationPrescriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RadiationPrescriptions
+    **/
+    _count?: true | RadiationPrescriptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RadiationPrescriptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RadiationPrescriptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RadiationPrescriptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RadiationPrescriptionMaxAggregateInputType
+  }
+
+  export type GetRadiationPrescriptionAggregateType<T extends RadiationPrescriptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateRadiationPrescription]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRadiationPrescription[P]>
+      : GetScalarType<T[P], AggregateRadiationPrescription[P]>
+  }
+
+
+
+
+  export type RadiationPrescriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationPrescriptionWhereInput
+    orderBy?: RadiationPrescriptionOrderByWithAggregationInput | RadiationPrescriptionOrderByWithAggregationInput[]
+    by: RadiationPrescriptionScalarFieldEnum[] | RadiationPrescriptionScalarFieldEnum
+    having?: RadiationPrescriptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RadiationPrescriptionCountAggregateInputType | true
+    _avg?: RadiationPrescriptionAvgAggregateInputType
+    _sum?: RadiationPrescriptionSumAggregateInputType
+    _min?: RadiationPrescriptionMinAggregateInputType
+    _max?: RadiationPrescriptionMaxAggregateInputType
+  }
+
+  export type RadiationPrescriptionGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId: string | null
+    prescriptionNumber: string | null
+    treatmentIntent: string | null
+    treatmentSiteId: string | null
+    laterality: string | null
+    modality: string | null
+    technique: string | null
+    totalDoseGy: Decimal | null
+    dosePerFractionGy: Decimal | null
+    plannedFractions: number | null
+    concurrentChemo: boolean
+    plannedStartDate: Date | null
+    plannedEndDate: Date | null
+    prescriptionNotes: string | null
+    prescribedBy: string | null
+    prescribedAt: Date | null
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: RadiationPrescriptionCountAggregateOutputType | null
+    _avg: RadiationPrescriptionAvgAggregateOutputType | null
+    _sum: RadiationPrescriptionSumAggregateOutputType | null
+    _min: RadiationPrescriptionMinAggregateOutputType | null
+    _max: RadiationPrescriptionMaxAggregateOutputType | null
+  }
+
+  type GetRadiationPrescriptionGroupByPayload<T extends RadiationPrescriptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RadiationPrescriptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RadiationPrescriptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RadiationPrescriptionGroupByOutputType[P]>
+            : GetScalarType<T[P], RadiationPrescriptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RadiationPrescriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    cancerProfileId?: boolean
+    prescriptionNumber?: boolean
+    treatmentIntent?: boolean
+    treatmentSiteId?: boolean
+    laterality?: boolean
+    modality?: boolean
+    technique?: boolean
+    totalDoseGy?: boolean
+    dosePerFractionGy?: boolean
+    plannedFractions?: boolean
+    concurrentChemo?: boolean
+    plannedStartDate?: boolean
+    plannedEndDate?: boolean
+    prescriptionNotes?: boolean
+    prescribedBy?: boolean
+    prescribedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    simulations?: boolean | RadiationPrescription$simulationsArgs<ExtArgs>
+    treatmentPlans?: boolean | RadiationPrescription$treatmentPlansArgs<ExtArgs>
+    reviews?: boolean | RadiationPrescription$reviewsArgs<ExtArgs>
+    completionSummaries?: boolean | RadiationPrescription$completionSummariesArgs<ExtArgs>
+    _count?: boolean | RadiationPrescriptionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationPrescription"]>
+
+  export type RadiationPrescriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    cancerProfileId?: boolean
+    prescriptionNumber?: boolean
+    treatmentIntent?: boolean
+    treatmentSiteId?: boolean
+    laterality?: boolean
+    modality?: boolean
+    technique?: boolean
+    totalDoseGy?: boolean
+    dosePerFractionGy?: boolean
+    plannedFractions?: boolean
+    concurrentChemo?: boolean
+    plannedStartDate?: boolean
+    plannedEndDate?: boolean
+    prescriptionNotes?: boolean
+    prescribedBy?: boolean
+    prescribedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["radiationPrescription"]>
+
+  export type RadiationPrescriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    cancerProfileId?: boolean
+    prescriptionNumber?: boolean
+    treatmentIntent?: boolean
+    treatmentSiteId?: boolean
+    laterality?: boolean
+    modality?: boolean
+    technique?: boolean
+    totalDoseGy?: boolean
+    dosePerFractionGy?: boolean
+    plannedFractions?: boolean
+    concurrentChemo?: boolean
+    plannedStartDate?: boolean
+    plannedEndDate?: boolean
+    prescriptionNotes?: boolean
+    prescribedBy?: boolean
+    prescribedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["radiationPrescription"]>
+
+  export type RadiationPrescriptionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    cancerProfileId?: boolean
+    prescriptionNumber?: boolean
+    treatmentIntent?: boolean
+    treatmentSiteId?: boolean
+    laterality?: boolean
+    modality?: boolean
+    technique?: boolean
+    totalDoseGy?: boolean
+    dosePerFractionGy?: boolean
+    plannedFractions?: boolean
+    concurrentChemo?: boolean
+    plannedStartDate?: boolean
+    plannedEndDate?: boolean
+    prescriptionNotes?: boolean
+    prescribedBy?: boolean
+    prescribedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RadiationPrescriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "patientId" | "encounterId" | "cancerProfileId" | "prescriptionNumber" | "treatmentIntent" | "treatmentSiteId" | "laterality" | "modality" | "technique" | "totalDoseGy" | "dosePerFractionGy" | "plannedFractions" | "concurrentChemo" | "plannedStartDate" | "plannedEndDate" | "prescriptionNotes" | "prescribedBy" | "prescribedAt" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["radiationPrescription"]>
+  export type RadiationPrescriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    simulations?: boolean | RadiationPrescription$simulationsArgs<ExtArgs>
+    treatmentPlans?: boolean | RadiationPrescription$treatmentPlansArgs<ExtArgs>
+    reviews?: boolean | RadiationPrescription$reviewsArgs<ExtArgs>
+    completionSummaries?: boolean | RadiationPrescription$completionSummariesArgs<ExtArgs>
+    _count?: boolean | RadiationPrescriptionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RadiationPrescriptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type RadiationPrescriptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $RadiationPrescriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RadiationPrescription"
+    objects: {
+      simulations: Prisma.$RadiationSimulationPayload<ExtArgs>[]
+      treatmentPlans: Prisma.$RadiationTreatmentPlanPayload<ExtArgs>[]
+      reviews: Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>[]
+      completionSummaries: Prisma.$RadiationCompletionSummaryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      encounterId: string
+      cancerProfileId: string | null
+      prescriptionNumber: string | null
+      treatmentIntent: string | null
+      treatmentSiteId: string | null
+      laterality: string | null
+      modality: string | null
+      technique: string | null
+      totalDoseGy: Prisma.Decimal | null
+      dosePerFractionGy: Prisma.Decimal | null
+      plannedFractions: number | null
+      concurrentChemo: boolean
+      plannedStartDate: Date | null
+      plannedEndDate: Date | null
+      prescriptionNotes: string | null
+      prescribedBy: string | null
+      prescribedAt: Date | null
+      status: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["radiationPrescription"]>
+    composites: {}
+  }
+
+  type RadiationPrescriptionGetPayload<S extends boolean | null | undefined | RadiationPrescriptionDefaultArgs> = $Result.GetResult<Prisma.$RadiationPrescriptionPayload, S>
+
+  type RadiationPrescriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RadiationPrescriptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RadiationPrescriptionCountAggregateInputType | true
+    }
+
+  export interface RadiationPrescriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RadiationPrescription'], meta: { name: 'RadiationPrescription' } }
+    /**
+     * Find zero or one RadiationPrescription that matches the filter.
+     * @param {RadiationPrescriptionFindUniqueArgs} args - Arguments to find a RadiationPrescription
+     * @example
+     * // Get one RadiationPrescription
+     * const radiationPrescription = await prisma.radiationPrescription.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RadiationPrescriptionFindUniqueArgs>(args: SelectSubset<T, RadiationPrescriptionFindUniqueArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RadiationPrescription that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RadiationPrescriptionFindUniqueOrThrowArgs} args - Arguments to find a RadiationPrescription
+     * @example
+     * // Get one RadiationPrescription
+     * const radiationPrescription = await prisma.radiationPrescription.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RadiationPrescriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, RadiationPrescriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationPrescription that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationPrescriptionFindFirstArgs} args - Arguments to find a RadiationPrescription
+     * @example
+     * // Get one RadiationPrescription
+     * const radiationPrescription = await prisma.radiationPrescription.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RadiationPrescriptionFindFirstArgs>(args?: SelectSubset<T, RadiationPrescriptionFindFirstArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationPrescription that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationPrescriptionFindFirstOrThrowArgs} args - Arguments to find a RadiationPrescription
+     * @example
+     * // Get one RadiationPrescription
+     * const radiationPrescription = await prisma.radiationPrescription.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RadiationPrescriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, RadiationPrescriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RadiationPrescriptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationPrescriptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RadiationPrescriptions
+     * const radiationPrescriptions = await prisma.radiationPrescription.findMany()
+     * 
+     * // Get first 10 RadiationPrescriptions
+     * const radiationPrescriptions = await prisma.radiationPrescription.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const radiationPrescriptionWithIdOnly = await prisma.radiationPrescription.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RadiationPrescriptionFindManyArgs>(args?: SelectSubset<T, RadiationPrescriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RadiationPrescription.
+     * @param {RadiationPrescriptionCreateArgs} args - Arguments to create a RadiationPrescription.
+     * @example
+     * // Create one RadiationPrescription
+     * const RadiationPrescription = await prisma.radiationPrescription.create({
+     *   data: {
+     *     // ... data to create a RadiationPrescription
+     *   }
+     * })
+     * 
+     */
+    create<T extends RadiationPrescriptionCreateArgs>(args: SelectSubset<T, RadiationPrescriptionCreateArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RadiationPrescriptions.
+     * @param {RadiationPrescriptionCreateManyArgs} args - Arguments to create many RadiationPrescriptions.
+     * @example
+     * // Create many RadiationPrescriptions
+     * const radiationPrescription = await prisma.radiationPrescription.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RadiationPrescriptionCreateManyArgs>(args?: SelectSubset<T, RadiationPrescriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RadiationPrescriptions and returns the data saved in the database.
+     * @param {RadiationPrescriptionCreateManyAndReturnArgs} args - Arguments to create many RadiationPrescriptions.
+     * @example
+     * // Create many RadiationPrescriptions
+     * const radiationPrescription = await prisma.radiationPrescription.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RadiationPrescriptions and only return the `id`
+     * const radiationPrescriptionWithIdOnly = await prisma.radiationPrescription.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RadiationPrescriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, RadiationPrescriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RadiationPrescription.
+     * @param {RadiationPrescriptionDeleteArgs} args - Arguments to delete one RadiationPrescription.
+     * @example
+     * // Delete one RadiationPrescription
+     * const RadiationPrescription = await prisma.radiationPrescription.delete({
+     *   where: {
+     *     // ... filter to delete one RadiationPrescription
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RadiationPrescriptionDeleteArgs>(args: SelectSubset<T, RadiationPrescriptionDeleteArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RadiationPrescription.
+     * @param {RadiationPrescriptionUpdateArgs} args - Arguments to update one RadiationPrescription.
+     * @example
+     * // Update one RadiationPrescription
+     * const radiationPrescription = await prisma.radiationPrescription.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RadiationPrescriptionUpdateArgs>(args: SelectSubset<T, RadiationPrescriptionUpdateArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RadiationPrescriptions.
+     * @param {RadiationPrescriptionDeleteManyArgs} args - Arguments to filter RadiationPrescriptions to delete.
+     * @example
+     * // Delete a few RadiationPrescriptions
+     * const { count } = await prisma.radiationPrescription.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RadiationPrescriptionDeleteManyArgs>(args?: SelectSubset<T, RadiationPrescriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationPrescriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationPrescriptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RadiationPrescriptions
+     * const radiationPrescription = await prisma.radiationPrescription.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RadiationPrescriptionUpdateManyArgs>(args: SelectSubset<T, RadiationPrescriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationPrescriptions and returns the data updated in the database.
+     * @param {RadiationPrescriptionUpdateManyAndReturnArgs} args - Arguments to update many RadiationPrescriptions.
+     * @example
+     * // Update many RadiationPrescriptions
+     * const radiationPrescription = await prisma.radiationPrescription.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RadiationPrescriptions and only return the `id`
+     * const radiationPrescriptionWithIdOnly = await prisma.radiationPrescription.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RadiationPrescriptionUpdateManyAndReturnArgs>(args: SelectSubset<T, RadiationPrescriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RadiationPrescription.
+     * @param {RadiationPrescriptionUpsertArgs} args - Arguments to update or create a RadiationPrescription.
+     * @example
+     * // Update or create a RadiationPrescription
+     * const radiationPrescription = await prisma.radiationPrescription.upsert({
+     *   create: {
+     *     // ... data to create a RadiationPrescription
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RadiationPrescription we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RadiationPrescriptionUpsertArgs>(args: SelectSubset<T, RadiationPrescriptionUpsertArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RadiationPrescriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationPrescriptionCountArgs} args - Arguments to filter RadiationPrescriptions to count.
+     * @example
+     * // Count the number of RadiationPrescriptions
+     * const count = await prisma.radiationPrescription.count({
+     *   where: {
+     *     // ... the filter for the RadiationPrescriptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends RadiationPrescriptionCountArgs>(
+      args?: Subset<T, RadiationPrescriptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RadiationPrescriptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RadiationPrescription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationPrescriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RadiationPrescriptionAggregateArgs>(args: Subset<T, RadiationPrescriptionAggregateArgs>): Prisma.PrismaPromise<GetRadiationPrescriptionAggregateType<T>>
+
+    /**
+     * Group by RadiationPrescription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationPrescriptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RadiationPrescriptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RadiationPrescriptionGroupByArgs['orderBy'] }
+        : { orderBy?: RadiationPrescriptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RadiationPrescriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRadiationPrescriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RadiationPrescription model
+   */
+  readonly fields: RadiationPrescriptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RadiationPrescription.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RadiationPrescriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    simulations<T extends RadiationPrescription$simulationsArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescription$simulationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    treatmentPlans<T extends RadiationPrescription$treatmentPlansArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescription$treatmentPlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviews<T extends RadiationPrescription$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescription$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    completionSummaries<T extends RadiationPrescription$completionSummariesArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescription$completionSummariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RadiationPrescription model
+   */
+  interface RadiationPrescriptionFieldRefs {
+    readonly id: FieldRef<"RadiationPrescription", 'String'>
+    readonly tenantId: FieldRef<"RadiationPrescription", 'String'>
+    readonly patientId: FieldRef<"RadiationPrescription", 'String'>
+    readonly encounterId: FieldRef<"RadiationPrescription", 'String'>
+    readonly cancerProfileId: FieldRef<"RadiationPrescription", 'String'>
+    readonly prescriptionNumber: FieldRef<"RadiationPrescription", 'String'>
+    readonly treatmentIntent: FieldRef<"RadiationPrescription", 'String'>
+    readonly treatmentSiteId: FieldRef<"RadiationPrescription", 'String'>
+    readonly laterality: FieldRef<"RadiationPrescription", 'String'>
+    readonly modality: FieldRef<"RadiationPrescription", 'String'>
+    readonly technique: FieldRef<"RadiationPrescription", 'String'>
+    readonly totalDoseGy: FieldRef<"RadiationPrescription", 'Decimal'>
+    readonly dosePerFractionGy: FieldRef<"RadiationPrescription", 'Decimal'>
+    readonly plannedFractions: FieldRef<"RadiationPrescription", 'Int'>
+    readonly concurrentChemo: FieldRef<"RadiationPrescription", 'Boolean'>
+    readonly plannedStartDate: FieldRef<"RadiationPrescription", 'DateTime'>
+    readonly plannedEndDate: FieldRef<"RadiationPrescription", 'DateTime'>
+    readonly prescriptionNotes: FieldRef<"RadiationPrescription", 'String'>
+    readonly prescribedBy: FieldRef<"RadiationPrescription", 'String'>
+    readonly prescribedAt: FieldRef<"RadiationPrescription", 'DateTime'>
+    readonly status: FieldRef<"RadiationPrescription", 'String'>
+    readonly createdAt: FieldRef<"RadiationPrescription", 'DateTime'>
+    readonly updatedAt: FieldRef<"RadiationPrescription", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RadiationPrescription findUnique
+   */
+  export type RadiationPrescriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationPrescription to fetch.
+     */
+    where: RadiationPrescriptionWhereUniqueInput
+  }
+
+  /**
+   * RadiationPrescription findUniqueOrThrow
+   */
+  export type RadiationPrescriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationPrescription to fetch.
+     */
+    where: RadiationPrescriptionWhereUniqueInput
+  }
+
+  /**
+   * RadiationPrescription findFirst
+   */
+  export type RadiationPrescriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationPrescription to fetch.
+     */
+    where?: RadiationPrescriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationPrescriptions to fetch.
+     */
+    orderBy?: RadiationPrescriptionOrderByWithRelationInput | RadiationPrescriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationPrescriptions.
+     */
+    cursor?: RadiationPrescriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationPrescriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationPrescriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationPrescriptions.
+     */
+    distinct?: RadiationPrescriptionScalarFieldEnum | RadiationPrescriptionScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationPrescription findFirstOrThrow
+   */
+  export type RadiationPrescriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationPrescription to fetch.
+     */
+    where?: RadiationPrescriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationPrescriptions to fetch.
+     */
+    orderBy?: RadiationPrescriptionOrderByWithRelationInput | RadiationPrescriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationPrescriptions.
+     */
+    cursor?: RadiationPrescriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationPrescriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationPrescriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationPrescriptions.
+     */
+    distinct?: RadiationPrescriptionScalarFieldEnum | RadiationPrescriptionScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationPrescription findMany
+   */
+  export type RadiationPrescriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationPrescriptions to fetch.
+     */
+    where?: RadiationPrescriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationPrescriptions to fetch.
+     */
+    orderBy?: RadiationPrescriptionOrderByWithRelationInput | RadiationPrescriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RadiationPrescriptions.
+     */
+    cursor?: RadiationPrescriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationPrescriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationPrescriptions.
+     */
+    skip?: number
+    distinct?: RadiationPrescriptionScalarFieldEnum | RadiationPrescriptionScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationPrescription create
+   */
+  export type RadiationPrescriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RadiationPrescription.
+     */
+    data: XOR<RadiationPrescriptionCreateInput, RadiationPrescriptionUncheckedCreateInput>
+  }
+
+  /**
+   * RadiationPrescription createMany
+   */
+  export type RadiationPrescriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RadiationPrescriptions.
+     */
+    data: RadiationPrescriptionCreateManyInput | RadiationPrescriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RadiationPrescription createManyAndReturn
+   */
+  export type RadiationPrescriptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many RadiationPrescriptions.
+     */
+    data: RadiationPrescriptionCreateManyInput | RadiationPrescriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RadiationPrescription update
+   */
+  export type RadiationPrescriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RadiationPrescription.
+     */
+    data: XOR<RadiationPrescriptionUpdateInput, RadiationPrescriptionUncheckedUpdateInput>
+    /**
+     * Choose, which RadiationPrescription to update.
+     */
+    where: RadiationPrescriptionWhereUniqueInput
+  }
+
+  /**
+   * RadiationPrescription updateMany
+   */
+  export type RadiationPrescriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RadiationPrescriptions.
+     */
+    data: XOR<RadiationPrescriptionUpdateManyMutationInput, RadiationPrescriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationPrescriptions to update
+     */
+    where?: RadiationPrescriptionWhereInput
+    /**
+     * Limit how many RadiationPrescriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationPrescription updateManyAndReturn
+   */
+  export type RadiationPrescriptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * The data used to update RadiationPrescriptions.
+     */
+    data: XOR<RadiationPrescriptionUpdateManyMutationInput, RadiationPrescriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationPrescriptions to update
+     */
+    where?: RadiationPrescriptionWhereInput
+    /**
+     * Limit how many RadiationPrescriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationPrescription upsert
+   */
+  export type RadiationPrescriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RadiationPrescription to update in case it exists.
+     */
+    where: RadiationPrescriptionWhereUniqueInput
+    /**
+     * In case the RadiationPrescription found by the `where` argument doesn't exist, create a new RadiationPrescription with this data.
+     */
+    create: XOR<RadiationPrescriptionCreateInput, RadiationPrescriptionUncheckedCreateInput>
+    /**
+     * In case the RadiationPrescription was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RadiationPrescriptionUpdateInput, RadiationPrescriptionUncheckedUpdateInput>
+  }
+
+  /**
+   * RadiationPrescription delete
+   */
+  export type RadiationPrescriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+    /**
+     * Filter which RadiationPrescription to delete.
+     */
+    where: RadiationPrescriptionWhereUniqueInput
+  }
+
+  /**
+   * RadiationPrescription deleteMany
+   */
+  export type RadiationPrescriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationPrescriptions to delete
+     */
+    where?: RadiationPrescriptionWhereInput
+    /**
+     * Limit how many RadiationPrescriptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationPrescription.simulations
+   */
+  export type RadiationPrescription$simulationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    where?: RadiationSimulationWhereInput
+    orderBy?: RadiationSimulationOrderByWithRelationInput | RadiationSimulationOrderByWithRelationInput[]
+    cursor?: RadiationSimulationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RadiationSimulationScalarFieldEnum | RadiationSimulationScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationPrescription.treatmentPlans
+   */
+  export type RadiationPrescription$treatmentPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    where?: RadiationTreatmentPlanWhereInput
+    orderBy?: RadiationTreatmentPlanOrderByWithRelationInput | RadiationTreatmentPlanOrderByWithRelationInput[]
+    cursor?: RadiationTreatmentPlanWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RadiationTreatmentPlanScalarFieldEnum | RadiationTreatmentPlanScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationPrescription.reviews
+   */
+  export type RadiationPrescription$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    where?: RadiationOnTreatmentReviewWhereInput
+    orderBy?: RadiationOnTreatmentReviewOrderByWithRelationInput | RadiationOnTreatmentReviewOrderByWithRelationInput[]
+    cursor?: RadiationOnTreatmentReviewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RadiationOnTreatmentReviewScalarFieldEnum | RadiationOnTreatmentReviewScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationPrescription.completionSummaries
+   */
+  export type RadiationPrescription$completionSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    where?: RadiationCompletionSummaryWhereInput
+    orderBy?: RadiationCompletionSummaryOrderByWithRelationInput | RadiationCompletionSummaryOrderByWithRelationInput[]
+    cursor?: RadiationCompletionSummaryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RadiationCompletionSummaryScalarFieldEnum | RadiationCompletionSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationPrescription without action
+   */
+  export type RadiationPrescriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationPrescription
+     */
+    select?: RadiationPrescriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationPrescription
+     */
+    omit?: RadiationPrescriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationPrescriptionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RadiationSimulation
+   */
+
+  export type AggregateRadiationSimulation = {
+    _count: RadiationSimulationCountAggregateOutputType | null
+    _min: RadiationSimulationMinAggregateOutputType | null
+    _max: RadiationSimulationMaxAggregateOutputType | null
+  }
+
+  export type RadiationSimulationMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    simulationDate: Date | null
+    patientPosition: string | null
+    immobilizationDevice: string | null
+    contrastUsed: boolean | null
+    scanRegion: string | null
+    setupReference: string | null
+    tattooMarkingDone: boolean | null
+    simulationNotes: string | null
+    performedBy: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationSimulationMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    simulationDate: Date | null
+    patientPosition: string | null
+    immobilizationDevice: string | null
+    contrastUsed: boolean | null
+    scanRegion: string | null
+    setupReference: string | null
+    tattooMarkingDone: boolean | null
+    simulationNotes: string | null
+    performedBy: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationSimulationCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    prescriptionId: number
+    simulationDate: number
+    patientPosition: number
+    immobilizationDevice: number
+    contrastUsed: number
+    scanRegion: number
+    setupReference: number
+    tattooMarkingDone: number
+    simulationNotes: number
+    performedBy: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RadiationSimulationMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    simulationDate?: true
+    patientPosition?: true
+    immobilizationDevice?: true
+    contrastUsed?: true
+    scanRegion?: true
+    setupReference?: true
+    tattooMarkingDone?: true
+    simulationNotes?: true
+    performedBy?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationSimulationMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    simulationDate?: true
+    patientPosition?: true
+    immobilizationDevice?: true
+    contrastUsed?: true
+    scanRegion?: true
+    setupReference?: true
+    tattooMarkingDone?: true
+    simulationNotes?: true
+    performedBy?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationSimulationCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    simulationDate?: true
+    patientPosition?: true
+    immobilizationDevice?: true
+    contrastUsed?: true
+    scanRegion?: true
+    setupReference?: true
+    tattooMarkingDone?: true
+    simulationNotes?: true
+    performedBy?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RadiationSimulationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationSimulation to aggregate.
+     */
+    where?: RadiationSimulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationSimulations to fetch.
+     */
+    orderBy?: RadiationSimulationOrderByWithRelationInput | RadiationSimulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RadiationSimulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationSimulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationSimulations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RadiationSimulations
+    **/
+    _count?: true | RadiationSimulationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RadiationSimulationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RadiationSimulationMaxAggregateInputType
+  }
+
+  export type GetRadiationSimulationAggregateType<T extends RadiationSimulationAggregateArgs> = {
+        [P in keyof T & keyof AggregateRadiationSimulation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRadiationSimulation[P]>
+      : GetScalarType<T[P], AggregateRadiationSimulation[P]>
+  }
+
+
+
+
+  export type RadiationSimulationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationSimulationWhereInput
+    orderBy?: RadiationSimulationOrderByWithAggregationInput | RadiationSimulationOrderByWithAggregationInput[]
+    by: RadiationSimulationScalarFieldEnum[] | RadiationSimulationScalarFieldEnum
+    having?: RadiationSimulationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RadiationSimulationCountAggregateInputType | true
+    _min?: RadiationSimulationMinAggregateInputType
+    _max?: RadiationSimulationMaxAggregateInputType
+  }
+
+  export type RadiationSimulationGroupByOutputType = {
+    id: string
+    tenantId: string
+    prescriptionId: string
+    simulationDate: Date | null
+    patientPosition: string | null
+    immobilizationDevice: string | null
+    contrastUsed: boolean
+    scanRegion: string | null
+    setupReference: string | null
+    tattooMarkingDone: boolean
+    simulationNotes: string | null
+    performedBy: string | null
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: RadiationSimulationCountAggregateOutputType | null
+    _min: RadiationSimulationMinAggregateOutputType | null
+    _max: RadiationSimulationMaxAggregateOutputType | null
+  }
+
+  type GetRadiationSimulationGroupByPayload<T extends RadiationSimulationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RadiationSimulationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RadiationSimulationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RadiationSimulationGroupByOutputType[P]>
+            : GetScalarType<T[P], RadiationSimulationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RadiationSimulationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationDate?: boolean
+    patientPosition?: boolean
+    immobilizationDevice?: boolean
+    contrastUsed?: boolean
+    scanRegion?: boolean
+    setupReference?: boolean
+    tattooMarkingDone?: boolean
+    simulationNotes?: boolean
+    performedBy?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    treatmentPlans?: boolean | RadiationSimulation$treatmentPlansArgs<ExtArgs>
+    _count?: boolean | RadiationSimulationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationSimulation"]>
+
+  export type RadiationSimulationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationDate?: boolean
+    patientPosition?: boolean
+    immobilizationDevice?: boolean
+    contrastUsed?: boolean
+    scanRegion?: boolean
+    setupReference?: boolean
+    tattooMarkingDone?: boolean
+    simulationNotes?: boolean
+    performedBy?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationSimulation"]>
+
+  export type RadiationSimulationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationDate?: boolean
+    patientPosition?: boolean
+    immobilizationDevice?: boolean
+    contrastUsed?: boolean
+    scanRegion?: boolean
+    setupReference?: boolean
+    tattooMarkingDone?: boolean
+    simulationNotes?: boolean
+    performedBy?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationSimulation"]>
+
+  export type RadiationSimulationSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationDate?: boolean
+    patientPosition?: boolean
+    immobilizationDevice?: boolean
+    contrastUsed?: boolean
+    scanRegion?: boolean
+    setupReference?: boolean
+    tattooMarkingDone?: boolean
+    simulationNotes?: boolean
+    performedBy?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RadiationSimulationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "prescriptionId" | "simulationDate" | "patientPosition" | "immobilizationDevice" | "contrastUsed" | "scanRegion" | "setupReference" | "tattooMarkingDone" | "simulationNotes" | "performedBy" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["radiationSimulation"]>
+  export type RadiationSimulationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    treatmentPlans?: boolean | RadiationSimulation$treatmentPlansArgs<ExtArgs>
+    _count?: boolean | RadiationSimulationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RadiationSimulationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+  export type RadiationSimulationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+
+  export type $RadiationSimulationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RadiationSimulation"
+    objects: {
+      prescription: Prisma.$RadiationPrescriptionPayload<ExtArgs>
+      treatmentPlans: Prisma.$RadiationTreatmentPlanPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      prescriptionId: string
+      simulationDate: Date | null
+      patientPosition: string | null
+      immobilizationDevice: string | null
+      contrastUsed: boolean
+      scanRegion: string | null
+      setupReference: string | null
+      tattooMarkingDone: boolean
+      simulationNotes: string | null
+      performedBy: string | null
+      status: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["radiationSimulation"]>
+    composites: {}
+  }
+
+  type RadiationSimulationGetPayload<S extends boolean | null | undefined | RadiationSimulationDefaultArgs> = $Result.GetResult<Prisma.$RadiationSimulationPayload, S>
+
+  type RadiationSimulationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RadiationSimulationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RadiationSimulationCountAggregateInputType | true
+    }
+
+  export interface RadiationSimulationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RadiationSimulation'], meta: { name: 'RadiationSimulation' } }
+    /**
+     * Find zero or one RadiationSimulation that matches the filter.
+     * @param {RadiationSimulationFindUniqueArgs} args - Arguments to find a RadiationSimulation
+     * @example
+     * // Get one RadiationSimulation
+     * const radiationSimulation = await prisma.radiationSimulation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RadiationSimulationFindUniqueArgs>(args: SelectSubset<T, RadiationSimulationFindUniqueArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RadiationSimulation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RadiationSimulationFindUniqueOrThrowArgs} args - Arguments to find a RadiationSimulation
+     * @example
+     * // Get one RadiationSimulation
+     * const radiationSimulation = await prisma.radiationSimulation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RadiationSimulationFindUniqueOrThrowArgs>(args: SelectSubset<T, RadiationSimulationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationSimulation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationSimulationFindFirstArgs} args - Arguments to find a RadiationSimulation
+     * @example
+     * // Get one RadiationSimulation
+     * const radiationSimulation = await prisma.radiationSimulation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RadiationSimulationFindFirstArgs>(args?: SelectSubset<T, RadiationSimulationFindFirstArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationSimulation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationSimulationFindFirstOrThrowArgs} args - Arguments to find a RadiationSimulation
+     * @example
+     * // Get one RadiationSimulation
+     * const radiationSimulation = await prisma.radiationSimulation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RadiationSimulationFindFirstOrThrowArgs>(args?: SelectSubset<T, RadiationSimulationFindFirstOrThrowArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RadiationSimulations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationSimulationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RadiationSimulations
+     * const radiationSimulations = await prisma.radiationSimulation.findMany()
+     * 
+     * // Get first 10 RadiationSimulations
+     * const radiationSimulations = await prisma.radiationSimulation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const radiationSimulationWithIdOnly = await prisma.radiationSimulation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RadiationSimulationFindManyArgs>(args?: SelectSubset<T, RadiationSimulationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RadiationSimulation.
+     * @param {RadiationSimulationCreateArgs} args - Arguments to create a RadiationSimulation.
+     * @example
+     * // Create one RadiationSimulation
+     * const RadiationSimulation = await prisma.radiationSimulation.create({
+     *   data: {
+     *     // ... data to create a RadiationSimulation
+     *   }
+     * })
+     * 
+     */
+    create<T extends RadiationSimulationCreateArgs>(args: SelectSubset<T, RadiationSimulationCreateArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RadiationSimulations.
+     * @param {RadiationSimulationCreateManyArgs} args - Arguments to create many RadiationSimulations.
+     * @example
+     * // Create many RadiationSimulations
+     * const radiationSimulation = await prisma.radiationSimulation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RadiationSimulationCreateManyArgs>(args?: SelectSubset<T, RadiationSimulationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RadiationSimulations and returns the data saved in the database.
+     * @param {RadiationSimulationCreateManyAndReturnArgs} args - Arguments to create many RadiationSimulations.
+     * @example
+     * // Create many RadiationSimulations
+     * const radiationSimulation = await prisma.radiationSimulation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RadiationSimulations and only return the `id`
+     * const radiationSimulationWithIdOnly = await prisma.radiationSimulation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RadiationSimulationCreateManyAndReturnArgs>(args?: SelectSubset<T, RadiationSimulationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RadiationSimulation.
+     * @param {RadiationSimulationDeleteArgs} args - Arguments to delete one RadiationSimulation.
+     * @example
+     * // Delete one RadiationSimulation
+     * const RadiationSimulation = await prisma.radiationSimulation.delete({
+     *   where: {
+     *     // ... filter to delete one RadiationSimulation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RadiationSimulationDeleteArgs>(args: SelectSubset<T, RadiationSimulationDeleteArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RadiationSimulation.
+     * @param {RadiationSimulationUpdateArgs} args - Arguments to update one RadiationSimulation.
+     * @example
+     * // Update one RadiationSimulation
+     * const radiationSimulation = await prisma.radiationSimulation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RadiationSimulationUpdateArgs>(args: SelectSubset<T, RadiationSimulationUpdateArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RadiationSimulations.
+     * @param {RadiationSimulationDeleteManyArgs} args - Arguments to filter RadiationSimulations to delete.
+     * @example
+     * // Delete a few RadiationSimulations
+     * const { count } = await prisma.radiationSimulation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RadiationSimulationDeleteManyArgs>(args?: SelectSubset<T, RadiationSimulationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationSimulations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationSimulationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RadiationSimulations
+     * const radiationSimulation = await prisma.radiationSimulation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RadiationSimulationUpdateManyArgs>(args: SelectSubset<T, RadiationSimulationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationSimulations and returns the data updated in the database.
+     * @param {RadiationSimulationUpdateManyAndReturnArgs} args - Arguments to update many RadiationSimulations.
+     * @example
+     * // Update many RadiationSimulations
+     * const radiationSimulation = await prisma.radiationSimulation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RadiationSimulations and only return the `id`
+     * const radiationSimulationWithIdOnly = await prisma.radiationSimulation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RadiationSimulationUpdateManyAndReturnArgs>(args: SelectSubset<T, RadiationSimulationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RadiationSimulation.
+     * @param {RadiationSimulationUpsertArgs} args - Arguments to update or create a RadiationSimulation.
+     * @example
+     * // Update or create a RadiationSimulation
+     * const radiationSimulation = await prisma.radiationSimulation.upsert({
+     *   create: {
+     *     // ... data to create a RadiationSimulation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RadiationSimulation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RadiationSimulationUpsertArgs>(args: SelectSubset<T, RadiationSimulationUpsertArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RadiationSimulations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationSimulationCountArgs} args - Arguments to filter RadiationSimulations to count.
+     * @example
+     * // Count the number of RadiationSimulations
+     * const count = await prisma.radiationSimulation.count({
+     *   where: {
+     *     // ... the filter for the RadiationSimulations we want to count
+     *   }
+     * })
+    **/
+    count<T extends RadiationSimulationCountArgs>(
+      args?: Subset<T, RadiationSimulationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RadiationSimulationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RadiationSimulation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationSimulationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RadiationSimulationAggregateArgs>(args: Subset<T, RadiationSimulationAggregateArgs>): Prisma.PrismaPromise<GetRadiationSimulationAggregateType<T>>
+
+    /**
+     * Group by RadiationSimulation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationSimulationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RadiationSimulationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RadiationSimulationGroupByArgs['orderBy'] }
+        : { orderBy?: RadiationSimulationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RadiationSimulationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRadiationSimulationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RadiationSimulation model
+   */
+  readonly fields: RadiationSimulationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RadiationSimulation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RadiationSimulationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    prescription<T extends RadiationPrescriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescriptionDefaultArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    treatmentPlans<T extends RadiationSimulation$treatmentPlansArgs<ExtArgs> = {}>(args?: Subset<T, RadiationSimulation$treatmentPlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RadiationSimulation model
+   */
+  interface RadiationSimulationFieldRefs {
+    readonly id: FieldRef<"RadiationSimulation", 'String'>
+    readonly tenantId: FieldRef<"RadiationSimulation", 'String'>
+    readonly prescriptionId: FieldRef<"RadiationSimulation", 'String'>
+    readonly simulationDate: FieldRef<"RadiationSimulation", 'DateTime'>
+    readonly patientPosition: FieldRef<"RadiationSimulation", 'String'>
+    readonly immobilizationDevice: FieldRef<"RadiationSimulation", 'String'>
+    readonly contrastUsed: FieldRef<"RadiationSimulation", 'Boolean'>
+    readonly scanRegion: FieldRef<"RadiationSimulation", 'String'>
+    readonly setupReference: FieldRef<"RadiationSimulation", 'String'>
+    readonly tattooMarkingDone: FieldRef<"RadiationSimulation", 'Boolean'>
+    readonly simulationNotes: FieldRef<"RadiationSimulation", 'String'>
+    readonly performedBy: FieldRef<"RadiationSimulation", 'String'>
+    readonly status: FieldRef<"RadiationSimulation", 'String'>
+    readonly createdAt: FieldRef<"RadiationSimulation", 'DateTime'>
+    readonly updatedAt: FieldRef<"RadiationSimulation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RadiationSimulation findUnique
+   */
+  export type RadiationSimulationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationSimulation to fetch.
+     */
+    where: RadiationSimulationWhereUniqueInput
+  }
+
+  /**
+   * RadiationSimulation findUniqueOrThrow
+   */
+  export type RadiationSimulationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationSimulation to fetch.
+     */
+    where: RadiationSimulationWhereUniqueInput
+  }
+
+  /**
+   * RadiationSimulation findFirst
+   */
+  export type RadiationSimulationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationSimulation to fetch.
+     */
+    where?: RadiationSimulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationSimulations to fetch.
+     */
+    orderBy?: RadiationSimulationOrderByWithRelationInput | RadiationSimulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationSimulations.
+     */
+    cursor?: RadiationSimulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationSimulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationSimulations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationSimulations.
+     */
+    distinct?: RadiationSimulationScalarFieldEnum | RadiationSimulationScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationSimulation findFirstOrThrow
+   */
+  export type RadiationSimulationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationSimulation to fetch.
+     */
+    where?: RadiationSimulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationSimulations to fetch.
+     */
+    orderBy?: RadiationSimulationOrderByWithRelationInput | RadiationSimulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationSimulations.
+     */
+    cursor?: RadiationSimulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationSimulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationSimulations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationSimulations.
+     */
+    distinct?: RadiationSimulationScalarFieldEnum | RadiationSimulationScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationSimulation findMany
+   */
+  export type RadiationSimulationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationSimulations to fetch.
+     */
+    where?: RadiationSimulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationSimulations to fetch.
+     */
+    orderBy?: RadiationSimulationOrderByWithRelationInput | RadiationSimulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RadiationSimulations.
+     */
+    cursor?: RadiationSimulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationSimulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationSimulations.
+     */
+    skip?: number
+    distinct?: RadiationSimulationScalarFieldEnum | RadiationSimulationScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationSimulation create
+   */
+  export type RadiationSimulationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RadiationSimulation.
+     */
+    data: XOR<RadiationSimulationCreateInput, RadiationSimulationUncheckedCreateInput>
+  }
+
+  /**
+   * RadiationSimulation createMany
+   */
+  export type RadiationSimulationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RadiationSimulations.
+     */
+    data: RadiationSimulationCreateManyInput | RadiationSimulationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RadiationSimulation createManyAndReturn
+   */
+  export type RadiationSimulationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * The data used to create many RadiationSimulations.
+     */
+    data: RadiationSimulationCreateManyInput | RadiationSimulationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationSimulation update
+   */
+  export type RadiationSimulationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RadiationSimulation.
+     */
+    data: XOR<RadiationSimulationUpdateInput, RadiationSimulationUncheckedUpdateInput>
+    /**
+     * Choose, which RadiationSimulation to update.
+     */
+    where: RadiationSimulationWhereUniqueInput
+  }
+
+  /**
+   * RadiationSimulation updateMany
+   */
+  export type RadiationSimulationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RadiationSimulations.
+     */
+    data: XOR<RadiationSimulationUpdateManyMutationInput, RadiationSimulationUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationSimulations to update
+     */
+    where?: RadiationSimulationWhereInput
+    /**
+     * Limit how many RadiationSimulations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationSimulation updateManyAndReturn
+   */
+  export type RadiationSimulationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * The data used to update RadiationSimulations.
+     */
+    data: XOR<RadiationSimulationUpdateManyMutationInput, RadiationSimulationUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationSimulations to update
+     */
+    where?: RadiationSimulationWhereInput
+    /**
+     * Limit how many RadiationSimulations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationSimulation upsert
+   */
+  export type RadiationSimulationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RadiationSimulation to update in case it exists.
+     */
+    where: RadiationSimulationWhereUniqueInput
+    /**
+     * In case the RadiationSimulation found by the `where` argument doesn't exist, create a new RadiationSimulation with this data.
+     */
+    create: XOR<RadiationSimulationCreateInput, RadiationSimulationUncheckedCreateInput>
+    /**
+     * In case the RadiationSimulation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RadiationSimulationUpdateInput, RadiationSimulationUncheckedUpdateInput>
+  }
+
+  /**
+   * RadiationSimulation delete
+   */
+  export type RadiationSimulationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    /**
+     * Filter which RadiationSimulation to delete.
+     */
+    where: RadiationSimulationWhereUniqueInput
+  }
+
+  /**
+   * RadiationSimulation deleteMany
+   */
+  export type RadiationSimulationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationSimulations to delete
+     */
+    where?: RadiationSimulationWhereInput
+    /**
+     * Limit how many RadiationSimulations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationSimulation.treatmentPlans
+   */
+  export type RadiationSimulation$treatmentPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    where?: RadiationTreatmentPlanWhereInput
+    orderBy?: RadiationTreatmentPlanOrderByWithRelationInput | RadiationTreatmentPlanOrderByWithRelationInput[]
+    cursor?: RadiationTreatmentPlanWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RadiationTreatmentPlanScalarFieldEnum | RadiationTreatmentPlanScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationSimulation without action
+   */
+  export type RadiationSimulationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RadiationTreatmentPlan
+   */
+
+  export type AggregateRadiationTreatmentPlan = {
+    _count: RadiationTreatmentPlanCountAggregateOutputType | null
+    _min: RadiationTreatmentPlanMinAggregateOutputType | null
+    _max: RadiationTreatmentPlanMaxAggregateOutputType | null
+  }
+
+  export type RadiationTreatmentPlanMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    simulationId: string | null
+    externalPlanReference: string | null
+    planningSystem: string | null
+    planningStatus: string | null
+    plannerId: string | null
+    physicistId: string | null
+    radiationOncologistId: string | null
+    contouringCompleted: boolean | null
+    physicsQaCompleted: boolean | null
+    treatmentMachine: string | null
+    planNotes: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationTreatmentPlanMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    simulationId: string | null
+    externalPlanReference: string | null
+    planningSystem: string | null
+    planningStatus: string | null
+    plannerId: string | null
+    physicistId: string | null
+    radiationOncologistId: string | null
+    contouringCompleted: boolean | null
+    physicsQaCompleted: boolean | null
+    treatmentMachine: string | null
+    planNotes: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationTreatmentPlanCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    prescriptionId: number
+    simulationId: number
+    externalPlanReference: number
+    planningSystem: number
+    planningStatus: number
+    plannerId: number
+    physicistId: number
+    radiationOncologistId: number
+    contouringCompleted: number
+    physicsQaCompleted: number
+    treatmentMachine: number
+    planNotes: number
+    approvedBy: number
+    approvedAt: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RadiationTreatmentPlanMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    simulationId?: true
+    externalPlanReference?: true
+    planningSystem?: true
+    planningStatus?: true
+    plannerId?: true
+    physicistId?: true
+    radiationOncologistId?: true
+    contouringCompleted?: true
+    physicsQaCompleted?: true
+    treatmentMachine?: true
+    planNotes?: true
+    approvedBy?: true
+    approvedAt?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationTreatmentPlanMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    simulationId?: true
+    externalPlanReference?: true
+    planningSystem?: true
+    planningStatus?: true
+    plannerId?: true
+    physicistId?: true
+    radiationOncologistId?: true
+    contouringCompleted?: true
+    physicsQaCompleted?: true
+    treatmentMachine?: true
+    planNotes?: true
+    approvedBy?: true
+    approvedAt?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationTreatmentPlanCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    simulationId?: true
+    externalPlanReference?: true
+    planningSystem?: true
+    planningStatus?: true
+    plannerId?: true
+    physicistId?: true
+    radiationOncologistId?: true
+    contouringCompleted?: true
+    physicsQaCompleted?: true
+    treatmentMachine?: true
+    planNotes?: true
+    approvedBy?: true
+    approvedAt?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RadiationTreatmentPlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationTreatmentPlan to aggregate.
+     */
+    where?: RadiationTreatmentPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationTreatmentPlans to fetch.
+     */
+    orderBy?: RadiationTreatmentPlanOrderByWithRelationInput | RadiationTreatmentPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RadiationTreatmentPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationTreatmentPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationTreatmentPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RadiationTreatmentPlans
+    **/
+    _count?: true | RadiationTreatmentPlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RadiationTreatmentPlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RadiationTreatmentPlanMaxAggregateInputType
+  }
+
+  export type GetRadiationTreatmentPlanAggregateType<T extends RadiationTreatmentPlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateRadiationTreatmentPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRadiationTreatmentPlan[P]>
+      : GetScalarType<T[P], AggregateRadiationTreatmentPlan[P]>
+  }
+
+
+
+
+  export type RadiationTreatmentPlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationTreatmentPlanWhereInput
+    orderBy?: RadiationTreatmentPlanOrderByWithAggregationInput | RadiationTreatmentPlanOrderByWithAggregationInput[]
+    by: RadiationTreatmentPlanScalarFieldEnum[] | RadiationTreatmentPlanScalarFieldEnum
+    having?: RadiationTreatmentPlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RadiationTreatmentPlanCountAggregateInputType | true
+    _min?: RadiationTreatmentPlanMinAggregateInputType
+    _max?: RadiationTreatmentPlanMaxAggregateInputType
+  }
+
+  export type RadiationTreatmentPlanGroupByOutputType = {
+    id: string
+    tenantId: string
+    prescriptionId: string
+    simulationId: string | null
+    externalPlanReference: string | null
+    planningSystem: string | null
+    planningStatus: string | null
+    plannerId: string | null
+    physicistId: string | null
+    radiationOncologistId: string | null
+    contouringCompleted: boolean
+    physicsQaCompleted: boolean
+    treatmentMachine: string | null
+    planNotes: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: RadiationTreatmentPlanCountAggregateOutputType | null
+    _min: RadiationTreatmentPlanMinAggregateOutputType | null
+    _max: RadiationTreatmentPlanMaxAggregateOutputType | null
+  }
+
+  type GetRadiationTreatmentPlanGroupByPayload<T extends RadiationTreatmentPlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RadiationTreatmentPlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RadiationTreatmentPlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RadiationTreatmentPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], RadiationTreatmentPlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RadiationTreatmentPlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationId?: boolean
+    externalPlanReference?: boolean
+    planningSystem?: boolean
+    planningStatus?: boolean
+    plannerId?: boolean
+    physicistId?: boolean
+    radiationOncologistId?: boolean
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: boolean
+    planNotes?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    simulation?: boolean | RadiationTreatmentPlan$simulationArgs<ExtArgs>
+    fractions?: boolean | RadiationTreatmentPlan$fractionsArgs<ExtArgs>
+    _count?: boolean | RadiationTreatmentPlanCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationTreatmentPlan"]>
+
+  export type RadiationTreatmentPlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationId?: boolean
+    externalPlanReference?: boolean
+    planningSystem?: boolean
+    planningStatus?: boolean
+    plannerId?: boolean
+    physicistId?: boolean
+    radiationOncologistId?: boolean
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: boolean
+    planNotes?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    simulation?: boolean | RadiationTreatmentPlan$simulationArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationTreatmentPlan"]>
+
+  export type RadiationTreatmentPlanSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationId?: boolean
+    externalPlanReference?: boolean
+    planningSystem?: boolean
+    planningStatus?: boolean
+    plannerId?: boolean
+    physicistId?: boolean
+    radiationOncologistId?: boolean
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: boolean
+    planNotes?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    simulation?: boolean | RadiationTreatmentPlan$simulationArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationTreatmentPlan"]>
+
+  export type RadiationTreatmentPlanSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    simulationId?: boolean
+    externalPlanReference?: boolean
+    planningSystem?: boolean
+    planningStatus?: boolean
+    plannerId?: boolean
+    physicistId?: boolean
+    radiationOncologistId?: boolean
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: boolean
+    planNotes?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RadiationTreatmentPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "prescriptionId" | "simulationId" | "externalPlanReference" | "planningSystem" | "planningStatus" | "plannerId" | "physicistId" | "radiationOncologistId" | "contouringCompleted" | "physicsQaCompleted" | "treatmentMachine" | "planNotes" | "approvedBy" | "approvedAt" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["radiationTreatmentPlan"]>
+  export type RadiationTreatmentPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    simulation?: boolean | RadiationTreatmentPlan$simulationArgs<ExtArgs>
+    fractions?: boolean | RadiationTreatmentPlan$fractionsArgs<ExtArgs>
+    _count?: boolean | RadiationTreatmentPlanCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RadiationTreatmentPlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    simulation?: boolean | RadiationTreatmentPlan$simulationArgs<ExtArgs>
+  }
+  export type RadiationTreatmentPlanIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+    simulation?: boolean | RadiationTreatmentPlan$simulationArgs<ExtArgs>
+  }
+
+  export type $RadiationTreatmentPlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RadiationTreatmentPlan"
+    objects: {
+      prescription: Prisma.$RadiationPrescriptionPayload<ExtArgs>
+      simulation: Prisma.$RadiationSimulationPayload<ExtArgs> | null
+      fractions: Prisma.$RadiationFractionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      prescriptionId: string
+      simulationId: string | null
+      externalPlanReference: string | null
+      planningSystem: string | null
+      planningStatus: string | null
+      plannerId: string | null
+      physicistId: string | null
+      radiationOncologistId: string | null
+      contouringCompleted: boolean
+      physicsQaCompleted: boolean
+      treatmentMachine: string | null
+      planNotes: string | null
+      approvedBy: string | null
+      approvedAt: Date | null
+      status: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["radiationTreatmentPlan"]>
+    composites: {}
+  }
+
+  type RadiationTreatmentPlanGetPayload<S extends boolean | null | undefined | RadiationTreatmentPlanDefaultArgs> = $Result.GetResult<Prisma.$RadiationTreatmentPlanPayload, S>
+
+  type RadiationTreatmentPlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RadiationTreatmentPlanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RadiationTreatmentPlanCountAggregateInputType | true
+    }
+
+  export interface RadiationTreatmentPlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RadiationTreatmentPlan'], meta: { name: 'RadiationTreatmentPlan' } }
+    /**
+     * Find zero or one RadiationTreatmentPlan that matches the filter.
+     * @param {RadiationTreatmentPlanFindUniqueArgs} args - Arguments to find a RadiationTreatmentPlan
+     * @example
+     * // Get one RadiationTreatmentPlan
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RadiationTreatmentPlanFindUniqueArgs>(args: SelectSubset<T, RadiationTreatmentPlanFindUniqueArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RadiationTreatmentPlan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RadiationTreatmentPlanFindUniqueOrThrowArgs} args - Arguments to find a RadiationTreatmentPlan
+     * @example
+     * // Get one RadiationTreatmentPlan
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RadiationTreatmentPlanFindUniqueOrThrowArgs>(args: SelectSubset<T, RadiationTreatmentPlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationTreatmentPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationTreatmentPlanFindFirstArgs} args - Arguments to find a RadiationTreatmentPlan
+     * @example
+     * // Get one RadiationTreatmentPlan
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RadiationTreatmentPlanFindFirstArgs>(args?: SelectSubset<T, RadiationTreatmentPlanFindFirstArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationTreatmentPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationTreatmentPlanFindFirstOrThrowArgs} args - Arguments to find a RadiationTreatmentPlan
+     * @example
+     * // Get one RadiationTreatmentPlan
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RadiationTreatmentPlanFindFirstOrThrowArgs>(args?: SelectSubset<T, RadiationTreatmentPlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RadiationTreatmentPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationTreatmentPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RadiationTreatmentPlans
+     * const radiationTreatmentPlans = await prisma.radiationTreatmentPlan.findMany()
+     * 
+     * // Get first 10 RadiationTreatmentPlans
+     * const radiationTreatmentPlans = await prisma.radiationTreatmentPlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const radiationTreatmentPlanWithIdOnly = await prisma.radiationTreatmentPlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RadiationTreatmentPlanFindManyArgs>(args?: SelectSubset<T, RadiationTreatmentPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RadiationTreatmentPlan.
+     * @param {RadiationTreatmentPlanCreateArgs} args - Arguments to create a RadiationTreatmentPlan.
+     * @example
+     * // Create one RadiationTreatmentPlan
+     * const RadiationTreatmentPlan = await prisma.radiationTreatmentPlan.create({
+     *   data: {
+     *     // ... data to create a RadiationTreatmentPlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends RadiationTreatmentPlanCreateArgs>(args: SelectSubset<T, RadiationTreatmentPlanCreateArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RadiationTreatmentPlans.
+     * @param {RadiationTreatmentPlanCreateManyArgs} args - Arguments to create many RadiationTreatmentPlans.
+     * @example
+     * // Create many RadiationTreatmentPlans
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RadiationTreatmentPlanCreateManyArgs>(args?: SelectSubset<T, RadiationTreatmentPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RadiationTreatmentPlans and returns the data saved in the database.
+     * @param {RadiationTreatmentPlanCreateManyAndReturnArgs} args - Arguments to create many RadiationTreatmentPlans.
+     * @example
+     * // Create many RadiationTreatmentPlans
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RadiationTreatmentPlans and only return the `id`
+     * const radiationTreatmentPlanWithIdOnly = await prisma.radiationTreatmentPlan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RadiationTreatmentPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, RadiationTreatmentPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RadiationTreatmentPlan.
+     * @param {RadiationTreatmentPlanDeleteArgs} args - Arguments to delete one RadiationTreatmentPlan.
+     * @example
+     * // Delete one RadiationTreatmentPlan
+     * const RadiationTreatmentPlan = await prisma.radiationTreatmentPlan.delete({
+     *   where: {
+     *     // ... filter to delete one RadiationTreatmentPlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RadiationTreatmentPlanDeleteArgs>(args: SelectSubset<T, RadiationTreatmentPlanDeleteArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RadiationTreatmentPlan.
+     * @param {RadiationTreatmentPlanUpdateArgs} args - Arguments to update one RadiationTreatmentPlan.
+     * @example
+     * // Update one RadiationTreatmentPlan
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RadiationTreatmentPlanUpdateArgs>(args: SelectSubset<T, RadiationTreatmentPlanUpdateArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RadiationTreatmentPlans.
+     * @param {RadiationTreatmentPlanDeleteManyArgs} args - Arguments to filter RadiationTreatmentPlans to delete.
+     * @example
+     * // Delete a few RadiationTreatmentPlans
+     * const { count } = await prisma.radiationTreatmentPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RadiationTreatmentPlanDeleteManyArgs>(args?: SelectSubset<T, RadiationTreatmentPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationTreatmentPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationTreatmentPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RadiationTreatmentPlans
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RadiationTreatmentPlanUpdateManyArgs>(args: SelectSubset<T, RadiationTreatmentPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationTreatmentPlans and returns the data updated in the database.
+     * @param {RadiationTreatmentPlanUpdateManyAndReturnArgs} args - Arguments to update many RadiationTreatmentPlans.
+     * @example
+     * // Update many RadiationTreatmentPlans
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RadiationTreatmentPlans and only return the `id`
+     * const radiationTreatmentPlanWithIdOnly = await prisma.radiationTreatmentPlan.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RadiationTreatmentPlanUpdateManyAndReturnArgs>(args: SelectSubset<T, RadiationTreatmentPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RadiationTreatmentPlan.
+     * @param {RadiationTreatmentPlanUpsertArgs} args - Arguments to update or create a RadiationTreatmentPlan.
+     * @example
+     * // Update or create a RadiationTreatmentPlan
+     * const radiationTreatmentPlan = await prisma.radiationTreatmentPlan.upsert({
+     *   create: {
+     *     // ... data to create a RadiationTreatmentPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RadiationTreatmentPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RadiationTreatmentPlanUpsertArgs>(args: SelectSubset<T, RadiationTreatmentPlanUpsertArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RadiationTreatmentPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationTreatmentPlanCountArgs} args - Arguments to filter RadiationTreatmentPlans to count.
+     * @example
+     * // Count the number of RadiationTreatmentPlans
+     * const count = await prisma.radiationTreatmentPlan.count({
+     *   where: {
+     *     // ... the filter for the RadiationTreatmentPlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends RadiationTreatmentPlanCountArgs>(
+      args?: Subset<T, RadiationTreatmentPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RadiationTreatmentPlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RadiationTreatmentPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationTreatmentPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RadiationTreatmentPlanAggregateArgs>(args: Subset<T, RadiationTreatmentPlanAggregateArgs>): Prisma.PrismaPromise<GetRadiationTreatmentPlanAggregateType<T>>
+
+    /**
+     * Group by RadiationTreatmentPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationTreatmentPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RadiationTreatmentPlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RadiationTreatmentPlanGroupByArgs['orderBy'] }
+        : { orderBy?: RadiationTreatmentPlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RadiationTreatmentPlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRadiationTreatmentPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RadiationTreatmentPlan model
+   */
+  readonly fields: RadiationTreatmentPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RadiationTreatmentPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RadiationTreatmentPlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    prescription<T extends RadiationPrescriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescriptionDefaultArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    simulation<T extends RadiationTreatmentPlan$simulationArgs<ExtArgs> = {}>(args?: Subset<T, RadiationTreatmentPlan$simulationArgs<ExtArgs>>): Prisma__RadiationSimulationClient<$Result.GetResult<Prisma.$RadiationSimulationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    fractions<T extends RadiationTreatmentPlan$fractionsArgs<ExtArgs> = {}>(args?: Subset<T, RadiationTreatmentPlan$fractionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RadiationTreatmentPlan model
+   */
+  interface RadiationTreatmentPlanFieldRefs {
+    readonly id: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly tenantId: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly prescriptionId: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly simulationId: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly externalPlanReference: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly planningSystem: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly planningStatus: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly plannerId: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly physicistId: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly radiationOncologistId: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly contouringCompleted: FieldRef<"RadiationTreatmentPlan", 'Boolean'>
+    readonly physicsQaCompleted: FieldRef<"RadiationTreatmentPlan", 'Boolean'>
+    readonly treatmentMachine: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly planNotes: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly approvedBy: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly approvedAt: FieldRef<"RadiationTreatmentPlan", 'DateTime'>
+    readonly status: FieldRef<"RadiationTreatmentPlan", 'String'>
+    readonly createdAt: FieldRef<"RadiationTreatmentPlan", 'DateTime'>
+    readonly updatedAt: FieldRef<"RadiationTreatmentPlan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RadiationTreatmentPlan findUnique
+   */
+  export type RadiationTreatmentPlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationTreatmentPlan to fetch.
+     */
+    where: RadiationTreatmentPlanWhereUniqueInput
+  }
+
+  /**
+   * RadiationTreatmentPlan findUniqueOrThrow
+   */
+  export type RadiationTreatmentPlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationTreatmentPlan to fetch.
+     */
+    where: RadiationTreatmentPlanWhereUniqueInput
+  }
+
+  /**
+   * RadiationTreatmentPlan findFirst
+   */
+  export type RadiationTreatmentPlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationTreatmentPlan to fetch.
+     */
+    where?: RadiationTreatmentPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationTreatmentPlans to fetch.
+     */
+    orderBy?: RadiationTreatmentPlanOrderByWithRelationInput | RadiationTreatmentPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationTreatmentPlans.
+     */
+    cursor?: RadiationTreatmentPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationTreatmentPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationTreatmentPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationTreatmentPlans.
+     */
+    distinct?: RadiationTreatmentPlanScalarFieldEnum | RadiationTreatmentPlanScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationTreatmentPlan findFirstOrThrow
+   */
+  export type RadiationTreatmentPlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationTreatmentPlan to fetch.
+     */
+    where?: RadiationTreatmentPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationTreatmentPlans to fetch.
+     */
+    orderBy?: RadiationTreatmentPlanOrderByWithRelationInput | RadiationTreatmentPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationTreatmentPlans.
+     */
+    cursor?: RadiationTreatmentPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationTreatmentPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationTreatmentPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationTreatmentPlans.
+     */
+    distinct?: RadiationTreatmentPlanScalarFieldEnum | RadiationTreatmentPlanScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationTreatmentPlan findMany
+   */
+  export type RadiationTreatmentPlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationTreatmentPlans to fetch.
+     */
+    where?: RadiationTreatmentPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationTreatmentPlans to fetch.
+     */
+    orderBy?: RadiationTreatmentPlanOrderByWithRelationInput | RadiationTreatmentPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RadiationTreatmentPlans.
+     */
+    cursor?: RadiationTreatmentPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationTreatmentPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationTreatmentPlans.
+     */
+    skip?: number
+    distinct?: RadiationTreatmentPlanScalarFieldEnum | RadiationTreatmentPlanScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationTreatmentPlan create
+   */
+  export type RadiationTreatmentPlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RadiationTreatmentPlan.
+     */
+    data: XOR<RadiationTreatmentPlanCreateInput, RadiationTreatmentPlanUncheckedCreateInput>
+  }
+
+  /**
+   * RadiationTreatmentPlan createMany
+   */
+  export type RadiationTreatmentPlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RadiationTreatmentPlans.
+     */
+    data: RadiationTreatmentPlanCreateManyInput | RadiationTreatmentPlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RadiationTreatmentPlan createManyAndReturn
+   */
+  export type RadiationTreatmentPlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * The data used to create many RadiationTreatmentPlans.
+     */
+    data: RadiationTreatmentPlanCreateManyInput | RadiationTreatmentPlanCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationTreatmentPlan update
+   */
+  export type RadiationTreatmentPlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RadiationTreatmentPlan.
+     */
+    data: XOR<RadiationTreatmentPlanUpdateInput, RadiationTreatmentPlanUncheckedUpdateInput>
+    /**
+     * Choose, which RadiationTreatmentPlan to update.
+     */
+    where: RadiationTreatmentPlanWhereUniqueInput
+  }
+
+  /**
+   * RadiationTreatmentPlan updateMany
+   */
+  export type RadiationTreatmentPlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RadiationTreatmentPlans.
+     */
+    data: XOR<RadiationTreatmentPlanUpdateManyMutationInput, RadiationTreatmentPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationTreatmentPlans to update
+     */
+    where?: RadiationTreatmentPlanWhereInput
+    /**
+     * Limit how many RadiationTreatmentPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationTreatmentPlan updateManyAndReturn
+   */
+  export type RadiationTreatmentPlanUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * The data used to update RadiationTreatmentPlans.
+     */
+    data: XOR<RadiationTreatmentPlanUpdateManyMutationInput, RadiationTreatmentPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationTreatmentPlans to update
+     */
+    where?: RadiationTreatmentPlanWhereInput
+    /**
+     * Limit how many RadiationTreatmentPlans to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationTreatmentPlan upsert
+   */
+  export type RadiationTreatmentPlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RadiationTreatmentPlan to update in case it exists.
+     */
+    where: RadiationTreatmentPlanWhereUniqueInput
+    /**
+     * In case the RadiationTreatmentPlan found by the `where` argument doesn't exist, create a new RadiationTreatmentPlan with this data.
+     */
+    create: XOR<RadiationTreatmentPlanCreateInput, RadiationTreatmentPlanUncheckedCreateInput>
+    /**
+     * In case the RadiationTreatmentPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RadiationTreatmentPlanUpdateInput, RadiationTreatmentPlanUncheckedUpdateInput>
+  }
+
+  /**
+   * RadiationTreatmentPlan delete
+   */
+  export type RadiationTreatmentPlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+    /**
+     * Filter which RadiationTreatmentPlan to delete.
+     */
+    where: RadiationTreatmentPlanWhereUniqueInput
+  }
+
+  /**
+   * RadiationTreatmentPlan deleteMany
+   */
+  export type RadiationTreatmentPlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationTreatmentPlans to delete
+     */
+    where?: RadiationTreatmentPlanWhereInput
+    /**
+     * Limit how many RadiationTreatmentPlans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationTreatmentPlan.simulation
+   */
+  export type RadiationTreatmentPlan$simulationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationSimulation
+     */
+    select?: RadiationSimulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationSimulation
+     */
+    omit?: RadiationSimulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationSimulationInclude<ExtArgs> | null
+    where?: RadiationSimulationWhereInput
+  }
+
+  /**
+   * RadiationTreatmentPlan.fractions
+   */
+  export type RadiationTreatmentPlan$fractionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    where?: RadiationFractionWhereInput
+    orderBy?: RadiationFractionOrderByWithRelationInput | RadiationFractionOrderByWithRelationInput[]
+    cursor?: RadiationFractionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RadiationFractionScalarFieldEnum | RadiationFractionScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationTreatmentPlan without action
+   */
+  export type RadiationTreatmentPlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationTreatmentPlan
+     */
+    select?: RadiationTreatmentPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationTreatmentPlan
+     */
+    omit?: RadiationTreatmentPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationTreatmentPlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RadiationFraction
+   */
+
+  export type AggregateRadiationFraction = {
+    _count: RadiationFractionCountAggregateOutputType | null
+    _avg: RadiationFractionAvgAggregateOutputType | null
+    _sum: RadiationFractionSumAggregateOutputType | null
+    _min: RadiationFractionMinAggregateOutputType | null
+    _max: RadiationFractionMaxAggregateOutputType | null
+  }
+
+  export type RadiationFractionAvgAggregateOutputType = {
+    fractionNumber: number | null
+    plannedDoseGy: Decimal | null
+    deliveredDoseGy: Decimal | null
+  }
+
+  export type RadiationFractionSumAggregateOutputType = {
+    fractionNumber: number | null
+    plannedDoseGy: Decimal | null
+    deliveredDoseGy: Decimal | null
+  }
+
+  export type RadiationFractionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    treatmentPlanId: string | null
+    fractionNumber: number | null
+    plannedDate: Date | null
+    actualDate: Date | null
+    plannedDoseGy: Decimal | null
+    deliveredDoseGy: Decimal | null
+    treatmentMachine: string | null
+    radiationTherapistId: string | null
+    status: string | null
+    interruptionReason: string | null
+    verificationCompleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationFractionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    treatmentPlanId: string | null
+    fractionNumber: number | null
+    plannedDate: Date | null
+    actualDate: Date | null
+    plannedDoseGy: Decimal | null
+    deliveredDoseGy: Decimal | null
+    treatmentMachine: string | null
+    radiationTherapistId: string | null
+    status: string | null
+    interruptionReason: string | null
+    verificationCompleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationFractionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    treatmentPlanId: number
+    fractionNumber: number
+    plannedDate: number
+    actualDate: number
+    plannedDoseGy: number
+    deliveredDoseGy: number
+    treatmentMachine: number
+    radiationTherapistId: number
+    status: number
+    interruptionReason: number
+    verificationCompleted: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RadiationFractionAvgAggregateInputType = {
+    fractionNumber?: true
+    plannedDoseGy?: true
+    deliveredDoseGy?: true
+  }
+
+  export type RadiationFractionSumAggregateInputType = {
+    fractionNumber?: true
+    plannedDoseGy?: true
+    deliveredDoseGy?: true
+  }
+
+  export type RadiationFractionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    treatmentPlanId?: true
+    fractionNumber?: true
+    plannedDate?: true
+    actualDate?: true
+    plannedDoseGy?: true
+    deliveredDoseGy?: true
+    treatmentMachine?: true
+    radiationTherapistId?: true
+    status?: true
+    interruptionReason?: true
+    verificationCompleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationFractionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    treatmentPlanId?: true
+    fractionNumber?: true
+    plannedDate?: true
+    actualDate?: true
+    plannedDoseGy?: true
+    deliveredDoseGy?: true
+    treatmentMachine?: true
+    radiationTherapistId?: true
+    status?: true
+    interruptionReason?: true
+    verificationCompleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationFractionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    treatmentPlanId?: true
+    fractionNumber?: true
+    plannedDate?: true
+    actualDate?: true
+    plannedDoseGy?: true
+    deliveredDoseGy?: true
+    treatmentMachine?: true
+    radiationTherapistId?: true
+    status?: true
+    interruptionReason?: true
+    verificationCompleted?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RadiationFractionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationFraction to aggregate.
+     */
+    where?: RadiationFractionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationFractions to fetch.
+     */
+    orderBy?: RadiationFractionOrderByWithRelationInput | RadiationFractionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RadiationFractionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationFractions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationFractions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RadiationFractions
+    **/
+    _count?: true | RadiationFractionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RadiationFractionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RadiationFractionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RadiationFractionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RadiationFractionMaxAggregateInputType
+  }
+
+  export type GetRadiationFractionAggregateType<T extends RadiationFractionAggregateArgs> = {
+        [P in keyof T & keyof AggregateRadiationFraction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRadiationFraction[P]>
+      : GetScalarType<T[P], AggregateRadiationFraction[P]>
+  }
+
+
+
+
+  export type RadiationFractionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationFractionWhereInput
+    orderBy?: RadiationFractionOrderByWithAggregationInput | RadiationFractionOrderByWithAggregationInput[]
+    by: RadiationFractionScalarFieldEnum[] | RadiationFractionScalarFieldEnum
+    having?: RadiationFractionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RadiationFractionCountAggregateInputType | true
+    _avg?: RadiationFractionAvgAggregateInputType
+    _sum?: RadiationFractionSumAggregateInputType
+    _min?: RadiationFractionMinAggregateInputType
+    _max?: RadiationFractionMaxAggregateInputType
+  }
+
+  export type RadiationFractionGroupByOutputType = {
+    id: string
+    tenantId: string
+    treatmentPlanId: string
+    fractionNumber: number
+    plannedDate: Date | null
+    actualDate: Date | null
+    plannedDoseGy: Decimal | null
+    deliveredDoseGy: Decimal | null
+    treatmentMachine: string | null
+    radiationTherapistId: string | null
+    status: string
+    interruptionReason: string | null
+    verificationCompleted: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: RadiationFractionCountAggregateOutputType | null
+    _avg: RadiationFractionAvgAggregateOutputType | null
+    _sum: RadiationFractionSumAggregateOutputType | null
+    _min: RadiationFractionMinAggregateOutputType | null
+    _max: RadiationFractionMaxAggregateOutputType | null
+  }
+
+  type GetRadiationFractionGroupByPayload<T extends RadiationFractionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RadiationFractionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RadiationFractionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RadiationFractionGroupByOutputType[P]>
+            : GetScalarType<T[P], RadiationFractionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RadiationFractionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    treatmentPlanId?: boolean
+    fractionNumber?: boolean
+    plannedDate?: boolean
+    actualDate?: boolean
+    plannedDoseGy?: boolean
+    deliveredDoseGy?: boolean
+    treatmentMachine?: boolean
+    radiationTherapistId?: boolean
+    status?: boolean
+    interruptionReason?: boolean
+    verificationCompleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    treatmentPlan?: boolean | RadiationTreatmentPlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationFraction"]>
+
+  export type RadiationFractionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    treatmentPlanId?: boolean
+    fractionNumber?: boolean
+    plannedDate?: boolean
+    actualDate?: boolean
+    plannedDoseGy?: boolean
+    deliveredDoseGy?: boolean
+    treatmentMachine?: boolean
+    radiationTherapistId?: boolean
+    status?: boolean
+    interruptionReason?: boolean
+    verificationCompleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    treatmentPlan?: boolean | RadiationTreatmentPlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationFraction"]>
+
+  export type RadiationFractionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    treatmentPlanId?: boolean
+    fractionNumber?: boolean
+    plannedDate?: boolean
+    actualDate?: boolean
+    plannedDoseGy?: boolean
+    deliveredDoseGy?: boolean
+    treatmentMachine?: boolean
+    radiationTherapistId?: boolean
+    status?: boolean
+    interruptionReason?: boolean
+    verificationCompleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    treatmentPlan?: boolean | RadiationTreatmentPlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationFraction"]>
+
+  export type RadiationFractionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    treatmentPlanId?: boolean
+    fractionNumber?: boolean
+    plannedDate?: boolean
+    actualDate?: boolean
+    plannedDoseGy?: boolean
+    deliveredDoseGy?: boolean
+    treatmentMachine?: boolean
+    radiationTherapistId?: boolean
+    status?: boolean
+    interruptionReason?: boolean
+    verificationCompleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RadiationFractionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "treatmentPlanId" | "fractionNumber" | "plannedDate" | "actualDate" | "plannedDoseGy" | "deliveredDoseGy" | "treatmentMachine" | "radiationTherapistId" | "status" | "interruptionReason" | "verificationCompleted" | "createdAt" | "updatedAt", ExtArgs["result"]["radiationFraction"]>
+  export type RadiationFractionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    treatmentPlan?: boolean | RadiationTreatmentPlanDefaultArgs<ExtArgs>
+  }
+  export type RadiationFractionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    treatmentPlan?: boolean | RadiationTreatmentPlanDefaultArgs<ExtArgs>
+  }
+  export type RadiationFractionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    treatmentPlan?: boolean | RadiationTreatmentPlanDefaultArgs<ExtArgs>
+  }
+
+  export type $RadiationFractionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RadiationFraction"
+    objects: {
+      treatmentPlan: Prisma.$RadiationTreatmentPlanPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      treatmentPlanId: string
+      fractionNumber: number
+      plannedDate: Date | null
+      actualDate: Date | null
+      plannedDoseGy: Prisma.Decimal | null
+      deliveredDoseGy: Prisma.Decimal | null
+      treatmentMachine: string | null
+      radiationTherapistId: string | null
+      status: string
+      interruptionReason: string | null
+      verificationCompleted: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["radiationFraction"]>
+    composites: {}
+  }
+
+  type RadiationFractionGetPayload<S extends boolean | null | undefined | RadiationFractionDefaultArgs> = $Result.GetResult<Prisma.$RadiationFractionPayload, S>
+
+  type RadiationFractionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RadiationFractionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RadiationFractionCountAggregateInputType | true
+    }
+
+  export interface RadiationFractionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RadiationFraction'], meta: { name: 'RadiationFraction' } }
+    /**
+     * Find zero or one RadiationFraction that matches the filter.
+     * @param {RadiationFractionFindUniqueArgs} args - Arguments to find a RadiationFraction
+     * @example
+     * // Get one RadiationFraction
+     * const radiationFraction = await prisma.radiationFraction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RadiationFractionFindUniqueArgs>(args: SelectSubset<T, RadiationFractionFindUniqueArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RadiationFraction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RadiationFractionFindUniqueOrThrowArgs} args - Arguments to find a RadiationFraction
+     * @example
+     * // Get one RadiationFraction
+     * const radiationFraction = await prisma.radiationFraction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RadiationFractionFindUniqueOrThrowArgs>(args: SelectSubset<T, RadiationFractionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationFraction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationFractionFindFirstArgs} args - Arguments to find a RadiationFraction
+     * @example
+     * // Get one RadiationFraction
+     * const radiationFraction = await prisma.radiationFraction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RadiationFractionFindFirstArgs>(args?: SelectSubset<T, RadiationFractionFindFirstArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationFraction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationFractionFindFirstOrThrowArgs} args - Arguments to find a RadiationFraction
+     * @example
+     * // Get one RadiationFraction
+     * const radiationFraction = await prisma.radiationFraction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RadiationFractionFindFirstOrThrowArgs>(args?: SelectSubset<T, RadiationFractionFindFirstOrThrowArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RadiationFractions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationFractionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RadiationFractions
+     * const radiationFractions = await prisma.radiationFraction.findMany()
+     * 
+     * // Get first 10 RadiationFractions
+     * const radiationFractions = await prisma.radiationFraction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const radiationFractionWithIdOnly = await prisma.radiationFraction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RadiationFractionFindManyArgs>(args?: SelectSubset<T, RadiationFractionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RadiationFraction.
+     * @param {RadiationFractionCreateArgs} args - Arguments to create a RadiationFraction.
+     * @example
+     * // Create one RadiationFraction
+     * const RadiationFraction = await prisma.radiationFraction.create({
+     *   data: {
+     *     // ... data to create a RadiationFraction
+     *   }
+     * })
+     * 
+     */
+    create<T extends RadiationFractionCreateArgs>(args: SelectSubset<T, RadiationFractionCreateArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RadiationFractions.
+     * @param {RadiationFractionCreateManyArgs} args - Arguments to create many RadiationFractions.
+     * @example
+     * // Create many RadiationFractions
+     * const radiationFraction = await prisma.radiationFraction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RadiationFractionCreateManyArgs>(args?: SelectSubset<T, RadiationFractionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RadiationFractions and returns the data saved in the database.
+     * @param {RadiationFractionCreateManyAndReturnArgs} args - Arguments to create many RadiationFractions.
+     * @example
+     * // Create many RadiationFractions
+     * const radiationFraction = await prisma.radiationFraction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RadiationFractions and only return the `id`
+     * const radiationFractionWithIdOnly = await prisma.radiationFraction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RadiationFractionCreateManyAndReturnArgs>(args?: SelectSubset<T, RadiationFractionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RadiationFraction.
+     * @param {RadiationFractionDeleteArgs} args - Arguments to delete one RadiationFraction.
+     * @example
+     * // Delete one RadiationFraction
+     * const RadiationFraction = await prisma.radiationFraction.delete({
+     *   where: {
+     *     // ... filter to delete one RadiationFraction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RadiationFractionDeleteArgs>(args: SelectSubset<T, RadiationFractionDeleteArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RadiationFraction.
+     * @param {RadiationFractionUpdateArgs} args - Arguments to update one RadiationFraction.
+     * @example
+     * // Update one RadiationFraction
+     * const radiationFraction = await prisma.radiationFraction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RadiationFractionUpdateArgs>(args: SelectSubset<T, RadiationFractionUpdateArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RadiationFractions.
+     * @param {RadiationFractionDeleteManyArgs} args - Arguments to filter RadiationFractions to delete.
+     * @example
+     * // Delete a few RadiationFractions
+     * const { count } = await prisma.radiationFraction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RadiationFractionDeleteManyArgs>(args?: SelectSubset<T, RadiationFractionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationFractions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationFractionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RadiationFractions
+     * const radiationFraction = await prisma.radiationFraction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RadiationFractionUpdateManyArgs>(args: SelectSubset<T, RadiationFractionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationFractions and returns the data updated in the database.
+     * @param {RadiationFractionUpdateManyAndReturnArgs} args - Arguments to update many RadiationFractions.
+     * @example
+     * // Update many RadiationFractions
+     * const radiationFraction = await prisma.radiationFraction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RadiationFractions and only return the `id`
+     * const radiationFractionWithIdOnly = await prisma.radiationFraction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RadiationFractionUpdateManyAndReturnArgs>(args: SelectSubset<T, RadiationFractionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RadiationFraction.
+     * @param {RadiationFractionUpsertArgs} args - Arguments to update or create a RadiationFraction.
+     * @example
+     * // Update or create a RadiationFraction
+     * const radiationFraction = await prisma.radiationFraction.upsert({
+     *   create: {
+     *     // ... data to create a RadiationFraction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RadiationFraction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RadiationFractionUpsertArgs>(args: SelectSubset<T, RadiationFractionUpsertArgs<ExtArgs>>): Prisma__RadiationFractionClient<$Result.GetResult<Prisma.$RadiationFractionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RadiationFractions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationFractionCountArgs} args - Arguments to filter RadiationFractions to count.
+     * @example
+     * // Count the number of RadiationFractions
+     * const count = await prisma.radiationFraction.count({
+     *   where: {
+     *     // ... the filter for the RadiationFractions we want to count
+     *   }
+     * })
+    **/
+    count<T extends RadiationFractionCountArgs>(
+      args?: Subset<T, RadiationFractionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RadiationFractionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RadiationFraction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationFractionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RadiationFractionAggregateArgs>(args: Subset<T, RadiationFractionAggregateArgs>): Prisma.PrismaPromise<GetRadiationFractionAggregateType<T>>
+
+    /**
+     * Group by RadiationFraction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationFractionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RadiationFractionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RadiationFractionGroupByArgs['orderBy'] }
+        : { orderBy?: RadiationFractionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RadiationFractionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRadiationFractionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RadiationFraction model
+   */
+  readonly fields: RadiationFractionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RadiationFraction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RadiationFractionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    treatmentPlan<T extends RadiationTreatmentPlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RadiationTreatmentPlanDefaultArgs<ExtArgs>>): Prisma__RadiationTreatmentPlanClient<$Result.GetResult<Prisma.$RadiationTreatmentPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RadiationFraction model
+   */
+  interface RadiationFractionFieldRefs {
+    readonly id: FieldRef<"RadiationFraction", 'String'>
+    readonly tenantId: FieldRef<"RadiationFraction", 'String'>
+    readonly treatmentPlanId: FieldRef<"RadiationFraction", 'String'>
+    readonly fractionNumber: FieldRef<"RadiationFraction", 'Int'>
+    readonly plannedDate: FieldRef<"RadiationFraction", 'DateTime'>
+    readonly actualDate: FieldRef<"RadiationFraction", 'DateTime'>
+    readonly plannedDoseGy: FieldRef<"RadiationFraction", 'Decimal'>
+    readonly deliveredDoseGy: FieldRef<"RadiationFraction", 'Decimal'>
+    readonly treatmentMachine: FieldRef<"RadiationFraction", 'String'>
+    readonly radiationTherapistId: FieldRef<"RadiationFraction", 'String'>
+    readonly status: FieldRef<"RadiationFraction", 'String'>
+    readonly interruptionReason: FieldRef<"RadiationFraction", 'String'>
+    readonly verificationCompleted: FieldRef<"RadiationFraction", 'Boolean'>
+    readonly createdAt: FieldRef<"RadiationFraction", 'DateTime'>
+    readonly updatedAt: FieldRef<"RadiationFraction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RadiationFraction findUnique
+   */
+  export type RadiationFractionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationFraction to fetch.
+     */
+    where: RadiationFractionWhereUniqueInput
+  }
+
+  /**
+   * RadiationFraction findUniqueOrThrow
+   */
+  export type RadiationFractionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationFraction to fetch.
+     */
+    where: RadiationFractionWhereUniqueInput
+  }
+
+  /**
+   * RadiationFraction findFirst
+   */
+  export type RadiationFractionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationFraction to fetch.
+     */
+    where?: RadiationFractionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationFractions to fetch.
+     */
+    orderBy?: RadiationFractionOrderByWithRelationInput | RadiationFractionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationFractions.
+     */
+    cursor?: RadiationFractionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationFractions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationFractions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationFractions.
+     */
+    distinct?: RadiationFractionScalarFieldEnum | RadiationFractionScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationFraction findFirstOrThrow
+   */
+  export type RadiationFractionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationFraction to fetch.
+     */
+    where?: RadiationFractionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationFractions to fetch.
+     */
+    orderBy?: RadiationFractionOrderByWithRelationInput | RadiationFractionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationFractions.
+     */
+    cursor?: RadiationFractionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationFractions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationFractions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationFractions.
+     */
+    distinct?: RadiationFractionScalarFieldEnum | RadiationFractionScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationFraction findMany
+   */
+  export type RadiationFractionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationFractions to fetch.
+     */
+    where?: RadiationFractionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationFractions to fetch.
+     */
+    orderBy?: RadiationFractionOrderByWithRelationInput | RadiationFractionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RadiationFractions.
+     */
+    cursor?: RadiationFractionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationFractions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationFractions.
+     */
+    skip?: number
+    distinct?: RadiationFractionScalarFieldEnum | RadiationFractionScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationFraction create
+   */
+  export type RadiationFractionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RadiationFraction.
+     */
+    data: XOR<RadiationFractionCreateInput, RadiationFractionUncheckedCreateInput>
+  }
+
+  /**
+   * RadiationFraction createMany
+   */
+  export type RadiationFractionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RadiationFractions.
+     */
+    data: RadiationFractionCreateManyInput | RadiationFractionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RadiationFraction createManyAndReturn
+   */
+  export type RadiationFractionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * The data used to create many RadiationFractions.
+     */
+    data: RadiationFractionCreateManyInput | RadiationFractionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationFraction update
+   */
+  export type RadiationFractionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RadiationFraction.
+     */
+    data: XOR<RadiationFractionUpdateInput, RadiationFractionUncheckedUpdateInput>
+    /**
+     * Choose, which RadiationFraction to update.
+     */
+    where: RadiationFractionWhereUniqueInput
+  }
+
+  /**
+   * RadiationFraction updateMany
+   */
+  export type RadiationFractionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RadiationFractions.
+     */
+    data: XOR<RadiationFractionUpdateManyMutationInput, RadiationFractionUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationFractions to update
+     */
+    where?: RadiationFractionWhereInput
+    /**
+     * Limit how many RadiationFractions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationFraction updateManyAndReturn
+   */
+  export type RadiationFractionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * The data used to update RadiationFractions.
+     */
+    data: XOR<RadiationFractionUpdateManyMutationInput, RadiationFractionUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationFractions to update
+     */
+    where?: RadiationFractionWhereInput
+    /**
+     * Limit how many RadiationFractions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationFraction upsert
+   */
+  export type RadiationFractionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RadiationFraction to update in case it exists.
+     */
+    where: RadiationFractionWhereUniqueInput
+    /**
+     * In case the RadiationFraction found by the `where` argument doesn't exist, create a new RadiationFraction with this data.
+     */
+    create: XOR<RadiationFractionCreateInput, RadiationFractionUncheckedCreateInput>
+    /**
+     * In case the RadiationFraction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RadiationFractionUpdateInput, RadiationFractionUncheckedUpdateInput>
+  }
+
+  /**
+   * RadiationFraction delete
+   */
+  export type RadiationFractionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+    /**
+     * Filter which RadiationFraction to delete.
+     */
+    where: RadiationFractionWhereUniqueInput
+  }
+
+  /**
+   * RadiationFraction deleteMany
+   */
+  export type RadiationFractionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationFractions to delete
+     */
+    where?: RadiationFractionWhereInput
+    /**
+     * Limit how many RadiationFractions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationFraction without action
+   */
+  export type RadiationFractionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationFraction
+     */
+    select?: RadiationFractionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationFraction
+     */
+    omit?: RadiationFractionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationFractionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RadiationOnTreatmentReview
+   */
+
+  export type AggregateRadiationOnTreatmentReview = {
+    _count: RadiationOnTreatmentReviewCountAggregateOutputType | null
+    _avg: RadiationOnTreatmentReviewAvgAggregateOutputType | null
+    _sum: RadiationOnTreatmentReviewSumAggregateOutputType | null
+    _min: RadiationOnTreatmentReviewMinAggregateOutputType | null
+    _max: RadiationOnTreatmentReviewMaxAggregateOutputType | null
+  }
+
+  export type RadiationOnTreatmentReviewAvgAggregateOutputType = {
+    weekNumber: number | null
+    painScore: number | null
+    weightKg: Decimal | null
+  }
+
+  export type RadiationOnTreatmentReviewSumAggregateOutputType = {
+    weekNumber: number | null
+    painScore: number | null
+    weightKg: Decimal | null
+  }
+
+  export type RadiationOnTreatmentReviewMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    reviewDate: Date | null
+    weekNumber: number | null
+    toxicityGrade: string | null
+    painScore: number | null
+    weightKg: Decimal | null
+    treatmentBreakRequired: boolean | null
+    reviewNotes: string | null
+    reviewedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationOnTreatmentReviewMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    reviewDate: Date | null
+    weekNumber: number | null
+    toxicityGrade: string | null
+    painScore: number | null
+    weightKg: Decimal | null
+    treatmentBreakRequired: boolean | null
+    reviewNotes: string | null
+    reviewedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationOnTreatmentReviewCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    prescriptionId: number
+    reviewDate: number
+    weekNumber: number
+    toxicityGrade: number
+    painScore: number
+    weightKg: number
+    treatmentBreakRequired: number
+    reviewNotes: number
+    reviewedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RadiationOnTreatmentReviewAvgAggregateInputType = {
+    weekNumber?: true
+    painScore?: true
+    weightKg?: true
+  }
+
+  export type RadiationOnTreatmentReviewSumAggregateInputType = {
+    weekNumber?: true
+    painScore?: true
+    weightKg?: true
+  }
+
+  export type RadiationOnTreatmentReviewMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    reviewDate?: true
+    weekNumber?: true
+    toxicityGrade?: true
+    painScore?: true
+    weightKg?: true
+    treatmentBreakRequired?: true
+    reviewNotes?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationOnTreatmentReviewMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    reviewDate?: true
+    weekNumber?: true
+    toxicityGrade?: true
+    painScore?: true
+    weightKg?: true
+    treatmentBreakRequired?: true
+    reviewNotes?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationOnTreatmentReviewCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    reviewDate?: true
+    weekNumber?: true
+    toxicityGrade?: true
+    painScore?: true
+    weightKg?: true
+    treatmentBreakRequired?: true
+    reviewNotes?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RadiationOnTreatmentReviewAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationOnTreatmentReview to aggregate.
+     */
+    where?: RadiationOnTreatmentReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationOnTreatmentReviews to fetch.
+     */
+    orderBy?: RadiationOnTreatmentReviewOrderByWithRelationInput | RadiationOnTreatmentReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RadiationOnTreatmentReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationOnTreatmentReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationOnTreatmentReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RadiationOnTreatmentReviews
+    **/
+    _count?: true | RadiationOnTreatmentReviewCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RadiationOnTreatmentReviewAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RadiationOnTreatmentReviewSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RadiationOnTreatmentReviewMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RadiationOnTreatmentReviewMaxAggregateInputType
+  }
+
+  export type GetRadiationOnTreatmentReviewAggregateType<T extends RadiationOnTreatmentReviewAggregateArgs> = {
+        [P in keyof T & keyof AggregateRadiationOnTreatmentReview]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRadiationOnTreatmentReview[P]>
+      : GetScalarType<T[P], AggregateRadiationOnTreatmentReview[P]>
+  }
+
+
+
+
+  export type RadiationOnTreatmentReviewGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationOnTreatmentReviewWhereInput
+    orderBy?: RadiationOnTreatmentReviewOrderByWithAggregationInput | RadiationOnTreatmentReviewOrderByWithAggregationInput[]
+    by: RadiationOnTreatmentReviewScalarFieldEnum[] | RadiationOnTreatmentReviewScalarFieldEnum
+    having?: RadiationOnTreatmentReviewScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RadiationOnTreatmentReviewCountAggregateInputType | true
+    _avg?: RadiationOnTreatmentReviewAvgAggregateInputType
+    _sum?: RadiationOnTreatmentReviewSumAggregateInputType
+    _min?: RadiationOnTreatmentReviewMinAggregateInputType
+    _max?: RadiationOnTreatmentReviewMaxAggregateInputType
+  }
+
+  export type RadiationOnTreatmentReviewGroupByOutputType = {
+    id: string
+    tenantId: string
+    prescriptionId: string
+    reviewDate: Date
+    weekNumber: number | null
+    toxicityGrade: string | null
+    painScore: number | null
+    weightKg: Decimal | null
+    treatmentBreakRequired: boolean
+    reviewNotes: string | null
+    reviewedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: RadiationOnTreatmentReviewCountAggregateOutputType | null
+    _avg: RadiationOnTreatmentReviewAvgAggregateOutputType | null
+    _sum: RadiationOnTreatmentReviewSumAggregateOutputType | null
+    _min: RadiationOnTreatmentReviewMinAggregateOutputType | null
+    _max: RadiationOnTreatmentReviewMaxAggregateOutputType | null
+  }
+
+  type GetRadiationOnTreatmentReviewGroupByPayload<T extends RadiationOnTreatmentReviewGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RadiationOnTreatmentReviewGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RadiationOnTreatmentReviewGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RadiationOnTreatmentReviewGroupByOutputType[P]>
+            : GetScalarType<T[P], RadiationOnTreatmentReviewGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RadiationOnTreatmentReviewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    reviewDate?: boolean
+    weekNumber?: boolean
+    toxicityGrade?: boolean
+    painScore?: boolean
+    weightKg?: boolean
+    treatmentBreakRequired?: boolean
+    reviewNotes?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationOnTreatmentReview"]>
+
+  export type RadiationOnTreatmentReviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    reviewDate?: boolean
+    weekNumber?: boolean
+    toxicityGrade?: boolean
+    painScore?: boolean
+    weightKg?: boolean
+    treatmentBreakRequired?: boolean
+    reviewNotes?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationOnTreatmentReview"]>
+
+  export type RadiationOnTreatmentReviewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    reviewDate?: boolean
+    weekNumber?: boolean
+    toxicityGrade?: boolean
+    painScore?: boolean
+    weightKg?: boolean
+    treatmentBreakRequired?: boolean
+    reviewNotes?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationOnTreatmentReview"]>
+
+  export type RadiationOnTreatmentReviewSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    reviewDate?: boolean
+    weekNumber?: boolean
+    toxicityGrade?: boolean
+    painScore?: boolean
+    weightKg?: boolean
+    treatmentBreakRequired?: boolean
+    reviewNotes?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RadiationOnTreatmentReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "prescriptionId" | "reviewDate" | "weekNumber" | "toxicityGrade" | "painScore" | "weightKg" | "treatmentBreakRequired" | "reviewNotes" | "reviewedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["radiationOnTreatmentReview"]>
+  export type RadiationOnTreatmentReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+  export type RadiationOnTreatmentReviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+  export type RadiationOnTreatmentReviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+
+  export type $RadiationOnTreatmentReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RadiationOnTreatmentReview"
+    objects: {
+      prescription: Prisma.$RadiationPrescriptionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      prescriptionId: string
+      reviewDate: Date
+      weekNumber: number | null
+      toxicityGrade: string | null
+      painScore: number | null
+      weightKg: Prisma.Decimal | null
+      treatmentBreakRequired: boolean
+      reviewNotes: string | null
+      reviewedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["radiationOnTreatmentReview"]>
+    composites: {}
+  }
+
+  type RadiationOnTreatmentReviewGetPayload<S extends boolean | null | undefined | RadiationOnTreatmentReviewDefaultArgs> = $Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload, S>
+
+  type RadiationOnTreatmentReviewCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RadiationOnTreatmentReviewFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RadiationOnTreatmentReviewCountAggregateInputType | true
+    }
+
+  export interface RadiationOnTreatmentReviewDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RadiationOnTreatmentReview'], meta: { name: 'RadiationOnTreatmentReview' } }
+    /**
+     * Find zero or one RadiationOnTreatmentReview that matches the filter.
+     * @param {RadiationOnTreatmentReviewFindUniqueArgs} args - Arguments to find a RadiationOnTreatmentReview
+     * @example
+     * // Get one RadiationOnTreatmentReview
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RadiationOnTreatmentReviewFindUniqueArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewFindUniqueArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RadiationOnTreatmentReview that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RadiationOnTreatmentReviewFindUniqueOrThrowArgs} args - Arguments to find a RadiationOnTreatmentReview
+     * @example
+     * // Get one RadiationOnTreatmentReview
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RadiationOnTreatmentReviewFindUniqueOrThrowArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationOnTreatmentReview that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationOnTreatmentReviewFindFirstArgs} args - Arguments to find a RadiationOnTreatmentReview
+     * @example
+     * // Get one RadiationOnTreatmentReview
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RadiationOnTreatmentReviewFindFirstArgs>(args?: SelectSubset<T, RadiationOnTreatmentReviewFindFirstArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationOnTreatmentReview that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationOnTreatmentReviewFindFirstOrThrowArgs} args - Arguments to find a RadiationOnTreatmentReview
+     * @example
+     * // Get one RadiationOnTreatmentReview
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RadiationOnTreatmentReviewFindFirstOrThrowArgs>(args?: SelectSubset<T, RadiationOnTreatmentReviewFindFirstOrThrowArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RadiationOnTreatmentReviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationOnTreatmentReviewFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RadiationOnTreatmentReviews
+     * const radiationOnTreatmentReviews = await prisma.radiationOnTreatmentReview.findMany()
+     * 
+     * // Get first 10 RadiationOnTreatmentReviews
+     * const radiationOnTreatmentReviews = await prisma.radiationOnTreatmentReview.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const radiationOnTreatmentReviewWithIdOnly = await prisma.radiationOnTreatmentReview.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RadiationOnTreatmentReviewFindManyArgs>(args?: SelectSubset<T, RadiationOnTreatmentReviewFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RadiationOnTreatmentReview.
+     * @param {RadiationOnTreatmentReviewCreateArgs} args - Arguments to create a RadiationOnTreatmentReview.
+     * @example
+     * // Create one RadiationOnTreatmentReview
+     * const RadiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.create({
+     *   data: {
+     *     // ... data to create a RadiationOnTreatmentReview
+     *   }
+     * })
+     * 
+     */
+    create<T extends RadiationOnTreatmentReviewCreateArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewCreateArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RadiationOnTreatmentReviews.
+     * @param {RadiationOnTreatmentReviewCreateManyArgs} args - Arguments to create many RadiationOnTreatmentReviews.
+     * @example
+     * // Create many RadiationOnTreatmentReviews
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RadiationOnTreatmentReviewCreateManyArgs>(args?: SelectSubset<T, RadiationOnTreatmentReviewCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RadiationOnTreatmentReviews and returns the data saved in the database.
+     * @param {RadiationOnTreatmentReviewCreateManyAndReturnArgs} args - Arguments to create many RadiationOnTreatmentReviews.
+     * @example
+     * // Create many RadiationOnTreatmentReviews
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RadiationOnTreatmentReviews and only return the `id`
+     * const radiationOnTreatmentReviewWithIdOnly = await prisma.radiationOnTreatmentReview.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RadiationOnTreatmentReviewCreateManyAndReturnArgs>(args?: SelectSubset<T, RadiationOnTreatmentReviewCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RadiationOnTreatmentReview.
+     * @param {RadiationOnTreatmentReviewDeleteArgs} args - Arguments to delete one RadiationOnTreatmentReview.
+     * @example
+     * // Delete one RadiationOnTreatmentReview
+     * const RadiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.delete({
+     *   where: {
+     *     // ... filter to delete one RadiationOnTreatmentReview
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RadiationOnTreatmentReviewDeleteArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewDeleteArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RadiationOnTreatmentReview.
+     * @param {RadiationOnTreatmentReviewUpdateArgs} args - Arguments to update one RadiationOnTreatmentReview.
+     * @example
+     * // Update one RadiationOnTreatmentReview
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RadiationOnTreatmentReviewUpdateArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewUpdateArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RadiationOnTreatmentReviews.
+     * @param {RadiationOnTreatmentReviewDeleteManyArgs} args - Arguments to filter RadiationOnTreatmentReviews to delete.
+     * @example
+     * // Delete a few RadiationOnTreatmentReviews
+     * const { count } = await prisma.radiationOnTreatmentReview.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RadiationOnTreatmentReviewDeleteManyArgs>(args?: SelectSubset<T, RadiationOnTreatmentReviewDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationOnTreatmentReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationOnTreatmentReviewUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RadiationOnTreatmentReviews
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RadiationOnTreatmentReviewUpdateManyArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationOnTreatmentReviews and returns the data updated in the database.
+     * @param {RadiationOnTreatmentReviewUpdateManyAndReturnArgs} args - Arguments to update many RadiationOnTreatmentReviews.
+     * @example
+     * // Update many RadiationOnTreatmentReviews
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RadiationOnTreatmentReviews and only return the `id`
+     * const radiationOnTreatmentReviewWithIdOnly = await prisma.radiationOnTreatmentReview.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RadiationOnTreatmentReviewUpdateManyAndReturnArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RadiationOnTreatmentReview.
+     * @param {RadiationOnTreatmentReviewUpsertArgs} args - Arguments to update or create a RadiationOnTreatmentReview.
+     * @example
+     * // Update or create a RadiationOnTreatmentReview
+     * const radiationOnTreatmentReview = await prisma.radiationOnTreatmentReview.upsert({
+     *   create: {
+     *     // ... data to create a RadiationOnTreatmentReview
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RadiationOnTreatmentReview we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RadiationOnTreatmentReviewUpsertArgs>(args: SelectSubset<T, RadiationOnTreatmentReviewUpsertArgs<ExtArgs>>): Prisma__RadiationOnTreatmentReviewClient<$Result.GetResult<Prisma.$RadiationOnTreatmentReviewPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RadiationOnTreatmentReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationOnTreatmentReviewCountArgs} args - Arguments to filter RadiationOnTreatmentReviews to count.
+     * @example
+     * // Count the number of RadiationOnTreatmentReviews
+     * const count = await prisma.radiationOnTreatmentReview.count({
+     *   where: {
+     *     // ... the filter for the RadiationOnTreatmentReviews we want to count
+     *   }
+     * })
+    **/
+    count<T extends RadiationOnTreatmentReviewCountArgs>(
+      args?: Subset<T, RadiationOnTreatmentReviewCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RadiationOnTreatmentReviewCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RadiationOnTreatmentReview.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationOnTreatmentReviewAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RadiationOnTreatmentReviewAggregateArgs>(args: Subset<T, RadiationOnTreatmentReviewAggregateArgs>): Prisma.PrismaPromise<GetRadiationOnTreatmentReviewAggregateType<T>>
+
+    /**
+     * Group by RadiationOnTreatmentReview.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationOnTreatmentReviewGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RadiationOnTreatmentReviewGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RadiationOnTreatmentReviewGroupByArgs['orderBy'] }
+        : { orderBy?: RadiationOnTreatmentReviewGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RadiationOnTreatmentReviewGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRadiationOnTreatmentReviewGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RadiationOnTreatmentReview model
+   */
+  readonly fields: RadiationOnTreatmentReviewFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RadiationOnTreatmentReview.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RadiationOnTreatmentReviewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    prescription<T extends RadiationPrescriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescriptionDefaultArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RadiationOnTreatmentReview model
+   */
+  interface RadiationOnTreatmentReviewFieldRefs {
+    readonly id: FieldRef<"RadiationOnTreatmentReview", 'String'>
+    readonly tenantId: FieldRef<"RadiationOnTreatmentReview", 'String'>
+    readonly prescriptionId: FieldRef<"RadiationOnTreatmentReview", 'String'>
+    readonly reviewDate: FieldRef<"RadiationOnTreatmentReview", 'DateTime'>
+    readonly weekNumber: FieldRef<"RadiationOnTreatmentReview", 'Int'>
+    readonly toxicityGrade: FieldRef<"RadiationOnTreatmentReview", 'String'>
+    readonly painScore: FieldRef<"RadiationOnTreatmentReview", 'Int'>
+    readonly weightKg: FieldRef<"RadiationOnTreatmentReview", 'Decimal'>
+    readonly treatmentBreakRequired: FieldRef<"RadiationOnTreatmentReview", 'Boolean'>
+    readonly reviewNotes: FieldRef<"RadiationOnTreatmentReview", 'String'>
+    readonly reviewedBy: FieldRef<"RadiationOnTreatmentReview", 'String'>
+    readonly createdAt: FieldRef<"RadiationOnTreatmentReview", 'DateTime'>
+    readonly updatedAt: FieldRef<"RadiationOnTreatmentReview", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RadiationOnTreatmentReview findUnique
+   */
+  export type RadiationOnTreatmentReviewFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationOnTreatmentReview to fetch.
+     */
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+  }
+
+  /**
+   * RadiationOnTreatmentReview findUniqueOrThrow
+   */
+  export type RadiationOnTreatmentReviewFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationOnTreatmentReview to fetch.
+     */
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+  }
+
+  /**
+   * RadiationOnTreatmentReview findFirst
+   */
+  export type RadiationOnTreatmentReviewFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationOnTreatmentReview to fetch.
+     */
+    where?: RadiationOnTreatmentReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationOnTreatmentReviews to fetch.
+     */
+    orderBy?: RadiationOnTreatmentReviewOrderByWithRelationInput | RadiationOnTreatmentReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationOnTreatmentReviews.
+     */
+    cursor?: RadiationOnTreatmentReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationOnTreatmentReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationOnTreatmentReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationOnTreatmentReviews.
+     */
+    distinct?: RadiationOnTreatmentReviewScalarFieldEnum | RadiationOnTreatmentReviewScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationOnTreatmentReview findFirstOrThrow
+   */
+  export type RadiationOnTreatmentReviewFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationOnTreatmentReview to fetch.
+     */
+    where?: RadiationOnTreatmentReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationOnTreatmentReviews to fetch.
+     */
+    orderBy?: RadiationOnTreatmentReviewOrderByWithRelationInput | RadiationOnTreatmentReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationOnTreatmentReviews.
+     */
+    cursor?: RadiationOnTreatmentReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationOnTreatmentReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationOnTreatmentReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationOnTreatmentReviews.
+     */
+    distinct?: RadiationOnTreatmentReviewScalarFieldEnum | RadiationOnTreatmentReviewScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationOnTreatmentReview findMany
+   */
+  export type RadiationOnTreatmentReviewFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationOnTreatmentReviews to fetch.
+     */
+    where?: RadiationOnTreatmentReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationOnTreatmentReviews to fetch.
+     */
+    orderBy?: RadiationOnTreatmentReviewOrderByWithRelationInput | RadiationOnTreatmentReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RadiationOnTreatmentReviews.
+     */
+    cursor?: RadiationOnTreatmentReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationOnTreatmentReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationOnTreatmentReviews.
+     */
+    skip?: number
+    distinct?: RadiationOnTreatmentReviewScalarFieldEnum | RadiationOnTreatmentReviewScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationOnTreatmentReview create
+   */
+  export type RadiationOnTreatmentReviewCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RadiationOnTreatmentReview.
+     */
+    data: XOR<RadiationOnTreatmentReviewCreateInput, RadiationOnTreatmentReviewUncheckedCreateInput>
+  }
+
+  /**
+   * RadiationOnTreatmentReview createMany
+   */
+  export type RadiationOnTreatmentReviewCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RadiationOnTreatmentReviews.
+     */
+    data: RadiationOnTreatmentReviewCreateManyInput | RadiationOnTreatmentReviewCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RadiationOnTreatmentReview createManyAndReturn
+   */
+  export type RadiationOnTreatmentReviewCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * The data used to create many RadiationOnTreatmentReviews.
+     */
+    data: RadiationOnTreatmentReviewCreateManyInput | RadiationOnTreatmentReviewCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationOnTreatmentReview update
+   */
+  export type RadiationOnTreatmentReviewUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RadiationOnTreatmentReview.
+     */
+    data: XOR<RadiationOnTreatmentReviewUpdateInput, RadiationOnTreatmentReviewUncheckedUpdateInput>
+    /**
+     * Choose, which RadiationOnTreatmentReview to update.
+     */
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+  }
+
+  /**
+   * RadiationOnTreatmentReview updateMany
+   */
+  export type RadiationOnTreatmentReviewUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RadiationOnTreatmentReviews.
+     */
+    data: XOR<RadiationOnTreatmentReviewUpdateManyMutationInput, RadiationOnTreatmentReviewUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationOnTreatmentReviews to update
+     */
+    where?: RadiationOnTreatmentReviewWhereInput
+    /**
+     * Limit how many RadiationOnTreatmentReviews to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationOnTreatmentReview updateManyAndReturn
+   */
+  export type RadiationOnTreatmentReviewUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * The data used to update RadiationOnTreatmentReviews.
+     */
+    data: XOR<RadiationOnTreatmentReviewUpdateManyMutationInput, RadiationOnTreatmentReviewUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationOnTreatmentReviews to update
+     */
+    where?: RadiationOnTreatmentReviewWhereInput
+    /**
+     * Limit how many RadiationOnTreatmentReviews to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationOnTreatmentReview upsert
+   */
+  export type RadiationOnTreatmentReviewUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RadiationOnTreatmentReview to update in case it exists.
+     */
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+    /**
+     * In case the RadiationOnTreatmentReview found by the `where` argument doesn't exist, create a new RadiationOnTreatmentReview with this data.
+     */
+    create: XOR<RadiationOnTreatmentReviewCreateInput, RadiationOnTreatmentReviewUncheckedCreateInput>
+    /**
+     * In case the RadiationOnTreatmentReview was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RadiationOnTreatmentReviewUpdateInput, RadiationOnTreatmentReviewUncheckedUpdateInput>
+  }
+
+  /**
+   * RadiationOnTreatmentReview delete
+   */
+  export type RadiationOnTreatmentReviewDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+    /**
+     * Filter which RadiationOnTreatmentReview to delete.
+     */
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+  }
+
+  /**
+   * RadiationOnTreatmentReview deleteMany
+   */
+  export type RadiationOnTreatmentReviewDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationOnTreatmentReviews to delete
+     */
+    where?: RadiationOnTreatmentReviewWhereInput
+    /**
+     * Limit how many RadiationOnTreatmentReviews to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationOnTreatmentReview without action
+   */
+  export type RadiationOnTreatmentReviewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationOnTreatmentReview
+     */
+    select?: RadiationOnTreatmentReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationOnTreatmentReview
+     */
+    omit?: RadiationOnTreatmentReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationOnTreatmentReviewInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RadiationCompletionSummary
+   */
+
+  export type AggregateRadiationCompletionSummary = {
+    _count: RadiationCompletionSummaryCountAggregateOutputType | null
+    _avg: RadiationCompletionSummaryAvgAggregateOutputType | null
+    _sum: RadiationCompletionSummarySumAggregateOutputType | null
+    _min: RadiationCompletionSummaryMinAggregateOutputType | null
+    _max: RadiationCompletionSummaryMaxAggregateOutputType | null
+  }
+
+  export type RadiationCompletionSummaryAvgAggregateOutputType = {
+    plannedTotalDoseGy: Decimal | null
+    deliveredTotalDoseGy: Decimal | null
+    plannedFractions: number | null
+    deliveredFractions: number | null
+  }
+
+  export type RadiationCompletionSummarySumAggregateOutputType = {
+    plannedTotalDoseGy: Decimal | null
+    deliveredTotalDoseGy: Decimal | null
+    plannedFractions: number | null
+    deliveredFractions: number | null
+  }
+
+  export type RadiationCompletionSummaryMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    completionDate: Date | null
+    plannedTotalDoseGy: Decimal | null
+    deliveredTotalDoseGy: Decimal | null
+    plannedFractions: number | null
+    deliveredFractions: number | null
+    interruptions: boolean | null
+    interruptionNotes: string | null
+    acuteToxicitySummary: string | null
+    responseAssessmentPlan: string | null
+    followupPlan: string | null
+    completedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationCompletionSummaryMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    prescriptionId: string | null
+    completionDate: Date | null
+    plannedTotalDoseGy: Decimal | null
+    deliveredTotalDoseGy: Decimal | null
+    plannedFractions: number | null
+    deliveredFractions: number | null
+    interruptions: boolean | null
+    interruptionNotes: string | null
+    acuteToxicitySummary: string | null
+    responseAssessmentPlan: string | null
+    followupPlan: string | null
+    completedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RadiationCompletionSummaryCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    prescriptionId: number
+    completionDate: number
+    plannedTotalDoseGy: number
+    deliveredTotalDoseGy: number
+    plannedFractions: number
+    deliveredFractions: number
+    interruptions: number
+    interruptionNotes: number
+    acuteToxicitySummary: number
+    responseAssessmentPlan: number
+    followupPlan: number
+    completedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RadiationCompletionSummaryAvgAggregateInputType = {
+    plannedTotalDoseGy?: true
+    deliveredTotalDoseGy?: true
+    plannedFractions?: true
+    deliveredFractions?: true
+  }
+
+  export type RadiationCompletionSummarySumAggregateInputType = {
+    plannedTotalDoseGy?: true
+    deliveredTotalDoseGy?: true
+    plannedFractions?: true
+    deliveredFractions?: true
+  }
+
+  export type RadiationCompletionSummaryMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    completionDate?: true
+    plannedTotalDoseGy?: true
+    deliveredTotalDoseGy?: true
+    plannedFractions?: true
+    deliveredFractions?: true
+    interruptions?: true
+    interruptionNotes?: true
+    acuteToxicitySummary?: true
+    responseAssessmentPlan?: true
+    followupPlan?: true
+    completedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationCompletionSummaryMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    completionDate?: true
+    plannedTotalDoseGy?: true
+    deliveredTotalDoseGy?: true
+    plannedFractions?: true
+    deliveredFractions?: true
+    interruptions?: true
+    interruptionNotes?: true
+    acuteToxicitySummary?: true
+    responseAssessmentPlan?: true
+    followupPlan?: true
+    completedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RadiationCompletionSummaryCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    prescriptionId?: true
+    completionDate?: true
+    plannedTotalDoseGy?: true
+    deliveredTotalDoseGy?: true
+    plannedFractions?: true
+    deliveredFractions?: true
+    interruptions?: true
+    interruptionNotes?: true
+    acuteToxicitySummary?: true
+    responseAssessmentPlan?: true
+    followupPlan?: true
+    completedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RadiationCompletionSummaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationCompletionSummary to aggregate.
+     */
+    where?: RadiationCompletionSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationCompletionSummaries to fetch.
+     */
+    orderBy?: RadiationCompletionSummaryOrderByWithRelationInput | RadiationCompletionSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RadiationCompletionSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationCompletionSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationCompletionSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RadiationCompletionSummaries
+    **/
+    _count?: true | RadiationCompletionSummaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RadiationCompletionSummaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RadiationCompletionSummarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RadiationCompletionSummaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RadiationCompletionSummaryMaxAggregateInputType
+  }
+
+  export type GetRadiationCompletionSummaryAggregateType<T extends RadiationCompletionSummaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateRadiationCompletionSummary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRadiationCompletionSummary[P]>
+      : GetScalarType<T[P], AggregateRadiationCompletionSummary[P]>
+  }
+
+
+
+
+  export type RadiationCompletionSummaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RadiationCompletionSummaryWhereInput
+    orderBy?: RadiationCompletionSummaryOrderByWithAggregationInput | RadiationCompletionSummaryOrderByWithAggregationInput[]
+    by: RadiationCompletionSummaryScalarFieldEnum[] | RadiationCompletionSummaryScalarFieldEnum
+    having?: RadiationCompletionSummaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RadiationCompletionSummaryCountAggregateInputType | true
+    _avg?: RadiationCompletionSummaryAvgAggregateInputType
+    _sum?: RadiationCompletionSummarySumAggregateInputType
+    _min?: RadiationCompletionSummaryMinAggregateInputType
+    _max?: RadiationCompletionSummaryMaxAggregateInputType
+  }
+
+  export type RadiationCompletionSummaryGroupByOutputType = {
+    id: string
+    tenantId: string
+    prescriptionId: string
+    completionDate: Date | null
+    plannedTotalDoseGy: Decimal | null
+    deliveredTotalDoseGy: Decimal | null
+    plannedFractions: number | null
+    deliveredFractions: number | null
+    interruptions: boolean
+    interruptionNotes: string | null
+    acuteToxicitySummary: string | null
+    responseAssessmentPlan: string | null
+    followupPlan: string | null
+    completedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: RadiationCompletionSummaryCountAggregateOutputType | null
+    _avg: RadiationCompletionSummaryAvgAggregateOutputType | null
+    _sum: RadiationCompletionSummarySumAggregateOutputType | null
+    _min: RadiationCompletionSummaryMinAggregateOutputType | null
+    _max: RadiationCompletionSummaryMaxAggregateOutputType | null
+  }
+
+  type GetRadiationCompletionSummaryGroupByPayload<T extends RadiationCompletionSummaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RadiationCompletionSummaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RadiationCompletionSummaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RadiationCompletionSummaryGroupByOutputType[P]>
+            : GetScalarType<T[P], RadiationCompletionSummaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RadiationCompletionSummarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    completionDate?: boolean
+    plannedTotalDoseGy?: boolean
+    deliveredTotalDoseGy?: boolean
+    plannedFractions?: boolean
+    deliveredFractions?: boolean
+    interruptions?: boolean
+    interruptionNotes?: boolean
+    acuteToxicitySummary?: boolean
+    responseAssessmentPlan?: boolean
+    followupPlan?: boolean
+    completedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationCompletionSummary"]>
+
+  export type RadiationCompletionSummarySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    completionDate?: boolean
+    plannedTotalDoseGy?: boolean
+    deliveredTotalDoseGy?: boolean
+    plannedFractions?: boolean
+    deliveredFractions?: boolean
+    interruptions?: boolean
+    interruptionNotes?: boolean
+    acuteToxicitySummary?: boolean
+    responseAssessmentPlan?: boolean
+    followupPlan?: boolean
+    completedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationCompletionSummary"]>
+
+  export type RadiationCompletionSummarySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    completionDate?: boolean
+    plannedTotalDoseGy?: boolean
+    deliveredTotalDoseGy?: boolean
+    plannedFractions?: boolean
+    deliveredFractions?: boolean
+    interruptions?: boolean
+    interruptionNotes?: boolean
+    acuteToxicitySummary?: boolean
+    responseAssessmentPlan?: boolean
+    followupPlan?: boolean
+    completedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["radiationCompletionSummary"]>
+
+  export type RadiationCompletionSummarySelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    prescriptionId?: boolean
+    completionDate?: boolean
+    plannedTotalDoseGy?: boolean
+    deliveredTotalDoseGy?: boolean
+    plannedFractions?: boolean
+    deliveredFractions?: boolean
+    interruptions?: boolean
+    interruptionNotes?: boolean
+    acuteToxicitySummary?: boolean
+    responseAssessmentPlan?: boolean
+    followupPlan?: boolean
+    completedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RadiationCompletionSummaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "prescriptionId" | "completionDate" | "plannedTotalDoseGy" | "deliveredTotalDoseGy" | "plannedFractions" | "deliveredFractions" | "interruptions" | "interruptionNotes" | "acuteToxicitySummary" | "responseAssessmentPlan" | "followupPlan" | "completedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["radiationCompletionSummary"]>
+  export type RadiationCompletionSummaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+  export type RadiationCompletionSummaryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+  export type RadiationCompletionSummaryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    prescription?: boolean | RadiationPrescriptionDefaultArgs<ExtArgs>
+  }
+
+  export type $RadiationCompletionSummaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RadiationCompletionSummary"
+    objects: {
+      prescription: Prisma.$RadiationPrescriptionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      prescriptionId: string
+      completionDate: Date | null
+      plannedTotalDoseGy: Prisma.Decimal | null
+      deliveredTotalDoseGy: Prisma.Decimal | null
+      plannedFractions: number | null
+      deliveredFractions: number | null
+      interruptions: boolean
+      interruptionNotes: string | null
+      acuteToxicitySummary: string | null
+      responseAssessmentPlan: string | null
+      followupPlan: string | null
+      completedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["radiationCompletionSummary"]>
+    composites: {}
+  }
+
+  type RadiationCompletionSummaryGetPayload<S extends boolean | null | undefined | RadiationCompletionSummaryDefaultArgs> = $Result.GetResult<Prisma.$RadiationCompletionSummaryPayload, S>
+
+  type RadiationCompletionSummaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RadiationCompletionSummaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RadiationCompletionSummaryCountAggregateInputType | true
+    }
+
+  export interface RadiationCompletionSummaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RadiationCompletionSummary'], meta: { name: 'RadiationCompletionSummary' } }
+    /**
+     * Find zero or one RadiationCompletionSummary that matches the filter.
+     * @param {RadiationCompletionSummaryFindUniqueArgs} args - Arguments to find a RadiationCompletionSummary
+     * @example
+     * // Get one RadiationCompletionSummary
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RadiationCompletionSummaryFindUniqueArgs>(args: SelectSubset<T, RadiationCompletionSummaryFindUniqueArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RadiationCompletionSummary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RadiationCompletionSummaryFindUniqueOrThrowArgs} args - Arguments to find a RadiationCompletionSummary
+     * @example
+     * // Get one RadiationCompletionSummary
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RadiationCompletionSummaryFindUniqueOrThrowArgs>(args: SelectSubset<T, RadiationCompletionSummaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationCompletionSummary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationCompletionSummaryFindFirstArgs} args - Arguments to find a RadiationCompletionSummary
+     * @example
+     * // Get one RadiationCompletionSummary
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RadiationCompletionSummaryFindFirstArgs>(args?: SelectSubset<T, RadiationCompletionSummaryFindFirstArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RadiationCompletionSummary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationCompletionSummaryFindFirstOrThrowArgs} args - Arguments to find a RadiationCompletionSummary
+     * @example
+     * // Get one RadiationCompletionSummary
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RadiationCompletionSummaryFindFirstOrThrowArgs>(args?: SelectSubset<T, RadiationCompletionSummaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RadiationCompletionSummaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationCompletionSummaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RadiationCompletionSummaries
+     * const radiationCompletionSummaries = await prisma.radiationCompletionSummary.findMany()
+     * 
+     * // Get first 10 RadiationCompletionSummaries
+     * const radiationCompletionSummaries = await prisma.radiationCompletionSummary.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const radiationCompletionSummaryWithIdOnly = await prisma.radiationCompletionSummary.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RadiationCompletionSummaryFindManyArgs>(args?: SelectSubset<T, RadiationCompletionSummaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RadiationCompletionSummary.
+     * @param {RadiationCompletionSummaryCreateArgs} args - Arguments to create a RadiationCompletionSummary.
+     * @example
+     * // Create one RadiationCompletionSummary
+     * const RadiationCompletionSummary = await prisma.radiationCompletionSummary.create({
+     *   data: {
+     *     // ... data to create a RadiationCompletionSummary
+     *   }
+     * })
+     * 
+     */
+    create<T extends RadiationCompletionSummaryCreateArgs>(args: SelectSubset<T, RadiationCompletionSummaryCreateArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RadiationCompletionSummaries.
+     * @param {RadiationCompletionSummaryCreateManyArgs} args - Arguments to create many RadiationCompletionSummaries.
+     * @example
+     * // Create many RadiationCompletionSummaries
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RadiationCompletionSummaryCreateManyArgs>(args?: SelectSubset<T, RadiationCompletionSummaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RadiationCompletionSummaries and returns the data saved in the database.
+     * @param {RadiationCompletionSummaryCreateManyAndReturnArgs} args - Arguments to create many RadiationCompletionSummaries.
+     * @example
+     * // Create many RadiationCompletionSummaries
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RadiationCompletionSummaries and only return the `id`
+     * const radiationCompletionSummaryWithIdOnly = await prisma.radiationCompletionSummary.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RadiationCompletionSummaryCreateManyAndReturnArgs>(args?: SelectSubset<T, RadiationCompletionSummaryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RadiationCompletionSummary.
+     * @param {RadiationCompletionSummaryDeleteArgs} args - Arguments to delete one RadiationCompletionSummary.
+     * @example
+     * // Delete one RadiationCompletionSummary
+     * const RadiationCompletionSummary = await prisma.radiationCompletionSummary.delete({
+     *   where: {
+     *     // ... filter to delete one RadiationCompletionSummary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RadiationCompletionSummaryDeleteArgs>(args: SelectSubset<T, RadiationCompletionSummaryDeleteArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RadiationCompletionSummary.
+     * @param {RadiationCompletionSummaryUpdateArgs} args - Arguments to update one RadiationCompletionSummary.
+     * @example
+     * // Update one RadiationCompletionSummary
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RadiationCompletionSummaryUpdateArgs>(args: SelectSubset<T, RadiationCompletionSummaryUpdateArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RadiationCompletionSummaries.
+     * @param {RadiationCompletionSummaryDeleteManyArgs} args - Arguments to filter RadiationCompletionSummaries to delete.
+     * @example
+     * // Delete a few RadiationCompletionSummaries
+     * const { count } = await prisma.radiationCompletionSummary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RadiationCompletionSummaryDeleteManyArgs>(args?: SelectSubset<T, RadiationCompletionSummaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationCompletionSummaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationCompletionSummaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RadiationCompletionSummaries
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RadiationCompletionSummaryUpdateManyArgs>(args: SelectSubset<T, RadiationCompletionSummaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RadiationCompletionSummaries and returns the data updated in the database.
+     * @param {RadiationCompletionSummaryUpdateManyAndReturnArgs} args - Arguments to update many RadiationCompletionSummaries.
+     * @example
+     * // Update many RadiationCompletionSummaries
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RadiationCompletionSummaries and only return the `id`
+     * const radiationCompletionSummaryWithIdOnly = await prisma.radiationCompletionSummary.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RadiationCompletionSummaryUpdateManyAndReturnArgs>(args: SelectSubset<T, RadiationCompletionSummaryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RadiationCompletionSummary.
+     * @param {RadiationCompletionSummaryUpsertArgs} args - Arguments to update or create a RadiationCompletionSummary.
+     * @example
+     * // Update or create a RadiationCompletionSummary
+     * const radiationCompletionSummary = await prisma.radiationCompletionSummary.upsert({
+     *   create: {
+     *     // ... data to create a RadiationCompletionSummary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RadiationCompletionSummary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RadiationCompletionSummaryUpsertArgs>(args: SelectSubset<T, RadiationCompletionSummaryUpsertArgs<ExtArgs>>): Prisma__RadiationCompletionSummaryClient<$Result.GetResult<Prisma.$RadiationCompletionSummaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RadiationCompletionSummaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationCompletionSummaryCountArgs} args - Arguments to filter RadiationCompletionSummaries to count.
+     * @example
+     * // Count the number of RadiationCompletionSummaries
+     * const count = await prisma.radiationCompletionSummary.count({
+     *   where: {
+     *     // ... the filter for the RadiationCompletionSummaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends RadiationCompletionSummaryCountArgs>(
+      args?: Subset<T, RadiationCompletionSummaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RadiationCompletionSummaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RadiationCompletionSummary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationCompletionSummaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RadiationCompletionSummaryAggregateArgs>(args: Subset<T, RadiationCompletionSummaryAggregateArgs>): Prisma.PrismaPromise<GetRadiationCompletionSummaryAggregateType<T>>
+
+    /**
+     * Group by RadiationCompletionSummary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RadiationCompletionSummaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RadiationCompletionSummaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RadiationCompletionSummaryGroupByArgs['orderBy'] }
+        : { orderBy?: RadiationCompletionSummaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RadiationCompletionSummaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRadiationCompletionSummaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RadiationCompletionSummary model
+   */
+  readonly fields: RadiationCompletionSummaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RadiationCompletionSummary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RadiationCompletionSummaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    prescription<T extends RadiationPrescriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RadiationPrescriptionDefaultArgs<ExtArgs>>): Prisma__RadiationPrescriptionClient<$Result.GetResult<Prisma.$RadiationPrescriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RadiationCompletionSummary model
+   */
+  interface RadiationCompletionSummaryFieldRefs {
+    readonly id: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly tenantId: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly prescriptionId: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly completionDate: FieldRef<"RadiationCompletionSummary", 'DateTime'>
+    readonly plannedTotalDoseGy: FieldRef<"RadiationCompletionSummary", 'Decimal'>
+    readonly deliveredTotalDoseGy: FieldRef<"RadiationCompletionSummary", 'Decimal'>
+    readonly plannedFractions: FieldRef<"RadiationCompletionSummary", 'Int'>
+    readonly deliveredFractions: FieldRef<"RadiationCompletionSummary", 'Int'>
+    readonly interruptions: FieldRef<"RadiationCompletionSummary", 'Boolean'>
+    readonly interruptionNotes: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly acuteToxicitySummary: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly responseAssessmentPlan: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly followupPlan: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly completedBy: FieldRef<"RadiationCompletionSummary", 'String'>
+    readonly createdAt: FieldRef<"RadiationCompletionSummary", 'DateTime'>
+    readonly updatedAt: FieldRef<"RadiationCompletionSummary", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RadiationCompletionSummary findUnique
+   */
+  export type RadiationCompletionSummaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationCompletionSummary to fetch.
+     */
+    where: RadiationCompletionSummaryWhereUniqueInput
+  }
+
+  /**
+   * RadiationCompletionSummary findUniqueOrThrow
+   */
+  export type RadiationCompletionSummaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationCompletionSummary to fetch.
+     */
+    where: RadiationCompletionSummaryWhereUniqueInput
+  }
+
+  /**
+   * RadiationCompletionSummary findFirst
+   */
+  export type RadiationCompletionSummaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationCompletionSummary to fetch.
+     */
+    where?: RadiationCompletionSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationCompletionSummaries to fetch.
+     */
+    orderBy?: RadiationCompletionSummaryOrderByWithRelationInput | RadiationCompletionSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationCompletionSummaries.
+     */
+    cursor?: RadiationCompletionSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationCompletionSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationCompletionSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationCompletionSummaries.
+     */
+    distinct?: RadiationCompletionSummaryScalarFieldEnum | RadiationCompletionSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationCompletionSummary findFirstOrThrow
+   */
+  export type RadiationCompletionSummaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationCompletionSummary to fetch.
+     */
+    where?: RadiationCompletionSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationCompletionSummaries to fetch.
+     */
+    orderBy?: RadiationCompletionSummaryOrderByWithRelationInput | RadiationCompletionSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RadiationCompletionSummaries.
+     */
+    cursor?: RadiationCompletionSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationCompletionSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationCompletionSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RadiationCompletionSummaries.
+     */
+    distinct?: RadiationCompletionSummaryScalarFieldEnum | RadiationCompletionSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationCompletionSummary findMany
+   */
+  export type RadiationCompletionSummaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which RadiationCompletionSummaries to fetch.
+     */
+    where?: RadiationCompletionSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RadiationCompletionSummaries to fetch.
+     */
+    orderBy?: RadiationCompletionSummaryOrderByWithRelationInput | RadiationCompletionSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RadiationCompletionSummaries.
+     */
+    cursor?: RadiationCompletionSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RadiationCompletionSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RadiationCompletionSummaries.
+     */
+    skip?: number
+    distinct?: RadiationCompletionSummaryScalarFieldEnum | RadiationCompletionSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * RadiationCompletionSummary create
+   */
+  export type RadiationCompletionSummaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RadiationCompletionSummary.
+     */
+    data: XOR<RadiationCompletionSummaryCreateInput, RadiationCompletionSummaryUncheckedCreateInput>
+  }
+
+  /**
+   * RadiationCompletionSummary createMany
+   */
+  export type RadiationCompletionSummaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RadiationCompletionSummaries.
+     */
+    data: RadiationCompletionSummaryCreateManyInput | RadiationCompletionSummaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RadiationCompletionSummary createManyAndReturn
+   */
+  export type RadiationCompletionSummaryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * The data used to create many RadiationCompletionSummaries.
+     */
+    data: RadiationCompletionSummaryCreateManyInput | RadiationCompletionSummaryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationCompletionSummary update
+   */
+  export type RadiationCompletionSummaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RadiationCompletionSummary.
+     */
+    data: XOR<RadiationCompletionSummaryUpdateInput, RadiationCompletionSummaryUncheckedUpdateInput>
+    /**
+     * Choose, which RadiationCompletionSummary to update.
+     */
+    where: RadiationCompletionSummaryWhereUniqueInput
+  }
+
+  /**
+   * RadiationCompletionSummary updateMany
+   */
+  export type RadiationCompletionSummaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RadiationCompletionSummaries.
+     */
+    data: XOR<RadiationCompletionSummaryUpdateManyMutationInput, RadiationCompletionSummaryUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationCompletionSummaries to update
+     */
+    where?: RadiationCompletionSummaryWhereInput
+    /**
+     * Limit how many RadiationCompletionSummaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationCompletionSummary updateManyAndReturn
+   */
+  export type RadiationCompletionSummaryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * The data used to update RadiationCompletionSummaries.
+     */
+    data: XOR<RadiationCompletionSummaryUpdateManyMutationInput, RadiationCompletionSummaryUncheckedUpdateManyInput>
+    /**
+     * Filter which RadiationCompletionSummaries to update
+     */
+    where?: RadiationCompletionSummaryWhereInput
+    /**
+     * Limit how many RadiationCompletionSummaries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RadiationCompletionSummary upsert
+   */
+  export type RadiationCompletionSummaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RadiationCompletionSummary to update in case it exists.
+     */
+    where: RadiationCompletionSummaryWhereUniqueInput
+    /**
+     * In case the RadiationCompletionSummary found by the `where` argument doesn't exist, create a new RadiationCompletionSummary with this data.
+     */
+    create: XOR<RadiationCompletionSummaryCreateInput, RadiationCompletionSummaryUncheckedCreateInput>
+    /**
+     * In case the RadiationCompletionSummary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RadiationCompletionSummaryUpdateInput, RadiationCompletionSummaryUncheckedUpdateInput>
+  }
+
+  /**
+   * RadiationCompletionSummary delete
+   */
+  export type RadiationCompletionSummaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+    /**
+     * Filter which RadiationCompletionSummary to delete.
+     */
+    where: RadiationCompletionSummaryWhereUniqueInput
+  }
+
+  /**
+   * RadiationCompletionSummary deleteMany
+   */
+  export type RadiationCompletionSummaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RadiationCompletionSummaries to delete
+     */
+    where?: RadiationCompletionSummaryWhereInput
+    /**
+     * Limit how many RadiationCompletionSummaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RadiationCompletionSummary without action
+   */
+  export type RadiationCompletionSummaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RadiationCompletionSummary
+     */
+    select?: RadiationCompletionSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RadiationCompletionSummary
+     */
+    omit?: RadiationCompletionSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RadiationCompletionSummaryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model OncologyCarePlan
    */
 
@@ -14498,6 +22790,143 @@ export namespace Prisma {
   export type OncologyHistologyMasterScalarFieldEnum = (typeof OncologyHistologyMasterScalarFieldEnum)[keyof typeof OncologyHistologyMasterScalarFieldEnum]
 
 
+  export const RadiationPrescriptionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    encounterId: 'encounterId',
+    cancerProfileId: 'cancerProfileId',
+    prescriptionNumber: 'prescriptionNumber',
+    treatmentIntent: 'treatmentIntent',
+    treatmentSiteId: 'treatmentSiteId',
+    laterality: 'laterality',
+    modality: 'modality',
+    technique: 'technique',
+    totalDoseGy: 'totalDoseGy',
+    dosePerFractionGy: 'dosePerFractionGy',
+    plannedFractions: 'plannedFractions',
+    concurrentChemo: 'concurrentChemo',
+    plannedStartDate: 'plannedStartDate',
+    plannedEndDate: 'plannedEndDate',
+    prescriptionNotes: 'prescriptionNotes',
+    prescribedBy: 'prescribedBy',
+    prescribedAt: 'prescribedAt',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RadiationPrescriptionScalarFieldEnum = (typeof RadiationPrescriptionScalarFieldEnum)[keyof typeof RadiationPrescriptionScalarFieldEnum]
+
+
+  export const RadiationSimulationScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    prescriptionId: 'prescriptionId',
+    simulationDate: 'simulationDate',
+    patientPosition: 'patientPosition',
+    immobilizationDevice: 'immobilizationDevice',
+    contrastUsed: 'contrastUsed',
+    scanRegion: 'scanRegion',
+    setupReference: 'setupReference',
+    tattooMarkingDone: 'tattooMarkingDone',
+    simulationNotes: 'simulationNotes',
+    performedBy: 'performedBy',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RadiationSimulationScalarFieldEnum = (typeof RadiationSimulationScalarFieldEnum)[keyof typeof RadiationSimulationScalarFieldEnum]
+
+
+  export const RadiationTreatmentPlanScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    prescriptionId: 'prescriptionId',
+    simulationId: 'simulationId',
+    externalPlanReference: 'externalPlanReference',
+    planningSystem: 'planningSystem',
+    planningStatus: 'planningStatus',
+    plannerId: 'plannerId',
+    physicistId: 'physicistId',
+    radiationOncologistId: 'radiationOncologistId',
+    contouringCompleted: 'contouringCompleted',
+    physicsQaCompleted: 'physicsQaCompleted',
+    treatmentMachine: 'treatmentMachine',
+    planNotes: 'planNotes',
+    approvedBy: 'approvedBy',
+    approvedAt: 'approvedAt',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RadiationTreatmentPlanScalarFieldEnum = (typeof RadiationTreatmentPlanScalarFieldEnum)[keyof typeof RadiationTreatmentPlanScalarFieldEnum]
+
+
+  export const RadiationFractionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    treatmentPlanId: 'treatmentPlanId',
+    fractionNumber: 'fractionNumber',
+    plannedDate: 'plannedDate',
+    actualDate: 'actualDate',
+    plannedDoseGy: 'plannedDoseGy',
+    deliveredDoseGy: 'deliveredDoseGy',
+    treatmentMachine: 'treatmentMachine',
+    radiationTherapistId: 'radiationTherapistId',
+    status: 'status',
+    interruptionReason: 'interruptionReason',
+    verificationCompleted: 'verificationCompleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RadiationFractionScalarFieldEnum = (typeof RadiationFractionScalarFieldEnum)[keyof typeof RadiationFractionScalarFieldEnum]
+
+
+  export const RadiationOnTreatmentReviewScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    prescriptionId: 'prescriptionId',
+    reviewDate: 'reviewDate',
+    weekNumber: 'weekNumber',
+    toxicityGrade: 'toxicityGrade',
+    painScore: 'painScore',
+    weightKg: 'weightKg',
+    treatmentBreakRequired: 'treatmentBreakRequired',
+    reviewNotes: 'reviewNotes',
+    reviewedBy: 'reviewedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RadiationOnTreatmentReviewScalarFieldEnum = (typeof RadiationOnTreatmentReviewScalarFieldEnum)[keyof typeof RadiationOnTreatmentReviewScalarFieldEnum]
+
+
+  export const RadiationCompletionSummaryScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    prescriptionId: 'prescriptionId',
+    completionDate: 'completionDate',
+    plannedTotalDoseGy: 'plannedTotalDoseGy',
+    deliveredTotalDoseGy: 'deliveredTotalDoseGy',
+    plannedFractions: 'plannedFractions',
+    deliveredFractions: 'deliveredFractions',
+    interruptions: 'interruptions',
+    interruptionNotes: 'interruptionNotes',
+    acuteToxicitySummary: 'acuteToxicitySummary',
+    responseAssessmentPlan: 'responseAssessmentPlan',
+    followupPlan: 'followupPlan',
+    completedBy: 'completedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RadiationCompletionSummaryScalarFieldEnum = (typeof RadiationCompletionSummaryScalarFieldEnum)[keyof typeof RadiationCompletionSummaryScalarFieldEnum]
+
+
   export const OncologyCarePlanScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
@@ -15747,6 +24176,718 @@ export namespace Prisma {
     active?: BoolWithAggregatesFilter<"OncologyHistologyMaster"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"OncologyHistologyMaster"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"OncologyHistologyMaster"> | Date | string
+  }
+
+  export type RadiationPrescriptionWhereInput = {
+    AND?: RadiationPrescriptionWhereInput | RadiationPrescriptionWhereInput[]
+    OR?: RadiationPrescriptionWhereInput[]
+    NOT?: RadiationPrescriptionWhereInput | RadiationPrescriptionWhereInput[]
+    id?: UuidFilter<"RadiationPrescription"> | string
+    tenantId?: UuidFilter<"RadiationPrescription"> | string
+    patientId?: UuidFilter<"RadiationPrescription"> | string
+    encounterId?: UuidFilter<"RadiationPrescription"> | string
+    cancerProfileId?: UuidNullableFilter<"RadiationPrescription"> | string | null
+    prescriptionNumber?: StringNullableFilter<"RadiationPrescription"> | string | null
+    treatmentIntent?: StringNullableFilter<"RadiationPrescription"> | string | null
+    treatmentSiteId?: UuidNullableFilter<"RadiationPrescription"> | string | null
+    laterality?: StringNullableFilter<"RadiationPrescription"> | string | null
+    modality?: StringNullableFilter<"RadiationPrescription"> | string | null
+    technique?: StringNullableFilter<"RadiationPrescription"> | string | null
+    totalDoseGy?: DecimalNullableFilter<"RadiationPrescription"> | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: DecimalNullableFilter<"RadiationPrescription"> | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: IntNullableFilter<"RadiationPrescription"> | number | null
+    concurrentChemo?: BoolFilter<"RadiationPrescription"> | boolean
+    plannedStartDate?: DateTimeNullableFilter<"RadiationPrescription"> | Date | string | null
+    plannedEndDate?: DateTimeNullableFilter<"RadiationPrescription"> | Date | string | null
+    prescriptionNotes?: StringNullableFilter<"RadiationPrescription"> | string | null
+    prescribedBy?: UuidNullableFilter<"RadiationPrescription"> | string | null
+    prescribedAt?: DateTimeNullableFilter<"RadiationPrescription"> | Date | string | null
+    status?: StringFilter<"RadiationPrescription"> | string
+    createdAt?: DateTimeFilter<"RadiationPrescription"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationPrescription"> | Date | string
+    simulations?: RadiationSimulationListRelationFilter
+    treatmentPlans?: RadiationTreatmentPlanListRelationFilter
+    reviews?: RadiationOnTreatmentReviewListRelationFilter
+    completionSummaries?: RadiationCompletionSummaryListRelationFilter
+  }
+
+  export type RadiationPrescriptionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    cancerProfileId?: SortOrderInput | SortOrder
+    prescriptionNumber?: SortOrderInput | SortOrder
+    treatmentIntent?: SortOrderInput | SortOrder
+    treatmentSiteId?: SortOrderInput | SortOrder
+    laterality?: SortOrderInput | SortOrder
+    modality?: SortOrderInput | SortOrder
+    technique?: SortOrderInput | SortOrder
+    totalDoseGy?: SortOrderInput | SortOrder
+    dosePerFractionGy?: SortOrderInput | SortOrder
+    plannedFractions?: SortOrderInput | SortOrder
+    concurrentChemo?: SortOrder
+    plannedStartDate?: SortOrderInput | SortOrder
+    plannedEndDate?: SortOrderInput | SortOrder
+    prescriptionNotes?: SortOrderInput | SortOrder
+    prescribedBy?: SortOrderInput | SortOrder
+    prescribedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    simulations?: RadiationSimulationOrderByRelationAggregateInput
+    treatmentPlans?: RadiationTreatmentPlanOrderByRelationAggregateInput
+    reviews?: RadiationOnTreatmentReviewOrderByRelationAggregateInput
+    completionSummaries?: RadiationCompletionSummaryOrderByRelationAggregateInput
+  }
+
+  export type RadiationPrescriptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RadiationPrescriptionWhereInput | RadiationPrescriptionWhereInput[]
+    OR?: RadiationPrescriptionWhereInput[]
+    NOT?: RadiationPrescriptionWhereInput | RadiationPrescriptionWhereInput[]
+    tenantId?: UuidFilter<"RadiationPrescription"> | string
+    patientId?: UuidFilter<"RadiationPrescription"> | string
+    encounterId?: UuidFilter<"RadiationPrescription"> | string
+    cancerProfileId?: UuidNullableFilter<"RadiationPrescription"> | string | null
+    prescriptionNumber?: StringNullableFilter<"RadiationPrescription"> | string | null
+    treatmentIntent?: StringNullableFilter<"RadiationPrescription"> | string | null
+    treatmentSiteId?: UuidNullableFilter<"RadiationPrescription"> | string | null
+    laterality?: StringNullableFilter<"RadiationPrescription"> | string | null
+    modality?: StringNullableFilter<"RadiationPrescription"> | string | null
+    technique?: StringNullableFilter<"RadiationPrescription"> | string | null
+    totalDoseGy?: DecimalNullableFilter<"RadiationPrescription"> | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: DecimalNullableFilter<"RadiationPrescription"> | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: IntNullableFilter<"RadiationPrescription"> | number | null
+    concurrentChemo?: BoolFilter<"RadiationPrescription"> | boolean
+    plannedStartDate?: DateTimeNullableFilter<"RadiationPrescription"> | Date | string | null
+    plannedEndDate?: DateTimeNullableFilter<"RadiationPrescription"> | Date | string | null
+    prescriptionNotes?: StringNullableFilter<"RadiationPrescription"> | string | null
+    prescribedBy?: UuidNullableFilter<"RadiationPrescription"> | string | null
+    prescribedAt?: DateTimeNullableFilter<"RadiationPrescription"> | Date | string | null
+    status?: StringFilter<"RadiationPrescription"> | string
+    createdAt?: DateTimeFilter<"RadiationPrescription"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationPrescription"> | Date | string
+    simulations?: RadiationSimulationListRelationFilter
+    treatmentPlans?: RadiationTreatmentPlanListRelationFilter
+    reviews?: RadiationOnTreatmentReviewListRelationFilter
+    completionSummaries?: RadiationCompletionSummaryListRelationFilter
+  }, "id">
+
+  export type RadiationPrescriptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    cancerProfileId?: SortOrderInput | SortOrder
+    prescriptionNumber?: SortOrderInput | SortOrder
+    treatmentIntent?: SortOrderInput | SortOrder
+    treatmentSiteId?: SortOrderInput | SortOrder
+    laterality?: SortOrderInput | SortOrder
+    modality?: SortOrderInput | SortOrder
+    technique?: SortOrderInput | SortOrder
+    totalDoseGy?: SortOrderInput | SortOrder
+    dosePerFractionGy?: SortOrderInput | SortOrder
+    plannedFractions?: SortOrderInput | SortOrder
+    concurrentChemo?: SortOrder
+    plannedStartDate?: SortOrderInput | SortOrder
+    plannedEndDate?: SortOrderInput | SortOrder
+    prescriptionNotes?: SortOrderInput | SortOrder
+    prescribedBy?: SortOrderInput | SortOrder
+    prescribedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RadiationPrescriptionCountOrderByAggregateInput
+    _avg?: RadiationPrescriptionAvgOrderByAggregateInput
+    _max?: RadiationPrescriptionMaxOrderByAggregateInput
+    _min?: RadiationPrescriptionMinOrderByAggregateInput
+    _sum?: RadiationPrescriptionSumOrderByAggregateInput
+  }
+
+  export type RadiationPrescriptionScalarWhereWithAggregatesInput = {
+    AND?: RadiationPrescriptionScalarWhereWithAggregatesInput | RadiationPrescriptionScalarWhereWithAggregatesInput[]
+    OR?: RadiationPrescriptionScalarWhereWithAggregatesInput[]
+    NOT?: RadiationPrescriptionScalarWhereWithAggregatesInput | RadiationPrescriptionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RadiationPrescription"> | string
+    tenantId?: UuidWithAggregatesFilter<"RadiationPrescription"> | string
+    patientId?: UuidWithAggregatesFilter<"RadiationPrescription"> | string
+    encounterId?: UuidWithAggregatesFilter<"RadiationPrescription"> | string
+    cancerProfileId?: UuidNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    prescriptionNumber?: StringNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    treatmentIntent?: StringNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    treatmentSiteId?: UuidNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    laterality?: StringNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    modality?: StringNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    technique?: StringNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    totalDoseGy?: DecimalNullableWithAggregatesFilter<"RadiationPrescription"> | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: DecimalNullableWithAggregatesFilter<"RadiationPrescription"> | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: IntNullableWithAggregatesFilter<"RadiationPrescription"> | number | null
+    concurrentChemo?: BoolWithAggregatesFilter<"RadiationPrescription"> | boolean
+    plannedStartDate?: DateTimeNullableWithAggregatesFilter<"RadiationPrescription"> | Date | string | null
+    plannedEndDate?: DateTimeNullableWithAggregatesFilter<"RadiationPrescription"> | Date | string | null
+    prescriptionNotes?: StringNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    prescribedBy?: UuidNullableWithAggregatesFilter<"RadiationPrescription"> | string | null
+    prescribedAt?: DateTimeNullableWithAggregatesFilter<"RadiationPrescription"> | Date | string | null
+    status?: StringWithAggregatesFilter<"RadiationPrescription"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"RadiationPrescription"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RadiationPrescription"> | Date | string
+  }
+
+  export type RadiationSimulationWhereInput = {
+    AND?: RadiationSimulationWhereInput | RadiationSimulationWhereInput[]
+    OR?: RadiationSimulationWhereInput[]
+    NOT?: RadiationSimulationWhereInput | RadiationSimulationWhereInput[]
+    id?: UuidFilter<"RadiationSimulation"> | string
+    tenantId?: UuidFilter<"RadiationSimulation"> | string
+    prescriptionId?: UuidFilter<"RadiationSimulation"> | string
+    simulationDate?: DateTimeNullableFilter<"RadiationSimulation"> | Date | string | null
+    patientPosition?: StringNullableFilter<"RadiationSimulation"> | string | null
+    immobilizationDevice?: StringNullableFilter<"RadiationSimulation"> | string | null
+    contrastUsed?: BoolFilter<"RadiationSimulation"> | boolean
+    scanRegion?: StringNullableFilter<"RadiationSimulation"> | string | null
+    setupReference?: StringNullableFilter<"RadiationSimulation"> | string | null
+    tattooMarkingDone?: BoolFilter<"RadiationSimulation"> | boolean
+    simulationNotes?: StringNullableFilter<"RadiationSimulation"> | string | null
+    performedBy?: UuidNullableFilter<"RadiationSimulation"> | string | null
+    status?: StringFilter<"RadiationSimulation"> | string
+    createdAt?: DateTimeFilter<"RadiationSimulation"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationSimulation"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+    treatmentPlans?: RadiationTreatmentPlanListRelationFilter
+  }
+
+  export type RadiationSimulationOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationDate?: SortOrderInput | SortOrder
+    patientPosition?: SortOrderInput | SortOrder
+    immobilizationDevice?: SortOrderInput | SortOrder
+    contrastUsed?: SortOrder
+    scanRegion?: SortOrderInput | SortOrder
+    setupReference?: SortOrderInput | SortOrder
+    tattooMarkingDone?: SortOrder
+    simulationNotes?: SortOrderInput | SortOrder
+    performedBy?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    prescription?: RadiationPrescriptionOrderByWithRelationInput
+    treatmentPlans?: RadiationTreatmentPlanOrderByRelationAggregateInput
+  }
+
+  export type RadiationSimulationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RadiationSimulationWhereInput | RadiationSimulationWhereInput[]
+    OR?: RadiationSimulationWhereInput[]
+    NOT?: RadiationSimulationWhereInput | RadiationSimulationWhereInput[]
+    tenantId?: UuidFilter<"RadiationSimulation"> | string
+    prescriptionId?: UuidFilter<"RadiationSimulation"> | string
+    simulationDate?: DateTimeNullableFilter<"RadiationSimulation"> | Date | string | null
+    patientPosition?: StringNullableFilter<"RadiationSimulation"> | string | null
+    immobilizationDevice?: StringNullableFilter<"RadiationSimulation"> | string | null
+    contrastUsed?: BoolFilter<"RadiationSimulation"> | boolean
+    scanRegion?: StringNullableFilter<"RadiationSimulation"> | string | null
+    setupReference?: StringNullableFilter<"RadiationSimulation"> | string | null
+    tattooMarkingDone?: BoolFilter<"RadiationSimulation"> | boolean
+    simulationNotes?: StringNullableFilter<"RadiationSimulation"> | string | null
+    performedBy?: UuidNullableFilter<"RadiationSimulation"> | string | null
+    status?: StringFilter<"RadiationSimulation"> | string
+    createdAt?: DateTimeFilter<"RadiationSimulation"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationSimulation"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+    treatmentPlans?: RadiationTreatmentPlanListRelationFilter
+  }, "id">
+
+  export type RadiationSimulationOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationDate?: SortOrderInput | SortOrder
+    patientPosition?: SortOrderInput | SortOrder
+    immobilizationDevice?: SortOrderInput | SortOrder
+    contrastUsed?: SortOrder
+    scanRegion?: SortOrderInput | SortOrder
+    setupReference?: SortOrderInput | SortOrder
+    tattooMarkingDone?: SortOrder
+    simulationNotes?: SortOrderInput | SortOrder
+    performedBy?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RadiationSimulationCountOrderByAggregateInput
+    _max?: RadiationSimulationMaxOrderByAggregateInput
+    _min?: RadiationSimulationMinOrderByAggregateInput
+  }
+
+  export type RadiationSimulationScalarWhereWithAggregatesInput = {
+    AND?: RadiationSimulationScalarWhereWithAggregatesInput | RadiationSimulationScalarWhereWithAggregatesInput[]
+    OR?: RadiationSimulationScalarWhereWithAggregatesInput[]
+    NOT?: RadiationSimulationScalarWhereWithAggregatesInput | RadiationSimulationScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RadiationSimulation"> | string
+    tenantId?: UuidWithAggregatesFilter<"RadiationSimulation"> | string
+    prescriptionId?: UuidWithAggregatesFilter<"RadiationSimulation"> | string
+    simulationDate?: DateTimeNullableWithAggregatesFilter<"RadiationSimulation"> | Date | string | null
+    patientPosition?: StringNullableWithAggregatesFilter<"RadiationSimulation"> | string | null
+    immobilizationDevice?: StringNullableWithAggregatesFilter<"RadiationSimulation"> | string | null
+    contrastUsed?: BoolWithAggregatesFilter<"RadiationSimulation"> | boolean
+    scanRegion?: StringNullableWithAggregatesFilter<"RadiationSimulation"> | string | null
+    setupReference?: StringNullableWithAggregatesFilter<"RadiationSimulation"> | string | null
+    tattooMarkingDone?: BoolWithAggregatesFilter<"RadiationSimulation"> | boolean
+    simulationNotes?: StringNullableWithAggregatesFilter<"RadiationSimulation"> | string | null
+    performedBy?: UuidNullableWithAggregatesFilter<"RadiationSimulation"> | string | null
+    status?: StringWithAggregatesFilter<"RadiationSimulation"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"RadiationSimulation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RadiationSimulation"> | Date | string
+  }
+
+  export type RadiationTreatmentPlanWhereInput = {
+    AND?: RadiationTreatmentPlanWhereInput | RadiationTreatmentPlanWhereInput[]
+    OR?: RadiationTreatmentPlanWhereInput[]
+    NOT?: RadiationTreatmentPlanWhereInput | RadiationTreatmentPlanWhereInput[]
+    id?: UuidFilter<"RadiationTreatmentPlan"> | string
+    tenantId?: UuidFilter<"RadiationTreatmentPlan"> | string
+    prescriptionId?: UuidFilter<"RadiationTreatmentPlan"> | string
+    simulationId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    externalPlanReference?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planningSystem?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planningStatus?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    plannerId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    physicistId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    radiationOncologistId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    contouringCompleted?: BoolFilter<"RadiationTreatmentPlan"> | boolean
+    physicsQaCompleted?: BoolFilter<"RadiationTreatmentPlan"> | boolean
+    treatmentMachine?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planNotes?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    approvedBy?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    approvedAt?: DateTimeNullableFilter<"RadiationTreatmentPlan"> | Date | string | null
+    status?: StringFilter<"RadiationTreatmentPlan"> | string
+    createdAt?: DateTimeFilter<"RadiationTreatmentPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationTreatmentPlan"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+    simulation?: XOR<RadiationSimulationNullableScalarRelationFilter, RadiationSimulationWhereInput> | null
+    fractions?: RadiationFractionListRelationFilter
+  }
+
+  export type RadiationTreatmentPlanOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationId?: SortOrderInput | SortOrder
+    externalPlanReference?: SortOrderInput | SortOrder
+    planningSystem?: SortOrderInput | SortOrder
+    planningStatus?: SortOrderInput | SortOrder
+    plannerId?: SortOrderInput | SortOrder
+    physicistId?: SortOrderInput | SortOrder
+    radiationOncologistId?: SortOrderInput | SortOrder
+    contouringCompleted?: SortOrder
+    physicsQaCompleted?: SortOrder
+    treatmentMachine?: SortOrderInput | SortOrder
+    planNotes?: SortOrderInput | SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    prescription?: RadiationPrescriptionOrderByWithRelationInput
+    simulation?: RadiationSimulationOrderByWithRelationInput
+    fractions?: RadiationFractionOrderByRelationAggregateInput
+  }
+
+  export type RadiationTreatmentPlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RadiationTreatmentPlanWhereInput | RadiationTreatmentPlanWhereInput[]
+    OR?: RadiationTreatmentPlanWhereInput[]
+    NOT?: RadiationTreatmentPlanWhereInput | RadiationTreatmentPlanWhereInput[]
+    tenantId?: UuidFilter<"RadiationTreatmentPlan"> | string
+    prescriptionId?: UuidFilter<"RadiationTreatmentPlan"> | string
+    simulationId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    externalPlanReference?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planningSystem?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planningStatus?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    plannerId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    physicistId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    radiationOncologistId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    contouringCompleted?: BoolFilter<"RadiationTreatmentPlan"> | boolean
+    physicsQaCompleted?: BoolFilter<"RadiationTreatmentPlan"> | boolean
+    treatmentMachine?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planNotes?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    approvedBy?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    approvedAt?: DateTimeNullableFilter<"RadiationTreatmentPlan"> | Date | string | null
+    status?: StringFilter<"RadiationTreatmentPlan"> | string
+    createdAt?: DateTimeFilter<"RadiationTreatmentPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationTreatmentPlan"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+    simulation?: XOR<RadiationSimulationNullableScalarRelationFilter, RadiationSimulationWhereInput> | null
+    fractions?: RadiationFractionListRelationFilter
+  }, "id">
+
+  export type RadiationTreatmentPlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationId?: SortOrderInput | SortOrder
+    externalPlanReference?: SortOrderInput | SortOrder
+    planningSystem?: SortOrderInput | SortOrder
+    planningStatus?: SortOrderInput | SortOrder
+    plannerId?: SortOrderInput | SortOrder
+    physicistId?: SortOrderInput | SortOrder
+    radiationOncologistId?: SortOrderInput | SortOrder
+    contouringCompleted?: SortOrder
+    physicsQaCompleted?: SortOrder
+    treatmentMachine?: SortOrderInput | SortOrder
+    planNotes?: SortOrderInput | SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RadiationTreatmentPlanCountOrderByAggregateInput
+    _max?: RadiationTreatmentPlanMaxOrderByAggregateInput
+    _min?: RadiationTreatmentPlanMinOrderByAggregateInput
+  }
+
+  export type RadiationTreatmentPlanScalarWhereWithAggregatesInput = {
+    AND?: RadiationTreatmentPlanScalarWhereWithAggregatesInput | RadiationTreatmentPlanScalarWhereWithAggregatesInput[]
+    OR?: RadiationTreatmentPlanScalarWhereWithAggregatesInput[]
+    NOT?: RadiationTreatmentPlanScalarWhereWithAggregatesInput | RadiationTreatmentPlanScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RadiationTreatmentPlan"> | string
+    tenantId?: UuidWithAggregatesFilter<"RadiationTreatmentPlan"> | string
+    prescriptionId?: UuidWithAggregatesFilter<"RadiationTreatmentPlan"> | string
+    simulationId?: UuidNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    externalPlanReference?: StringNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    planningSystem?: StringNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    planningStatus?: StringNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    plannerId?: UuidNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    physicistId?: UuidNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    radiationOncologistId?: UuidNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    contouringCompleted?: BoolWithAggregatesFilter<"RadiationTreatmentPlan"> | boolean
+    physicsQaCompleted?: BoolWithAggregatesFilter<"RadiationTreatmentPlan"> | boolean
+    treatmentMachine?: StringNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    planNotes?: StringNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    approvedBy?: UuidNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"RadiationTreatmentPlan"> | Date | string | null
+    status?: StringWithAggregatesFilter<"RadiationTreatmentPlan"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"RadiationTreatmentPlan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RadiationTreatmentPlan"> | Date | string
+  }
+
+  export type RadiationFractionWhereInput = {
+    AND?: RadiationFractionWhereInput | RadiationFractionWhereInput[]
+    OR?: RadiationFractionWhereInput[]
+    NOT?: RadiationFractionWhereInput | RadiationFractionWhereInput[]
+    id?: UuidFilter<"RadiationFraction"> | string
+    tenantId?: UuidFilter<"RadiationFraction"> | string
+    treatmentPlanId?: UuidFilter<"RadiationFraction"> | string
+    fractionNumber?: IntFilter<"RadiationFraction"> | number
+    plannedDate?: DateTimeNullableFilter<"RadiationFraction"> | Date | string | null
+    actualDate?: DateTimeNullableFilter<"RadiationFraction"> | Date | string | null
+    plannedDoseGy?: DecimalNullableFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: DecimalNullableFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: StringNullableFilter<"RadiationFraction"> | string | null
+    radiationTherapistId?: UuidNullableFilter<"RadiationFraction"> | string | null
+    status?: StringFilter<"RadiationFraction"> | string
+    interruptionReason?: StringNullableFilter<"RadiationFraction"> | string | null
+    verificationCompleted?: BoolFilter<"RadiationFraction"> | boolean
+    createdAt?: DateTimeFilter<"RadiationFraction"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationFraction"> | Date | string
+    treatmentPlan?: XOR<RadiationTreatmentPlanScalarRelationFilter, RadiationTreatmentPlanWhereInput>
+  }
+
+  export type RadiationFractionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    treatmentPlanId?: SortOrder
+    fractionNumber?: SortOrder
+    plannedDate?: SortOrderInput | SortOrder
+    actualDate?: SortOrderInput | SortOrder
+    plannedDoseGy?: SortOrderInput | SortOrder
+    deliveredDoseGy?: SortOrderInput | SortOrder
+    treatmentMachine?: SortOrderInput | SortOrder
+    radiationTherapistId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    interruptionReason?: SortOrderInput | SortOrder
+    verificationCompleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    treatmentPlan?: RadiationTreatmentPlanOrderByWithRelationInput
+  }
+
+  export type RadiationFractionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    treatmentPlanId_fractionNumber?: RadiationFractionTreatmentPlanIdFractionNumberCompoundUniqueInput
+    AND?: RadiationFractionWhereInput | RadiationFractionWhereInput[]
+    OR?: RadiationFractionWhereInput[]
+    NOT?: RadiationFractionWhereInput | RadiationFractionWhereInput[]
+    tenantId?: UuidFilter<"RadiationFraction"> | string
+    treatmentPlanId?: UuidFilter<"RadiationFraction"> | string
+    fractionNumber?: IntFilter<"RadiationFraction"> | number
+    plannedDate?: DateTimeNullableFilter<"RadiationFraction"> | Date | string | null
+    actualDate?: DateTimeNullableFilter<"RadiationFraction"> | Date | string | null
+    plannedDoseGy?: DecimalNullableFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: DecimalNullableFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: StringNullableFilter<"RadiationFraction"> | string | null
+    radiationTherapistId?: UuidNullableFilter<"RadiationFraction"> | string | null
+    status?: StringFilter<"RadiationFraction"> | string
+    interruptionReason?: StringNullableFilter<"RadiationFraction"> | string | null
+    verificationCompleted?: BoolFilter<"RadiationFraction"> | boolean
+    createdAt?: DateTimeFilter<"RadiationFraction"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationFraction"> | Date | string
+    treatmentPlan?: XOR<RadiationTreatmentPlanScalarRelationFilter, RadiationTreatmentPlanWhereInput>
+  }, "id" | "treatmentPlanId_fractionNumber">
+
+  export type RadiationFractionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    treatmentPlanId?: SortOrder
+    fractionNumber?: SortOrder
+    plannedDate?: SortOrderInput | SortOrder
+    actualDate?: SortOrderInput | SortOrder
+    plannedDoseGy?: SortOrderInput | SortOrder
+    deliveredDoseGy?: SortOrderInput | SortOrder
+    treatmentMachine?: SortOrderInput | SortOrder
+    radiationTherapistId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    interruptionReason?: SortOrderInput | SortOrder
+    verificationCompleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RadiationFractionCountOrderByAggregateInput
+    _avg?: RadiationFractionAvgOrderByAggregateInput
+    _max?: RadiationFractionMaxOrderByAggregateInput
+    _min?: RadiationFractionMinOrderByAggregateInput
+    _sum?: RadiationFractionSumOrderByAggregateInput
+  }
+
+  export type RadiationFractionScalarWhereWithAggregatesInput = {
+    AND?: RadiationFractionScalarWhereWithAggregatesInput | RadiationFractionScalarWhereWithAggregatesInput[]
+    OR?: RadiationFractionScalarWhereWithAggregatesInput[]
+    NOT?: RadiationFractionScalarWhereWithAggregatesInput | RadiationFractionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RadiationFraction"> | string
+    tenantId?: UuidWithAggregatesFilter<"RadiationFraction"> | string
+    treatmentPlanId?: UuidWithAggregatesFilter<"RadiationFraction"> | string
+    fractionNumber?: IntWithAggregatesFilter<"RadiationFraction"> | number
+    plannedDate?: DateTimeNullableWithAggregatesFilter<"RadiationFraction"> | Date | string | null
+    actualDate?: DateTimeNullableWithAggregatesFilter<"RadiationFraction"> | Date | string | null
+    plannedDoseGy?: DecimalNullableWithAggregatesFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: DecimalNullableWithAggregatesFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: StringNullableWithAggregatesFilter<"RadiationFraction"> | string | null
+    radiationTherapistId?: UuidNullableWithAggregatesFilter<"RadiationFraction"> | string | null
+    status?: StringWithAggregatesFilter<"RadiationFraction"> | string
+    interruptionReason?: StringNullableWithAggregatesFilter<"RadiationFraction"> | string | null
+    verificationCompleted?: BoolWithAggregatesFilter<"RadiationFraction"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"RadiationFraction"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RadiationFraction"> | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewWhereInput = {
+    AND?: RadiationOnTreatmentReviewWhereInput | RadiationOnTreatmentReviewWhereInput[]
+    OR?: RadiationOnTreatmentReviewWhereInput[]
+    NOT?: RadiationOnTreatmentReviewWhereInput | RadiationOnTreatmentReviewWhereInput[]
+    id?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    tenantId?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    prescriptionId?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    reviewDate?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    weekNumber?: IntNullableFilter<"RadiationOnTreatmentReview"> | number | null
+    toxicityGrade?: StringNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    painScore?: IntNullableFilter<"RadiationOnTreatmentReview"> | number | null
+    weightKg?: DecimalNullableFilter<"RadiationOnTreatmentReview"> | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFilter<"RadiationOnTreatmentReview"> | boolean
+    reviewNotes?: StringNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    reviewedBy?: UuidNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    createdAt?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+  }
+
+  export type RadiationOnTreatmentReviewOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    reviewDate?: SortOrder
+    weekNumber?: SortOrderInput | SortOrder
+    toxicityGrade?: SortOrderInput | SortOrder
+    painScore?: SortOrderInput | SortOrder
+    weightKg?: SortOrderInput | SortOrder
+    treatmentBreakRequired?: SortOrder
+    reviewNotes?: SortOrderInput | SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    prescription?: RadiationPrescriptionOrderByWithRelationInput
+  }
+
+  export type RadiationOnTreatmentReviewWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RadiationOnTreatmentReviewWhereInput | RadiationOnTreatmentReviewWhereInput[]
+    OR?: RadiationOnTreatmentReviewWhereInput[]
+    NOT?: RadiationOnTreatmentReviewWhereInput | RadiationOnTreatmentReviewWhereInput[]
+    tenantId?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    prescriptionId?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    reviewDate?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    weekNumber?: IntNullableFilter<"RadiationOnTreatmentReview"> | number | null
+    toxicityGrade?: StringNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    painScore?: IntNullableFilter<"RadiationOnTreatmentReview"> | number | null
+    weightKg?: DecimalNullableFilter<"RadiationOnTreatmentReview"> | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFilter<"RadiationOnTreatmentReview"> | boolean
+    reviewNotes?: StringNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    reviewedBy?: UuidNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    createdAt?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+  }, "id">
+
+  export type RadiationOnTreatmentReviewOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    reviewDate?: SortOrder
+    weekNumber?: SortOrderInput | SortOrder
+    toxicityGrade?: SortOrderInput | SortOrder
+    painScore?: SortOrderInput | SortOrder
+    weightKg?: SortOrderInput | SortOrder
+    treatmentBreakRequired?: SortOrder
+    reviewNotes?: SortOrderInput | SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RadiationOnTreatmentReviewCountOrderByAggregateInput
+    _avg?: RadiationOnTreatmentReviewAvgOrderByAggregateInput
+    _max?: RadiationOnTreatmentReviewMaxOrderByAggregateInput
+    _min?: RadiationOnTreatmentReviewMinOrderByAggregateInput
+    _sum?: RadiationOnTreatmentReviewSumOrderByAggregateInput
+  }
+
+  export type RadiationOnTreatmentReviewScalarWhereWithAggregatesInput = {
+    AND?: RadiationOnTreatmentReviewScalarWhereWithAggregatesInput | RadiationOnTreatmentReviewScalarWhereWithAggregatesInput[]
+    OR?: RadiationOnTreatmentReviewScalarWhereWithAggregatesInput[]
+    NOT?: RadiationOnTreatmentReviewScalarWhereWithAggregatesInput | RadiationOnTreatmentReviewScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RadiationOnTreatmentReview"> | string
+    tenantId?: UuidWithAggregatesFilter<"RadiationOnTreatmentReview"> | string
+    prescriptionId?: UuidWithAggregatesFilter<"RadiationOnTreatmentReview"> | string
+    reviewDate?: DateTimeWithAggregatesFilter<"RadiationOnTreatmentReview"> | Date | string
+    weekNumber?: IntNullableWithAggregatesFilter<"RadiationOnTreatmentReview"> | number | null
+    toxicityGrade?: StringNullableWithAggregatesFilter<"RadiationOnTreatmentReview"> | string | null
+    painScore?: IntNullableWithAggregatesFilter<"RadiationOnTreatmentReview"> | number | null
+    weightKg?: DecimalNullableWithAggregatesFilter<"RadiationOnTreatmentReview"> | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolWithAggregatesFilter<"RadiationOnTreatmentReview"> | boolean
+    reviewNotes?: StringNullableWithAggregatesFilter<"RadiationOnTreatmentReview"> | string | null
+    reviewedBy?: UuidNullableWithAggregatesFilter<"RadiationOnTreatmentReview"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"RadiationOnTreatmentReview"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RadiationOnTreatmentReview"> | Date | string
+  }
+
+  export type RadiationCompletionSummaryWhereInput = {
+    AND?: RadiationCompletionSummaryWhereInput | RadiationCompletionSummaryWhereInput[]
+    OR?: RadiationCompletionSummaryWhereInput[]
+    NOT?: RadiationCompletionSummaryWhereInput | RadiationCompletionSummaryWhereInput[]
+    id?: UuidFilter<"RadiationCompletionSummary"> | string
+    tenantId?: UuidFilter<"RadiationCompletionSummary"> | string
+    prescriptionId?: UuidFilter<"RadiationCompletionSummary"> | string
+    completionDate?: DateTimeNullableFilter<"RadiationCompletionSummary"> | Date | string | null
+    plannedTotalDoseGy?: DecimalNullableFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: DecimalNullableFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: IntNullableFilter<"RadiationCompletionSummary"> | number | null
+    deliveredFractions?: IntNullableFilter<"RadiationCompletionSummary"> | number | null
+    interruptions?: BoolFilter<"RadiationCompletionSummary"> | boolean
+    interruptionNotes?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    acuteToxicitySummary?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    responseAssessmentPlan?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    followupPlan?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    completedBy?: UuidNullableFilter<"RadiationCompletionSummary"> | string | null
+    createdAt?: DateTimeFilter<"RadiationCompletionSummary"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationCompletionSummary"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+  }
+
+  export type RadiationCompletionSummaryOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    completionDate?: SortOrderInput | SortOrder
+    plannedTotalDoseGy?: SortOrderInput | SortOrder
+    deliveredTotalDoseGy?: SortOrderInput | SortOrder
+    plannedFractions?: SortOrderInput | SortOrder
+    deliveredFractions?: SortOrderInput | SortOrder
+    interruptions?: SortOrder
+    interruptionNotes?: SortOrderInput | SortOrder
+    acuteToxicitySummary?: SortOrderInput | SortOrder
+    responseAssessmentPlan?: SortOrderInput | SortOrder
+    followupPlan?: SortOrderInput | SortOrder
+    completedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    prescription?: RadiationPrescriptionOrderByWithRelationInput
+  }
+
+  export type RadiationCompletionSummaryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    prescriptionId?: string
+    AND?: RadiationCompletionSummaryWhereInput | RadiationCompletionSummaryWhereInput[]
+    OR?: RadiationCompletionSummaryWhereInput[]
+    NOT?: RadiationCompletionSummaryWhereInput | RadiationCompletionSummaryWhereInput[]
+    tenantId?: UuidFilter<"RadiationCompletionSummary"> | string
+    completionDate?: DateTimeNullableFilter<"RadiationCompletionSummary"> | Date | string | null
+    plannedTotalDoseGy?: DecimalNullableFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: DecimalNullableFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: IntNullableFilter<"RadiationCompletionSummary"> | number | null
+    deliveredFractions?: IntNullableFilter<"RadiationCompletionSummary"> | number | null
+    interruptions?: BoolFilter<"RadiationCompletionSummary"> | boolean
+    interruptionNotes?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    acuteToxicitySummary?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    responseAssessmentPlan?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    followupPlan?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    completedBy?: UuidNullableFilter<"RadiationCompletionSummary"> | string | null
+    createdAt?: DateTimeFilter<"RadiationCompletionSummary"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationCompletionSummary"> | Date | string
+    prescription?: XOR<RadiationPrescriptionScalarRelationFilter, RadiationPrescriptionWhereInput>
+  }, "id" | "prescriptionId">
+
+  export type RadiationCompletionSummaryOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    completionDate?: SortOrderInput | SortOrder
+    plannedTotalDoseGy?: SortOrderInput | SortOrder
+    deliveredTotalDoseGy?: SortOrderInput | SortOrder
+    plannedFractions?: SortOrderInput | SortOrder
+    deliveredFractions?: SortOrderInput | SortOrder
+    interruptions?: SortOrder
+    interruptionNotes?: SortOrderInput | SortOrder
+    acuteToxicitySummary?: SortOrderInput | SortOrder
+    responseAssessmentPlan?: SortOrderInput | SortOrder
+    followupPlan?: SortOrderInput | SortOrder
+    completedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RadiationCompletionSummaryCountOrderByAggregateInput
+    _avg?: RadiationCompletionSummaryAvgOrderByAggregateInput
+    _max?: RadiationCompletionSummaryMaxOrderByAggregateInput
+    _min?: RadiationCompletionSummaryMinOrderByAggregateInput
+    _sum?: RadiationCompletionSummarySumOrderByAggregateInput
+  }
+
+  export type RadiationCompletionSummaryScalarWhereWithAggregatesInput = {
+    AND?: RadiationCompletionSummaryScalarWhereWithAggregatesInput | RadiationCompletionSummaryScalarWhereWithAggregatesInput[]
+    OR?: RadiationCompletionSummaryScalarWhereWithAggregatesInput[]
+    NOT?: RadiationCompletionSummaryScalarWhereWithAggregatesInput | RadiationCompletionSummaryScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RadiationCompletionSummary"> | string
+    tenantId?: UuidWithAggregatesFilter<"RadiationCompletionSummary"> | string
+    prescriptionId?: UuidWithAggregatesFilter<"RadiationCompletionSummary"> | string
+    completionDate?: DateTimeNullableWithAggregatesFilter<"RadiationCompletionSummary"> | Date | string | null
+    plannedTotalDoseGy?: DecimalNullableWithAggregatesFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: DecimalNullableWithAggregatesFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: IntNullableWithAggregatesFilter<"RadiationCompletionSummary"> | number | null
+    deliveredFractions?: IntNullableWithAggregatesFilter<"RadiationCompletionSummary"> | number | null
+    interruptions?: BoolWithAggregatesFilter<"RadiationCompletionSummary"> | boolean
+    interruptionNotes?: StringNullableWithAggregatesFilter<"RadiationCompletionSummary"> | string | null
+    acuteToxicitySummary?: StringNullableWithAggregatesFilter<"RadiationCompletionSummary"> | string | null
+    responseAssessmentPlan?: StringNullableWithAggregatesFilter<"RadiationCompletionSummary"> | string | null
+    followupPlan?: StringNullableWithAggregatesFilter<"RadiationCompletionSummary"> | string | null
+    completedBy?: UuidNullableWithAggregatesFilter<"RadiationCompletionSummary"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"RadiationCompletionSummary"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RadiationCompletionSummary"> | Date | string
   }
 
   export type OncologyCarePlanWhereInput = {
@@ -17222,6 +26363,857 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RadiationPrescriptionCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationCreateNestedManyWithoutPrescriptionInput
+    treatmentPlans?: RadiationTreatmentPlanCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationUncheckedCreateNestedManyWithoutPrescriptionInput
+    treatmentPlans?: RadiationTreatmentPlanUncheckedCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewUncheckedCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUpdateManyWithoutPrescriptionNestedInput
+    treatmentPlans?: RadiationTreatmentPlanUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationPrescriptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUncheckedUpdateManyWithoutPrescriptionNestedInput
+    treatmentPlans?: RadiationTreatmentPlanUncheckedUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUncheckedUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationPrescriptionCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationPrescriptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationPrescriptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationSimulationCreateInput = {
+    id?: string
+    tenantId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    prescription: RadiationPrescriptionCreateNestedOneWithoutSimulationsInput
+    treatmentPlans?: RadiationTreatmentPlanCreateNestedManyWithoutSimulationInput
+  }
+
+  export type RadiationSimulationUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    treatmentPlans?: RadiationTreatmentPlanUncheckedCreateNestedManyWithoutSimulationInput
+  }
+
+  export type RadiationSimulationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    prescription?: RadiationPrescriptionUpdateOneRequiredWithoutSimulationsNestedInput
+    treatmentPlans?: RadiationTreatmentPlanUpdateManyWithoutSimulationNestedInput
+  }
+
+  export type RadiationSimulationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    treatmentPlans?: RadiationTreatmentPlanUncheckedUpdateManyWithoutSimulationNestedInput
+  }
+
+  export type RadiationSimulationCreateManyInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationSimulationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationSimulationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationTreatmentPlanCreateInput = {
+    id?: string
+    tenantId: string
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    prescription: RadiationPrescriptionCreateNestedOneWithoutTreatmentPlansInput
+    simulation?: RadiationSimulationCreateNestedOneWithoutTreatmentPlansInput
+    fractions?: RadiationFractionCreateNestedManyWithoutTreatmentPlanInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    simulationId?: string | null
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fractions?: RadiationFractionUncheckedCreateNestedManyWithoutTreatmentPlanInput
+  }
+
+  export type RadiationTreatmentPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    prescription?: RadiationPrescriptionUpdateOneRequiredWithoutTreatmentPlansNestedInput
+    simulation?: RadiationSimulationUpdateOneWithoutTreatmentPlansNestedInput
+    fractions?: RadiationFractionUpdateManyWithoutTreatmentPlanNestedInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    simulationId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fractions?: RadiationFractionUncheckedUpdateManyWithoutTreatmentPlanNestedInput
+  }
+
+  export type RadiationTreatmentPlanCreateManyInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    simulationId?: string | null
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationTreatmentPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    simulationId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationFractionCreateInput = {
+    id?: string
+    tenantId: string
+    fractionNumber: number
+    plannedDate?: Date | string | null
+    actualDate?: Date | string | null
+    plannedDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: string | null
+    radiationTherapistId?: string | null
+    status?: string
+    interruptionReason?: string | null
+    verificationCompleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    treatmentPlan: RadiationTreatmentPlanCreateNestedOneWithoutFractionsInput
+  }
+
+  export type RadiationFractionUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    treatmentPlanId: string
+    fractionNumber: number
+    plannedDate?: Date | string | null
+    actualDate?: Date | string | null
+    plannedDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: string | null
+    radiationTherapistId?: string | null
+    status?: string
+    interruptionReason?: string | null
+    verificationCompleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationFractionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fractionNumber?: IntFieldUpdateOperationsInput | number
+    plannedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationTherapistId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    interruptionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    treatmentPlan?: RadiationTreatmentPlanUpdateOneRequiredWithoutFractionsNestedInput
+  }
+
+  export type RadiationFractionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    treatmentPlanId?: StringFieldUpdateOperationsInput | string
+    fractionNumber?: IntFieldUpdateOperationsInput | number
+    plannedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationTherapistId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    interruptionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationFractionCreateManyInput = {
+    id?: string
+    tenantId: string
+    treatmentPlanId: string
+    fractionNumber: number
+    plannedDate?: Date | string | null
+    actualDate?: Date | string | null
+    plannedDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: string | null
+    radiationTherapistId?: string | null
+    status?: string
+    interruptionReason?: string | null
+    verificationCompleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationFractionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fractionNumber?: IntFieldUpdateOperationsInput | number
+    plannedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationTherapistId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    interruptionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationFractionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    treatmentPlanId?: StringFieldUpdateOperationsInput | string
+    fractionNumber?: IntFieldUpdateOperationsInput | number
+    plannedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationTherapistId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    interruptionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewCreateInput = {
+    id?: string
+    tenantId: string
+    reviewDate: Date | string
+    weekNumber?: number | null
+    toxicityGrade?: string | null
+    painScore?: number | null
+    weightKg?: Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: boolean
+    reviewNotes?: string | null
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    prescription: RadiationPrescriptionCreateNestedOneWithoutReviewsInput
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    reviewDate: Date | string
+    weekNumber?: number | null
+    toxicityGrade?: string | null
+    painScore?: number | null
+    weightKg?: Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: boolean
+    reviewNotes?: string | null
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    toxicityGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    weightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFieldUpdateOperationsInput | boolean
+    reviewNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    prescription?: RadiationPrescriptionUpdateOneRequiredWithoutReviewsNestedInput
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    toxicityGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    weightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFieldUpdateOperationsInput | boolean
+    reviewNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewCreateManyInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    reviewDate: Date | string
+    weekNumber?: number | null
+    toxicityGrade?: string | null
+    painScore?: number | null
+    weightKg?: Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: boolean
+    reviewNotes?: string | null
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    toxicityGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    weightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFieldUpdateOperationsInput | boolean
+    reviewNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    toxicityGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    weightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFieldUpdateOperationsInput | boolean
+    reviewNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationCompletionSummaryCreateInput = {
+    id?: string
+    tenantId: string
+    completionDate?: Date | string | null
+    plannedTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    deliveredFractions?: number | null
+    interruptions?: boolean
+    interruptionNotes?: string | null
+    acuteToxicitySummary?: string | null
+    responseAssessmentPlan?: string | null
+    followupPlan?: string | null
+    completedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    prescription: RadiationPrescriptionCreateNestedOneWithoutCompletionSummariesInput
+  }
+
+  export type RadiationCompletionSummaryUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    completionDate?: Date | string | null
+    plannedTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    deliveredFractions?: number | null
+    interruptions?: boolean
+    interruptionNotes?: string | null
+    acuteToxicitySummary?: string | null
+    responseAssessmentPlan?: string | null
+    followupPlan?: string | null
+    completedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationCompletionSummaryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    deliveredFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    interruptions?: BoolFieldUpdateOperationsInput | boolean
+    interruptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    acuteToxicitySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    responseAssessmentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    followupPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    prescription?: RadiationPrescriptionUpdateOneRequiredWithoutCompletionSummariesNestedInput
+  }
+
+  export type RadiationCompletionSummaryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    deliveredFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    interruptions?: BoolFieldUpdateOperationsInput | boolean
+    interruptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    acuteToxicitySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    responseAssessmentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    followupPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationCompletionSummaryCreateManyInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    completionDate?: Date | string | null
+    plannedTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    deliveredFractions?: number | null
+    interruptions?: boolean
+    interruptionNotes?: string | null
+    acuteToxicitySummary?: string | null
+    responseAssessmentPlan?: string | null
+    followupPlan?: string | null
+    completedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationCompletionSummaryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    deliveredFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    interruptions?: BoolFieldUpdateOperationsInput | boolean
+    interruptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    acuteToxicitySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    responseAssessmentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    followupPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationCompletionSummaryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    deliveredFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    interruptions?: BoolFieldUpdateOperationsInput | boolean
+    interruptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    acuteToxicitySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    responseAssessmentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    followupPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OncologyCarePlanCreateInput = {
     id?: string
     tenantId: string
@@ -18386,6 +28378,483 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type RadiationSimulationListRelationFilter = {
+    every?: RadiationSimulationWhereInput
+    some?: RadiationSimulationWhereInput
+    none?: RadiationSimulationWhereInput
+  }
+
+  export type RadiationTreatmentPlanListRelationFilter = {
+    every?: RadiationTreatmentPlanWhereInput
+    some?: RadiationTreatmentPlanWhereInput
+    none?: RadiationTreatmentPlanWhereInput
+  }
+
+  export type RadiationOnTreatmentReviewListRelationFilter = {
+    every?: RadiationOnTreatmentReviewWhereInput
+    some?: RadiationOnTreatmentReviewWhereInput
+    none?: RadiationOnTreatmentReviewWhereInput
+  }
+
+  export type RadiationCompletionSummaryListRelationFilter = {
+    every?: RadiationCompletionSummaryWhereInput
+    some?: RadiationCompletionSummaryWhereInput
+    none?: RadiationCompletionSummaryWhereInput
+  }
+
+  export type RadiationSimulationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RadiationTreatmentPlanOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RadiationOnTreatmentReviewOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RadiationCompletionSummaryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RadiationPrescriptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    cancerProfileId?: SortOrder
+    prescriptionNumber?: SortOrder
+    treatmentIntent?: SortOrder
+    treatmentSiteId?: SortOrder
+    laterality?: SortOrder
+    modality?: SortOrder
+    technique?: SortOrder
+    totalDoseGy?: SortOrder
+    dosePerFractionGy?: SortOrder
+    plannedFractions?: SortOrder
+    concurrentChemo?: SortOrder
+    plannedStartDate?: SortOrder
+    plannedEndDate?: SortOrder
+    prescriptionNotes?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationPrescriptionAvgOrderByAggregateInput = {
+    totalDoseGy?: SortOrder
+    dosePerFractionGy?: SortOrder
+    plannedFractions?: SortOrder
+  }
+
+  export type RadiationPrescriptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    cancerProfileId?: SortOrder
+    prescriptionNumber?: SortOrder
+    treatmentIntent?: SortOrder
+    treatmentSiteId?: SortOrder
+    laterality?: SortOrder
+    modality?: SortOrder
+    technique?: SortOrder
+    totalDoseGy?: SortOrder
+    dosePerFractionGy?: SortOrder
+    plannedFractions?: SortOrder
+    concurrentChemo?: SortOrder
+    plannedStartDate?: SortOrder
+    plannedEndDate?: SortOrder
+    prescriptionNotes?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationPrescriptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    cancerProfileId?: SortOrder
+    prescriptionNumber?: SortOrder
+    treatmentIntent?: SortOrder
+    treatmentSiteId?: SortOrder
+    laterality?: SortOrder
+    modality?: SortOrder
+    technique?: SortOrder
+    totalDoseGy?: SortOrder
+    dosePerFractionGy?: SortOrder
+    plannedFractions?: SortOrder
+    concurrentChemo?: SortOrder
+    plannedStartDate?: SortOrder
+    plannedEndDate?: SortOrder
+    prescriptionNotes?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationPrescriptionSumOrderByAggregateInput = {
+    totalDoseGy?: SortOrder
+    dosePerFractionGy?: SortOrder
+    plannedFractions?: SortOrder
+  }
+
+  export type RadiationPrescriptionScalarRelationFilter = {
+    is?: RadiationPrescriptionWhereInput
+    isNot?: RadiationPrescriptionWhereInput
+  }
+
+  export type RadiationSimulationCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationDate?: SortOrder
+    patientPosition?: SortOrder
+    immobilizationDevice?: SortOrder
+    contrastUsed?: SortOrder
+    scanRegion?: SortOrder
+    setupReference?: SortOrder
+    tattooMarkingDone?: SortOrder
+    simulationNotes?: SortOrder
+    performedBy?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationSimulationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationDate?: SortOrder
+    patientPosition?: SortOrder
+    immobilizationDevice?: SortOrder
+    contrastUsed?: SortOrder
+    scanRegion?: SortOrder
+    setupReference?: SortOrder
+    tattooMarkingDone?: SortOrder
+    simulationNotes?: SortOrder
+    performedBy?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationSimulationMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationDate?: SortOrder
+    patientPosition?: SortOrder
+    immobilizationDevice?: SortOrder
+    contrastUsed?: SortOrder
+    scanRegion?: SortOrder
+    setupReference?: SortOrder
+    tattooMarkingDone?: SortOrder
+    simulationNotes?: SortOrder
+    performedBy?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationSimulationNullableScalarRelationFilter = {
+    is?: RadiationSimulationWhereInput | null
+    isNot?: RadiationSimulationWhereInput | null
+  }
+
+  export type RadiationFractionListRelationFilter = {
+    every?: RadiationFractionWhereInput
+    some?: RadiationFractionWhereInput
+    none?: RadiationFractionWhereInput
+  }
+
+  export type RadiationFractionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RadiationTreatmentPlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationId?: SortOrder
+    externalPlanReference?: SortOrder
+    planningSystem?: SortOrder
+    planningStatus?: SortOrder
+    plannerId?: SortOrder
+    physicistId?: SortOrder
+    radiationOncologistId?: SortOrder
+    contouringCompleted?: SortOrder
+    physicsQaCompleted?: SortOrder
+    treatmentMachine?: SortOrder
+    planNotes?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationTreatmentPlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationId?: SortOrder
+    externalPlanReference?: SortOrder
+    planningSystem?: SortOrder
+    planningStatus?: SortOrder
+    plannerId?: SortOrder
+    physicistId?: SortOrder
+    radiationOncologistId?: SortOrder
+    contouringCompleted?: SortOrder
+    physicsQaCompleted?: SortOrder
+    treatmentMachine?: SortOrder
+    planNotes?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationTreatmentPlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    simulationId?: SortOrder
+    externalPlanReference?: SortOrder
+    planningSystem?: SortOrder
+    planningStatus?: SortOrder
+    plannerId?: SortOrder
+    physicistId?: SortOrder
+    radiationOncologistId?: SortOrder
+    contouringCompleted?: SortOrder
+    physicsQaCompleted?: SortOrder
+    treatmentMachine?: SortOrder
+    planNotes?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationTreatmentPlanScalarRelationFilter = {
+    is?: RadiationTreatmentPlanWhereInput
+    isNot?: RadiationTreatmentPlanWhereInput
+  }
+
+  export type RadiationFractionTreatmentPlanIdFractionNumberCompoundUniqueInput = {
+    treatmentPlanId: string
+    fractionNumber: number
+  }
+
+  export type RadiationFractionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    treatmentPlanId?: SortOrder
+    fractionNumber?: SortOrder
+    plannedDate?: SortOrder
+    actualDate?: SortOrder
+    plannedDoseGy?: SortOrder
+    deliveredDoseGy?: SortOrder
+    treatmentMachine?: SortOrder
+    radiationTherapistId?: SortOrder
+    status?: SortOrder
+    interruptionReason?: SortOrder
+    verificationCompleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationFractionAvgOrderByAggregateInput = {
+    fractionNumber?: SortOrder
+    plannedDoseGy?: SortOrder
+    deliveredDoseGy?: SortOrder
+  }
+
+  export type RadiationFractionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    treatmentPlanId?: SortOrder
+    fractionNumber?: SortOrder
+    plannedDate?: SortOrder
+    actualDate?: SortOrder
+    plannedDoseGy?: SortOrder
+    deliveredDoseGy?: SortOrder
+    treatmentMachine?: SortOrder
+    radiationTherapistId?: SortOrder
+    status?: SortOrder
+    interruptionReason?: SortOrder
+    verificationCompleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationFractionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    treatmentPlanId?: SortOrder
+    fractionNumber?: SortOrder
+    plannedDate?: SortOrder
+    actualDate?: SortOrder
+    plannedDoseGy?: SortOrder
+    deliveredDoseGy?: SortOrder
+    treatmentMachine?: SortOrder
+    radiationTherapistId?: SortOrder
+    status?: SortOrder
+    interruptionReason?: SortOrder
+    verificationCompleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationFractionSumOrderByAggregateInput = {
+    fractionNumber?: SortOrder
+    plannedDoseGy?: SortOrder
+    deliveredDoseGy?: SortOrder
+  }
+
+  export type RadiationOnTreatmentReviewCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    reviewDate?: SortOrder
+    weekNumber?: SortOrder
+    toxicityGrade?: SortOrder
+    painScore?: SortOrder
+    weightKg?: SortOrder
+    treatmentBreakRequired?: SortOrder
+    reviewNotes?: SortOrder
+    reviewedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationOnTreatmentReviewAvgOrderByAggregateInput = {
+    weekNumber?: SortOrder
+    painScore?: SortOrder
+    weightKg?: SortOrder
+  }
+
+  export type RadiationOnTreatmentReviewMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    reviewDate?: SortOrder
+    weekNumber?: SortOrder
+    toxicityGrade?: SortOrder
+    painScore?: SortOrder
+    weightKg?: SortOrder
+    treatmentBreakRequired?: SortOrder
+    reviewNotes?: SortOrder
+    reviewedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationOnTreatmentReviewMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    reviewDate?: SortOrder
+    weekNumber?: SortOrder
+    toxicityGrade?: SortOrder
+    painScore?: SortOrder
+    weightKg?: SortOrder
+    treatmentBreakRequired?: SortOrder
+    reviewNotes?: SortOrder
+    reviewedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationOnTreatmentReviewSumOrderByAggregateInput = {
+    weekNumber?: SortOrder
+    painScore?: SortOrder
+    weightKg?: SortOrder
+  }
+
+  export type RadiationCompletionSummaryCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    completionDate?: SortOrder
+    plannedTotalDoseGy?: SortOrder
+    deliveredTotalDoseGy?: SortOrder
+    plannedFractions?: SortOrder
+    deliveredFractions?: SortOrder
+    interruptions?: SortOrder
+    interruptionNotes?: SortOrder
+    acuteToxicitySummary?: SortOrder
+    responseAssessmentPlan?: SortOrder
+    followupPlan?: SortOrder
+    completedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationCompletionSummaryAvgOrderByAggregateInput = {
+    plannedTotalDoseGy?: SortOrder
+    deliveredTotalDoseGy?: SortOrder
+    plannedFractions?: SortOrder
+    deliveredFractions?: SortOrder
+  }
+
+  export type RadiationCompletionSummaryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    completionDate?: SortOrder
+    plannedTotalDoseGy?: SortOrder
+    deliveredTotalDoseGy?: SortOrder
+    plannedFractions?: SortOrder
+    deliveredFractions?: SortOrder
+    interruptions?: SortOrder
+    interruptionNotes?: SortOrder
+    acuteToxicitySummary?: SortOrder
+    responseAssessmentPlan?: SortOrder
+    followupPlan?: SortOrder
+    completedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationCompletionSummaryMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    prescriptionId?: SortOrder
+    completionDate?: SortOrder
+    plannedTotalDoseGy?: SortOrder
+    deliveredTotalDoseGy?: SortOrder
+    plannedFractions?: SortOrder
+    deliveredFractions?: SortOrder
+    interruptions?: SortOrder
+    interruptionNotes?: SortOrder
+    acuteToxicitySummary?: SortOrder
+    responseAssessmentPlan?: SortOrder
+    followupPlan?: SortOrder
+    completedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RadiationCompletionSummarySumOrderByAggregateInput = {
+    plannedTotalDoseGy?: SortOrder
+    deliveredTotalDoseGy?: SortOrder
+    plannedFractions?: SortOrder
+    deliveredFractions?: SortOrder
+  }
+
   export type OncologyCarePlanCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
@@ -18837,6 +29306,344 @@ export namespace Prisma {
     upsert?: OncologyPrimarySiteMasterUpsertWithoutSiteMappingsInput
     connect?: OncologyPrimarySiteMasterWhereUniqueInput
     update?: XOR<XOR<OncologyPrimarySiteMasterUpdateToOneWithWhereWithoutSiteMappingsInput, OncologyPrimarySiteMasterUpdateWithoutSiteMappingsInput>, OncologyPrimarySiteMasterUncheckedUpdateWithoutSiteMappingsInput>
+  }
+
+  export type RadiationSimulationCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationSimulationCreateWithoutPrescriptionInput, RadiationSimulationUncheckedCreateWithoutPrescriptionInput> | RadiationSimulationCreateWithoutPrescriptionInput[] | RadiationSimulationUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationSimulationCreateOrConnectWithoutPrescriptionInput | RadiationSimulationCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationSimulationCreateManyPrescriptionInputEnvelope
+    connect?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+  }
+
+  export type RadiationTreatmentPlanCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput> | RadiationTreatmentPlanCreateWithoutPrescriptionInput[] | RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput | RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationTreatmentPlanCreateManyPrescriptionInputEnvelope
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+  }
+
+  export type RadiationOnTreatmentReviewCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationOnTreatmentReviewCreateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput> | RadiationOnTreatmentReviewCreateWithoutPrescriptionInput[] | RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput | RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationOnTreatmentReviewCreateManyPrescriptionInputEnvelope
+    connect?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+  }
+
+  export type RadiationCompletionSummaryCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationCompletionSummaryCreateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput> | RadiationCompletionSummaryCreateWithoutPrescriptionInput[] | RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput | RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationCompletionSummaryCreateManyPrescriptionInputEnvelope
+    connect?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+  }
+
+  export type RadiationSimulationUncheckedCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationSimulationCreateWithoutPrescriptionInput, RadiationSimulationUncheckedCreateWithoutPrescriptionInput> | RadiationSimulationCreateWithoutPrescriptionInput[] | RadiationSimulationUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationSimulationCreateOrConnectWithoutPrescriptionInput | RadiationSimulationCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationSimulationCreateManyPrescriptionInputEnvelope
+    connect?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+  }
+
+  export type RadiationTreatmentPlanUncheckedCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput> | RadiationTreatmentPlanCreateWithoutPrescriptionInput[] | RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput | RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationTreatmentPlanCreateManyPrescriptionInputEnvelope
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationOnTreatmentReviewCreateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput> | RadiationOnTreatmentReviewCreateWithoutPrescriptionInput[] | RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput | RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationOnTreatmentReviewCreateManyPrescriptionInputEnvelope
+    connect?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+  }
+
+  export type RadiationCompletionSummaryUncheckedCreateNestedManyWithoutPrescriptionInput = {
+    create?: XOR<RadiationCompletionSummaryCreateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput> | RadiationCompletionSummaryCreateWithoutPrescriptionInput[] | RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput | RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput[]
+    createMany?: RadiationCompletionSummaryCreateManyPrescriptionInputEnvelope
+    connect?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+  }
+
+  export type RadiationSimulationUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationSimulationCreateWithoutPrescriptionInput, RadiationSimulationUncheckedCreateWithoutPrescriptionInput> | RadiationSimulationCreateWithoutPrescriptionInput[] | RadiationSimulationUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationSimulationCreateOrConnectWithoutPrescriptionInput | RadiationSimulationCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationSimulationUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationSimulationUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationSimulationCreateManyPrescriptionInputEnvelope
+    set?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    disconnect?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    delete?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    connect?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    update?: RadiationSimulationUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationSimulationUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationSimulationUpdateManyWithWhereWithoutPrescriptionInput | RadiationSimulationUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationSimulationScalarWhereInput | RadiationSimulationScalarWhereInput[]
+  }
+
+  export type RadiationTreatmentPlanUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput> | RadiationTreatmentPlanCreateWithoutPrescriptionInput[] | RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput | RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationTreatmentPlanUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationTreatmentPlanUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationTreatmentPlanCreateManyPrescriptionInputEnvelope
+    set?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    disconnect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    delete?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    update?: RadiationTreatmentPlanUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationTreatmentPlanUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationTreatmentPlanUpdateManyWithWhereWithoutPrescriptionInput | RadiationTreatmentPlanUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationTreatmentPlanScalarWhereInput | RadiationTreatmentPlanScalarWhereInput[]
+  }
+
+  export type RadiationOnTreatmentReviewUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationOnTreatmentReviewCreateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput> | RadiationOnTreatmentReviewCreateWithoutPrescriptionInput[] | RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput | RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationOnTreatmentReviewUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationOnTreatmentReviewUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationOnTreatmentReviewCreateManyPrescriptionInputEnvelope
+    set?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    disconnect?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    delete?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    connect?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    update?: RadiationOnTreatmentReviewUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationOnTreatmentReviewUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationOnTreatmentReviewUpdateManyWithWhereWithoutPrescriptionInput | RadiationOnTreatmentReviewUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationOnTreatmentReviewScalarWhereInput | RadiationOnTreatmentReviewScalarWhereInput[]
+  }
+
+  export type RadiationCompletionSummaryUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationCompletionSummaryCreateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput> | RadiationCompletionSummaryCreateWithoutPrescriptionInput[] | RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput | RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationCompletionSummaryUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationCompletionSummaryUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationCompletionSummaryCreateManyPrescriptionInputEnvelope
+    set?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    disconnect?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    delete?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    connect?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    update?: RadiationCompletionSummaryUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationCompletionSummaryUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationCompletionSummaryUpdateManyWithWhereWithoutPrescriptionInput | RadiationCompletionSummaryUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationCompletionSummaryScalarWhereInput | RadiationCompletionSummaryScalarWhereInput[]
+  }
+
+  export type RadiationSimulationUncheckedUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationSimulationCreateWithoutPrescriptionInput, RadiationSimulationUncheckedCreateWithoutPrescriptionInput> | RadiationSimulationCreateWithoutPrescriptionInput[] | RadiationSimulationUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationSimulationCreateOrConnectWithoutPrescriptionInput | RadiationSimulationCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationSimulationUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationSimulationUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationSimulationCreateManyPrescriptionInputEnvelope
+    set?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    disconnect?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    delete?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    connect?: RadiationSimulationWhereUniqueInput | RadiationSimulationWhereUniqueInput[]
+    update?: RadiationSimulationUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationSimulationUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationSimulationUpdateManyWithWhereWithoutPrescriptionInput | RadiationSimulationUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationSimulationScalarWhereInput | RadiationSimulationScalarWhereInput[]
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput> | RadiationTreatmentPlanCreateWithoutPrescriptionInput[] | RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput | RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationTreatmentPlanUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationTreatmentPlanUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationTreatmentPlanCreateManyPrescriptionInputEnvelope
+    set?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    disconnect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    delete?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    update?: RadiationTreatmentPlanUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationTreatmentPlanUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationTreatmentPlanUpdateManyWithWhereWithoutPrescriptionInput | RadiationTreatmentPlanUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationTreatmentPlanScalarWhereInput | RadiationTreatmentPlanScalarWhereInput[]
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationOnTreatmentReviewCreateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput> | RadiationOnTreatmentReviewCreateWithoutPrescriptionInput[] | RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput | RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationOnTreatmentReviewUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationOnTreatmentReviewUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationOnTreatmentReviewCreateManyPrescriptionInputEnvelope
+    set?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    disconnect?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    delete?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    connect?: RadiationOnTreatmentReviewWhereUniqueInput | RadiationOnTreatmentReviewWhereUniqueInput[]
+    update?: RadiationOnTreatmentReviewUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationOnTreatmentReviewUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationOnTreatmentReviewUpdateManyWithWhereWithoutPrescriptionInput | RadiationOnTreatmentReviewUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationOnTreatmentReviewScalarWhereInput | RadiationOnTreatmentReviewScalarWhereInput[]
+  }
+
+  export type RadiationCompletionSummaryUncheckedUpdateManyWithoutPrescriptionNestedInput = {
+    create?: XOR<RadiationCompletionSummaryCreateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput> | RadiationCompletionSummaryCreateWithoutPrescriptionInput[] | RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput[]
+    connectOrCreate?: RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput | RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput[]
+    upsert?: RadiationCompletionSummaryUpsertWithWhereUniqueWithoutPrescriptionInput | RadiationCompletionSummaryUpsertWithWhereUniqueWithoutPrescriptionInput[]
+    createMany?: RadiationCompletionSummaryCreateManyPrescriptionInputEnvelope
+    set?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    disconnect?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    delete?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    connect?: RadiationCompletionSummaryWhereUniqueInput | RadiationCompletionSummaryWhereUniqueInput[]
+    update?: RadiationCompletionSummaryUpdateWithWhereUniqueWithoutPrescriptionInput | RadiationCompletionSummaryUpdateWithWhereUniqueWithoutPrescriptionInput[]
+    updateMany?: RadiationCompletionSummaryUpdateManyWithWhereWithoutPrescriptionInput | RadiationCompletionSummaryUpdateManyWithWhereWithoutPrescriptionInput[]
+    deleteMany?: RadiationCompletionSummaryScalarWhereInput | RadiationCompletionSummaryScalarWhereInput[]
+  }
+
+  export type RadiationPrescriptionCreateNestedOneWithoutSimulationsInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutSimulationsInput, RadiationPrescriptionUncheckedCreateWithoutSimulationsInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutSimulationsInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+  }
+
+  export type RadiationTreatmentPlanCreateNestedManyWithoutSimulationInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutSimulationInput, RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput> | RadiationTreatmentPlanCreateWithoutSimulationInput[] | RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput | RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput[]
+    createMany?: RadiationTreatmentPlanCreateManySimulationInputEnvelope
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+  }
+
+  export type RadiationTreatmentPlanUncheckedCreateNestedManyWithoutSimulationInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutSimulationInput, RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput> | RadiationTreatmentPlanCreateWithoutSimulationInput[] | RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput | RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput[]
+    createMany?: RadiationTreatmentPlanCreateManySimulationInputEnvelope
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+  }
+
+  export type RadiationPrescriptionUpdateOneRequiredWithoutSimulationsNestedInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutSimulationsInput, RadiationPrescriptionUncheckedCreateWithoutSimulationsInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutSimulationsInput
+    upsert?: RadiationPrescriptionUpsertWithoutSimulationsInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+    update?: XOR<XOR<RadiationPrescriptionUpdateToOneWithWhereWithoutSimulationsInput, RadiationPrescriptionUpdateWithoutSimulationsInput>, RadiationPrescriptionUncheckedUpdateWithoutSimulationsInput>
+  }
+
+  export type RadiationTreatmentPlanUpdateManyWithoutSimulationNestedInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutSimulationInput, RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput> | RadiationTreatmentPlanCreateWithoutSimulationInput[] | RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput | RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput[]
+    upsert?: RadiationTreatmentPlanUpsertWithWhereUniqueWithoutSimulationInput | RadiationTreatmentPlanUpsertWithWhereUniqueWithoutSimulationInput[]
+    createMany?: RadiationTreatmentPlanCreateManySimulationInputEnvelope
+    set?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    disconnect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    delete?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    update?: RadiationTreatmentPlanUpdateWithWhereUniqueWithoutSimulationInput | RadiationTreatmentPlanUpdateWithWhereUniqueWithoutSimulationInput[]
+    updateMany?: RadiationTreatmentPlanUpdateManyWithWhereWithoutSimulationInput | RadiationTreatmentPlanUpdateManyWithWhereWithoutSimulationInput[]
+    deleteMany?: RadiationTreatmentPlanScalarWhereInput | RadiationTreatmentPlanScalarWhereInput[]
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateManyWithoutSimulationNestedInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutSimulationInput, RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput> | RadiationTreatmentPlanCreateWithoutSimulationInput[] | RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput[]
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput | RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput[]
+    upsert?: RadiationTreatmentPlanUpsertWithWhereUniqueWithoutSimulationInput | RadiationTreatmentPlanUpsertWithWhereUniqueWithoutSimulationInput[]
+    createMany?: RadiationTreatmentPlanCreateManySimulationInputEnvelope
+    set?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    disconnect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    delete?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    connect?: RadiationTreatmentPlanWhereUniqueInput | RadiationTreatmentPlanWhereUniqueInput[]
+    update?: RadiationTreatmentPlanUpdateWithWhereUniqueWithoutSimulationInput | RadiationTreatmentPlanUpdateWithWhereUniqueWithoutSimulationInput[]
+    updateMany?: RadiationTreatmentPlanUpdateManyWithWhereWithoutSimulationInput | RadiationTreatmentPlanUpdateManyWithWhereWithoutSimulationInput[]
+    deleteMany?: RadiationTreatmentPlanScalarWhereInput | RadiationTreatmentPlanScalarWhereInput[]
+  }
+
+  export type RadiationPrescriptionCreateNestedOneWithoutTreatmentPlansInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutTreatmentPlansInput, RadiationPrescriptionUncheckedCreateWithoutTreatmentPlansInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutTreatmentPlansInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+  }
+
+  export type RadiationSimulationCreateNestedOneWithoutTreatmentPlansInput = {
+    create?: XOR<RadiationSimulationCreateWithoutTreatmentPlansInput, RadiationSimulationUncheckedCreateWithoutTreatmentPlansInput>
+    connectOrCreate?: RadiationSimulationCreateOrConnectWithoutTreatmentPlansInput
+    connect?: RadiationSimulationWhereUniqueInput
+  }
+
+  export type RadiationFractionCreateNestedManyWithoutTreatmentPlanInput = {
+    create?: XOR<RadiationFractionCreateWithoutTreatmentPlanInput, RadiationFractionUncheckedCreateWithoutTreatmentPlanInput> | RadiationFractionCreateWithoutTreatmentPlanInput[] | RadiationFractionUncheckedCreateWithoutTreatmentPlanInput[]
+    connectOrCreate?: RadiationFractionCreateOrConnectWithoutTreatmentPlanInput | RadiationFractionCreateOrConnectWithoutTreatmentPlanInput[]
+    createMany?: RadiationFractionCreateManyTreatmentPlanInputEnvelope
+    connect?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+  }
+
+  export type RadiationFractionUncheckedCreateNestedManyWithoutTreatmentPlanInput = {
+    create?: XOR<RadiationFractionCreateWithoutTreatmentPlanInput, RadiationFractionUncheckedCreateWithoutTreatmentPlanInput> | RadiationFractionCreateWithoutTreatmentPlanInput[] | RadiationFractionUncheckedCreateWithoutTreatmentPlanInput[]
+    connectOrCreate?: RadiationFractionCreateOrConnectWithoutTreatmentPlanInput | RadiationFractionCreateOrConnectWithoutTreatmentPlanInput[]
+    createMany?: RadiationFractionCreateManyTreatmentPlanInputEnvelope
+    connect?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+  }
+
+  export type RadiationPrescriptionUpdateOneRequiredWithoutTreatmentPlansNestedInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutTreatmentPlansInput, RadiationPrescriptionUncheckedCreateWithoutTreatmentPlansInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutTreatmentPlansInput
+    upsert?: RadiationPrescriptionUpsertWithoutTreatmentPlansInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+    update?: XOR<XOR<RadiationPrescriptionUpdateToOneWithWhereWithoutTreatmentPlansInput, RadiationPrescriptionUpdateWithoutTreatmentPlansInput>, RadiationPrescriptionUncheckedUpdateWithoutTreatmentPlansInput>
+  }
+
+  export type RadiationSimulationUpdateOneWithoutTreatmentPlansNestedInput = {
+    create?: XOR<RadiationSimulationCreateWithoutTreatmentPlansInput, RadiationSimulationUncheckedCreateWithoutTreatmentPlansInput>
+    connectOrCreate?: RadiationSimulationCreateOrConnectWithoutTreatmentPlansInput
+    upsert?: RadiationSimulationUpsertWithoutTreatmentPlansInput
+    disconnect?: RadiationSimulationWhereInput | boolean
+    delete?: RadiationSimulationWhereInput | boolean
+    connect?: RadiationSimulationWhereUniqueInput
+    update?: XOR<XOR<RadiationSimulationUpdateToOneWithWhereWithoutTreatmentPlansInput, RadiationSimulationUpdateWithoutTreatmentPlansInput>, RadiationSimulationUncheckedUpdateWithoutTreatmentPlansInput>
+  }
+
+  export type RadiationFractionUpdateManyWithoutTreatmentPlanNestedInput = {
+    create?: XOR<RadiationFractionCreateWithoutTreatmentPlanInput, RadiationFractionUncheckedCreateWithoutTreatmentPlanInput> | RadiationFractionCreateWithoutTreatmentPlanInput[] | RadiationFractionUncheckedCreateWithoutTreatmentPlanInput[]
+    connectOrCreate?: RadiationFractionCreateOrConnectWithoutTreatmentPlanInput | RadiationFractionCreateOrConnectWithoutTreatmentPlanInput[]
+    upsert?: RadiationFractionUpsertWithWhereUniqueWithoutTreatmentPlanInput | RadiationFractionUpsertWithWhereUniqueWithoutTreatmentPlanInput[]
+    createMany?: RadiationFractionCreateManyTreatmentPlanInputEnvelope
+    set?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    disconnect?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    delete?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    connect?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    update?: RadiationFractionUpdateWithWhereUniqueWithoutTreatmentPlanInput | RadiationFractionUpdateWithWhereUniqueWithoutTreatmentPlanInput[]
+    updateMany?: RadiationFractionUpdateManyWithWhereWithoutTreatmentPlanInput | RadiationFractionUpdateManyWithWhereWithoutTreatmentPlanInput[]
+    deleteMany?: RadiationFractionScalarWhereInput | RadiationFractionScalarWhereInput[]
+  }
+
+  export type RadiationFractionUncheckedUpdateManyWithoutTreatmentPlanNestedInput = {
+    create?: XOR<RadiationFractionCreateWithoutTreatmentPlanInput, RadiationFractionUncheckedCreateWithoutTreatmentPlanInput> | RadiationFractionCreateWithoutTreatmentPlanInput[] | RadiationFractionUncheckedCreateWithoutTreatmentPlanInput[]
+    connectOrCreate?: RadiationFractionCreateOrConnectWithoutTreatmentPlanInput | RadiationFractionCreateOrConnectWithoutTreatmentPlanInput[]
+    upsert?: RadiationFractionUpsertWithWhereUniqueWithoutTreatmentPlanInput | RadiationFractionUpsertWithWhereUniqueWithoutTreatmentPlanInput[]
+    createMany?: RadiationFractionCreateManyTreatmentPlanInputEnvelope
+    set?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    disconnect?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    delete?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    connect?: RadiationFractionWhereUniqueInput | RadiationFractionWhereUniqueInput[]
+    update?: RadiationFractionUpdateWithWhereUniqueWithoutTreatmentPlanInput | RadiationFractionUpdateWithWhereUniqueWithoutTreatmentPlanInput[]
+    updateMany?: RadiationFractionUpdateManyWithWhereWithoutTreatmentPlanInput | RadiationFractionUpdateManyWithWhereWithoutTreatmentPlanInput[]
+    deleteMany?: RadiationFractionScalarWhereInput | RadiationFractionScalarWhereInput[]
+  }
+
+  export type RadiationTreatmentPlanCreateNestedOneWithoutFractionsInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutFractionsInput, RadiationTreatmentPlanUncheckedCreateWithoutFractionsInput>
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutFractionsInput
+    connect?: RadiationTreatmentPlanWhereUniqueInput
+  }
+
+  export type RadiationTreatmentPlanUpdateOneRequiredWithoutFractionsNestedInput = {
+    create?: XOR<RadiationTreatmentPlanCreateWithoutFractionsInput, RadiationTreatmentPlanUncheckedCreateWithoutFractionsInput>
+    connectOrCreate?: RadiationTreatmentPlanCreateOrConnectWithoutFractionsInput
+    upsert?: RadiationTreatmentPlanUpsertWithoutFractionsInput
+    connect?: RadiationTreatmentPlanWhereUniqueInput
+    update?: XOR<XOR<RadiationTreatmentPlanUpdateToOneWithWhereWithoutFractionsInput, RadiationTreatmentPlanUpdateWithoutFractionsInput>, RadiationTreatmentPlanUncheckedUpdateWithoutFractionsInput>
+  }
+
+  export type RadiationPrescriptionCreateNestedOneWithoutReviewsInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutReviewsInput, RadiationPrescriptionUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutReviewsInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+  }
+
+  export type RadiationPrescriptionUpdateOneRequiredWithoutReviewsNestedInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutReviewsInput, RadiationPrescriptionUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutReviewsInput
+    upsert?: RadiationPrescriptionUpsertWithoutReviewsInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+    update?: XOR<XOR<RadiationPrescriptionUpdateToOneWithWhereWithoutReviewsInput, RadiationPrescriptionUpdateWithoutReviewsInput>, RadiationPrescriptionUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type RadiationPrescriptionCreateNestedOneWithoutCompletionSummariesInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutCompletionSummariesInput, RadiationPrescriptionUncheckedCreateWithoutCompletionSummariesInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutCompletionSummariesInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+  }
+
+  export type RadiationPrescriptionUpdateOneRequiredWithoutCompletionSummariesNestedInput = {
+    create?: XOR<RadiationPrescriptionCreateWithoutCompletionSummariesInput, RadiationPrescriptionUncheckedCreateWithoutCompletionSummariesInput>
+    connectOrCreate?: RadiationPrescriptionCreateOrConnectWithoutCompletionSummariesInput
+    upsert?: RadiationPrescriptionUpsertWithoutCompletionSummariesInput
+    connect?: RadiationPrescriptionWhereUniqueInput
+    update?: XOR<XOR<RadiationPrescriptionUpdateToOneWithWhereWithoutCompletionSummariesInput, RadiationPrescriptionUpdateWithoutCompletionSummariesInput>, RadiationPrescriptionUncheckedUpdateWithoutCompletionSummariesInput>
   }
 
   export type CancerDiagnosisCreateNestedOneWithoutCarePlansInput = {
@@ -20219,6 +31026,1214 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RadiationSimulationCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    treatmentPlans?: RadiationTreatmentPlanCreateNestedManyWithoutSimulationInput
+  }
+
+  export type RadiationSimulationUncheckedCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    treatmentPlans?: RadiationTreatmentPlanUncheckedCreateNestedManyWithoutSimulationInput
+  }
+
+  export type RadiationSimulationCreateOrConnectWithoutPrescriptionInput = {
+    where: RadiationSimulationWhereUniqueInput
+    create: XOR<RadiationSimulationCreateWithoutPrescriptionInput, RadiationSimulationUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationSimulationCreateManyPrescriptionInputEnvelope = {
+    data: RadiationSimulationCreateManyPrescriptionInput | RadiationSimulationCreateManyPrescriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RadiationTreatmentPlanCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulation?: RadiationSimulationCreateNestedOneWithoutTreatmentPlansInput
+    fractions?: RadiationFractionCreateNestedManyWithoutTreatmentPlanInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    simulationId?: string | null
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fractions?: RadiationFractionUncheckedCreateNestedManyWithoutTreatmentPlanInput
+  }
+
+  export type RadiationTreatmentPlanCreateOrConnectWithoutPrescriptionInput = {
+    where: RadiationTreatmentPlanWhereUniqueInput
+    create: XOR<RadiationTreatmentPlanCreateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationTreatmentPlanCreateManyPrescriptionInputEnvelope = {
+    data: RadiationTreatmentPlanCreateManyPrescriptionInput | RadiationTreatmentPlanCreateManyPrescriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RadiationOnTreatmentReviewCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    reviewDate: Date | string
+    weekNumber?: number | null
+    toxicityGrade?: string | null
+    painScore?: number | null
+    weightKg?: Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: boolean
+    reviewNotes?: string | null
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    reviewDate: Date | string
+    weekNumber?: number | null
+    toxicityGrade?: string | null
+    painScore?: number | null
+    weightKg?: Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: boolean
+    reviewNotes?: string | null
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationOnTreatmentReviewCreateOrConnectWithoutPrescriptionInput = {
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+    create: XOR<RadiationOnTreatmentReviewCreateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationOnTreatmentReviewCreateManyPrescriptionInputEnvelope = {
+    data: RadiationOnTreatmentReviewCreateManyPrescriptionInput | RadiationOnTreatmentReviewCreateManyPrescriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RadiationCompletionSummaryCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    completionDate?: Date | string | null
+    plannedTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    deliveredFractions?: number | null
+    interruptions?: boolean
+    interruptionNotes?: string | null
+    acuteToxicitySummary?: string | null
+    responseAssessmentPlan?: string | null
+    followupPlan?: string | null
+    completedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput = {
+    id?: string
+    tenantId: string
+    completionDate?: Date | string | null
+    plannedTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    deliveredFractions?: number | null
+    interruptions?: boolean
+    interruptionNotes?: string | null
+    acuteToxicitySummary?: string | null
+    responseAssessmentPlan?: string | null
+    followupPlan?: string | null
+    completedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationCompletionSummaryCreateOrConnectWithoutPrescriptionInput = {
+    where: RadiationCompletionSummaryWhereUniqueInput
+    create: XOR<RadiationCompletionSummaryCreateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationCompletionSummaryCreateManyPrescriptionInputEnvelope = {
+    data: RadiationCompletionSummaryCreateManyPrescriptionInput | RadiationCompletionSummaryCreateManyPrescriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RadiationSimulationUpsertWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationSimulationWhereUniqueInput
+    update: XOR<RadiationSimulationUpdateWithoutPrescriptionInput, RadiationSimulationUncheckedUpdateWithoutPrescriptionInput>
+    create: XOR<RadiationSimulationCreateWithoutPrescriptionInput, RadiationSimulationUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationSimulationUpdateWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationSimulationWhereUniqueInput
+    data: XOR<RadiationSimulationUpdateWithoutPrescriptionInput, RadiationSimulationUncheckedUpdateWithoutPrescriptionInput>
+  }
+
+  export type RadiationSimulationUpdateManyWithWhereWithoutPrescriptionInput = {
+    where: RadiationSimulationScalarWhereInput
+    data: XOR<RadiationSimulationUpdateManyMutationInput, RadiationSimulationUncheckedUpdateManyWithoutPrescriptionInput>
+  }
+
+  export type RadiationSimulationScalarWhereInput = {
+    AND?: RadiationSimulationScalarWhereInput | RadiationSimulationScalarWhereInput[]
+    OR?: RadiationSimulationScalarWhereInput[]
+    NOT?: RadiationSimulationScalarWhereInput | RadiationSimulationScalarWhereInput[]
+    id?: UuidFilter<"RadiationSimulation"> | string
+    tenantId?: UuidFilter<"RadiationSimulation"> | string
+    prescriptionId?: UuidFilter<"RadiationSimulation"> | string
+    simulationDate?: DateTimeNullableFilter<"RadiationSimulation"> | Date | string | null
+    patientPosition?: StringNullableFilter<"RadiationSimulation"> | string | null
+    immobilizationDevice?: StringNullableFilter<"RadiationSimulation"> | string | null
+    contrastUsed?: BoolFilter<"RadiationSimulation"> | boolean
+    scanRegion?: StringNullableFilter<"RadiationSimulation"> | string | null
+    setupReference?: StringNullableFilter<"RadiationSimulation"> | string | null
+    tattooMarkingDone?: BoolFilter<"RadiationSimulation"> | boolean
+    simulationNotes?: StringNullableFilter<"RadiationSimulation"> | string | null
+    performedBy?: UuidNullableFilter<"RadiationSimulation"> | string | null
+    status?: StringFilter<"RadiationSimulation"> | string
+    createdAt?: DateTimeFilter<"RadiationSimulation"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationSimulation"> | Date | string
+  }
+
+  export type RadiationTreatmentPlanUpsertWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationTreatmentPlanWhereUniqueInput
+    update: XOR<RadiationTreatmentPlanUpdateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedUpdateWithoutPrescriptionInput>
+    create: XOR<RadiationTreatmentPlanCreateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationTreatmentPlanUpdateWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationTreatmentPlanWhereUniqueInput
+    data: XOR<RadiationTreatmentPlanUpdateWithoutPrescriptionInput, RadiationTreatmentPlanUncheckedUpdateWithoutPrescriptionInput>
+  }
+
+  export type RadiationTreatmentPlanUpdateManyWithWhereWithoutPrescriptionInput = {
+    where: RadiationTreatmentPlanScalarWhereInput
+    data: XOR<RadiationTreatmentPlanUpdateManyMutationInput, RadiationTreatmentPlanUncheckedUpdateManyWithoutPrescriptionInput>
+  }
+
+  export type RadiationTreatmentPlanScalarWhereInput = {
+    AND?: RadiationTreatmentPlanScalarWhereInput | RadiationTreatmentPlanScalarWhereInput[]
+    OR?: RadiationTreatmentPlanScalarWhereInput[]
+    NOT?: RadiationTreatmentPlanScalarWhereInput | RadiationTreatmentPlanScalarWhereInput[]
+    id?: UuidFilter<"RadiationTreatmentPlan"> | string
+    tenantId?: UuidFilter<"RadiationTreatmentPlan"> | string
+    prescriptionId?: UuidFilter<"RadiationTreatmentPlan"> | string
+    simulationId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    externalPlanReference?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planningSystem?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planningStatus?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    plannerId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    physicistId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    radiationOncologistId?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    contouringCompleted?: BoolFilter<"RadiationTreatmentPlan"> | boolean
+    physicsQaCompleted?: BoolFilter<"RadiationTreatmentPlan"> | boolean
+    treatmentMachine?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    planNotes?: StringNullableFilter<"RadiationTreatmentPlan"> | string | null
+    approvedBy?: UuidNullableFilter<"RadiationTreatmentPlan"> | string | null
+    approvedAt?: DateTimeNullableFilter<"RadiationTreatmentPlan"> | Date | string | null
+    status?: StringFilter<"RadiationTreatmentPlan"> | string
+    createdAt?: DateTimeFilter<"RadiationTreatmentPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationTreatmentPlan"> | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUpsertWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+    update: XOR<RadiationOnTreatmentReviewUpdateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedUpdateWithoutPrescriptionInput>
+    create: XOR<RadiationOnTreatmentReviewCreateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationOnTreatmentReviewUpdateWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationOnTreatmentReviewWhereUniqueInput
+    data: XOR<RadiationOnTreatmentReviewUpdateWithoutPrescriptionInput, RadiationOnTreatmentReviewUncheckedUpdateWithoutPrescriptionInput>
+  }
+
+  export type RadiationOnTreatmentReviewUpdateManyWithWhereWithoutPrescriptionInput = {
+    where: RadiationOnTreatmentReviewScalarWhereInput
+    data: XOR<RadiationOnTreatmentReviewUpdateManyMutationInput, RadiationOnTreatmentReviewUncheckedUpdateManyWithoutPrescriptionInput>
+  }
+
+  export type RadiationOnTreatmentReviewScalarWhereInput = {
+    AND?: RadiationOnTreatmentReviewScalarWhereInput | RadiationOnTreatmentReviewScalarWhereInput[]
+    OR?: RadiationOnTreatmentReviewScalarWhereInput[]
+    NOT?: RadiationOnTreatmentReviewScalarWhereInput | RadiationOnTreatmentReviewScalarWhereInput[]
+    id?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    tenantId?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    prescriptionId?: UuidFilter<"RadiationOnTreatmentReview"> | string
+    reviewDate?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    weekNumber?: IntNullableFilter<"RadiationOnTreatmentReview"> | number | null
+    toxicityGrade?: StringNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    painScore?: IntNullableFilter<"RadiationOnTreatmentReview"> | number | null
+    weightKg?: DecimalNullableFilter<"RadiationOnTreatmentReview"> | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFilter<"RadiationOnTreatmentReview"> | boolean
+    reviewNotes?: StringNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    reviewedBy?: UuidNullableFilter<"RadiationOnTreatmentReview"> | string | null
+    createdAt?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationOnTreatmentReview"> | Date | string
+  }
+
+  export type RadiationCompletionSummaryUpsertWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationCompletionSummaryWhereUniqueInput
+    update: XOR<RadiationCompletionSummaryUpdateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedUpdateWithoutPrescriptionInput>
+    create: XOR<RadiationCompletionSummaryCreateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedCreateWithoutPrescriptionInput>
+  }
+
+  export type RadiationCompletionSummaryUpdateWithWhereUniqueWithoutPrescriptionInput = {
+    where: RadiationCompletionSummaryWhereUniqueInput
+    data: XOR<RadiationCompletionSummaryUpdateWithoutPrescriptionInput, RadiationCompletionSummaryUncheckedUpdateWithoutPrescriptionInput>
+  }
+
+  export type RadiationCompletionSummaryUpdateManyWithWhereWithoutPrescriptionInput = {
+    where: RadiationCompletionSummaryScalarWhereInput
+    data: XOR<RadiationCompletionSummaryUpdateManyMutationInput, RadiationCompletionSummaryUncheckedUpdateManyWithoutPrescriptionInput>
+  }
+
+  export type RadiationCompletionSummaryScalarWhereInput = {
+    AND?: RadiationCompletionSummaryScalarWhereInput | RadiationCompletionSummaryScalarWhereInput[]
+    OR?: RadiationCompletionSummaryScalarWhereInput[]
+    NOT?: RadiationCompletionSummaryScalarWhereInput | RadiationCompletionSummaryScalarWhereInput[]
+    id?: UuidFilter<"RadiationCompletionSummary"> | string
+    tenantId?: UuidFilter<"RadiationCompletionSummary"> | string
+    prescriptionId?: UuidFilter<"RadiationCompletionSummary"> | string
+    completionDate?: DateTimeNullableFilter<"RadiationCompletionSummary"> | Date | string | null
+    plannedTotalDoseGy?: DecimalNullableFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: DecimalNullableFilter<"RadiationCompletionSummary"> | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: IntNullableFilter<"RadiationCompletionSummary"> | number | null
+    deliveredFractions?: IntNullableFilter<"RadiationCompletionSummary"> | number | null
+    interruptions?: BoolFilter<"RadiationCompletionSummary"> | boolean
+    interruptionNotes?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    acuteToxicitySummary?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    responseAssessmentPlan?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    followupPlan?: StringNullableFilter<"RadiationCompletionSummary"> | string | null
+    completedBy?: UuidNullableFilter<"RadiationCompletionSummary"> | string | null
+    createdAt?: DateTimeFilter<"RadiationCompletionSummary"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationCompletionSummary"> | Date | string
+  }
+
+  export type RadiationPrescriptionCreateWithoutSimulationsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    treatmentPlans?: RadiationTreatmentPlanCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionUncheckedCreateWithoutSimulationsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    treatmentPlans?: RadiationTreatmentPlanUncheckedCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewUncheckedCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionCreateOrConnectWithoutSimulationsInput = {
+    where: RadiationPrescriptionWhereUniqueInput
+    create: XOR<RadiationPrescriptionCreateWithoutSimulationsInput, RadiationPrescriptionUncheckedCreateWithoutSimulationsInput>
+  }
+
+  export type RadiationTreatmentPlanCreateWithoutSimulationInput = {
+    id?: string
+    tenantId: string
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    prescription: RadiationPrescriptionCreateNestedOneWithoutTreatmentPlansInput
+    fractions?: RadiationFractionCreateNestedManyWithoutTreatmentPlanInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fractions?: RadiationFractionUncheckedCreateNestedManyWithoutTreatmentPlanInput
+  }
+
+  export type RadiationTreatmentPlanCreateOrConnectWithoutSimulationInput = {
+    where: RadiationTreatmentPlanWhereUniqueInput
+    create: XOR<RadiationTreatmentPlanCreateWithoutSimulationInput, RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput>
+  }
+
+  export type RadiationTreatmentPlanCreateManySimulationInputEnvelope = {
+    data: RadiationTreatmentPlanCreateManySimulationInput | RadiationTreatmentPlanCreateManySimulationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RadiationPrescriptionUpsertWithoutSimulationsInput = {
+    update: XOR<RadiationPrescriptionUpdateWithoutSimulationsInput, RadiationPrescriptionUncheckedUpdateWithoutSimulationsInput>
+    create: XOR<RadiationPrescriptionCreateWithoutSimulationsInput, RadiationPrescriptionUncheckedCreateWithoutSimulationsInput>
+    where?: RadiationPrescriptionWhereInput
+  }
+
+  export type RadiationPrescriptionUpdateToOneWithWhereWithoutSimulationsInput = {
+    where?: RadiationPrescriptionWhereInput
+    data: XOR<RadiationPrescriptionUpdateWithoutSimulationsInput, RadiationPrescriptionUncheckedUpdateWithoutSimulationsInput>
+  }
+
+  export type RadiationPrescriptionUpdateWithoutSimulationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    treatmentPlans?: RadiationTreatmentPlanUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationPrescriptionUncheckedUpdateWithoutSimulationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    treatmentPlans?: RadiationTreatmentPlanUncheckedUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUncheckedUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationTreatmentPlanUpsertWithWhereUniqueWithoutSimulationInput = {
+    where: RadiationTreatmentPlanWhereUniqueInput
+    update: XOR<RadiationTreatmentPlanUpdateWithoutSimulationInput, RadiationTreatmentPlanUncheckedUpdateWithoutSimulationInput>
+    create: XOR<RadiationTreatmentPlanCreateWithoutSimulationInput, RadiationTreatmentPlanUncheckedCreateWithoutSimulationInput>
+  }
+
+  export type RadiationTreatmentPlanUpdateWithWhereUniqueWithoutSimulationInput = {
+    where: RadiationTreatmentPlanWhereUniqueInput
+    data: XOR<RadiationTreatmentPlanUpdateWithoutSimulationInput, RadiationTreatmentPlanUncheckedUpdateWithoutSimulationInput>
+  }
+
+  export type RadiationTreatmentPlanUpdateManyWithWhereWithoutSimulationInput = {
+    where: RadiationTreatmentPlanScalarWhereInput
+    data: XOR<RadiationTreatmentPlanUpdateManyMutationInput, RadiationTreatmentPlanUncheckedUpdateManyWithoutSimulationInput>
+  }
+
+  export type RadiationPrescriptionCreateWithoutTreatmentPlansInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionUncheckedCreateWithoutTreatmentPlansInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationUncheckedCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewUncheckedCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionCreateOrConnectWithoutTreatmentPlansInput = {
+    where: RadiationPrescriptionWhereUniqueInput
+    create: XOR<RadiationPrescriptionCreateWithoutTreatmentPlansInput, RadiationPrescriptionUncheckedCreateWithoutTreatmentPlansInput>
+  }
+
+  export type RadiationSimulationCreateWithoutTreatmentPlansInput = {
+    id?: string
+    tenantId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    prescription: RadiationPrescriptionCreateNestedOneWithoutSimulationsInput
+  }
+
+  export type RadiationSimulationUncheckedCreateWithoutTreatmentPlansInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationSimulationCreateOrConnectWithoutTreatmentPlansInput = {
+    where: RadiationSimulationWhereUniqueInput
+    create: XOR<RadiationSimulationCreateWithoutTreatmentPlansInput, RadiationSimulationUncheckedCreateWithoutTreatmentPlansInput>
+  }
+
+  export type RadiationFractionCreateWithoutTreatmentPlanInput = {
+    id?: string
+    tenantId: string
+    fractionNumber: number
+    plannedDate?: Date | string | null
+    actualDate?: Date | string | null
+    plannedDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: string | null
+    radiationTherapistId?: string | null
+    status?: string
+    interruptionReason?: string | null
+    verificationCompleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationFractionUncheckedCreateWithoutTreatmentPlanInput = {
+    id?: string
+    tenantId: string
+    fractionNumber: number
+    plannedDate?: Date | string | null
+    actualDate?: Date | string | null
+    plannedDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: string | null
+    radiationTherapistId?: string | null
+    status?: string
+    interruptionReason?: string | null
+    verificationCompleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationFractionCreateOrConnectWithoutTreatmentPlanInput = {
+    where: RadiationFractionWhereUniqueInput
+    create: XOR<RadiationFractionCreateWithoutTreatmentPlanInput, RadiationFractionUncheckedCreateWithoutTreatmentPlanInput>
+  }
+
+  export type RadiationFractionCreateManyTreatmentPlanInputEnvelope = {
+    data: RadiationFractionCreateManyTreatmentPlanInput | RadiationFractionCreateManyTreatmentPlanInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RadiationPrescriptionUpsertWithoutTreatmentPlansInput = {
+    update: XOR<RadiationPrescriptionUpdateWithoutTreatmentPlansInput, RadiationPrescriptionUncheckedUpdateWithoutTreatmentPlansInput>
+    create: XOR<RadiationPrescriptionCreateWithoutTreatmentPlansInput, RadiationPrescriptionUncheckedCreateWithoutTreatmentPlansInput>
+    where?: RadiationPrescriptionWhereInput
+  }
+
+  export type RadiationPrescriptionUpdateToOneWithWhereWithoutTreatmentPlansInput = {
+    where?: RadiationPrescriptionWhereInput
+    data: XOR<RadiationPrescriptionUpdateWithoutTreatmentPlansInput, RadiationPrescriptionUncheckedUpdateWithoutTreatmentPlansInput>
+  }
+
+  export type RadiationPrescriptionUpdateWithoutTreatmentPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationPrescriptionUncheckedUpdateWithoutTreatmentPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUncheckedUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUncheckedUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationSimulationUpsertWithoutTreatmentPlansInput = {
+    update: XOR<RadiationSimulationUpdateWithoutTreatmentPlansInput, RadiationSimulationUncheckedUpdateWithoutTreatmentPlansInput>
+    create: XOR<RadiationSimulationCreateWithoutTreatmentPlansInput, RadiationSimulationUncheckedCreateWithoutTreatmentPlansInput>
+    where?: RadiationSimulationWhereInput
+  }
+
+  export type RadiationSimulationUpdateToOneWithWhereWithoutTreatmentPlansInput = {
+    where?: RadiationSimulationWhereInput
+    data: XOR<RadiationSimulationUpdateWithoutTreatmentPlansInput, RadiationSimulationUncheckedUpdateWithoutTreatmentPlansInput>
+  }
+
+  export type RadiationSimulationUpdateWithoutTreatmentPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    prescription?: RadiationPrescriptionUpdateOneRequiredWithoutSimulationsNestedInput
+  }
+
+  export type RadiationSimulationUncheckedUpdateWithoutTreatmentPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationFractionUpsertWithWhereUniqueWithoutTreatmentPlanInput = {
+    where: RadiationFractionWhereUniqueInput
+    update: XOR<RadiationFractionUpdateWithoutTreatmentPlanInput, RadiationFractionUncheckedUpdateWithoutTreatmentPlanInput>
+    create: XOR<RadiationFractionCreateWithoutTreatmentPlanInput, RadiationFractionUncheckedCreateWithoutTreatmentPlanInput>
+  }
+
+  export type RadiationFractionUpdateWithWhereUniqueWithoutTreatmentPlanInput = {
+    where: RadiationFractionWhereUniqueInput
+    data: XOR<RadiationFractionUpdateWithoutTreatmentPlanInput, RadiationFractionUncheckedUpdateWithoutTreatmentPlanInput>
+  }
+
+  export type RadiationFractionUpdateManyWithWhereWithoutTreatmentPlanInput = {
+    where: RadiationFractionScalarWhereInput
+    data: XOR<RadiationFractionUpdateManyMutationInput, RadiationFractionUncheckedUpdateManyWithoutTreatmentPlanInput>
+  }
+
+  export type RadiationFractionScalarWhereInput = {
+    AND?: RadiationFractionScalarWhereInput | RadiationFractionScalarWhereInput[]
+    OR?: RadiationFractionScalarWhereInput[]
+    NOT?: RadiationFractionScalarWhereInput | RadiationFractionScalarWhereInput[]
+    id?: UuidFilter<"RadiationFraction"> | string
+    tenantId?: UuidFilter<"RadiationFraction"> | string
+    treatmentPlanId?: UuidFilter<"RadiationFraction"> | string
+    fractionNumber?: IntFilter<"RadiationFraction"> | number
+    plannedDate?: DateTimeNullableFilter<"RadiationFraction"> | Date | string | null
+    actualDate?: DateTimeNullableFilter<"RadiationFraction"> | Date | string | null
+    plannedDoseGy?: DecimalNullableFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: DecimalNullableFilter<"RadiationFraction"> | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: StringNullableFilter<"RadiationFraction"> | string | null
+    radiationTherapistId?: UuidNullableFilter<"RadiationFraction"> | string | null
+    status?: StringFilter<"RadiationFraction"> | string
+    interruptionReason?: StringNullableFilter<"RadiationFraction"> | string | null
+    verificationCompleted?: BoolFilter<"RadiationFraction"> | boolean
+    createdAt?: DateTimeFilter<"RadiationFraction"> | Date | string
+    updatedAt?: DateTimeFilter<"RadiationFraction"> | Date | string
+  }
+
+  export type RadiationTreatmentPlanCreateWithoutFractionsInput = {
+    id?: string
+    tenantId: string
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    prescription: RadiationPrescriptionCreateNestedOneWithoutTreatmentPlansInput
+    simulation?: RadiationSimulationCreateNestedOneWithoutTreatmentPlansInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedCreateWithoutFractionsInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    simulationId?: string | null
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationTreatmentPlanCreateOrConnectWithoutFractionsInput = {
+    where: RadiationTreatmentPlanWhereUniqueInput
+    create: XOR<RadiationTreatmentPlanCreateWithoutFractionsInput, RadiationTreatmentPlanUncheckedCreateWithoutFractionsInput>
+  }
+
+  export type RadiationTreatmentPlanUpsertWithoutFractionsInput = {
+    update: XOR<RadiationTreatmentPlanUpdateWithoutFractionsInput, RadiationTreatmentPlanUncheckedUpdateWithoutFractionsInput>
+    create: XOR<RadiationTreatmentPlanCreateWithoutFractionsInput, RadiationTreatmentPlanUncheckedCreateWithoutFractionsInput>
+    where?: RadiationTreatmentPlanWhereInput
+  }
+
+  export type RadiationTreatmentPlanUpdateToOneWithWhereWithoutFractionsInput = {
+    where?: RadiationTreatmentPlanWhereInput
+    data: XOR<RadiationTreatmentPlanUpdateWithoutFractionsInput, RadiationTreatmentPlanUncheckedUpdateWithoutFractionsInput>
+  }
+
+  export type RadiationTreatmentPlanUpdateWithoutFractionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    prescription?: RadiationPrescriptionUpdateOneRequiredWithoutTreatmentPlansNestedInput
+    simulation?: RadiationSimulationUpdateOneWithoutTreatmentPlansNestedInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateWithoutFractionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    simulationId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationPrescriptionCreateWithoutReviewsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationCreateNestedManyWithoutPrescriptionInput
+    treatmentPlans?: RadiationTreatmentPlanCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionUncheckedCreateWithoutReviewsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationUncheckedCreateNestedManyWithoutPrescriptionInput
+    treatmentPlans?: RadiationTreatmentPlanUncheckedCreateNestedManyWithoutPrescriptionInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionCreateOrConnectWithoutReviewsInput = {
+    where: RadiationPrescriptionWhereUniqueInput
+    create: XOR<RadiationPrescriptionCreateWithoutReviewsInput, RadiationPrescriptionUncheckedCreateWithoutReviewsInput>
+  }
+
+  export type RadiationPrescriptionUpsertWithoutReviewsInput = {
+    update: XOR<RadiationPrescriptionUpdateWithoutReviewsInput, RadiationPrescriptionUncheckedUpdateWithoutReviewsInput>
+    create: XOR<RadiationPrescriptionCreateWithoutReviewsInput, RadiationPrescriptionUncheckedCreateWithoutReviewsInput>
+    where?: RadiationPrescriptionWhereInput
+  }
+
+  export type RadiationPrescriptionUpdateToOneWithWhereWithoutReviewsInput = {
+    where?: RadiationPrescriptionWhereInput
+    data: XOR<RadiationPrescriptionUpdateWithoutReviewsInput, RadiationPrescriptionUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type RadiationPrescriptionUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUpdateManyWithoutPrescriptionNestedInput
+    treatmentPlans?: RadiationTreatmentPlanUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationPrescriptionUncheckedUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUncheckedUpdateManyWithoutPrescriptionNestedInput
+    treatmentPlans?: RadiationTreatmentPlanUncheckedUpdateManyWithoutPrescriptionNestedInput
+    completionSummaries?: RadiationCompletionSummaryUncheckedUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationPrescriptionCreateWithoutCompletionSummariesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationCreateNestedManyWithoutPrescriptionInput
+    treatmentPlans?: RadiationTreatmentPlanCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionUncheckedCreateWithoutCompletionSummariesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId: string
+    cancerProfileId?: string | null
+    prescriptionNumber?: string | null
+    treatmentIntent?: string | null
+    treatmentSiteId?: string | null
+    laterality?: string | null
+    modality?: string | null
+    technique?: string | null
+    totalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    concurrentChemo?: boolean
+    plannedStartDate?: Date | string | null
+    plannedEndDate?: Date | string | null
+    prescriptionNotes?: string | null
+    prescribedBy?: string | null
+    prescribedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    simulations?: RadiationSimulationUncheckedCreateNestedManyWithoutPrescriptionInput
+    treatmentPlans?: RadiationTreatmentPlanUncheckedCreateNestedManyWithoutPrescriptionInput
+    reviews?: RadiationOnTreatmentReviewUncheckedCreateNestedManyWithoutPrescriptionInput
+  }
+
+  export type RadiationPrescriptionCreateOrConnectWithoutCompletionSummariesInput = {
+    where: RadiationPrescriptionWhereUniqueInput
+    create: XOR<RadiationPrescriptionCreateWithoutCompletionSummariesInput, RadiationPrescriptionUncheckedCreateWithoutCompletionSummariesInput>
+  }
+
+  export type RadiationPrescriptionUpsertWithoutCompletionSummariesInput = {
+    update: XOR<RadiationPrescriptionUpdateWithoutCompletionSummariesInput, RadiationPrescriptionUncheckedUpdateWithoutCompletionSummariesInput>
+    create: XOR<RadiationPrescriptionCreateWithoutCompletionSummariesInput, RadiationPrescriptionUncheckedCreateWithoutCompletionSummariesInput>
+    where?: RadiationPrescriptionWhereInput
+  }
+
+  export type RadiationPrescriptionUpdateToOneWithWhereWithoutCompletionSummariesInput = {
+    where?: RadiationPrescriptionWhereInput
+    data: XOR<RadiationPrescriptionUpdateWithoutCompletionSummariesInput, RadiationPrescriptionUncheckedUpdateWithoutCompletionSummariesInput>
+  }
+
+  export type RadiationPrescriptionUpdateWithoutCompletionSummariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUpdateManyWithoutPrescriptionNestedInput
+    treatmentPlans?: RadiationTreatmentPlanUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUpdateManyWithoutPrescriptionNestedInput
+  }
+
+  export type RadiationPrescriptionUncheckedUpdateWithoutCompletionSummariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    cancerProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    prescriptionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentIntent?: NullableStringFieldUpdateOperationsInput | string | null
+    treatmentSiteId?: NullableStringFieldUpdateOperationsInput | string | null
+    laterality?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: NullableStringFieldUpdateOperationsInput | string | null
+    technique?: NullableStringFieldUpdateOperationsInput | string | null
+    totalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dosePerFractionGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    concurrentChemo?: BoolFieldUpdateOperationsInput | boolean
+    plannedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prescriptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    prescribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulations?: RadiationSimulationUncheckedUpdateManyWithoutPrescriptionNestedInput
+    treatmentPlans?: RadiationTreatmentPlanUncheckedUpdateManyWithoutPrescriptionNestedInput
+    reviews?: RadiationOnTreatmentReviewUncheckedUpdateManyWithoutPrescriptionNestedInput
+  }
+
   export type CancerDiagnosisCreateWithoutCarePlansInput = {
     id?: string
     tenantId: string
@@ -20867,6 +32882,448 @@ export namespace Prisma {
     cancerTypeId?: StringFieldUpdateOperationsInput | string
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationSimulationCreateManyPrescriptionInput = {
+    id?: string
+    tenantId: string
+    simulationDate?: Date | string | null
+    patientPosition?: string | null
+    immobilizationDevice?: string | null
+    contrastUsed?: boolean
+    scanRegion?: string | null
+    setupReference?: string | null
+    tattooMarkingDone?: boolean
+    simulationNotes?: string | null
+    performedBy?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationTreatmentPlanCreateManyPrescriptionInput = {
+    id?: string
+    tenantId: string
+    simulationId?: string | null
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationOnTreatmentReviewCreateManyPrescriptionInput = {
+    id?: string
+    tenantId: string
+    reviewDate: Date | string
+    weekNumber?: number | null
+    toxicityGrade?: string | null
+    painScore?: number | null
+    weightKg?: Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: boolean
+    reviewNotes?: string | null
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationCompletionSummaryCreateManyPrescriptionInput = {
+    id?: string
+    tenantId: string
+    completionDate?: Date | string | null
+    plannedTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: number | null
+    deliveredFractions?: number | null
+    interruptions?: boolean
+    interruptionNotes?: string | null
+    acuteToxicitySummary?: string | null
+    responseAssessmentPlan?: string | null
+    followupPlan?: string | null
+    completedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationSimulationUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    treatmentPlans?: RadiationTreatmentPlanUpdateManyWithoutSimulationNestedInput
+  }
+
+  export type RadiationSimulationUncheckedUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    treatmentPlans?: RadiationTreatmentPlanUncheckedUpdateManyWithoutSimulationNestedInput
+  }
+
+  export type RadiationSimulationUncheckedUpdateManyWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    patientPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    immobilizationDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastUsed?: BoolFieldUpdateOperationsInput | boolean
+    scanRegion?: NullableStringFieldUpdateOperationsInput | string | null
+    setupReference?: NullableStringFieldUpdateOperationsInput | string | null
+    tattooMarkingDone?: BoolFieldUpdateOperationsInput | boolean
+    simulationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationTreatmentPlanUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    simulation?: RadiationSimulationUpdateOneWithoutTreatmentPlansNestedInput
+    fractions?: RadiationFractionUpdateManyWithoutTreatmentPlanNestedInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fractions?: RadiationFractionUncheckedUpdateManyWithoutTreatmentPlanNestedInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateManyWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    simulationId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    toxicityGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    weightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFieldUpdateOperationsInput | boolean
+    reviewNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    toxicityGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    weightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFieldUpdateOperationsInput | boolean
+    reviewNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationOnTreatmentReviewUncheckedUpdateManyWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    toxicityGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    weightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentBreakRequired?: BoolFieldUpdateOperationsInput | boolean
+    reviewNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationCompletionSummaryUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    deliveredFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    interruptions?: BoolFieldUpdateOperationsInput | boolean
+    interruptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    acuteToxicitySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    responseAssessmentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    followupPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationCompletionSummaryUncheckedUpdateWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    deliveredFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    interruptions?: BoolFieldUpdateOperationsInput | boolean
+    interruptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    acuteToxicitySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    responseAssessmentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    followupPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationCompletionSummaryUncheckedUpdateManyWithoutPrescriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredTotalDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    plannedFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    deliveredFractions?: NullableIntFieldUpdateOperationsInput | number | null
+    interruptions?: BoolFieldUpdateOperationsInput | boolean
+    interruptionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    acuteToxicitySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    responseAssessmentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    followupPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationTreatmentPlanCreateManySimulationInput = {
+    id?: string
+    tenantId: string
+    prescriptionId: string
+    externalPlanReference?: string | null
+    planningSystem?: string | null
+    planningStatus?: string | null
+    plannerId?: string | null
+    physicistId?: string | null
+    radiationOncologistId?: string | null
+    contouringCompleted?: boolean
+    physicsQaCompleted?: boolean
+    treatmentMachine?: string | null
+    planNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationTreatmentPlanUpdateWithoutSimulationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    prescription?: RadiationPrescriptionUpdateOneRequiredWithoutTreatmentPlansNestedInput
+    fractions?: RadiationFractionUpdateManyWithoutTreatmentPlanNestedInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateWithoutSimulationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fractions?: RadiationFractionUncheckedUpdateManyWithoutTreatmentPlanNestedInput
+  }
+
+  export type RadiationTreatmentPlanUncheckedUpdateManyWithoutSimulationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    prescriptionId?: StringFieldUpdateOperationsInput | string
+    externalPlanReference?: NullableStringFieldUpdateOperationsInput | string | null
+    planningSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    planningStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    plannerId?: NullableStringFieldUpdateOperationsInput | string | null
+    physicistId?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationOncologistId?: NullableStringFieldUpdateOperationsInput | string | null
+    contouringCompleted?: BoolFieldUpdateOperationsInput | boolean
+    physicsQaCompleted?: BoolFieldUpdateOperationsInput | boolean
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    planNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationFractionCreateManyTreatmentPlanInput = {
+    id?: string
+    tenantId: string
+    fractionNumber: number
+    plannedDate?: Date | string | null
+    actualDate?: Date | string | null
+    plannedDoseGy?: Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: string | null
+    radiationTherapistId?: string | null
+    status?: string
+    interruptionReason?: string | null
+    verificationCompleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RadiationFractionUpdateWithoutTreatmentPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fractionNumber?: IntFieldUpdateOperationsInput | number
+    plannedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationTherapistId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    interruptionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationFractionUncheckedUpdateWithoutTreatmentPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fractionNumber?: IntFieldUpdateOperationsInput | number
+    plannedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationTherapistId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    interruptionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RadiationFractionUncheckedUpdateManyWithoutTreatmentPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fractionNumber?: IntFieldUpdateOperationsInput | number
+    plannedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    plannedDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    deliveredDoseGy?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    treatmentMachine?: NullableStringFieldUpdateOperationsInput | string | null
+    radiationTherapistId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    interruptionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCompleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

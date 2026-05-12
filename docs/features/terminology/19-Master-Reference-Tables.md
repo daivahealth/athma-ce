@@ -144,6 +144,11 @@ SELECT * FROM populate_procedure_order_from_master(
 );
 ```
 
+**OT Usage**:
+- OT request creation should source procedure selection from `procedure_master`.
+- OT request procedure pickers should limit results to surgical procedure catalog rows, with category matching handled case-insensitively.
+- When a procedure is selected, the client can safely derive display and helper defaults such as billing/procedure code, anesthesia type, and estimated duration from the catalog row.
+
 ## Order Integration
 
 ### Master Table References

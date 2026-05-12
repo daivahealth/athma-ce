@@ -12,6 +12,7 @@ export interface CatalogFilters {
   tenantId?: string | undefined;
   isActive?: boolean | undefined;
   search?: string | undefined; // Searches across name fields
+  procedureCategory?: string | undefined;
   includeGlobal?: boolean | undefined; // Include global entries (tenant_id = NULL)
 }
 
@@ -220,6 +221,13 @@ export class CatalogService {
     // Handle tenant filtering - catalogs are tenant-specific
     if (filters.tenantId) {
       where.tenantId = filters.tenantId;
+    }
+
+    if (filters.procedureCategory) {
+      where.procedureCategory = {
+        equals: filters.procedureCategory,
+        mode: 'insensitive',
+      };
     }
 
     if (filters.search) {

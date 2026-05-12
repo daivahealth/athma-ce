@@ -1,4 +1,10 @@
 export * from './types';
 export * from './services';
 export * from './hooks';
-export * from './components';
+export {
+  SearchInput,
+  SearchResults,
+  SearchFiltersPanel,
+  DocumentPreview,
+} from './components';
+export { EmbeddingStats as EmbeddingStatsCard } from './components';

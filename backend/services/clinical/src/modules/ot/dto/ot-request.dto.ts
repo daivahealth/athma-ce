@@ -190,6 +190,11 @@ export class TransitionOtRequestDto {
 }
 
 export class ListOtRequestsDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  search?: string;
+
   @ApiPropertyOptional({ enum: ['DRAFT', 'REQUESTED', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'SCHEDULED', 'CANCELLED', 'COMPLETED'] })
   @IsOptional()
   @IsString()

@@ -166,8 +166,8 @@ export function ChecklistForm({ instanceId, onComplete, onVerify }: ChecklistFor
             <Checkbox
               id={item.itemKey}
               checked={value === true}
-              onCheckedChange={(checked) =>
-                handleValueChange(item.itemKey, item.id, checked)
+              onChange={(event) =>
+                handleValueChange(item.itemKey, item.id, event.target.checked)
               }
               disabled={instance?.status === 'COMPLETED' || instance?.status === 'VERIFIED'}
             />

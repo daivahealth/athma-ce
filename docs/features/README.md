@@ -11,6 +11,11 @@ This folder contains feature-specific documentation organized by domain and modu
   - Encounter management
   - Visit types and workflows
 
+- **[ot/](./ot/)** - Operating theatre workflow
+  - OT requests and review workflow
+  - OT scheduling, conflicts, and team assignment
+  - OT reporting and report versioning
+
 - **[patient-management/](./patient-management/)** - Patient registration and management
   - Patient change history and audit trails
   - Patient consent management

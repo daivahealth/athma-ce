@@ -130,6 +130,11 @@ function formatValue(value: unknown, column: ResultColumn): string {
   }
 }
 
+function formatUnknownValue(value: unknown): string {
+  if (value === null || value === undefined) return '-';
+  return String(value);
+}
+
 /**
  * Tooltip payload entry from Recharts
  */
@@ -171,7 +176,7 @@ function CustomTooltip({
               {column?.displayName || entry.dataKey}:
             </span>
             <span className="font-medium">
-              {column ? formatValue(entry.value, column) : entry.value}
+              {column ? formatValue(entry.value, column) : formatUnknownValue(entry.value)}
             </span>
           </div>
         );

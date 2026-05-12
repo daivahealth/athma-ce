@@ -62,7 +62,12 @@ export function TemplateForm({ initialValues, submitLabel = 'Save template', onS
       variables_schema: toTextareaJson(initialValues?.variables_schema),
       approval_status: (initialValues?.approval_status ?? 'draft') as TemplateApprovalStatus,
       version: initialValues?.version ?? undefined,
-      is_active: initialValues?.is_active == null ? 'true' : String(Boolean(initialValues.is_active)),
+      is_active:
+        initialValues?.is_active == null
+          ? 'true'
+          : initialValues.is_active
+            ? 'true'
+            : 'false',
     }),
     [initialValues]
   );

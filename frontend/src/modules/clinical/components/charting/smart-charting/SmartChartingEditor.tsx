@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import { NodeSelection } from '@tiptap/pm/state';
+import { NodeSelection, TextSelection } from '@tiptap/pm/state';
 import StarterKit from '@tiptap/starter-kit';
 import {
   FileText,
@@ -265,7 +265,7 @@ export function SmartChartingEditor({
       // creating default content for cursor positioning
       if (isTextBlock) {
         // For text blocks, set cursor inside the paragraph (endPos + 2 accounts for block start + paragraph start)
-        tr.setSelection(editor.state.selection.constructor.near(tr.doc.resolve(endPos + 2)));
+        tr.setSelection(TextSelection.near(tr.doc.resolve(endPos + 2)));
       } else {
         // For atom blocks, use NodeSelection to select the block itself
         // This prevents ProseMirror from creating a paragraph for cursor

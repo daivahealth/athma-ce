@@ -10,8 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { useProtocol, useUpdateProtocol } from '@/plugins/oncology/hooks/use-oncology';
-import type { RegimenItem, LabPrerequisite, HydrationOrder } from '@/plugins/oncology/types';
+import { useProtocol, useUpdateProtocol, useCancerTypes } from '@/plugins/oncology/hooks/use-oncology';
+import type { RegimenItem, LabPrerequisite, HydrationOrder, OncologyCancerType } from '@/plugins/oncology/types';
 
 interface RegimenRow extends RegimenItem { day: number }
 
@@ -20,6 +20,8 @@ export default function EditProtocolPage({ params }: { params: { locale: string;
   const back = () => router.push(`/${params.locale}/oncology/protocols`);
   const { data: protocol, isLoading } = useProtocol(params.id);
   const updateProtocol = useUpdateProtocol();
+  const { data: cancerTypesData } = useCancerTypes({ active: 'true' });
+  const cancerTypes: OncologyCancerType[] = cancerTypesData?.data ?? [];
 
   const [code, setCode] = useState('');
   const [name, setName] = useState('');
@@ -85,7 +87,7 @@ export default function EditProtocolPage({ params }: { params: { locale: string;
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={back}>
-          <ArrowLeft className="mr-2 h-4 w-4" />Back
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
           <h1 className="text-2xl font-bold">Edit Protocol</h1>
@@ -110,7 +112,28 @@ export default function EditProtocolPage({ params }: { params: { locale: string;
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Cancer Type *</Label>
-                <Input value={cancerType} onChange={(e) => setCancerType(e.target.value)} />
+                <Select
+                  value={cancerType || '__none'}
+                  onValueChange={(v) => setCancerType(v === '__none' ? '' : v)}
+                >
+                  <SelectTrigger><SelectValue placeholder="Select cancer type..." /></SelectTrigger>
+                  <SelectContent className="max-h-72 overflow-y-auto">
+                    <SelectItem value="__none">— Select cancer type —</SelectItem>
+                    {cancerTypes.map((ct) => (
+                      <SelectItem key={ct.id} value={ct.name}>
+                        {ct.name}
+                        {ct.category && (
+                          <span className="ml-2 text-xs text-muted-foreground">({ct.category})</span>
+                        )}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {cancerType && !cancerTypes.some((ct) => ct.name === cancerType) && cancerTypes.length > 0 && (
+                  <p className="text-xs text-amber-600">
+                    Current value &ldquo;{cancerType}&rdquo; not in catalog — select a replacement above.
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Treatment Intent *</Label>

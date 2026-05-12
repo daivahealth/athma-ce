@@ -234,6 +234,7 @@ export interface CatalogFilters {
   tenantId?: string;
   isActive?: boolean;
   search?: string;
+  procedureCategory?: string;
   includeGlobal?: boolean;
 }
 

@@ -18,6 +18,7 @@ const oncologyPlugin: FrontendPluginManifest = {
         { href: '/oncology/care-plans', labelKey: 'nav.carePlans', icon: 'FileText' },
         { href: '/oncology/protocols', labelKey: 'nav.chemoProtocols', icon: 'FlaskConical' },
         { href: '/oncology/orders', labelKey: 'nav.chemoOrders', icon: 'Syringe' },
+        { href: '/oncology/radiation', labelKey: 'nav.radiationOncology', icon: 'Radiation' },
         { href: '/oncology/catalogs', labelKey: 'nav.oncologyCatalogs', icon: 'BookOpen' },
       ],
     },

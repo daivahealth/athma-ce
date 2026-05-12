@@ -60,6 +60,30 @@ export class OtRoomsService {
     };
   }
 
+  async getBySpaceIds(tenantId: string, spaceIds: string[]) {
+    const uniqueSpaceIds = [...new Set(spaceIds.filter(Boolean))];
+    if (uniqueSpaceIds.length === 0) {
+      return new Map();
+    }
+
+    const configs = await this.prisma.otRoomConfig.findMany({
+      where: {
+        tenantId,
+        spaceId: { in: uniqueSpaceIds },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    const enriched = await Promise.all(
+      configs.map(async (config) => ({
+        ...config,
+        space: await this.foundationService.getSpace(config.spaceId, tenantId),
+      }))
+    );
+
+    return new Map(enriched.map((room) => [room.spaceId, room]));
+  }
+
   async upsert(tenantId: string, userId: string, dto: UpsertOtRoomConfigDto) {
     const space = await this.foundationService.getSpace(dto.spaceId, tenantId);
     if (!space) {

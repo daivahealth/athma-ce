@@ -307,6 +307,125 @@ exports.Prisma.OncologyHistologyMasterScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RadiationPrescriptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  cancerProfileId: 'cancerProfileId',
+  prescriptionNumber: 'prescriptionNumber',
+  treatmentIntent: 'treatmentIntent',
+  treatmentSiteId: 'treatmentSiteId',
+  laterality: 'laterality',
+  modality: 'modality',
+  technique: 'technique',
+  totalDoseGy: 'totalDoseGy',
+  dosePerFractionGy: 'dosePerFractionGy',
+  plannedFractions: 'plannedFractions',
+  concurrentChemo: 'concurrentChemo',
+  plannedStartDate: 'plannedStartDate',
+  plannedEndDate: 'plannedEndDate',
+  prescriptionNotes: 'prescriptionNotes',
+  prescribedBy: 'prescribedBy',
+  prescribedAt: 'prescribedAt',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RadiationSimulationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prescriptionId: 'prescriptionId',
+  simulationDate: 'simulationDate',
+  patientPosition: 'patientPosition',
+  immobilizationDevice: 'immobilizationDevice',
+  contrastUsed: 'contrastUsed',
+  scanRegion: 'scanRegion',
+  setupReference: 'setupReference',
+  tattooMarkingDone: 'tattooMarkingDone',
+  simulationNotes: 'simulationNotes',
+  performedBy: 'performedBy',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RadiationTreatmentPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prescriptionId: 'prescriptionId',
+  simulationId: 'simulationId',
+  externalPlanReference: 'externalPlanReference',
+  planningSystem: 'planningSystem',
+  planningStatus: 'planningStatus',
+  plannerId: 'plannerId',
+  physicistId: 'physicistId',
+  radiationOncologistId: 'radiationOncologistId',
+  contouringCompleted: 'contouringCompleted',
+  physicsQaCompleted: 'physicsQaCompleted',
+  treatmentMachine: 'treatmentMachine',
+  planNotes: 'planNotes',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RadiationFractionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  treatmentPlanId: 'treatmentPlanId',
+  fractionNumber: 'fractionNumber',
+  plannedDate: 'plannedDate',
+  actualDate: 'actualDate',
+  plannedDoseGy: 'plannedDoseGy',
+  deliveredDoseGy: 'deliveredDoseGy',
+  treatmentMachine: 'treatmentMachine',
+  radiationTherapistId: 'radiationTherapistId',
+  status: 'status',
+  interruptionReason: 'interruptionReason',
+  verificationCompleted: 'verificationCompleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RadiationOnTreatmentReviewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prescriptionId: 'prescriptionId',
+  reviewDate: 'reviewDate',
+  weekNumber: 'weekNumber',
+  toxicityGrade: 'toxicityGrade',
+  painScore: 'painScore',
+  weightKg: 'weightKg',
+  treatmentBreakRequired: 'treatmentBreakRequired',
+  reviewNotes: 'reviewNotes',
+  reviewedBy: 'reviewedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RadiationCompletionSummaryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prescriptionId: 'prescriptionId',
+  completionDate: 'completionDate',
+  plannedTotalDoseGy: 'plannedTotalDoseGy',
+  deliveredTotalDoseGy: 'deliveredTotalDoseGy',
+  plannedFractions: 'plannedFractions',
+  deliveredFractions: 'deliveredFractions',
+  interruptions: 'interruptions',
+  interruptionNotes: 'interruptionNotes',
+  acuteToxicitySummary: 'acuteToxicitySummary',
+  responseAssessmentPlan: 'responseAssessmentPlan',
+  followupPlan: 'followupPlan',
+  completedBy: 'completedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.OncologyCarePlanScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -370,6 +489,12 @@ exports.Prisma.ModelName = {
   OncologyPrimarySiteMaster: 'OncologyPrimarySiteMaster',
   OncologyCancerTypeSiteMapping: 'OncologyCancerTypeSiteMapping',
   OncologyHistologyMaster: 'OncologyHistologyMaster',
+  RadiationPrescription: 'RadiationPrescription',
+  RadiationSimulation: 'RadiationSimulation',
+  RadiationTreatmentPlan: 'RadiationTreatmentPlan',
+  RadiationFraction: 'RadiationFraction',
+  RadiationOnTreatmentReview: 'RadiationOnTreatmentReview',
+  RadiationCompletionSummary: 'RadiationCompletionSummary',
   OncologyCarePlan: 'OncologyCarePlan'
 };
 

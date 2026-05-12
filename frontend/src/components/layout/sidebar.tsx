@@ -107,6 +107,21 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    items: [
+      {
+        icon: Scissors,
+        labelKey: 'nav.ot',
+        children: [
+          { href: '/ot', icon: Scissors, labelKey: 'nav.otDashboard' },
+          { href: '/ot/requests', icon: ClipboardList, labelKey: 'nav.otRequests' },
+          { href: '/ot/schedules', icon: CalendarClock, labelKey: 'nav.otSchedules' },
+          { href: '/ot/reports', icon: FileText, labelKey: 'nav.otReports' },
+          { href: '/ot/rooms', icon: ShieldCheck, labelKey: 'nav.otRooms' },
+        ],
+      },
+    ],
+  },
+  {
     featureFlag: 'feature.nav.resultsReporting',
     items: [
       {

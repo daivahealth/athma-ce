@@ -87,7 +87,12 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
       max_executions_per_day: initialValues?.max_executions_per_day ?? undefined,
       effective_from: initialValues?.effective_from ?? '',
       effective_to: initialValues?.effective_to ?? '',
-      is_active: initialValues?.is_active == null ? 'true' : String(Boolean(initialValues.is_active)),
+      is_active:
+        initialValues?.is_active == null
+          ? 'true'
+          : initialValues.is_active
+            ? 'true'
+            : 'false',
     }),
     [initialValues]
   );

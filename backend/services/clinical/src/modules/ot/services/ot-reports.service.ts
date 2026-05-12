@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, PrismaService } from '@zeal/database-clinical';
+import { STANDARD_PATIENT_SELECT } from '../../common/constants/patient-select.constant';
 import {
   AmendOtReportDto,
   CreateOtReportDto,
@@ -11,6 +12,7 @@ import {
   UpdateOtReportDto,
 } from '../dto/ot-report.dto';
 import { OtReportStatus } from '../ot.constants';
+import { buildOtPatientDisplay } from '../ot-patient-display.util';
 
 @Injectable()
 export class OtReportsService {
@@ -39,7 +41,7 @@ export class OtReportsService {
 
     const reportNumber = await this.generateReportNumber(tenantId);
 
-    return this.prisma.$transaction(async (tx) => {
+    const reportId = await this.prisma.$transaction(async (tx) => {
       const report = await tx.otReport.create({
         data: {
           tenantId,
@@ -65,21 +67,17 @@ export class OtReportsService {
         },
       });
 
-      return tx.otReport.findUnique({
-        where: { id: report.id },
-        include: {
-          versions: {
-            orderBy: { versionNo: 'desc' },
-          },
-        },
-      });
+      return report.id;
     });
+    return this.findById(tenantId, reportId);
   }
 
   async list(tenantId: string, query: ListOtReportsDto) {
-    return this.prisma.otReport.findMany({
+    const patientIds = await this.resolvePatientIdsBySearch(tenantId, query.search);
+    const reports = await this.prisma.otReport.findMany({
       where: {
         tenantId,
+        ...(query.search ? { patientId: { in: patientIds } } : {}),
         ...(query.reportStatus ? { reportStatus: query.reportStatus as any } : {}),
         ...(query.patientId ? { patientId: query.patientId } : {}),
         ...(query.scheduleId ? { scheduleId: query.scheduleId } : {}),
@@ -92,6 +90,11 @@ export class OtReportsService {
       },
       orderBy: { createdAt: 'desc' },
     });
+    const patientDisplayMap = await this.fetchPatientDisplayMap(
+      tenantId,
+      reports.map((report) => report.patientId)
+    );
+    return reports.map((report) => this.serializeReport(report, patientDisplayMap));
   }
 
   async findById(tenantId: string, id: string) {
@@ -108,7 +111,8 @@ export class OtReportsService {
       throw new NotFoundException(`OT report ${id} not found`);
     }
 
-    return report;
+    const patientDisplayMap = await this.fetchPatientDisplayMap(tenantId, [report.patientId]);
+    return this.serializeReport(report, patientDisplayMap);
   }
 
   async update(tenantId: string, id: string, userId: string, dto: UpdateOtReportDto) {
@@ -153,15 +157,9 @@ export class OtReportsService {
         },
       });
 
-      return tx.otReport.findUnique({
-        where: { id },
-        include: {
-          versions: {
-            orderBy: { versionNo: 'desc' },
-          },
-        },
-      });
+      return id;
     });
+    return this.findById(tenantId, id);
   }
 
   async sign(tenantId: string, id: string, userId: string, remarks?: string) {
@@ -170,7 +168,7 @@ export class OtReportsService {
       throw new BadRequestException(`Cannot sign OT report in status ${report.reportStatus}`);
     }
 
-    return this.prisma.otReport.update({
+    await this.prisma.otReport.update({
       where: { id },
       data: {
         reportStatus: OtReportStatus.SIGNED,
@@ -180,6 +178,7 @@ export class OtReportsService {
         ...(remarks !== undefined ? { remarks } : {}),
       },
     });
+    return this.findById(tenantId, id);
   }
 
   async amend(tenantId: string, id: string, userId: string, dto: AmendOtReportDto) {
@@ -214,7 +213,7 @@ export class OtReportsService {
         },
       });
 
-      return tx.otReport.update({
+      await tx.otReport.update({
         where: { id },
         data: {
           reportStatus: OtReportStatus.AMENDED,
@@ -226,12 +225,14 @@ export class OtReportsService {
               : {}),
         },
       });
+      return id;
     });
+    return this.findById(tenantId, id);
   }
 
   async cancel(tenantId: string, id: string, userId: string, remarks?: string) {
     await this.findById(tenantId, id);
-    return this.prisma.otReport.update({
+    await this.prisma.otReport.update({
       where: { id },
       data: {
         reportStatus: OtReportStatus.CANCELLED,
@@ -239,6 +240,7 @@ export class OtReportsService {
         ...(remarks !== undefined ? { remarks } : {}),
       },
     });
+    return this.findById(tenantId, id);
   }
 
   async getVersions(tenantId: string, id: string) {
@@ -264,5 +266,57 @@ export class OtReportsService {
   private async generateReportNumber(tenantId: string) {
     const count = await this.prisma.otReport.count({ where: { tenantId } });
     return `OTR-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${String(count + 1).padStart(4, '0')}`;
+  }
+
+  private async fetchPatientDisplayMap(tenantId: string, patientIds: string[]) {
+    const uniquePatientIds = [...new Set(patientIds.filter(Boolean))];
+    if (uniquePatientIds.length === 0) {
+      return new Map<string, ReturnType<typeof buildOtPatientDisplay>>();
+    }
+
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        tenantId,
+        id: { in: uniquePatientIds },
+      },
+      select: STANDARD_PATIENT_SELECT,
+    });
+
+    return new Map(
+      patients.map((patient) => [patient.id, buildOtPatientDisplay(patient)])
+    );
+  }
+
+  private async resolvePatientIdsBySearch(tenantId: string, search?: string) {
+    const term = search?.trim();
+    if (!term) {
+      return [];
+    }
+
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        tenantId,
+        OR: [
+          { firstName: { contains: term, mode: 'insensitive' } },
+          { lastName: { contains: term, mode: 'insensitive' } },
+          { displayName: { contains: term, mode: 'insensitive' } },
+          { mrn: { contains: term, mode: 'insensitive' } },
+          { phoneNumber: { contains: term } },
+        ],
+      },
+      select: { id: true },
+    });
+
+    return patients.map((patient) => patient.id);
+  }
+
+  private serializeReport(
+    report: any,
+    patientDisplayMap: Map<string, ReturnType<typeof buildOtPatientDisplay>>
+  ) {
+    return {
+      ...report,
+      patientDisplay: patientDisplayMap.get(report.patientId) ?? null,
+    };
   }
 }

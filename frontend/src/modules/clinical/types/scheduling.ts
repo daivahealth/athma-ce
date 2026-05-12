@@ -108,10 +108,13 @@ export interface Appointment {
   id: string;
   tenantId: string;
   patientId: string;
+  patientDisplay?: PatientDisplayDto;
   patient?: {
     id: string;
     firstName: string;
     lastName: string;
+    mrn?: string;
+    gender?: string;
     displayName?: string;
     email?: string;
     phoneNumber?: string;

@@ -47,6 +47,13 @@ const INPATIENT_KEYS = {
   transferHistory: (admissionId: string) => [...INPATIENT_KEYS.admissions, admissionId, 'transfer-history'] as const,
 };
 
+function invalidateDischargeTransactions(queryClient: ReturnType<typeof useQueryClient>) {
+  queryClient.invalidateQueries({
+    predicate: (query) =>
+      Array.isArray(query.queryKey) && query.queryKey.includes('discharge-transaction'),
+  });
+}
+
 export function useCreateAdmission() {
   const queryClient = useQueryClient();
   return useMutation<InpatientAdmission, Error, CreateAdmissionInput>({
@@ -174,7 +181,7 @@ export function useMarkDischargeReady(dischargeId: string) {
     mutationFn: (payload) => inpatientService.markDischargeReady(dischargeId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
+      invalidateDischargeTransactions(queryClient);
     },
   });
 }
@@ -185,7 +192,7 @@ export function useApproveDischarge(dischargeId: string) {
     mutationFn: (payload) => inpatientService.approveDischarge(dischargeId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
+      invalidateDischargeTransactions(queryClient);
     },
   });
 }
@@ -196,7 +203,7 @@ export function useExecuteDischarge(dischargeId: string) {
     mutationFn: (payload) => inpatientService.executeDischarge(dischargeId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
+      invalidateDischargeTransactions(queryClient);
     },
   });
 }
@@ -207,7 +214,7 @@ export function useCancelDischarge(dischargeId: string) {
     mutationFn: (payload) => inpatientService.cancelDischarge(dischargeId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
+      invalidateDischargeTransactions(queryClient);
     },
   });
 }

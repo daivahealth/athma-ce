@@ -188,6 +188,11 @@ export class ListOtSchedulesDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  search?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   status?: string;
 
   @ApiPropertyOptional()

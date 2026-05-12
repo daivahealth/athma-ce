@@ -31,7 +31,7 @@ export default function ConfigurationsPage() {
   const claims = decodeAccessToken(session.accessToken);
   const tenantId = claims?.tenantId ?? session.user?.tenantId;
   const facilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? session.user?.defaultFacilityId;
-  const userId = claims?.userId ?? session.user?.id ?? '';
+  const userId = claims?.userId ?? session.user?.userId ?? '';
 
   const { data: instanceConfigs, isLoading: instanceLoading, error: instanceError } = useInstanceConfigs();
   const { data: tenantConfigs, isLoading: tenantLoading } = useTenantConfigs(tenantId || '');

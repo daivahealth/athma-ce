@@ -183,12 +183,14 @@ export class CatalogController {
     @Query('tenantId') tenantId?: string,
     @Query('isActive') isActive?: string,
     @Query('search') search?: string,
+    @Query('procedureCategory') procedureCategory?: string,
     @Query('includeGlobal') includeGlobal?: string,
   ) {
     return this.catalogService.listProcedures({
       tenantId,
       isActive: isActive ? isActive === 'true' : undefined,
       search,
+      procedureCategory,
       includeGlobal: includeGlobal !== 'false',
     });
   }

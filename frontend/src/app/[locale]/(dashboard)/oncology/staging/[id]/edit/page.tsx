@@ -79,7 +79,7 @@ export default function EditStagingPage({ params }: { params: { locale: string; 
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={back}>
-          <ArrowLeft className="mr-2 h-4 w-4" />Back
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
           <h1 className="text-2xl font-bold">Edit Tumor Staging</h1>

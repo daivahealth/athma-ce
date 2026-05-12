@@ -480,3 +480,207 @@ export function useUpdateHistology() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: oncologyKeys.histologies() }),
   });
 }
+
+// ── Radiation Oncology Hooks ──────────────────────────────────
+
+const radiationKeys = {
+  all: [...oncologyKeys.all, 'radiation'] as const,
+  prescriptions: () => [...radiationKeys.all, 'prescriptions'] as const,
+  prescriptionList: (p?: Record<string, unknown>) => [...radiationKeys.prescriptions(), 'list', p] as const,
+  prescriptionDetail: (id: string) => [...radiationKeys.prescriptions(), 'detail', id] as const,
+  simulations: (prescriptionId: string) => [...radiationKeys.all, 'simulations', prescriptionId] as const,
+  plans: (prescriptionId?: string) => [...radiationKeys.all, 'plans', prescriptionId] as const,
+  planDetail: (id: string) => [...radiationKeys.all, 'plans', 'detail', id] as const,
+  fractions: (planId: string) => [...radiationKeys.all, 'fractions', planId] as const,
+  reviews: (prescriptionId: string) => [...radiationKeys.all, 'reviews', prescriptionId] as const,
+  completion: (prescriptionId: string) => [...radiationKeys.all, 'completion', prescriptionId] as const,
+};
+
+export function useRadiationPrescriptions(params?: { patientId?: string; status?: string }) {
+  return useQuery({
+    queryKey: radiationKeys.prescriptionList(params),
+    queryFn: () => oncologyService.listRadiationPrescriptions(params),
+  });
+}
+
+export function useRadiationPrescription(id: string) {
+  return useQuery({
+    queryKey: radiationKeys.prescriptionDetail(id),
+    queryFn: () => oncologyService.getRadiationPrescription(id),
+    enabled: !!id,
+  });
+}
+
+export function useCreateRadiationPrescription() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.createRadiationPrescription,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptions() }),
+  });
+}
+
+export function useUpdateRadiationPrescription() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, unknown> }) =>
+      oncologyService.updateRadiationPrescription(id, data),
+    onSuccess: (_data, { id }) => {
+      queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptionDetail(id) });
+      queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptions() });
+    },
+  });
+}
+
+export function useApproveRadiationPrescription() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.approveRadiationPrescription,
+    onSuccess: (_data, id) => queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptionDetail(id) }),
+  });
+}
+
+export function useActivateRadiationPrescription() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.activateRadiationPrescription,
+    onSuccess: (_data, id) => queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptionDetail(id) }),
+  });
+}
+
+export function useRadiationSimulations(prescriptionId: string) {
+  return useQuery({
+    queryKey: radiationKeys.simulations(prescriptionId),
+    queryFn: () => oncologyService.listRadiationSimulations(prescriptionId),
+    enabled: !!prescriptionId,
+  });
+}
+
+export function useCreateRadiationSimulation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.createRadiationSimulation,
+    onSuccess: (_data, vars) => {
+      queryClient.invalidateQueries({ queryKey: radiationKeys.simulations(vars.prescriptionId as string) });
+      queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptionDetail(vars.prescriptionId as string) });
+    },
+  });
+}
+
+export function useRadiationPlans(prescriptionId?: string) {
+  return useQuery({
+    queryKey: radiationKeys.plans(prescriptionId),
+    queryFn: () => oncologyService.listRadiationPlans({ prescriptionId }),
+    enabled: !!prescriptionId,
+  });
+}
+
+export function useRadiationPlan(id: string) {
+  return useQuery({
+    queryKey: radiationKeys.planDetail(id),
+    queryFn: () => oncologyService.getRadiationPlan(id),
+    enabled: !!id,
+  });
+}
+
+export function useCreateRadiationPlan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.createRadiationPlan,
+    onSuccess: (_data, vars) => {
+      queryClient.invalidateQueries({ queryKey: radiationKeys.plans(vars.prescriptionId as string) });
+      queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptionDetail(vars.prescriptionId as string) });
+    },
+  });
+}
+
+export function useApproveRadiationPlan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.approveRadiationPlan,
+    onSuccess: (_data, id) => {
+      queryClient.invalidateQueries({ queryKey: radiationKeys.planDetail(id) });
+      queryClient.invalidateQueries({ queryKey: radiationKeys.plans() });
+    },
+  });
+}
+
+export function useUpdateRadiationPlan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, unknown> }) =>
+      oncologyService.updateRadiationPlan(id, data),
+    onSuccess: (_data, { id }) => queryClient.invalidateQueries({ queryKey: radiationKeys.planDetail(id) }),
+  });
+}
+
+export function useRadiationFractions(planId: string) {
+  return useQuery({
+    queryKey: radiationKeys.fractions(planId),
+    queryFn: () => oncologyService.listRadiationFractions(planId),
+    enabled: !!planId,
+  });
+}
+
+export function useBulkCreateFractions() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ planId, data }: { planId: string; data: Record<string, unknown> }) =>
+      oncologyService.bulkCreateFractions(planId, data),
+    onSuccess: (_data, { planId }) => queryClient.invalidateQueries({ queryKey: radiationKeys.fractions(planId) }),
+  });
+}
+
+export function useDeliverFraction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, unknown> }) =>
+      oncologyService.deliverFraction(id, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [...radiationKeys.all, 'fractions'] }),
+  });
+}
+
+export function useUpdateRadiationFraction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, unknown> }) =>
+      oncologyService.updateRadiationFraction(id, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [...radiationKeys.all, 'fractions'] }),
+  });
+}
+
+export function useOnTreatmentReviews(prescriptionId: string) {
+  return useQuery({
+    queryKey: radiationKeys.reviews(prescriptionId),
+    queryFn: () => oncologyService.listOnTreatmentReviews(prescriptionId),
+    enabled: !!prescriptionId,
+  });
+}
+
+export function useCreateOnTreatmentReview() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.createOnTreatmentReview,
+    onSuccess: (_data, vars) =>
+      queryClient.invalidateQueries({ queryKey: radiationKeys.reviews(vars.prescriptionId as string) }),
+  });
+}
+
+export function useCompletionSummary(prescriptionId: string) {
+  return useQuery({
+    queryKey: radiationKeys.completion(prescriptionId),
+    queryFn: () => oncologyService.getCompletionSummary(prescriptionId),
+    enabled: !!prescriptionId,
+    retry: false,
+  });
+}
+
+export function useCreateCompletionSummary() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.createCompletionSummary,
+    onSuccess: (_data, vars) => {
+      queryClient.invalidateQueries({ queryKey: radiationKeys.completion(vars.prescriptionId as string) });
+      queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptionDetail(vars.prescriptionId as string) });
+    },
+  });
+}

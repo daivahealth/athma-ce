@@ -12,7 +12,8 @@ import { cn } from '@/lib/utils';
 interface PatientSearchSelectProps {
   label?: string;
   required?: boolean;
-  selectedPatient: any | null;
+  selectedPatient?: any | null;
+  value?: any | null;
   onSelect: (patient: any) => void;
   onClear: () => void;
   error?: string;
@@ -24,12 +25,14 @@ export function PatientSearchSelect({
   label = 'Patient',
   required = false,
   selectedPatient,
+  value,
   onSelect,
   onClear,
   error,
   placeholder = 'Search by name, MRN, or mobile',
   disabled = false,
 }: PatientSearchSelectProps) {
+  const currentPatient = selectedPatient ?? value ?? null;
   const [patientSearchQuery, setPatientSearchQuery] = useState('');
   const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
 
@@ -52,7 +55,7 @@ export function PatientSearchSelect({
         {label}
         {required ? ' *' : ''}
       </Label>
-      {!selectedPatient && (
+      {!currentPatient && (
         <div className="relative">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground opacity-50" />
@@ -121,11 +124,11 @@ export function PatientSearchSelect({
           )}
         </div>
       )}
-      {selectedPatient && (
+      {currentPatient && (
         <div className="flex flex-col gap-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4 relative">
           <div className="flex items-center justify-between w-full">
             <span className="font-semibold text-[15px] text-foreground">
-              {selectedPatient.fullName || `${selectedPatient.firstName} ${selectedPatient.lastName}`}
+              {currentPatient.fullName || `${currentPatient.firstName} ${currentPatient.lastName}`}
             </span>
             <Button
               type="button"
@@ -145,20 +148,20 @@ export function PatientSearchSelect({
             <div className="flex items-center gap-2">
               <span className={cn(
                 "flex h-5 items-center justify-center rounded bg-background border px-1.5 text-[10px] font-bold uppercase tracking-widest shadow-sm", 
-                (selectedPatient.gender?.[0]?.toUpperCase() === 'M') ? 'border-blue-200 text-blue-600 dark:border-blue-900/50 dark:text-blue-400' : 'border-pink-200 text-pink-600 dark:border-pink-900/50 dark:text-pink-400'
+                (currentPatient.gender?.[0]?.toUpperCase() === 'M') ? 'border-blue-200 text-blue-600 dark:border-blue-900/50 dark:text-blue-400' : 'border-pink-200 text-pink-600 dark:border-pink-900/50 dark:text-pink-400'
               )}>
-                {selectedPatient.gender ? selectedPatient.gender[0].toUpperCase() : '—'}
+                {currentPatient.gender ? currentPatient.gender[0].toUpperCase() : '—'}
               </span>
               <span className="font-medium">
-                {selectedPatient.dateOfBirth ? Math.floor((Date.now() - new Date(selectedPatient.dateOfBirth).getTime()) / 31557600000) : '—'} yrs
+                {currentPatient.dateOfBirth ? Math.floor((Date.now() - new Date(currentPatient.dateOfBirth).getTime()) / 31557600000) : '—'} yrs
               </span>
             </div>
             <div className="h-3 w-px bg-border" />
-            <span className="font-mono text-[11px] tracking-tight">{selectedPatient.mrn || '—'}</span>
+            <span className="font-mono text-[11px] tracking-tight">{currentPatient.mrn || '—'}</span>
             <div className="h-3 w-px bg-border" />
             <div className="flex items-center text-[11px] font-mono">
               <Phone className="h-3 w-3 mr-1.5 opacity-60" />
-              {selectedPatient.phoneNumber || 'No phone'}
+              {currentPatient.phoneNumber || 'No phone'}
             </div>
           </div>
         </div>
