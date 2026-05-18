@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronsUpDown, Check, Search, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 import {
   useCreateCancerDiagnosis,
@@ -34,6 +36,8 @@ export default function NewDiagnosisPage({ params }: { params: { locale: string 
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   // Cancer Identity — catalog-driven
+  const [cancerTypeOpen, setCancerTypeOpen] = useState(false);
+  const [cancerTypeSearch, setCancerTypeSearch] = useState('');
   const [selectedCancerTypeId, setSelectedCancerTypeId] = useState('');
   const [cancerType, setCancerType] = useState('');
   const [selectedPrimarySiteId, setSelectedPrimarySiteId] = useState('');
@@ -129,6 +133,10 @@ export default function NewDiagnosisPage({ params }: { params: { locale: string 
 
   const isValid = selectedPatient && cancerType && primarySite && diagnosisDate;
 
+  const age = (selectedPatient as any)?.dateOfBirth
+    ? Math.floor((Date.now() - new Date((selectedPatient as any).dateOfBirth).getTime()) / 31557600000)
+    : null;
+
   const handleSubmit = async () => {
     if (!isValid) return;
     await createDiagnosis.mutateAsync({
@@ -165,46 +173,147 @@ export default function NewDiagnosisPage({ params }: { params: { locale: string 
       </div>
 
       <div className="space-y-6">
-        {/* Patient */}
-        <Card>
-          <CardHeader><CardTitle>Patient</CardTitle></CardHeader>
-          <CardContent>
-            <PatientSearchSelect
-              required
-              selectedPatient={selectedPatient}
-              onSelect={(p) => setSelectedPatient(p as Patient)}
-              onClear={() => setSelectedPatient(null)}
-            />
-          </CardContent>
-        </Card>
 
-        {/* Cancer Identity */}
+        {/* Step 1 — Patient (search card or blue banner) */}
+        {!selectedPatient ? (
+          <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
+            <div className="relative space-y-3">
+              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/50">
+                  <Search className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-xs font-semibold uppercase tracking-wider">Select Patient</span>
+              </div>
+              <PatientSearchSelect
+                required
+                selectedPatient={selectedPatient}
+                onSelect={(p) => setSelectedPatient(p as Patient)}
+                onClear={() => setSelectedPatient(null)}
+              />
+            </div>
+          </div>
+        ) : (
+          /* Blue patient banner (selected state) */
+          <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
+            <div className="relative space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/50">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-semibold uppercase tracking-wider">Patient</span>
+                </div>
+                <Button
+                  type="button" variant="outline" size="sm"
+                  className="h-7 text-xs bg-white/70 dark:bg-white/10 border-blue-200 dark:border-blue-800"
+                  onClick={() => setSelectedPatient(null)}
+                >
+                  Change
+                </Button>
+              </div>
+              <p className="text-base font-bold text-foreground leading-tight">
+                {(selectedPatient as any).fullName ||
+                  `${(selectedPatient as any).firstName ?? ''} ${(selectedPatient as any).lastName ?? ''}`.trim() ||
+                  (selectedPatient as any).displayName || '—'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {(selectedPatient as any).mrn && (
+                  <span className="inline-flex items-center rounded-md bg-blue-100/70 dark:bg-blue-900/40 px-2 py-0.5 text-xs font-mono font-medium text-blue-700 dark:text-blue-300">
+                    {(selectedPatient as any).mrn}
+                  </span>
+                )}
+                {age !== null && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                    {age} yrs
+                  </span>
+                )}
+                {(selectedPatient as any).gender && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
+                    {(selectedPatient as any).gender}
+                  </span>
+                )}
+                {(selectedPatient as any).phoneNumber && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                    {(selectedPatient as any).phoneNumber}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Cancer Identity + Clinical Assessment — gated on patient selection */}
+        {selectedPatient && (<>
         <Card>
           <CardHeader><CardTitle>Cancer Identity</CardTitle></CardHeader>
           <CardContent className="space-y-4">
 
-            {/* Cancer Type — from master */}
+            {/* Cancer Type — searchable combobox */}
             <div className="space-y-2">
               <Label>Cancer Type *</Label>
-              <Select
-                value={selectedCancerTypeId || '__none'}
-                onValueChange={handleCancerTypeChange}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select cancer type..." />
-                </SelectTrigger>
-                <SelectContent className="max-h-72 overflow-y-auto">
-                  <SelectItem value="__none">— Select cancer type —</SelectItem>
-                  {cancerTypes.map((ct) => (
-                    <SelectItem key={ct.id} value={ct.id}>
-                      {ct.name}
-                      {ct.category && (
-                        <span className="ml-2 text-xs text-muted-foreground">({ct.category})</span>
-                      )}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Popover open={cancerTypeOpen} onOpenChange={(o) => { setCancerTypeOpen(o); if (o) setCancerTypeSearch(''); }}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={cancerTypeOpen}
+                    className="w-full justify-between font-normal"
+                  >
+                    <span className={cn('truncate', !cancerType && 'text-muted-foreground')}>
+                      {cancerType || 'Select cancer type...'}
+                    </span>
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-[--radix-popover-trigger-width] p-0">
+                  {/* Search input */}
+                  <div className="flex items-center border-b px-3 py-2 gap-2">
+                    <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <input
+                      autoFocus
+                      className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                      placeholder="Search cancer type..."
+                      value={cancerTypeSearch}
+                      onChange={(e) => setCancerTypeSearch(e.target.value)}
+                    />
+                  </div>
+                  {/* Filtered list */}
+                  <div className="max-h-64 overflow-y-auto py-1">
+                    {cancerTypes
+                      .filter((ct) =>
+                        !cancerTypeSearch ||
+                        ct.name.toLowerCase().includes(cancerTypeSearch.toLowerCase()) ||
+                        (ct.category ?? '').toLowerCase().includes(cancerTypeSearch.toLowerCase()),
+                      )
+                      .map((ct) => (
+                        <button
+                          key={ct.id}
+                          type="button"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted/50 text-left"
+                          onClick={() => {
+                            handleCancerTypeChange(ct.id);
+                            setCancerTypeOpen(false);
+                          }}
+                        >
+                          <Check className={cn('h-4 w-4 shrink-0', selectedCancerTypeId === ct.id ? 'opacity-100' : 'opacity-0')} />
+                          <span className="flex-1">{ct.name}</span>
+                          {ct.category && (
+                            <span className="text-xs text-muted-foreground">{ct.category}</span>
+                          )}
+                        </button>
+                      ))}
+                    {cancerTypes.filter((ct) =>
+                      !cancerTypeSearch ||
+                      ct.name.toLowerCase().includes(cancerTypeSearch.toLowerCase()) ||
+                      (ct.category ?? '').toLowerCase().includes(cancerTypeSearch.toLowerCase()),
+                    ).length === 0 && (
+                      <p className="px-3 py-4 text-center text-sm text-muted-foreground">No cancer type found.</p>
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
 
             {/* Primary Site — filtered by cancer type via site mappings */}
@@ -412,6 +521,7 @@ export default function NewDiagnosisPage({ params }: { params: { locale: string 
             {createDiagnosis.isPending ? 'Saving...' : 'Add to Registry'}
           </Button>
         </div>
+        </>)}
       </div>
     </div>
   );

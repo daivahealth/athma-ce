@@ -5,6 +5,7 @@ import type {
   CreateOtReportInput,
   CreateOtRequestInput,
   CreateOtScheduleInput,
+  OtBoardResponse,
   OtConflictsResponse,
   OtReport,
   OtReportListFilters,
@@ -26,6 +27,13 @@ import type {
 } from '../types';
 
 class OtService {
+  async getBoard(date?: string): Promise<OtBoardResponse> {
+    const response = await clinicalClient.get('/ot/board', {
+      params: date ? { date } : undefined,
+    });
+    return response.data;
+  }
+
   async listRequests(filters?: OtRequestListFilters): Promise<OtRequest[]> {
     const response = await clinicalClient.get('/ot/requests', { params: filters });
     return response.data;

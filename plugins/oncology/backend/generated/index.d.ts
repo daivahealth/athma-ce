@@ -93,6 +93,11 @@ export type RadiationCompletionSummary = $Result.DefaultSelection<Prisma.$Radiat
  * 
  */
 export type OncologyCarePlan = $Result.DefaultSelection<Prisma.$OncologyCarePlanPayload>
+/**
+ * Model CancerTimelineEvent
+ * 
+ */
+export type CancerTimelineEvent = $Result.DefaultSelection<Prisma.$CancerTimelineEventPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -371,6 +376,16 @@ export class PrismaClient<
     * ```
     */
   get oncologyCarePlan(): Prisma.OncologyCarePlanDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.cancerTimelineEvent`: Exposes CRUD operations for the **CancerTimelineEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CancerTimelineEvents
+    * const cancerTimelineEvents = await prisma.cancerTimelineEvent.findMany()
+    * ```
+    */
+  get cancerTimelineEvent(): Prisma.CancerTimelineEventDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -827,7 +842,8 @@ export namespace Prisma {
     RadiationFraction: 'RadiationFraction',
     RadiationOnTreatmentReview: 'RadiationOnTreatmentReview',
     RadiationCompletionSummary: 'RadiationCompletionSummary',
-    OncologyCarePlan: 'OncologyCarePlan'
+    OncologyCarePlan: 'OncologyCarePlan',
+    CancerTimelineEvent: 'CancerTimelineEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -846,7 +862,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "cancerDiagnosis" | "tumorStaging" | "chemoProtocol" | "chemoOrder" | "tumorBoardCase" | "oncologyCancerTypeMaster" | "oncologyPrimarySiteMaster" | "oncologyCancerTypeSiteMapping" | "oncologyHistologyMaster" | "radiationPrescription" | "radiationSimulation" | "radiationTreatmentPlan" | "radiationFraction" | "radiationOnTreatmentReview" | "radiationCompletionSummary" | "oncologyCarePlan"
+      modelProps: "cancerDiagnosis" | "tumorStaging" | "chemoProtocol" | "chemoOrder" | "tumorBoardCase" | "oncologyCancerTypeMaster" | "oncologyPrimarySiteMaster" | "oncologyCancerTypeSiteMapping" | "oncologyHistologyMaster" | "radiationPrescription" | "radiationSimulation" | "radiationTreatmentPlan" | "radiationFraction" | "radiationOnTreatmentReview" | "radiationCompletionSummary" | "oncologyCarePlan" | "cancerTimelineEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2034,6 +2050,80 @@ export namespace Prisma {
           }
         }
       }
+      CancerTimelineEvent: {
+        payload: Prisma.$CancerTimelineEventPayload<ExtArgs>
+        fields: Prisma.CancerTimelineEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CancerTimelineEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CancerTimelineEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>
+          }
+          findFirst: {
+            args: Prisma.CancerTimelineEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CancerTimelineEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>
+          }
+          findMany: {
+            args: Prisma.CancerTimelineEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>[]
+          }
+          create: {
+            args: Prisma.CancerTimelineEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>
+          }
+          createMany: {
+            args: Prisma.CancerTimelineEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CancerTimelineEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>[]
+          }
+          delete: {
+            args: Prisma.CancerTimelineEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>
+          }
+          update: {
+            args: Prisma.CancerTimelineEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.CancerTimelineEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CancerTimelineEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CancerTimelineEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.CancerTimelineEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancerTimelineEventPayload>
+          }
+          aggregate: {
+            args: Prisma.CancerTimelineEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCancerTimelineEvent>
+          }
+          groupBy: {
+            args: Prisma.CancerTimelineEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CancerTimelineEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CancerTimelineEventCountArgs<ExtArgs>
+            result: $Utils.Optional<CancerTimelineEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2146,6 +2236,7 @@ export namespace Prisma {
     radiationOnTreatmentReview?: RadiationOnTreatmentReviewOmit
     radiationCompletionSummary?: RadiationCompletionSummaryOmit
     oncologyCarePlan?: OncologyCarePlanOmit
+    cancerTimelineEvent?: CancerTimelineEventOmit
   }
 
   /* Types for Logging */
@@ -22564,6 +22655,1114 @@ export namespace Prisma {
 
 
   /**
+   * Model CancerTimelineEvent
+   */
+
+  export type AggregateCancerTimelineEvent = {
+    _count: CancerTimelineEventCountAggregateOutputType | null
+    _min: CancerTimelineEventMinAggregateOutputType | null
+    _max: CancerTimelineEventMaxAggregateOutputType | null
+  }
+
+  export type CancerTimelineEventMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    cancerDiagnosisId: string | null
+    eventType: string | null
+    eventDate: Date | null
+    title: string | null
+    description: string | null
+    sourceEntity: string | null
+    sourceId: string | null
+    severity: string | null
+    createdBy: string | null
+    createdAt: Date | null
+  }
+
+  export type CancerTimelineEventMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    cancerDiagnosisId: string | null
+    eventType: string | null
+    eventDate: Date | null
+    title: string | null
+    description: string | null
+    sourceEntity: string | null
+    sourceId: string | null
+    severity: string | null
+    createdBy: string | null
+    createdAt: Date | null
+  }
+
+  export type CancerTimelineEventCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    cancerDiagnosisId: number
+    eventType: number
+    eventDate: number
+    title: number
+    description: number
+    sourceEntity: number
+    sourceId: number
+    metadata: number
+    severity: number
+    createdBy: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CancerTimelineEventMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    cancerDiagnosisId?: true
+    eventType?: true
+    eventDate?: true
+    title?: true
+    description?: true
+    sourceEntity?: true
+    sourceId?: true
+    severity?: true
+    createdBy?: true
+    createdAt?: true
+  }
+
+  export type CancerTimelineEventMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    cancerDiagnosisId?: true
+    eventType?: true
+    eventDate?: true
+    title?: true
+    description?: true
+    sourceEntity?: true
+    sourceId?: true
+    severity?: true
+    createdBy?: true
+    createdAt?: true
+  }
+
+  export type CancerTimelineEventCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    cancerDiagnosisId?: true
+    eventType?: true
+    eventDate?: true
+    title?: true
+    description?: true
+    sourceEntity?: true
+    sourceId?: true
+    metadata?: true
+    severity?: true
+    createdBy?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CancerTimelineEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CancerTimelineEvent to aggregate.
+     */
+    where?: CancerTimelineEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancerTimelineEvents to fetch.
+     */
+    orderBy?: CancerTimelineEventOrderByWithRelationInput | CancerTimelineEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CancerTimelineEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancerTimelineEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancerTimelineEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CancerTimelineEvents
+    **/
+    _count?: true | CancerTimelineEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CancerTimelineEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CancerTimelineEventMaxAggregateInputType
+  }
+
+  export type GetCancerTimelineEventAggregateType<T extends CancerTimelineEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateCancerTimelineEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCancerTimelineEvent[P]>
+      : GetScalarType<T[P], AggregateCancerTimelineEvent[P]>
+  }
+
+
+
+
+  export type CancerTimelineEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CancerTimelineEventWhereInput
+    orderBy?: CancerTimelineEventOrderByWithAggregationInput | CancerTimelineEventOrderByWithAggregationInput[]
+    by: CancerTimelineEventScalarFieldEnum[] | CancerTimelineEventScalarFieldEnum
+    having?: CancerTimelineEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CancerTimelineEventCountAggregateInputType | true
+    _min?: CancerTimelineEventMinAggregateInputType
+    _max?: CancerTimelineEventMaxAggregateInputType
+  }
+
+  export type CancerTimelineEventGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    cancerDiagnosisId: string | null
+    eventType: string
+    eventDate: Date
+    title: string
+    description: string | null
+    sourceEntity: string | null
+    sourceId: string | null
+    metadata: JsonValue
+    severity: string
+    createdBy: string
+    createdAt: Date
+    _count: CancerTimelineEventCountAggregateOutputType | null
+    _min: CancerTimelineEventMinAggregateOutputType | null
+    _max: CancerTimelineEventMaxAggregateOutputType | null
+  }
+
+  type GetCancerTimelineEventGroupByPayload<T extends CancerTimelineEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CancerTimelineEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CancerTimelineEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CancerTimelineEventGroupByOutputType[P]>
+            : GetScalarType<T[P], CancerTimelineEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CancerTimelineEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    cancerDiagnosisId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    title?: boolean
+    description?: boolean
+    sourceEntity?: boolean
+    sourceId?: boolean
+    metadata?: boolean
+    severity?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["cancerTimelineEvent"]>
+
+  export type CancerTimelineEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    cancerDiagnosisId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    title?: boolean
+    description?: boolean
+    sourceEntity?: boolean
+    sourceId?: boolean
+    metadata?: boolean
+    severity?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["cancerTimelineEvent"]>
+
+  export type CancerTimelineEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    cancerDiagnosisId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    title?: boolean
+    description?: boolean
+    sourceEntity?: boolean
+    sourceId?: boolean
+    metadata?: boolean
+    severity?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["cancerTimelineEvent"]>
+
+  export type CancerTimelineEventSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    cancerDiagnosisId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    title?: boolean
+    description?: boolean
+    sourceEntity?: boolean
+    sourceId?: boolean
+    metadata?: boolean
+    severity?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+  }
+
+  export type CancerTimelineEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "patientId" | "cancerDiagnosisId" | "eventType" | "eventDate" | "title" | "description" | "sourceEntity" | "sourceId" | "metadata" | "severity" | "createdBy" | "createdAt", ExtArgs["result"]["cancerTimelineEvent"]>
+
+  export type $CancerTimelineEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CancerTimelineEvent"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      cancerDiagnosisId: string | null
+      eventType: string
+      eventDate: Date
+      title: string
+      description: string | null
+      sourceEntity: string | null
+      sourceId: string | null
+      metadata: Prisma.JsonValue
+      severity: string
+      createdBy: string
+      createdAt: Date
+    }, ExtArgs["result"]["cancerTimelineEvent"]>
+    composites: {}
+  }
+
+  type CancerTimelineEventGetPayload<S extends boolean | null | undefined | CancerTimelineEventDefaultArgs> = $Result.GetResult<Prisma.$CancerTimelineEventPayload, S>
+
+  type CancerTimelineEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CancerTimelineEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CancerTimelineEventCountAggregateInputType | true
+    }
+
+  export interface CancerTimelineEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CancerTimelineEvent'], meta: { name: 'CancerTimelineEvent' } }
+    /**
+     * Find zero or one CancerTimelineEvent that matches the filter.
+     * @param {CancerTimelineEventFindUniqueArgs} args - Arguments to find a CancerTimelineEvent
+     * @example
+     * // Get one CancerTimelineEvent
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CancerTimelineEventFindUniqueArgs>(args: SelectSubset<T, CancerTimelineEventFindUniqueArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CancerTimelineEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CancerTimelineEventFindUniqueOrThrowArgs} args - Arguments to find a CancerTimelineEvent
+     * @example
+     * // Get one CancerTimelineEvent
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CancerTimelineEventFindUniqueOrThrowArgs>(args: SelectSubset<T, CancerTimelineEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CancerTimelineEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancerTimelineEventFindFirstArgs} args - Arguments to find a CancerTimelineEvent
+     * @example
+     * // Get one CancerTimelineEvent
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CancerTimelineEventFindFirstArgs>(args?: SelectSubset<T, CancerTimelineEventFindFirstArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CancerTimelineEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancerTimelineEventFindFirstOrThrowArgs} args - Arguments to find a CancerTimelineEvent
+     * @example
+     * // Get one CancerTimelineEvent
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CancerTimelineEventFindFirstOrThrowArgs>(args?: SelectSubset<T, CancerTimelineEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CancerTimelineEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancerTimelineEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CancerTimelineEvents
+     * const cancerTimelineEvents = await prisma.cancerTimelineEvent.findMany()
+     * 
+     * // Get first 10 CancerTimelineEvents
+     * const cancerTimelineEvents = await prisma.cancerTimelineEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const cancerTimelineEventWithIdOnly = await prisma.cancerTimelineEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CancerTimelineEventFindManyArgs>(args?: SelectSubset<T, CancerTimelineEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CancerTimelineEvent.
+     * @param {CancerTimelineEventCreateArgs} args - Arguments to create a CancerTimelineEvent.
+     * @example
+     * // Create one CancerTimelineEvent
+     * const CancerTimelineEvent = await prisma.cancerTimelineEvent.create({
+     *   data: {
+     *     // ... data to create a CancerTimelineEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends CancerTimelineEventCreateArgs>(args: SelectSubset<T, CancerTimelineEventCreateArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CancerTimelineEvents.
+     * @param {CancerTimelineEventCreateManyArgs} args - Arguments to create many CancerTimelineEvents.
+     * @example
+     * // Create many CancerTimelineEvents
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CancerTimelineEventCreateManyArgs>(args?: SelectSubset<T, CancerTimelineEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CancerTimelineEvents and returns the data saved in the database.
+     * @param {CancerTimelineEventCreateManyAndReturnArgs} args - Arguments to create many CancerTimelineEvents.
+     * @example
+     * // Create many CancerTimelineEvents
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CancerTimelineEvents and only return the `id`
+     * const cancerTimelineEventWithIdOnly = await prisma.cancerTimelineEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CancerTimelineEventCreateManyAndReturnArgs>(args?: SelectSubset<T, CancerTimelineEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CancerTimelineEvent.
+     * @param {CancerTimelineEventDeleteArgs} args - Arguments to delete one CancerTimelineEvent.
+     * @example
+     * // Delete one CancerTimelineEvent
+     * const CancerTimelineEvent = await prisma.cancerTimelineEvent.delete({
+     *   where: {
+     *     // ... filter to delete one CancerTimelineEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CancerTimelineEventDeleteArgs>(args: SelectSubset<T, CancerTimelineEventDeleteArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CancerTimelineEvent.
+     * @param {CancerTimelineEventUpdateArgs} args - Arguments to update one CancerTimelineEvent.
+     * @example
+     * // Update one CancerTimelineEvent
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CancerTimelineEventUpdateArgs>(args: SelectSubset<T, CancerTimelineEventUpdateArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CancerTimelineEvents.
+     * @param {CancerTimelineEventDeleteManyArgs} args - Arguments to filter CancerTimelineEvents to delete.
+     * @example
+     * // Delete a few CancerTimelineEvents
+     * const { count } = await prisma.cancerTimelineEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CancerTimelineEventDeleteManyArgs>(args?: SelectSubset<T, CancerTimelineEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CancerTimelineEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancerTimelineEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CancerTimelineEvents
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CancerTimelineEventUpdateManyArgs>(args: SelectSubset<T, CancerTimelineEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CancerTimelineEvents and returns the data updated in the database.
+     * @param {CancerTimelineEventUpdateManyAndReturnArgs} args - Arguments to update many CancerTimelineEvents.
+     * @example
+     * // Update many CancerTimelineEvents
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CancerTimelineEvents and only return the `id`
+     * const cancerTimelineEventWithIdOnly = await prisma.cancerTimelineEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CancerTimelineEventUpdateManyAndReturnArgs>(args: SelectSubset<T, CancerTimelineEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CancerTimelineEvent.
+     * @param {CancerTimelineEventUpsertArgs} args - Arguments to update or create a CancerTimelineEvent.
+     * @example
+     * // Update or create a CancerTimelineEvent
+     * const cancerTimelineEvent = await prisma.cancerTimelineEvent.upsert({
+     *   create: {
+     *     // ... data to create a CancerTimelineEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CancerTimelineEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CancerTimelineEventUpsertArgs>(args: SelectSubset<T, CancerTimelineEventUpsertArgs<ExtArgs>>): Prisma__CancerTimelineEventClient<$Result.GetResult<Prisma.$CancerTimelineEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CancerTimelineEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancerTimelineEventCountArgs} args - Arguments to filter CancerTimelineEvents to count.
+     * @example
+     * // Count the number of CancerTimelineEvents
+     * const count = await prisma.cancerTimelineEvent.count({
+     *   where: {
+     *     // ... the filter for the CancerTimelineEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends CancerTimelineEventCountArgs>(
+      args?: Subset<T, CancerTimelineEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CancerTimelineEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CancerTimelineEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancerTimelineEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CancerTimelineEventAggregateArgs>(args: Subset<T, CancerTimelineEventAggregateArgs>): Prisma.PrismaPromise<GetCancerTimelineEventAggregateType<T>>
+
+    /**
+     * Group by CancerTimelineEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancerTimelineEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CancerTimelineEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CancerTimelineEventGroupByArgs['orderBy'] }
+        : { orderBy?: CancerTimelineEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CancerTimelineEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCancerTimelineEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CancerTimelineEvent model
+   */
+  readonly fields: CancerTimelineEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CancerTimelineEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CancerTimelineEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CancerTimelineEvent model
+   */
+  interface CancerTimelineEventFieldRefs {
+    readonly id: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly tenantId: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly patientId: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly cancerDiagnosisId: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly eventType: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly eventDate: FieldRef<"CancerTimelineEvent", 'DateTime'>
+    readonly title: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly description: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly sourceEntity: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly sourceId: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly metadata: FieldRef<"CancerTimelineEvent", 'Json'>
+    readonly severity: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly createdBy: FieldRef<"CancerTimelineEvent", 'String'>
+    readonly createdAt: FieldRef<"CancerTimelineEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CancerTimelineEvent findUnique
+   */
+  export type CancerTimelineEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * Filter, which CancerTimelineEvent to fetch.
+     */
+    where: CancerTimelineEventWhereUniqueInput
+  }
+
+  /**
+   * CancerTimelineEvent findUniqueOrThrow
+   */
+  export type CancerTimelineEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * Filter, which CancerTimelineEvent to fetch.
+     */
+    where: CancerTimelineEventWhereUniqueInput
+  }
+
+  /**
+   * CancerTimelineEvent findFirst
+   */
+  export type CancerTimelineEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * Filter, which CancerTimelineEvent to fetch.
+     */
+    where?: CancerTimelineEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancerTimelineEvents to fetch.
+     */
+    orderBy?: CancerTimelineEventOrderByWithRelationInput | CancerTimelineEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CancerTimelineEvents.
+     */
+    cursor?: CancerTimelineEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancerTimelineEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancerTimelineEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CancerTimelineEvents.
+     */
+    distinct?: CancerTimelineEventScalarFieldEnum | CancerTimelineEventScalarFieldEnum[]
+  }
+
+  /**
+   * CancerTimelineEvent findFirstOrThrow
+   */
+  export type CancerTimelineEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * Filter, which CancerTimelineEvent to fetch.
+     */
+    where?: CancerTimelineEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancerTimelineEvents to fetch.
+     */
+    orderBy?: CancerTimelineEventOrderByWithRelationInput | CancerTimelineEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CancerTimelineEvents.
+     */
+    cursor?: CancerTimelineEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancerTimelineEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancerTimelineEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CancerTimelineEvents.
+     */
+    distinct?: CancerTimelineEventScalarFieldEnum | CancerTimelineEventScalarFieldEnum[]
+  }
+
+  /**
+   * CancerTimelineEvent findMany
+   */
+  export type CancerTimelineEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * Filter, which CancerTimelineEvents to fetch.
+     */
+    where?: CancerTimelineEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancerTimelineEvents to fetch.
+     */
+    orderBy?: CancerTimelineEventOrderByWithRelationInput | CancerTimelineEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CancerTimelineEvents.
+     */
+    cursor?: CancerTimelineEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancerTimelineEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancerTimelineEvents.
+     */
+    skip?: number
+    distinct?: CancerTimelineEventScalarFieldEnum | CancerTimelineEventScalarFieldEnum[]
+  }
+
+  /**
+   * CancerTimelineEvent create
+   */
+  export type CancerTimelineEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * The data needed to create a CancerTimelineEvent.
+     */
+    data: XOR<CancerTimelineEventCreateInput, CancerTimelineEventUncheckedCreateInput>
+  }
+
+  /**
+   * CancerTimelineEvent createMany
+   */
+  export type CancerTimelineEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CancerTimelineEvents.
+     */
+    data: CancerTimelineEventCreateManyInput | CancerTimelineEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CancerTimelineEvent createManyAndReturn
+   */
+  export type CancerTimelineEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many CancerTimelineEvents.
+     */
+    data: CancerTimelineEventCreateManyInput | CancerTimelineEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CancerTimelineEvent update
+   */
+  export type CancerTimelineEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * The data needed to update a CancerTimelineEvent.
+     */
+    data: XOR<CancerTimelineEventUpdateInput, CancerTimelineEventUncheckedUpdateInput>
+    /**
+     * Choose, which CancerTimelineEvent to update.
+     */
+    where: CancerTimelineEventWhereUniqueInput
+  }
+
+  /**
+   * CancerTimelineEvent updateMany
+   */
+  export type CancerTimelineEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CancerTimelineEvents.
+     */
+    data: XOR<CancerTimelineEventUpdateManyMutationInput, CancerTimelineEventUncheckedUpdateManyInput>
+    /**
+     * Filter which CancerTimelineEvents to update
+     */
+    where?: CancerTimelineEventWhereInput
+    /**
+     * Limit how many CancerTimelineEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CancerTimelineEvent updateManyAndReturn
+   */
+  export type CancerTimelineEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * The data used to update CancerTimelineEvents.
+     */
+    data: XOR<CancerTimelineEventUpdateManyMutationInput, CancerTimelineEventUncheckedUpdateManyInput>
+    /**
+     * Filter which CancerTimelineEvents to update
+     */
+    where?: CancerTimelineEventWhereInput
+    /**
+     * Limit how many CancerTimelineEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CancerTimelineEvent upsert
+   */
+  export type CancerTimelineEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * The filter to search for the CancerTimelineEvent to update in case it exists.
+     */
+    where: CancerTimelineEventWhereUniqueInput
+    /**
+     * In case the CancerTimelineEvent found by the `where` argument doesn't exist, create a new CancerTimelineEvent with this data.
+     */
+    create: XOR<CancerTimelineEventCreateInput, CancerTimelineEventUncheckedCreateInput>
+    /**
+     * In case the CancerTimelineEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CancerTimelineEventUpdateInput, CancerTimelineEventUncheckedUpdateInput>
+  }
+
+  /**
+   * CancerTimelineEvent delete
+   */
+  export type CancerTimelineEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+    /**
+     * Filter which CancerTimelineEvent to delete.
+     */
+    where: CancerTimelineEventWhereUniqueInput
+  }
+
+  /**
+   * CancerTimelineEvent deleteMany
+   */
+  export type CancerTimelineEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CancerTimelineEvents to delete
+     */
+    where?: CancerTimelineEventWhereInput
+    /**
+     * Limit how many CancerTimelineEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CancerTimelineEvent without action
+   */
+  export type CancerTimelineEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancerTimelineEvent
+     */
+    select?: CancerTimelineEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancerTimelineEvent
+     */
+    omit?: CancerTimelineEventOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -22955,6 +24154,26 @@ export namespace Prisma {
   };
 
   export type OncologyCarePlanScalarFieldEnum = (typeof OncologyCarePlanScalarFieldEnum)[keyof typeof OncologyCarePlanScalarFieldEnum]
+
+
+  export const CancerTimelineEventScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    cancerDiagnosisId: 'cancerDiagnosisId',
+    eventType: 'eventType',
+    eventDate: 'eventDate',
+    title: 'title',
+    description: 'description',
+    sourceEntity: 'sourceEntity',
+    sourceId: 'sourceId',
+    metadata: 'metadata',
+    severity: 'severity',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt'
+  };
+
+  export type CancerTimelineEventScalarFieldEnum = (typeof CancerTimelineEventScalarFieldEnum)[keyof typeof CancerTimelineEventScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -25040,6 +26259,103 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"OncologyCarePlan"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"OncologyCarePlan"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"OncologyCarePlan"> | Date | string
+  }
+
+  export type CancerTimelineEventWhereInput = {
+    AND?: CancerTimelineEventWhereInput | CancerTimelineEventWhereInput[]
+    OR?: CancerTimelineEventWhereInput[]
+    NOT?: CancerTimelineEventWhereInput | CancerTimelineEventWhereInput[]
+    id?: UuidFilter<"CancerTimelineEvent"> | string
+    tenantId?: UuidFilter<"CancerTimelineEvent"> | string
+    patientId?: UuidFilter<"CancerTimelineEvent"> | string
+    cancerDiagnosisId?: UuidNullableFilter<"CancerTimelineEvent"> | string | null
+    eventType?: StringFilter<"CancerTimelineEvent"> | string
+    eventDate?: DateTimeFilter<"CancerTimelineEvent"> | Date | string
+    title?: StringFilter<"CancerTimelineEvent"> | string
+    description?: StringNullableFilter<"CancerTimelineEvent"> | string | null
+    sourceEntity?: StringNullableFilter<"CancerTimelineEvent"> | string | null
+    sourceId?: UuidNullableFilter<"CancerTimelineEvent"> | string | null
+    metadata?: JsonFilter<"CancerTimelineEvent">
+    severity?: StringFilter<"CancerTimelineEvent"> | string
+    createdBy?: UuidFilter<"CancerTimelineEvent"> | string
+    createdAt?: DateTimeFilter<"CancerTimelineEvent"> | Date | string
+  }
+
+  export type CancerTimelineEventOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    cancerDiagnosisId?: SortOrderInput | SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    sourceEntity?: SortOrderInput | SortOrder
+    sourceId?: SortOrderInput | SortOrder
+    metadata?: SortOrder
+    severity?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CancerTimelineEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CancerTimelineEventWhereInput | CancerTimelineEventWhereInput[]
+    OR?: CancerTimelineEventWhereInput[]
+    NOT?: CancerTimelineEventWhereInput | CancerTimelineEventWhereInput[]
+    tenantId?: UuidFilter<"CancerTimelineEvent"> | string
+    patientId?: UuidFilter<"CancerTimelineEvent"> | string
+    cancerDiagnosisId?: UuidNullableFilter<"CancerTimelineEvent"> | string | null
+    eventType?: StringFilter<"CancerTimelineEvent"> | string
+    eventDate?: DateTimeFilter<"CancerTimelineEvent"> | Date | string
+    title?: StringFilter<"CancerTimelineEvent"> | string
+    description?: StringNullableFilter<"CancerTimelineEvent"> | string | null
+    sourceEntity?: StringNullableFilter<"CancerTimelineEvent"> | string | null
+    sourceId?: UuidNullableFilter<"CancerTimelineEvent"> | string | null
+    metadata?: JsonFilter<"CancerTimelineEvent">
+    severity?: StringFilter<"CancerTimelineEvent"> | string
+    createdBy?: UuidFilter<"CancerTimelineEvent"> | string
+    createdAt?: DateTimeFilter<"CancerTimelineEvent"> | Date | string
+  }, "id">
+
+  export type CancerTimelineEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    cancerDiagnosisId?: SortOrderInput | SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    sourceEntity?: SortOrderInput | SortOrder
+    sourceId?: SortOrderInput | SortOrder
+    metadata?: SortOrder
+    severity?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    _count?: CancerTimelineEventCountOrderByAggregateInput
+    _max?: CancerTimelineEventMaxOrderByAggregateInput
+    _min?: CancerTimelineEventMinOrderByAggregateInput
+  }
+
+  export type CancerTimelineEventScalarWhereWithAggregatesInput = {
+    AND?: CancerTimelineEventScalarWhereWithAggregatesInput | CancerTimelineEventScalarWhereWithAggregatesInput[]
+    OR?: CancerTimelineEventScalarWhereWithAggregatesInput[]
+    NOT?: CancerTimelineEventScalarWhereWithAggregatesInput | CancerTimelineEventScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CancerTimelineEvent"> | string
+    tenantId?: UuidWithAggregatesFilter<"CancerTimelineEvent"> | string
+    patientId?: UuidWithAggregatesFilter<"CancerTimelineEvent"> | string
+    cancerDiagnosisId?: UuidNullableWithAggregatesFilter<"CancerTimelineEvent"> | string | null
+    eventType?: StringWithAggregatesFilter<"CancerTimelineEvent"> | string
+    eventDate?: DateTimeWithAggregatesFilter<"CancerTimelineEvent"> | Date | string
+    title?: StringWithAggregatesFilter<"CancerTimelineEvent"> | string
+    description?: StringNullableWithAggregatesFilter<"CancerTimelineEvent"> | string | null
+    sourceEntity?: StringNullableWithAggregatesFilter<"CancerTimelineEvent"> | string | null
+    sourceId?: UuidNullableWithAggregatesFilter<"CancerTimelineEvent"> | string | null
+    metadata?: JsonWithAggregatesFilter<"CancerTimelineEvent">
+    severity?: StringWithAggregatesFilter<"CancerTimelineEvent"> | string
+    createdBy?: UuidWithAggregatesFilter<"CancerTimelineEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CancerTimelineEvent"> | Date | string
   }
 
   export type CancerDiagnosisCreateInput = {
@@ -27402,6 +28718,125 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CancerTimelineEventCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    cancerDiagnosisId?: string | null
+    eventType: string
+    eventDate: Date | string
+    title: string
+    description?: string | null
+    sourceEntity?: string | null
+    sourceId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    severity?: string
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type CancerTimelineEventUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    cancerDiagnosisId?: string | null
+    eventType: string
+    eventDate: Date | string
+    title: string
+    description?: string | null
+    sourceEntity?: string | null
+    sourceId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    severity?: string
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type CancerTimelineEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceEntity?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    severity?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CancerTimelineEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceEntity?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    severity?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CancerTimelineEventCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    cancerDiagnosisId?: string | null
+    eventType: string
+    eventDate: Date | string
+    title: string
+    description?: string | null
+    sourceEntity?: string | null
+    sourceId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    severity?: string
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type CancerTimelineEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceEntity?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    severity?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CancerTimelineEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    cancerDiagnosisId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceEntity?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    severity?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -28940,6 +30375,55 @@ export namespace Prisma {
     version?: SortOrder
     plannedCycles?: SortOrder
     cycleDurationDays?: SortOrder
+  }
+
+  export type CancerTimelineEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    cancerDiagnosisId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    sourceEntity?: SortOrder
+    sourceId?: SortOrder
+    metadata?: SortOrder
+    severity?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CancerTimelineEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    cancerDiagnosisId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    sourceEntity?: SortOrder
+    sourceId?: SortOrder
+    severity?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CancerTimelineEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    cancerDiagnosisId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    sourceEntity?: SortOrder
+    sourceId?: SortOrder
+    severity?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TumorStagingCreateNestedManyWithoutCancerDiagnosisInput = {

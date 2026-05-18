@@ -6,6 +6,7 @@ import type {
   CreateOtReportInput,
   CreateOtRequestInput,
   CreateOtScheduleInput,
+  OtBoardResponse,
   OtReportListFilters,
   OtRequestListFilters,
   OtScheduleListFilters,
@@ -20,6 +21,7 @@ import type {
 
 export const otKeys = {
   all: ['ot'] as const,
+  board: (date?: string) => [...otKeys.all, 'board', date ?? 'today'] as const,
   requests: (filters?: OtRequestListFilters) => [...otKeys.all, 'requests', filters ?? {}] as const,
   request: (id: string) => [...otKeys.all, 'request', id] as const,
   requestHistory: (id: string) => [...otKeys.all, 'request', id, 'history'] as const,
@@ -34,6 +36,13 @@ export const otKeys = {
   rooms: (params?: { facilityId?: string; includeInactive?: boolean }) =>
     [...otKeys.all, 'rooms', params ?? {}] as const,
 };
+
+export function useOtBoard(date?: string) {
+  return useQuery<OtBoardResponse>({
+    queryKey: otKeys.board(date),
+    queryFn: () => otService.getBoard(date),
+  });
+}
 
 export function useOtRequests(filters?: OtRequestListFilters) {
   return useQuery({

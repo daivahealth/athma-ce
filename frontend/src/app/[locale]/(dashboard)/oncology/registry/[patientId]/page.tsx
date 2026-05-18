@@ -1,12 +1,17 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+import { History } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { usePatientCancerSummary } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, EmptyState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
 
 export default function PatientCancerProfilePage() {
   const params = useParams();
+  const router = useRouter();
+  const locale = useLocale();
   const patientId = params.patientId as string;
   const { data, isLoading } = usePatientCancerSummary(patientId);
 
@@ -17,11 +22,22 @@ export default function PatientCancerProfilePage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Patient Cancer Profile</h1>
-        <p className="text-muted-foreground text-sm mt-1">
-          Complete oncology history for this patient
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Patient Cancer Profile</h1>
+          <p className="text-muted-foreground text-sm mt-1">
+            Complete oncology history for this patient
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => router.push(`/${locale}/oncology/timeline/${patientId}`)}
+          className="flex items-center gap-2"
+        >
+          <History className="h-4 w-4" />
+          View Timeline
+        </Button>
       </div>
 
       <section className="space-y-3">

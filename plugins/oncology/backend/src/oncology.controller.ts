@@ -2,6 +2,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   Body,
   Param,
   Query,
@@ -771,6 +772,44 @@ export class OncologyController {
     try {
       return { success: true, data: await this.oncologyService.createCompletionSummary(body) };
     } catch (err: unknown) { this.handleError('createCompletionSummary', err); }
+  }
+
+  // ============================================
+  // Cancer Patient Timeline
+  // ============================================
+
+  @Get('timeline/:patientId')
+  @Permissions('oncology.diagnosis.read')
+  async listTimeline(
+    @Param('patientId') patientId: string,
+    @Query('eventType') eventType?: string,
+    @Query('fromDate') fromDate?: string,
+    @Query('toDate') toDate?: string,
+    @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
+  ) {
+    const filters: { eventType?: string; fromDate?: string; toDate?: string; cancerDiagnosisId?: string } = {};
+    if (eventType !== undefined) filters.eventType = eventType;
+    if (fromDate !== undefined) filters.fromDate = fromDate;
+    if (toDate !== undefined) filters.toDate = toDate;
+    if (cancerDiagnosisId !== undefined) filters.cancerDiagnosisId = cancerDiagnosisId;
+    return { success: true, ...(await this.oncologyService.listTimeline(patientId, filters)) };
+  }
+
+  @Post('timeline')
+  @Permissions('oncology.diagnosis.write')
+  @HttpCode(HttpStatus.CREATED)
+  async createCustomTimelineEvent(@Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.createCustomTimelineEvent(body) };
+    } catch (err: unknown) { this.handleError('createCustomTimelineEvent', err); }
+  }
+
+  @Delete('timeline/:id')
+  @Permissions('oncology.diagnosis.write')
+  async deleteTimelineEvent(@Param('id') id: string) {
+    try {
+      return { success: true, data: await this.oncologyService.deleteTimelineEvent(id) };
+    } catch (err: unknown) { this.handleError('deleteTimelineEvent', err); }
   }
 
   private handleError(method: string, err: unknown): never {

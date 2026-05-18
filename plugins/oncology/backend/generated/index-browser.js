@@ -453,6 +453,23 @@ exports.Prisma.OncologyCarePlanScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CancerTimelineEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  cancerDiagnosisId: 'cancerDiagnosisId',
+  eventType: 'eventType',
+  eventDate: 'eventDate',
+  title: 'title',
+  description: 'description',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  metadata: 'metadata',
+  severity: 'severity',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -495,7 +512,8 @@ exports.Prisma.ModelName = {
   RadiationFraction: 'RadiationFraction',
   RadiationOnTreatmentReview: 'RadiationOnTreatmentReview',
   RadiationCompletionSummary: 'RadiationCompletionSummary',
-  OncologyCarePlan: 'OncologyCarePlan'
+  OncologyCarePlan: 'OncologyCarePlan',
+  CancerTimelineEvent: 'CancerTimelineEvent'
 };
 
 /**

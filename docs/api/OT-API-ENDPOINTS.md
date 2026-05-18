@@ -20,6 +20,39 @@ x-user-id: <user-uuid>
 
 The OT module is tenant-scoped and lives in the Clinical service. OT room master data remains owned by Foundation `Space`; the Clinical service stores OT-specific room configuration only.
 
+## OT Board
+
+### `GET /ot/board`
+
+Query parameters:
+- `date=YYYY-MM-DD`
+
+Response behavior:
+- returns a room-first OT utilization board for the requested day
+- includes `generatedAt` so clients can show freshness after manual refresh
+- includes a top-level `summary` with room-state counts
+- each room item includes:
+  - room identity from `OtRoomConfig` plus Foundation `Space`
+  - `state` and `stateLabel`
+  - current case, if one is live
+  - next case, if one is queued later in the day
+  - per-room daily summary counts and occupied-minute totals
+- current and next cases include `patientDisplay`
+
+Board states:
+- `IDLE`
+- `OCCUPIED`
+- `NEXT_UP`
+- `BLOCKED`
+- `INACTIVE`
+
+Room state rules:
+- `INACTIVE`: OT room config is inactive
+- `BLOCKED`: an approved room `resource_block` overlaps the board time
+- `OCCUPIED`: a live intra-op schedule overlaps the board time
+- `NEXT_UP`: no live case now, but a later scheduled case exists
+- `IDLE`: active room with no current or later case
+
 ## OT Requests
 
 ### `POST /ot/requests`

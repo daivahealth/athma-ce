@@ -34,6 +34,7 @@ const oncologyKeys = {
   siteMappingList: (params?: Record<string, unknown>) => [...oncologyKeys.siteMappings(), 'list', params] as const,
   histologies: () => [...oncologyKeys.catalogs(), 'histologies'] as const,
   histologyList: (params?: Record<string, unknown>) => [...oncologyKeys.histologies(), 'list', params] as const,
+  timeline: (patientId: string) => [...oncologyKeys.all, 'timeline', patientId] as const,
 };
 
 // Cancer Diagnosis
@@ -682,5 +683,35 @@ export function useCreateCompletionSummary() {
       queryClient.invalidateQueries({ queryKey: radiationKeys.completion(vars.prescriptionId as string) });
       queryClient.invalidateQueries({ queryKey: radiationKeys.prescriptionDetail(vars.prescriptionId as string) });
     },
+  });
+}
+
+// ── Cancer Patient Timeline ────────────────────────────────────────────────
+
+export function usePatientTimeline(patientId: string, params?: {
+  eventType?: string; fromDate?: string; toDate?: string; cancerDiagnosisId?: string;
+}) {
+  return useQuery({
+    queryKey: oncologyKeys.timeline(patientId),
+    queryFn: () => oncologyService.getTimeline(patientId, params),
+    enabled: !!patientId,
+  });
+}
+
+export function useCreateCustomTimelineEvent() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.createCustomTimelineEvent,
+    onSuccess: (_data, vars) =>
+      queryClient.invalidateQueries({ queryKey: oncologyKeys.timeline(vars.patientId) }),
+  });
+}
+
+export function useDeleteTimelineEvent(patientId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => oncologyService.deleteTimelineEvent(id),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: oncologyKeys.timeline(patientId) }),
   });
 }

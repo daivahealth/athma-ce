@@ -69,6 +69,45 @@ export class OncologyService {
     };
   }
 
+  private async logTimelineEvent(event: {
+    patientId: string;
+    cancerDiagnosisId?: string | null;
+    eventType: string;
+    eventDate: Date | string;
+    title: string;
+    description?: string;
+    sourceEntity?: string;
+    sourceId?: string;
+    metadata?: Record<string, unknown>;
+    severity?: 'milestone' | 'info' | 'warning' | 'adverse';
+  }): Promise<void> {
+    try {
+      const tenantId = this.getTenantId();
+      const userId = this.getCurrentUserId();
+      await this.prisma.$queryRawUnsafe(
+        `INSERT INTO plugin_oncology.cancer_timeline_events
+          (id, tenant_id, patient_id, cancer_diagnosis_id, event_type, event_date,
+           title, description, source_entity, source_id, metadata, severity, created_by, created_at)
+         VALUES (gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, $4, $5::timestamptz,
+                 $6, $7, $8, $9::uuid, $10::jsonb, $11, $12::uuid, NOW())`,
+        tenantId,
+        event.patientId,
+        event.cancerDiagnosisId ?? null,
+        event.eventType,
+        event.eventDate instanceof Date ? event.eventDate.toISOString() : event.eventDate,
+        event.title,
+        event.description ?? null,
+        event.sourceEntity ?? null,
+        event.sourceId ?? null,
+        JSON.stringify(event.metadata ?? {}),
+        event.severity ?? 'info',
+        userId,
+      );
+    } catch {
+      // Timeline logging is non-blocking — do not fail the primary operation
+    }
+  }
+
   // ============================================
   // Cancer Diagnosis
   // ============================================
@@ -136,6 +175,10 @@ export class OncologyService {
     const tenantId = this.getTenantId();
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `SELECT cd.*,
+        p.mrn AS patient_mrn, p.display_name AS patient_display_name,
+        p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+        p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender,
+        p.phone_number AS patient_phone_number,
         (SELECT json_agg(ts ORDER BY ts.staging_date DESC)
          FROM plugin_oncology.tumor_staging ts
          WHERE ts.cancer_diagnosis_id = cd.id AND ts.tenant_id = cd.tenant_id
@@ -145,6 +188,7 @@ export class OncologyService {
          WHERE cp.cancer_diagnosis_id = cd.id AND cp.tenant_id = cd.tenant_id AND cp.status != 'revised'
         ) as care_plans
       FROM plugin_oncology.cancer_diagnoses cd
+      LEFT JOIN public.patients p ON p.id = cd.patient_id
       WHERE cd.id = $1::uuid AND cd.tenant_id = $2::uuid`,
       id,
       tenantId,
@@ -196,7 +240,25 @@ export class OncologyService {
       (data.diagnosedBy as string) || this.getCurrentUserId(),
       data.notes ?? null,
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.id,
+      eventType: 'diagnosis',
+      eventDate: r.diagnosis_date ?? r.created_at,
+      title: `Diagnosed: ${r.cancer_type}`,
+      sourceEntity: 'cancer_diagnosis',
+      sourceId: r.id,
+      metadata: {
+        cancerType: r.cancer_type,
+        primarySite: r.primary_site,
+        clinicalStatus: r.clinical_status,
+        metastaticStatus: r.metastatic_status,
+        grade: r.grade,
+      },
+      severity: 'milestone',
+    });
+    return r;
   }
 
   async updateCancerDiagnosis(id: string, data: Record<string, unknown>) {
@@ -426,9 +488,19 @@ export class OncologyService {
   async getStaging(id: string) {
     const tenantId = this.getTenantId();
     const results = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT ts.*, cd.cancer_type, cd.primary_site
+      `SELECT ts.*,
+              cd.cancer_type, cd.primary_site, cd.primary_site_code,
+              cd.laterality, cd.clinical_status, cd.diagnosis_date,
+              cd.metastatic_status, cd.icd_code,
+              cd.grade AS diagnosis_grade,
+              cd.histology_morphology AS diagnosis_histology,
+              p.mrn AS patient_mrn, p.display_name AS patient_display_name,
+              p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+              p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender,
+              p.phone_number AS patient_phone_number
        FROM plugin_oncology.tumor_staging ts
        JOIN plugin_oncology.cancer_diagnoses cd ON ts.cancer_diagnosis_id = cd.id
+       LEFT JOIN public.patients p ON p.id = ts.patient_id
        WHERE ts.id = $1::uuid AND ts.tenant_id = $2::uuid`,
       id,
       tenantId,
@@ -488,7 +560,27 @@ export class OncologyService {
       data.status ?? 'active',
       data.notes ?? null,
     );
-    return results[0];
+    const r = results[0];
+    const stageLabel = [r.stage_group, r.t_category && `T${r.t_category}`, r.n_category && `N${r.n_category}`, r.m_category && `M${r.m_category}`].filter(Boolean).join(' ');
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id,
+      eventType: 'staging',
+      eventDate: r.staging_date ?? r.created_at,
+      title: `Staged: ${r.staging_system}${stageLabel ? ` — ${stageLabel}` : ''}`,
+      sourceEntity: 'tumor_staging',
+      sourceId: r.id,
+      metadata: {
+        stagingSystem: r.staging_system,
+        stagingType: r.staging_type,
+        stageGroup: r.stage_group,
+        tCategory: r.t_category,
+        nCategory: r.n_category,
+        mCategory: r.m_category,
+      },
+      severity: 'info',
+    });
+    return r;
   }
 
   async updateStaging(id: string, data: Record<string, unknown>) {
@@ -582,15 +674,26 @@ export class OncologyService {
   async getCarePlan(id: string) {
     const tenantId = this.getTenantId();
     const results = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT cp.*, cd.cancer_type, cd.primary_site
+      `SELECT cp.*, cd.cancer_type, cd.primary_site, cd.primary_site_code, cd.laterality,
+              cd.clinical_status, cd.diagnosis_date, cd.metastatic_status, cd.icd_code,
+              cd.grade AS diagnosis_grade, cd.histology_morphology AS diagnosis_histology,
+              p.mrn AS patient_mrn, p.display_name AS patient_display_name,
+              p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+              p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender,
+              p.phone_number AS patient_phone_number
        FROM plugin_oncology.oncology_care_plans cp
        JOIN plugin_oncology.cancer_diagnoses cd ON cp.cancer_diagnosis_id = cd.id
+       LEFT JOIN public.patients p ON p.id = cp.patient_id
        WHERE cp.id = $1::uuid AND cp.tenant_id = $2::uuid`,
       id,
       tenantId,
     );
     if (!results.length) throw new NotFoundException(`Care plan '${id}' not found`);
-    return results[0];
+    const r = results[0];
+    const pd = this.buildPatientDisplay(r);
+    const clean = { ...r };
+    for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_'))) delete clean[k];
+    return { ...clean, patientDisplay: pd };
   }
 
   async createCarePlan(data: Record<string, unknown>) {
@@ -651,7 +754,23 @@ export class OncologyService {
       (data.createdBy as string) || this.getCurrentUserId(),
       data.notes ?? null,
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id,
+      eventType: 'care_plan_created',
+      eventDate: r.created_at,
+      title: `Care Plan Created: ${r.treatment_intent ?? 'Unspecified'}`,
+      sourceEntity: 'oncology_care_plan',
+      sourceId: r.id,
+      metadata: {
+        planNumber: r.plan_number,
+        treatmentIntent: r.treatment_intent,
+        subspecialty: r.oncology_subspecialty,
+      },
+      severity: 'info',
+    });
+    return r;
   }
 
   async updateCarePlan(id: string, data: Record<string, unknown>) {
@@ -706,7 +825,19 @@ export class OncologyService {
       approvedBy,
     );
     if (!results.length) throw new NotFoundException(`Care plan '${id}' not found or not in draft status`);
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id,
+      eventType: 'care_plan_approved',
+      eventDate: r.approved_at ?? r.updated_at,
+      title: `Care Plan Approved: ${r.treatment_intent ?? r.plan_number}`,
+      sourceEntity: 'oncology_care_plan',
+      sourceId: r.id,
+      metadata: { planNumber: r.plan_number, treatmentIntent: r.treatment_intent },
+      severity: 'milestone',
+    });
+    return r;
   }
 
   async reviseCarePlan(id: string, data: Record<string, unknown>) {
@@ -794,9 +925,18 @@ export class OncologyService {
   async getTumorBoardCase(id: string) {
     const tenantId = this.getTenantId();
     const results = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT tbc.*, cd.cancer_type, cd.primary_site
+      `SELECT tbc.*, cd.cancer_type, cd.primary_site, cd.primary_site_code,
+              cd.laterality, cd.clinical_status, cd.diagnosis_date,
+              cd.metastatic_status, cd.icd_code,
+              cd.grade AS diagnosis_grade,
+              cd.histology_morphology AS diagnosis_histology,
+              p.mrn AS patient_mrn, p.display_name AS patient_display_name,
+              p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+              p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender,
+              p.phone_number AS patient_phone_number
        FROM plugin_oncology.tumor_board_cases tbc
        JOIN plugin_oncology.cancer_diagnoses cd ON tbc.cancer_diagnosis_id = cd.id
+       LEFT JOIN public.patients p ON p.id = tbc.patient_id
        WHERE tbc.id = $1::uuid AND tbc.tenant_id = $2::uuid`,
       id,
       tenantId,
@@ -860,7 +1000,19 @@ export class OncologyService {
       JSON.stringify(data.followUpActions ?? []),
       data.status ?? 'scheduled',
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id,
+      eventType: 'tumor_board',
+      eventDate: r.meeting_date ?? r.created_at,
+      title: 'MDT Case Presented',
+      sourceEntity: 'tumor_board_case',
+      sourceId: r.id,
+      metadata: { treatmentIntent: r.treatment_intent, status: r.status },
+      severity: 'info',
+    });
+    return r;
   }
 
   async updateTumorBoardCase(id: string, data: Record<string, unknown>) {
@@ -904,7 +1056,21 @@ export class OncologyService {
       data.reviewOutcome ?? null,
       data.status ?? null,
     );
-    return results[0];
+    const r = results[0];
+    if (r.status === 'completed' && r.treatment_intent) {
+      await this.logTimelineEvent({
+        patientId: r.patient_id,
+        cancerDiagnosisId: r.cancer_diagnosis_id,
+        eventType: 'tumor_board_decision',
+        eventDate: r.meeting_date ?? r.updated_at,
+        title: `MDT Decision: ${r.treatment_intent}`,
+        sourceEntity: 'tumor_board_case',
+        sourceId: r.id,
+        metadata: { treatmentIntent: r.treatment_intent, mdtRecommendation: r.mdt_recommendation },
+        severity: 'milestone',
+      });
+    }
+    return r;
   }
 
   // ============================================
@@ -914,9 +1080,9 @@ export class OncologyService {
   async listProtocols(cancerType?: string, page = 1, limit = 20) {
     const tenantId = this.getTenantId();
     const results = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT * FROM plugin_oncology.chemo_protocols WHERE tenant_id = $1::uuid ${cancerType ? 'AND cancer_type = $2' : ''} AND is_active = true ORDER BY name LIMIT $${cancerType ? '3' : '2'} OFFSET $${cancerType ? '4' : '3'}`,
+      `SELECT * FROM plugin_oncology.chemo_protocols WHERE tenant_id = $1::uuid ${cancerType ? 'AND cancer_type ILIKE $2' : ''} AND is_active = true ORDER BY name LIMIT $${cancerType ? '3' : '2'} OFFSET $${cancerType ? '4' : '3'}`,
       tenantId,
-      ...(cancerType ? [cancerType] : []),
+      ...(cancerType ? [`%${cancerType}%`] : []),
       limit,
       (page - 1) * limit,
     );
@@ -1075,7 +1241,9 @@ export class OncologyService {
         cp.hydration as protocol_hydration, cp.lab_prerequisites as protocol_lab_prerequisites,
         cp.emetogenic_risk as protocol_emetogenic_risk, cp.total_cycles as protocol_total_cycles,
         cp.cycle_duration_days as protocol_cycle_duration_days, cp.dose_formula as protocol_dose_formula,
-        cd.cancer_type, cd.primary_site,
+        cd.cancer_type, cd.primary_site, cd.primary_site_code, cd.laterality,
+        cd.clinical_status, cd.diagnosis_date, cd.metastatic_status, cd.icd_code,
+        cd.grade AS diagnosis_grade, cd.histology_morphology AS diagnosis_histology,
         p.mrn as patient_mrn, p.first_name as patient_first_name, p.last_name as patient_last_name,
         p.display_name as patient_display_name, p.date_of_birth as patient_date_of_birth,
         p.gender as patient_gender, p.phone_number as patient_phone_number,
@@ -1150,7 +1318,19 @@ export class OncologyService {
       data.status ?? 'pending',
       data.notes ?? null,
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
+      eventType: 'chemo_ordered',
+      eventDate: r.scheduled_date ?? r.created_at,
+      title: `Chemo Ordered: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
+      sourceEntity: 'chemo_order',
+      sourceId: r.id,
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, scheduledDate: r.scheduled_date },
+      severity: 'info',
+    });
+    return r;
   }
 
   async updateChemoOrder(id: string, data: Record<string, unknown>) {
@@ -1213,7 +1393,19 @@ export class OncologyService {
       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
       id, tenantId, this.getCurrentUserId(),
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
+      eventType: 'chemo_approved',
+      eventDate: r.approved_at ?? r.updated_at,
+      title: `Chemo Approved: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
+      sourceEntity: 'chemo_order',
+      sourceId: r.id,
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number },
+      severity: 'info',
+    });
+    return r;
   }
 
   async verifyChemoOrder(id: string, secondVerifiedBy?: string, nurseVerificationChecklist?: Record<string, unknown>, drugPreparationDetails?: unknown[]) {
@@ -1279,7 +1471,19 @@ export class OncologyService {
       WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
       id, tenantId, this.getCurrentUserId(),
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
+      eventType: 'chemo_started',
+      eventDate: r.administered_at ?? r.updated_at,
+      title: `Chemo Started: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
+      sourceEntity: 'chemo_order',
+      sourceId: r.id,
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, bsa: r.bsa },
+      severity: 'milestone',
+    });
+    return r;
   }
 
   async completeAdministration(id: string, data: Record<string, unknown>) {
@@ -1304,7 +1508,19 @@ export class OncologyService {
       JSON.stringify(data.adverseReactions ?? []),
       data.notes ?? null,
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
+      eventType: 'chemo_completed',
+      eventDate: r.updated_at,
+      title: `Chemo Completed: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
+      sourceEntity: 'chemo_order',
+      sourceId: r.id,
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number },
+      severity: 'milestone',
+    });
+    return r;
   }
 
   async holdChemoOrder(id: string, reason: string) {
@@ -1319,7 +1535,19 @@ export class OncologyService {
       reason ? `\n[HELD] ${reason}` : '\n[HELD]',
     );
     if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
+      eventType: 'chemo_held',
+      eventDate: r.updated_at,
+      title: `Chemo Held: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
+      sourceEntity: 'chemo_order',
+      sourceId: r.id,
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason },
+      severity: 'warning',
+    });
+    return r;
   }
 
   async cancelChemoOrder(id: string, reason: string) {
@@ -1334,7 +1562,19 @@ export class OncologyService {
       reason ? `\n[CANCELLED] ${reason}` : '\n[CANCELLED]',
     );
     if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
+      eventType: 'chemo_cancelled',
+      eventDate: r.updated_at,
+      title: `Chemo Cancelled: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
+      sourceEntity: 'chemo_order',
+      sourceId: r.id,
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason },
+      severity: 'warning',
+    });
+    return r;
   }
 
   // ============================================================
@@ -1758,9 +1998,14 @@ export class OncologyService {
     const tenantId = this.getTenantId();
     const rows = await this.prisma.$queryRawUnsafe<any[]>(
       `SELECT rp.*,
+        cd.cancer_type, cd.primary_site, cd.primary_site_code,
+        cd.clinical_status, cd.diagnosis_date, cd.metastatic_status, cd.icd_code,
+        cd.grade AS diagnosis_grade, cd.histology_morphology AS diagnosis_histology,
+        cd.laterality AS diagnosis_laterality,
         p.mrn as patient_mrn, p.first_name as patient_first_name,
         p.last_name as patient_last_name, p.display_name as patient_display_name,
         p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,
+        p.phone_number as patient_phone_number,
         (SELECT json_agg(s ORDER BY s.simulation_date)
          FROM plugin_oncology.radiation_simulations s WHERE s.prescription_id = rp.id) as simulations,
         (SELECT json_agg(tp ORDER BY tp.created_at)
@@ -1770,16 +2015,17 @@ export class OncologyService {
         (SELECT row_to_json(cs) FROM plugin_oncology.radiation_completion_summaries cs
          WHERE cs.prescription_id = rp.id LIMIT 1) as completion_summary
       FROM plugin_oncology.radiation_prescriptions rp
+      LEFT JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = rp.cancer_profile_id
       LEFT JOIN public.patients p ON p.id = rp.patient_id
       WHERE rp.id = $1::uuid AND rp.tenant_id = $2::uuid`,
       id, tenantId,
     );
     if (!rows.length) throw new NotFoundException(`Radiation prescription '${id}' not found`);
     const row = rows[0];
-    const patientDisplay = this.buildPatientDisplay(row);
+    const pd = this.buildPatientDisplay(row);
     const { patient_mrn, patient_first_name, patient_last_name, patient_display_name,
-      patient_gender, patient_date_of_birth, ...rest } = row;
-    return { ...rest, patientDisplay };
+      patient_gender, patient_date_of_birth, patient_phone_number, ...rest } = row;
+    return { ...rest, patientDisplay: pd };
   }
 
   async createRadiationPrescription(data: Record<string, unknown>) {
@@ -1821,7 +2067,25 @@ export class OncologyService {
       (data.prescribedBy as string) || userId,
       data.status ?? 'DRAFT',
     );
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_profile_id ?? null,
+      eventType: 'radiation_prescribed',
+      eventDate: r.created_at,
+      title: `Radiation Prescribed: ${r.total_dose_gy != null ? `${r.total_dose_gy} Gy` : ''}${r.planned_fractions != null ? ` / ${r.planned_fractions} fx` : ''}`.trim() || 'Radiation Prescribed',
+      sourceEntity: 'radiation_prescription',
+      sourceId: r.id,
+      metadata: {
+        totalDoseGy: r.total_dose_gy,
+        plannedFractions: r.planned_fractions,
+        modality: r.modality,
+        technique: r.technique,
+        treatmentIntent: r.treatment_intent,
+      },
+      severity: 'info',
+    });
+    return r;
   }
 
   async updateRadiationPrescription(id: string, data: Record<string, unknown>) {
@@ -1883,7 +2147,24 @@ export class OncologyService {
       id, tenantId,
     );
     if (!results.length) throw new BadRequestException('Prescription not found or not in APPROVED status');
-    return results[0];
+    const r = results[0];
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_profile_id ?? null,
+      eventType: 'radiation_started',
+      eventDate: r.updated_at,
+      title: `Radiation Started: ${r.modality ? `${r.modality} ` : ''}${r.total_dose_gy != null ? `${r.total_dose_gy} Gy` : ''}`.trim() || 'Radiation Started',
+      sourceEntity: 'radiation_prescription',
+      sourceId: r.id,
+      metadata: {
+        totalDoseGy: r.total_dose_gy,
+        plannedFractions: r.planned_fractions,
+        modality: r.modality,
+        technique: r.technique,
+      },
+      severity: 'milestone',
+    });
+    return r;
   }
 
   // ============================================================
@@ -1943,7 +2224,32 @@ export class OncologyService {
       (data.performedBy as string) || userId,
       data.status ?? 'COMPLETED',
     );
-    return results[0];
+    const r = results[0];
+    // Get patient_id from the linked prescription for the timeline event
+    const rxRows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT patient_id, cancer_profile_id FROM plugin_oncology.radiation_prescriptions WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      data.prescriptionId, this.getTenantId(),
+    );
+    if (rxRows.length) {
+      await this.logTimelineEvent({
+        patientId: rxRows[0].patient_id,
+        cancerDiagnosisId: rxRows[0].cancer_profile_id ?? null,
+        eventType: 'simulation',
+        eventDate: r.simulation_date ?? r.created_at,
+        title: `CT Simulation Performed${r.scan_region ? `: ${r.scan_region}` : ''}`,
+        sourceEntity: 'radiation_prescription',
+        sourceId: r.prescription_id,
+        metadata: {
+          patientPosition: r.patient_position,
+          immobilizationDevice: r.immobilization_device,
+          contrastUsed: r.contrast_used,
+          scanRegion: r.scan_region,
+          tattooMarkingDone: r.tattoo_marking_done,
+        },
+        severity: 'info',
+      });
+    }
+    return r;
   }
 
   async updateRadiationSimulation(id: string, data: Record<string, unknown>) {
@@ -2363,6 +2669,113 @@ export class OncologyService {
       data.prescriptionId, tenantId,
     );
 
+    const r = results[0];
+    // Get patient_id and cancer_profile_id from the linked prescription
+    const rxRows2 = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT patient_id, cancer_profile_id, modality, total_dose_gy, planned_fractions FROM plugin_oncology.radiation_prescriptions WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      data.prescriptionId, this.getTenantId(),
+    );
+    if (rxRows2.length) {
+      const rx = rxRows2[0];
+      const doseLabel = r.delivered_total_dose_gy != null ? `${r.delivered_total_dose_gy} Gy` : rx.total_dose_gy != null ? `${rx.total_dose_gy} Gy` : '';
+      const fxLabel = r.delivered_fractions != null ? `${r.delivered_fractions} fx` : rx.planned_fractions != null ? `${rx.planned_fractions} fx` : '';
+      await this.logTimelineEvent({
+        patientId: rx.patient_id,
+        cancerDiagnosisId: rx.cancer_profile_id ?? null,
+        eventType: 'radiation_completed',
+        eventDate: r.completion_date ?? r.created_at,
+        title: `Radiation Completed: ${[doseLabel, fxLabel ? `${fxLabel} delivered` : ''].filter(Boolean).join(' / ')}` || 'Radiation Completed',
+        sourceEntity: 'radiation_prescription',
+        sourceId: r.prescription_id,
+        metadata: {
+          deliveredTotalDoseGy: r.delivered_total_dose_gy,
+          deliveredFractions: r.delivered_fractions,
+          plannedTotalDoseGy: r.planned_total_dose_gy,
+          plannedFractions: r.planned_fractions,
+          interruptions: r.interruptions,
+        },
+        severity: 'milestone',
+      });
+    }
+    return r;
+  }
+
+  // ============================================================
+  // Cancer Timeline
+  // ============================================================
+
+  async listTimeline(
+    patientId: string,
+    filters: { eventType?: string; fromDate?: string; toDate?: string; cancerDiagnosisId?: string } = {},
+  ) {
+    const tenantId = this.getTenantId();
+    let query = `SELECT * FROM plugin_oncology.cancer_timeline_events
+      WHERE tenant_id = $1::uuid AND patient_id = $2::uuid`;
+    const params: unknown[] = [tenantId, patientId];
+    let idx = 3;
+
+    if (filters.cancerDiagnosisId) {
+      query += ` AND cancer_diagnosis_id = $${idx++}::uuid`;
+      params.push(filters.cancerDiagnosisId);
+    }
+    if (filters.eventType) {
+      query += ` AND event_type = $${idx++}`;
+      params.push(filters.eventType);
+    }
+    if (filters.fromDate) {
+      query += ` AND event_date >= $${idx++}::timestamptz`;
+      params.push(filters.fromDate);
+    }
+    if (filters.toDate) {
+      query += ` AND event_date <= $${idx++}::timestamptz`;
+      params.push(filters.toDate);
+    }
+
+    query += ` ORDER BY event_date ASC, created_at ASC`;
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    return { data: rows };
+  }
+
+  async createCustomTimelineEvent(data: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    const userId = this.getCurrentUserId();
+
+    if (!data.patientId) throw new BadRequestException('patientId is required');
+    if (!data.title) throw new BadRequestException('title is required');
+    if (!data.eventDate) throw new BadRequestException('eventDate is required');
+
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO plugin_oncology.cancer_timeline_events
+        (id, tenant_id, patient_id, cancer_diagnosis_id, event_type, event_date,
+         title, description, source_entity, source_id, metadata, severity, created_by, created_at)
+       VALUES (gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, 'custom', $4::timestamptz,
+               $5, $6, 'manual', NULL, '{}'::jsonb, 'info', $7::uuid, NOW())
+       RETURNING *`,
+      tenantId,
+      data.patientId,
+      data.cancerDiagnosisId ?? null,
+      data.eventDate,
+      data.title,
+      data.description ?? null,
+      userId,
+    );
     return results[0];
+  }
+
+  async deleteTimelineEvent(id: string) {
+    const tenantId = this.getTenantId();
+    const existing = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, source_entity FROM plugin_oncology.cancer_timeline_events WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!existing.length) throw new NotFoundException(`Timeline event '${id}' not found`);
+    if (existing[0].source_entity !== 'manual') {
+      throw new BadRequestException('Only manually-added timeline events can be deleted');
+    }
+    await this.prisma.$queryRawUnsafe(
+      `DELETE FROM plugin_oncology.cancer_timeline_events WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    return { success: true };
   }
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, User, Dna, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,13 +31,8 @@ export default function NewChemoOrderPage({ params }: { params: { locale: string
   const back = () => router.push(`/${params.locale}/oncology/orders`);
   const createOrder = useCreateChemoOrder();
 
-  // Step 1 — Patient
-  const [selectedPatient, setSelectedPatient] = useState<{ id: string } | null>(null);
-
-  // Step 2 — Diagnosis (auto-listed once patient selected)
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [cancerDiagnosisId, setCancerDiagnosisId] = useState('');
-
-  // Step 3 onwards — order fields
   const [oncologyCarePlanId, setOncologyCarePlanId] = useState('');
   const [protocolId, setProtocolId] = useState('');
   const [cycleNumber, setCycleNumber] = useState('1');
@@ -53,24 +48,29 @@ export default function NewChemoOrderPage({ params }: { params: { locale: string
   const [checklist, setChecklist] = useState<PreChemoChecklist>({});
   const [notes, setNotes] = useState('');
 
-  // Active diagnoses for selected patient
   const { data: diagnosesData, isLoading: diagnosesLoading } = useCancerDiagnoses(
     selectedPatient ? { patientId: selectedPatient.id, clinicalStatus: 'active' } : undefined,
   );
   const diagnoses: CancerDiagnosis[] = diagnosesData?.data ?? [];
   const selectedDiagnosis = diagnoses.find((d) => d.id === cancerDiagnosisId);
 
+  // Auto-select when patient has exactly one active diagnosis
+  useEffect(() => {
+    if (!diagnosesLoading && diagnoses.length === 1 && !cancerDiagnosisId) {
+      setCancerDiagnosisId(diagnoses[0].id);
+    }
+  }, [diagnosesLoading, diagnoses.length, cancerDiagnosisId]);
+
   const { data: carePlansData } = useOncologyCarePlans(
     cancerDiagnosisId ? { cancerDiagnosisId } : undefined,
   );
   const carePlans = carePlansData?.data ?? [];
 
-  const { data: protocolsData } = useProtocols();
-  const allProtocols: ChemoProtocol[] = protocolsData?.data ?? [];
-  const filteredProtocols = selectedDiagnosis
-    ? allProtocols.filter((p) => p.is_active && p.cancer_type.toLowerCase().includes(selectedDiagnosis.cancer_type.toLowerCase().split(' ')[0]))
-    : allProtocols.filter((p) => p.is_active);
-  const selectedProtocol = allProtocols.find((p) => p.id === protocolId);
+  const { data: protocolsData } = useProtocols(
+    selectedDiagnosis ? { cancerType: selectedDiagnosis.cancer_type } : undefined,
+  );
+  const filteredProtocols: ChemoProtocol[] = protocolsData?.data ?? [];
+  const selectedProtocol = filteredProtocols.find((p) => p.id === protocolId);
 
   const bsa = useMemo(() => {
     if (bsaOverride) return parseFloat(bsaOverride);
@@ -95,7 +95,7 @@ export default function NewChemoOrderPage({ params }: { params: { locale: string
     }));
   }, [selectedProtocol, bsa, weight]);
 
-  const handleSelectPatient = (p: { id: string }) => {
+  const handleSelectPatient = (p: any) => {
     setSelectedPatient(p);
     setCancerDiagnosisId('');
     setProtocolId('');
@@ -139,6 +139,10 @@ export default function NewChemoOrderPage({ params }: { params: { locale: string
     back();
   };
 
+  const age = selectedPatient?.dateOfBirth
+    ? Math.floor((Date.now() - new Date(selectedPatient.dateOfBirth).getTime()) / 31557600000)
+    : null;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -153,69 +157,184 @@ export default function NewChemoOrderPage({ params }: { params: { locale: string
 
       <div className="space-y-6">
 
-        {/* Step 1 — Patient */}
-        <Card>
-          <CardHeader><CardTitle>Patient</CardTitle></CardHeader>
-          <CardContent>
-            <PatientSearchSelect
-              required
-              selectedPatient={selectedPatient}
-              onSelect={handleSelectPatient}
-              onClear={handleClearPatient}
-            />
-          </CardContent>
-        </Card>
+        {/* Step 1 — Patient (search card or blue banner) */}
+        {!selectedPatient ? (
+          <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
+            <div className="relative space-y-3">
+              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/50">
+                  <Search className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-xs font-semibold uppercase tracking-wider">Select Patient</span>
+              </div>
+              <PatientSearchSelect
+                required
+                selectedPatient={selectedPatient}
+                onSelect={handleSelectPatient}
+                onClear={handleClearPatient}
+              />
+            </div>
+          </div>
+        ) : (
+          /* Blue patient banner */
+          <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
+            <div className="relative space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/50">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-semibold uppercase tracking-wider">Patient</span>
+                </div>
+                <Button
+                  type="button" variant="outline" size="sm"
+                  className="h-7 text-xs bg-white/70 dark:bg-white/10 border-blue-200 dark:border-blue-800"
+                  onClick={handleClearPatient}
+                >
+                  Change
+                </Button>
+              </div>
+              <p className="text-base font-bold text-foreground leading-tight">
+                {selectedPatient.fullName ||
+                  `${selectedPatient.firstName ?? ''} ${selectedPatient.lastName ?? ''}`.trim() || '—'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {selectedPatient.mrn && (
+                  <span className="inline-flex items-center rounded-md bg-blue-100/70 dark:bg-blue-900/40 px-2 py-0.5 text-xs font-mono font-medium text-blue-700 dark:text-blue-300">
+                    {selectedPatient.mrn}
+                  </span>
+                )}
+                {age !== null && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                    {age} yrs
+                  </span>
+                )}
+                {selectedPatient.gender && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
+                    {selectedPatient.gender}
+                  </span>
+                )}
+                {selectedPatient.phoneNumber && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                    {selectedPatient.phoneNumber}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
-        {/* Step 2 — Active cancer diagnoses (auto-listed) */}
-        {selectedPatient && (
-          <Card>
-            <CardHeader><CardTitle>Active Cancer Diagnosis *</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
+        {/* Step 2 — Diagnosis selection card (only when multiple active diagnoses) */}
+        {selectedPatient && !cancerDiagnosisId && (
+          <div className="relative overflow-hidden rounded-xl border border-rose-200 bg-gradient-to-br from-rose-50 to-purple-50 dark:border-rose-900/40 dark:from-rose-950/40 dark:to-purple-950/40 p-4">
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-rose-100/60 dark:bg-rose-900/20" />
+            <div className="relative space-y-3">
+              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-100 dark:bg-rose-900/50">
+                  <Dna className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-xs font-semibold uppercase tracking-wider">Select Cancer Diagnosis</span>
+              </div>
               {diagnosesLoading ? (
                 <p className="text-sm text-muted-foreground">Loading diagnoses...</p>
               ) : diagnoses.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  No active cancer diagnoses found for this patient.{' '}
-                  <button
-                    className="underline text-primary"
-                    onClick={() => router.push(`/${params.locale}/oncology/registry/new`)}
-                  >
+                  No active cancer diagnoses found.{' '}
+                  <button className="underline text-primary" onClick={() => router.push(`/${params.locale}/oncology/registry/new`)}>
                     Add one first
                   </button>
                 </p>
               ) : (
-                diagnoses.map((d) => (
-                  <button
-                    key={d.id}
-                    onClick={() => handleSelectDiagnosis(d.id)}
-                    className={[
-                      'w-full text-left px-4 py-3 rounded-md border text-sm transition-colors',
-                      cancerDiagnosisId === d.id
-                        ? 'border-primary bg-primary/5 ring-1 ring-primary'
-                        : 'border-border hover:bg-muted/40',
-                    ].join(' ')}
-                  >
-                    <div className="font-medium">{d.cancer_type}</div>
-                    <div className="text-muted-foreground mt-0.5">
-                      {d.primary_site}
-                      {d.primary_site_code && (
-                        <span className="ml-2 font-mono text-xs">{d.primary_site_code}</span>
+                <div className="space-y-2">
+                  {diagnoses.map((d) => (
+                    <button
+                      key={d.id}
+                      onClick={() => handleSelectDiagnosis(d.id)}
+                      className="w-full text-left px-4 py-3 rounded-lg border border-rose-200/60 bg-white/60 dark:bg-white/5 dark:border-rose-900/30 hover:bg-white/90 dark:hover:bg-white/10 text-sm transition-colors"
+                    >
+                      <div className="font-semibold text-foreground">{d.cancer_type}</div>
+                      <div className="flex flex-wrap gap-x-3 mt-0.5 text-xs text-muted-foreground">
+                        <span>{d.primary_site}{d.primary_site_code && <span className="font-mono ml-1">({d.primary_site_code})</span>}</span>
+                        <span>Dx {new Date(d.diagnosis_date).toLocaleDateString()}</span>
+                        {d.grade && <span>{d.grade}</span>}
+                      </div>
+                      {d.histology_morphology && (
+                        <div className="text-xs text-muted-foreground mt-0.5">{d.histology_morphology}</div>
                       )}
-                      <span className="ml-3">
-                        Diagnosed {new Date(d.diagnosis_date).toLocaleDateString()}
-                      </span>
-                      {d.metastatic_status && d.metastatic_status !== 'unknown' && (
-                        <span className="ml-3 capitalize">{d.metastatic_status}</span>
-                      )}
-                    </div>
-                    {d.histology_morphology && (
-                      <div className="text-xs text-muted-foreground mt-0.5">{d.histology_morphology}</div>
-                    )}
-                  </button>
-                ))
+                    </button>
+                  ))}
+                </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
+        )}
+
+        {/* Rose/purple diagnosis banner (after selection) */}
+        {selectedDiagnosis && (
+          <div className="relative overflow-hidden rounded-xl border border-rose-200 bg-gradient-to-br from-rose-50 to-purple-50 dark:border-rose-900/40 dark:from-rose-950/40 dark:to-purple-950/40 p-4">
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-rose-100/60 dark:bg-rose-900/20" />
+            <div className="relative space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-100 dark:bg-rose-900/50">
+                    <Dna className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-semibold uppercase tracking-wider">Cancer Diagnosis</span>
+                </div>
+                {diagnoses.length > 1 && (
+                  <Button
+                    type="button" variant="outline" size="sm"
+                    className="h-7 text-xs bg-white/70 dark:bg-white/10 border-rose-200 dark:border-rose-800"
+                    onClick={() => { setCancerDiagnosisId(''); setProtocolId(''); setOncologyCarePlanId(''); }}
+                  >
+                    Change
+                  </Button>
+                )}
+              </div>
+              <p className="text-base font-bold text-foreground leading-tight">{selectedDiagnosis.cancer_type}</p>
+              <div className="flex flex-wrap gap-2">
+                {selectedDiagnosis.primary_site && (
+                  <span className="inline-flex items-center rounded-md bg-rose-100/70 dark:bg-rose-900/40 px-2 py-0.5 text-xs font-medium text-rose-700 dark:text-rose-300">
+                    {selectedDiagnosis.primary_site}
+                    {selectedDiagnosis.primary_site_code && (
+                      <span className="font-mono ml-1 opacity-70">({selectedDiagnosis.primary_site_code})</span>
+                    )}
+                  </span>
+                )}
+                {selectedDiagnosis.laterality && selectedDiagnosis.laterality !== 'not_applicable' && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
+                    {selectedDiagnosis.laterality}
+                  </span>
+                )}
+                <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                  Dx {new Date(selectedDiagnosis.diagnosis_date).toLocaleDateString()}
+                </span>
+                {selectedDiagnosis.metastatic_status && selectedDiagnosis.metastatic_status !== 'unknown' && (
+                  <span className="inline-flex items-center rounded-md bg-amber-100/70 dark:bg-amber-900/30 px-2 py-0.5 text-xs capitalize font-medium text-amber-700 dark:text-amber-400">
+                    {selectedDiagnosis.metastatic_status}
+                  </span>
+                )}
+                {selectedDiagnosis.clinical_status && (
+                  <span className="inline-flex items-center rounded-md bg-emerald-100/70 dark:bg-emerald-900/30 px-2 py-0.5 text-xs capitalize font-medium text-emerald-700 dark:text-emerald-400">
+                    {selectedDiagnosis.clinical_status}
+                  </span>
+                )}
+                {selectedDiagnosis.grade && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-purple-100/70 dark:bg-purple-900/30 px-2 py-0.5 text-xs font-medium text-purple-700 dark:text-purple-300">
+                    <span className="opacity-70">Grade</span> {selectedDiagnosis.grade}
+                  </span>
+                )}
+                {selectedDiagnosis.histology_morphology && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                    <span className="opacity-70">Histology</span>
+                    <span className="font-medium text-foreground">{selectedDiagnosis.histology_morphology}</span>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Steps 3+ — shown only after a diagnosis is selected */}

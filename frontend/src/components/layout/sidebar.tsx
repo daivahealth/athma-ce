@@ -58,6 +58,7 @@ import {
   Scissors,
   Pill,
   Package,
+  MonitorPlay,
 } from 'lucide-react';
 
 type NavItem = {
@@ -112,7 +113,7 @@ const navSections: NavSection[] = [
         icon: Scissors,
         labelKey: 'nav.ot',
         children: [
-          { href: '/ot', icon: Scissors, labelKey: 'nav.otDashboard' },
+          { href: '/ot/board', icon: MonitorPlay, labelKey: 'nav.otBoard' },
           { href: '/ot/requests', icon: ClipboardList, labelKey: 'nav.otRequests' },
           { href: '/ot/schedules', icon: CalendarClock, labelKey: 'nav.otSchedules' },
           { href: '/ot/reports', icon: FileText, labelKey: 'nav.otReports' },

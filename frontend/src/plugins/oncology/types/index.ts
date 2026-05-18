@@ -55,6 +55,14 @@ export interface CancerDiagnosis {
   patientDisplay?: OncologyPatientDisplay;
   stagings?: TumorStaging[];
   care_plans?: OncologyCarePlan[];
+  // Joined from patients (available on single-record fetch)
+  patient_mrn?: string;
+  patient_display_name?: string;
+  patient_first_name?: string;
+  patient_last_name?: string;
+  patient_date_of_birth?: string;
+  patient_gender?: string;
+  patient_phone_number?: string;
 }
 
 export interface TumorStaging {
@@ -81,6 +89,23 @@ export interface TumorStaging {
   updated_at: string;
   cancer_type?: string;
   primary_site?: string;
+  primary_site_code?: string;
+  laterality?: string;
+  clinical_status?: string;
+  diagnosis_date?: string;
+  metastatic_status?: string;
+  icd_code?: string;
+  // Joined from cancer_diagnoses for pre-population
+  diagnosis_grade?: string;
+  diagnosis_histology?: string;
+  // Joined from patients
+  patient_mrn?: string;
+  patient_display_name?: string;
+  patient_first_name?: string;
+  patient_last_name?: string;
+  patient_date_of_birth?: string;
+  patient_gender?: string;
+  patient_phone_number?: string;
   patientDisplay?: OncologyPatientDisplay;
 }
 
@@ -109,6 +134,21 @@ export interface TumorBoardCase {
   updated_at: string;
   cancer_type?: string;
   primary_site?: string;
+  primary_site_code?: string;
+  laterality?: string;
+  clinical_status?: string;
+  diagnosis_date?: string;
+  metastatic_status?: string;
+  icd_code?: string;
+  diagnosis_grade?: string;
+  diagnosis_histology?: string;
+  patient_mrn?: string;
+  patient_display_name?: string;
+  patient_first_name?: string;
+  patient_last_name?: string;
+  patient_date_of_birth?: string;
+  patient_gender?: string;
+  patient_phone_number?: string;
   patientDisplay?: OncologyPatientDisplay;
 }
 
@@ -155,6 +195,15 @@ export interface OncologyCarePlan {
   updated_at: string;
   cancer_type?: string;
   primary_site?: string;
+  primary_site_code?: string;
+  laterality?: string;
+  clinical_status?: string;
+  diagnosis_date?: string;
+  metastatic_status?: string;
+  icd_code?: string;
+  diagnosis_grade?: string;
+  diagnosis_histology?: string;
+  patientDisplay?: OncologyPatientDisplay;
 }
 
 export interface LabPrerequisite {
@@ -262,6 +311,14 @@ export interface ChemoOrder {
   oncology_care_plan_id?: string;
   cancer_type?: string;
   primary_site?: string;
+  primary_site_code?: string;
+  laterality?: string;
+  clinical_status?: string;
+  diagnosis_date?: string;
+  metastatic_status?: string;
+  icd_code?: string;
+  diagnosis_grade?: string;
+  diagnosis_histology?: string;
   ordering_provider: string;
   cycle_number: number;
   day_number: number;
@@ -399,6 +456,17 @@ export interface RadiationPrescription {
   status: RadiationStatus;
   created_at: string;
   updated_at: string;
+  // Joined from cancer_diagnoses (via cancer_profile_id)
+  cancer_type?: string;
+  primary_site?: string;
+  primary_site_code?: string;
+  diagnosis_laterality?: string;
+  clinical_status?: string;
+  diagnosis_date?: string;
+  metastatic_status?: string;
+  icd_code?: string;
+  diagnosis_grade?: string;
+  diagnosis_histology?: string;
   patientDisplay?: OncologyPatientDisplay;
   simulations?: RadiationSimulation[];
   treatment_plans?: RadiationTreatmentPlan[];
@@ -481,6 +549,35 @@ export interface RadiationOnTreatmentReview {
   reviewed_by?: string;
   created_at: string;
   updated_at: string;
+}
+
+// ── Cancer Patient Clinical Timeline ──────────────────────────────────────────
+
+export type TimelineEventType =
+  | 'diagnosis' | 'staging' | 'tumor_board' | 'tumor_board_decision'
+  | 'care_plan_created' | 'care_plan_approved'
+  | 'chemo_ordered' | 'chemo_approved' | 'chemo_started' | 'chemo_completed'
+  | 'chemo_held' | 'chemo_cancelled'
+  | 'radiation_prescribed' | 'radiation_started' | 'radiation_completed' | 'simulation'
+  | 'response_assessment' | 'follow_up' | 'custom';
+
+export type TimelineEventSeverity = 'milestone' | 'info' | 'warning' | 'adverse';
+
+export interface CancerTimelineEvent {
+  id: string;
+  tenant_id: string;
+  patient_id: string;
+  cancer_diagnosis_id?: string;
+  event_type: TimelineEventType;
+  event_date: string;
+  title: string;
+  description?: string;
+  source_entity?: string;
+  source_id?: string;
+  metadata: Record<string, unknown>;
+  severity: TimelineEventSeverity;
+  created_by: string;
+  created_at: string;
 }
 
 export interface RadiationCompletionSummary {

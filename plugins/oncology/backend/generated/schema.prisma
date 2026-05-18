@@ -522,3 +522,59 @@ model OncologyCarePlan {
   @@map("oncology_care_plans")
   @@schema("plugin_oncology")
 }
+
+// ─── Cancer Patient Clinical Timeline ─────────────────────────────────────────
+// Append-only event log. Auto-events are written by service methods after each
+// key clinical action. Manual (custom) events can be added and deleted by users.
+// Auto-events are immutable — only source_entity = 'manual' rows can be deleted.
+
+model CancerTimelineEvent {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String  @map("tenant_id") @db.Uuid
+  patientId         String  @map("patient_id") @db.Uuid
+  cancerDiagnosisId String? @map("cancer_diagnosis_id") @db.Uuid
+
+  // Event classification
+  // Auto values: diagnosis | staging | tumor_board | tumor_board_decision
+  //   care_plan_created | care_plan_approved | chemo_ordered | chemo_approved
+  //   chemo_started | chemo_completed | chemo_held | chemo_cancelled
+  //   radiation_prescribed | radiation_started | radiation_completed | simulation
+  // Manual value: custom
+  eventType String @map("event_type") @db.VarChar(50)
+
+  // Clinical date (e.g. diagnosis_date, staging_date) — not the system entry date
+  eventDate DateTime @map("event_date") @db.Timestamptz(6)
+
+  // Human-readable one-line summary shown on the timeline card
+  title String @db.VarChar(300)
+
+  // Optional additional clinical detail
+  description String? @db.Text
+
+  // Source entity type and UUID — enables deep-link back to the originating record
+  // Values: cancer_diagnosis | tumor_staging | tumor_board_case
+  //         oncology_care_plan | chemo_order | radiation_prescription | manual
+  sourceEntity String? @map("source_entity") @db.VarChar(50)
+  sourceId     String? @map("source_id") @db.Uuid
+
+  // Flexible payload for display chips on the timeline card
+  // diagnosis  → { cancerType, primarySite, clinicalStatus, metastaticStatus }
+  // staging    → { stagingSystem, stageGroup, tCategory, nCategory, mCategory }
+  // chemo      → { protocol, cycleNumber, dayNumber, bsa }
+  // radiation  → { totalDoseGy, plannedFractions, modality, technique }
+  metadata Json @default("{}")
+
+  // milestone = key events (diagnosis, first treatment, completion) — large dot
+  // info      = routine events (ordered, approved, staged)
+  // warning   = disruptions (held, cancelled, missed)
+  // adverse   = adverse reactions, toxicity
+  severity String @default("info") @db.VarChar(20)
+
+  createdBy String   @map("created_by") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, cancerDiagnosisId])
+  @@map("cancer_timeline_events")
+  @@schema("plugin_oncology")
+}

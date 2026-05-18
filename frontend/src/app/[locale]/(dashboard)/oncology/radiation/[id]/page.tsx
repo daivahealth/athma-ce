@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, CheckCircle2, ChevronDown, ChevronRight, Plus } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ChevronDown, ChevronRight, Plus, User, Dna } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -252,6 +252,11 @@ export default function RadiationPrescriptionDetailPage({
   const canComplete = rx.status === 'ACTIVE' && !completion;
   const deliveredCount = fractions.filter((f) => f.status === 'DELIVERED').length;
 
+  const patient = rx.patientDisplay;
+  const age = patient?.dateOfBirth
+    ? Math.floor((Date.now() - new Date(patient.dateOfBirth).getTime()) / 31557600000)
+    : null;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -262,17 +267,12 @@ export default function RadiationPrescriptionDetailPage({
           </Button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold">
-                {rx.patientDisplay?.displayName ?? 'Radiation Prescription'}
-              </h1>
+              <h1 className="text-2xl font-bold">Radiation Prescription</h1>
               <Badge className={STATUS_COLORS[rx.status] ?? ''} variant="secondary">{rx.status}</Badge>
             </div>
-            <p className="text-sm text-muted-foreground">
-              {rx.patientDisplay?.mrn && `MRN: ${rx.patientDisplay.mrn} · `}
-              {rx.patientDisplay?.age != null && `${rx.patientDisplay.age}y · `}
-              {rx.prescription_number && `Rx# ${rx.prescription_number} · `}
-              Created {new Date(rx.created_at).toLocaleDateString()}
-            </p>
+            {rx.prescription_number && (
+              <p className="text-sm font-mono text-muted-foreground">{rx.prescription_number}</p>
+            )}
           </div>
         </div>
         <div className="flex gap-2">
@@ -291,6 +291,104 @@ export default function RadiationPrescriptionDetailPage({
               Record Completion
             </Button>
           )}
+        </div>
+      </div>
+
+      {/* Context banner — Patient + Cancer Diagnosis */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* Blue patient card */}
+        <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
+          <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
+          <div className="relative space-y-2">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/50">
+                <User className="h-3.5 w-3.5" />
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-wider">Patient</span>
+            </div>
+            <p className="text-base font-bold text-foreground leading-tight">
+              {patient?.displayName || '—'}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {patient?.mrn && (
+                <span className="inline-flex items-center rounded-md bg-blue-100/70 dark:bg-blue-900/40 px-2 py-0.5 text-xs font-mono font-medium text-blue-700 dark:text-blue-300">
+                  {patient.mrn}
+                </span>
+              )}
+              {age !== null && (
+                <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                  {age} yrs
+                </span>
+              )}
+              {patient?.gender && (
+                <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
+                  {patient.gender}
+                </span>
+              )}
+              {patient?.phoneNumber && (
+                <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                  {patient.phoneNumber}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Rose/purple cancer diagnosis card */}
+        <div className="relative overflow-hidden rounded-xl border border-rose-200 bg-gradient-to-br from-rose-50 to-purple-50 dark:border-rose-900/40 dark:from-rose-950/40 dark:to-purple-950/40 p-4">
+          <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-rose-100/60 dark:bg-rose-900/20" />
+          <div className="relative space-y-2">
+            <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-100 dark:bg-rose-900/50">
+                <Dna className="h-3.5 w-3.5" />
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-wider">Cancer Diagnosis</span>
+            </div>
+            <p className="text-base font-bold text-foreground leading-tight">
+              {rx.cancer_type || '—'}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {rx.primary_site && (
+                <span className="inline-flex items-center rounded-md bg-rose-100/70 dark:bg-rose-900/40 px-2 py-0.5 text-xs font-medium text-rose-700 dark:text-rose-300">
+                  {rx.primary_site}
+                  {rx.primary_site_code && (
+                    <span className="font-mono ml-1 opacity-70">({rx.primary_site_code})</span>
+                  )}
+                </span>
+              )}
+              {rx.diagnosis_laterality && rx.diagnosis_laterality !== 'not_applicable' && (
+                <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
+                  {rx.diagnosis_laterality}
+                </span>
+              )}
+              {rx.diagnosis_date && (
+                <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                  Dx {new Date(rx.diagnosis_date).toLocaleDateString()}
+                </span>
+              )}
+              {rx.metastatic_status && rx.metastatic_status !== 'unknown' && (
+                <span className="inline-flex items-center rounded-md bg-amber-100/70 dark:bg-amber-900/30 px-2 py-0.5 text-xs capitalize font-medium text-amber-700 dark:text-amber-400">
+                  {rx.metastatic_status}
+                </span>
+              )}
+              {rx.clinical_status && (
+                <span className="inline-flex items-center rounded-md bg-emerald-100/70 dark:bg-emerald-900/30 px-2 py-0.5 text-xs capitalize font-medium text-emerald-700 dark:text-emerald-400">
+                  {rx.clinical_status}
+                </span>
+              )}
+              {rx.diagnosis_grade && (
+                <span className="inline-flex items-center gap-1 rounded-md bg-purple-100/70 dark:bg-purple-900/30 px-2 py-0.5 text-xs font-medium text-purple-700 dark:text-purple-300">
+                  <span className="opacity-70">Grade</span> {rx.diagnosis_grade}
+                </span>
+              )}
+              {rx.diagnosis_histology && (
+                <span className="inline-flex items-center gap-1 rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                  <span className="opacity-70">Histology</span>
+                  <span className="font-medium text-foreground">{rx.diagnosis_histology}</span>
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

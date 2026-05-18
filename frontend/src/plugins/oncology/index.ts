@@ -20,6 +20,7 @@ const oncologyPlugin: FrontendPluginManifest = {
         { href: '/oncology/orders', labelKey: 'nav.chemoOrders', icon: 'Syringe' },
         { href: '/oncology/radiation', labelKey: 'nav.radiationOncology', icon: 'Radiation' },
         { href: '/oncology/catalogs', labelKey: 'nav.oncologyCatalogs', icon: 'BookOpen' },
+        { href: '/oncology/timeline', labelKey: 'nav.cancerTimeline', icon: 'GitCommitHorizontal' },
       ],
     },
   ],

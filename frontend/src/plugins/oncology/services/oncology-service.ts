@@ -4,6 +4,7 @@ import type {
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
   RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan,
   RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
+  CancerTimelineEvent,
 } from '../types';
 
 const BASE_URL = '/plugins/oncology';
@@ -370,5 +371,25 @@ export const oncologyService = {
   async createCompletionSummary(body: Record<string, unknown>): Promise<RadiationCompletionSummary> {
     const { data } = await clinicalClient.post(`${BASE_URL}/radiation/completions`, body);
     return data.data;
+  },
+
+  // ── Cancer Patient Timeline ────────────────────────────────────────────────
+  async getTimeline(patientId: string, params?: {
+    eventType?: string; fromDate?: string; toDate?: string; cancerDiagnosisId?: string;
+  }): Promise<CancerTimelineEvent[]> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/timeline/${patientId}`, { params });
+    return data.data ?? [];
+  },
+
+  async createCustomTimelineEvent(body: {
+    patientId: string; cancerDiagnosisId?: string;
+    eventDate: string; title: string; description?: string;
+  }): Promise<CancerTimelineEvent> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/timeline`, body);
+    return data.data;
+  },
+
+  async deleteTimelineEvent(id: string): Promise<void> {
+    await clinicalClient.delete(`${BASE_URL}/timeline/${id}`);
   },
 };

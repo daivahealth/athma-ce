@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -201,6 +201,10 @@ export default function EditDiagnosisPage({ params }: { params: { locale: string
     return <div className="text-muted-foreground p-8">Loading...</div>;
   }
 
+  const age = diagnosis?.patient_date_of_birth
+    ? Math.floor((Date.now() - new Date(diagnosis.patient_date_of_birth).getTime()) / 31557600000)
+    : null;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -212,6 +216,47 @@ export default function EditDiagnosisPage({ params }: { params: { locale: string
           <p className="text-muted-foreground text-sm">Update cancer diagnosis details</p>
         </div>
       </div>
+
+      {/* Patient context banner */}
+      {diagnosis && (
+        <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
+          <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
+          <div className="relative flex items-center gap-6">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
+              <User className="h-5 w-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-base text-foreground leading-tight truncate">
+                {diagnosis.patient_display_name ||
+                  `${diagnosis.patient_first_name ?? ''} ${diagnosis.patient_last_name ?? ''}`.trim() ||
+                  '—'}
+              </p>
+              <div className="flex flex-wrap gap-2 mt-1.5">
+                {diagnosis.patient_mrn && (
+                  <span className="inline-flex items-center rounded-md bg-blue-100/80 dark:bg-blue-900/40 px-2 py-0.5 text-xs font-mono font-medium text-blue-700 dark:text-blue-300">
+                    {diagnosis.patient_mrn}
+                  </span>
+                )}
+                {age !== null && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                    {age} yrs
+                  </span>
+                )}
+                {diagnosis.patient_gender && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
+                    {diagnosis.patient_gender}
+                  </span>
+                )}
+                {diagnosis.patient_phone_number && (
+                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
+                    {diagnosis.patient_phone_number}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-6">
         <Card>

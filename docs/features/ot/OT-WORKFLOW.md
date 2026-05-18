@@ -12,7 +12,7 @@ The OT module covers:
 - OT reports with versioned JSONB content
 
 The current scope includes a v1 frontend workspace in the Clinical app with dedicated OT pages for:
-- dashboard
+- OT board
 - OT requests
 - OT schedules
 - OT reports
@@ -24,8 +24,10 @@ Frontend route pattern:
 - workflow actions such as submit, approve, confirm, sign, and cancel remain available from the list screens
 - OT list and selection UIs use the shared `patientDisplay` DTO instead of rendering raw patient UUIDs whenever patient context is available
 - OT request, schedule, and report list pages support patient search by name, MRN, or phone using the same list-page pattern as Encounters
+- `/ot` now redirects directly to `/ot/board`
+- the OT board route at `/ot/board` is a room-first operational board that renders room state, current case, next case, and daily utilization from a single OT board API
 
-The frontend currently focuses on operational workflows and CRUD/transition coverage over the implemented backend APIs. It does not yet include a theatre board view, patient-facing OT timeline, or role-specific OT consoles.
+The frontend currently focuses on operational workflows and CRUD/transition coverage over the implemented backend APIs. It now includes a room-first OT board view, but does not yet include a drag/drop scheduler, patient-facing OT timeline, or role-specific OT consoles.
 
 ## Ownership model
 
@@ -86,6 +88,7 @@ Rules:
 - Only spaces explicitly configured as OT rooms can be used by OT schedules.
 - Scheduling blocks inactive OT room configs.
 - OT room APIs can enrich config rows with Foundation `Space` data for room name/code/location.
+- The OT board uses `OtRoomConfig` plus Foundation `Space` to render room identity and state without extra client-side room lookups.
 
 Local seeded environments also include demo OT spaces and OT room configurations for the main hospital so the OT room screens are populated immediately after seeding.
 
@@ -160,6 +163,36 @@ Conflict categories returned by the API:
 - `block`
 
 This lets the frontend present actionable scheduling failures instead of a generic validation error.
+
+## OT Board workflow
+
+The OT board is a room-first utilization view intended for operational awareness.
+
+Route:
+- `/ot/board`
+
+Backend API:
+- `GET /api/v1/ot/board?date=YYYY-MM-DD`
+
+Board behavior:
+- returns OT-configured rooms only
+- resolves room identity, room state, current case, next case, and per-room daily summary on the backend
+- uses `patientDisplay` for current and next case rendering
+- supports manual refresh from the UI
+
+Board states:
+- `IDLE`
+- `OCCUPIED`
+- `NEXT_UP`
+- `BLOCKED`
+- `INACTIVE`
+
+State resolution:
+- `INACTIVE`: OT room config is inactive
+- `BLOCKED`: an approved `resource_block` overlaps the board time for the OT room
+- `OCCUPIED`: a live intra-op schedule is in progress for the room
+- `NEXT_UP`: no live case now, but another case is queued later in the day
+- `IDLE`: active room with no live case and no later case for the selected day
 
 ## OT Report workflow
 

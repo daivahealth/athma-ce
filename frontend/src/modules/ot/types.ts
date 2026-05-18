@@ -170,6 +170,68 @@ export interface OtRoomConfig {
   space?: Space | null;
 }
 
+export const OT_BOARD_STATES = ['IDLE', 'OCCUPIED', 'NEXT_UP', 'BLOCKED', 'INACTIVE'] as const;
+export type OtBoardState = (typeof OT_BOARD_STATES)[number];
+
+export interface OtBoardCase {
+  scheduleId: string;
+  otRequestId: string;
+  patientId: string;
+  patientDisplay?: PatientDisplay | null;
+  plannedStartTime: string;
+  plannedEndTime: string;
+  actualStartTime?: string | null;
+  actualEndTime?: string | null;
+  scheduleStatus: OtScheduleStatus;
+  procedureName: string;
+  procedureCode?: string | null;
+  primarySurgeonId?: string | null;
+}
+
+export interface OtBoardRoom {
+  room: {
+    id: string;
+    spaceId: string;
+    name: string;
+    spaceNumber?: string | null;
+    specialty?: string | null;
+    isActive: boolean;
+    notes?: string | null;
+  };
+  state: OtBoardState;
+  stateLabel: string;
+  blockedReason?: string | null;
+  currentCase?: OtBoardCase | null;
+  nextCase?: OtBoardCase | null;
+  summary: {
+    scheduledCaseCount: number;
+    completedCaseCount: number;
+    cancelledCaseCount: number;
+    plannedOccupiedMinutes: number;
+    actualOccupiedMinutes: number;
+    hasDelay: boolean;
+    delayMinutes: number;
+  };
+}
+
+export interface OtBoardSummary {
+  totalRooms: number;
+  activeRooms: number;
+  occupiedRooms: number;
+  idleRooms: number;
+  blockedRooms: number;
+  inactiveRooms: number;
+  nextUpRooms: number;
+  casesInProgress: number;
+}
+
+export interface OtBoardResponse {
+  date: string;
+  generatedAt: string;
+  summary: OtBoardSummary;
+  rooms: OtBoardRoom[];
+}
+
 export interface OtRequestStatusEvent {
   id: string;
   tenantId: string;
