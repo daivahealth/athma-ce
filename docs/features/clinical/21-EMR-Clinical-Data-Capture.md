@@ -319,207 +319,154 @@ CREATE TABLE screenings (
 
 ## Order Management
 
-### Order Types
+athma-ce uses a **shared order header plus specialty execution detail** model.
 
-**Table: `orders`**
+### Shared Runtime Order Header
 
-```sql
-CREATE TABLE orders (
-    id UUID PRIMARY KEY,
-    encounter_id UUID NOT NULL,
-    order_type VARCHAR(50),        -- medication, lab, imaging, procedure, referral
-    status VARCHAR(30),            -- draft, ordered, in_progress, completed, cancelled
-    priority VARCHAR(20),          -- routine, urgent, stat, asap
-    ordered_by UUID,
-    ordered_at TIMESTAMPTZ,
-    approved_by UUID,
-    approved_at TIMESTAMPTZ,
-    clinical_notes TEXT
-);
-```
+**Table: `clinical_orders`**
+
+`clinical_orders` is the shared EMR runtime record for executable lab, imaging, and procedure orders.
+
+Representative fields:
+
+- `tenant_id`
+- `encounter_id`
+- `patient_id`
+- `order_type`
+- `order_code`
+- `code_system`
+- `order_name`
+- `priority`
+- `status`
+- `clinical_indication`
+- `special_instructions`
+- `ordered_by`
+- `ordered_at`
+- coarse result fields such as `result_status` and `resulted_at`
 
 ### Medication Orders
 
-**Table: `medication_orders`**
-
-```sql
-CREATE TABLE medication_orders (
-    id UUID PRIMARY KEY,
-    order_id UUID,
-    medication_master_id UUID,     -- link to master catalog
-    medication_name VARCHAR(255),
-    dosage VARCHAR(100),
-    frequency VARCHAR(100),
-    route VARCHAR(50),
-    duration VARCHAR(100),
-    refills INTEGER,
-    quantity NUMERIC(10,2),
-    start_date DATE,
-    end_date DATE,
-    special_instructions TEXT
-);
-```
+Medication ordering is modeled separately through `prescription_orders`, not through `clinical_orders`.
 
 **Workflow**:
 1. Physician searches medication master catalog
 2. Auto-populate dosage, route, frequency from master
 3. Allergy check against patient allergies
 4. Drug-drug interaction check
-5. Formulary check (insurance coverage)
-6. eRx transmission to pharmacy
+5. Formulary check where applicable
+6. eRx or dispense workflow continues through medication-specific modules
 
-### Lab Orders
+### Direct Diagnostic Orders
 
-**Table: `lab_orders`**
+For direct clinician ordering:
 
-```sql
-CREATE TABLE lab_orders (
-    id UUID PRIMARY KEY,
-    order_id UUID,
-    lab_test_master_id UUID,
-    test_name VARCHAR(255),
-    loinc_code VARCHAR(20),        -- LOINC for test identification
-    cpt_code VARCHAR(10),          -- CPT for billing
-    specimen_type VARCHAR(100),
-    collection_method VARCHAR(100),
-    requires_fasting BOOLEAN,
-    fasting_hours INTEGER,
-    special_instructions TEXT
-);
-```
+- CBC
+- Lipid Panel
+- Serum Creatinine
 
-**Workflow**:
-1. Physician orders test from master catalog
-2. Auto-populate LOINC and CPT codes
-3. Check for duplicate recent orders
-4. Generate specimen collection label
-5. Send to lab system (HL7/FHIR)
-6. Track status: ordered → collected → in_lab → resulted
+the recommended runtime model is:
 
-### Imaging Orders
+- three rows in `clinical_orders`
+- each row has `order_type = 'lab'`
+- each row expands into `lab_order_tests` execution-detail rows
 
-**Table: `imaging_orders`**
+### Package-Driven Orders
 
-```sql
-CREATE TABLE imaging_orders (
-    id UUID PRIMARY KEY,
-    order_id UUID,
-    imaging_study_master_id UUID,
-    study_name VARCHAR(255),
-    cpt_code VARCHAR(10),
-    modality VARCHAR(50),          -- X-ray, CT, MRI, Ultrasound
-    body_part VARCHAR(100),
-    contrast_required BOOLEAN,
-    preparation_instructions TEXT,
-    clinical_indication TEXT
-);
-```
+Packages are catalog definitions, not runtime patient orders.
 
-**Workflow**:
-1. Physician orders study from master catalog
-2. Check for prior authorization requirements
-3. Verify insurance eligibility
-4. Schedule imaging appointment
-5. Send order to PACS/RIS (HL7/DICOM)
-6. Radiologist reads and signs report
+Current catalog tables:
 
-### Procedure Orders
+- `packages`
+- `package_items`
 
-**Table: `procedure_orders`**
+Recommended runtime expansion:
 
-```sql
-CREATE TABLE procedure_orders (
-    id UUID PRIMARY KEY,
-    order_id UUID,
-    procedure_master_id UUID,
-    procedure_name VARCHAR(255),
-    cpt_code VARCHAR(10),
-    anesthesia_type VARCHAR(50),
-    consent_required BOOLEAN,
-    preparation_instructions TEXT,
-    estimated_duration_minutes INTEGER
-);
-```
+1. create one `package_orders` row
+2. read `package_items`
+3. expand package items into executable `clinical_orders`
+4. create specialty detail rows such as `lab_order_tests`
+
+### Lab Execution Details
+
+Recommended execution-detail table:
+
+- `lab_order_tests`
+
+Recommended purpose:
+
+- one row per ordered test or panel member
+- linked to `clinical_orders`
+- stores test code, specimen type, collection method, fasting requirements, and execution status
+
+### Post-Order Lab Operations
+
+Post-order operational workflow begins after ordering and should live outside `clinical_orders`.
+
+Recommended future tables:
+
+- `lab_specimens`
+- `lab_accessions` or `lab_specimen_events`
+- `lab_analyzer_runs`
+
+These tables support:
+
+- sample collection
+- sample barcode and accession
+- transport and receiving
+- analyzer integration
+- rejection, recollect, rerun, and QC-linked traces
+
+### Imaging and Procedure Execution
+
+Imaging and procedure workflows use the same pattern:
+
+- `clinical_orders` as the shared runtime header
+- specialty-specific detail tables for execution
+- report tables as the final clinical output layer
+
+Recommended future detail tables:
+
+- `imaging_order_details` or `imaging_order_studies`
+- `procedure_order_details`
 
 ---
 
 ## Results Management
 
+athma-ce uses report-oriented result tables linked back to `clinical_orders`.
+
+Current result/report tables:
+
+- `lab_reports`
+- `lab_result_items`
+- `imaging_reports`
+- `procedure_reports`
+
 ### Lab Results
 
-**Table: `lab_results`**
-
-```sql
-CREATE TABLE lab_results (
-    id UUID PRIMARY KEY,
-    lab_order_id UUID NOT NULL,
-    test_name VARCHAR(255),
-    loinc_code VARCHAR(20),
-    result_value VARCHAR(500),
-    result_unit VARCHAR(50),
-    reference_range_min NUMERIC(10,2),
-    reference_range_max NUMERIC(10,2),
-    abnormal_flag VARCHAR(20),     -- normal, low, high, critical
-    result_status VARCHAR(30),     -- preliminary, final, corrected
-    resulted_at TIMESTAMPTZ,
-    reviewed_by UUID,
-    reviewed_at TIMESTAMPTZ
-);
-```
-
-**Workflow**:
-1. Lab completes test
-2. Result ingested via HL7 ORU message or manual entry
-3. Auto-flag abnormal results
-4. Notify ordering physician
-5. Physician reviews and acknowledges
-6. Critical results escalated (phone call required)
+Recommended workflow:
+1. Lab order exists in `clinical_orders`
+2. Ordered tests are represented in `lab_order_tests`
+3. Collection and accession workflows progress through specimen tables
+4. Final report is created in `lab_reports`
+5. Individual analytes are written to `lab_result_items`
+6. Report state transitions are tracked in `report_status_history`
 
 ### Imaging Results
 
-**Table: `imaging_results`**
-
-```sql
-CREATE TABLE imaging_results (
-    id UUID PRIMARY KEY,
-    imaging_order_id UUID NOT NULL,
-    study_name VARCHAR(255),
-    findings TEXT,
-    impression TEXT,
-    radiologist_id UUID,
-    signed_at TIMESTAMPTZ,
-    dicom_study_uid VARCHAR(255),
-    pacs_url TEXT
-);
-```
-
-**Workflow**:
-1. Imaging study performed
-2. Images sent to PACS
-3. Radiologist reads study in PACS
-4. Report dictated/typed
-5. Report signed and transmitted to EMR
-6. Ordering physician notified
-7. Results reviewed with patient
+Recommended workflow:
+1. Imaging order exists in `clinical_orders`
+2. Imaging execution detail is tracked in imaging-specific detail tables
+3. Final narrative output is stored in `imaging_reports`
+4. Status transitions sync summary result state back to `clinical_orders`
 
 ### Procedure Results
 
-**Table: `procedure_results`**
-
-```sql
-CREATE TABLE procedure_results (
-    id UUID PRIMARY KEY,
-    procedure_order_id UUID NOT NULL,
-    procedure_name VARCHAR(255),
-    start_time TIMESTAMPTZ,
-    end_time TIMESTAMPTZ,
-    performing_staff_id UUID,
-    anesthesia_used VARCHAR(100),
-    findings TEXT,
-    complications TEXT,
-    specimens_collected JSONB
-);
-```
+Recommended workflow:
+1. Procedure order exists in `clinical_orders`
+2. Procedure execution detail is tracked in procedure-specific detail tables
+3. Final structured note is stored in `procedure_reports`
+4. Status transitions sync summary result state back to `clinical_orders`
 
 ---
 
@@ -591,44 +538,47 @@ CREATE TABLE care_plan_interventions (
 
 ### Unified Order Entry
 
-**Design Principle**: All orders go through a unified `orders` table with type-specific child tables.
+**Design Principle**: Diagnostic orders use a unified `clinical_orders` header with specialty execution-detail and reporting tables.
 
 ```
-orders (parent)
-    ├── medication_orders
-    ├── lab_orders
-    ├── imaging_orders
-    ├── procedure_orders
-    └── referral_orders
+package_orders (planned runtime package assignment)
+    └── clinical_orders (expanded executable orders)
+
+clinical_orders (shared runtime header)
+    ├── lab_order_tests (planned)
+    ├── imaging_order_details / imaging_order_studies (planned)
+    ├── procedure_order_details (planned)
+    ├── lab_reports
+    ├── imaging_reports
+    └── procedure_reports
 ```
 
 ### Order Lifecycle
 
 ```
-Draft → Ordered → Approved → Sent → In Progress → Completed
-                      ↓                               ↓
-                  Cancelled                      Cancelled
+Ordered → In Progress → Completed
+    ↓
+Cancelled
 ```
 
 ### Order Approval Workflow
 
-**For high-risk orders:**
-- Controlled substances → Require supervisor approval
-- High-cost imaging → Require medical director approval
-- Off-formulary medications → Require pharmacy approval
+Approval or sign-off rules are specialty-specific:
+
+- diagnostic orders use `clinical_orders` for shared ordered/cancelled/in-progress state
+- report authorization is tracked on report tables such as `lab_reports` and `imaging_reports`
+- medication approval remains medication-specific and should not be modeled through `clinical_orders`
 
 ```sql
--- Order approval tracking
+-- Shared clinical orders awaiting operational work
 SELECT 
-    o.id,
-    o.order_type,
-    o.status,
-    o.ordered_by,
-    o.approved_by,
-    o.ordered_at,
-    o.approved_at
-FROM orders o
-WHERE o.status = 'pending_approval';
+    co.id,
+    co.order_type,
+    co.status,
+    co.ordered_by,
+    co.ordered_at
+FROM clinical_orders co
+WHERE co.status IN ('ordered', 'in_progress');
 ```
 
 ### Order Signing & Attestation
@@ -643,10 +593,10 @@ SET is_signed = true,
 WHERE encounter_id = 'encounter-uuid';
 
 -- Order signing
-UPDATE orders
+UPDATE clinical_orders
 SET status = 'ordered',
-    approved_by = 'physician-uuid',
-    approved_at = NOW()
+    ordered_by = 'physician-uuid',
+    ordered_at = NOW()
 WHERE id = 'order-uuid';
 ```
 
@@ -668,44 +618,45 @@ async function processHL7LabResult(hl7Message: string): Promise<void> {
   const order = parsed.OBR;    // Order
   const results = parsed.OBX;  // Observations (results)
   
-  // Find matching lab order
-  const labOrder = await findLabOrder(order.placerOrderNumber);
-  
-  // Insert results
+  // Find matching clinical order and active lab report workflow
+  const clinicalOrder = await findClinicalOrder(order.placerOrderNumber);
+
+  // Create or update lab report and result items
   for (const obx of results) {
     await db.query(`
-      INSERT INTO lab_results (
-        lab_order_id,
+      INSERT INTO lab_result_items (
+        lab_report_id,
         test_name,
-        loinc_code,
-        result_value,
-        result_unit,
-        reference_range_min,
-        reference_range_max,
-        abnormal_flag,
-        resulted_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        test_code,
+        code_system,
+        value_string,
+        unit,
+        ref_range_text,
+        interpretation,
+        abnormal_flag
+      ) VALUES ($1, $2, $3, 'LOINC', $4, $5, $6, $7, $8)
     `, [
-      labOrder.id,
+      clinicalOrder.activeLabReportId,
       obx.observationIdentifier,
       obx.loincCode,
       obx.observationValue,
       obx.units,
-      obx.referenceRangeLow,
-      obx.referenceRangeHigh,
-      obx.abnormalFlag,
-      obx.observationDateTime
+      obx.referenceRangeText,
+      obx.interpretation,
+      obx.abnormalFlag === 'N' ? false : true
     ]);
   }
   
-  // Update order status
+  // Update shared order summary status
   await db.query(`
-    UPDATE orders SET status = 'completed' WHERE id = $1
-  `, [labOrder.order_id]);
+    UPDATE clinical_orders
+    SET status = 'completed', result_status = 'final', resulted_at = NOW()
+    WHERE id = $1
+  `, [clinicalOrder.id]);
   
   // Notify physician if abnormal
   if (hasAbnormalResults(results)) {
-    await notifyPhysician(labOrder.ordered_by, labOrder.id);
+    await notifyPhysician(clinicalOrder.orderedBy, clinicalOrder.id);
   }
 }
 ```
@@ -715,21 +666,21 @@ async function processHL7LabResult(hl7Message: string): Promise<void> {
 ```sql
 -- Critical lab results requiring immediate notification
 SELECT 
-    lr.id,
-    lr.test_name,
-    lr.result_value,
-    lr.abnormal_flag,
+    lri.id,
+    lri.test_name,
+    COALESCE(lri.value_string, lri.value_numeric::text) as result_value,
+    lri.interpretation,
     p.first_name || ' ' || p.last_name as patient_name,
     s.first_name || ' ' || s.last_name as ordering_physician
-FROM lab_results lr
-JOIN lab_orders lo ON lo.id = lr.lab_order_id
-JOIN orders o ON o.id = lo.order_id
-JOIN encounters e ON e.id = o.encounter_id
+FROM lab_result_items lri
+JOIN lab_reports lr ON lr.id = lri.lab_report_id
+JOIN clinical_orders co ON co.id = lr.order_id
+JOIN encounters e ON e.id = co.encounter_id
 JOIN patients p ON p.id = e.patient_id
-JOIN staff s ON s.id = o.ordered_by
-WHERE lr.abnormal_flag = 'critical'
-  AND lr.reviewed_by IS NULL
-ORDER BY lr.resulted_at DESC;
+JOIN staff s ON s.id = co.ordered_by
+WHERE lri.critical_flag = true
+  AND lr.verified_by IS NULL
+ORDER BY lr.reported_at DESC;
 ```
 
 ---
@@ -749,13 +700,11 @@ async function checkDrugInteractions(
   // Get patient's current medications
   const currentMeds = await db.query(`
     SELECT DISTINCT m.ndc_code, m.medication_name
-    FROM medication_orders mo
-    JOIN medication_master m ON m.id = mo.medication_master_id
-    JOIN orders o ON o.id = mo.order_id
-    JOIN encounters e ON e.id = o.encounter_id
+    FROM prescription_orders po
+    JOIN medication_master m ON m.local_code = po.drug_code
+    JOIN encounters e ON e.id = po.encounter_id
     WHERE e.patient_id = $1
-      AND o.status IN ('ordered', 'in_progress')
-      AND (mo.end_date IS NULL OR mo.end_date > NOW())
+      AND po.status IN ('active', 'completed')
   `, [patientId]);
   
   // Check interactions using drug interaction database
@@ -815,17 +764,12 @@ async function checkDuplicateOrder(
 ): Promise<boolean> {
   const result = await db.query(`
     SELECT COUNT(*) as count
-    FROM orders o
-    JOIN encounters e ON e.id = o.encounter_id
-    LEFT JOIN lab_orders lo ON lo.order_id = o.id
-    LEFT JOIN imaging_orders io ON io.order_id = o.id
+    FROM clinical_orders co
+    JOIN encounters e ON e.id = co.encounter_id
     WHERE e.patient_id = $1
-      AND o.order_type = $2
-      AND o.ordered_at > NOW() - INTERVAL '$3 days'
-      AND (
-        (lo.loinc_code = $4) OR
-        (io.cpt_code = $4)
-      )
+      AND co.order_type = $2
+      AND co.ordered_at > NOW() - INTERVAL '$3 days'
+      AND co.order_code = $4
   `, [patientId, orderType, withinDays, code]);
   
   return parseInt(result.rows[0].count) > 0;
@@ -838,21 +782,7 @@ async function checkDuplicateOrder(
 
 ### Referral Management
 
-**Table: `referral_orders`**
-
-```sql
-CREATE TABLE referral_orders (
-    id UUID PRIMARY KEY,
-    order_id UUID,
-    referred_to_staff_id UUID,
-    referred_to_facility_id UUID,
-    referred_to_specialty VARCHAR(100),
-    referral_reason TEXT,
-    urgency VARCHAR(20),
-    clinical_summary TEXT,
-    records_to_send TEXT[]
-);
-```
+Referral management remains a separate workflow from the shared diagnostic order design and should not be inferred from `clinical_orders` unless a dedicated referral model is introduced.
 
 **Workflow**:
 1. Primary care physician creates referral
@@ -1050,16 +980,18 @@ SELECT
     p.mrn,
     p.first_name || ' ' || p.last_name as patient_name,
     EXTRACT(YEAR FROM AGE(p.date_of_birth)) as age,
-    MAX(io.created_at) as last_mammogram
+    MAX(co.ordered_at) as last_mammogram
 FROM patients p
 LEFT JOIN encounters e ON e.patient_id = p.id
-LEFT JOIN orders o ON o.encounter_id = e.id
-LEFT JOIN imaging_orders io ON io.order_id = o.id AND io.cpt_code = '77067'
+LEFT JOIN clinical_orders co
+  ON co.encounter_id = e.id
+ AND co.order_type = 'imaging'
+ AND co.order_code = '77067'
 WHERE p.sex = 'female'
   AND EXTRACT(YEAR FROM AGE(p.date_of_birth)) >= 40
 GROUP BY p.id, p.mrn, p.first_name, p.last_name, p.date_of_birth
-HAVING MAX(io.created_at) IS NULL 
-    OR NOW() - MAX(io.created_at) > INTERVAL '2 years';
+HAVING MAX(co.ordered_at) IS NULL
+    OR NOW() - MAX(co.ordered_at) > INTERVAL '2 years';
 ```
 
 ### Medication Adherence Tracking
@@ -1070,25 +1002,22 @@ SELECT
     p.id,
     p.mrn,
     p.first_name || ' ' || p.last_name as patient_name,
-    m.medication_name,
-    mo.end_date,
-    NOW()::DATE - mo.end_date as days_overdue
+    po.drug_name as medication_name,
+    po.prescribed_at::DATE as last_prescribed_date,
+    NOW()::DATE - po.prescribed_at::DATE as days_since_prescribed
 FROM patients p
 JOIN encounters e ON e.patient_id = p.id
-JOIN orders o ON o.encounter_id = e.id
-JOIN medication_orders mo ON mo.order_id = o.id
-JOIN medication_master m ON m.id = mo.medication_master_id
-WHERE mo.end_date < NOW()
-  AND mo.refills > 0
+JOIN prescription_orders po ON po.encounter_id = e.id
+WHERE po.refills > 0
+  AND po.status = 'completed'
   AND NOT EXISTS (
-    SELECT 1 FROM medication_orders mo2
-    JOIN orders o2 ON o2.id = mo2.order_id
-    JOIN encounters e2 ON e2.id = o2.encounter_id
+    SELECT 1 FROM prescription_orders po2
+    JOIN encounters e2 ON e2.id = po2.encounter_id
     WHERE e2.patient_id = p.id
-      AND mo2.medication_master_id = mo.medication_master_id
-      AND mo2.start_date > mo.end_date
+      AND po2.drug_code = po.drug_code
+      AND po2.prescribed_at > po.prescribed_at
   )
-ORDER BY days_overdue DESC;
+ORDER BY days_since_prescribed DESC;
 ```
 
 ---
@@ -1214,13 +1143,13 @@ CREATE INDEX idx_encounters_staff_date ON encounters(primary_staff_id, encounter
 CREATE INDEX idx_encounters_status ON encounters(status, encounter_date DESC);
 
 -- Order queries
-CREATE INDEX idx_orders_encounter ON orders(encounter_id, order_type);
-CREATE INDEX idx_orders_status ON orders(status, ordered_at DESC);
+CREATE INDEX idx_orders_encounter ON clinical_orders(encounter_id, order_type);
+CREATE INDEX idx_orders_status ON clinical_orders(status, ordered_at DESC);
 
 -- Result queries
-CREATE INDEX idx_lab_results_order ON lab_results(lab_order_id);
-CREATE INDEX idx_lab_results_abnormal ON lab_results(abnormal_flag, resulted_at DESC);
-CREATE INDEX idx_imaging_results_order ON imaging_results(imaging_order_id);
+CREATE INDEX idx_lab_reports_order ON lab_reports(order_id);
+CREATE INDEX idx_lab_result_items_report ON lab_result_items(lab_report_id);
+CREATE INDEX idx_imaging_reports_order ON imaging_reports(order_id);
 ```
 
 ### Query Optimization
@@ -1244,7 +1173,7 @@ SELECT
      WHERE cn.encounter_id = e.id) as notes,
     
     -- Orders
-    (SELECT json_agg(o.*) FROM orders o 
+    (SELECT json_agg(o.*) FROM clinical_orders o
      WHERE o.encounter_id = e.id) as orders,
     
     -- Diagnoses
@@ -1418,4 +1347,3 @@ The EMR system is designed for:
 - **Telemedicine**: Virtual consultations
 
 All workflows support the complete spectrum of healthcare delivery in the UAE.
-

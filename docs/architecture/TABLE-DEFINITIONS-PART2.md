@@ -390,8 +390,9 @@ Lab, imaging, and procedure orders
 | `status` | String(20) | Default: "ordered" | ordered, in_progress, completed, cancelled |
 | `clinical_indication` | Text | Nullable | Clinical indication |
 | `special_instructions` | Text | Nullable | Special instructions |
+| `package_order_id` | UUID | Nullable, Proposed FK → package_orders.id | Runtime package assignment when the order is generated from a package |
 | `result_status` | String(20) | Nullable | pending, preliminary, final, amended |
-| `result_data` | JSON | Nullable | Structured results |
+| `result_data` | JSON | Nullable | Legacy/coarse result summary; specialty report tables remain the primary result source |
 | `result_notes` | Text | Nullable | Result notes |
 | `resulted_at` | Timestamptz | Nullable | Result timestamp |
 | `ordered_by` | UUID | Required | Ordering staff (Foundation DB reference) |

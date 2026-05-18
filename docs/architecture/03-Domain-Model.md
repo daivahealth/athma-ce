@@ -98,7 +98,7 @@ erDiagram
 
 Notes:
 - Encounters can exist without a scheduled appointment (`encounter_source = walk_in/emergency`).
-- JSON fields capture structured clinical data until dedicated tables (observations, orders) are introduced.
+- Some encounter fields still contain structured JSON, but dedicated tables already exist for several clinical domains, including observations, diagnoses, prescriptions, and shared clinical orders.
 
 ## 6. Cross-Context Interactions
 
@@ -113,9 +113,8 @@ Every cross-context call must include tenant metadata and propagate the athma-ce
 
 | Upcoming Domain | Planned Entities | Status |
 | --- | --- | --- |
-| **Orders & Results** | MedicationOrder, LabOrder, ImagingOrder, ProcedureOrder, Result | Schema placeholders (JSON) exist within `encounters`; dedicated tables will arrive with the Orders service. |
+| **Orders & Results** | `clinical_orders`, `prescription_orders`, `lab_reports`, `lab_result_items`, `imaging_reports`, `procedure_reports` | Core shared order header and result/report tables already exist in the Clinical database. Future work adds execution-detail tables such as `package_orders`, `lab_order_tests`, and specialty-specific operational workflow tables. |
 | **Billing & RCM** | Payer, Plan, Claim, Remittance, Payment, Denial | Not yet implemented; will consume encounter discharge data and appointment metadata. |
 | **Care Management** | CarePlan, Task, OutreachEvent | Pending roadmap alignment. |
 
-Documentation will be updated as soon as these services land in the schema.
-
+Documentation should be kept aligned as execution-detail order tables are introduced so it does not fall back to the historical `orders/lab_orders/imaging_orders` model.

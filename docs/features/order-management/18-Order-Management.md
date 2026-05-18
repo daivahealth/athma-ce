@@ -1,460 +1,444 @@
-# Order Management: Medicine & Diagnostic Orders
+# Clinical Order Design in athma-ce
 
 ## Overview
 
-The athma-ce platform supports comprehensive order management for various types of medical orders including medications, laboratory tests, imaging studies, procedures, and referrals. The system uses a flexible design that separates generic order information from order-type-specific details.
-
-## Data Model Design
-
-### Core Architecture
-
-The order management system uses a **header-detail pattern**:
-
-1. **`orders`** - Generic order header with common fields
-2. **Order-specific tables** - Detailed information for each order type
-3. **Result tables** - Store outcomes and findings
-4. **Inventory tables** - Manage medication stock and dispensing
-
-### Order Types Supported
-
-| Order Type | Table | Purpose | Key Features |
-|------------|-------|---------|--------------|
-| **Medication** | `medication_orders` | Prescriptions | Dosage, frequency, refills, drug interactions |
-| **Laboratory** | `lab_orders` | Lab tests | Specimen type, fasting requirements, reference ranges |
-| **Imaging** | `imaging_orders` | Radiology studies | Modality, contrast, body part, DICOM integration |
-| **Procedure** | `procedure_orders` | Surgical/diagnostic procedures | Anesthesia, facility requirements, consent |
-| **Referral** | `referral_orders` | Specialist referrals | Specialty, urgency, authorization requirements |
-
-## Order Workflow
-
-### 1. Order Creation
-
-```sql
--- Step 1: Create generic order header
-INSERT INTO orders (
-    encounter_id, patient_id, primary_staff_id,
-    order_type, status, priority, description,
-    clinical_notes
-) VALUES (
-    'encounter-uuid', 'patient-uuid', 'staff-uuid',
-    'medication', 'pending', 'routine',
-    'Prescription for hypertension management',
-    'Patient has elevated BP, starting ACE inhibitor'
-);
-
--- Step 2: Add order-specific details
-INSERT INTO medication_orders (
-    order_id, medication_name, generic_name,
-    dosage_form, strength, route, frequency,
-    duration, quantity, quantity_unit, refills,
-    instructions, indication
-) VALUES (
-    'order-uuid', 'Lisinopril', 'Lisinopril',
-    'tablet', '10mg', 'oral', 'once daily',
-    '30 days', 30, 'tablets', 2,
-    'Take with or without food', 'Hypertension'
-);
-```
-
-### 2. Order Approval & Processing
-
-```sql
--- Approve order
-UPDATE orders 
-SET status = 'approved', 
-    approved_at = NOW(),
-    approved_by = 'supervisor-uuid'
-WHERE id = 'order-uuid';
-
--- Send to pharmacy/lab/imaging
-UPDATE orders 
-SET status = 'sent',
-    sent_at = NOW()
-WHERE id = 'order-uuid';
-```
-
-### 3. Result Entry
-
-```sql
--- Lab results
-INSERT INTO lab_results (
-    lab_order_id, test_name, test_code,
-    result_value, result_unit, reference_range,
-    abnormal_flag, result_status, result_date,
-    performed_by, verified_by
-) VALUES (
-    'lab-order-uuid', 'Complete Blood Count', 'CBC',
-    '4.5', 'x10^9/L', '4.0-11.0', 'N',
-    'final', NOW(), 'Lab Tech 1', 'Dr. Smith'
-);
-
--- Imaging results
-INSERT INTO imaging_results (
-    imaging_order_id, study_name, modality,
-    body_part, findings, impression,
-    recommendations, report_status, report_date,
-    radiologist_id
-) VALUES (
-    'imaging-order-uuid', 'Chest X-Ray', 'X-ray',
-    'chest', 'Clear lung fields, normal heart size',
-    'Normal chest X-ray', 'No follow-up needed',
-    'final', NOW(), 'radiologist-uuid'
-);
-```
-
-## Order Type Details
-
-### Medication Orders
-
-**Key Features:**
-- Comprehensive drug information (generic/brand names)
-- Dosage and administration details
-- Drug interaction and allergy checking
-- Refill management
-- Patient instructions
-
-**Example:**
-```sql
-INSERT INTO medication_orders (
-    order_id, medication_name, generic_name, medication_code,
-    dosage_form, strength, route, frequency, duration,
-    quantity, quantity_unit, refills, instructions,
-    indication, allergies_checked, drug_interactions_checked
-) VALUES (
-    'order-uuid', 'Amoxicillin', 'Amoxicillin', 'NDC-12345-678-90',
-    'capsule', '500mg', 'oral', 'three times daily', '7 days',
-    21, 'capsules', 0, 'Take with food to reduce stomach upset',
-    'Bacterial infection', TRUE, TRUE
-);
-```
-
-### Laboratory Orders
-
-**Key Features:**
-- Test categorization (hematology, chemistry, microbiology)
-- Specimen collection requirements
-- Fasting instructions
-- Reference lab integration
-- Expected result dates
-
-**Example:**
-```sql
-INSERT INTO lab_orders (
-    order_id, test_name, test_code, test_category,
-    specimen_type, collection_method, fasting_required,
-    fasting_duration_hours, special_instructions,
-    reference_lab, expected_result_date
-) VALUES (
-    'order-uuid', 'Lipid Panel', 'LIPID', 'chemistry',
-    'blood', 'venipuncture', TRUE, 12,
-    'Patient should fast for 12 hours before collection',
-    'Central Lab', NOW() + INTERVAL '2 days'
-);
-```
-
-### Imaging Orders
-
-**Key Features:**
-- Modality specification (X-ray, CT, MRI, Ultrasound)
-- Body part identification
-- Contrast requirements
-- Preparation instructions
-- DICOM integration support
-
-**Example:**
-```sql
-INSERT INTO imaging_orders (
-    order_id, study_name, study_code, modality,
-    body_part, contrast_required, contrast_type,
-    preparation_instructions, clinical_indication,
-    radiologist_id, facility_id, scheduled_at
-) VALUES (
-    'order-uuid', 'CT Abdomen and Pelvis', 'CT-ABD-PEL', 'CT',
-    'abdomen and pelvis', TRUE, 'IV contrast',
-    'NPO 4 hours prior, drink contrast 1 hour before',
-    'Abdominal pain, rule out appendicitis',
-    'radiologist-uuid', 'facility-uuid', '2024-01-15 14:00:00+04'
-);
-```
-
-### Procedure Orders
-
-**Key Features:**
-- Procedure categorization (surgical, diagnostic, therapeutic)
-- Anesthesia requirements
-- Facility specifications
-- Risk assessment
-- Consent management
-
-**Example:**
-```sql
-INSERT INTO procedure_orders (
-    order_id, procedure_name, procedure_code, procedure_category,
-    body_system, anesthesia_type, facility_required,
-    estimated_duration_minutes, preparation_instructions,
-    risks_and_complications, consent_required,
-    surgeon_id, facility_id, scheduled_at
-) VALUES (
-    'order-uuid', 'Colonoscopy', '45378', 'diagnostic',
-    'gastrointestinal', 'conscious sedation', 'hospital',
-    60, 'Clear liquid diet 24 hours prior, bowel prep',
-    'Bleeding, perforation, reaction to sedation',
-    TRUE, 'surgeon-uuid', 'facility-uuid', '2024-01-20 09:00:00+04'
-);
-```
-
-### Referral Orders
-
-**Key Features:**
-- Specialty targeting
-- Urgency classification
-- Insurance authorization
-- Clinical summary
-- Contact information
-
-**Example:**
-```sql
-INSERT INTO referral_orders (
-    order_id, referral_type, specialty, referred_to_name,
-    referred_to_facility, referral_reason, clinical_summary,
-    urgency, expected_appointment_date,
-    insurance_authorization_required, authorization_number
-) VALUES (
-    'order-uuid', 'specialist', 'cardiology', 'Dr. Ahmed Al-Rashid',
-    'Dubai Heart Center', 'Chest pain evaluation',
-    '45-year-old male with chest pain, ECG shows ST changes',
-    'urgent', '2024-01-16', TRUE, 'AUTH-12345'
-);
-```
-
-## Medication Inventory & Dispensing
-
-### Inventory Management
-
-```sql
--- Add medication to inventory
-INSERT INTO medication_inventory (
-    tenant_id, medication_name, generic_name, medication_code,
-    dosage_form, strength, manufacturer, batch_number,
-    expiry_date, current_stock, minimum_stock, maximum_stock,
-    unit_cost, selling_price, storage_location,
-    controlled_substance, requires_prescription
-) VALUES (
-    'tenant-uuid', 'Lisinopril', 'Lisinopril', 'NDC-12345-678-90',
-    'tablet', '10mg', 'Generic Pharma', 'BATCH-2024-001',
-    '2025-12-31', 1000, 100, 2000, 0.50, 2.00,
-    'Pharmacy Shelf A1', FALSE, TRUE
-);
-```
-
-### Dispensing Process
-
-```sql
--- Dispense medication
-INSERT INTO medication_dispensing (
-    medication_order_id, inventory_id, dispensed_quantity,
-    dispensed_unit, dispensed_by, patient_instructions,
-    side_effects_discussed, drug_interactions_discussed,
-    patient_understood
-) VALUES (
-    'medication-order-uuid', 'inventory-uuid', 30,
-    'tablets', 'pharmacist-uuid',
-    'Take once daily with or without food. Monitor blood pressure.',
-    TRUE, TRUE, TRUE
-);
-
--- Update inventory
-UPDATE medication_inventory 
-SET current_stock = current_stock - 30
-WHERE id = 'inventory-uuid';
-```
-
-## Business Logic & Validation
-
-### Order Status Workflow
-
-```sql
--- Order status transitions
-CREATE OR REPLACE FUNCTION validate_order_status_transition()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Validate status transitions
-    IF OLD.status = 'completed' AND NEW.status != 'completed' THEN
-        RAISE EXCEPTION 'Cannot modify completed order';
-    END IF;
-    
-    -- Set timestamps based on status
-    IF NEW.status = 'approved' AND OLD.status = 'pending' THEN
-        NEW.approved_at = NOW();
-    END IF;
-    
-    IF NEW.status = 'sent' AND OLD.status = 'approved' THEN
-        NEW.sent_at = NOW();
-    END IF;
-    
-    IF NEW.status = 'completed' AND OLD.status = 'sent' THEN
-        NEW.completed_at = NOW();
-    END IF;
-    
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_orders_status_transition
-    BEFORE UPDATE ON orders
-    FOR EACH ROW
-    EXECUTE FUNCTION validate_order_status_transition();
-```
-
-### Drug Interaction Checking
-
-```sql
--- Check for drug interactions (simplified example)
-CREATE OR REPLACE FUNCTION check_drug_interactions(
-    p_medication_name VARCHAR,
-    p_patient_id UUID
-) RETURNS TABLE(
-    interaction_level VARCHAR,
-    interaction_description TEXT
-) AS $$
-BEGIN
-    -- This would integrate with a drug interaction database
-    -- For now, return a placeholder
-    RETURN QUERY
-    SELECT 'moderate'::VARCHAR, 'Potential interaction with current medications'::TEXT
-    WHERE EXISTS (
-        SELECT 1 FROM medication_orders mo
-        JOIN orders o ON o.id = mo.order_id
-        WHERE o.patient_id = p_patient_id
-          AND mo.medication_name != p_medication_name
-          AND o.status IN ('approved', 'sent', 'completed')
-    );
-END;
-$$ LANGUAGE plpgsql;
-```
-
-## Integration Points
-
-### 1. Billing Integration
-
-Orders automatically generate billing entries:
-
-```sql
--- Create superbill item from order
-INSERT INTO superbill_items (
-    superbill_id, line_number, code_type, code,
-    description, units, unit_price
-) 
-SELECT 
-    s.id, 1, 'CPT', '99213', -- Example CPT code
-    o.description, 1, 150.00
-FROM orders o
-JOIN encounters e ON e.id = o.encounter_id
-JOIN superbills s ON s.encounter_id = e.id
-WHERE o.id = 'order-uuid'
-  AND o.status = 'completed';
-```
-
-### 2. Clinical Decision Support
-
-```sql
--- Get patient's medication history for interaction checking
-SELECT 
-    mo.medication_name,
-    mo.generic_name,
-    mo.strength,
-    mo.frequency,
-    o.ordered_at,
-    o.status
-FROM medication_orders mo
-JOIN orders o ON o.id = mo.order_id
-WHERE o.patient_id = 'patient-uuid'
-  AND o.status IN ('approved', 'sent', 'completed')
-  AND o.ordered_at >= NOW() - INTERVAL '6 months'
-ORDER BY o.ordered_at DESC;
-```
-
-### 3. Reporting & Analytics
-
-```sql
--- Order volume by type and status
-SELECT 
-    order_type,
-    status,
-    COUNT(*) as order_count,
-    AVG(EXTRACT(EPOCH FROM (completed_at - ordered_at))/3600) as avg_completion_hours
-FROM orders
-WHERE ordered_at >= CURRENT_DATE - INTERVAL '30 days'
-GROUP BY order_type, status
-ORDER BY order_type, status;
-
--- Medication inventory alerts
-SELECT 
-    medication_name,
-    current_stock,
-    minimum_stock,
-    (current_stock - minimum_stock) as stock_remaining
-FROM medication_inventory
-WHERE current_stock <= minimum_stock
-  AND status = 'active'
-ORDER BY (current_stock - minimum_stock);
-```
-
-## Best Practices
-
-### 1. Order Management
-
-- **Always check allergies** before prescribing medications
-- **Verify drug interactions** for all new prescriptions
-- **Include clear instructions** for patients
-- **Set appropriate priorities** (routine, urgent, stat)
-- **Document clinical reasoning** in order notes
-
-### 2. Result Management
-
-- **Enter results promptly** when available
-- **Flag abnormal results** appropriately
-- **Include reference ranges** for lab results
-- **Provide clear impressions** for imaging
-- **Document follow-up recommendations**
-
-### 3. Inventory Management
-
-- **Monitor stock levels** regularly
-- **Set appropriate minimum/maximum** stock levels
-- **Track expiration dates** and rotate stock
-- **Maintain accurate pricing** information
-- **Handle controlled substances** with extra care
-
-### 4. Compliance
-
-- **Maintain audit trails** for all order changes
-- **Ensure proper authorization** for controlled substances
-- **Follow regulatory requirements** for prescriptions
-- **Document consent** for procedures
-- **Maintain patient privacy** throughout the process
-
-## UAE-Specific Considerations
-
-### 1. Regulatory Compliance
-
-- **DHA requirements** for prescription management
-- **Controlled substance regulations** in UAE
-- **Insurance authorization** requirements
-- **Medical device regulations** for procedures
-
-### 2. Local Integration
-
-- **UAE pharmacy networks** for medication dispensing
-- **Local laboratory services** for test processing
-- **Imaging centers** and DICOM standards
-- **Specialist referral networks**
-
-### 3. Language Support
-
-- **Arabic medication names** and instructions
-- **Bilingual result reporting**
-- **Local terminology** for procedures
-- **Cultural considerations** in patient instructions
-
-This comprehensive order management system provides the foundation for efficient clinical workflows while maintaining data integrity, regulatory compliance, and integration capabilities across the athma-ce platform.
+This document defines the recommended clinical order design for athma-ce based on the current clinical schema, catalog model, and planned diagnostic workflows.
+
+It replaces older generic documentation that described `orders`, `lab_orders`, and `imaging_orders` as the primary runtime tables. The current athma-ce implementation already uses `clinical_orders` as the shared clinical order header, plus report-oriented tables such as `lab_reports`, `lab_result_items`, `imaging_reports`, and `procedure_reports`.
+
+## Purpose
+
+The design must support:
+
+- Direct clinician ordering of lab, imaging, and procedure items
+- Package-driven ordering, such as annual health checks
+- Shared encounter-level order history across order domains
+- Specialty-specific execution workflows after the order is placed
+- Tenant-level enablement of lab-only, imaging-only, or combined diagnostics
+- Future extension without forcing specialty plugins for core diagnostics
+
+## Core Design Decision
+
+athma-ce uses a **shared order header plus specialty execution details** pattern.
+
+The core runtime tables are:
+
+- `clinical_orders`
+- `package_orders` (proposed)
+- `lab_order_tests` (proposed)
+- future imaging/procedure detail tables
+- existing result/report tables
+
+The design principle is:
+
+- `clinical_orders` records the shared EMR fact that a clinician placed an executable order
+- specialty tables record what that department must actually perform
+- report tables record the final clinical output
+
+## Why `clinical_orders` Exists
+
+`clinical_orders` is required because the EMR needs one shared runtime concept for:
+
+- patient and encounter linkage
+- who ordered and when
+- priority
+- broad order status
+- cancellation
+- clinical indication
+- unified order history across lab, imaging, and procedures
+
+Without `clinical_orders`, these shared fields would be duplicated in multiple specialty tables, and every patient or encounter order history query would become a union across lab, imaging, and procedure order tables.
+
+## Current Runtime Tables in the Clinical Schema
+
+The current schema already includes:
+
+| Table | Role |
+|---|---|
+| `clinical_orders` | Shared order header for lab, imaging, and procedure orders |
+| `lab_reports` | Lab reporting record linked to `clinical_orders` |
+| `lab_result_items` | Structured analyte-level lab results |
+| `imaging_reports` | Imaging reporting record linked to `clinical_orders` |
+| `procedure_reports` | Procedure reporting record linked to `clinical_orders` |
+| `packages` | Package catalog definition |
+| `package_items` | Package composition definition |
+| `lab_test_master` | Lab catalog |
+| `imaging_study_master` | Imaging catalog |
+
+The current `clinical_orders` table is the correct base header for future order design. The missing layer is not the header. The missing layer is the execution detail between ordering and final reporting.
+
+## Recommended Runtime Model
+
+### Shared Order Header
+
+Use `clinical_orders` for all executable orders.
+
+Recommended meaning:
+
+- one row represents one executable departmental order
+- `order_type` remains the shared discriminator, such as `lab`, `imaging`, or `procedure`
+- the row is clinician-facing and cross-domain
+
+Recommended shared fields in `clinical_orders`:
+
+- `tenant_id`
+- `encounter_id`
+- `patient_id`
+- `order_type`
+- `order_code`
+- `code_system`
+- `order_name`
+- `priority`
+- `status`
+- `clinical_indication`
+- `special_instructions`
+- `ordered_by`
+- `ordered_at`
+- coarse result summary fields such as `result_status` and `resulted_at`
+- nullable `package_order_id` for package-derived orders
+
+Do not overload `clinical_orders` with specialty operational fields such as specimen barcode, accession number, analyzer payload, modality scheduling specifics, or procedure anesthesia details.
+
+### Package Ordering
+
+Packages already exist as catalog definitions:
+
+- `packages`
+- `package_items`
+
+These catalog tables should not be used as runtime patient order records.
+
+Add a runtime table:
+
+- `package_orders`
+
+Recommended meaning:
+
+- one row records that a patient or encounter has been assigned a package
+- package fulfillment is then expanded into real executable `clinical_orders`
+
+Recommended fields for `package_orders`:
+
+- `id`
+- `tenant_id`
+- `package_id`
+- `encounter_id`
+- `patient_id`
+- `ordered_by`
+- `ordered_at`
+- `status`
+- `notes`
+
+Recommended linkage:
+
+- `clinical_orders.package_order_id` nullable foreign key to `package_orders`
+
+This replaces any need for a separate boolean like `part_of_package`. The relationship itself already answers that question.
+
+### Lab Ordering
+
+For lab orders, add:
+
+- `lab_order_tests`
+
+Recommended meaning:
+
+- one row per ordered lab test or panel member
+- this is an ordering/execution detail table, not a report table
+
+Recommended fields:
+
+- `id`
+- `tenant_id`
+- `order_id`
+- `lab_test_master_id`
+- `test_code`
+- `code_system`
+- `test_name`
+- `loinc_code`
+- `cpt_code`
+- `specimen_type`
+- `collection_method`
+- `fasting_required`
+- `fasting_duration_hours`
+- `sort_order`
+- `status`
+
+`lab_order_details` is optional and should be deferred for now. Add it only if order-level lab-only metadata grows enough that it no longer belongs in the shared header.
+
+### Post-Order Lab Operations
+
+Lab operations begin after ordering and should not be mixed into `clinical_orders` or `lab_order_tests`.
+
+Recommended future tables:
+
+- `lab_specimens`
+- `lab_accessions` or `lab_specimen_events`
+- `lab_analyzer_runs`
+
+Recommended meaning:
+
+- `lab_specimens`: collected sample records
+- `lab_accessions` or `lab_specimen_events`: barcode, accession, transport, receiving, rejection, recollect
+- `lab_analyzer_runs`: analyzer execution audit, raw payloads, reruns, and QC-linked traces
+
+### Imaging Ordering
+
+Imaging should use the same architectural pattern as lab, but with imaging-specific execution tables.
+
+Recommended future tables:
+
+- `imaging_order_details` or `imaging_order_studies`
+
+Recommended meaning:
+
+- one or more rows that capture imaging execution details such as modality, body part, contrast, scheduling, accession, and performing facility
+
+Do not reuse lab tables for imaging execution. The architecture is shared. The operational tables are specialty-specific.
+
+### Procedure Ordering
+
+Procedure workflows should also use the same pattern.
+
+Recommended future tables:
+
+- `procedure_order_details`
+
+Recommended meaning:
+
+- procedure execution details such as anesthesia, facility requirements, estimated duration, pre-procedure instructions, and consent-related workflow hooks
+
+## Order Granularity
+
+### Direct Ordering
+
+When a doctor directly orders:
+
+- CBC
+- Lipid Panel
+- Serum Creatinine
+
+the recommended model is:
+
+- three separate rows in `clinical_orders`
+- each row has `order_type = 'lab'`
+- each row expands into its own `lab_order_tests` row or rows
+
+Reason:
+
+- each item is independently cancellable
+- each item may have a different specimen requirement
+- each item may have a different execution, result, and billing path
+- each item is a real executable clinical order
+
+### Package Ordering
+
+When a doctor orders a package such as an annual health check:
+
+the recommended model is:
+
+1. create one row in `package_orders`
+2. read package composition from `package_items`
+3. expand package items into executable `clinical_orders`
+4. create specialty detail rows under those generated orders
+
+Example:
+
+- annual health check package contains:
+  - CBC
+  - Lipid Panel
+  - Serum Creatinine
+  - Chest X-ray
+
+Recommended runtime expansion:
+
+- one row in `package_orders`
+- one or more rows in `clinical_orders`
+  - either:
+    - three lab orders and one imaging order
+  - or:
+    - one grouped lab executable order plus one imaging executable order
+
+For the current athma-ce direction, the simpler and more consistent recommendation is:
+
+- direct orders stay atomic
+- package expansion also produces atomic executable `clinical_orders`
+
+That keeps package-derived work and directly ordered work on the same runtime model.
+
+## Recommended v1 Decision for athma-ce
+
+For the first implementation pass:
+
+- keep `clinical_orders` as the shared runtime header
+- add `package_orders`
+- add `lab_order_tests`
+- keep using existing `lab_reports` and `lab_result_items` for final lab results
+- defer `lab_order_details`
+- defer imaging and procedure detail tables until those modules are implemented
+
+This gives athma-ce:
+
+- a clean core order model
+- package support without abusing catalog tables as runtime tables
+- a realistic lab execution seam
+- future imaging and procedure extensibility
+
+## Status Boundaries
+
+Use status fields at the correct level.
+
+Recommended boundaries:
+
+- `clinical_orders.status`
+  - broad clinician-facing order state
+  - examples: `ordered`, `in_progress`, `completed`, `cancelled`
+- `lab_order_tests.status`
+  - per-test execution state
+  - examples: `ordered`, `queued`, `processing`, `resulted`, `cancelled`
+- `lab_specimens.status`
+  - per-specimen operational state
+  - examples: `collected`, `received`, `rejected`, `stored`
+- `lab_reports.report_status`
+  - final reporting workflow
+  - examples: `DRAFT`, `PRELIMINARY`, `FINAL`, `AMENDED`
+
+Do not try to represent all operational states in `clinical_orders.status`.
+
+## Reporting and Result Publication
+
+The existing reporting model should remain the final output layer:
+
+- `lab_reports`
+- `lab_result_items`
+- `imaging_reports`
+- `procedure_reports`
+
+These tables are not part of the initial clinician ordering act. They are generated or updated after specialty execution begins.
+
+For lab specifically:
+
+- `clinical_orders` + `lab_order_tests` represent the ordering layer
+- specimen and accession tables represent the operational layer
+- `lab_reports` + `lab_result_items` represent the reporting layer
+
+This separation keeps “what was ordered,” “what was handled,” and “what was reported” distinct.
+
+## Why Diagnostics Stay in Core Clinical Service
+
+Lab and imaging should remain core clinical-service modules, not specialty plugins.
+
+Reason:
+
+- diagnostics are foundational EMR workflows
+- they are needed across tenants, not only in niche specialties
+- they must integrate deeply with encounters, charting, results, and patient history
+- tenant-level enablement can be handled by feature flags and permissions without moving them into plugins
+
+Specialty plugins remain appropriate for workflows that build on diagnostics, such as oncology overlays, but not for the base diagnostic order model itself.
+
+## Tenant-Level Enablement
+
+The design should support tenants using:
+
+- lab only
+- imaging only
+- both
+- neither
+
+This is best handled by:
+
+- module-level activation flags
+- module-specific permissions
+- validation that allowed `order_type` values match tenant or facility activation
+
+This does not require separate pluginization of core diagnostic modules.
+
+## Performance Considerations
+
+Inserting into multiple tables for one clinical workflow is acceptable and expected.
+
+Examples:
+
+- direct lab order:
+  - 1 row in `clinical_orders`
+  - 1 or more rows in `lab_order_tests`
+- package order:
+  - 1 row in `package_orders`
+  - multiple rows in `clinical_orders`
+  - multiple rows in specialty detail tables
+
+This is not a meaningful performance concern for normal OLTP healthcare workloads if:
+
+- writes are wrapped in one database transaction
+- foreign keys are indexed
+- read paths are designed carefully
+- unnecessary denormalization is avoided
+
+The main risks are poor indexing and unclear runtime semantics, not the number of inserts by itself.
+
+## Example Runtime Flows
+
+### Flow A: Direct Lab Ordering
+
+Doctor orders:
+
+- CBC
+- Lipid Panel
+- Serum Creatinine
+
+Recommended runtime records:
+
+- 3 rows in `clinical_orders`
+- 3 rows in `lab_order_tests`
+- later specimen, accession, and report rows as workflow progresses
+
+### Flow B: Package Ordering
+
+Doctor orders:
+
+- Annual Health Check package
+
+Package definition contains:
+
+- CBC
+- Lipid Panel
+- Serum Creatinine
+- Chest X-ray
+
+Recommended runtime records:
+
+- 1 row in `package_orders`
+- expanded executable `clinical_orders` rows
+- lab detail rows in `lab_order_tests`
+- future imaging detail rows in imaging execution tables
+
+## Non-Goals
+
+This document does not define:
+
+- the final API contract for new order-entry endpoints
+- specimen/barcode schema in full detail
+- imaging scheduling and accession details in full detail
+- billing posting behavior for package expansion
+- migration scripts
+
+Those should be documented when implementation work begins.
+
+## Relationship to Existing Documentation
+
+This document is the canonical feature-level design for clinical order modeling in athma-ce.
+
+Related references:
+
+- `docs/features/clinical/21-EMR-Clinical-Data-Capture.md`
+- `docs/architecture/03-Domain-Model.md`
+- `docs/architecture/22-Data-Model-Summary.md`
+- `docs/architecture/TABLE-DEFINITIONS.md`
+
+Known documentation mismatch:
+
+- some architecture and feature documents still describe older generic tables such as `orders`, `lab_orders`, and `imaging_orders`
+- the actual schema already uses `clinical_orders` and report tables linked to it
+
+Any implementation work on orders should reconcile those docs in the same session so code and docs do not drift further apart.

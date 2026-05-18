@@ -82,32 +82,30 @@ This document provides a **high-level summary** of the athma-ce Platform data mo
 
 ---
 
-### 4. Order Management (16 tables)
+### 4. Order Management (Current + Planned Extensions)
 
 | Table | Purpose | Key Features |
 |-------|---------|--------------|
-| `orders` | Generic orders | Type, status, priority, approval |
-| `medication_orders` | Medication orders | Dosage, frequency, refills |
-| `lab_orders` | Lab test orders | LOINC, specimen, fasting |
-| `imaging_orders` | Imaging orders | CPT, modality, contrast |
-| `procedure_orders` | Procedure orders | CPT, anesthesia, consent |
-| `referral_orders` | Specialist referrals | Specialty, urgency, clinical summary |
-| `lab_results` | Lab results | LOINC, value, reference range, abnormal flags |
-| `imaging_results` | Imaging reports | Findings, impression, DICOM |
-| `procedure_results` | Procedure outcomes | Start/end time, findings, complications |
-| `medication_inventory` | Pharmacy stock | Quantity, expiry, controlled substances |
-| `medication_dispensing` | Dispensing log | Quantity, date, dispensed by |
-| `prescriptions` | eRx integration | NCPDP SCRIPT, pharmacy routing |
-| `lab_panels` | Test grouping | CBC, BMP, lipid panel |
-| `operative_notes` | Surgical documentation | Surgeon, assistant, findings |
-| `procedure_consents` | Consent forms | Digital signature, witness |
-| `intraoperative_events` | Real-time tracking | Vital signs, complications |
+| `clinical_orders` | Shared diagnostic order header | Lab, imaging, and procedure order identity; patient/encounter linkage; status; ordering context |
+| `prescription_orders` | Medication prescriptions | Dosage, route, frequency, refills, instructions |
+| `lab_reports` | Lab report headers | Specimen/report metadata, report state, verification |
+| `lab_result_items` | Lab analyte results | LOINC, value, unit, reference range, abnormal and critical flags |
+| `imaging_reports` | Imaging reports | Findings, impression, DICOM/PACS identifiers, critical findings |
+| `procedure_reports` | Procedure outcomes | Timing, findings, complications, specimens, performers |
+| `report_status_history` | Report workflow audit | Draft, preliminary, final, amended, corrected transitions |
+| `packages` | Package catalog | Health checks and bundled services |
+| `package_items` | Package composition | Lab, imaging, procedure, and other catalog members |
+| `package_orders` | Proposed runtime package orders | Patient/encounter package assignment with runtime expansion |
+| `lab_order_tests` | Proposed lab execution details | Per-test rows under an executable lab order |
+| `lab_specimens` | Proposed specimen tracking | Collection, transport, receiving, rejection |
+| `lab_accessions` | Proposed accession tracking | Barcode, accession number, receiving workflow |
+| `lab_analyzer_runs` | Proposed analyzer workflow | Instrument payloads, reruns, QC-linked traces |
 
 **Key Features**:
 - ✅ Unified order entry
-- ✅ Type-specific extensions
-- ✅ Result tracking
-- ✅ Approval workflows
+- ✅ Shared order header plus specialty extensions
+- ✅ Report-oriented result tracking
+- ✅ Package expansion into executable orders
 - ✅ HL7/FHIR integration ready
 
 ---
@@ -382,21 +380,25 @@ WHERE code = '99213'
 
 ### 4. Polymorphic Relationships
 
-**Pattern**: Parent-child with type-specific extensions
+**Pattern**: Shared runtime header with specialty execution and reporting tables
 
 ```sql
-orders (parent)
-    ├── medication_orders (child)
-    ├── lab_orders (child)
-    ├── imaging_orders (child)
-    ├── procedure_orders (child)
-    └── referral_orders (child)
+clinical_orders (shared order header)
+    ├── lab_order_tests (planned execution detail)
+    ├── imaging_order_details / imaging_order_studies (planned)
+    ├── procedure_order_details (planned)
+    ├── lab_reports (report header)
+    ├── imaging_reports (report header)
+    └── procedure_reports (report header)
+
+package_orders (planned runtime package assignment)
+    └── clinical_orders (expanded executable orders)
 ```
 
 **Benefits**:
 - Unified order management
-- Type-specific fields
-- Common workflow (status, approvals)
+- Specialty-specific execution detail
+- Common workflow and audit context
 - Extensible to new order types
 
 ---
@@ -462,7 +464,7 @@ encounters.status:
 -- Patient + date range (most common query pattern)
 CREATE INDEX idx_encounters_patient_date ON encounters(patient_id, encounter_date DESC);
 CREATE INDEX idx_appointments_patient_date ON appointments(patient_id, scheduled_at DESC);
-CREATE INDEX idx_orders_patient_date ON orders(encounter_id, created_at DESC);
+CREATE INDEX idx_orders_patient_date ON clinical_orders(encounter_id, created_at DESC);
 
 -- Staff + date range
 CREATE INDEX idx_appointments_staff_date ON appointments(primary_staff_id, scheduled_at DESC);
@@ -470,7 +472,7 @@ CREATE INDEX idx_encounters_staff_date ON encounters(primary_staff_id, encounter
 
 -- Status + date (for dashboards)
 CREATE INDEX idx_claims_status_date ON claim_headers(status, service_date DESC);
-CREATE INDEX idx_orders_status_date ON orders(status, ordered_at DESC);
+CREATE INDEX idx_orders_status_date ON clinical_orders(status, ordered_at DESC);
 ```
 
 **Benefits**:
@@ -736,4 +738,3 @@ SELECT cron.schedule('archive-old-data', '0 0 1 * *', 'SELECT archive_old_data()
 ---
 
 **© 2025 athma-ce Platform. All rights reserved.**
-
