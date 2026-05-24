@@ -140,6 +140,19 @@ CREATE TABLE immunizations (
 );
 ```
 
+### Shared Patient Display DTO
+
+Clinical patient-facing worklists should prefer the shared `patientDisplay` summary DTO over rendering raw patient UUID references or reconstructing identity ad hoc in the UI.
+
+Key fields commonly rendered in operational and charting workflows:
+
+- `displayName`
+- `mrn`
+- `age`
+- `gender`
+
+This same patient summary shape is used by encounter/charting views and by the Lab Operations collection worklist so specimen collection staff can verify patient identity directly from the queue.
+
 ---
 
 ## Encounter Management
@@ -386,6 +399,12 @@ Recommended runtime expansion:
 3. expand package items into executable `clinical_orders`
 4. create specialty detail rows such as `lab_order_tests`
 
+Recommended patient-chart presentation:
+
+- show the `package_orders` row as the top-level chart item
+- show expanded child `clinical_orders` only inside the package row on expand or drilldown
+- do not duplicate package-generated child orders as separate top-level chart rows
+
 ### Lab Execution Details
 
 Recommended execution-detail table:
@@ -400,21 +419,26 @@ Recommended purpose:
 
 ### Post-Order Lab Operations
 
-Post-order operational workflow begins after ordering and should live outside `clinical_orders`.
+Post-order operational workflow begins after ordering and lives outside `clinical_orders`.
 
-Recommended future tables:
+Current operational tables:
 
 - `lab_specimens`
-- `lab_accessions` or `lab_specimen_events`
-- `lab_analyzer_runs`
+- `lab_specimen_tests`
+- `lab_accessions`
+- `lab_specimen_events`
+- `lab_processing_runs`
 
 These tables support:
 
 - sample collection
+- one specimen satisfying one or more ordered tests
+- one collected specimen spanning multiple compatible lab orders within the same patient encounter
 - sample barcode and accession
 - transport and receiving
-- analyzer integration
-- rejection, recollect, rerun, and QC-linked traces
+- accession registration and acceptance
+- analyzer/manual processing context
+- rejection and operational audit
 
 ### Imaging and Procedure Execution
 
@@ -447,10 +471,33 @@ Current result/report tables:
 Recommended workflow:
 1. Lab order exists in `clinical_orders`
 2. Ordered tests are represented in `lab_order_tests`
-3. Collection and accession workflows progress through specimen tables
+3. Collection, receiving, accessioning, and processing progress through specimen tables
 4. Final report is created in `lab_reports`
 5. Individual analytes are written to `lab_result_items`
 6. Report state transitions are tracked in `report_status_history`
+
+Current operational UI:
+
+- `/results/lab/collection`
+  - Collection
+- `/results/lab/operations`
+  - Receiving
+  - Accessioning
+  - Processing
+  - Result Entry
+
+Collection queue behavior:
+
+- collection groups are specimen-first
+- grouping is normalized through `lab_test_master` collection metadata
+- fasting is shown as an instruction badge rather than creating a separate collection bucket by default
+- collection is exposed as a separate pre-lab workspace for nurses/phlebotomists rather than being grouped into the lab-internal operations screen
+- the collection screen supports patient search/filter, narrowing the queue through the existing `patientId` worklist filter
+- collection is a two-step action:
+  1. prepare/print the specimen label and affix it to the vacutainer
+  2. mark the prepared specimen as collected after the blood draw
+- the collection screen can reprint a prepared label without creating a second specimen
+- v1 printing is workstation/app-bridge driven: the backend returns `.prn` label payloads and the frontend sends them to a local printer bridge when available, falling back to downloading the label file
 
 ### Imaging Results
 
@@ -552,6 +599,8 @@ clinical_orders (shared runtime header)
     ├── imaging_reports
     └── procedure_reports
 ```
+
+For charting reads, prefer a grouped encounter-orders projection instead of a flat executable-order list so package orders remain concise in the doctor-facing UI.
 
 ### Order Lifecycle
 

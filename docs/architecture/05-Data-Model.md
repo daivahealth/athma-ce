@@ -166,7 +166,14 @@ Every tenant-scoped table carries a `tenant_id` column and is protected by row-l
 
 | Table | Description | Key Columns | Notes |
 | --- | --- | --- | --- |
-| `clinical_orders` | Lab, imaging, and procedure orders. | `tenant_id`, `encounter_id`, `patient_id`, `order_type`, `order_code`, `code_system`, `order_name`, `order_name_ar`, `priority`, `status`, `clinical_indication`, `special_instructions`, `result_status`, `result_data`, `result_notes`, `resulted_at`, `ordered_by`, `ordered_at`, `performed_by`, `performed_at` | Order types: lab, imaging, procedure. Code systems: LOINC, CPT, SNOMED. Full result tracking. |
+| `clinical_orders` | Lab, imaging, and procedure orders. | `tenant_id`, `encounter_id`, `patient_id`, `package_order_id`, `order_type`, `order_code`, `code_system`, `order_name`, `order_name_ar`, `priority`, `status`, `clinical_indication`, `special_instructions`, `result_status`, `result_data`, `result_notes`, `resulted_at`, `ordered_by`, `ordered_at`, `performed_by`, `performed_at` | Shared executable order header. Order types: lab, imaging, procedure. Code systems: LOINC, CPT, SNOMED. Full result tracking. |
+| `package_orders` | Runtime package assignments. | `tenant_id`, `package_id`, `encounter_id`, `patient_id`, `ordered_by`, `ordered_at`, `status`, `notes` | Package catalog selection expanded into executable `clinical_orders`. |
+| `lab_order_tests` | Per-test lab order details. | `tenant_id`, `order_id`, `lab_test_master_id`, `test_code`, `test_name`, `specimen_type`, `collection_method`, `fasting_required`, `status` | Ordering/execution detail rows under a lab `clinical_order`. |
+| `lab_specimens` | Collected physical samples. | `tenant_id`, `order_id`, `specimen_type`, `container_type`, `collection_site`, `barcode`, `collected_at`, `status` | Post-order specimen lifecycle begins here. |
+| `lab_specimen_tests` | Specimen-to-test links. | `tenant_id`, `specimen_id`, `lab_order_test_id`, `status` | Allows one specimen to satisfy one or more ordered lab tests. |
+| `lab_accessions` | Lab receiving and accession records. | `tenant_id`, `specimen_id`, `accession_number`, `received_at`, `receiving_location`, `accessioned_at`, `status` | Separate physical receiving from LIS accessioning. |
+| `lab_specimen_events` | Operational specimen audit trail. | `tenant_id`, `specimen_id`, `event_type`, `event_time`, `performed_by`, `metadata` | Captures collection, receiving, accessioning, rejection, processing, and result-entry milestones. |
+| `lab_processing_runs` | Processing/analyzer execution context. | `tenant_id`, `specimen_id`, `lab_order_test_id`, `run_type`, `instrument_code`, `instrument_run_id`, `status`, `raw_payload` | Manual or analyzer-linked workflow per specimen and ordered test. |
 | `prescription_orders` | Medication prescriptions. | `tenant_id`, `encounter_id`, `patient_id`, `drug_code`, `code_system`, `drug_name`, `drug_name_ar`, `generic_name`, `dosage`, `route`, `frequency`, `duration`, `quantity`, `refills`, `instructions`, `instructions_ar`, `status`, `prescribed_by`, `prescribed_at` | NDC, RxNorm, or local formulary codes. Multi-language instructions. |
 
 ### 2.7 AI Integration

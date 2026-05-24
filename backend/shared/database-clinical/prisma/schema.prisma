@@ -638,6 +638,7 @@ model Encounter {
   encounterNotes       EncounterNote[]
   diagnoses            EncounterDiagnosis[]
   clinicalOrders       ClinicalOrder[]
+  packageOrders        PackageOrder[]
   prescriptionOrders   PrescriptionOrder[]
   prescriptions        Prescription[]
   aiNoteSuggestions    AiNoteSuggestion[]
@@ -800,6 +801,7 @@ model ClinicalOrder {
   tenantId          String    @map("tenant_id") @db.Uuid
   encounterId       String    @map("encounter_id") @db.Uuid
   patientId         String    @map("patient_id") @db.Uuid
+  packageOrderId    String?   @map("package_order_id") @db.Uuid
 
   // Order Type & Code
   orderType         String    @map("order_type") @db.VarChar(50) // lab, imaging, procedure
@@ -835,13 +837,19 @@ model ClinicalOrder {
   updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relations
-  encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  encounter         Encounter      @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  packageOrder      PackageOrder?  @relation(fields: [packageOrderId], references: [id], onDelete: SetNull)
+  labOrderTests     LabOrderTest[]
+  labSpecimens      LabSpecimen[]
+  imagingOrderDetails ImagingOrderDetail[]
+  procedureOrderDetails ProcedureOrderDetail[]
   labReports        LabReport[]
   imagingReports    ImagingReport[]
   procedureReports  ProcedureReport[]
 
   @@index([tenantId, encounterId], map: "idx_orders_encounter")
   @@index([tenantId, patientId], map: "idx_orders_patient")
+  @@index([tenantId, packageOrderId], map: "idx_orders_package_order")
   @@index([tenantId, orderType, status], map: "idx_orders_type_status")
   @@index([tenantId, orderCode], map: "idx_orders_code")
   @@map("clinical_orders")
@@ -1762,12 +1770,37 @@ model Package {
   updatedAt          DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   items              PackageItem[]
+  packageOrders      PackageOrder[]
 
   @@unique([tenantId, code])
   @@index([tenantId, isActive], map: "idx_packages_tenant_active")
   @@index([packageType])
   @@index([careSetting])
   @@map("packages")
+}
+
+model PackageOrder {
+  id            String          @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String          @map("tenant_id") @db.Uuid
+  packageId     String          @map("package_id") @db.Uuid
+  encounterId   String          @map("encounter_id") @db.Uuid
+  patientId     String          @map("patient_id") @db.Uuid
+  status        String          @default("ordered") @db.VarChar(20)
+  notes         String?         @db.Text
+  orderedBy     String          @map("ordered_by") @db.Uuid
+  orderedAt     DateTime        @default(now()) @map("ordered_at") @db.Timestamptz(6)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  package       Package         @relation(fields: [packageId], references: [id], onDelete: Restrict)
+  encounter     Encounter       @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  clinicalOrders ClinicalOrder[]
+
+  @@index([tenantId, encounterId], map: "idx_package_orders_encounter")
+  @@index([tenantId, patientId], map: "idx_package_orders_patient")
+  @@index([tenantId, packageId], map: "idx_package_orders_package")
+  @@index([tenantId, status], map: "idx_package_orders_status")
+  @@map("package_orders")
 }
 
 model PackageItem {
@@ -1791,6 +1824,209 @@ model PackageItem {
   @@index([packageId], map: "idx_package_items_package")
   @@index([catalogType, catalogId], map: "idx_package_items_catalog")
   @@map("package_items")
+}
+
+model LabOrderTest {
+  id                    String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  orderId               String    @map("order_id") @db.Uuid
+  labTestMasterId       String?   @map("lab_test_master_id") @db.Uuid
+  testCode              String    @map("test_code") @db.VarChar(100)
+  codeSystem            String    @default("LOINC") @map("code_system") @db.VarChar(20)
+  testName              String    @map("test_name") @db.VarChar(255)
+  loincCode             String?   @map("loinc_code") @db.VarChar(20)
+  cptCode               String?   @map("cpt_code") @db.VarChar(10)
+  specimenType          String?   @map("specimen_type") @db.VarChar(100)
+  collectionMethod      String?   @map("collection_method") @db.VarChar(100)
+  fastingRequired       Boolean   @default(false) @map("fasting_required")
+  fastingDurationHours  Int?      @map("fasting_duration_hours")
+  quantity              Decimal   @default(1) @db.Decimal(10, 3)
+  sortOrder             Int       @default(0) @map("sort_order")
+  status                String    @default("ordered") @db.VarChar(20)
+  notes                 String?   @db.Text
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order                 ClinicalOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  specimenTests         LabSpecimenTest[]
+  processingRuns        LabProcessingRun[]
+
+  @@index([tenantId, orderId], map: "idx_lab_order_tests_order")
+  @@index([tenantId, testCode], map: "idx_lab_order_tests_code")
+  @@index([tenantId, status], map: "idx_lab_order_tests_status")
+  @@map("lab_order_tests")
+}
+
+model ImagingOrderDetail {
+  id                       String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                 String    @map("tenant_id") @db.Uuid
+  orderId                  String    @map("order_id") @db.Uuid
+  imagingStudyMasterId     String?   @map("imaging_study_master_id") @db.Uuid
+  studyCode                String    @map("study_code") @db.VarChar(100)
+  codeSystem               String    @default("CPT") @map("code_system") @db.VarChar(20)
+  studyName                String    @map("study_name") @db.VarChar(255)
+  cptCode                  String?   @map("cpt_code") @db.VarChar(10)
+  modality                 String?   @db.VarChar(50)
+  bodyPart                 String?   @map("body_part") @db.VarChar(100)
+  contrastRequired         Boolean   @default(false) @map("contrast_required")
+  contrastType             String?   @map("contrast_type") @db.VarChar(100)
+  preparationInstructions  String?   @map("preparation_instructions") @db.Text
+  quantity                 Decimal   @default(1) @db.Decimal(10, 3)
+  sortOrder                Int       @default(0) @map("sort_order")
+  status                   String    @default("ordered") @db.VarChar(20)
+  notes                    String?   @db.Text
+  createdAt                DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order                     ClinicalOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, orderId], map: "idx_imaging_order_details_order")
+  @@index([tenantId, studyCode], map: "idx_imaging_order_details_code")
+  @@index([tenantId, status], map: "idx_imaging_order_details_status")
+  @@map("imaging_order_details")
+}
+
+model ProcedureOrderDetail {
+  id                        String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                  String    @map("tenant_id") @db.Uuid
+  orderId                   String    @map("order_id") @db.Uuid
+  procedureMasterId         String?   @map("procedure_master_id") @db.Uuid
+  procedureCode             String    @map("procedure_code") @db.VarChar(100)
+  codeSystem                String    @default("CPT") @map("code_system") @db.VarChar(20)
+  procedureName             String    @map("procedure_name") @db.VarChar(255)
+  cptCode                   String?   @map("cpt_code") @db.VarChar(10)
+  icd10PcsCode              String?   @map("icd10_pcs_code") @db.VarChar(10)
+  procedureCategory         String?   @map("procedure_category") @db.VarChar(100)
+  bodySystem                String?   @map("body_system") @db.VarChar(100)
+  anesthesiaType            String?   @map("anesthesia_type") @db.VarChar(50)
+  facilityRequired          String?   @map("facility_required") @db.VarChar(50)
+  estimatedDurationMinutes  Int?      @map("estimated_duration_minutes")
+  preparationInstructions   String?   @map("preparation_instructions") @db.Text
+  consentRequired           Boolean   @default(false) @map("consent_required")
+  quantity                  Decimal   @default(1) @db.Decimal(10, 3)
+  sortOrder                 Int       @default(0) @map("sort_order")
+  status                    String    @default("ordered") @db.VarChar(20)
+  notes                     String?   @db.Text
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order                     ClinicalOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, orderId], map: "idx_procedure_order_details_order")
+  @@index([tenantId, procedureCode], map: "idx_procedure_order_details_code")
+  @@index([tenantId, status], map: "idx_procedure_order_details_status")
+  @@map("procedure_order_details")
+}
+
+model LabSpecimen {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  orderId         String    @map("order_id") @db.Uuid
+  specimenType    String?   @map("specimen_type") @db.VarChar(100)
+  containerType   String?   @map("container_type") @db.VarChar(100)
+  collectionSite  String?   @map("collection_site") @db.VarChar(100)
+  barcode         String?   @map("barcode") @db.VarChar(100)
+  collectedAt     DateTime? @map("collected_at") @db.Timestamptz(6)
+  collectedBy     String?   @map("collected_by") @db.Uuid
+  status          String    @default("pending_collection") @db.VarChar(30)
+  rejectionReason String?   @map("rejection_reason") @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order           ClinicalOrder       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  specimenTests   LabSpecimenTest[]
+  accessions      LabAccession[]
+  events          LabSpecimenEvent[]
+  processingRuns  LabProcessingRun[]
+
+  @@index([tenantId, orderId], map: "idx_lab_specimens_order")
+  @@index([tenantId, status], map: "idx_lab_specimens_status")
+  @@index([tenantId, barcode], map: "idx_lab_specimens_barcode")
+  @@map("lab_specimens")
+}
+
+model LabSpecimenTest {
+  id             String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  specimenId     String    @map("specimen_id") @db.Uuid
+  labOrderTestId String    @map("lab_order_test_id") @db.Uuid
+  status         String    @default("collected") @db.VarChar(30)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  specimen       LabSpecimen @relation(fields: [specimenId], references: [id], onDelete: Cascade)
+  labOrderTest   LabOrderTest @relation(fields: [labOrderTestId], references: [id], onDelete: Cascade)
+
+  @@unique([specimenId, labOrderTestId], map: "ux_lab_specimen_tests_specimen_test")
+  @@index([tenantId, specimenId], map: "idx_lab_specimen_tests_specimen")
+  @@index([tenantId, labOrderTestId], map: "idx_lab_specimen_tests_order_test")
+  @@index([tenantId, status], map: "idx_lab_specimen_tests_status")
+  @@map("lab_specimen_tests")
+}
+
+model LabAccession {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  specimenId        String    @map("specimen_id") @db.Uuid
+  accessionNumber   String    @map("accession_number") @db.VarChar(100)
+  receivedAt        DateTime? @map("received_at") @db.Timestamptz(6)
+  receivedBy        String?   @map("received_by") @db.Uuid
+  receivingLocation String?   @map("receiving_location") @db.VarChar(255)
+  accessionedAt     DateTime? @map("accessioned_at") @db.Timestamptz(6)
+  accessionedBy     String?   @map("accessioned_by") @db.Uuid
+  status            String    @default("received") @db.VarChar(30)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  specimen          LabSpecimen @relation(fields: [specimenId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, accessionNumber], map: "ux_lab_accessions_number")
+  @@index([tenantId, specimenId], map: "idx_lab_accessions_specimen")
+  @@index([tenantId, status], map: "idx_lab_accessions_status")
+  @@map("lab_accessions")
+}
+
+model LabSpecimenEvent {
+  id           String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  specimenId    String   @map("specimen_id") @db.Uuid
+  eventType     String   @map("event_type") @db.VarChar(50)
+  eventTime     DateTime @map("event_time") @db.Timestamptz(6)
+  performedBy   String?  @map("performed_by") @db.Uuid
+  notes         String?  @db.Text
+  metadata      Json?    @db.Json
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  specimen      LabSpecimen @relation(fields: [specimenId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, specimenId], map: "idx_lab_specimen_events_specimen")
+  @@index([tenantId, eventType], map: "idx_lab_specimen_events_type")
+  @@index([tenantId, eventTime], map: "idx_lab_specimen_events_time")
+  @@map("lab_specimen_events")
+}
+
+model LabProcessingRun {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  specimenId      String    @map("specimen_id") @db.Uuid
+  labOrderTestId  String    @map("lab_order_test_id") @db.Uuid
+  runType         String    @default("manual") @map("run_type") @db.VarChar(20)
+  instrumentCode  String?   @map("instrument_code") @db.VarChar(100)
+  instrumentRunId String?   @map("instrument_run_id") @db.VarChar(100)
+  status          String    @default("processing") @db.VarChar(30)
+  rawPayload      Json?     @map("raw_payload") @db.Json
+  processedAt     DateTime? @map("processed_at") @db.Timestamptz(6)
+  processedBy     String?   @map("processed_by") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  specimen        LabSpecimen @relation(fields: [specimenId], references: [id], onDelete: Cascade)
+  labOrderTest    LabOrderTest @relation(fields: [labOrderTestId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, specimenId], map: "idx_lab_processing_runs_specimen")
+  @@index([tenantId, labOrderTestId], map: "idx_lab_processing_runs_order_test")
+  @@index([tenantId, status], map: "idx_lab_processing_runs_status")
+  @@map("lab_processing_runs")
 }
 
 // ============================================

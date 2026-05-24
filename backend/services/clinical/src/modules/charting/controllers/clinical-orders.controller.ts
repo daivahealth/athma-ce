@@ -15,9 +15,12 @@ import {
   import { ClinicalOrdersService } from '../services/clinical-orders.service';
   import {
     CreateClinicalOrderDto,
+    CreatePackageOrderDto,
     UpdateClinicalOrderDto,
     AddOrderResultDto,
     ClinicalOrderResponseDto,
+    PackageOrderResponseDto,
+    EncounterChartOrdersResponseDto,
   } from '../dto/clinical-order.dto';
   import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
   import {
@@ -44,6 +47,50 @@ import {
       @Body() dto: CreateClinicalOrderDto,
     ) {
       return this.clinicalOrdersService.create(tenantId, dto);
+    }
+
+    @Post('package-orders')
+    @Permissions(CLINICAL_ORDER_CREATE)
+    @ApiOperation({ summary: 'Create a runtime package order and expand it into executable clinical orders' })
+    @ApiResponse({ status: 201, description: 'Package order created successfully', type: PackageOrderResponseDto })
+    async createPackageOrder(
+      @Headers('x-tenant-id') tenantId: string,
+      @Body() dto: CreatePackageOrderDto,
+    ) {
+      return this.clinicalOrdersService.createPackageOrder(tenantId, dto);
+    }
+
+    @Get('package-orders/:id')
+    @Permissions(CLINICAL_ORDER_READ)
+    @ApiOperation({ summary: 'Get package order by ID with expanded clinical orders' })
+    @ApiResponse({ status: 200, description: 'Package order found', type: PackageOrderResponseDto })
+    async findPackageOrderById(
+      @Headers('x-tenant-id') tenantId: string,
+      @Param('id') id: string,
+    ) {
+      return this.clinicalOrdersService.findPackageOrderById(tenantId, id);
+    }
+
+    @Post('package-orders/:id/cancel')
+    @Permissions(CLINICAL_ORDER_CANCEL)
+    @ApiOperation({ summary: 'Cancel a package order and cascade cancellation to linked child clinical orders' })
+    @ApiResponse({ status: 200, description: 'Package order cancelled', type: PackageOrderResponseDto })
+    async cancelPackageOrder(
+      @Headers('x-tenant-id') tenantId: string,
+      @Param('id') id: string,
+    ) {
+      return this.clinicalOrdersService.cancelPackageOrder(tenantId, id);
+    }
+
+    @Get('encounter/:encounterId/chart-view')
+    @Permissions(CLINICAL_ORDER_READ)
+    @ApiOperation({ summary: 'Get chart-facing encounter orders grouped into standalone orders and package summaries' })
+    @ApiResponse({ status: 200, description: 'Chart-facing encounter orders retrieved', type: EncounterChartOrdersResponseDto })
+    async findChartViewByEncounter(
+      @Headers('x-tenant-id') tenantId: string,
+      @Param('encounterId') encounterId: string,
+    ) {
+      return this.clinicalOrdersService.findChartViewByEncounter(tenantId, encounterId);
     }
   
     @Get(':id')

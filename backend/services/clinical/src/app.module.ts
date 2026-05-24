@@ -19,6 +19,7 @@ import { LongevityModule } from './modules/longevity/longevity.module';
 import { LifestyleModule } from './modules/lifestyle/lifestyle.module';
 import { DeviceSyncModule } from './modules/device-sync/device-sync.module';
 import { ReportingModule } from './modules/reporting/reporting.module';
+import { LabOperationsModule } from './modules/lab-operations/lab-operations.module';
 import { OtModule } from './modules/ot/ot.module';
 import { StorageModule } from './common/storage/storage.module';
 import { PluginLoaderModule } from './common/plugins/plugin-loader.module';
@@ -51,6 +52,7 @@ import { LoggerService } from './common/logger/logger.service';
     LifestyleModule,
     DeviceSyncModule,
     ReportingModule,
+    LabOperationsModule,
     OtModule,
     PluginLoaderModule.forRoot(),
   ],

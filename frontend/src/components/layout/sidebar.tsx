@@ -126,10 +126,18 @@ const navSections: NavSection[] = [
     featureFlag: 'feature.nav.resultsReporting',
     items: [
       {
+        icon: FlaskConical,
+        labelKey: 'nav.lab',
+        children: [
+          { href: '/results/lab', icon: FlaskConical, labelKey: 'nav.labResults' },
+          { href: '/results/lab/collection', icon: TestTube, labelKey: 'nav.labCollection' },
+          { href: '/results/lab/operations', icon: ClipboardList, labelKey: 'nav.labOperations' },
+        ],
+      },
+      {
         icon: FileText,
         labelKey: 'nav.resultsReporting',
         children: [
-          { href: '/results/lab', icon: FlaskConical, labelKey: 'nav.labResults' },
           { href: '/results/imaging', icon: ScanLine, labelKey: 'nav.imagingResults' },
           { href: '/results/procedure', icon: Scissors, labelKey: 'nav.procedureResults' },
         ],

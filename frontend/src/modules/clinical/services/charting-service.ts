@@ -9,8 +9,11 @@ import type {
   UpdateDiagnosisInput,
   ClinicalOrder,
   CreateClinicalOrderInput,
+  CreatePackageOrderInput,
+  EncounterChartOrders,
   UpdateClinicalOrderInput,
   AddOrderResultInput,
+  PackageOrder,
   Prescription,
   CreatePrescriptionInput,
   UpdatePrescriptionInput,
@@ -144,6 +147,21 @@ class ChartingService {
     return response.data;
   }
 
+  async createPackageOrder(payload: CreatePackageOrderInput): Promise<PackageOrder> {
+    const response = await clinicalClient.post('/clinical-orders/package-orders', payload);
+    return response.data;
+  }
+
+  async getPackageOrder(id: string): Promise<PackageOrder> {
+    const response = await clinicalClient.get(`/clinical-orders/package-orders/${id}`);
+    return response.data;
+  }
+
+  async cancelPackageOrder(id: string): Promise<PackageOrder> {
+    const response = await clinicalClient.post(`/clinical-orders/package-orders/${id}/cancel`);
+    return response.data;
+  }
+
   async getClinicalOrder(id: string): Promise<ClinicalOrder> {
     const response = await clinicalClient.get(`/clinical-orders/${id}`);
     return response.data;
@@ -151,6 +169,11 @@ class ChartingService {
 
   async getClinicalOrdersByEncounter(encounterId: string): Promise<ClinicalOrder[]> {
     const response = await clinicalClient.get(`/clinical-orders/encounter/${encounterId}`);
+    return response.data;
+  }
+
+  async getEncounterChartOrders(encounterId: string): Promise<EncounterChartOrders> {
+    const response = await clinicalClient.get(`/clinical-orders/encounter/${encounterId}/chart-view`);
     return response.data;
   }
 
@@ -168,12 +191,12 @@ class ChartingService {
   }
 
   async addOrderResult(id: string, payload: AddOrderResultInput): Promise<ClinicalOrder> {
-    const response = await clinicalClient.post(`/clinical-orders/${id}/result`, payload);
+    const response = await clinicalClient.put(`/clinical-orders/${id}/results`, payload);
     return response.data;
   }
 
-  async cancelClinicalOrder(id: string, reason: string): Promise<ClinicalOrder> {
-    const response = await clinicalClient.post(`/clinical-orders/${id}/cancel`, { reason });
+  async cancelClinicalOrder(id: string): Promise<ClinicalOrder> {
+    const response = await clinicalClient.post(`/clinical-orders/${id}/cancel`);
     return response.data;
   }
 

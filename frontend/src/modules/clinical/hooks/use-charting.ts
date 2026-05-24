@@ -5,6 +5,7 @@ import type {
   UpdateClinicalNoteInput,
   CreateDiagnosisInput,
   CreateClinicalOrderInput,
+  CreatePackageOrderInput,
   UpdateClinicalOrderInput,
   CreatePrescriptionInput,
   UpdatePrescriptionInput,
@@ -92,6 +93,14 @@ export function useClinicalOrdersByEncounter(encounterId: string) {
   });
 }
 
+export function useEncounterChartOrders(encounterId: string) {
+  return useQuery({
+    queryKey: ['clinical-orders', 'encounter', encounterId, 'chart-view'],
+    queryFn: () => chartingService.getEncounterChartOrders(encounterId),
+    enabled: !!encounterId,
+  });
+}
+
 export function useCreateClinicalOrder() {
   const queryClient = useQueryClient();
 
@@ -101,6 +110,43 @@ export function useCreateClinicalOrder() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['clinical-orders', 'encounter', variables.encounterId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId, 'chart-view'],
+      });
+    },
+  });
+}
+
+export function useCreatePackageOrder() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: CreatePackageOrderInput) =>
+      chartingService.createPackageOrder(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId, 'chart-view'],
+      });
+    },
+  });
+}
+
+export function useCancelPackageOrder() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+      chartingService.cancelPackageOrder(id),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId, 'chart-view'],
       });
     },
   });
@@ -122,6 +168,9 @@ export function useUpdateClinicalOrder() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['clinical-orders', 'encounter', variables.encounterId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId, 'chart-view'],
       });
     },
   });

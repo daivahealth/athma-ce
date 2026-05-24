@@ -82,7 +82,7 @@ This document provides a **high-level summary** of the athma-ce Platform data mo
 
 ---
 
-### 4. Order Management (Current + Planned Extensions)
+### 4. Order Management (Current + Near-Term Extensions)
 
 | Table | Purpose | Key Features |
 |-------|---------|--------------|
@@ -95,11 +95,13 @@ This document provides a **high-level summary** of the athma-ce Platform data mo
 | `report_status_history` | Report workflow audit | Draft, preliminary, final, amended, corrected transitions |
 | `packages` | Package catalog | Health checks and bundled services |
 | `package_items` | Package composition | Lab, imaging, procedure, and other catalog members |
-| `package_orders` | Proposed runtime package orders | Patient/encounter package assignment with runtime expansion |
-| `lab_order_tests` | Proposed lab execution details | Per-test rows under an executable lab order |
-| `lab_specimens` | Proposed specimen tracking | Collection, transport, receiving, rejection |
-| `lab_accessions` | Proposed accession tracking | Barcode, accession number, receiving workflow |
-| `lab_analyzer_runs` | Proposed analyzer workflow | Instrument payloads, reruns, QC-linked traces |
+| `package_orders` | Runtime package orders | Patient/encounter package assignment with runtime expansion |
+| `lab_order_tests` | Lab execution details | Per-test rows under an executable lab order |
+| `lab_specimens` | Specimen tracking | Collection-stage specimen identity and status |
+| `lab_specimen_tests` | Specimen-to-test mapping | One specimen satisfying one or more ordered tests |
+| `lab_accessions` | Receiving and accession tracking | Lab receipt, accession registration, accession number |
+| `lab_specimen_events` | Operational audit trail | Collection, receiving, accessioning, rejection, processing, result-entry milestones |
+| `lab_processing_runs` | Processing workflow | Manual/analyzer processing context per specimen and test |
 
 **Key Features**:
 - ✅ Unified order entry

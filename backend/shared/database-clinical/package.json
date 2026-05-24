@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",
+    "@zeal/observability": "file:../observability",
     "@zeal/shared-utils": "file:../utils"
   },
   "devDependencies": {

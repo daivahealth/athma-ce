@@ -375,6 +375,7 @@ exports.Prisma.ClinicalOrderScalarFieldEnum = {
   tenantId: 'tenantId',
   encounterId: 'encounterId',
   patientId: 'patientId',
+  packageOrderId: 'packageOrderId',
   orderType: 'orderType',
   orderCode: 'orderCode',
   codeSystem: 'codeSystem',
@@ -968,6 +969,20 @@ exports.Prisma.PackageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PackageOrderScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  packageId: 'packageId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  status: 'status',
+  notes: 'notes',
+  orderedBy: 'orderedBy',
+  orderedAt: 'orderedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PackageItemScalarFieldEnum = {
   id: 'id',
   packageId: 'packageId',
@@ -980,6 +995,144 @@ exports.Prisma.PackageItemScalarFieldEnum = {
   sortOrder: 'sortOrder',
   maxUsesPerPackage: 'maxUsesPerPackage',
   notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LabOrderTestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  labTestMasterId: 'labTestMasterId',
+  testCode: 'testCode',
+  codeSystem: 'codeSystem',
+  testName: 'testName',
+  loincCode: 'loincCode',
+  cptCode: 'cptCode',
+  specimenType: 'specimenType',
+  collectionMethod: 'collectionMethod',
+  fastingRequired: 'fastingRequired',
+  fastingDurationHours: 'fastingDurationHours',
+  quantity: 'quantity',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ImagingOrderDetailScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  imagingStudyMasterId: 'imagingStudyMasterId',
+  studyCode: 'studyCode',
+  codeSystem: 'codeSystem',
+  studyName: 'studyName',
+  cptCode: 'cptCode',
+  modality: 'modality',
+  bodyPart: 'bodyPart',
+  contrastRequired: 'contrastRequired',
+  contrastType: 'contrastType',
+  preparationInstructions: 'preparationInstructions',
+  quantity: 'quantity',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProcedureOrderDetailScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  procedureMasterId: 'procedureMasterId',
+  procedureCode: 'procedureCode',
+  codeSystem: 'codeSystem',
+  procedureName: 'procedureName',
+  cptCode: 'cptCode',
+  icd10PcsCode: 'icd10PcsCode',
+  procedureCategory: 'procedureCategory',
+  bodySystem: 'bodySystem',
+  anesthesiaType: 'anesthesiaType',
+  facilityRequired: 'facilityRequired',
+  estimatedDurationMinutes: 'estimatedDurationMinutes',
+  preparationInstructions: 'preparationInstructions',
+  consentRequired: 'consentRequired',
+  quantity: 'quantity',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LabSpecimenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  specimenType: 'specimenType',
+  containerType: 'containerType',
+  collectionSite: 'collectionSite',
+  barcode: 'barcode',
+  collectedAt: 'collectedAt',
+  collectedBy: 'collectedBy',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LabSpecimenTestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  specimenId: 'specimenId',
+  labOrderTestId: 'labOrderTestId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LabAccessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  specimenId: 'specimenId',
+  accessionNumber: 'accessionNumber',
+  receivedAt: 'receivedAt',
+  receivedBy: 'receivedBy',
+  receivingLocation: 'receivingLocation',
+  accessionedAt: 'accessionedAt',
+  accessionedBy: 'accessionedBy',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LabSpecimenEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  specimenId: 'specimenId',
+  eventType: 'eventType',
+  eventTime: 'eventTime',
+  performedBy: 'performedBy',
+  notes: 'notes',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.LabProcessingRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  specimenId: 'specimenId',
+  labOrderTestId: 'labOrderTestId',
+  runType: 'runType',
+  instrumentCode: 'instrumentCode',
+  instrumentRunId: 'instrumentRunId',
+  status: 'status',
+  rawPayload: 'rawPayload',
+  processedAt: 'processedAt',
+  processedBy: 'processedBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -2650,7 +2803,16 @@ exports.Prisma.ModelName = {
   TenantValueSetOverride: 'TenantValueSetOverride',
   ValueSetHistory: 'ValueSetHistory',
   Package: 'Package',
+  PackageOrder: 'PackageOrder',
   PackageItem: 'PackageItem',
+  LabOrderTest: 'LabOrderTest',
+  ImagingOrderDetail: 'ImagingOrderDetail',
+  ProcedureOrderDetail: 'ProcedureOrderDetail',
+  LabSpecimen: 'LabSpecimen',
+  LabSpecimenTest: 'LabSpecimenTest',
+  LabAccession: 'LabAccession',
+  LabSpecimenEvent: 'LabSpecimenEvent',
+  LabProcessingRun: 'LabProcessingRun',
   AdministrativeService: 'AdministrativeService',
   VitalSignsTemplate: 'VitalSignsTemplate',
   InpatientAdmission: 'InpatientAdmission',

@@ -40,7 +40,6 @@ export enum OrderPriority {
   ROUTINE = 'routine',
   URGENT = 'urgent',
   STAT = 'stat',
-  ASAP = 'asap',
 }
 
 export enum OrderStatus {
@@ -51,10 +50,24 @@ export enum OrderStatus {
 }
 
 export enum ResultStatus {
+  PENDING = 'pending',
   PRELIMINARY = 'preliminary',
   FINAL = 'final',
-  CORRECTED = 'corrected',
   AMENDED = 'amended',
+}
+
+export enum CodeSystem {
+  LOINC = 'LOINC',
+  CPT = 'CPT',
+  SNOMED = 'SNOMED',
+  LOCAL = 'LOCAL',
+}
+
+export enum PackageOrderStatus {
+  ORDERED = 'ordered',
+  IN_PROGRESS = 'in_progress',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
 }
 
 export enum PrescriptionStatus {
@@ -191,15 +204,71 @@ export interface ClinicalOrder {
   performedBy?: string;
   performedAt?: Date | string;
   specialInstructions?: string;
-  instructionsAr?: string;
   clinicalIndication?: string;
+  packageOrderId?: string;
   resultStatus?: ResultStatus;
   resultData?: Record<string, any>;
-  resultBy?: string;
-  resultAt?: Date | string;
-  cancelReason?: string;
+  resultNotes?: string;
+  resultedAt?: Date | string;
   createdAt: Date | string;
   updatedAt: Date | string;
+  labTests?: LabOrderTest[];
+  imagingDetails?: ImagingOrderDetail[];
+  procedureDetails?: ProcedureOrderDetail[];
+}
+
+export interface LabOrderTest {
+  id?: string;
+  labTestMasterId?: string;
+  testCode: string;
+  codeSystem?: CodeSystem | string;
+  testName: string;
+  loincCode?: string;
+  cptCode?: string;
+  specimenType?: string;
+  collectionMethod?: string;
+  fastingRequired?: boolean;
+  fastingDurationHours?: number;
+  quantity?: number;
+  sortOrder?: number;
+  notes?: string;
+}
+
+export interface ImagingOrderDetail {
+  id?: string;
+  imagingStudyMasterId?: string;
+  studyCode: string;
+  codeSystem?: CodeSystem | string;
+  studyName: string;
+  cptCode?: string;
+  modality?: string;
+  bodyPart?: string;
+  contrastRequired?: boolean;
+  contrastType?: string;
+  preparationInstructions?: string;
+  quantity?: number;
+  sortOrder?: number;
+  notes?: string;
+}
+
+export interface ProcedureOrderDetail {
+  id?: string;
+  procedureMasterId?: string;
+  procedureCode: string;
+  codeSystem?: CodeSystem | string;
+  procedureName: string;
+  cptCode?: string;
+  icd10PcsCode?: string;
+  procedureCategory?: string;
+  bodySystem?: string;
+  anesthesiaType?: string;
+  facilityRequired?: string;
+  estimatedDurationMinutes?: number;
+  preparationInstructions?: string;
+  consentRequired?: boolean;
+  quantity?: number;
+  sortOrder?: number;
+  notes?: string;
 }
 
 export interface CreateClinicalOrderInput {
@@ -207,30 +276,83 @@ export interface CreateClinicalOrderInput {
   patientId: string;
   orderType: OrderType;
   orderCode: string;
-  codeSystem: string;
+  codeSystem: CodeSystem | string;
   orderName: string;
   orderNameAr?: string;
   priority: OrderPriority;
   orderedBy: string;
-  scheduledFor?: string;
   specialInstructions?: string;
-  instructionsAr?: string;
   clinicalIndication?: string;
+  packageOrderId?: string;
+  labTests?: LabOrderTest[];
+  imagingDetails?: ImagingOrderDetail[];
+  procedureDetails?: ProcedureOrderDetail[];
 }
 
 export interface UpdateClinicalOrderInput {
   status?: OrderStatus;
-  scheduledFor?: string;
   specialInstructions?: string;
-  instructionsAr?: string;
   clinicalIndication?: string;
-  cancelReason?: string;
 }
 
 export interface AddOrderResultInput {
   resultStatus: ResultStatus;
   resultData: Record<string, any>;
-  resultBy: string;
+  resultNotes?: string;
+  performedBy?: string;
+  performedAt?: string;
+}
+
+export interface CreatePackageOrderInput {
+  packageId: string;
+  encounterId: string;
+  patientId: string;
+  priority?: OrderPriority;
+  clinicalIndication?: string;
+  specialInstructions?: string;
+  notes?: string;
+  orderedBy: string;
+}
+
+export interface PackageOrder {
+  id: string;
+  tenantId: string;
+  packageId: string;
+  packageCode?: string;
+  packageName?: string;
+  encounterId: string;
+  patientId: string;
+  status: PackageOrderStatus;
+  notes?: string;
+  orderedBy: string;
+  orderedAt: Date | string;
+  clinicalOrders: ClinicalOrder[];
+  createdAt: Date | string;
+  updatedAt: Date | string;
+}
+
+export interface ChildTypeSummary {
+  lab: number;
+  imaging: number;
+  procedure: number;
+}
+
+export interface ChartPackageOrder {
+  id: string;
+  packageId: string;
+  packageCode: string;
+  packageName: string;
+  status: PackageOrderStatus;
+  orderedBy: string;
+  orderedAt: Date | string;
+  childOrderCount: number;
+  childTypeSummary: ChildTypeSummary;
+  clinicalOrders: ClinicalOrder[];
+}
+
+export interface EncounterChartOrders {
+  standaloneOrders: ClinicalOrder[];
+  packageOrders: ChartPackageOrder[];
 }
 
 // ========================================

@@ -6,6 +6,10 @@ import { CreatePackageDto, UpdatePackageDto, QueryPackagesDto } from '../dto/pac
 export class PackageService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private normalizeCatalogType(value: string) {
+    return value.trim().toUpperCase();
+  }
+
   /**
    * Create a new package with items
    */
@@ -34,7 +38,7 @@ export class PackageService {
       if (items) {
         createData.items = {
           create: items.map((item, index) => ({
-            catalogType: item.catalogType,
+            catalogType: this.normalizeCatalogType(item.catalogType),
             catalogId: item.catalogId,
             quantity: item.quantity || 1,
             isMandatory: item.isMandatory ?? true,
@@ -222,7 +226,7 @@ export class PackageService {
         await tx.packageItem.createMany({
           data: items.map((item, index) => ({
             packageId: id,
-            catalogType: item.catalogType,
+            catalogType: this.normalizeCatalogType(item.catalogType),
             catalogId: item.catalogId,
             quantity: item.quantity || 1,
             isMandatory: item.isMandatory ?? true,

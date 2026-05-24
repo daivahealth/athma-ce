@@ -168,19 +168,49 @@ Recommended fields:
 
 ### Post-Order Lab Operations
 
-Lab operations begin after ordering and should not be mixed into `clinical_orders` or `lab_order_tests`.
+Lab operations begin after ordering and are now modeled outside `clinical_orders` and `lab_order_tests`.
 
-Recommended future tables:
+Current operational tables:
 
 - `lab_specimens`
-- `lab_accessions` or `lab_specimen_events`
-- `lab_analyzer_runs`
+- `lab_specimen_tests`
+- `lab_accessions`
+- `lab_specimen_events`
+- `lab_processing_runs`
 
-Recommended meaning:
+Current meaning:
 
-- `lab_specimens`: collected sample records
-- `lab_accessions` or `lab_specimen_events`: barcode, accession, transport, receiving, rejection, recollect
-- `lab_analyzer_runs`: analyzer execution audit, raw payloads, reruns, and QC-linked traces
+- `lab_specimens`: specimen workflow records linked to a lab `clinical_order`, including prepared pre-collection specimens and later collected physical samples
+- `lab_specimen_tests`: junction rows allowing one specimen to satisfy one or more ordered lab tests, including tests coming from multiple compatible lab orders in the same patient encounter
+- `lab_accessions`: lab-side receiving and accession registration state
+- `lab_specimen_events`: append-only operational audit for collection, receiving, accessioning, rejection, processing, and result-entry milestones
+- `lab_processing_runs`: manual/analyzer processing context per specimen and ordered test
+
+Operational stage boundary in athma-ce v1:
+
+1. `collection`
+2. `receiving`
+3. `accessioning`
+4. `processing`
+5. `result_entry`
+
+The reporting layer remains separate:
+
+- `lab_reports`
+- `lab_result_items`
+- `report_status_history`
+
+Collection worklist design:
+
+- collection is **specimen-first**, not order-row-first
+- pending tests are grouped by patient encounter plus canonical lab collection profile
+- canonical profile comes from `lab_test_master` with order-row values as fallback
+- fasting is treated as a collection instruction on the group, not a primary splitter
+- collection is surfaced in a separate pre-lab UI workspace, while `/results/lab/operations` begins at receiving
+- collection uses a two-step workflow:
+  1. prepare the specimen label and reserve barcode on a `pending_collection` specimen record
+  2. confirm the actual blood draw by moving that prepared specimen to `collected`
+- label printing is initiated from the collection workstation/app using the returned `.prn` payload; backend v1 does not directly manage Wi-Fi/Bluetooth printer connectivity
 
 ### Imaging Ordering
 
@@ -377,6 +407,25 @@ This is not a meaningful performance concern for normal OLTP healthcare workload
 
 The main risks are poor indexing and unclear runtime semantics, not the number of inserts by itself.
 
+For patient-chart rendering specifically:
+
+- do not flatten package-expanded child orders into the top-level chart list
+- use a chart-facing grouped read model instead
+- return standalone `clinical_orders` separately from `package_orders`
+- include child executable orders under the package row only for expand or drilldown
+
+Recommended chart-facing API behavior:
+
+- `GET /clinical-orders/encounter/:encounterId`
+  - raw executable orders for operational workflows
+- `GET /clinical-orders/encounter/:encounterId/chart-view`
+  - chart-facing grouped response with:
+    - standalone direct orders
+    - package summary rows
+    - child executable orders nested under the package summary
+
+This avoids changing the backend write model while keeping the doctor-facing chart concise.
+
 ## Example Runtime Flows
 
 ### Flow A: Direct Lab Ordering
@@ -412,6 +461,12 @@ Recommended runtime records:
 - expanded executable `clinical_orders` rows
 - lab detail rows in `lab_order_tests`
 - future imaging detail rows in imaging execution tables
+
+Recommended patient-chart presentation:
+
+- 1 package row in the chart
+- expandable child orders nested beneath it
+- no duplicate top-level child rows for orders generated from that package
 
 ## Non-Goals
 
