@@ -38,12 +38,14 @@ interface NewReportDialogProps {
 
 const typeLabels: Record<ReportType, string> = {
   lab: 'Lab Report',
+  pathology: 'Pathology Report',
   imaging: 'Imaging Report',
   procedure: 'Procedure Report',
 };
 
 const routePrefixes: Record<ReportType, string> = {
   lab: 'results/lab',
+  pathology: 'results/lab',
   imaging: 'results/imaging',
   procedure: 'results/procedure',
 };
@@ -76,6 +78,8 @@ export function NewReportDialog({ reportType }: NewReportDialogProps) {
     setCreating(order.id);
     try {
       if (reportType === 'lab') {
+        await createLab.mutateAsync({ orderId: order.id });
+      } else if (reportType === 'pathology') {
         await createLab.mutateAsync({ orderId: order.id });
       } else if (reportType === 'imaging') {
         await createImaging.mutateAsync({ orderId: order.id });

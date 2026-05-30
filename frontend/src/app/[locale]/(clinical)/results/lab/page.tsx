@@ -161,7 +161,9 @@ export default function LabResultsListPage() {
                         ) : null}
                       </TableCell>
                       <TableCell className="text-center">
-                        {result.labSummary?.itemCount || 0}
+                        {result.labSummary?.reportStyle === 'narrative'
+                          ? 'Narrative'
+                          : result.labSummary?.itemCount || 0}
                       </TableCell>
                       <TableCell className="text-center">
                         {(result.labSummary?.abnormalCount || 0) > 0 ? (

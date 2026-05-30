@@ -492,4 +492,47 @@ INSERT INTO lab_test_master (
   true,
   NOW(),
   NOW()
+),
+
+-- Histopathology
+(
+  'b1111111-1111-1111-1111-111111111129',
+  NULL,
+  'Histopathology Examination',
+  '33717-0',
+  '88305',
+  'LAB-019',
+  'Pathology',
+  'Histopathology',
+  'Tissue',
+  'Biopsy / surgical specimen',
+  false,
+  NULL,
+  'Submit tissue in properly labeled formalin container with clinical history and specimen site.',
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  'Gross and microscopic examination',
+  72,
+  NULL,
+  true,
+  NOW(),
+  NOW()
 );
+
+UPDATE lab_test_master
+SET report_style = 'structured',
+    lab_discipline = CASE
+      WHEN local_code IN ('LAB-001', 'LAB-002', 'LAB-003', 'LAB-017') THEN 'hematology'
+      WHEN local_code IN ('LAB-004', 'LAB-005', 'LAB-006', 'LAB-007', 'LAB-008', 'LAB-009', 'LAB-010', 'LAB-011', 'LAB-012', 'LAB-013', 'LAB-018') THEN 'chemistry'
+      WHEN local_code IN ('LAB-014', 'LAB-015') THEN 'microbiology'
+      WHEN local_code = 'LAB-016' THEN 'immunology'
+      ELSE lower(test_category)
+    END
+WHERE local_code <> 'LAB-019';
+
+UPDATE lab_test_master
+SET report_style = 'narrative',
+    lab_discipline = 'histopathology'
+WHERE local_code = 'LAB-019';

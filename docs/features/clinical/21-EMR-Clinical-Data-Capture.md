@@ -463,6 +463,7 @@ Current result/report tables:
 
 - `lab_reports`
 - `lab_result_items`
+- `pathology_reports`
 - `imaging_reports`
 - `procedure_reports`
 
@@ -475,6 +476,19 @@ Recommended workflow:
 4. Final report is created in `lab_reports`
 5. Individual analytes are written to `lab_result_items`
 6. Report state transitions are tracked in `report_status_history`
+
+Reference:
+
+- for a current-state summary of available lab functionality and pending lab work, see [22-Lab-Module-Functionality-and-Roadmap.md](./22-Lab-Module-Functionality-and-Roadmap.md)
+
+Narrative pathology behavior:
+
+- the same lab order/specimen/accession/processing workflow is reused for histopathology and similar lab disciplines
+- the reporting structure depends on `lab_test_master.report_style`
+- `structured` lab tests continue to use `lab_reports` + `lab_result_items`
+- `narrative` lab tests use `pathology_reports` with sectioned fields such as clinical history, specimen received, gross description, microscopic description, diagnosis, and comment
+- `/results/lab/:orderId` resolves the appropriate editor/viewer automatically from the configured lab test style
+- `/results/lab` still lists both styles together because pathology remains part of the same lab module
 
 Current operational UI:
 

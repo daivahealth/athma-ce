@@ -7,6 +7,7 @@ import { PrismaService } from '@zeal/database-clinical';
 import { PatientDisplayDto } from '@zeal/contracts';
 import { STANDARD_PATIENT_SELECT, StandardPatientData } from '../../common/constants/patient-select.constant';
 import { LabReportsService } from '../../reporting/services/lab-reports.service';
+import { PathologyReportsService } from '../../reporting/services/pathology-reports.service';
 import {
   AccessionLabSpecimenDto,
   PrepareLabSpecimenDto,
@@ -69,7 +70,34 @@ export class LabOperationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly labReportsService: LabReportsService,
+    private readonly pathologyReportsService: PathologyReportsService,
   ) {}
+
+  private async getLabTestReportConfigTx(
+    tx: TxClient,
+    labTestMasterId?: string | null,
+  ): Promise<{ reportStyle: string; labDiscipline: string | null }> {
+    if (!labTestMasterId) {
+      return { reportStyle: 'structured', labDiscipline: null };
+    }
+
+    const master = await tx.labTestMaster.findUnique({
+      where: { id: labTestMasterId },
+      select: {
+        reportStyle: true,
+        labDiscipline: true,
+      },
+    });
+
+    return {
+      reportStyle: master?.reportStyle ?? 'structured',
+      labDiscipline: master?.labDiscipline ?? null,
+    };
+  }
+
+  private isNarrativeReportStyle(reportStyle?: string | null) {
+    return reportStyle === 'narrative';
+  }
 
   private calculateAge(dateOfBirth: Date): number {
     const today = new Date();
@@ -648,6 +676,7 @@ export class LabOperationsService {
         tenantId,
         dto,
       );
+      const reportConfig = await this.getLabTestReportConfigTx(tx, orderTest.labTestMasterId);
       this.ensureSpecimenActionable(specimen);
 
       const link = specimenLink;
@@ -696,6 +725,7 @@ export class LabOperationsService {
         tenantId,
         userId,
         orderTest,
+        reportConfig.reportStyle,
         specimen,
         latestAccession,
       );
@@ -719,6 +749,7 @@ export class LabOperationsService {
         tenantId,
         dto,
       );
+      const reportConfig = await this.getLabTestReportConfigTx(tx, orderTest.labTestMasterId);
 
       if (orderTest.status !== LabSpecimenStatus.PROCESSING && orderTest.status !== LabSpecimenStatus.RESULT_ENTERED) {
         await tx.labOrderTest.update({
@@ -734,6 +765,7 @@ export class LabOperationsService {
         tenantId,
         userId,
         orderTest,
+        reportConfig.reportStyle,
         specimen,
         latestAccession,
       );
@@ -743,33 +775,12 @@ export class LabOperationsService {
         reportId: report.id,
       });
 
-      if (report.items.length === 0 && orderTest.labTestMasterId) {
-        const seededItems = await this.seedResultTemplateItemsTx(
-          tx,
-          tenantId,
-          report.id,
-          orderTest.labTestMasterId,
-        );
-
-        if (seededItems.length > 0) {
-          report = await tx.labReport.findUniqueOrThrow({
-            where: { id: report.id },
-            include: {
-              items: {
-                orderBy: {
-                  sortOrder: 'asc',
-                },
-              },
-            },
-          });
-        }
-      }
-
       return {
         order: orderTest.order,
         labOrderTest: orderTest,
         specimen,
         accession: latestAccession,
+        reportMode: this.isNarrativeReportStyle(reportConfig.reportStyle) ? 'narrative' : 'structured',
         report,
       };
     });
@@ -844,9 +855,42 @@ export class LabOperationsService {
     tenantId: string,
     userId: string,
     orderTest: any,
+    reportStyle: string,
     specimen: any,
     latestAccession: any,
   ) {
+    if (this.isNarrativeReportStyle(reportStyle)) {
+      const existingReport = await tx.pathologyReport.findFirst({
+        where: {
+          tenantId,
+          orderId: orderTest.orderId,
+          reportStatus: {
+            in: ['DRAFT', 'PRELIMINARY'],
+          },
+        },
+        orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
+      });
+
+      if (!existingReport) {
+        return this.pathologyReportsService.create(tenantId, userId, {
+          orderId: orderTest.orderId,
+          specimenType: specimen.specimenType ?? undefined,
+          collectionDate: specimen.collectedAt?.toISOString(),
+          receivedDate: latestAccession?.receivedAt?.toISOString(),
+        });
+      }
+
+      return tx.pathologyReport.update({
+        where: { id: existingReport.id },
+        data: {
+          specimenType: existingReport.specimenType ?? specimen.specimenType ?? null,
+          collectionDate: existingReport.collectionDate ?? specimen.collectedAt ?? null,
+          receivedDate: existingReport.receivedDate ?? latestAccession?.receivedAt ?? null,
+          updatedBy: userId,
+        },
+      });
+    }
+
     const existingReport = await tx.labReport.findFirst({
       where: {
         tenantId,
@@ -956,14 +1000,21 @@ export class LabOperationsService {
         throw new BadRequestException('No actionable specimen is linked to this lab order test');
       }
 
+      const reportConfig = await this.getLabTestReportConfigTx(tx, orderTest.labTestMasterId);
+
       const report = await tx.labReport.findFirst({
-        where: {
-          tenantId,
-          orderId: orderTest.orderId,
-          reportStatus: {
-            in: ['DRAFT', 'PRELIMINARY', 'FINAL', 'AMENDED'],
-          },
-        },
+        where: this.isNarrativeReportStyle(reportConfig.reportStyle)
+          ? {
+              tenantId,
+              orderId: orderTest.orderId,
+            }
+          : {
+              tenantId,
+              orderId: orderTest.orderId,
+              reportStatus: {
+                in: ['DRAFT', 'PRELIMINARY', 'FINAL', 'AMENDED'],
+              },
+            },
         include: {
           items: true,
         },
@@ -971,6 +1022,86 @@ export class LabOperationsService {
           updatedAt: 'desc',
         },
       });
+      if (this.isNarrativeReportStyle(reportConfig.reportStyle)) {
+        const pathologyReport = await tx.pathologyReport.findFirst({
+          where: {
+            tenantId,
+            orderId: orderTest.orderId,
+            reportStatus: {
+              in: ['DRAFT', 'PRELIMINARY', 'FINAL', 'AMENDED'],
+            },
+          },
+          orderBy: {
+            updatedAt: 'desc',
+          },
+        });
+
+        if (
+          !pathologyReport ||
+          ![
+            pathologyReport.clinicalHistory,
+            pathologyReport.specimenReceived,
+            pathologyReport.grossDescription,
+            pathologyReport.microscopicDescription,
+            pathologyReport.diagnosis,
+            pathologyReport.comment,
+          ].some((value) => value && value.trim().length > 0)
+        ) {
+          throw new BadRequestException('Result entry cannot be completed before pathology report content is saved');
+        }
+
+        await this.ensureManualProcessingRunForCompletedEntryTx(
+          tx,
+          tenantId,
+          userId,
+          orderTest.id,
+          specimenLink.specimenId,
+          pathologyReport.reportedAt ?? pathologyReport.updatedAt ?? new Date(),
+        );
+
+        await tx.labOrderTest.update({
+          where: { id: orderTest.id },
+          data: {
+            status: LabSpecimenStatus.RESULT_ENTERED,
+          },
+        });
+
+        await tx.labSpecimenTest.update({
+          where: { id: specimenLink.id },
+          data: {
+            status: LabSpecimenStatus.RESULT_ENTERED,
+          },
+        });
+
+        const remainingOpenTests = await tx.labSpecimenTest.count({
+          where: {
+            tenantId,
+            specimenId: specimenLink.specimenId,
+            status: {
+              notIn: [LabSpecimenStatus.RESULT_ENTERED, LabSpecimenStatus.COMPLETED, LabSpecimenStatus.REJECTED],
+            },
+          },
+        });
+
+        await tx.labSpecimen.update({
+          where: { id: specimenLink.specimenId },
+          data: {
+            status: remainingOpenTests === 0 ? LabSpecimenStatus.RESULT_ENTERED : LabSpecimenStatus.PROCESSING,
+          },
+        });
+
+        await this.recordEvent(tx, tenantId, specimenLink.specimenId, LabSpecimenEventType.RESULT_ENTERED, userId, dto.notes, {
+          labOrderTestId: orderTest.id,
+          reportId: pathologyReport.id,
+        });
+
+        return {
+          reportId: pathologyReport.id,
+          specimenId: specimenLink.specimenId,
+          labOrderTestId: orderTest.id,
+          status: LabSpecimenStatus.RESULT_ENTERED,
+        };
+      }
 
       if (!report || report.items.length === 0) {
         throw new BadRequestException('Result entry cannot be completed before report items are saved');

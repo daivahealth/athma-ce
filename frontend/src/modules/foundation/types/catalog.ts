@@ -49,6 +49,8 @@ export interface LabTest {
   units?: string | null;
   methodology?: string | null;
   turnaroundTimeHours?: number | null;
+  reportStyle: string;
+  labDiscipline?: string | null;
   referenceLab?: string | null;
   isActive: boolean;
   createdAt: string;

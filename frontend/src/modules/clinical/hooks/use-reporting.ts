@@ -4,6 +4,8 @@ import type {
   CreateLabReportInput,
   UpdateLabReportInput,
   LabResultItemInput,
+  CreatePathologyReportInput,
+  UpdatePathologyReportInput,
   CreateImagingReportInput,
   UpdateImagingReportInput,
   CreateProcedureReportInput,
@@ -46,7 +48,7 @@ export function useCreateLabReport() {
 export function useUpdateLabReport() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, orderId, data }: { id: string; orderId: string; data: UpdateLabReportInput }) =>
+    mutationFn: ({ id, data }: { id: string; data: UpdateLabReportInput }) =>
       reportingService.updateLabReport(id, data),
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['lab-reports', 'order', result.orderId] });
@@ -106,6 +108,93 @@ export function useLabReportHistory(id: string) {
   return useQuery({
     queryKey: ['lab-reports', id, 'history'],
     queryFn: () => reportingService.getLabReportHistory(id),
+    enabled: !!id,
+  });
+}
+
+// ========================================
+// PATHOLOGY REPORT HOOKS
+// ========================================
+
+export function usePathologyReportsByOrder(orderId: string) {
+  return useQuery({
+    queryKey: ['pathology-reports', 'order', orderId],
+    queryFn: () => reportingService.getPathologyReportsByOrder(orderId),
+    enabled: !!orderId,
+  });
+}
+
+export function usePathologyReport(id: string) {
+  return useQuery({
+    queryKey: ['pathology-reports', id],
+    queryFn: () => reportingService.getPathologyReport(id),
+    enabled: !!id,
+  });
+}
+
+export function useCreatePathologyReport() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreatePathologyReportInput) =>
+      reportingService.createPathologyReport(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['pathology-reports', 'order', variables.orderId] });
+    },
+  });
+}
+
+export function useUpdatePathologyReport() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdatePathologyReportInput }) =>
+      reportingService.updatePathologyReport(id, data),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['pathology-reports', 'order', result.orderId] });
+      queryClient.invalidateQueries({ queryKey: ['pathology-reports', result.id] });
+    },
+  });
+}
+
+export function useTransitionPathologyReportStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...payload }: { id: string } & ReportStatusTransitionInput) =>
+      reportingService.transitionPathologyReportStatus(id, payload),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['pathology-reports', 'order', result.orderId] });
+      queryClient.invalidateQueries({ queryKey: ['pathology-reports', result.id] });
+      queryClient.invalidateQueries({ queryKey: ['patient-results'] });
+      queryClient.invalidateQueries({ queryKey: ['encounter-results'] });
+    },
+  });
+}
+
+export function useVerifyPathologyReport() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => reportingService.verifyPathologyReport(id),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['pathology-reports', result.id] });
+    },
+  });
+}
+
+export function useAmendPathologyReport() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...payload }: { id: string } & AmendReportInput) =>
+      reportingService.amendPathologyReport(id, payload),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['pathology-reports', 'order', result.orderId] });
+      queryClient.invalidateQueries({ queryKey: ['patient-results'] });
+    },
+  });
+}
+
+export function usePathologyReportHistory(id: string) {
+  return useQuery({
+    queryKey: ['pathology-reports', id, 'history'],
+    queryFn: () => reportingService.getPathologyReportHistory(id),
     enabled: !!id,
   });
 }

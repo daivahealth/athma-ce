@@ -153,7 +153,6 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
   const handleSave = async () => {
     await updateReport.mutateAsync({
       id: report.id,
-      orderId: report.orderId,
       data: reportData,
     });
     await saveItems.mutateAsync({

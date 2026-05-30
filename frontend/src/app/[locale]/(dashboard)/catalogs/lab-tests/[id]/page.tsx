@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Edit, Trash2, Clock, Plus, FlaskConical, FolderTree, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,14 +11,17 @@ import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import {
   useLabTest,
   useLabTestResultTemplates,
   useObservationCodes,
   useReplaceLabTestResultTemplates,
+  useUpdateLabTest,
 } from '@/modules/foundation/hooks/use-catalogs';
-import type { LabTestResultTemplate, ObservationCode } from '@/modules/foundation/types/catalog';
+import type { LabTest, LabTestResultTemplate, ObservationCode } from '@/modules/foundation/types/catalog';
 import { CatalogBillingMappingsPanel } from '@/modules/rcm/components/catalog-billing-mappings-panel';
 
 type LabAnalyteDomain =
@@ -33,6 +36,42 @@ type LabAnalyteDomain =
 type DraftLabTestResultTemplate = LabTestResultTemplate & {
   draftKey: string;
 };
+
+type LabTestMaintenanceForm = {
+  reportStyle: string;
+  labDiscipline: string;
+  turnaroundTimeHours: string;
+  referenceLab: string;
+  isActive: boolean;
+};
+
+const REPORT_STYLE_OPTIONS = [
+  { value: 'structured', label: 'Structured' },
+  { value: 'narrative', label: 'Narrative' },
+  { value: 'hybrid', label: 'Hybrid' },
+] as const;
+
+const LAB_DISCIPLINE_OPTIONS = [
+  { value: 'hematology', label: 'Hematology' },
+  { value: 'chemistry', label: 'Chemistry' },
+  { value: 'microbiology', label: 'Microbiology' },
+  { value: 'histopathology', label: 'Histopathology' },
+  { value: 'cytology', label: 'Cytology' },
+  { value: 'coagulation', label: 'Coagulation' },
+  { value: 'urinalysis', label: 'Urinalysis' },
+  { value: 'other', label: 'Other' },
+] as const;
+
+function createMaintenanceForm(labTest?: LabTest): LabTestMaintenanceForm {
+  return {
+    reportStyle: labTest?.reportStyle ?? 'structured',
+    labDiscipline: labTest?.labDiscipline ?? '',
+    turnaroundTimeHours:
+      labTest?.turnaroundTimeHours != null ? String(labTest.turnaroundTimeHours) : '',
+    referenceLab: labTest?.referenceLab ?? '',
+    isActive: labTest?.isActive ?? true,
+  };
+}
 
 function getObservationDomain(observationCode: ObservationCode): Exclude<LabAnalyteDomain, 'all'> {
   if (observationCode.labDomain === 'hematology') return 'hematology';
@@ -150,14 +189,22 @@ export default function LabTestDetailPage() {
   const { data: resultTemplates, isLoading: isLoadingTemplates } = useLabTestResultTemplates(labTestId);
   const { data: observationCodes, isLoading: isLoadingObservationCodes } = useObservationCodes('laboratory');
   const replaceTemplates = useReplaceLabTestResultTemplates(labTestId);
+  const updateLabTest = useUpdateLabTest(labTestId);
 
   const [draftTemplates, setDraftTemplates] = useState<DraftLabTestResultTemplate[] | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [pickerParentTemplateId, setPickerParentTemplateId] = useState<string | null>(null);
   const [newGroupName, setNewGroupName] = useState('');
   const [search, setSearch] = useState('');
   const [domainFilter, setDomainFilter] = useState<LabAnalyteDomain>('all');
+  const [editForm, setEditForm] = useState<LabTestMaintenanceForm>(createMaintenanceForm());
+
+  useEffect(() => {
+    if (!labTest || editDialogOpen) return;
+    setEditForm(createMaintenanceForm(labTest));
+  }, [editDialogOpen, labTest]);
 
   const effectiveTemplates = useMemo(
     () => draftTemplates ?? (resultTemplates ?? []).map(toDraftTemplate),
@@ -338,6 +385,52 @@ export default function LabTestDetailPage() {
     setDraftTemplates(null);
   };
 
+  const handleOpenEditDialog = () => {
+    setEditForm(createMaintenanceForm(labTest));
+    setEditDialogOpen(true);
+  };
+
+  const handleSaveLabTest = async () => {
+    try {
+      const normalizedTurnaround =
+        editForm.turnaroundTimeHours.trim() === ''
+          ? null
+          : Number.parseInt(editForm.turnaroundTimeHours.trim(), 10);
+
+      if (
+        editForm.turnaroundTimeHours.trim() !== '' &&
+        (!Number.isFinite(normalizedTurnaround) || normalizedTurnaround < 0)
+      ) {
+        toast({
+          variant: 'destructive',
+          title: 'Invalid turnaround time',
+          description: 'Turnaround time must be a whole number of hours.',
+        });
+        return;
+      }
+
+      await updateLabTest.mutateAsync({
+        reportStyle: editForm.reportStyle,
+        labDiscipline: editForm.labDiscipline || null,
+        turnaroundTimeHours: normalizedTurnaround,
+        referenceLab: editForm.referenceLab.trim() || null,
+        isActive: editForm.isActive,
+      });
+
+      setEditDialogOpen(false);
+      toast({
+        title: 'Lab master updated',
+        description: `${labTest?.testName ?? 'Lab test'} maintenance fields were saved.`,
+      });
+    } catch (saveError) {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to update lab master',
+        description: saveError instanceof Error ? saveError.message : 'Try again.',
+      });
+    }
+  };
+
   const handleSaveTemplates = async () => {
     try {
       const orderedItems = flattenTemplateTree(effectiveTemplates);
@@ -509,6 +602,14 @@ export default function LabTestDetailPage() {
           <Badge variant={labTest.isActive ? 'default' : 'secondary'}>
             {labTest.isActive ? 'Active' : 'Inactive'}
           </Badge>
+          <Badge variant="outline" className="capitalize">
+            {labTest.reportStyle}
+          </Badge>
+          {labTest.labDiscipline && (
+            <Badge variant="outline" className="capitalize">
+              {labTest.labDiscipline.replace(/_/g, ' ')}
+            </Badge>
+          )}
           {labTest.fastingRequired && <Badge variant="outline">Fasting Required</Badge>}
           {labTest.turnaroundTimeHours && (
             <Badge variant="secondary">
@@ -520,7 +621,7 @@ export default function LabTestDetailPage() {
       </div>
 
       <div className="flex gap-2">
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" onClick={handleOpenEditDialog}>
           <Edit className="h-4 w-4 mr-2" />
           Edit
         </Button>
@@ -551,6 +652,26 @@ export default function LabTestDetailPage() {
             <div>
               <label className="text-sm font-medium text-muted-foreground">Methodology</label>
               <p className="text-base">{labTest.methodology || 'N/A'}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Classification & Reporting</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Report Style</label>
+              <p className="text-base capitalize">{labTest.reportStyle}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Lab Discipline</label>
+              <p className="text-base capitalize">
+                {labTest.labDiscipline ? labTest.labDiscipline.replace(/_/g, ' ') : 'N/A'}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -796,6 +917,118 @@ export default function LabTestDetailPage() {
                 Add group
               </Button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Edit lab master maintenance fields</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-2 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="report-style">Report Style</Label>
+              <Select
+                value={editForm.reportStyle}
+                onValueChange={(value) => setEditForm((current) => ({ ...current, reportStyle: value }))}
+              >
+                <SelectTrigger id="report-style">
+                  <SelectValue placeholder="Select report style" />
+                </SelectTrigger>
+                <SelectContent>
+                  {REPORT_STYLE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="lab-discipline">Lab Discipline</Label>
+              <Select
+                value={editForm.labDiscipline || '__none__'}
+                onValueChange={(value) =>
+                  setEditForm((current) => ({
+                    ...current,
+                    labDiscipline: value === '__none__' ? '' : value,
+                  }))
+                }
+              >
+                <SelectTrigger id="lab-discipline">
+                  <SelectValue placeholder="Select discipline" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">Not specified</SelectItem>
+                  {LAB_DISCIPLINE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tat-hours">Turnaround Time (hours)</Label>
+              <Input
+                id="tat-hours"
+                inputMode="numeric"
+                value={editForm.turnaroundTimeHours}
+                onChange={(event) =>
+                  setEditForm((current) => ({
+                    ...current,
+                    turnaroundTimeHours: event.target.value,
+                  }))
+                }
+                placeholder="2"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="reference-lab">Reference Lab</Label>
+              <Input
+                id="reference-lab"
+                value={editForm.referenceLab}
+                onChange={(event) =>
+                  setEditForm((current) => ({
+                    ...current,
+                    referenceLab: event.target.value,
+                  }))
+                }
+                placeholder="In-house"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 rounded-lg border p-3">
+            <Checkbox
+              id="lab-active"
+              checked={editForm.isActive}
+              onChange={(event) =>
+                setEditForm((current) => ({
+                  ...current,
+                  isActive: event.target.checked,
+                }))
+              }
+            />
+            <div className="space-y-1">
+              <Label htmlFor="lab-active">Active lab master</Label>
+              <p className="text-sm text-muted-foreground">
+                Inactive tests stay in the catalog but should not be offered for new orders.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveLabTest} disabled={updateLabTest.isPending}>
+              Save changes
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

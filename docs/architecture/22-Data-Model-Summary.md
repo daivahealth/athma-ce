@@ -90,6 +90,7 @@ This document provides a **high-level summary** of the athma-ce Platform data mo
 | `prescription_orders` | Medication prescriptions | Dosage, route, frequency, refills, instructions |
 | `lab_reports` | Lab report headers | Specimen/report metadata, report state, verification |
 | `lab_result_items` | Lab analyte results | Actual reported analytes/components with code, value, unit, reference range, abnormal and critical flags |
+| `pathology_reports` | Narrative pathology report headers | Histopathology/cytology sections such as clinical history, gross description, microscopy, diagnosis, and sign-off |
 | `observation_code_catalog` | Canonical observation/analyte catalog | Standard code, display, category, optional `lab_domain`, data type, default unit, default reference range |
 | `lab_test_result_templates` | Orderable-test result hierarchy | Structural group rows plus analyte rows, parent-child panel nesting, display order, required flag |
 | `imaging_reports` | Imaging reports | Findings, impression, DICOM/PACS identifiers, critical findings |

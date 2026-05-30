@@ -11,6 +11,22 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Search, Eye } from 'lucide-react';
 
+const REPORT_STYLE_LABELS: Record<string, string> = {
+  structured: 'Structured',
+  narrative: 'Narrative',
+  hybrid: 'Hybrid',
+};
+
+const LAB_DISCIPLINE_LABELS: Record<string, string> = {
+  hematology: 'Hematology',
+  chemistry: 'Chemistry',
+  microbiology: 'Microbiology',
+  histopathology: 'Histopathology',
+  cytology: 'Cytology',
+  coagulation: 'Coagulation',
+  urinalysis: 'Urinalysis',
+};
+
 const createColumns = (router: ReturnType<typeof useRouter>, locale: string): ColumnDef<LabTest>[] => [
   {
     accessorKey: 'testName',
@@ -67,6 +83,32 @@ const createColumns = (router: ReturnType<typeof useRouter>, locale: string): Co
     cell: ({ getValue }) => {
       const hours = getValue<number | null>();
       return hours ? `${hours}h` : '—';
+    },
+  },
+  {
+    accessorKey: 'reportStyle',
+    header: 'Report Style',
+    cell: ({ getValue }) => {
+      const reportStyle = getValue<string>();
+      return (
+        <Badge variant="outline" className="capitalize">
+          {REPORT_STYLE_LABELS[reportStyle] ?? reportStyle}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: 'labDiscipline',
+    header: 'Discipline',
+    cell: ({ getValue }) => {
+      const labDiscipline = getValue<string | null>();
+      if (!labDiscipline) return '—';
+
+      return (
+        <span className="text-sm">
+          {LAB_DISCIPLINE_LABELS[labDiscipline] ?? labDiscipline.replace(/_/g, ' ')}
+        </span>
+      );
     },
   },
   {

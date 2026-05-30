@@ -10,6 +10,7 @@ This folder contains feature-specific documentation organized by domain and modu
   - EMR clinical data capture
   - Encounter management
   - Visit types and workflows
+  - Lab module functionality and roadmap
 
 - **[ot/](./ot/)** - Operating theatre workflow
   - OT requests and review workflow

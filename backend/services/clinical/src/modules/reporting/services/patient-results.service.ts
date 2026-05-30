@@ -20,6 +20,8 @@ export interface PatientResultSummary {
     criticalCount: number;
     specimenType?: string | null;
     specimenNumber?: string | null;
+    reportStyle?: string | null;
+    labDiscipline?: string | null;
   };
   imagingSummary?: {
     modality?: string | null;
@@ -134,6 +136,50 @@ export class PatientResultsService {
     return map;
   }
 
+  private async resolveLabReportConfigByOrder(
+    tenantId: string,
+    orderIds: string[],
+  ): Promise<Map<string, { reportStyle: string; labDiscipline: string | null }>> {
+    const unique = [...new Set(orderIds)];
+    if (unique.length === 0) return new Map();
+
+    const orderTests = await this.prisma.labOrderTest.findMany({
+      where: {
+        tenantId,
+        orderId: { in: unique },
+      },
+      select: {
+        orderId: true,
+        labTestMasterId: true,
+        sortOrder: true,
+      },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    });
+
+    const labTestMasterIds = [...new Set(orderTests.map((test) => test.labTestMasterId).filter(Boolean))] as string[];
+    const masters = await this.prisma.labTestMaster.findMany({
+      where: { id: { in: labTestMasterIds } },
+      select: {
+        id: true,
+        reportStyle: true,
+        labDiscipline: true,
+      },
+    });
+
+    const masterMap = new Map(
+      masters.map((master) => [master.id, { reportStyle: master.reportStyle, labDiscipline: master.labDiscipline }]),
+    );
+
+    const configMap = new Map<string, { reportStyle: string; labDiscipline: string | null }>();
+    for (const orderTest of orderTests) {
+      if (configMap.has(orderTest.orderId)) continue;
+      const config = orderTest.labTestMasterId ? masterMap.get(orderTest.labTestMasterId) : null;
+      configMap.set(orderTest.orderId, config ?? { reportStyle: 'structured', labDiscipline: null });
+    }
+
+    return configMap;
+  }
+
   async getAll(
     tenantId: string,
     options?: {
@@ -180,6 +226,41 @@ export class PatientResultsService {
             abnormalCount: lr.items.filter((i) => i.abnormalFlag).length,
             criticalCount: lr.items.filter((i) => i.criticalFlag).length,
             specimenType: lr.specimenType,
+          },
+        });
+      }
+
+      const pathologyReports = await this.prisma.pathologyReport.findMany({
+        where,
+        include: { order: orderSelect },
+        orderBy: { createdAt: 'desc' },
+      });
+      const pathologyConfigs = await this.resolveLabReportConfigByOrder(
+        tenantId,
+        pathologyReports.map((report) => report.orderId),
+      );
+
+      for (const pr of pathologyReports) {
+        const reportConfig = pathologyConfigs.get(pr.orderId);
+        results.push({
+          id: pr.id,
+          reportType: 'lab',
+          orderId: pr.orderId,
+          orderName: pr.order.orderName,
+          orderNameAr: pr.order.orderNameAr,
+          patientId: pr.patientId,
+          encounterId: pr.encounterId,
+          reportStatus: pr.reportStatus,
+          reportedAt: pr.reportedAt,
+          version: pr.version,
+          createdAt: pr.createdAt,
+          labSummary: {
+            itemCount: 0,
+            abnormalCount: 0,
+            criticalCount: 0,
+            specimenType: pr.specimenType,
+            reportStyle: reportConfig?.reportStyle ?? 'narrative',
+            labDiscipline: reportConfig?.labDiscipline ?? null,
           },
         });
       }
@@ -341,6 +422,41 @@ export class PatientResultsService {
         });
       }
 
+      const pathologyReports = await this.prisma.pathologyReport.findMany({
+        where,
+        include: { order: orderSelect },
+        orderBy: { createdAt: 'desc' },
+      });
+      const pathologyConfigs = await this.resolveLabReportConfigByOrder(
+        tenantId,
+        pathologyReports.map((report) => report.orderId),
+      );
+
+      for (const pr of pathologyReports) {
+        const reportConfig = pathologyConfigs.get(pr.orderId);
+        results.push({
+          id: pr.id,
+          reportType: 'lab',
+          orderId: pr.orderId,
+          orderName: pr.order.orderName,
+          orderNameAr: pr.order.orderNameAr,
+          patientId: pr.patientId,
+          encounterId: pr.encounterId,
+          reportStatus: pr.reportStatus,
+          reportedAt: pr.reportedAt,
+          version: pr.version,
+          createdAt: pr.createdAt,
+          labSummary: {
+            itemCount: 0,
+            abnormalCount: 0,
+            criticalCount: 0,
+            specimenType: pr.specimenType,
+            reportStyle: reportConfig?.reportStyle ?? 'narrative',
+            labDiscipline: reportConfig?.labDiscipline ?? null,
+          },
+        });
+      }
+
       const dedupedLabResults = collapseResultsByOrder(
         results.filter((result) => result.reportType === 'lab') as Omit<PatientResultSummary, 'patientName'>[],
       );
@@ -449,13 +565,18 @@ export class PatientResultsService {
   async getByEncounter(tenantId: string, encounterId: string): Promise<PatientResultSummary[]> {
     const partial: Omit<PatientResultSummary, 'patientName'>[] = [];
 
-    const [labReports, imagingReports, procedureReports] = await Promise.all([
+    const [labReports, pathologyReports, imagingReports, procedureReports] = await Promise.all([
       this.prisma.labReport.findMany({
         where: { tenantId, encounterId },
         include: {
           order: orderSelect,
           items: { select: { abnormalFlag: true, criticalFlag: true } },
         },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.pathologyReport.findMany({
+        where: { tenantId, encounterId },
+        include: { order: orderSelect },
         orderBy: { createdAt: 'desc' },
       }),
       this.prisma.imagingReport.findMany({
@@ -469,6 +590,10 @@ export class PatientResultsService {
         orderBy: { createdAt: 'desc' },
       }),
     ]);
+    const pathologyConfigs = await this.resolveLabReportConfigByOrder(
+      tenantId,
+      pathologyReports.map((report) => report.orderId),
+    );
 
     for (const lr of labReports) {
       partial.push({
@@ -485,9 +610,34 @@ export class PatientResultsService {
         createdAt: lr.createdAt,
         labSummary: {
           itemCount: lr.items.length,
-          abnormalCount: lr.items.filter((i) => i.abnormalFlag).length,
-          criticalCount: lr.items.filter((i) => i.criticalFlag).length,
+          abnormalCount: lr.items.filter((i: { abnormalFlag: boolean }) => i.abnormalFlag).length,
+          criticalCount: lr.items.filter((i: { criticalFlag: boolean }) => i.criticalFlag).length,
           specimenType: lr.specimenType,
+        },
+      });
+    }
+
+    for (const pr of pathologyReports) {
+      const reportConfig = pathologyConfigs.get(pr.orderId);
+      partial.push({
+        id: pr.id,
+        reportType: 'lab',
+        orderId: pr.orderId,
+        orderName: pr.order.orderName,
+        orderNameAr: pr.order.orderNameAr,
+        patientId: pr.patientId,
+        encounterId: pr.encounterId,
+        reportStatus: pr.reportStatus,
+        reportedAt: pr.reportedAt,
+        version: pr.version,
+        createdAt: pr.createdAt,
+        labSummary: {
+          itemCount: 0,
+          abnormalCount: 0,
+          criticalCount: 0,
+          specimenType: pr.specimenType,
+          reportStyle: reportConfig?.reportStyle ?? 'narrative',
+          labDiscipline: reportConfig?.labDiscipline ?? null,
         },
       });
     }
@@ -594,12 +744,22 @@ export class PatientResultsService {
     // Get all order IDs that already have a report for this type
     let existingOrderIds: string[] = [];
     if (orderType === 'lab') {
-      const existing = await this.prisma.labReport.findMany({
-        where: { tenantId },
-        select: { orderId: true },
-        distinct: ['orderId'],
-      });
-      existingOrderIds = existing.map((r) => r.orderId);
+      const [structuredExisting, pathologyExisting] = await Promise.all([
+        this.prisma.labReport.findMany({
+          where: { tenantId },
+          select: { orderId: true },
+          distinct: ['orderId'],
+        }),
+        this.prisma.pathologyReport.findMany({
+          where: { tenantId },
+          select: { orderId: true },
+          distinct: ['orderId'],
+        }),
+      ]);
+      existingOrderIds = [
+        ...structuredExisting.map((r: { orderId: string }) => r.orderId),
+        ...pathologyExisting.map((r: { orderId: string }) => r.orderId),
+      ];
     } else if (orderType === 'imaging') {
       const existing = await this.prisma.imagingReport.findMany({
         where: { tenantId },

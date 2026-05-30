@@ -12,6 +12,7 @@ export enum ReportStatus {
 
 export enum ReportType {
   LAB = 'lab',
+  PATHOLOGY = 'pathology',
   IMAGING = 'imaging',
   PROCEDURE = 'procedure',
 }

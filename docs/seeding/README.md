@@ -5,7 +5,7 @@ This directory contains SQL fixtures for populating the four athma-ce domain dat
 | Domain | Database | Purpose |
 | --- | --- | --- |
 | Foundation | `zeal_foundation` | Tenants, facilities, RBAC, catalogs |
-| Clinical | `zeal_clinical` | Sample patients, clinical catalogs, and CBC lab templates |
+| Clinical | `zeal_clinical` | Sample patients, clinical catalogs, CBC lab templates, and seeded narrative histopathology catalog rows |
 | Revenue Cycle | `zeal_rcm` | Payers / financial reference data |
 | Analytics | `zeal_analytics` | Audit and HIE health samples |
 
@@ -19,7 +19,7 @@ This directory contains SQL fixtures for populating the four athma-ce domain dat
 ```
 cd seed
 ./run-seeds.sh foundation   # master data & RBAC
-./run-seeds.sh clinical     # sample patients, clinical catalogs, and CBC lab templates
+./run-seeds.sh clinical     # sample patients, clinical catalogs, CBC lab templates, and narrative histopathology rows
 ./run-seeds.sh rcm          # optional payer data
 ./run-seeds.sh analytics    # optional audit data
 ```
@@ -32,7 +32,7 @@ The script lists each SQL file as it streams it into the `zeal-postgres` contain
 
 ## SQL Files
 - **Foundation**: `01-tenants.sql` … `98-hie-data-mappings.sql` (see guide for full list).
-- **Clinical**: setup helpers, sample patients, clinical catalogs, CBC observation/result template seed using flat CBC rows plus a grouped `Differential Count`, idempotent lab-test TAT defaults for seeded masters, oncology and OT fixtures.
+- **Clinical**: setup helpers, sample patients, clinical catalogs, CBC observation/result template seed using flat CBC rows plus a grouped `Differential Count`, seeded `lab_test_master.report_style` / `lab_discipline` values including a narrative `Histopathology Examination` test, idempotent lab-test TAT defaults for seeded masters, oncology and OT fixtures.
 - **RCM**: `17-payers.sql`.
 - **Analytics**: `100-hie-sync-logs.sql`, `101-hie-platform-health.sql`.
 

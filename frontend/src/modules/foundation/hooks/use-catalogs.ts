@@ -4,6 +4,7 @@ import type {
   CatalogFilters,
   DiagnosisFilters,
   DiagnosisVersionFilters,
+  LabTest,
   NoteTemplateFilters,
   CreateNoteTemplateInput,
   ReplaceLabTestResultTemplateItemInput,
@@ -44,6 +45,18 @@ export function useLabTest(id: string | undefined) {
     queryKey: ['labTest', id],
     queryFn: () => catalogService.getLabTestById(id!),
     enabled: Boolean(id),
+  });
+}
+
+export function useUpdateLabTest(id: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Partial<LabTest>) => catalogService.updateLabTest(id!, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['labTest', id] });
+      queryClient.invalidateQueries({ queryKey: ['labTests'] });
+    },
   });
 }
 

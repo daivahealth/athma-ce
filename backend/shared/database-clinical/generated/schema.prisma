@@ -645,6 +645,7 @@ model Encounter {
   clinicalObservations ClinicalObservation[]
   clinicalCodings      EncounterClinicalCoding[]
   labReports           LabReport[]
+  pathologyReports     PathologyReport[]
   imagingReports       ImagingReport[]
   procedureReports     ProcedureReport[]
   triage               Triage?
@@ -844,6 +845,7 @@ model ClinicalOrder {
   imagingOrderDetails   ImagingOrderDetail[]
   procedureOrderDetails ProcedureOrderDetail[]
   labReports            LabReport[]
+  pathologyReports      PathologyReport[]
   imagingReports        ImagingReport[]
   procedureReports      ProcedureReport[]
 
@@ -1407,6 +1409,8 @@ model LabTestMaster {
   units                   String?  @db.VarChar(50)
   methodology             String?  @db.VarChar(255)
   turnaroundTimeHours     Int?     @map("turnaround_time_hours")
+  reportStyle             String   @default("structured") @map("report_style") @db.VarChar(30) // structured, narrative, hybrid
+  labDiscipline           String?  @map("lab_discipline") @db.VarChar(50) // hematology, chemistry, microbiology, histopathology, cytology
   referenceLab            String?  @map("reference_lab") @db.VarChar(255)
   isActive                Boolean  @default(true) @map("is_active")
   createdAt               DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -4369,6 +4373,56 @@ model LabResultItem {
   @@index([tenantId, labReportId], map: "idx_lab_result_item_report")
   @@index([tenantId, testCode], map: "idx_lab_result_item_code")
   @@map("lab_result_items")
+}
+
+/// Pathology Report - Narrative-first lab reporting for histopathology/cytology style workflows
+model PathologyReport {
+  id          String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId    String @map("tenant_id") @db.Uuid
+  orderId     String @map("order_id") @db.Uuid
+  encounterId String @map("encounter_id") @db.Uuid
+  patientId   String @map("patient_id") @db.Uuid
+
+  // Report status workflow: DRAFT -> PRELIMINARY -> FINAL -> AMENDED
+  reportStatus      String  @default("DRAFT") @map("report_status") @db.VarChar(20)
+  version           Int     @default(1)
+  previousVersionId String? @map("previous_version_id") @db.Uuid
+
+  // Specimen information
+  specimenType   String?   @map("specimen_type") @db.VarChar(100)
+  collectionDate DateTime? @map("collection_date") @db.Timestamptz(6)
+  receivedDate   DateTime? @map("received_date") @db.Timestamptz(6)
+
+  // Narrative sections
+  clinicalHistory        String? @map("clinical_history") @db.Text
+  specimenReceived       String? @map("specimen_received") @db.Text
+  grossDescription       String? @map("gross_description") @db.Text
+  microscopicDescription String? @map("microscopic_description") @db.Text
+  diagnosis              String? @db.Text
+  comment                String? @db.Text
+  internalNotes          String? @map("internal_notes") @db.Text
+
+  // Authorship
+  reportedBy String?   @map("reported_by") @db.Uuid
+  verifiedBy String?   @map("verified_by") @db.Uuid
+  reportedAt DateTime? @map("reported_at") @db.Timestamptz(6)
+  verifiedAt DateTime? @map("verified_at") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  order     ClinicalOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  encounter Encounter     @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, orderId], map: "idx_pathology_report_order")
+  @@index([tenantId, patientId], map: "idx_pathology_report_patient")
+  @@index([tenantId, encounterId], map: "idx_pathology_report_encounter")
+  @@index([tenantId, reportStatus], map: "idx_pathology_report_status")
+  @@index([tenantId, patientId, reportStatus], map: "idx_pathology_report_patient_status")
+  @@map("pathology_reports")
 }
 
 /// Imaging Report - Radiology/diagnostic imaging reports with structured sections

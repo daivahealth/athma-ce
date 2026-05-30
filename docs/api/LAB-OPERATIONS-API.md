@@ -23,6 +23,9 @@ These endpoints manage:
 Result-entry catalog note:
 
 - `lab_test_master` remains the orderable test or panel catalog
+- `lab_test_master.report_style` determines whether the lab order uses:
+  - `structured`: analyte-style `lab_reports` + `lab_result_items`
+  - `narrative`: pathology-style `pathology_reports`
 - expected result analytes are defined through `lab_test_result_templates`
 - template rows can be either:
   - `group` rows for panel sections such as `Differential Count`
@@ -209,8 +212,10 @@ Behavior:
 
 - creates `lab_processing_runs`
 - updates specimen, specimen-test, and ordered-test state to `processing`
-- ensures an active draft `lab_report` exists for the parent lab order as soon as processing starts, so the order appears on `/results/lab` before a user explicitly opens result entry
-- if the ordered test references a `lab_test_master` row and the new draft has no saved items yet, seeds default `lab_result_items` from active `lab_test_result_templates`
+- ensures an active draft report exists for the parent lab order as soon as processing starts, so the order appears on `/results/lab` before a user explicitly opens result entry
+- `structured` lab tests create/reuse `lab_reports`
+- `narrative` lab tests create/reuse `pathology_reports`
+- if a structured draft has no saved items yet, seeds default `lab_result_items` from active `lab_test_result_templates`
 - records a `processing_started` specimen event
 
 ### Result Entry Start
@@ -220,10 +225,11 @@ Behavior:
 Behavior:
 
 - resolves the requested ordered test and specimen context
-- finds or creates an active draft report in `lab_reports`
+- finds or creates an active draft report
 - is idempotent for repeated UI opens of the same ordered test; if a concurrent request already created the active draft, the endpoint reuses that report instead of failing
 - hydrates specimen metadata into that draft when available
-- if the ordered lab test references a `lab_test_master` row and the draft has no saved items, seeds default `lab_result_items` from active `lab_test_result_templates`
+- if the ordered lab test is `structured` and the draft has no saved items, seeds default `lab_result_items` from active `lab_test_result_templates`
+- if the ordered lab test is `narrative`, reuses the same order/specimen/accession context but targets a `pathology_reports` draft instead of analyte rows
 - only template rows with `node_type = analyte` create saved `lab_result_items`; group rows are structural only
 - records a `result_entry_started` specimen event
 
@@ -255,6 +261,7 @@ Behavior:
 Behavior:
 
 - requires saved `lab_result_items`
+- for narrative pathology reports, requires at least one populated narrative section before completion
 - if no `lab_processing_run` exists yet for the specimen/test pair, creates a completed manual processing run so workflow state cannot skip from accessioned directly to reported
 - marks the ordered test and specimen-test link as `result_entered`
 - updates specimen state when all linked tests are entered
@@ -303,6 +310,7 @@ Route intent:
 - `/results/lab/operations`: lab-internal queue starting from receiving
 - `/results/lab/:orderId`: order-level lab report page that now shows a printable report plus ordered-test, specimen, and accession context using the read-only result-entry context endpoint
   - for multi-test lab orders, the frontend resolves context per `lab_order_test` and renders each ordered test explicitly instead of assuming the first test represents the whole order
+  - for `narrative` lab tests such as histopathology, the same page switches to a sectioned pathology editor/viewer instead of the analyte-entry grid
 - `/results/lab`: aggregated lab results list that now surfaces orders immediately after `Start Processing`, and shows specimen type plus specimen number from the linked lab specimen workflow
 
 ## Related Docs

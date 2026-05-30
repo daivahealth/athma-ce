@@ -182,9 +182,7 @@ export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) 
                     items={(resultEntry.data as LabProcessingWorklistItem[] | undefined) ?? []}
                     isLoading={resultEntry.isLoading}
                     onOpen={(item) =>
-                      router.push(
-                        `/${locale}/results/lab/operations/result-entry/${item.labOrderTest.id}?specimenId=${item.specimen.id}`,
-                      )
+                      router.push(`/${locale}/results/lab/${item.specimen.order.id}`)
                     }
                   />
                 )}

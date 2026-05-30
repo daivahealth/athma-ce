@@ -107,6 +107,16 @@ export class CreateLabTestDto {
   @IsOptional()
   turnaroundTimeHours?: number;
 
+  @ApiPropertyOptional({ description: 'Reporting structure: structured, narrative, or hybrid' })
+  @IsString()
+  @IsOptional()
+  reportStyle?: string;
+
+  @ApiPropertyOptional({ description: 'Lab discipline: hematology, chemistry, histopathology, cytology, microbiology, etc.' })
+  @IsString()
+  @IsOptional()
+  labDiscipline?: string;
+
   @ApiPropertyOptional({ description: 'Reference lab name' })
   @IsString()
   @IsOptional()
@@ -143,6 +153,8 @@ export interface LabTestResponseDto {
   units?: string | null;
   methodology?: string | null;
   turnaroundTimeHours?: number | null;
+  reportStyle: string;
+  labDiscipline?: string | null;
   referenceLab?: string | null;
   isActive: boolean;
   createdAt: Date;

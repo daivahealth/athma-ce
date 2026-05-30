@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/table';
 import type { ClinicalOrder } from '../../../types/charting';
 import type { LabReportContext } from '../../../types/lab-operations';
-import type { LabReport, PatientResult } from '../../../types/reporting';
+import type { LabReport, PathologyReport, PatientResult } from '../../../types/reporting';
 import type { LabTest } from '@/modules/foundation/types/catalog';
 import { cn } from '@/lib/utils';
 
@@ -22,7 +22,7 @@ type LabReportContextCardProps = {
   order?: ClinicalOrder | null;
   contexts?: LabReportContext[];
   encounterLabResults?: PatientResult[];
-  report?: LabReport | null;
+  report?: LabReport | PathologyReport | null;
   labTest?: LabTest | null;
 };
 

@@ -22,6 +22,7 @@ SET turnaround_time_hours = CASE local_code
   WHEN 'LAB-016' THEN 4   -- CRP
   WHEN 'LAB-017' THEN 2   -- PT/INR
   WHEN 'LAB-018' THEN 1   -- Urinalysis, Complete
+  WHEN 'LAB-019' THEN 72  -- Histopathology Examination
   ELSE turnaround_time_hours
 END,
 updated_at = NOW()
@@ -43,5 +44,6 @@ WHERE local_code IN (
   'LAB-015',
   'LAB-016',
   'LAB-017',
-  'LAB-018'
+  'LAB-018',
+  'LAB-019'
 );

@@ -5,6 +5,9 @@ import type {
   UpdateLabReportInput,
   LabResultItem,
   LabResultItemInput,
+  PathologyReport,
+  CreatePathologyReportInput,
+  UpdatePathologyReportInput,
   ImagingReport,
   CreateImagingReportInput,
   UpdateImagingReportInput,
@@ -66,6 +69,50 @@ class ReportingService {
 
   async getLabReportHistory(id: string): Promise<ReportStatusHistoryEntry[]> {
     const response = await clinicalClient.get(`/lab-reports/${id}/history`);
+    return response.data;
+  }
+
+  // ========================================
+  // PATHOLOGY REPORTS
+  // ========================================
+
+  async createPathologyReport(payload: CreatePathologyReportInput): Promise<PathologyReport> {
+    const response = await clinicalClient.post('/pathology-reports', payload);
+    return response.data;
+  }
+
+  async getPathologyReport(id: string): Promise<PathologyReport> {
+    const response = await clinicalClient.get(`/pathology-reports/${id}`);
+    return response.data;
+  }
+
+  async getPathologyReportsByOrder(orderId: string): Promise<PathologyReport[]> {
+    const response = await clinicalClient.get(`/pathology-reports/order/${orderId}`);
+    return response.data;
+  }
+
+  async updatePathologyReport(id: string, payload: UpdatePathologyReportInput): Promise<PathologyReport> {
+    const response = await clinicalClient.patch(`/pathology-reports/${id}`, payload);
+    return response.data;
+  }
+
+  async transitionPathologyReportStatus(id: string, payload: ReportStatusTransitionInput): Promise<PathologyReport> {
+    const response = await clinicalClient.post(`/pathology-reports/${id}/status`, payload);
+    return response.data;
+  }
+
+  async verifyPathologyReport(id: string): Promise<PathologyReport> {
+    const response = await clinicalClient.post(`/pathology-reports/${id}/verify`);
+    return response.data;
+  }
+
+  async amendPathologyReport(id: string, payload: AmendReportInput): Promise<PathologyReport> {
+    const response = await clinicalClient.post(`/pathology-reports/${id}/amend`, payload);
+    return response.data;
+  }
+
+  async getPathologyReportHistory(id: string): Promise<ReportStatusHistoryEntry[]> {
+    const response = await clinicalClient.get(`/pathology-reports/${id}/history`);
     return response.data;
   }
 

@@ -743,6 +743,8 @@ exports.Prisma.LabTestMasterScalarFieldEnum = {
   units: 'units',
   methodology: 'methodology',
   turnaroundTimeHours: 'turnaroundTimeHours',
+  reportStyle: 'reportStyle',
+  labDiscipline: 'labDiscipline',
   referenceLab: 'referenceLab',
   isActive: 'isActive',
   createdAt: 'createdAt',
@@ -2218,6 +2220,35 @@ exports.Prisma.LabResultItemScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PathologyReportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  reportStatus: 'reportStatus',
+  version: 'version',
+  previousVersionId: 'previousVersionId',
+  specimenType: 'specimenType',
+  collectionDate: 'collectionDate',
+  receivedDate: 'receivedDate',
+  clinicalHistory: 'clinicalHistory',
+  specimenReceived: 'specimenReceived',
+  grossDescription: 'grossDescription',
+  microscopicDescription: 'microscopicDescription',
+  diagnosis: 'diagnosis',
+  comment: 'comment',
+  internalNotes: 'internalNotes',
+  reportedBy: 'reportedBy',
+  verifiedBy: 'verifiedBy',
+  reportedAt: 'reportedAt',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
 exports.Prisma.ImagingReportScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -2878,6 +2909,7 @@ exports.Prisma.ModelName = {
   ReportStatusHistory: 'ReportStatusHistory',
   LabReport: 'LabReport',
   LabResultItem: 'LabResultItem',
+  PathologyReport: 'PathologyReport',
   ImagingReport: 'ImagingReport',
   ProcedureReport: 'ProcedureReport',
   OtRequest: 'OtRequest',

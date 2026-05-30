@@ -11,7 +11,7 @@ export enum ReportStatus {
   CANCELLED = 'CANCELLED',
 }
 
-export type ReportType = 'lab' | 'imaging' | 'procedure';
+export type ReportType = 'lab' | 'pathology' | 'imaging' | 'procedure';
 
 // ========================================
 // LAB REPORT TYPES
@@ -99,6 +99,57 @@ export interface LabResultItemInput {
   criticalFlag?: boolean;
   comment?: string;
   sortOrder?: number;
+}
+
+// ========================================
+// PATHOLOGY REPORT TYPES
+// ========================================
+
+export interface PathologyReport {
+  id: string;
+  tenantId: string;
+  orderId: string;
+  encounterId: string;
+  patientId: string;
+  reportStatus: ReportStatus;
+  version: number;
+  previousVersionId?: string | null;
+  specimenType?: string | null;
+  collectionDate?: string | null;
+  receivedDate?: string | null;
+  clinicalHistory?: string | null;
+  specimenReceived?: string | null;
+  grossDescription?: string | null;
+  microscopicDescription?: string | null;
+  diagnosis?: string | null;
+  comment?: string | null;
+  internalNotes?: string | null;
+  reportedBy?: string | null;
+  verifiedBy?: string | null;
+  reportedAt?: string | null;
+  verifiedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePathologyReportInput {
+  orderId: string;
+  specimenType?: string;
+  collectionDate?: string;
+  receivedDate?: string;
+}
+
+export interface UpdatePathologyReportInput {
+  specimenType?: string;
+  collectionDate?: string;
+  receivedDate?: string;
+  clinicalHistory?: string;
+  specimenReceived?: string;
+  grossDescription?: string;
+  microscopicDescription?: string;
+  diagnosis?: string;
+  comment?: string;
+  internalNotes?: string;
 }
 
 // ========================================
@@ -267,6 +318,8 @@ export interface PatientResult {
     criticalCount: number;
     specimenType?: string | null;
     specimenNumber?: string | null;
+    reportStyle?: string | null;
+    labDiscipline?: string | null;
   };
   imagingSummary?: {
     modality?: string | null;

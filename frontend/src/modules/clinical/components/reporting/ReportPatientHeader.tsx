@@ -21,6 +21,7 @@ interface ReportPatientHeaderProps {
 
 const reportTypeConfig: Record<ReportType, { label: string; icon: React.ElementType; backPath: string }> = {
   lab: { label: 'Lab Report', icon: FlaskConical, backPath: '/results/lab' },
+  pathology: { label: 'Pathology Report', icon: FlaskConical, backPath: '/results/lab' },
   imaging: { label: 'Imaging Report', icon: ScanLine, backPath: '/results/imaging' },
   procedure: { label: 'Procedure Report', icon: Scissors, backPath: '/results/procedure' },
 };
