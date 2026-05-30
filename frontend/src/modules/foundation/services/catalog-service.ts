@@ -1,7 +1,10 @@
-import { foundationClient, clinicalClient } from '@/lib/api/client';
+import { clinicalClient } from '@/lib/api/client';
 import type {
   Medication,
   LabTest,
+  LabTestResultTemplate,
+  ReplaceLabTestResultTemplateItemInput,
+  ObservationCode,
   ImagingStudy,
   Procedure,
   CatalogFilters,
@@ -75,6 +78,32 @@ class CatalogService {
 
   async deleteLabTest(id: string): Promise<void> {
     await clinicalClient.delete(`/catalogs/lab-tests/${id}`);
+  }
+
+  async listLabTestResultTemplates(id: string): Promise<LabTestResultTemplate[]> {
+    const response = await clinicalClient.get(`/catalogs/lab-tests/${id}/result-templates`);
+    return response.data;
+  }
+
+  async replaceLabTestResultTemplates(
+    id: string,
+    items: ReplaceLabTestResultTemplateItemInput[],
+  ): Promise<LabTestResultTemplate[]> {
+    const response = await clinicalClient.put(`/catalogs/lab-tests/${id}/result-templates`, {
+      items,
+    });
+    return response.data;
+  }
+
+  // ========================================
+  // OBSERVATION CODES
+  // ========================================
+
+  async listObservationCodes(category?: string): Promise<ObservationCode[]> {
+    const response = await clinicalClient.get('/observation-catalog', {
+      params: category ? { category } : undefined,
+    });
+    return response.data;
   }
 
   // ========================================

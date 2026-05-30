@@ -42,6 +42,12 @@ export default function LabResultsListPage() {
     limit,
   });
 
+  const errorMessage =
+    error && typeof error === 'object' && 'response' in error
+      ? ((error as { response?: { data?: { message?: string } } }).response?.data?.message ??
+        'Please try again or contact support.')
+      : 'Please try again or contact support.';
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -103,7 +109,7 @@ export default function LabResultsListPage() {
         <Card className="p-6 text-center">
           <p className="text-destructive font-semibold mb-2">Error loading lab results</p>
           <p className="text-sm text-muted-foreground">
-            {(error as any)?.response?.data?.message || 'Please try again or contact support.'}
+            {errorMessage}
           </p>
         </Card>
       )}
@@ -147,7 +153,12 @@ export default function LabResultsListPage() {
                       <TableCell className="font-medium">{result.orderName}</TableCell>
                       <TableCell>{result.patientName}</TableCell>
                       <TableCell className="text-muted-foreground">
-                        {result.labSummary?.specimenType || '-'}
+                        <div>{result.labSummary?.specimenType || '-'}</div>
+                        {result.labSummary?.specimenNumber ? (
+                          <div className="font-mono text-xs text-muted-foreground">
+                            {result.labSummary.specimenNumber}
+                          </div>
+                        ) : null}
                       </TableCell>
                       <TableCell className="text-center">
                         {result.labSummary?.itemCount || 0}

@@ -80,7 +80,7 @@ export interface LabSpecimenEvent {
   eventTime: string;
   performedBy?: string | null;
   notes?: string | null;
-  metadata?: Record<string, any> | null;
+  metadata?: Record<string, unknown> | null;
 }
 
 export interface LabProcessingRun {
@@ -141,6 +141,13 @@ export interface StartLabResultEntryContext {
   specimen: LabSpecimen;
   accession?: LabSpecimenAccession | null;
   report: LabReport;
+}
+
+export interface LabReportContext {
+  order: LabOrderSummary;
+  labOrderTest: LabOrderTestSummary;
+  specimen: LabSpecimen;
+  accession?: LabSpecimenAccession | null;
 }
 
 export interface CollectLabSpecimenInput {
@@ -213,7 +220,7 @@ export interface CreateLabProcessingRunInput {
   instrumentCode?: string;
   instrumentRunId?: string;
   status?: 'processing' | 'completed' | 'failed';
-  rawPayload?: Record<string, any>;
+  rawPayload?: Record<string, unknown>;
   processedAt?: string;
   processedBy?: string;
 }

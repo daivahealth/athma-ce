@@ -23,6 +23,7 @@ import {
   CollectLabSpecimenDto,
   CompleteLabResultEntryDto,
   CreateLabProcessingRunDto,
+  GetLabResultEntryContextQueryDto,
   LabWorklistQueryDto,
   PrintLabSpecimenLabelDto,
   ReceiveLabSpecimenDto,
@@ -146,6 +147,23 @@ export class LabOperationsController {
     @Body() dto: CreateLabProcessingRunDto,
   ) {
     return this.labOperationsService.createProcessingRun(tenantId, userId, dto);
+  }
+
+  @Get('result-entry/context/:labOrderTestId')
+  @Permissions(LAB_RESULT_READ)
+  @ApiOperation({ summary: 'Get ordered test, specimen, and accession context for a lab result page without mutating workflow state' })
+  @ApiResponse({ status: 200, description: 'Result context retrieved' })
+  async getResultEntryContext(
+    @Headers('x-tenant-id') tenantId: string,
+    @Param('labOrderTestId') labOrderTestId: string,
+    @Query() query: GetLabResultEntryContextQueryDto,
+  ) {
+    return this.labOperationsService.getResultEntryContext(
+      tenantId,
+      query.specimenId
+        ? { labOrderTestId, specimenId: query.specimenId }
+        : { labOrderTestId },
+    );
   }
 
   @Post('result-entry/start')

@@ -749,6 +749,23 @@ exports.Prisma.LabTestMasterScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LabTestResultTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  labTestMasterId: 'labTestMasterId',
+  parentTemplateId: 'parentTemplateId',
+  nodeType: 'nodeType',
+  groupKey: 'groupKey',
+  renderStyle: 'renderStyle',
+  observationCodeCatalogId: 'observationCodeCatalogId',
+  displayLabel: 'displayLabel',
+  sortOrder: 'sortOrder',
+  isRequired: 'isRequired',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ImagingStudyMasterScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -2088,6 +2105,7 @@ exports.Prisma.ObservationCodeCatalogScalarFieldEnum = {
   displayName: 'displayName',
   displayNameAr: 'displayNameAr',
   category: 'category',
+  labDomain: 'labDomain',
   dataType: 'dataType',
   defaultUnit: 'defaultUnit',
   refRangeLow: 'refRangeLow',
@@ -2791,6 +2809,7 @@ exports.Prisma.ModelName = {
   AppointmentSeries: 'AppointmentSeries',
   MedicationMaster: 'MedicationMaster',
   LabTestMaster: 'LabTestMaster',
+  LabTestResultTemplate: 'LabTestResultTemplate',
   ImagingStudyMaster: 'ImagingStudyMaster',
   ProcedureMaster: 'ProcedureMaster',
   DiagnosisVersion: 'DiagnosisVersion',

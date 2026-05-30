@@ -54,7 +54,7 @@ export default function ProcedureResultPage() {
     displayReport.reportStatus === ReportStatus.PRELIMINARY;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="px-6 pb-6 pt-2 space-y-6">
       <ReportPatientHeader
         encounterId={displayReport.encounterId}
         reportType="procedure"

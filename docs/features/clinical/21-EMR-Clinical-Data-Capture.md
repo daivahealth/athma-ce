@@ -485,6 +485,31 @@ Current operational UI:
   - Accessioning
   - Processing
   - Result Entry
+- `/results/lab/:orderId`
+  - Read-only or editable lab report page for a specific order
+  - Shows an `Order & Specimen Summary` panel with ordered test context, specimen barcode/ID, accession number, and workflow timestamps
+  - Groups ordered, collected, received, processing, and reported date/time values together so lab users can compare the operational timeline at a glance
+  - Computes TAT status from the linked `lab_test_master.turnaround_time_hours` when configured, marking the order as within TAT, approaching TAT, met, or breached
+  - Distinguishes order scope from encounter scope: the page shows how many tests belong to the current lab order, and separately how many lab orders exist across the encounter
+  - For multi-test orders, lists each ordered test separately with its own specimen/accession context instead of collapsing to the first test only
+  - Supports browser printing for finalized/amended reports without mutating lab workflow state
+
+Lab results listing behavior:
+
+- `/results/lab` is fed from aggregated `patient-results` summaries
+- a lab order now becomes visible there as soon as `Start Processing` creates or reuses the active draft report
+- the list also shows the linked specimen type and specimen number so staff can identify the processed tube directly from the reporting queue
+
+Result-entry open behavior:
+
+- opening `/results/lab/operations/result-entry/:labOrderTestId` is safe to repeat
+- if the UI issues overlapping open requests for the same ordered test while the draft report is being created, the backend reuses the active draft instead of failing on the second request
+- when users submit manual lab results as preliminary or final, the workflow also completes lab result entry and backfills a manual processing run if none exists yet, so reporting cannot appear ahead of processing in the operational timeline
+
+Lab results listing behavior:
+
+- `/results/lab` is order-oriented for laboratory reports
+- if multiple draft rows exist for the same lab order because of an older concurrent-create race, the patient-results aggregation now collapses them to one visible result row per order and prefers the latest logical report
 
 Collection queue behavior:
 

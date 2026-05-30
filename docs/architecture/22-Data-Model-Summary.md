@@ -89,7 +89,9 @@ This document provides a **high-level summary** of the athma-ce Platform data mo
 | `clinical_orders` | Shared diagnostic order header | Lab, imaging, and procedure order identity; patient/encounter linkage; status; ordering context |
 | `prescription_orders` | Medication prescriptions | Dosage, route, frequency, refills, instructions |
 | `lab_reports` | Lab report headers | Specimen/report metadata, report state, verification |
-| `lab_result_items` | Lab analyte results | LOINC, value, unit, reference range, abnormal and critical flags |
+| `lab_result_items` | Lab analyte results | Actual reported analytes/components with code, value, unit, reference range, abnormal and critical flags |
+| `observation_code_catalog` | Canonical observation/analyte catalog | Standard code, display, category, optional `lab_domain`, data type, default unit, default reference range |
+| `lab_test_result_templates` | Orderable-test result hierarchy | Structural group rows plus analyte rows, parent-child panel nesting, display order, required flag |
 | `imaging_reports` | Imaging reports | Findings, impression, DICOM/PACS identifiers, critical findings |
 | `procedure_reports` | Procedure outcomes | Timing, findings, complications, specimens, performers |
 | `report_status_history` | Report workflow audit | Draft, preliminary, final, amended, corrected transitions |

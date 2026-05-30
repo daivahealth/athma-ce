@@ -5,8 +5,19 @@ import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
 import {
   useAccessionLabSpecimen,
   useCreateLabProcessingRun,
@@ -35,7 +46,11 @@ const stageMeta: Array<{ value: LabOperationsStage; label: string; description: 
 
 export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<LabOperationsStage>('receiving');
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [selectedSpecimen, setSelectedSpecimen] = useState<LabSpecimen | null>(null);
+  const [rejectionReason, setRejectionReason] = useState('');
 
   const receiving = useLabWorklist('receiving');
   const accessioning = useLabWorklist('accessioning');
@@ -56,6 +71,46 @@ export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) 
     }),
     [receiving.data, accessioning.data, processing.data, resultEntry.data],
   );
+
+  const openRejectDialog = (specimen: LabSpecimen) => {
+    setSelectedSpecimen(specimen);
+    setRejectionReason('');
+    setRejectDialogOpen(true);
+  };
+
+  const closeRejectDialog = () => {
+    if (rejectMutation.isPending) return;
+    setRejectDialogOpen(false);
+    setSelectedSpecimen(null);
+    setRejectionReason('');
+  };
+
+  const handleReject = async () => {
+    if (!selectedSpecimen) return;
+
+    const reason = rejectionReason.trim();
+    if (!reason) {
+      toast({
+        title: 'Rejection reason is required',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      await rejectMutation.mutateAsync({
+        id: selectedSpecimen.id,
+        payload: { rejectionReason: reason },
+      });
+      closeRejectDialog();
+    } catch (error) {
+      toast({
+        title: 'Failed to reject specimen',
+        description: error instanceof Error ? error.message : 'Try again.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -96,15 +151,7 @@ export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) 
                     isLoading={receiving.isLoading}
                     actionLabel="Receive"
                     onAction={(specimen) => receiveMutation.mutate({ id: specimen.id })}
-                    onReject={(specimen) => {
-                      const reason = window.prompt(`Reject specimen ${specimen.barcode ?? specimen.id} because:`);
-                      if (reason) {
-                        rejectMutation.mutate({
-                          id: specimen.id,
-                          payload: { rejectionReason: reason },
-                        });
-                      }
-                    }}
+                    onReject={openRejectDialog}
                   />
                 )}
                 {stage.value === 'accessioning' && (
@@ -113,21 +160,14 @@ export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) 
                     isLoading={accessioning.isLoading}
                     actionLabel="Accession"
                     onAction={(specimen) => accessionMutation.mutate({ id: specimen.id })}
-                    onReject={(specimen) => {
-                      const reason = window.prompt(`Reject specimen ${specimen.barcode ?? specimen.id} because:`);
-                      if (reason) {
-                        rejectMutation.mutate({
-                          id: specimen.id,
-                          payload: { rejectionReason: reason },
-                        });
-                      }
-                    }}
+                    onReject={openRejectDialog}
                   />
                 )}
                 {stage.value === 'processing' && (
                   <ProcessingTable
                     items={(processing.data as LabProcessingWorklistItem[] | undefined) ?? []}
                     isLoading={processing.isLoading}
+                    isStarting={processingMutation.isPending}
                     onStart={(item) =>
                       processingMutation.mutate({
                         specimenId: item.specimen.id,
@@ -153,6 +193,36 @@ export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) 
           </TabsContent>
         ))}
       </Tabs>
+
+      <Dialog open={rejectDialogOpen} onOpenChange={(open) => (!open ? closeRejectDialog() : setRejectDialogOpen(true))}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Specimen</DialogTitle>
+            <DialogDescription>
+              Provide a reason for rejecting specimen {selectedSpecimen?.barcode ?? selectedSpecimen?.id ?? ''}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 pb-2">
+            <Label htmlFor="lab-rejection-reason">Rejection reason *</Label>
+            <Textarea
+              id="lab-rejection-reason"
+              value={rejectionReason}
+              onChange={(event) => setRejectionReason(event.target.value)}
+              placeholder="Enter rejection reason..."
+              className="min-h-[160px]"
+              disabled={rejectMutation.isPending}
+            />
+          </div>
+          <DialogFooter className="pt-2">
+            <Button variant="outline" onClick={closeRejectDialog} disabled={rejectMutation.isPending}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleReject} disabled={rejectMutation.isPending}>
+              {rejectMutation.isPending ? 'Rejecting...' : 'Reject'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -225,10 +295,12 @@ function SpecimenTable({
 function ProcessingTable({
   items,
   isLoading,
+  isStarting,
   onStart,
 }: {
   items: LabProcessingWorklistItem[];
   isLoading: boolean;
+  isStarting: boolean;
   onStart: (item: LabProcessingWorklistItem) => void;
 }) {
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading processing worklist...</div>;
@@ -263,8 +335,12 @@ function ProcessingTable({
               </Badge>
             </TableCell>
             <TableCell className="text-right">
-              <Button size="sm" onClick={() => onStart(item)}>
-                Start Processing
+              <Button
+                size="sm"
+                onClick={() => onStart(item)}
+                disabled={isStarting || item.status !== 'accessioned'}
+              >
+                {item.status === 'processing' ? 'Processing Started' : 'Start Processing'}
               </Button>
             </TableCell>
           </TableRow>

@@ -7,6 +7,7 @@
 
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
+import { ReplaceLabTestResultTemplatesDto } from './dto/lab-test-result-template.dto';
 
 export interface CatalogFilters {
   tenantId?: string | undefined;
@@ -123,6 +124,15 @@ export class CatalogService {
   async getLabTestById(id: string) {
     const labTest = await this.prisma.labTestMaster.findUnique({
       where: { id },
+      include: {
+        resultTemplates: {
+          where: { isActive: true },
+          include: {
+            observationCodeCatalog: true,
+          },
+          orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+        },
+      },
     });
 
     if (!labTest) {
@@ -148,6 +158,115 @@ export class CatalogService {
 
   async deactivateLabTest(id: string) {
     return this.updateLabTest(id, { isActive: false });
+  }
+
+  async listLabTestResultTemplates(labTestId: string, tenantId?: string) {
+    await this.getLabTestById(labTestId);
+
+    return this.prisma.labTestResultTemplate.findMany({
+      where: {
+        labTestMasterId: labTestId,
+        isActive: true,
+        ...(tenantId ? { OR: [{ tenantId }, { tenantId: null }] } : {}),
+      },
+      include: {
+        observationCodeCatalog: true,
+      },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    });
+  }
+
+  async replaceLabTestResultTemplates(
+    labTestId: string,
+    data: ReplaceLabTestResultTemplatesDto,
+    tenantId?: string,
+  ) {
+    const labTest = await this.getLabTestById(labTestId);
+
+    if (tenantId && labTest.tenantId && labTest.tenantId !== tenantId) {
+      throw new BadRequestException('Lab test tenant does not match request tenant');
+    }
+
+    const templateKeys = new Set<string>();
+    for (const item of data.items) {
+      if (templateKeys.has(item.templateKey)) {
+        throw new BadRequestException(`Duplicate template key '${item.templateKey}'`);
+      }
+      templateKeys.add(item.templateKey);
+
+      const nodeType = item.nodeType ?? 'analyte';
+      if (item.parentTemplateKey && !templateKeys.has(item.parentTemplateKey)) {
+        throw new BadRequestException('Parent groups must appear before their child template rows');
+      }
+      if (item.parentTemplateKey && item.parentTemplateKey === item.templateKey) {
+        throw new BadRequestException('Template rows cannot be their own parent');
+      }
+      if (nodeType === 'group' && !item.displayLabel?.trim()) {
+        throw new BadRequestException('Group template rows require a display label');
+      }
+      if (nodeType === 'analyte' && !item.observationCodeCatalogId) {
+        throw new BadRequestException('Analyte template rows require an observation catalog reference');
+      }
+    }
+
+    const observationIds = [
+      ...new Set(
+        data.items
+          .filter((item) => (item.nodeType ?? 'analyte') === 'analyte')
+          .map((item) => item.observationCodeCatalogId)
+          .filter((value): value is string => Boolean(value)),
+      ),
+    ];
+    const observations = observationIds.length
+      ? await this.prisma.observationCodeCatalog.findMany({
+          where: {
+            id: { in: observationIds },
+            isActive: true,
+            category: 'laboratory',
+            ...(tenantId ? { OR: [{ tenantId }, { tenantId: null }] } : {}),
+          },
+        })
+      : [];
+
+    if (observations.length !== observationIds.length) {
+      throw new BadRequestException(
+        'Every template item must reference an active laboratory observation catalog entry',
+      );
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.labTestResultTemplate.deleteMany({
+        where: { labTestMasterId: labTestId },
+      });
+
+      if (data.items.length > 0) {
+        const createdTemplateIds = new Map<string, string>();
+
+        for (const [index, item] of data.items.entries()) {
+          const created = await tx.labTestResultTemplate.create({
+            data: {
+              tenantId: labTest.tenantId ?? tenantId ?? null,
+              labTestMasterId: labTestId,
+              parentTemplateId: item.parentTemplateKey
+                ? createdTemplateIds.get(item.parentTemplateKey) ?? null
+                : null,
+              nodeType: item.nodeType ?? 'analyte',
+              groupKey: item.groupKey?.trim() || null,
+              renderStyle: item.renderStyle?.trim() || null,
+              observationCodeCatalogId: item.observationCodeCatalogId ?? null,
+              displayLabel: item.displayLabel?.trim() || null,
+              sortOrder: item.sortOrder ?? index,
+              isRequired: item.isRequired ?? true,
+              isActive: item.isActive ?? true,
+            },
+          });
+
+          createdTemplateIds.set(item.templateKey, created.id);
+        }
+      }
+    });
+
+    return this.listLabTestResultTemplates(labTestId, tenantId ?? labTest.tenantId ?? undefined);
   }
 
   // ========================================

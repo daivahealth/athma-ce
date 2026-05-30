@@ -39,7 +39,7 @@ export function useUpdateClinicalNote() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, encounterId, payload }: { id: string; encounterId: string; payload: UpdateClinicalNoteInput }) =>
+    mutationFn: ({ id, payload }: { id: string; encounterId: string; payload: UpdateClinicalNoteInput }) =>
       chartingService.updateClinicalNote(id, payload),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['clinical-notes', 'encounter', variables.encounterId] });
@@ -74,7 +74,7 @@ export function useDeleteDiagnosis() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+    mutationFn: ({ id }: { id: string; encounterId: string }) =>
       chartingService.deleteDiagnosis(id),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
@@ -90,6 +90,14 @@ export function useClinicalOrdersByEncounter(encounterId: string) {
     queryKey: ['clinical-orders', 'encounter', encounterId],
     queryFn: () => chartingService.getClinicalOrdersByEncounter(encounterId),
     enabled: !!encounterId,
+  });
+}
+
+export function useClinicalOrder(id: string) {
+  return useQuery({
+    queryKey: ['clinical-order', id],
+    queryFn: () => chartingService.getClinicalOrder(id),
+    enabled: !!id,
   });
 }
 
@@ -139,7 +147,7 @@ export function useCancelPackageOrder() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+    mutationFn: ({ id }: { id: string; encounterId: string }) =>
       chartingService.cancelPackageOrder(id),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
@@ -158,7 +166,6 @@ export function useUpdateClinicalOrder() {
   return useMutation({
     mutationFn: ({
       id,
-      encounterId,
       data,
     }: {
       id: string;
@@ -180,7 +187,7 @@ export function useDeleteClinicalOrder() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+    mutationFn: ({ id }: { id: string; encounterId: string }) =>
       chartingService.deleteClinicalOrder(id),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
@@ -219,7 +226,6 @@ export function useUpdatePrescription() {
   return useMutation({
     mutationFn: ({
       id,
-      encounterId,
       data,
     }: {
       id: string;
@@ -238,7 +244,7 @@ export function useDeletePrescription() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+    mutationFn: ({ id }: { id: string; encounterId: string }) =>
       chartingService.deletePrescription(id),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({

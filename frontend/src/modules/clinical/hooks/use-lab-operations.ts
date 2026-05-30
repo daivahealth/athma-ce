@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { labOperationsService } from '../services/lab-operations-service';
 import type {
   AccessionLabSpecimenInput,
@@ -6,6 +6,7 @@ import type {
   CollectLabSpecimenInput,
   CompleteLabResultEntryInput,
   CreateLabProcessingRunInput,
+  LabReportContext,
   LabWorklistStage,
   ReceiveLabSpecimenInput,
   RejectLabSpecimenInput,
@@ -36,7 +37,7 @@ export function useCollectLabSpecimen() {
   return useMutation({
     mutationFn: (payload: CollectLabSpecimenInput) => labOperationsService.collectSpecimen(payload),
     onSuccess: () => {
-      invalidateLabWorklists(queryClient);
+      invalidateLabWorklistStages(queryClient, ['collection', 'receiving']);
     },
   });
 }
@@ -47,7 +48,7 @@ export function usePrepareLabSpecimen() {
   return useMutation({
     mutationFn: (payload: PrepareLabSpecimenInput) => labOperationsService.prepareSpecimen(payload),
     onSuccess: () => {
-      invalidateLabWorklists(queryClient);
+      invalidateLabWorklistStages(queryClient, ['collection']);
     },
   });
 }
@@ -65,7 +66,7 @@ export function useReceiveLabSpecimen() {
     mutationFn: ({ id, payload }: { id: string; payload?: ReceiveLabSpecimenInput }) =>
       labOperationsService.receiveSpecimen(id, payload),
     onSuccess: (_, variables) => {
-      invalidateLabWorklists(queryClient);
+      invalidateLabWorklistStages(queryClient, ['receiving', 'accessioning']);
       queryClient.invalidateQueries({ queryKey: ['lab-operations', 'specimen', variables.id] });
     },
   });
@@ -78,7 +79,7 @@ export function useAccessionLabSpecimen() {
     mutationFn: ({ id, payload }: { id: string; payload?: AccessionLabSpecimenInput }) =>
       labOperationsService.accessionSpecimen(id, payload),
     onSuccess: (_, variables) => {
-      invalidateLabWorklists(queryClient);
+      invalidateLabWorklistStages(queryClient, ['accessioning', 'processing']);
       queryClient.invalidateQueries({ queryKey: ['lab-operations', 'specimen', variables.id] });
     },
   });
@@ -91,7 +92,7 @@ export function useRejectLabSpecimen() {
     mutationFn: ({ id, payload }: { id: string; payload: RejectLabSpecimenInput }) =>
       labOperationsService.rejectSpecimen(id, payload),
     onSuccess: (_, variables) => {
-      invalidateLabWorklists(queryClient);
+      invalidateLabWorklistStages(queryClient, ['receiving', 'accessioning', 'processing', 'result-entry']);
       queryClient.invalidateQueries({ queryKey: ['lab-operations', 'specimen', variables.id] });
     },
   });
@@ -103,7 +104,7 @@ export function useCreateLabProcessingRun() {
   return useMutation({
     mutationFn: (payload: CreateLabProcessingRunInput) => labOperationsService.createProcessingRun(payload),
     onSuccess: () => {
-      invalidateLabWorklists(queryClient);
+      invalidateLabWorklistStages(queryClient, ['processing']);
     },
   });
 }
@@ -114,19 +115,54 @@ export function useStartLabResultEntry() {
   });
 }
 
+export function useLabResultEntryContext(labOrderTestId: string, specimenId?: string) {
+  return useQuery({
+    queryKey: ['lab-operations', 'result-entry-context', labOrderTestId, specimenId],
+    queryFn: () => labOperationsService.getResultEntryContext(labOrderTestId, specimenId),
+    enabled: !!labOrderTestId,
+  });
+}
+
+export function useLabResultEntryContexts(labOrderTestIds: string[]) {
+  return useQueries({
+    queries: labOrderTestIds.map((labOrderTestId) => ({
+      queryKey: ['lab-operations', 'result-entry-context', labOrderTestId],
+      queryFn: () => labOperationsService.getResultEntryContext(labOrderTestId),
+      enabled: !!labOrderTestId,
+    })),
+    combine: (results) => ({
+      data: results
+        .map((result) => result.data)
+        .filter((context): context is LabReportContext => Boolean(context)),
+      isLoading: results.some((result) => result.isLoading),
+      isError: results.some((result) => result.isError),
+    }),
+  });
+}
+
 export function useCompleteLabResultEntry() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (payload: CompleteLabResultEntryInput) => labOperationsService.completeResultEntry(payload),
     onSuccess: () => {
-      invalidateLabWorklists(queryClient);
+      invalidateLabWorklistStages(queryClient, ['processing', 'result-entry']);
+      invalidateResultQueries(queryClient);
+      queryClient.invalidateQueries({ queryKey: ['lab-operations', 'result-entry-context'] });
     },
   });
 }
 
-function invalidateLabWorklists(queryClient: ReturnType<typeof useQueryClient>) {
-  queryClient.invalidateQueries({ queryKey: ['lab-operations'] });
+function invalidateLabWorklistStages(
+  queryClient: ReturnType<typeof useQueryClient>,
+  stages: LabWorklistStage[],
+) {
+  stages.forEach((stage) => {
+    queryClient.invalidateQueries({ queryKey: ['lab-operations', 'worklist', stage] });
+  });
+}
+
+function invalidateResultQueries(queryClient: ReturnType<typeof useQueryClient>) {
   queryClient.invalidateQueries({ queryKey: ['results'] });
   queryClient.invalidateQueries({ queryKey: ['patient-results'] });
 }

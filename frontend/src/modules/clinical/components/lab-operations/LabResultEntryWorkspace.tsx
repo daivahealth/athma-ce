@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,10 +23,17 @@ export function LabResultEntryWorkspace({
 }: LabResultEntryWorkspaceProps) {
   const router = useRouter();
   const [context, setContext] = useState<StartLabResultEntryContext | null>(null);
+  const requestedKeyRef = useRef<string | null>(null);
   const startResultEntry = useStartLabResultEntry();
   const completeResultEntry = useCompleteLabResultEntry();
 
   useEffect(() => {
+    const requestKey = `${labOrderTestId}:${specimenId ?? 'latest'}`;
+    if (requestedKeyRef.current === requestKey) {
+      return;
+    }
+    requestedKeyRef.current = requestKey;
+
     startResultEntry
       .mutateAsync({
         labOrderTestId,
@@ -34,11 +41,7 @@ export function LabResultEntryWorkspace({
       })
       .then(setContext)
       .catch(() => null);
-  }, [labOrderTestId, specimenId]);
-
-  if (startResultEntry.isPending || !context) {
-    return <div className="p-6">Preparing result entry...</div>;
-  }
+  }, [labOrderTestId, specimenId, startResultEntry]);
 
   if (startResultEntry.isError) {
     return (
@@ -46,6 +49,10 @@ export function LabResultEntryWorkspace({
         Unable to open lab result entry for this ordered test.
       </div>
     );
+  }
+
+  if (startResultEntry.isPending || !context) {
+    return <div className="p-6">Preparing result entry...</div>;
   }
 
   return (

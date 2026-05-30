@@ -643,20 +643,14 @@ export class LabOperationsService {
 
   async createProcessingRun(tenantId: string, userId: string, dto: CreateLabProcessingRunDto) {
     return this.prisma.$transaction(async (tx) => {
-      const specimen = await this.requireSpecimenTx(tx, tenantId, dto.specimenId);
+      const { orderTest, specimen, specimenLink, latestAccession } = await this.resolveResultEntryContextTx(
+        tx,
+        tenantId,
+        dto,
+      );
       this.ensureSpecimenActionable(specimen);
 
-      const link = await tx.labSpecimenTest.findFirst({
-        where: {
-          tenantId,
-          specimenId: dto.specimenId,
-          labOrderTestId: dto.labOrderTestId,
-        },
-      });
-
-      if (!link) {
-        throw new BadRequestException('The supplied specimen is not linked to the requested lab order test');
-      }
+      const link = specimenLink;
 
       const processedAt = dto.processedAt ? new Date(dto.processedAt) : new Date();
       const processedBy = dto.processedBy ?? userId;
@@ -697,6 +691,15 @@ export class LabOperationsService {
         },
       });
 
+      await this.ensureActiveReportForOrderTestTx(
+        tx,
+        tenantId,
+        userId,
+        orderTest,
+        specimen,
+        latestAccession,
+      );
+
       await this.recordEvent(tx, tenantId, specimen.id, LabSpecimenEventType.PROCESSING_STARTED, processedBy, null, {
         labOrderTestId: dto.labOrderTestId,
         processingRunId: run.id,
@@ -711,41 +714,11 @@ export class LabOperationsService {
 
   async startResultEntry(tenantId: string, userId: string, dto: StartLabResultEntryDto) {
     return this.prisma.$transaction(async (tx) => {
-      const orderTest = await tx.labOrderTest.findFirst({
-        where: {
-          tenantId,
-          id: dto.labOrderTestId,
-        },
-        include: {
-          order: true,
-          specimenTests: {
-            include: {
-              specimen: {
-                include: {
-                  accessions: {
-                    orderBy: { createdAt: 'desc' },
-                  },
-                },
-              },
-            },
-            orderBy: {
-              createdAt: 'desc',
-            },
-          },
-        },
-      });
-
-      if (!orderTest) {
-        throw new NotFoundException(`Lab order test ${dto.labOrderTestId} not found`);
-      }
-
-      const specimenLink = dto.specimenId
-        ? orderTest.specimenTests.find((candidate) => candidate.specimenId === dto.specimenId)
-        : orderTest.specimenTests.find((candidate) => candidate.specimen.status !== LabSpecimenStatus.REJECTED);
-
-      if (!specimenLink) {
-        throw new BadRequestException('No actionable specimen is linked to this lab order test');
-      }
+      const { orderTest, specimen, specimenLink, latestAccession } = await this.resolveResultEntryContextTx(
+        tx,
+        tenantId,
+        dto,
+      );
 
       if (orderTest.status !== LabSpecimenStatus.PROCESSING && orderTest.status !== LabSpecimenStatus.RESULT_ENTERED) {
         await tx.labOrderTest.update({
@@ -756,66 +729,41 @@ export class LabOperationsService {
         });
       }
 
-      const specimen = specimenLink.specimen;
-      const latestAccession = specimen.accessions[0] ?? null;
-
-      const existingReport = await tx.labReport.findFirst({
-        where: {
-          tenantId,
-          orderId: orderTest.orderId,
-          reportStatus: {
-            in: ['DRAFT', 'PRELIMINARY'],
-          },
-        },
-        include: {
-          items: {
-            orderBy: {
-              sortOrder: 'asc',
-            },
-          },
-        },
-        orderBy: {
-          updatedAt: 'desc',
-        },
-      });
-
-      let report;
-      if (!existingReport) {
-        const createPayload: {
-          orderId: string;
-          specimenType?: string;
-          collectionDate?: string;
-          receivedDate?: string;
-        } = {
-          orderId: orderTest.orderId,
-        };
-        if (specimen.specimenType) createPayload.specimenType = specimen.specimenType;
-        if (specimen.collectedAt) createPayload.collectionDate = specimen.collectedAt.toISOString();
-        if (latestAccession?.receivedAt) createPayload.receivedDate = latestAccession.receivedAt.toISOString();
-        report = await this.labReportsService.create(tenantId, userId, createPayload);
-      } else {
-        report = await tx.labReport.update({
-          where: { id: existingReport.id },
-          data: {
-            specimenType: existingReport.specimenType ?? specimen.specimenType ?? null,
-            collectionDate: existingReport.collectionDate ?? specimen.collectedAt ?? null,
-            receivedDate: existingReport.receivedDate ?? latestAccession?.receivedAt ?? null,
-            updatedBy: userId,
-          },
-          include: {
-            items: {
-              orderBy: {
-                sortOrder: 'asc',
-              },
-            },
-          },
-        });
-      }
+      let report = await this.ensureActiveReportForOrderTestTx(
+        tx,
+        tenantId,
+        userId,
+        orderTest,
+        specimen,
+        latestAccession,
+      );
 
       await this.recordEvent(tx, tenantId, specimen.id, LabSpecimenEventType.RESULT_ENTRY_STARTED, userId, null, {
         labOrderTestId: orderTest.id,
         reportId: report.id,
       });
+
+      if (report.items.length === 0 && orderTest.labTestMasterId) {
+        const seededItems = await this.seedResultTemplateItemsTx(
+          tx,
+          tenantId,
+          report.id,
+          orderTest.labTestMasterId,
+        );
+
+        if (seededItems.length > 0) {
+          report = await tx.labReport.findUniqueOrThrow({
+            where: { id: report.id },
+            include: {
+              items: {
+                orderBy: {
+                  sortOrder: 'asc',
+                },
+              },
+            },
+          });
+        }
+      }
 
       return {
         order: orderTest.order,
@@ -825,6 +773,155 @@ export class LabOperationsService {
         report,
       };
     });
+  }
+
+  async getResultEntryContext(tenantId: string, dto: StartLabResultEntryDto) {
+    const { orderTest, specimen, latestAccession } = await this.resolveResultEntryContextTx(
+      this.prisma,
+      tenantId,
+      dto,
+    );
+
+    return {
+      order: orderTest.order,
+      labOrderTest: orderTest,
+      specimen,
+      accession: latestAccession,
+    };
+  }
+
+  private async resolveResultEntryContextTx(
+    tx: TxClient,
+    tenantId: string,
+    dto: StartLabResultEntryDto,
+  ) {
+    const orderTest = await tx.labOrderTest.findFirst({
+      where: {
+        tenantId,
+        id: dto.labOrderTestId,
+      },
+      include: {
+        order: true,
+        specimenTests: {
+          include: {
+            specimen: {
+              include: {
+                accessions: {
+                  orderBy: { createdAt: 'desc' },
+                },
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
+
+    if (!orderTest) {
+      throw new NotFoundException(`Lab order test ${dto.labOrderTestId} not found`);
+    }
+
+    const specimenLink = dto.specimenId
+      ? orderTest.specimenTests.find((candidate: any) => candidate.specimenId === dto.specimenId)
+      : orderTest.specimenTests.find(
+          (candidate: any) => candidate.specimen.status !== LabSpecimenStatus.REJECTED,
+        );
+
+    if (!specimenLink) {
+      throw new BadRequestException('No actionable specimen is linked to this lab order test');
+    }
+
+    const specimen = specimenLink.specimen;
+    const latestAccession = specimen.accessions[0] ?? null;
+
+    return { orderTest, specimen, specimenLink, latestAccession };
+  }
+
+  private async ensureActiveReportForOrderTestTx(
+    tx: TxClient,
+    tenantId: string,
+    userId: string,
+    orderTest: any,
+    specimen: any,
+    latestAccession: any,
+  ) {
+    const existingReport = await tx.labReport.findFirst({
+      where: {
+        tenantId,
+        orderId: orderTest.orderId,
+        reportStatus: {
+          in: ['DRAFT', 'PRELIMINARY'],
+        },
+      },
+      include: {
+        items: {
+          orderBy: {
+            sortOrder: 'asc',
+          },
+        },
+      },
+      orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
+    });
+
+    let report;
+    if (!existingReport) {
+      const createPayload: {
+        orderId: string;
+        specimenType?: string;
+        collectionDate?: string;
+        receivedDate?: string;
+      } = {
+        orderId: orderTest.orderId,
+      };
+      if (specimen.specimenType) createPayload.specimenType = specimen.specimenType;
+      if (specimen.collectedAt) createPayload.collectionDate = specimen.collectedAt.toISOString();
+      if (latestAccession?.receivedAt) createPayload.receivedDate = latestAccession.receivedAt.toISOString();
+      const createdReport = await this.labReportsService.create(tenantId, userId, createPayload);
+      report = await this.labReportsService.findById(tenantId, createdReport.id);
+    } else {
+      report = await tx.labReport.update({
+        where: { id: existingReport.id },
+        data: {
+          specimenType: existingReport.specimenType ?? specimen.specimenType ?? null,
+          collectionDate: existingReport.collectionDate ?? specimen.collectedAt ?? null,
+          receivedDate: existingReport.receivedDate ?? latestAccession?.receivedAt ?? null,
+          updatedBy: userId,
+        },
+        include: {
+          items: {
+            orderBy: {
+              sortOrder: 'asc',
+            },
+          },
+        },
+      });
+    }
+
+    if (report.items.length === 0 && orderTest.labTestMasterId) {
+      const seededItems = await this.seedResultTemplateItemsTx(
+        tx,
+        tenantId,
+        report.id,
+        orderTest.labTestMasterId,
+      );
+
+      if (seededItems.length > 0) {
+        report = await tx.labReport.findUniqueOrThrow({
+          where: { id: report.id },
+          include: {
+            items: {
+              orderBy: {
+                sortOrder: 'asc',
+              },
+            },
+          },
+        });
+      }
+    }
+
+    return report;
   }
 
   async completeResultEntry(tenantId: string, userId: string, dto: CompleteLabResultEntryDto) {
@@ -879,6 +976,15 @@ export class LabOperationsService {
         throw new BadRequestException('Result entry cannot be completed before report items are saved');
       }
 
+      await this.ensureManualProcessingRunForCompletedEntryTx(
+        tx,
+        tenantId,
+        userId,
+        orderTest.id,
+        specimenLink.specimenId,
+        report.reportedAt ?? report.updatedAt ?? new Date(),
+      );
+
       await tx.labOrderTest.update({
         where: { id: orderTest.id },
         data: {
@@ -922,6 +1028,60 @@ export class LabOperationsService {
         status: LabSpecimenStatus.RESULT_ENTERED,
       };
     });
+  }
+
+  private async ensureManualProcessingRunForCompletedEntryTx(
+    tx: TxClient,
+    tenantId: string,
+    userId: string,
+    labOrderTestId: string,
+    specimenId: string,
+    processedAtSource: Date | string,
+  ) {
+    const existingRun = await tx.labProcessingRun.findFirst({
+      where: {
+        tenantId,
+        labOrderTestId,
+        specimenId,
+      },
+      orderBy: [{ processedAt: 'desc' }, { createdAt: 'desc' }],
+    });
+
+    if (existingRun) {
+      return existingRun;
+    }
+
+    const processedAt = processedAtSource instanceof Date ? processedAtSource : new Date(processedAtSource);
+
+    const run = await tx.labProcessingRun.create({
+      data: {
+        tenantId,
+        specimenId,
+        labOrderTestId,
+        runType: LabProcessingRunType.MANUAL,
+        status: LabProcessingStatus.COMPLETED,
+        processedAt,
+        processedBy: userId,
+      },
+    });
+
+    await this.recordEvent(
+      tx,
+      tenantId,
+      specimenId,
+      LabSpecimenEventType.PROCESSING_STARTED,
+      userId,
+      'Backfilled from manual result completion',
+      {
+        labOrderTestId,
+        processingRunId: run.id,
+        runType: run.runType,
+        source: 'manual_result_completion',
+      },
+      processedAt,
+    );
+
+    return run;
   }
 
   private async getCollectionWorklist(tenantId: string, query: LabWorklistQueryDto) {
@@ -1164,6 +1324,53 @@ export class LabOperationsService {
     }));
 
     return [...preparedGroups, ...readyGroups];
+  }
+
+  private async seedResultTemplateItemsTx(
+    tx: TxClient,
+    tenantId: string,
+    reportId: string,
+    labTestMasterId: string,
+  ) {
+    const templates = await tx.labTestResultTemplate.findMany({
+      where: {
+        labTestMasterId,
+        isActive: true,
+        OR: [{ tenantId }, { tenantId: null }],
+      },
+      include: {
+        observationCodeCatalog: true,
+      },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    });
+
+    if (templates.length === 0) {
+      return [];
+    }
+
+    const analyteTemplates = templates.filter(
+      (template: (typeof templates)[number]) =>
+        template.nodeType === 'analyte' && template.observationCodeCatalog !== null,
+    );
+
+    return Promise.all(
+      analyteTemplates.map((template: (typeof analyteTemplates)[number], index: number) =>
+        tx.labResultItem.create({
+          data: {
+            tenantId,
+            labReportId: reportId,
+            sortOrder: template.sortOrder ?? index,
+            testCode: template.observationCodeCatalog!.code,
+            codeSystem: template.observationCodeCatalog!.codeSystem,
+            testName: template.displayLabel ?? template.observationCodeCatalog!.displayName,
+            testNameAr: template.observationCodeCatalog!.displayNameAr ?? null,
+            unit: template.observationCodeCatalog!.defaultUnit ?? null,
+            refRangeLow: template.observationCodeCatalog!.refRangeLow ?? null,
+            refRangeHigh: template.observationCodeCatalog!.refRangeHigh ?? null,
+          },
+        }),
+      ),
+    );
   }
 
   private async getReceivingWorklist(tenantId: string, query: LabWorklistQueryDto) {

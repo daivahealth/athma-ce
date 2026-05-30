@@ -13,14 +13,16 @@ export class ObservationCatalogController {
   async list(
     @Headers('x-tenant-id') tenantId: string,
     @Query('category') category?: string,
+    @Query('labDomain') labDomain?: string,
   ) {
     return this.prisma.observationCodeCatalog.findMany({
       where: {
         isActive: true,
         OR: [{ tenantId }, { tenantId: null }],
         ...(category ? { category } : {}),
+        ...(labDomain ? { labDomain } : {}),
       },
-      orderBy: [{ category: 'asc' }, { displayName: 'asc' }],
+      orderBy: [{ category: 'asc' }, { labDomain: 'asc' }, { displayName: 'asc' }],
     });
   }
 

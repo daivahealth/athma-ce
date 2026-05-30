@@ -267,6 +267,13 @@ export class StartLabResultEntryDto {
   specimenId?: string;
 }
 
+export class GetLabResultEntryContextQueryDto {
+  @ApiPropertyOptional({ description: 'Specimen ID. If omitted, latest linked specimen is used.' })
+  @IsOptional()
+  @IsUUID('4')
+  specimenId?: string;
+}
+
 export class CompleteLabResultEntryDto {
   @ApiProperty({ description: 'Lab order test ID' })
   @IsUUID('4')

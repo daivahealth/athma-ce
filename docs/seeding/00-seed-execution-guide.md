@@ -61,8 +61,30 @@ Each command streams SQL files into the Postgres container (`zeal-postgres`); cu
 
 ### Clinical seeds
 ```
-20-patients.sql
-99-hie-patient-consents.sql
+00-setup.sql
+01-patients.sql
+02-valuesets.sql
+03-vital-signs-templates.sql
+04-medications.sql
+05-lab-tests.sql
+06-imaging-studies.sql
+07-procedures.sql
+08-diagnosis-master.sql
+09-administrative-services.sql
+10-packages.sql
+11-discharge-checklist-template.sql
+12-more-checklist-templates.sql
+13-biomarkers.sql
+14-wellness-programs.sql
+15-longevity-protocols.sql
+16-lifestyle-templates.sql
+17-membership-plans.sql
+18-pgvector-setup.sql
+21-lab-test-result-templates.sql   # CBC analytes + hybrid CBC template (flat CBC rows with grouped Differential Count)
+23-oncology-catalogs.sql
+24-chemo-protocols.sql
+25-ot-room-configs.sql
+26-lab-test-tat-backfill.sql      # Idempotent turnaround-time defaults for seeded lab_test_master rows
 ```
 
 ### RCM seeds
@@ -106,7 +128,8 @@ SELECT COUNT(*) FROM roles;
 
 -- Clinical
 SELECT COUNT(*) FROM patients;
-SELECT COUNT(*) FROM patient_consents;
+SELECT COUNT(*) FROM observation_code_catalog;
+SELECT COUNT(*) FROM lab_test_result_templates;
 
 -- RCM
 SELECT COUNT(*) FROM payers;

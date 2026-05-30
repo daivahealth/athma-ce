@@ -22,7 +22,13 @@ import type { CreateClinicalCodingInput } from '../types/clinical-coding';
 
 type LegacySectionsPayload = {
   sections?: unknown;
-  content?: Record<string, any>;
+  content?: Record<string, unknown>;
+};
+
+type LegacyClinicalOrderPayload = ClinicalOrder & {
+  labOrderTests?: ClinicalOrder['labTests'];
+  imagingOrderDetails?: ClinicalOrder['imagingDetails'];
+  procedureOrderDetails?: ClinicalOrder['procedureDetails'];
 };
 
 function normalizeClinicalNotePayload<T extends LegacySectionsPayload>(payload: T): T {
@@ -38,6 +44,37 @@ function normalizeClinicalNotePayload<T extends LegacySectionsPayload>(payload: 
     ...rest,
     content: normalizedContent,
   } as T;
+}
+
+function normalizeClinicalOrderPayload<T extends LegacyClinicalOrderPayload>(payload: T): T {
+  return {
+    ...payload,
+    labTests: payload.labTests ?? payload.labOrderTests ?? [],
+    imagingDetails: payload.imagingDetails ?? payload.imagingOrderDetails ?? [],
+    procedureDetails: payload.procedureDetails ?? payload.procedureOrderDetails ?? [],
+  };
+}
+
+function normalizeClinicalOrderList<T extends LegacyClinicalOrderPayload>(payload: T[]): T[] {
+  return payload.map((order) => normalizeClinicalOrderPayload(order));
+}
+
+function normalizePackageOrderPayload(payload: PackageOrder): PackageOrder {
+  return {
+    ...payload,
+    clinicalOrders: normalizeClinicalOrderList(payload.clinicalOrders ?? []),
+  };
+}
+
+function normalizeEncounterChartOrdersPayload(payload: EncounterChartOrders): EncounterChartOrders {
+  return {
+    ...payload,
+    standaloneOrders: normalizeClinicalOrderList(payload.standaloneOrders ?? []),
+    packageOrders: (payload.packageOrders ?? []).map((packageOrder) => ({
+      ...packageOrder,
+      clinicalOrders: normalizeClinicalOrderList(packageOrder.clinicalOrders ?? []),
+    })),
+  };
 }
 
 class ChartingService {
@@ -93,7 +130,7 @@ class ChartingService {
     await clinicalClient.delete(`/encounter-notes/${id}`);
   }
 
-  async getClinicalNoteStatistics(encounterId: string): Promise<any> {
+  async getClinicalNoteStatistics(encounterId: string): Promise<Record<string, unknown>> {
     const response = await clinicalClient.get(
       `/encounter-notes/encounter/${encounterId}/statistics`
     );
@@ -144,42 +181,42 @@ class ChartingService {
 
   async createClinicalOrder(payload: CreateClinicalOrderInput): Promise<ClinicalOrder> {
     const response = await clinicalClient.post('/clinical-orders', payload);
-    return response.data;
+    return normalizeClinicalOrderPayload(response.data);
   }
 
   async createPackageOrder(payload: CreatePackageOrderInput): Promise<PackageOrder> {
     const response = await clinicalClient.post('/clinical-orders/package-orders', payload);
-    return response.data;
+    return normalizePackageOrderPayload(response.data);
   }
 
   async getPackageOrder(id: string): Promise<PackageOrder> {
     const response = await clinicalClient.get(`/clinical-orders/package-orders/${id}`);
-    return response.data;
+    return normalizePackageOrderPayload(response.data);
   }
 
   async cancelPackageOrder(id: string): Promise<PackageOrder> {
     const response = await clinicalClient.post(`/clinical-orders/package-orders/${id}/cancel`);
-    return response.data;
+    return normalizePackageOrderPayload(response.data);
   }
 
   async getClinicalOrder(id: string): Promise<ClinicalOrder> {
     const response = await clinicalClient.get(`/clinical-orders/${id}`);
-    return response.data;
+    return normalizeClinicalOrderPayload(response.data);
   }
 
   async getClinicalOrdersByEncounter(encounterId: string): Promise<ClinicalOrder[]> {
     const response = await clinicalClient.get(`/clinical-orders/encounter/${encounterId}`);
-    return response.data;
+    return normalizeClinicalOrderList(response.data);
   }
 
   async getEncounterChartOrders(encounterId: string): Promise<EncounterChartOrders> {
     const response = await clinicalClient.get(`/clinical-orders/encounter/${encounterId}/chart-view`);
-    return response.data;
+    return normalizeEncounterChartOrdersPayload(response.data);
   }
 
   async getClinicalOrdersByPatient(patientId: string): Promise<ClinicalOrder[]> {
     const response = await clinicalClient.get(`/clinical-orders/patient/${patientId}`);
-    return response.data;
+    return normalizeClinicalOrderList(response.data);
   }
 
   async updateClinicalOrder(
@@ -187,17 +224,17 @@ class ChartingService {
     payload: UpdateClinicalOrderInput
   ): Promise<ClinicalOrder> {
     const response = await clinicalClient.patch(`/clinical-orders/${id}`, payload);
-    return response.data;
+    return normalizeClinicalOrderPayload(response.data);
   }
 
   async addOrderResult(id: string, payload: AddOrderResultInput): Promise<ClinicalOrder> {
     const response = await clinicalClient.put(`/clinical-orders/${id}/results`, payload);
-    return response.data;
+    return normalizeClinicalOrderPayload(response.data);
   }
 
   async cancelClinicalOrder(id: string): Promise<ClinicalOrder> {
     const response = await clinicalClient.post(`/clinical-orders/${id}/cancel`);
-    return response.data;
+    return normalizeClinicalOrderPayload(response.data);
   }
 
   async deleteClinicalOrder(id: string): Promise<void> {

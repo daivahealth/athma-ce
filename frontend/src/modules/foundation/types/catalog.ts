@@ -53,6 +53,56 @@ export interface LabTest {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  resultTemplates?: LabTestResultTemplate[];
+}
+
+export interface ObservationCode {
+  id: string;
+  tenantId?: string | null;
+  code: string;
+  codeSystem: string;
+  displayName: string;
+  displayNameAr?: string | null;
+  category: string;
+  labDomain?: string | null;
+  dataType: string;
+  defaultUnit?: string | null;
+  refRangeLow?: number | null;
+  refRangeHigh?: number | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LabTestResultTemplate {
+  id: string;
+  tenantId?: string | null;
+  labTestMasterId: string;
+  parentTemplateId?: string | null;
+  nodeType: 'group' | 'analyte';
+  groupKey?: string | null;
+  renderStyle?: string | null;
+  observationCodeCatalogId?: string | null;
+  displayLabel?: string | null;
+  sortOrder: number;
+  isRequired: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  observationCodeCatalog?: ObservationCode | null;
+}
+
+export interface ReplaceLabTestResultTemplateItemInput {
+  templateKey: string;
+  parentTemplateKey?: string;
+  nodeType?: 'group' | 'analyte';
+  observationCodeCatalogId?: string;
+  displayLabel?: string;
+  groupKey?: string;
+  renderStyle?: string;
+  sortOrder?: number;
+  isRequired?: boolean;
+  isActive?: boolean;
 }
 
 // Imaging Study Master
@@ -184,7 +234,7 @@ export interface NoteTemplateVersion {
   id: string;
   templateId: string;
   version: number;
-  schema: Record<string, any>;
+  schema: Record<string, unknown>;
   changeLog?: string | null;
   createdBy?: string | null;
   createdAt: string;
@@ -225,7 +275,7 @@ export interface CreateNoteTemplateInput {
   templateType?: NoteTemplateType;
   specialtyId?: string;
   status?: TemplateStatus;
-  schema: Record<string, any>;
+  schema: Record<string, unknown>;
   changeLog?: string;
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,6 +16,13 @@ import {
   useSaveLabResultItems,
   useTransitionLabReportStatus,
 } from '../../../hooks/use-reporting';
+import { useClinicalOrder } from '../../../hooks/use-charting';
+import {
+  useCompleteLabResultEntry,
+  useLabResultEntryContexts,
+} from '../../../hooks/use-lab-operations';
+import { useLabTestResultTemplates } from '@/modules/foundation/hooks/use-catalogs';
+import { buildLabDisplayRows } from './lab-report-grouping';
 
 interface LabResultEntryFormProps {
   report: LabReport;
@@ -78,8 +85,25 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
   const updateReport = useUpdateLabReport();
   const saveItems = useSaveLabResultItems();
   const transitionStatus = useTransitionLabReportStatus();
+  const completeResultEntry = useCompleteLabResultEntry();
+  const { data: order } = useClinicalOrder(report.orderId);
+  const labOrderTestIds = (order?.labTests ?? [])
+    .map((labTest) => labTest.id)
+    .filter((id): id is string => Boolean(id));
+  const { data: resultContexts = [] } = useLabResultEntryContexts(labOrderTestIds);
+  const labTestMasterId = order?.labTests?.find((labTest) => Boolean(labTest.labTestMasterId))?.labTestMasterId;
+  const { data: labTestTemplates } = useLabTestResultTemplates(labTestMasterId);
+  const displayRows = useMemo(
+    () =>
+      buildLabDisplayRows(
+        items,
+        order,
+        labTestMasterId && labTestTemplates ? { [labTestMasterId]: labTestTemplates } : undefined,
+      ),
+    [items, order, labTestMasterId, labTestTemplates],
+  );
 
-  const updateItem = (index: number, field: string, value: any) => {
+  const updateItem = (index: number, field: keyof LabResultItemInput, value: unknown) => {
     setItems((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], [field]: value };
@@ -119,6 +143,13 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
     setItems((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const findItemIndex = (rowKey: string, rowCode: string, rowCodeSystem?: string | null) =>
+    items.findIndex(
+      (item, index) =>
+        (item.id ?? `${item.testCode}:${item.codeSystem ?? 'LOINC'}:${index}`) === rowKey ||
+        (item.testCode === rowCode && (item.codeSystem ?? 'LOINC') === (rowCodeSystem ?? 'LOINC')),
+    );
+
   const handleSave = async () => {
     await updateReport.mutateAsync({
       id: report.id,
@@ -132,8 +163,24 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
     onSaved?.();
   };
 
+  const handleCompleteWorkflow = async () => {
+    const actionableContexts = resultContexts.filter(
+      (context) => context.labOrderTest.status !== 'result_entered',
+    );
+
+    await Promise.all(
+      actionableContexts.map((context) =>
+        completeResultEntry.mutateAsync({
+          labOrderTestId: context.labOrderTest.id,
+          specimenId: context.specimen.id,
+        }),
+      ),
+    );
+  };
+
   const handleSubmitPreliminary = async () => {
     await handleSave();
+    await handleCompleteWorkflow();
     await transitionStatus.mutateAsync({
       id: report.id,
       status: ReportStatus.PRELIMINARY,
@@ -143,6 +190,7 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
 
   const handleSubmitFinal = async () => {
     await handleSave();
+    await handleCompleteWorkflow();
     await transitionStatus.mutateAsync({
       id: report.id,
       status: ReportStatus.FINAL,
@@ -150,14 +198,18 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
     onSaved?.();
   };
 
-  const isSaving = updateReport.isPending || saveItems.isPending || transitionStatus.isPending;
+  const isSaving =
+    updateReport.isPending ||
+    saveItems.isPending ||
+    transitionStatus.isPending ||
+    completeResultEntry.isPending;
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold">Lab Report</h2>
+          <h2 className="text-lg font-semibold">Results</h2>
           <ResultStatusBadge status={report.reportStatus} />
           <ReportVersionIndicator
             version={report.version}
@@ -166,43 +218,6 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
           />
         </div>
         <ResultStatusWorkflow currentStatus={report.reportStatus} />
-      </div>
-
-      {/* Specimen Info */}
-      <div className="rounded-lg border p-4 space-y-4">
-        <h3 className="font-medium">Specimen Information</h3>
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label htmlFor="specimenType">Specimen Type</Label>
-            <Input
-              id="specimenType"
-              value={reportData.specimenType || ''}
-              onChange={(e) => setReportData((prev) => ({ ...prev, specimenType: e.target.value }))}
-              disabled={!isEditable}
-              placeholder="e.g., Blood, Urine"
-            />
-          </div>
-          <div>
-            <Label htmlFor="collectionDate">Collection Date</Label>
-            <Input
-              id="collectionDate"
-              type="date"
-              value={reportData.collectionDate || ''}
-              onChange={(e) => setReportData((prev) => ({ ...prev, collectionDate: e.target.value }))}
-              disabled={!isEditable}
-            />
-          </div>
-          <div>
-            <Label htmlFor="receivedDate">Received Date</Label>
-            <Input
-              id="receivedDate"
-              type="date"
-              value={reportData.receivedDate || ''}
-              onChange={(e) => setReportData((prev) => ({ ...prev, receivedDate: e.target.value }))}
-              disabled={!isEditable}
-            />
-          </div>
-        </div>
       </div>
 
       {/* Result Items */}
@@ -230,20 +245,32 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
         </div>
 
         {/* Items */}
-        {items.map((item, index) => {
+        {displayRows.map((row) => {
+          if (row.kind === 'group') {
+            return (
+              <div key={row.key} className="rounded-md bg-muted/30 px-3 py-2 text-sm font-semibold">
+                {row.label}
+              </div>
+            );
+          }
+
+          const index = findItemIndex(row.key, row.item.testCode, row.item.codeSystem);
+          if (index === -1) return null;
+
+          const item = items[index];
           const isAbnormal = item.abnormalFlag;
           const isCritical = item.criticalFlag;
 
           return (
             <div
-              key={index}
+              key={row.key}
               className={cn(
                 'grid grid-cols-12 gap-2 items-center py-1',
                 isCritical && 'bg-red-50 rounded px-1',
                 isAbnormal && !isCritical && 'bg-amber-50 rounded px-1',
               )}
             >
-              <div className="col-span-2">
+              <div className={cn('col-span-2', row.indentLevel > 0 && 'pl-6')}>
                 <Input
                   value={item.testName}
                   onChange={(e) => updateItem(index, 'testName', e.target.value)}
@@ -361,7 +388,7 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
           );
         })}
 
-        {items.length === 0 && (
+        {displayRows.length === 0 && (
           <p className="text-center text-sm text-muted-foreground py-4">
             No result items. Click &quot;+ Add Item&quot; to begin entering results.
           </p>

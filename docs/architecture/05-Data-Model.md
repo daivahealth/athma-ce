@@ -89,6 +89,8 @@ Every tenant-scoped table carries a `tenant_id` column and is protected by row-l
 | --- | --- | --- | --- |
 | `lab_test_master` | Standardized lab test catalog with reference ranges. | `tenant_id?`, `test_name`, `loinc_code`, `cpt_code`, `local_code`, `test_category`, `test_subcategory`, `specimen_type`, `collection_method`, `fasting_required`, `fasting_duration_hours`, `preparation_instructions`, `normal_range_male`, `normal_range_female`, `normal_range_pediatric`, `units`, `methodology`, `turnaround_time_hours`, `reference_lab`, `is_active` | LOINC codes for clinical ordering, CPT codes for billing. Gender and age-specific reference ranges. |
 
+| `observation_code_catalog` | Canonical observation and analyte dictionary used by result entry and analytics. | `tenant_id?`, `code`, `code_system`, `display_name`, `category`, `lab_domain?`, `data_type`, `default_unit`, `ref_range_low`, `ref_range_high`, `is_active` | Supports laboratory analytes such as WBC/RBC/HGB and differential components separately from orderable panels such as CBC. `lab_domain` drives data-driven picker sections such as hematology, chemistry, coagulation, and urinalysis. |
+
 #### 1.7.3 Imaging Study Master
 
 | Table | Description | Key Columns | Notes |

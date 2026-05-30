@@ -1411,12 +1411,43 @@ model LabTestMaster {
   createdAt                DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt                DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  resultTemplates          LabTestResultTemplate[]
+
   @@unique([tenantId, loincCode], map: "unique_tenant_labtest_loinc")
   @@unique([tenantId, localCode], map: "unique_tenant_labtest_local_code")
   @@index([tenantId])
   @@index([testCategory])
   @@index([isActive])
   @@map("lab_test_master")
+}
+
+/// Lab Test Result Template - maps an orderable lab test/panel to expected analytes
+model LabTestResultTemplate {
+  id                       String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                 String?  @map("tenant_id") @db.Uuid // null = global template
+  labTestMasterId          String   @map("lab_test_master_id") @db.Uuid
+  parentTemplateId         String?  @map("parent_template_id") @db.Uuid
+  nodeType                 String   @default("analyte") @map("node_type") @db.VarChar(20) // group, analyte
+  groupKey                 String?  @map("group_key") @db.VarChar(100)
+  renderStyle              String?  @map("render_style") @db.VarChar(30) // section, inline, table
+  observationCodeCatalogId String?  @map("observation_code_catalog_id") @db.Uuid
+  displayLabel             String?  @map("display_label") @db.VarChar(255)
+  sortOrder                Int      @default(0) @map("sort_order")
+  isRequired               Boolean  @default(true) @map("is_required")
+  isActive                 Boolean  @default(true) @map("is_active")
+  createdAt                DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  labTestMaster            LabTestMaster           @relation(fields: [labTestMasterId], references: [id], onDelete: Cascade)
+  parentTemplate           LabTestResultTemplate?  @relation("LabTestResultTemplateHierarchy", fields: [parentTemplateId], references: [id], onDelete: Cascade)
+  childTemplates           LabTestResultTemplate[] @relation("LabTestResultTemplateHierarchy")
+  observationCodeCatalog   ObservationCodeCatalog? @relation(fields: [observationCodeCatalogId], references: [id], onDelete: Cascade)
+
+  @@unique([labTestMasterId, observationCodeCatalogId], map: "ux_lab_test_result_template_component")
+  @@index([tenantId, labTestMasterId, isActive], map: "idx_lab_test_result_template_test")
+  @@index([tenantId, parentTemplateId], map: "idx_lab_test_result_template_parent")
+  @@index([tenantId, observationCodeCatalogId], map: "idx_lab_test_result_template_obs")
+  @@map("lab_test_result_templates")
 }
 
 /// Imaging Study Master (CPT, local codes)
@@ -4132,6 +4163,7 @@ model ObservationCodeCatalog {
   displayName   String   @map("display_name") @db.VarChar(255)
   displayNameAr String?  @map("display_name_ar") @db.VarChar(255)
   category      String   @db.VarChar(50) // vital-signs, laboratory, imaging, score
+  labDomain     String?  @map("lab_domain") @db.VarChar(50) // hematology, chemistry, microbiology, coagulation, urinalysis
   dataType      String   @map("data_type") @db.VarChar(20) // numeric, string, coded
   defaultUnit   String?  @map("default_unit") @db.VarChar(50)
   refRangeLow   Decimal? @map("ref_range_low") @db.Decimal(12, 4)
@@ -4139,6 +4171,8 @@ model ObservationCodeCatalog {
   isActive      Boolean  @default(true) @map("is_active")
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  labTestTemplates LabTestResultTemplate[]
 
   @@unique([tenantId, code, codeSystem], map: "ux_obs_code_system")
   @@index([tenantId, category, isActive], map: "idx_obs_catalog_tenant_category")

@@ -19,6 +19,7 @@ import {
 } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
 import { CreateLabTestDto, UpdateLabTestDto } from './dto/lab-test.dto';
+import { ReplaceLabTestResultTemplatesDto } from './dto/lab-test-result-template.dto';
 import { CreateImagingStudyDto, UpdateImagingStudyDto } from './dto/imaging-study.dto';
 import { CreateProcedureDto, UpdateProcedureDto } from './dto/procedure.dto';
 import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
@@ -127,6 +128,24 @@ export class CatalogController {
   @Permissions(CATALOG_DELETE)
   async deactivateLabTest(@Param('id') id: string) {
     return this.catalogService.deactivateLabTest(id);
+  }
+
+  @Get('lab-tests/:id/result-templates')
+  @Permissions(CATALOG_READ)
+  async listLabTestResultTemplates(@Param('id') id: string, @Req() req: any) {
+    const { tenantId } = this.getContext(req);
+    return this.catalogService.listLabTestResultTemplates(id, tenantId);
+  }
+
+  @Put('lab-tests/:id/result-templates')
+  @Permissions(CATALOG_UPDATE)
+  async replaceLabTestResultTemplates(
+    @Param('id') id: string,
+    @Body() data: ReplaceLabTestResultTemplatesDto,
+    @Req() req: any,
+  ) {
+    const { tenantId } = this.getContext(req);
+    return this.catalogService.replaceLabTestResultTemplates(id, data, tenantId);
   }
 
   // ========================================

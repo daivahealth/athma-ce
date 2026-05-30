@@ -6,6 +6,7 @@ import type {
   CollectLabSpecimenInput,
   CompleteLabResultEntryInput,
   CreateLabProcessingRunInput,
+  LabReportContext,
   LabCollectionWorklistItem,
   LabProcessingRun,
   LabProcessingWorklistItem,
@@ -65,6 +66,16 @@ class LabOperationsService {
 
   async createProcessingRun(payload: CreateLabProcessingRunInput): Promise<LabProcessingRun> {
     const response = await clinicalClient.post('/lab-operations/processing', payload);
+    return response.data;
+  }
+
+  async getResultEntryContext(
+    labOrderTestId: string,
+    specimenId?: string,
+  ): Promise<LabReportContext> {
+    const response = await clinicalClient.get(`/lab-operations/result-entry/context/${labOrderTestId}`, {
+      params: specimenId ? { specimenId } : undefined,
+    });
     return response.data;
   }
 

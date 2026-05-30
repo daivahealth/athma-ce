@@ -6,6 +6,7 @@ import type {
   DiagnosisVersionFilters,
   NoteTemplateFilters,
   CreateNoteTemplateInput,
+  ReplaceLabTestResultTemplateItemInput,
 } from '../types/catalog';
 
 // ========================================
@@ -43,6 +44,34 @@ export function useLabTest(id: string | undefined) {
     queryKey: ['labTest', id],
     queryFn: () => catalogService.getLabTestById(id!),
     enabled: Boolean(id),
+  });
+}
+
+export function useLabTestResultTemplates(id: string | undefined) {
+  return useQuery({
+    queryKey: ['labTestResultTemplates', id],
+    queryFn: () => catalogService.listLabTestResultTemplates(id!),
+    enabled: Boolean(id),
+  });
+}
+
+export function useReplaceLabTestResultTemplates(id: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (items: ReplaceLabTestResultTemplateItemInput[]) =>
+      catalogService.replaceLabTestResultTemplates(id!, items),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['labTest', id] });
+      queryClient.invalidateQueries({ queryKey: ['labTestResultTemplates', id] });
+    },
+  });
+}
+
+export function useObservationCodes(category?: string) {
+  return useQuery({
+    queryKey: ['observationCodes', category],
+    queryFn: () => catalogService.listObservationCodes(category),
   });
 }
 

@@ -19,6 +19,7 @@ export interface PatientResultSummary {
     abnormalCount: number;
     criticalCount: number;
     specimenType?: string | null;
+    specimenNumber?: string | null;
   };
   imagingSummary?: {
     modality?: string | null;
@@ -34,6 +35,37 @@ export interface PatientResultSummary {
 }
 
 const orderSelect = { select: { orderName: true, orderNameAr: true } } as const;
+
+function pickPreferredResult<T extends Omit<PatientResultSummary, 'patientName'>>(
+  current: T | undefined,
+  candidate: T,
+): T {
+  if (!current) return candidate;
+  if (candidate.version !== current.version) {
+    return candidate.version > current.version ? candidate : current;
+  }
+  const candidateReportedAt = candidate.reportedAt?.getTime() ?? 0;
+  const currentReportedAt = current.reportedAt?.getTime() ?? 0;
+  if (candidateReportedAt !== currentReportedAt) {
+    return candidateReportedAt > currentReportedAt ? candidate : current;
+  }
+  if (candidate.createdAt.getTime() !== current.createdAt.getTime()) {
+    return candidate.createdAt.getTime() > current.createdAt.getTime() ? candidate : current;
+  }
+  return candidate.id > current.id ? candidate : current;
+}
+
+function collapseResultsByOrder<T extends Omit<PatientResultSummary, 'patientName'>>(
+  results: T[],
+): T[] {
+  const byOrder = new Map<string, T>();
+
+  for (const result of results) {
+    byOrder.set(result.orderId, pickPreferredResult(byOrder.get(result.orderId), result));
+  }
+
+  return Array.from(byOrder.values());
+}
 
 @Injectable()
 export class PatientResultsService {
@@ -54,6 +86,50 @@ export class PatientResultsService {
     const map = new Map<string, string>();
     for (const p of patients) {
       map.set(p.id, [p.firstName, p.lastName].filter(Boolean).join(' '));
+    }
+    return map;
+  }
+
+  private async resolveLabSpecimenNumbersByOrder(
+    tenantId: string,
+    orderIds: string[],
+  ): Promise<Map<string, string>> {
+    const unique = [...new Set(orderIds)];
+    if (unique.length === 0) return new Map();
+
+    const specimenLinks = await this.prisma.labSpecimenTest.findMany({
+      where: {
+        tenantId,
+        labOrderTest: {
+          orderId: { in: unique },
+        },
+      },
+      include: {
+        labOrderTest: {
+          select: {
+            orderId: true,
+          },
+        },
+        specimen: {
+          select: {
+            id: true,
+            barcode: true,
+            createdAt: true,
+          },
+        },
+      },
+      orderBy: [
+        { createdAt: 'desc' },
+        { specimen: { createdAt: 'desc' } },
+        { id: 'desc' },
+      ],
+    });
+
+    const map = new Map<string, string>();
+    for (const link of specimenLinks) {
+      const orderId = link.labOrderTest.orderId;
+      if (map.has(orderId)) continue;
+      map.set(orderId, link.specimen.barcode || link.specimen.id);
     }
     return map;
   }
@@ -107,6 +183,13 @@ export class PatientResultsService {
           },
         });
       }
+
+      const dedupedLabResults = collapseResultsByOrder(
+        results.filter((result) => result.reportType === 'lab') as Omit<PatientResultSummary, 'patientName'>[],
+      );
+      const nonLabResults = results.filter((result) => result.reportType !== 'lab');
+      results.length = 0;
+      results.push(...nonLabResults, ...dedupedLabResults);
     }
 
     if (!options?.reportType || options.reportType === 'imaging') {
@@ -180,14 +263,28 @@ export class PatientResultsService {
     const paged = results.slice(skip, skip + limit);
 
     // Resolve patient names for the current page only
-    const nameMap = await this.resolvePatientNames(
-      tenantId,
-      paged.map((r) => r.patientId),
-    );
+    const [nameMap, specimenNumberMap] = await Promise.all([
+      this.resolvePatientNames(
+        tenantId,
+        paged.map((r) => r.patientId),
+      ),
+      this.resolveLabSpecimenNumbersByOrder(
+        tenantId,
+        paged.filter((r) => r.reportType === 'lab').map((r) => r.orderId),
+      ),
+    ]);
 
     const withNames: PatientResultSummary[] = paged.map((r) => ({
       ...r,
       patientName: nameMap.get(r.patientId) || 'Unknown',
+      ...(r.reportType === 'lab' && r.labSummary
+        ? {
+            labSummary: {
+              ...r.labSummary,
+              specimenNumber: specimenNumberMap.get(r.orderId) ?? null,
+            },
+          }
+        : {}),
     }));
 
     return { results: withNames, total };
@@ -243,6 +340,13 @@ export class PatientResultsService {
           },
         });
       }
+
+      const dedupedLabResults = collapseResultsByOrder(
+        results.filter((result) => result.reportType === 'lab') as Omit<PatientResultSummary, 'patientName'>[],
+      );
+      const nonLabResults = results.filter((result) => result.reportType !== 'lab');
+      results.length = 0;
+      results.push(...nonLabResults, ...dedupedLabResults);
     }
 
     if (!options?.reportType || options.reportType === 'imaging') {
@@ -315,14 +419,28 @@ export class PatientResultsService {
     const total = results.length;
     const paged = results.slice(skip, skip + limit);
 
-    const nameMap = await this.resolvePatientNames(
-      tenantId,
-      paged.map((r) => r.patientId),
-    );
+    const [nameMap, specimenNumberMap] = await Promise.all([
+      this.resolvePatientNames(
+        tenantId,
+        paged.map((r) => r.patientId),
+      ),
+      this.resolveLabSpecimenNumbersByOrder(
+        tenantId,
+        paged.filter((r) => r.reportType === 'lab').map((r) => r.orderId),
+      ),
+    ]);
 
     const withNames: PatientResultSummary[] = paged.map((r) => ({
       ...r,
       patientName: nameMap.get(r.patientId) || 'Unknown',
+      ...(r.reportType === 'lab' && r.labSummary
+        ? {
+            labSummary: {
+              ...r.labSummary,
+              specimenNumber: specimenNumberMap.get(r.orderId) ?? null,
+            },
+          }
+        : {}),
     }));
 
     return { results: withNames, total };
@@ -374,6 +492,13 @@ export class PatientResultsService {
       });
     }
 
+    const dedupedLabResults = collapseResultsByOrder(
+      partial.filter((result) => result.reportType === 'lab') as Omit<PatientResultSummary, 'patientName'>[],
+    );
+    const nonLabResults = partial.filter((result) => result.reportType !== 'lab');
+    partial.length = 0;
+    partial.push(...nonLabResults, ...dedupedLabResults);
+
     for (const ir of imagingReports) {
       partial.push({
         id: ir.id,
@@ -419,14 +544,28 @@ export class PatientResultsService {
 
     partial.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-    const nameMap = await this.resolvePatientNames(
-      tenantId,
-      partial.map((r) => r.patientId),
-    );
+    const [nameMap, specimenNumberMap] = await Promise.all([
+      this.resolvePatientNames(
+        tenantId,
+        partial.map((r) => r.patientId),
+      ),
+      this.resolveLabSpecimenNumbersByOrder(
+        tenantId,
+        partial.filter((r) => r.reportType === 'lab').map((r) => r.orderId),
+      ),
+    ]);
 
     return partial.map((r) => ({
       ...r,
       patientName: nameMap.get(r.patientId) || 'Unknown',
+      ...(r.reportType === 'lab' && r.labSummary
+        ? {
+            labSummary: {
+              ...r.labSummary,
+              specimenNumber: specimenNumberMap.get(r.orderId) ?? null,
+            },
+          }
+        : {}),
     }));
   }
 

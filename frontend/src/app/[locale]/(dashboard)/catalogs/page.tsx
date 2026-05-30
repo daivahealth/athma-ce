@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity, ClipboardCheck, Sparkles } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity, ClipboardCheck, Sparkles, Waypoints } from 'lucide-react';
 import { useCatalogPopulationHistory } from '@/modules/clinical/hooks/use-catalog-population';
 
 export default function CatalogsPage() {
@@ -65,6 +65,13 @@ export default function CatalogsPage() {
       description: 'Manage lab test catalog with LOINC codes, specimen types, and reference ranges',
       icon: Beaker,
       href: `/${locale}/catalogs/lab-tests`,
+      count: '—',
+    },
+    {
+      title: 'Observation Codes',
+      description: 'Browse canonical coded analytes and observation definitions used in result entry and analytics',
+      icon: Waypoints,
+      href: `/${locale}/catalogs/observation-codes`,
       count: '—',
     },
     {

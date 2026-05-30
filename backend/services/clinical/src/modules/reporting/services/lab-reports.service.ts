@@ -25,9 +25,11 @@ export class LabReportsService {
         orderId: dto.orderId,
         reportStatus: { in: [ReportStatus.DRAFT, ReportStatus.PRELIMINARY] },
       },
+      include: { items: { orderBy: { sortOrder: 'asc' } } },
+      orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
     });
     if (existing) {
-      throw new BadRequestException('An active lab report already exists for this order');
+      return existing;
     }
 
     const report = await this.prisma.labReport.create({
@@ -77,7 +79,7 @@ export class LabReportsService {
     return this.prisma.labReport.findMany({
       where: { tenantId, orderId },
       include: { items: { orderBy: { sortOrder: 'asc' } } },
-      orderBy: { version: 'desc' },
+      orderBy: [{ version: 'desc' }, { updatedAt: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
     });
   }
 

@@ -48,9 +48,11 @@ CLINICAL_FILES=(
   "clinical/16-lifestyle-templates.sql"
   "clinical/17-membership-plans.sql"
   "clinical/18-pgvector-setup.sql"    # pgvector extension for semantic search
+  "clinical/21-lab-test-result-templates.sql" # CBC analyte seed and lab test mapping
   "clinical/23-oncology-catalogs.sql" # Oncology catalog master data (cancer types, primary sites, histologies, mappings)
   "clinical/24-chemo-protocols.sql"  # Chemotherapy protocol library (22 protocols across 12 cancer types)
   "clinical/25-ot-room-configs.sql"  # OT room configuration data
+  "clinical/26-lab-test-tat-backfill.sql" # Idempotent turnaround-time defaults for seeded lab tests
 )
 
 RCM_FILES=(

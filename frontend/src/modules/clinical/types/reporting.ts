@@ -125,7 +125,7 @@ export interface ImagingReport {
   criticalFindingNotifiedTo?: string | null;
   criticalFindingNotifiedAt?: string | null;
   criticalFindingAcknowledgedAt?: string | null;
-  reportContent?: Record<string, any> | null;
+  reportContent?: Record<string, unknown> | null;
   accessionNumber?: string | null;
   studyInstanceUid?: string | null;
   reportedBy?: string | null;
@@ -155,7 +155,7 @@ export interface UpdateImagingReportInput {
   comments?: string;
   accessionNumber?: string;
   studyInstanceUid?: string;
-  reportContent?: Record<string, any>;
+  reportContent?: Record<string, unknown>;
 }
 
 // ========================================
@@ -186,7 +186,7 @@ export interface ProcedureReport {
   assistants: string[];
   estimatedBloodLoss?: string | null;
   implantsUsed?: Array<{ name: string; manufacturer?: string; lot?: string }> | null;
-  reportContent?: Record<string, any> | null;
+  reportContent?: Record<string, unknown> | null;
   reportedBy?: string | null;
   reportedAt?: string | null;
   comments?: string | null;
@@ -216,7 +216,7 @@ export interface UpdateProcedureReportInput {
   estimatedBloodLoss?: string;
   implantsUsed?: Array<{ name: string; manufacturer?: string; lot?: string }>;
   comments?: string;
-  reportContent?: Record<string, any>;
+  reportContent?: Record<string, unknown>;
 }
 
 // ========================================
@@ -266,6 +266,7 @@ export interface PatientResult {
     abnormalCount: number;
     criticalCount: number;
     specimenType?: string | null;
+    specimenNumber?: string | null;
   };
   imagingSummary?: {
     modality?: string | null;

@@ -58,7 +58,7 @@ export default function ClinicalLayout({
           locale={locale}
           onSidebarToggle={handleMobileToggle}
         />
-        <main className="flex-1 space-y-6 p-6 bg-slate-50/50 dark:bg-transparent theme-transition">
+        <main className="flex-1 space-y-6 px-6 pb-6 pt-2 bg-slate-50/50 dark:bg-transparent theme-transition">
           <Suspense fallback={null}>
             <NavigationProgress />
           </Suspense>

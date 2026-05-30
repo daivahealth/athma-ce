@@ -615,7 +615,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 space-y-6 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
         {visibleSections.map((section, sectionIndex) => (
-          <div key={`${section.labelKey ?? 'section'}-${sectionIndex}`} className="space-y-1">
+          <div key={`${section.labelKey ?? 'section'}-${sectionIndex}`} className="space-y-6">
             {!isCollapsed && section.labelKey && (
               <p className="px-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">
                 {t(section.labelKey)}

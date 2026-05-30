@@ -20,6 +20,16 @@ These endpoints manage:
 - processing
 - result-entry handoff into the existing `lab_reports` / `lab_result_items` reporting layer
 
+Result-entry catalog note:
+
+- `lab_test_master` remains the orderable test or panel catalog
+- expected result analytes are defined through `lab_test_result_templates`
+- template rows can be either:
+  - `group` rows for panel sections such as `Differential Count`
+  - `analyte` rows that point to canonical laboratory observation codes in `observation_code_catalog`
+- manual result entry preloads mapped analytes when a draft report has no saved result items yet
+- analyzer or interface payloads may still save additional `lab_result_items` that are not part of the configured template
+
 ## Authentication and Tenant Context
 
 Required headers:
@@ -199,6 +209,8 @@ Behavior:
 
 - creates `lab_processing_runs`
 - updates specimen, specimen-test, and ordered-test state to `processing`
+- ensures an active draft `lab_report` exists for the parent lab order as soon as processing starts, so the order appears on `/results/lab` before a user explicitly opens result entry
+- if the ordered test references a `lab_test_master` row and the new draft has no saved items yet, seeds default `lab_result_items` from active `lab_test_result_templates`
 - records a `processing_started` specimen event
 
 ### Result Entry Start
@@ -209,8 +221,32 @@ Behavior:
 
 - resolves the requested ordered test and specimen context
 - finds or creates an active draft report in `lab_reports`
+- is idempotent for repeated UI opens of the same ordered test; if a concurrent request already created the active draft, the endpoint reuses that report instead of failing
 - hydrates specimen metadata into that draft when available
+- if the ordered lab test references a `lab_test_master` row and the draft has no saved items, seeds default `lab_result_items` from active `lab_test_result_templates`
+- only template rows with `node_type = analyte` create saved `lab_result_items`; group rows are structural only
 - records a `result_entry_started` specimen event
+
+### Result Entry Context
+
+`GET /lab-operations/result-entry/context/:labOrderTestId`
+
+Optional query parameters:
+
+- `specimenId`
+
+Behavior:
+
+- resolves the ordered lab test plus the latest actionable linked specimen
+- returns read-only context for:
+  - parent order
+  - ordered test name/code
+  - specimen barcode/id and specimen type
+  - latest accession number and accession status
+- does not create a draft report
+- does not seed result items
+- does not record specimen events
+- is intended for read-only result pages such as `/results/lab/:orderId`, where the UI needs to print a finalized report and still show ordered test, specimen, and accession context
 
 ### Result Entry Complete
 
@@ -219,6 +255,7 @@ Behavior:
 Behavior:
 
 - requires saved `lab_result_items`
+- if no `lab_processing_run` exists yet for the specimen/test pair, creates a completed manual processing run so workflow state cannot skip from accessioned directly to reported
 - marks the ordered test and specimen-test link as `result_entered`
 - updates specimen state when all linked tests are entered
 - records a `result_entered` specimen event
@@ -228,11 +265,45 @@ Behavior:
 - `/results/lab/collection`
 - `/results/lab/operations`
 - `/results/lab/operations/result-entry/:labOrderTestId`
+- `/results/lab/:orderId`
+
+## Related Catalog Endpoints
+
+`GET /catalogs/lab-tests/:id/result-templates`
+
+Behavior:
+
+- returns active analyte mappings for the selected orderable lab test
+- each mapping includes:
+  - row metadata such as `nodeType`, `parentTemplateId`, `groupKey`, and `renderStyle`
+  - the linked `observation_code_catalog` row for analyte nodes, including canonical code, unit, and default reference-range metadata
+
+`PUT /catalogs/lab-tests/:id/result-templates`
+
+Behavior:
+
+- replaces the full analyte template set for the selected orderable lab test
+- accepts both:
+  - `group` rows with a display label
+  - `analyte` rows referencing active `observation_code_catalog` entries in category `laboratory`
+- child rows reference parent groups by client-side `templateKey` ordering in the request payload
+- is intended for panel configuration such as CBC -> Differential Count -> Neutrophils / Lymphocytes / Monocytes
+
+Catalog UI note:
+
+- the default manual-entry analyte template for a lab test is managed from `/catalogs/lab-tests/:id`
+- the `Observation Codes` catalog at `/catalogs/observation-codes` is the source dictionary for selectable analytes
+- laboratory observation codes can optionally carry `lab_domain` values such as `hematology`, `chemistry`, `coagulation`, and `urinalysis` so picker grouping is data-driven
+- final lab report viewing/printing uses the same template hierarchy when the source lab order resolves to a configured `lab_test_master`, so grouped sections such as `Differential Count` render as report sections while stored `lab_result_items` remain flat
+- the default seeded CBC layout is hybrid: core CBC analytes stay flat, while only percentage differential analytes are grouped under `Differential Count`
 
 Route intent:
 
 - `/results/lab/collection`: nurse/phlebotomy-facing specimen collection queue that prepares labels before blood draw, then confirms collection before lab handoff
 - `/results/lab/operations`: lab-internal queue starting from receiving
+- `/results/lab/:orderId`: order-level lab report page that now shows a printable report plus ordered-test, specimen, and accession context using the read-only result-entry context endpoint
+  - for multi-test lab orders, the frontend resolves context per `lab_order_test` and renders each ordered test explicitly instead of assuming the first test represents the whole order
+- `/results/lab`: aggregated lab results list that now surfaces orders immediately after `Start Processing`, and shows specimen type plus specimen number from the linked lab specimen workflow
 
 ## Related Docs
 
