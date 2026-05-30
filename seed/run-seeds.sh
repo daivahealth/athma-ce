@@ -53,6 +53,7 @@ CLINICAL_FILES=(
   "clinical/24-chemo-protocols.sql"  # Chemotherapy protocol library (22 protocols across 12 cancer types)
   "clinical/25-ot-room-configs.sql"  # OT room configuration data
   "clinical/26-lab-test-tat-backfill.sql" # Idempotent turnaround-time defaults for seeded lab tests
+  "clinical/27-oncology-lab-tests-backfill.sql" # Idempotent oncology-focused lab test master rows
 )
 
 RCM_FILES=(

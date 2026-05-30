@@ -32,7 +32,7 @@ The script lists each SQL file as it streams it into the `zeal-postgres` contain
 
 ## SQL Files
 - **Foundation**: `01-tenants.sql` … `98-hie-data-mappings.sql` (see guide for full list).
-- **Clinical**: setup helpers, sample patients, clinical catalogs, CBC observation/result template seed using flat CBC rows plus a grouped `Differential Count`, seeded `lab_test_master.report_style` / `lab_discipline` values including a narrative `Histopathology Examination` test, idempotent lab-test TAT defaults for seeded masters, oncology and OT fixtures.
+- **Clinical**: setup helpers, sample patients, clinical catalogs, CBC observation/result template seed using flat CBC rows plus a grouped `Differential Count`, seeded `lab_test_master.report_style` / `lab_discipline` values including a narrative `Histopathology Examination` test and structured oncology-related lab masters (`CEA`, `CA-125`, `CA 19-9`, `AFP`, `PSA`, `beta-hCG`, `LDH`), idempotent lab-test TAT defaults for seeded masters, an idempotent oncology lab-test backfill, oncology and OT fixtures.
 - **RCM**: `17-payers.sql`.
 - **Analytics**: `100-hie-sync-logs.sql`, `101-hie-platform-health.sql`.
 

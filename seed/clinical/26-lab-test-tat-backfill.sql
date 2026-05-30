@@ -23,6 +23,13 @@ SET turnaround_time_hours = CASE local_code
   WHEN 'LAB-017' THEN 2   -- PT/INR
   WHEN 'LAB-018' THEN 1   -- Urinalysis, Complete
   WHEN 'LAB-019' THEN 72  -- Histopathology Examination
+  WHEN 'LAB-020' THEN 24  -- Carcinoembryonic Antigen (CEA)
+  WHEN 'LAB-021' THEN 24  -- Cancer Antigen 125 (CA-125)
+  WHEN 'LAB-022' THEN 24  -- Cancer Antigen 19-9 (CA 19-9)
+  WHEN 'LAB-023' THEN 24  -- Alpha-Fetoprotein (AFP)
+  WHEN 'LAB-024' THEN 24  -- Prostate Specific Antigen (PSA), Total
+  WHEN 'LAB-025' THEN 12  -- Beta-hCG, Quantitative
+  WHEN 'LAB-026' THEN 4   -- Lactate Dehydrogenase (LDH)
   ELSE turnaround_time_hours
 END,
 updated_at = NOW()
@@ -45,5 +52,12 @@ WHERE local_code IN (
   'LAB-016',
   'LAB-017',
   'LAB-018',
-  'LAB-019'
+  'LAB-019',
+  'LAB-020',
+  'LAB-021',
+  'LAB-022',
+  'LAB-023',
+  'LAB-024',
+  'LAB-025',
+  'LAB-026'
 );

@@ -84,7 +84,8 @@ Each command streams SQL files into the Postgres container (`zeal-postgres`); cu
 23-oncology-catalogs.sql
 24-chemo-protocols.sql
 25-ot-room-configs.sql
-26-lab-test-tat-backfill.sql      # Idempotent turnaround-time defaults for seeded lab_test_master rows, including histopathology
+26-lab-test-tat-backfill.sql      # Idempotent turnaround-time defaults for seeded lab_test_master rows, including histopathology and oncology-related lab masters
+27-oncology-lab-tests-backfill.sql # Idempotent oncology-focused lab_test_master rows for existing dev databases
 ```
 
 ### RCM seeds

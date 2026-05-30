@@ -21,6 +21,7 @@ const LAB_DISCIPLINE_LABELS: Record<string, string> = {
   hematology: 'Hematology',
   chemistry: 'Chemistry',
   microbiology: 'Microbiology',
+  oncology: 'Oncology',
   histopathology: 'Histopathology',
   cytology: 'Cytology',
   coagulation: 'Coagulation',

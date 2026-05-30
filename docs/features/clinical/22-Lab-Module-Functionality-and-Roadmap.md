@@ -62,6 +62,14 @@ Seeded examples:
 - `LAB-001` Complete Blood Count (CBC) → `structured`
 - `LAB-015` Blood Culture → `structured`
 - `LAB-019` Histopathology Examination → `narrative`
+- `LAB-020` to `LAB-026` → oncology-related structured lab masters
+  - CEA
+  - CA-125
+  - CA 19-9
+  - AFP
+  - PSA
+  - beta-hCG
+  - LDH
 
 ### 2. Specimen Collection Workflow
 

@@ -55,6 +55,7 @@ const LAB_DISCIPLINE_OPTIONS = [
   { value: 'hematology', label: 'Hematology' },
   { value: 'chemistry', label: 'Chemistry' },
   { value: 'microbiology', label: 'Microbiology' },
+  { value: 'oncology', label: 'Oncology' },
   { value: 'histopathology', label: 'Histopathology' },
   { value: 'cytology', label: 'Cytology' },
   { value: 'coagulation', label: 'Coagulation' },
