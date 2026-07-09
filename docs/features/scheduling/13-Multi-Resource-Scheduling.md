@@ -36,6 +36,7 @@ Manages staff availability and working hours:
 - Effective date ranges for schedule changes
 - Availability flags for planned time off
 - Notes for special conditions
+- In the scheduling UI, new staff schedule forms default the facility scope from the active session facility context (`x-facility-id`) and display the resolved facility name
 
 ```sql
 CREATE TABLE staff_schedules (

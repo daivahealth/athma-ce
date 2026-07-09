@@ -2,7 +2,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Plus, CalendarClock, CalendarRange, Trash2, Pencil } from 'lucide-react';
+import { decodeAccessToken } from '@/lib/auth/tokens';
+import { getSession } from '@/lib/api/client';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
+import { useFacility } from '@/modules/foundation/hooks/use-facility';
 import type { StaffMember } from '@/modules/foundation/types/staff';
 import {
   useCreateStaffSchedule,
@@ -74,6 +77,8 @@ interface ScheduleFormProps {
   onSubmit: (values: FormState) => Promise<void>;
   isSubmitting: boolean;
   defaultValues?: Partial<FormState>;
+  facilityDisplayName?: string;
+  facilityHelpText?: string;
 }
 
 interface FormState {
@@ -100,7 +105,13 @@ const defaultFormState: FormState = {
   notes: '',
 };
 
-function StaffScheduleForm({ onSubmit, isSubmitting, defaultValues }: ScheduleFormProps) {
+function StaffScheduleForm({
+  onSubmit,
+  isSubmitting,
+  defaultValues,
+  facilityDisplayName,
+  facilityHelpText,
+}: ScheduleFormProps) {
   const [formState, setFormState] = useState<FormState>(() => ({ ...defaultFormState, ...defaultValues }));
 
   useEffect(() => {
@@ -194,13 +205,22 @@ function StaffScheduleForm({ onSubmit, isSubmitting, defaultValues }: ScheduleFo
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="facilityId">Facility (optional)</Label>
-          <Input
-            id="facilityId"
-            value={formState.facilityId}
-            onChange={(event) => handleChange('facilityId', event.target.value)}
-            placeholder="Auto-uses current facility if empty"
-          />
+          <Label htmlFor="facilityId">Facility</Label>
+          {facilityDisplayName ? (
+            <>
+              <Input id="facilityId" value={facilityDisplayName} readOnly disabled />
+              {facilityHelpText && (
+                <p className="text-xs text-muted-foreground">{facilityHelpText}</p>
+              )}
+            </>
+          ) : (
+            <Input
+              id="facilityId"
+              value={formState.facilityId}
+              onChange={(event) => handleChange('facilityId', event.target.value)}
+              placeholder="Auto-uses current facility if empty"
+            />
+          )}
         </div>
         <div className="flex items-center gap-3 pt-6">
           <Switch
@@ -299,14 +319,25 @@ function resolveStaffDisplayName(staff?: StaffMember | null) {
     .trim() || undefined;
 }
 
-export default function StaffSchedulingPage({ params: _params }: { params: { locale: string } }) {
+export default function StaffSchedulingPage() {
   const showToast = useToast();
+  const session = getSession();
+  const claims = decodeAccessToken(session.accessToken);
+  const currentFacilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? '';
+  const { data: currentFacility } = useFacility(currentFacilityId || undefined);
   const { data: staff, isLoading: isLoadingStaff, error: staffError } = useStaffList();
   const staffOptions = useMemo(() => buildStaffOptions(staff), [staff]);
+  const currentFacilityName = currentFacility?.name ?? '';
   const [selectedStaffId, setSelectedStaffId] = useState<string>('');
   const activeStaff = useMemo(
     () => staffOptions.find((member) => member.id === selectedStaffId)?.raw ?? null,
     [staffOptions, selectedStaffId]
+  );
+  const createFormDefaults = useMemo(
+    () => ({
+      facilityId: currentFacilityId,
+    }),
+    [currentFacilityId]
   );
   useEffect(() => {
     if (!selectedStaffId && staffOptions.length > 0) {
@@ -343,6 +374,8 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
   const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
   const [isWeeklyDialogOpen, setWeeklyDialogOpen] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState<StaffSchedule | null>(null);
+  const editingFacilityId = editingSchedule?.facilityId ?? currentFacilityId;
+  const { data: editingFacility } = useFacility(editingFacilityId || undefined);
 
   const handleCreateSchedule = async (values: FormState) => {
     if (!selectedStaffId) return;
@@ -534,6 +567,13 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
               <WeeklyScheduleForm
                 isSubmitting={createWeeklyScheduleMutation.isPending}
                 onSubmit={handleWeeklySchedule}
+                defaultValues={createFormDefaults}
+                facilityDisplayName={currentFacilityName}
+                facilityHelpText={
+                  currentFacilityName
+                    ? 'Defaults to the active facility from your current session.'
+                    : undefined
+                }
               />
             </DialogContent>
           </Dialog>
@@ -556,6 +596,13 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
               <StaffScheduleForm
                 onSubmit={handleCreateSchedule}
                 isSubmitting={createScheduleMutation.isPending}
+                defaultValues={createFormDefaults}
+                facilityDisplayName={currentFacilityName}
+                facilityHelpText={
+                  currentFacilityName
+                    ? 'Defaults to the active facility from your current session.'
+                    : undefined
+                }
               />
             </DialogContent>
           </Dialog>
@@ -609,7 +656,7 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
           {scheduleError && (
             <div className="col-span-full">
               <p className="text-sm text-destructive">
-                Unable to load schedules. {(scheduleError as any)?.response?.data?.message || 'Please try again.'}
+                Unable to load schedules. {getErrorMessage(scheduleError)}
               </p>
             </div>
           )}
@@ -753,11 +800,17 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
                 endTime: toTimeInput(editingSchedule.endTime),
                 isAvailable: editingSchedule.isAvailable,
                 scheduleType: editingSchedule.scheduleType,
-                facilityId: editingSchedule.facilityId ?? '',
+                facilityId: editingSchedule.facilityId ?? currentFacilityId,
                 effectiveFrom: toDateInput(editingSchedule.effectiveFrom),
                 effectiveTo: toDateInput(editingSchedule.effectiveTo ?? undefined),
                 notes: editingSchedule.notes ?? '',
               }}
+              facilityDisplayName={editingFacility?.name ?? currentFacilityName}
+              facilityHelpText={
+                (editingFacility?.name ?? currentFacilityName)
+                  ? 'Uses the schedule facility, or your active session facility when none is set.'
+                  : undefined
+              }
             />
           )}
         </DialogContent>
@@ -769,11 +822,24 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
 interface WeeklyScheduleFormProps {
   onSubmit: (values: FormState & { days: string[] }) => Promise<void>;
   isSubmitting: boolean;
+  defaultValues?: Partial<FormState>;
+  facilityDisplayName?: string;
+  facilityHelpText?: string;
 }
 
-function WeeklyScheduleForm({ onSubmit, isSubmitting }: WeeklyScheduleFormProps) {
+function WeeklyScheduleForm({
+  onSubmit,
+  isSubmitting,
+  defaultValues,
+  facilityDisplayName,
+  facilityHelpText,
+}: WeeklyScheduleFormProps) {
   const [selectedDays, setSelectedDays] = useState<string[]>(['1', '2', '3', '4', '5']);
-  const [formState, setFormState] = useState<FormState>({ ...defaultFormState });
+  const [formState, setFormState] = useState<FormState>({ ...defaultFormState, ...defaultValues });
+
+  useEffect(() => {
+    setFormState((prev) => ({ ...prev, ...defaultValues }));
+  }, [defaultValues]);
 
   const toggleDay = (day: string) => {
     setSelectedDays((current) =>
@@ -875,12 +941,21 @@ function WeeklyScheduleForm({ onSubmit, isSubmitting }: WeeklyScheduleFormProps)
         </div>
         <div className="space-y-2">
           <Label htmlFor="weekly-facility">Facility</Label>
-          <Input
-            id="weekly-facility"
-            value={formState.facilityId}
-            onChange={(event) => updateField('facilityId', event.target.value)}
-            placeholder="Uses current facility if left blank"
-          />
+          {facilityDisplayName ? (
+            <>
+              <Input id="weekly-facility" value={facilityDisplayName} readOnly disabled />
+              {facilityHelpText && (
+                <p className="text-xs text-muted-foreground">{facilityHelpText}</p>
+              )}
+            </>
+          ) : (
+            <Input
+              id="weekly-facility"
+              value={formState.facilityId}
+              onChange={(event) => updateField('facilityId', event.target.value)}
+              placeholder="Uses current facility if left blank"
+            />
+          )}
         </div>
       </div>
 
