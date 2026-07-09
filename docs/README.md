@@ -45,7 +45,7 @@ Welcome to the athma-ce Healthcare Platform documentation. This folder contains 
 
 ## 💡 Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for documentation standards and guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the code contribution workflow (branching, commits, PRs, testing) and documentation writing standards.
 
 ---
 
