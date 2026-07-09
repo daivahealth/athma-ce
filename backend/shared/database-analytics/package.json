@@ -9,7 +9,9 @@
     "build": "prisma generate --schema prisma/schema.prisma && tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@prisma/client": "~6.19.0"
+    "@prisma/client": "~6.19.0",
+    "@zeal/observability": "file:../observability",
+    "@zeal/shared-utils": "file:../utils"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
