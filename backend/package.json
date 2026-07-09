@@ -44,5 +44,19 @@
   "packageManager": "npm@9.8.1",
   "dependencies": {
     "@prisma/client": "~6.19.0"
+  },
+  "overrides": {
+    "@grpc/proto-loader": {
+      "protobufjs": "^7.5.5"
+    },
+    "@opentelemetry/otlp-grpc-exporter-base": {
+      "protobufjs": "^7.5.5"
+    },
+    "@opentelemetry/otlp-proto-exporter-base": {
+      "protobufjs": "^7.5.5"
+    },
+    "ts-jest": {
+      "handlebars": "^4.7.9"
+    }
   }
 }
