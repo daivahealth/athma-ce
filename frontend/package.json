@@ -107,5 +107,10 @@
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.16.0",
     "typescript": "5.4.5"
+  },
+  "overrides": {
+    "@next/eslint-plugin-next": {
+      "glob": "^10.5.0"
+    }
   }
 }
