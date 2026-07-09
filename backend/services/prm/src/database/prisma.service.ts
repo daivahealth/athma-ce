@@ -54,10 +54,16 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 
   /**
-   * Apply tenant middleware to scope all queries by tenantId
-   * Called by TenantModule per request
+   * Returns a tenant-scoped Prisma client extension that auto-injects
+   * tenantId into queries against TENANT_ISOLATED_MODELS. Prisma removed
+   * the `$use` middleware API this used to rely on (v6) in favor of
+   * `$extends`; this is the migrated equivalent. Services currently
+   * enforce tenant scoping explicitly via `@TenantId()` + manual `where`
+   * clauses (see e.g. tasks.service.ts) — call `forTenant()` for an
+   * additional, ORM-level safety net where a shared/service-level client
+   * is preferred over per-call filtering.
    */
-  applyTenantMiddleware(tenantId: string) {
+  forTenant(tenantId: string) {
     const TENANT_ISOLATED_MODELS = [
       'PatientEngagementEvent',
       'EngagementRule',
@@ -70,53 +76,49 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       'ProviderCallback',
     ];
 
-    this.$use(async (params, next) => {
-      // Skip if not a tenant-isolated model
-      if (!params.model || !TENANT_ISOLATED_MODELS.includes(params.model)) {
-        return next(params);
-      }
+    return this.$extends({
+      name: `tenant-scope`,
+      query: {
+        $allModels: {
+          async $allOperations({ model, operation, args, query }) {
+            if (!model || !TENANT_ISOLATED_MODELS.includes(model)) {
+              return query(args);
+            }
 
-      // Inject tenantId into where clause for all operations
-      if (params.action === 'findUnique' || params.action === 'findFirst') {
-        params.args.where = { ...params.args.where, tenantId };
-      }
+            const a = args as any;
 
-      if (params.action === 'findMany') {
-        if (!params.args) {
-          params.args = {};
-        }
-        params.args.where = { ...params.args.where, tenantId };
-      }
+            switch (operation) {
+              case 'findUnique':
+              case 'findUniqueOrThrow':
+              case 'findFirst':
+              case 'findFirstOrThrow':
+              case 'findMany':
+              case 'update':
+              case 'updateMany':
+              case 'delete':
+              case 'deleteMany':
+              case 'count':
+              case 'aggregate':
+                a.where = { ...a.where, tenantId };
+                break;
+              case 'create':
+                a.data = { ...a.data, tenantId };
+                break;
+              case 'createMany':
+                if (Array.isArray(a.data)) {
+                  a.data = a.data.map((item: any) => ({ ...item, tenantId }));
+                }
+                break;
+              case 'upsert':
+                a.where = { ...a.where, tenantId };
+                a.create = { ...a.create, tenantId };
+                break;
+            }
 
-      if (params.action === 'create' || params.action === 'createMany') {
-        if (params.action === 'create') {
-          params.args.data = { ...params.args.data, tenantId };
-        } else {
-          // createMany
-          if (Array.isArray(params.args.data)) {
-            params.args.data = params.args.data.map((item: any) => ({ ...item, tenantId }));
-          }
-        }
-      }
-
-      if (params.action === 'update' || params.action === 'updateMany') {
-        params.args.where = { ...params.args.where, tenantId };
-      }
-
-      if (params.action === 'delete' || params.action === 'deleteMany') {
-        params.args.where = { ...params.args.where, tenantId };
-      }
-
-      if (params.action === 'upsert') {
-        params.args.where = { ...params.args.where, tenantId };
-        params.args.create = { ...params.args.create, tenantId };
-      }
-
-      if (params.action === 'count' || params.action === 'aggregate') {
-        params.args.where = { ...params.args.where, tenantId };
-      }
-
-      return next(params);
+            return query(a);
+          },
+        },
+      },
     });
   }
 }
