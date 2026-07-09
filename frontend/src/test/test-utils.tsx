@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
-import { vi } from 'vitest';
 
 // Mock messages for testing
 const mockMessages = {
@@ -75,10 +74,10 @@ export const mockApiResponses = {
 
 // Mock API client
 export const mockApiClient = {
-  get: vi.fn(),
-  post: vi.fn(),
-  put: vi.fn(),
-  delete: vi.fn(),
+  get: jest.fn(),
+  post: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn(),
 };
 
 // Test utilities
@@ -87,14 +86,14 @@ export const testUtils = {
   mockLocalStorage: () => {
     const store: Record<string, string> = {};
     return {
-      getItem: vi.fn((key: string) => store[key] || null),
-      setItem: vi.fn((key: string, value: string) => {
+      getItem: jest.fn((key: string) => store[key] || null),
+      setItem: jest.fn((key: string, value: string) => {
         store[key] = value;
       }),
-      removeItem: vi.fn((key: string) => {
+      removeItem: jest.fn((key: string) => {
         delete store[key];
       }),
-      clear: vi.fn(() => {
+      clear: jest.fn(() => {
         Object.keys(store).forEach(key => delete store[key]);
       }),
     };
