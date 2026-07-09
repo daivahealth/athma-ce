@@ -57,6 +57,9 @@
     },
     "ts-jest": {
       "handlebars": "^4.7.9"
+    },
+    "@nestjs/platform-express": {
+      "multer": "^2.2.0"
     }
   }
 }
