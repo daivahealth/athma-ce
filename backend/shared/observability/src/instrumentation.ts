@@ -17,13 +17,18 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http';
-import { Resource } from '@opentelemetry/resources';
+import { resourceFromAttributes } from '@opentelemetry/resources';
 import {
-  SEMRESATTRS_SERVICE_NAME,
-  SEMRESATTRS_SERVICE_VERSION,
-  SEMRESATTRS_SERVICE_NAMESPACE,
-  SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+  ATTR_SERVICE_NAMESPACE,
 } from '@opentelemetry/semantic-conventions';
+
+// Not exported from the package's public types (only the newer
+// ATTR_DEPLOYMENT_ENVIRONMENT_NAME is, which uses a different key:
+// "deployment.environment.name"). Kept as a literal to preserve the
+// existing "deployment.environment" attribute name.
+const ATTR_DEPLOYMENT_ENVIRONMENT = 'deployment.environment';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { ParentBasedSampler, TraceIdRatioBasedSampler } from '@opentelemetry/sdk-trace-base';
@@ -59,11 +64,11 @@ export function initializeObservability(): boolean {
     }
 
     // Create resource with service information
-    const resource = new Resource({
-      [SEMRESATTRS_SERVICE_NAME]: config.exporter.serviceName,
-      [SEMRESATTRS_SERVICE_VERSION]: config.exporter.serviceVersion,
-      [SEMRESATTRS_SERVICE_NAMESPACE]: config.exporter.serviceNamespace,
-      [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: config.exporter.environment,
+    const resource = resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: config.exporter.serviceName,
+      [ATTR_SERVICE_VERSION]: config.exporter.serviceVersion,
+      [ATTR_SERVICE_NAMESPACE]: config.exporter.serviceNamespace,
+      [ATTR_DEPLOYMENT_ENVIRONMENT]: config.exporter.environment,
     });
 
     // Configure trace exporter and sampler
@@ -89,11 +94,11 @@ export function initializeObservability(): boolean {
 
     // Configure log processor
     const logRecordProcessor = config.logging.enabled
-      ? new BatchLogRecordProcessor(
-        new OTLPLogExporter({
+      ? new BatchLogRecordProcessor({
+        exporter: new OTLPLogExporter({
           url: `${config.exporter.endpoint}/v1/logs`,
-        })
-      )
+        }),
+      })
       : undefined;
 
     // Build instrumentations list
@@ -105,7 +110,10 @@ export function initializeObservability(): boolean {
         '@opentelemetry/instrumentation-net': { enabled: false },
         // Configure HTTP instrumentation
         '@opentelemetry/instrumentation-http': {
-          ignoreIncomingPaths: ['/health', '/ready', '/metrics', '/favicon.ico'],
+          ignoreIncomingRequestHook: (request) => {
+            const path = request.url?.split('?')[0];
+            return ['/health', '/ready', '/metrics', '/favicon.ico'].includes(path ?? '');
+          },
         },
       }),
     ];
