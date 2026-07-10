@@ -54,7 +54,7 @@
     "i18next": "^23.11.5",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.441.0",
-    "next": "14.2.33",
+    "next": "14.2.35",
     "next-auth": "^4.24.7",
     "next-intl": "^4.9.2",
     "next-themes": "^0.2.1",
@@ -111,6 +111,9 @@
   "overrides": {
     "@next/eslint-plugin-next": {
       "glob": "^10.5.0"
+    },
+    "next": {
+      "postcss": "^8.5.10"
     }
   }
 }
