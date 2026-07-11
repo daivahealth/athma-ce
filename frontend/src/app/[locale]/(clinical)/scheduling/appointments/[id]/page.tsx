@@ -11,7 +11,6 @@ import {
   ArrowLeft,
   Edit,
   XCircle,
-  CheckCircle,
   Stethoscope,
 } from 'lucide-react';
 
@@ -24,6 +23,20 @@ import { useToast } from '@/components/ui/use-toast';
 
 import { useAppointment, useCancelAppointment } from '@/modules/clinical/hooks/use-appointments';
 import { RescheduleAppointmentDialog } from '@/modules/clinical/components/RescheduleAppointmentDialog';
+import type { Appointment } from '@/modules/clinical/types/scheduling';
+
+type AppointmentWithDisplayFields = Appointment & {
+  staffDisplayName?: string | null;
+  facilityName?: string | null;
+};
+
+type ApiError = {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+};
 
 const STATUS_COLORS: Record<string, string> = {
   scheduled: 'bg-blue-100 text-blue-800',
@@ -67,11 +80,13 @@ export default function AppointmentDetailPage({
       });
 
       router.push(`/${params.locale}/scheduling/appointments`);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+
       publishToast({
         variant: 'destructive',
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to cancel appointment',
+        description: apiError.response?.data?.message || 'Failed to cancel appointment',
       });
     }
   };
@@ -118,6 +133,7 @@ export default function AppointmentDetailPage({
     );
   }
 
+  const appointmentDetails = appointment as AppointmentWithDisplayFields;
   const canModify = appointment.status !== 'cancelled' && appointment.status !== 'completed';
 
   return (
@@ -273,7 +289,7 @@ export default function AppointmentDetailPage({
               {appointment.staffId ? (
                 <p className="mt-1 flex items-center gap-2">
                   <User className="h-4 w-4 text-muted-foreground" />
-                  <span>{(appointment as any).staffDisplayName || appointment.staffId}</span>
+                  <span>{appointmentDetails.staffDisplayName || appointment.staffId}</span>
                 </p>
               ) : (
                 <p className="mt-1 text-sm text-muted-foreground">Not assigned</p>
@@ -285,7 +301,7 @@ export default function AppointmentDetailPage({
                 <Separator />
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Facility</label>
-                  <p className="mt-1">{(appointment as any).facilityName || appointment.facilityId}</p>
+                  <p className="mt-1">{appointmentDetails.facilityName || appointment.facilityId}</p>
                 </div>
               </>
             )}
@@ -311,42 +327,47 @@ export default function AppointmentDetailPage({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {appointment.resources.map((resource) => (
-                  <div
-                    key={resource.id}
-                    className="flex items-center justify-between rounded-lg border p-4"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="rounded-full bg-primary/10 p-2">
-                        {resource.resourceType === 'staff' && <User className="h-4 w-4" />}
-                        {resource.resourceType === 'equipment' && <FileText className="h-4 w-4" />}
-                        {resource.resourceType === 'space' && <CalendarIcon className="h-4 w-4" />}
-                      </div>
-                      <div>
-                        <p className="font-medium capitalize">{resource.resourceType}</p>
-                        <p className="text-sm text-muted-foreground font-mono">
-                          {resource.resourceId.substring(0, 16)}...
-                        </p>
-                        {resource.resourceRole && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Role: {resource.resourceRole}
+                {appointment.resources.map((resource) => {
+                  const resourceLabel = resource.resourceDisplayName || resource.resourceId;
+                  const resourceStatus = resource.allocationStatus || resource.status || 'allocated';
+
+                  return (
+                    <div
+                      key={resource.id}
+                      className="flex items-center justify-between rounded-lg border p-4"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="rounded-full bg-primary/10 p-2">
+                          {resource.resourceType === 'staff' && <User className="h-4 w-4" />}
+                          {resource.resourceType === 'equipment' && <FileText className="h-4 w-4" />}
+                          {resource.resourceType === 'space' && <CalendarIcon className="h-4 w-4" />}
+                        </div>
+                        <div>
+                          <p className="font-medium capitalize">{resource.resourceType}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {resourceLabel}
                           </p>
-                        )}
+                          {resource.resourceRole && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Role: {resource.resourceRole}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <Badge
+                          variant={resourceStatus === 'confirmed' ? 'default' : 'secondary'}
+                        >
+                          {resourceStatus}
+                        </Badge>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {format(new Date(resource.startTime), 'HH:mm')} -{' '}
+                          {format(new Date(resource.endTime), 'HH:mm')}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <Badge
-                        variant={resource.allocationStatus === 'confirmed' ? 'default' : 'secondary'}
-                      >
-                        {resource.allocationStatus}
-                      </Badge>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {format(new Date(resource.startTime), 'HH:mm')} -{' '}
-                        {format(new Date(resource.endTime), 'HH:mm')}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </CardContent>
           </Card>

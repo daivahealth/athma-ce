@@ -156,6 +156,35 @@ export class AppointmentService {
     }
   }
 
+  private async enrichResourceDisplayNames(
+    resources: any[],
+    tenantId: string
+  ): Promise<any[]> {
+    const staffNameCache = new Map<string, Promise<string | null>>();
+
+    return Promise.all(
+      resources.map(async (resource) => {
+        if (resource.resourceType !== 'staff') {
+          return resource;
+        }
+
+        if (!staffNameCache.has(resource.resourceId)) {
+          staffNameCache.set(
+            resource.resourceId,
+            this.fetchStaffDisplayName(resource.resourceId, tenantId)
+          );
+        }
+
+        const resourceDisplayName = await staffNameCache.get(resource.resourceId)!;
+
+        return {
+          ...resource,
+          resourceDisplayName,
+        };
+      })
+    );
+  }
+
   /**
    * Fetch facility name from Foundation API
    */
@@ -505,8 +534,14 @@ export class AppointmentService {
       facilityName = await this.fetchFacilityName(appointment.facilityId, context.tenantId);
     }
 
+    const resources = await this.enrichResourceDisplayNames(
+      appointment.resources,
+      context.tenantId
+    );
+
     return {
       ...appointment,
+      resources,
       patientDisplay,
       staffDisplayName,
       facilityName,

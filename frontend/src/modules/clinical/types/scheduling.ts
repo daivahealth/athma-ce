@@ -93,12 +93,14 @@ export interface AppointmentResource {
   appointmentId: string;
   resourceType: 'staff' | 'equipment' | 'space';
   resourceId: string;
+  resourceDisplayName?: string | null;
   resourceRole?: string;
   startTime: string;
   endTime: string;
   preparationStart?: string;
   cleanupEnd?: string;
-  allocationStatus: string;
+  allocationStatus?: string;
+  status?: string;
   confirmedAt?: string;
   createdAt: string;
   updatedAt: string;

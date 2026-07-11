@@ -625,6 +625,7 @@ POST /scheduling/appointments
       "id": "uuid",
       "resourceType": "staff",
       "resourceId": "uuid",
+      "resourceDisplayName": "Dr. Jane Smith",
       "resourceRole": "primary_physician",
       "status": "allocated"
     }
@@ -653,9 +654,20 @@ GET /scheduling/appointments/:id
   "status": "scheduled",
   "startTime": "2025-11-03T10:00:00Z",
   "endTime": "2025-11-03T10:30:00Z",
-  "resources": [...]
+  "resources": [
+    {
+      "id": "uuid",
+      "resourceType": "staff",
+      "resourceId": "uuid",
+      "resourceDisplayName": "Dr. Jane Smith",
+      "resourceRole": "primary_staff",
+      "status": "allocated"
+    }
+  ]
 }
 ```
+
+Staff resources include `resourceDisplayName` when the staff profile can be resolved from the Foundation service. Clients should fall back to `resourceId` when a display name is unavailable.
 
 ### Reschedule Appointment
 

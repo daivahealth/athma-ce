@@ -18,17 +18,43 @@ import {
   useDeleteClinicalOrder,
 } from '@/modules/clinical/hooks/use-charting';
 import { useEncounter } from '@/modules/clinical/hooks/use-encounters';
-import { OrderType, OrderPriority, CodeSystem } from '@/modules/clinical/types/charting';
-import type { ChartPackageOrder, ClinicalOrder } from '@/modules/clinical/types/charting';
+import { OrderType, OrderPriority } from '@/modules/clinical/types/charting';
+import type { ChartPackageOrder, ClinicalOrder, CodeSystem } from '@/modules/clinical/types/charting';
 import { useToast } from '@/components/ui/use-toast';
 import { useSmartChartingContext } from '../SmartChartingEditor';
 import { BLOCK_COLORS } from '../types';
+
+type CatalogOrderType = 'lab' | 'imaging' | 'procedure' | 'package';
+
+const ORDER_TYPE_BADGE_STYLES: Record<CatalogOrderType, string> = {
+  lab: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  imaging: 'border-sky-200 bg-sky-50 text-sky-700',
+  procedure: 'border-violet-200 bg-violet-50 text-violet-700',
+  package: 'border-amber-200 bg-amber-50 text-amber-700',
+};
+
+const ORDER_TYPE_TAB_STYLES: Record<CatalogOrderType, string> = {
+  lab: 'data-[state=on]:border-emerald-500 data-[state=on]:bg-emerald-600 data-[state=on]:text-white data-[state=on]:ring-emerald-200',
+  imaging: 'data-[state=on]:border-sky-500 data-[state=on]:bg-sky-600 data-[state=on]:text-white data-[state=on]:ring-sky-200',
+  procedure: 'data-[state=on]:border-violet-500 data-[state=on]:bg-violet-600 data-[state=on]:text-white data-[state=on]:ring-violet-200',
+  package: 'data-[state=on]:border-amber-500 data-[state=on]:bg-amber-500 data-[state=on]:text-white data-[state=on]:ring-amber-200',
+};
+
+const ORDER_TYPE_LABELS: Record<CatalogOrderType, string> = {
+  lab: 'Lab',
+  imaging: 'Imaging',
+  procedure: 'Procedure',
+  package: 'Package',
+};
+
+const getOrderTypeBadgeStyle = (orderType: string): string =>
+  ORDER_TYPE_BADGE_STYLES[orderType as CatalogOrderType] ?? 'border-slate-200 bg-slate-50 text-slate-700';
 
 export function OrdersBlockView({ deleteNode }: NodeViewProps) {
   const { encounterId, patientId } = useSmartChartingContext();
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
-  const [catalogType, setCatalogType] = useState<'lab' | 'imaging' | 'procedure' | 'package'>('lab');
+  const [catalogType, setCatalogType] = useState<CatalogOrderType>('lab');
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [expandedPackages, setExpandedPackages] = useState<Record<string, boolean>>({});
   const toast = useToast();
@@ -39,8 +65,14 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
   const { mutateAsync: createPackageOrder } = useCreatePackageOrder();
   const { mutateAsync: cancelPackageOrder } = useCancelPackageOrder();
   const { mutateAsync: deleteOrder } = useDeleteClinicalOrder();
-  const standaloneOrders = chartOrders?.standaloneOrders ?? [];
-  const packageOrders = chartOrders?.packageOrders ?? [];
+  const standaloneOrders = useMemo(
+    () => chartOrders?.standaloneOrders ?? [],
+    [chartOrders?.standaloneOrders]
+  );
+  const packageOrders = useMemo(
+    () => chartOrders?.packageOrders ?? [],
+    [chartOrders?.packageOrders]
+  );
   const allVisibleOrders = standaloneOrders.length + packageOrders.length;
 
   const existingCodes = useMemo(
@@ -240,8 +272,11 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
 
   const renderChildOrderRow = (order: ClinicalOrder) => (
     <div key={order.id} className="ml-6 flex items-center gap-2 py-1 text-sm text-muted-foreground">
-      <Badge variant="outline" className="capitalize text-[11px] font-normal">
-        {order.orderType}
+      <Badge
+        variant="outline"
+        className={`capitalize text-[11px] font-medium ${getOrderTypeBadgeStyle(order.orderType)}`}
+      >
+        {ORDER_TYPE_LABELS[order.orderType as CatalogOrderType] ?? order.orderType}
       </Badge>
       <span className="font-medium text-foreground">{order.orderName}</span>
       <span className="text-xs">{order.orderCode}</span>
@@ -283,14 +318,14 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
             <ToggleGroup
               type="single"
               value={catalogType}
-              onValueChange={(value) => value && setCatalogType(value as 'lab' | 'imaging' | 'procedure' | 'package')}
+              onValueChange={(value) => value && setCatalogType(value as CatalogOrderType)}
               className="flex flex-wrap justify-start gap-2 rounded-xl bg-muted/40 p-1"
             >
               <ToggleGroupItem
                 value="lab"
                 aria-label="Lab tests"
                 variant="outline"
-                className="rounded-full px-3 text-muted-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 data-[state=on]:ring-primary/20"
+                className={`rounded-full px-3 text-muted-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 ${ORDER_TYPE_TAB_STYLES.lab}`}
               >
                 Lab
               </ToggleGroupItem>
@@ -298,7 +333,7 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
                 value="imaging"
                 aria-label="Imaging studies"
                 variant="outline"
-                className="rounded-full px-3 text-muted-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 data-[state=on]:ring-primary/20"
+                className={`rounded-full px-3 text-muted-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 ${ORDER_TYPE_TAB_STYLES.imaging}`}
               >
                 Imaging
               </ToggleGroupItem>
@@ -306,7 +341,7 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
                 value="procedure"
                 aria-label="Procedures"
                 variant="outline"
-                className="rounded-full px-3 text-muted-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 data-[state=on]:ring-primary/20"
+                className={`rounded-full px-3 text-muted-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 ${ORDER_TYPE_TAB_STYLES.procedure}`}
               >
                 Procedure
               </ToggleGroupItem>
@@ -315,7 +350,7 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
                 value="package"
                 aria-label="Packages"
                 variant="outline"
-                className="rounded-full px-3 text-muted-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 data-[state=on]:ring-primary/20"
+                className={`rounded-full px-3 text-muted-foreground data-[state=on]:shadow-sm data-[state=on]:ring-2 ${ORDER_TYPE_TAB_STYLES.package}`}
               >
                 Package
               </ToggleGroupItem>
@@ -353,7 +388,10 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
                         ) : (
                           <ChevronRight className="h-4 w-4 text-muted-foreground" />
                         )}
-                        <Badge variant="secondary" className="text-[11px] font-normal uppercase">
+                        <Badge
+                          variant="outline"
+                          className={`text-[11px] font-medium uppercase ${ORDER_TYPE_BADGE_STYLES.package}`}
+                        >
                           Package
                         </Badge>
                         <span className="font-medium">{packageOrder.packageName}</span>
@@ -403,8 +441,11 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
               })}
               {standaloneOrders.map((order) => (
                 <div key={order.id} className="flex items-center gap-2 py-1.5 text-sm">
-                  <Badge variant="outline" className="capitalize text-xs font-normal">
-                    {order.orderType}
+                  <Badge
+                    variant="outline"
+                    className={`capitalize text-xs font-medium ${getOrderTypeBadgeStyle(order.orderType)}`}
+                  >
+                    {ORDER_TYPE_LABELS[order.orderType as CatalogOrderType] ?? order.orderType}
                   </Badge>
                   <span className="font-medium">{order.orderName}</span>
                   <span className="text-xs text-muted-foreground">{order.orderCode}</span>
