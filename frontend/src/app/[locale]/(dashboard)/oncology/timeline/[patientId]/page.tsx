@@ -247,7 +247,7 @@ export default function CancerTimelinePage({
       ) : (
         <div className="relative">
           {/* Vertical connector line - runs through the center of the dot column (64px date rail + 12px gap + 12px to dot center) */}
-          <div className="absolute left-[88px] top-4 bottom-4 w-px bg-border" />
+          <div className="absolute z-0 left-[88px] top-4 bottom-4 w-px bg-border" />
 
           <ol className="space-y-4">
             {nodes.map((node) => {
@@ -259,7 +259,7 @@ export default function CancerTimelinePage({
                       <DateRailRange startIso={node.startDate} endIso={node.endDate} />
                     </div>
                     <div className="w-6 flex-shrink-0 flex justify-center pt-4">
-                      <div className={cn('h-4 w-4 rounded-full border-2', style.dot)} />
+                      <div className={cn('relative z-10 h-4 w-4 rounded-full border-2', style.dot)} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <TimelineGroupCard
@@ -284,7 +284,7 @@ export default function CancerTimelinePage({
                     <DateRailSingle iso={event.event_date} />
                   </div>
                   <div className="w-6 flex-shrink-0 flex justify-center pt-4">
-                    <div className={cn('h-3 w-3 rounded-full border-2', style.dot, severityRingClass(event.severity))} />
+                    <div className={cn('relative z-10 h-3 w-3 rounded-full border-2', style.dot, severityRingClass(event.severity))} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <TimelineEventCard
