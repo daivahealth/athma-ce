@@ -384,6 +384,9 @@ export const oncologyService = {
   async createCustomTimelineEvent(body: {
     patientId: string; cancerDiagnosisId?: string;
     eventDate: string; title: string; description?: string;
+    /** Only 'custom' | 'surgery' | 'response' | 'follow_up' are accepted by the backend. */
+    category?: string;
+    severity?: 'milestone' | 'info' | 'warning' | 'adverse';
   }): Promise<CancerTimelineEvent> {
     const { data } = await clinicalClient.post(`${BASE_URL}/timeline`, body);
     return data.data;

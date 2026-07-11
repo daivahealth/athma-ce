@@ -108,6 +108,20 @@ export class OncologyService {
     }
   }
 
+  /** Used to enrich chemo timeline event metadata with the protocol's planned cycle count. */
+  private async getProtocolTotalCycles(tenantId: string, protocolId: string | null | undefined): Promise<number | null> {
+    if (!protocolId) return null;
+    try {
+      const rows = await this.prisma.$queryRawUnsafe<{ total_cycles: number }[]>(
+        `SELECT total_cycles FROM plugin_oncology.chemo_protocols WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+        protocolId, tenantId,
+      );
+      return rows[0]?.total_cycles ?? null;
+    } catch {
+      return null;
+    }
+  }
+
   // ============================================
   // Cancer Diagnosis
   // ============================================
@@ -1319,6 +1333,7 @@ export class OncologyService {
       data.notes ?? null,
     );
     const r = results[0];
+    const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
       cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
@@ -1327,7 +1342,7 @@ export class OncologyService {
       title: `Chemo Ordered: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
       sourceEntity: 'chemo_order',
       sourceId: r.id,
-      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, scheduledDate: r.scheduled_date },
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, scheduledDate: r.scheduled_date, protocolTotalCycles },
       severity: 'info',
     });
     return r;
@@ -1394,6 +1409,7 @@ export class OncologyService {
       id, tenantId, this.getCurrentUserId(),
     );
     const r = results[0];
+    const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
       cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
@@ -1402,7 +1418,7 @@ export class OncologyService {
       title: `Chemo Approved: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
       sourceEntity: 'chemo_order',
       sourceId: r.id,
-      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number },
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, protocolTotalCycles },
       severity: 'info',
     });
     return r;
@@ -1472,6 +1488,7 @@ export class OncologyService {
       id, tenantId, this.getCurrentUserId(),
     );
     const r = results[0];
+    const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
       cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
@@ -1480,7 +1497,7 @@ export class OncologyService {
       title: `Chemo Started: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
       sourceEntity: 'chemo_order',
       sourceId: r.id,
-      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, bsa: r.bsa },
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, bsa: r.bsa, protocolTotalCycles },
       severity: 'milestone',
     });
     return r;
@@ -1509,6 +1526,7 @@ export class OncologyService {
       data.notes ?? null,
     );
     const r = results[0];
+    const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
       cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
@@ -1517,7 +1535,7 @@ export class OncologyService {
       title: `Chemo Completed: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
       sourceEntity: 'chemo_order',
       sourceId: r.id,
-      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number },
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, protocolTotalCycles },
       severity: 'milestone',
     });
     return r;
@@ -1536,6 +1554,7 @@ export class OncologyService {
     );
     if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
     const r = results[0];
+    const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
       cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
@@ -1544,7 +1563,7 @@ export class OncologyService {
       title: `Chemo Held: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
       sourceEntity: 'chemo_order',
       sourceId: r.id,
-      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason },
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason, protocolTotalCycles },
       severity: 'warning',
     });
     return r;
@@ -1563,6 +1582,7 @@ export class OncologyService {
     );
     if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
     const r = results[0];
+    const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
       cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
@@ -1571,7 +1591,7 @@ export class OncologyService {
       title: `Chemo Cancelled: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
       sourceEntity: 'chemo_order',
       sourceId: r.id,
-      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason },
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason, protocolTotalCycles },
       severity: 'warning',
     });
     return r;
@@ -2736,6 +2756,13 @@ export class OncologyService {
     return { data: rows };
   }
 
+  // Manual timeline entries can only claim categories that don't have a
+  // structured clinical workflow of their own — 'diagnosis'/'staging'/
+  // 'chemotherapy'/'radiation'/'care_plan'/'tumor_board' are always
+  // derived from real records, never spoofable via a free-text note.
+  private static readonly MANUAL_TIMELINE_CATEGORIES = new Set(['custom', 'surgery', 'response', 'follow_up']);
+  private static readonly TIMELINE_SEVERITIES = new Set(['milestone', 'info', 'warning', 'adverse']);
+
   async createCustomTimelineEvent(data: Record<string, unknown>) {
     const tenantId = this.getTenantId();
     const userId = this.getCurrentUserId();
@@ -2744,12 +2771,20 @@ export class OncologyService {
     if (!data.title) throw new BadRequestException('title is required');
     if (!data.eventDate) throw new BadRequestException('eventDate is required');
 
+    const category = typeof data.category === 'string' && OncologyService.MANUAL_TIMELINE_CATEGORIES.has(data.category)
+      ? data.category
+      : undefined;
+    const severity = typeof data.severity === 'string' && OncologyService.TIMELINE_SEVERITIES.has(data.severity)
+      ? data.severity
+      : 'info';
+    const metadata = category ? { category } : {};
+
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `INSERT INTO plugin_oncology.cancer_timeline_events
         (id, tenant_id, patient_id, cancer_diagnosis_id, event_type, event_date,
          title, description, source_entity, source_id, metadata, severity, created_by, created_at)
        VALUES (gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, 'custom', $4::timestamptz,
-               $5, $6, 'manual', NULL, '{}'::jsonb, 'info', $7::uuid, NOW())
+               $5, $6, 'manual', NULL, $7::jsonb, $8, $9::uuid, NOW())
        RETURNING *`,
       tenantId,
       data.patientId,
@@ -2757,6 +2792,8 @@ export class OncologyService {
       data.eventDate,
       data.title,
       data.description ?? null,
+      JSON.stringify(metadata),
+      severity,
       userId,
     );
     return results[0];
