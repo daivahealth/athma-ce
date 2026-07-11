@@ -151,12 +151,12 @@ export function TimelineGroupCard({ group, getDeepLink, onView, onDelete, deleti
       {expanded && (
         <div className="px-4 pb-4 pt-0">
           <div className="relative pl-6 space-y-2">
-            <div className="absolute left-[7px] top-1 bottom-1 w-px bg-border/70" />
+            <div className="absolute z-0 left-[7px] top-1 bottom-1 w-px bg-border/70" />
             {[...group.events].reverse().map((event) => {
               const deepLink = getDeepLink(event);
               return (
                 <div key={event.id} className="relative">
-                  <div className={cn('absolute -left-[19px] top-3 h-2 w-2 rounded-full border-2', style.dot)} />
+                  <div className={cn('absolute -left-[19px] top-3 z-10 h-2 w-2 rounded-full border-2', style.dot)} />
                   <TimelineEventCard
                     event={event}
                     deepLink={deepLink}
