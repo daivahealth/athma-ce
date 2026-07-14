@@ -530,6 +530,89 @@ POST /v1/providers/webhooks/:channel
 GET /v1/providers/callbacks?channel=sms&processed=false
 ```
 
+### Notifications
+
+User-facing notification center backing the app topbar. All routes are tenant-
+and recipient-scoped: a notification reaches a user when it is addressed to them
+(`user_id`) or broadcast to the whole tenant (`user_id = null`, optionally
+narrowed by an `audience` role).
+
+#### List Notifications
+```http
+GET /v1/notifications?unread=true&limit=50&offset=0
+Authorization: Bearer <JWT>
+```
+
+**Response:**
+```json
+{
+  "data": [
+    {
+      "id": "uuid",
+      "user_id": "uuid",
+      "audience": null,
+      "type": "consent_expiring",
+      "severity": "warning",
+      "title": "Consent expiring",
+      "body": "Data-sharing consent expires in 3 days.",
+      "entity_ref": "consent:abc",
+      "read": false,
+      "created_at": "2026-07-15T10:00:00Z"
+    }
+  ],
+  "total": 12,
+  "unread_count": 4,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+`severity` is one of `info | action | warning | error`.
+
+#### Unread Count
+```http
+GET /v1/notifications/unread-count
+Authorization: Bearer <JWT>
+```
+```json
+{ "unread_count": 4 }
+```
+
+#### Mark As Read
+```http
+POST /v1/notifications/:id/read
+Authorization: Bearer <JWT>
+```
+Returns the updated notification (idempotent — already-read notifications are
+returned unchanged). Responds `404` if the notification is not visible to the
+recipient.
+
+#### Real-Time Stream (SSE)
+```http
+GET /v1/notifications/stream
+Authorization: Bearer <JWT>
+Accept: text/event-stream
+```
+Server-Sent Events stream that pushes each new notification targeting the
+recipient as a `message` event whose `data` is the notification JSON (same shape
+as a list item). Because the browser `EventSource` API cannot set an
+`Authorization` header, the JWT may alternatively be supplied as the
+`access_token` query parameter:
+```
+GET /v1/notifications/stream?access_token=<JWT>
+```
+
+#### Simulate Event (DEV ONLY)
+```http
+POST /v1/notifications/simulate
+Authorization: Bearer <JWT>
+
+{ "type": "claim_denied", "severity": "error", "title": "Claim denied" }
+```
+Persists a sample notification and emits it onto the stream. All body fields are
+optional (a rotating sample is used for omitted values). Returns `403` when
+`NODE_ENV=production`.
+
 ---
 
 ## Database Schema
@@ -660,6 +743,24 @@ Raw webhook payloads from SMS/Email/WhatsApp providers.
 - `id`, `tenant_id`, `channel`, `provider_message_id`
 - `received_at`, `payload` (JSONB)
 - `processed`, `processed_at`
+
+#### `notifications`
+User-facing notification-center entries surfaced in the app topbar and pushed in
+real time over SSE.
+
+**Key Fields:**
+- `id`, `tenant_id`
+- `user_id` (nullable — null = tenant broadcast), `audience` (nullable role)
+- `type`, `severity` (info | action | warning | error)
+- `title`, `body`, `entity_ref` (e.g. `claim:abc`, `encounter:123`)
+- `read`, `read_at`, `created_at`
+
+**Indexes:**
+- `idx_notifications_recipient_unread` - (tenant_id, user_id, read, created_at DESC)
+- `idx_notifications_tenant_time` - (tenant_id, created_at DESC)
+
+> Migration: `backend/shared/database-prm/migrations/001_add_notifications.sql`
+> (not auto-applied). Seed: `seed/prm/05-notifications.sql`.
 
 ---
 

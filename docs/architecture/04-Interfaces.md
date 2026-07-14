@@ -79,6 +79,29 @@ PaginationResponse:
           type: integer
 ```
 
+### Real-Time Streaming (Server-Sent Events)
+
+For push-style, one-directional server-to-client updates (e.g. the PRM
+notification center), services expose a Server-Sent Events (SSE) endpoint rather
+than WebSockets. SSE keeps the HTTP/auth model, works through standard proxies,
+and auto-reconnects in the browser.
+
+Conventions:
+
+- Endpoint returns `Content-Type: text/event-stream`; each frame is a `message`
+  event whose `data` is the JSON payload (same shape as the REST list item).
+- Streams are tenant- and recipient-scoped from the JWT claims, identical to the
+  REST endpoints for the same resource.
+- Because the browser `EventSource` API cannot set an `Authorization` header, SSE
+  endpoints also accept the JWT via the `access_token` query parameter, verified
+  by the same guard used for the bearer header.
+- The stream is a live feed only; clients still load history and unread counts
+  from the paginated REST endpoints and treat SSE as an incremental signal.
+
+Reference implementation: PRM `GET /v1/notifications/stream` (backed by an
+in-process RxJS subject fanned out per recipient). See
+[PRM Service Guide](../services/PRM-SERVICE-GUIDE.md#notifications).
+
 ## PMS Core Service APIs
 
 ### Patient Management
