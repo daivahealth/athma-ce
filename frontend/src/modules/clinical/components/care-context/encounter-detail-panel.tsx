@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { format, parseISO } from 'date-fns';
-import { Zap, FileText, Shield, FlaskConical } from 'lucide-react';
+import { Zap, FileText, Shield, FlaskConical, Receipt, AlertOctagon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,8 @@ import type { Encounter } from '@/modules/clinical/types/encounter';
 import { useClaims } from '@/modules/rcm/hooks/use-claims';
 import { usePreAuthRequests } from '@/modules/rcm/hooks/use-preauth';
 import { useEncounterCoverages } from '@/modules/rcm/hooks/use-encounter-coverages';
+import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
+import { useDenials, useDraftAppeal, useFileAppeal } from '@/modules/rcm/hooks/use-denials';
 import { useEncounterObservations } from '@/modules/clinical/hooks/use-observations';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { Field, SectionLabel, FeaturePlaceholder, EmptyState } from './parts';
@@ -19,6 +21,15 @@ function fmtDateTime(value?: string | null): string {
   if (!value) return '—';
   try {
     return format(parseISO(value), 'MMM dd, yyyy · HH:mm');
+  } catch {
+    return value;
+  }
+}
+
+function fmtDate(value?: string | null): string {
+  if (!value) return '—';
+  try {
+    return format(parseISO(value), 'MMM dd, yyyy');
   } catch {
     return value;
   }
@@ -36,7 +47,7 @@ function titleCase(value?: string | null): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-type SectionKey = 'encounter' | 'results' | 'documents' | 'claims' | 'preauth' | 'denials' | 'policy';
+type SectionKey = 'encounter' | 'results' | 'documents' | 'claims' | 'preauth' | 'denials' | 'invoices' | 'policy';
 
 export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const encounterId = encounter?.id;
@@ -45,7 +56,11 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const { data: preauthData, isLoading: preauthLoading } = usePreAuthRequests(encounterId ? { encounterId } : undefined);
   const { data: coverages, isLoading: coveragesLoading } = useEncounterCoverages(encounterId);
   const { data: results, isLoading: resultsLoading } = useEncounterObservations(encounterId);
+  const { data: invoicesData, isLoading: invoicesLoading } = useInvoices(encounterId ? { encounterId } : undefined);
+  const { data: denialsData, isLoading: denialsLoading } = useDenials(encounterId ? { encounterId } : undefined);
   const { data: staff } = useStaffList();
+  const draftAppeal = useDraftAppeal();
+  const fileAppeal = useFileAppeal();
 
   const providerName = React.useMemo(() => {
     if (!encounter?.primaryStaffId) return undefined;
@@ -57,6 +72,22 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const preauths = encounterId ? preauthData?.requests ?? [] : [];
   const encounterCoverages = coverages ?? [];
   const encounterResults = results ?? [];
+  const invoices = encounterId ? invoicesData ?? [] : [];
+  const denials = encounterId ? denialsData?.denials ?? [] : [];
+
+  // Encounter financials derived from its invoices.
+  const financials = React.useMemo(() => {
+    const inv = encounterId ? invoicesData ?? [] : [];
+    if (inv.length === 0) return null;
+    const sum = (pick: (i: (typeof inv)[number]) => number | null | undefined) =>
+      inv.reduce((acc, row) => acc + (Number(pick(row)) || 0), 0);
+    return {
+      currency: inv[0]?.currency ?? null,
+      billed: sum((i) => i.netAmount),
+      paid: sum((i) => i.amountPaid),
+      owes: sum((i) => i.balanceDue),
+    };
+  }, [invoicesData, encounterId]);
 
   const refs = React.useRef<Record<SectionKey, HTMLDivElement | null>>({
     encounter: null,
@@ -65,6 +96,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
     claims: null,
     preauth: null,
     denials: null,
+    invoices: null,
     policy: null,
   });
   const scrollTo = (key: SectionKey) =>
@@ -84,7 +116,8 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
     { key: 'documents', label: 'Documents' },
     { key: 'claims', label: `Claims · ${claims.length}` },
     { key: 'preauth', label: `Pre-Auth · ${preauths.length}` },
-    { key: 'denials', label: 'Denials' },
+    { key: 'denials', label: `Denials · ${denials.length}` },
+    { key: 'invoices', label: `Invoices · ${invoices.length}` },
     { key: 'policy', label: `Policy · ${encounterCoverages.length}` },
   ];
 
@@ -134,12 +167,18 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         ) : null}
       </div>
 
-      {/* Financials — no single aggregate endpoint yet */}
+      {/* Financials — derived from the encounter's invoices */}
       <div className="grid grid-cols-3 gap-2">
-        {['Total Billed', 'Total Paid', 'Patient Owes'].map((label) => (
+        {([
+          ['Total Billed', financials?.billed],
+          ['Total Paid', financials?.paid],
+          ['Patient Owes', financials?.owes],
+        ] as const).map(([label, value]) => (
           <div key={label} className="rounded-lg border border-border/60 bg-card/60 px-3 py-2">
             <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">{label}</p>
-            <p className="mt-0.5 text-base font-semibold text-muted-foreground">—</p>
+            <p className="mt-0.5 text-base font-semibold text-foreground">
+              {value == null ? '—' : money(value, financials?.currency)}
+            </p>
           </div>
         ))}
       </div>
@@ -246,14 +285,92 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
           )}
         </section>
 
-        {/* Denials — greenfield */}
+        {/* Denials & appeals */}
         <section ref={setRef('denials')} className="scroll-mt-20 space-y-2">
           <SectionLabel>Denials & Appeals</SectionLabel>
-          <FeaturePlaceholder
-            title="Denials & appeals not yet available"
-            detail="Denial codes (e.g. CO-197), appeal drafting, and appeal deadlines require a dedicated RCM denials module. Denied claims currently surface only as a claim status."
-            requires="rcm denials + appeals module"
-          />
+          {denialsLoading ? (
+            <LoadingSpinner size="sm" text="Loading denials..." />
+          ) : denials.length === 0 ? (
+            <EmptyState>No denials for this encounter.</EmptyState>
+          ) : (
+            denials.map((d) => {
+              const draft = d.appeals?.find((a) => a.status === 'draft');
+              const filed = d.appeals?.find((a) => a.status !== 'draft');
+              return (
+                <div key={d.id} className="space-y-2 rounded-lg border border-border/60 bg-card/40 p-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start gap-2">
+                      <AlertOctagon className="mt-0.5 h-4 w-4 text-destructive" />
+                      <div>
+                        <p className="text-sm font-medium text-foreground">
+                          <span className="font-mono">{d.denialCode}</span> · {money(d.deniedAmount, d.currency)}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{d.denialReason}</p>
+                        {d.appealDeadline ? (
+                          <p className="mt-0.5 text-xs text-muted-foreground">Appeal by {fmtDate(d.appealDeadline)}</p>
+                        ) : null}
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="capitalize">{String(d.status).toLowerCase()}</Badge>
+                  </div>
+                  <div>
+                    {filed ? (
+                      <Badge variant="secondary" className="capitalize">Appeal {String(filed.status)}</Badge>
+                    ) : draft ? (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={fileAppeal.isPending}
+                        onClick={() => fileAppeal.mutate({ appealId: draft.id })}
+                      >
+                        File appeal
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={draftAppeal.isPending}
+                        onClick={() =>
+                          draftAppeal.mutate({
+                            denialId: d.id,
+                            payload: { narrative: `Appeal for ${d.denialCode}: ${d.denialReason}` },
+                          })
+                        }
+                      >
+                        Draft appeal
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </section>
+
+        {/* Invoices */}
+        <section ref={setRef('invoices')} className="scroll-mt-20 space-y-2">
+          <SectionLabel>Invoices</SectionLabel>
+          {invoicesLoading ? (
+            <LoadingSpinner size="sm" text="Loading invoices..." />
+          ) : invoices.length === 0 ? (
+            <EmptyState>No invoices for this encounter.</EmptyState>
+          ) : (
+            invoices.map((inv) => (
+              <div key={inv.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-card/40 p-3">
+                <div className="flex items-center gap-2">
+                  <Receipt className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="font-mono text-sm font-medium text-foreground">{inv.invoiceNumber}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Billed {money(inv.netAmount, inv.currency)} · Paid {money(inv.amountPaid, inv.currency)} · Due{' '}
+                      {money(inv.balanceDue, inv.currency)}
+                    </p>
+                  </div>
+                </div>
+                <Badge variant="outline" className="capitalize">{String(inv.status).toLowerCase()}</Badge>
+              </div>
+            ))
+          )}
         </section>
 
         {/* Encounter-level Policy */}

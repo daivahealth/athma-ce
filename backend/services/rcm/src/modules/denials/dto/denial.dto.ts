@@ -1,3 +1,6 @@
+import { IsOptional, IsString, IsEnum, IsInt } from 'class-validator';
+import { Type } from 'class-transformer';
+
 // Denial status enum
 export enum DenialStatus {
     OPEN = 'open',
@@ -50,10 +53,10 @@ export class FileAppealDto {
 
 // DTO for filtering denials list
 export class DenialFilterDto {
-    claimId?: string;
-    encounterId?: string;
-    patientId?: string;
-    status?: DenialStatus;
-    limit?: number;
-    offset?: number;
+    @IsOptional() @IsString() claimId?: string;
+    @IsOptional() @IsString() encounterId?: string;
+    @IsOptional() @IsString() patientId?: string;
+    @IsOptional() @IsEnum(DenialStatus) status?: DenialStatus;
+    @IsOptional() @Type(() => Number) @IsInt() limit?: number;
+    @IsOptional() @Type(() => Number) @IsInt() offset?: number;
 }

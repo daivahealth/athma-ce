@@ -33,7 +33,7 @@ export class DenialsService {
                 claimId: dto.claimId,
                 denialCode: dto.denialCode,
                 denialReason: dto.denialReason,
-                remarkCodes: (dto.remarkCodes ?? undefined) as object | undefined,
+                ...(dto.remarkCodes !== undefined ? { remarkCodes: dto.remarkCodes as object } : {}),
                 deniedAmount: dto.deniedAmount,
                 currency: dto.currency ?? claim.currency ?? 'AED',
                 status: dto.status ?? DenialStatus.OPEN,
@@ -59,7 +59,7 @@ export class DenialsService {
         if (filters?.encounterId) claimFilter.encounterId = filters.encounterId;
         if (filters?.patientId) claimFilter.patientId = filters.patientId;
         if (Object.keys(claimFilter).length > 0) {
-            where.claim = { is: claimFilter };
+            where.claim = claimFilter;
         }
 
         const [denials, total] = await Promise.all([
