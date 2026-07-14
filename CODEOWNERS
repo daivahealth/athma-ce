@@ -1,32 +1,12 @@
-# CODEOWNERS for Zeal Healthcare Platform
+# CODEOWNERS for athma-ce
+#
+# NOTE: this file previously referenced GitHub teams under a `@zeal/*`
+# namespace (foundation-team, clinical-team, platform-team, etc.) that
+# don't exist in this org (`daivahealth` currently has zero GitHub
+# teams) - every rule was silently a no-op. Simplified to the one
+# real reviewer this repo has today. Re-expand back to team-based
+# ownership once teams actually exist under this org (see
+# docs/development/GITHUB-SETUP-GUIDE.md for the aspirational
+# structure this was based on).
 
-# Root docs & governance
-/docs/                              @zeal/maintainers
-/.github/                           @zeal/maintainers
-/README.md                          @zeal/maintainers
-
-# Services (teams own their domains)
-backend/services/foundation/        @zeal/foundation-team
-backend/services/clinical/          @zeal/clinical-team
-backend/services/rcm/               @zeal/rcm-team
-backend/services/analytics/         @zeal/analytics-team
-
-# Shared libraries
-backend/shared/                     @zeal/platform-team
-backend/contracts/                  @zeal/platform-team
-
-# Database folders (migrations & policy)
-backend/shared/database-foundation/ @zeal/db-team
-backend/shared/database-clinical/   @zeal/db-team
-
-# DevOps / IaC / Helm charts
-infra/                              @zeal/devops-team
-charts/                             @zeal/devops-team
-
-# Frontend applications (when added)
-frontend/                           @zeal/frontend-team
-
-# Configuration
-.changeset/                         @zeal/maintainers
-turbo.json                          @zeal/platform-team
-package.json                        @zeal/platform-team
+* @sajithchandran
