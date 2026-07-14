@@ -21,6 +21,12 @@ class ObservationService {
     const response = await clinicalClient.get(`${this.basePath}/patient/${patientId}/latest`);
     return unwrap<ClinicalObservation>(response.data);
   }
+
+  /** All observations (labs/vitals) recorded for a specific encounter. */
+  async getByEncounter(encounterId: string): Promise<ClinicalObservation[]> {
+    const response = await clinicalClient.get(`${this.basePath}/encounter/${encounterId}`);
+    return unwrap<ClinicalObservation>(response.data);
+  }
 }
 
 export const observationService = new ObservationService();

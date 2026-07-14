@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ClipboardList, Sparkles, FlaskConical, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ClipboardList, Sparkles, FlaskConical, ShieldCheck, PanelLeftOpen } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,6 +28,7 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
   );
 
   const [selectedEncounterId, setSelectedEncounterId] = React.useState<string | undefined>(undefined);
+  const [railOpen, setRailOpen] = React.useState(true);
 
   // Default selection to the most recent encounter once loaded.
   React.useEffect(() => {
@@ -95,12 +97,42 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
       </div>
 
       {/* 3-pane workspace */}
-      <div className="grid gap-4 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(0,1.15fr)]">
-        <Card>
-          <CardContent className="p-4">
-            <PatientContextRail patient={patient} />
-          </CardContent>
-        </Card>
+      <div
+        className={cn(
+          'grid gap-4',
+          railOpen
+            ? 'lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(0,1.15fr)]'
+            : 'lg:grid-cols-[52px_minmax(0,1fr)_minmax(0,1.15fr)]',
+        )}
+      >
+        {railOpen ? (
+          <Card>
+            <CardContent className="p-4">
+              <PatientContextRail patient={patient} onCollapse={() => setRailOpen(false)} />
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardContent className="flex flex-col items-center gap-3 p-2 pt-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                aria-label="Expand patient panel"
+                title="Expand patient panel"
+                onClick={() => setRailOpen(true)}
+              >
+                <PanelLeftOpen className="h-4 w-4" />
+              </Button>
+              <span
+                className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70"
+                style={{ writingMode: 'vertical-rl' }}
+              >
+                Patient
+              </span>
+            </CardContent>
+          </Card>
+        )}
 
         <Card>
           <CardContent className="p-4">

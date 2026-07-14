@@ -35,10 +35,9 @@ export function StatTile({ label, value, unit }: { label: string; value: React.R
   );
 }
 
-/** Renders a comma/newline-separated free-text field as chips, with an empty fallback. */
-export function ChipList({ value, empty }: { value?: string | null; empty: string }) {
-  const items = (value ?? '')
-    .split(/[,;\n]/)
+/** Renders a comma/newline-separated string or a string[] as chips, with an empty fallback. */
+export function ChipList({ value, empty }: { value?: string | string[] | null; empty: string }) {
+  const items = (Array.isArray(value) ? value : (value ?? '').split(/[,;\n]/))
     .map((s) => s.trim())
     .filter(Boolean);
   if (items.length === 0) return <p className="text-sm text-muted-foreground">{empty}</p>;

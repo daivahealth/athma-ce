@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading';
 import type { Encounter } from '@/modules/clinical/types/encounter';
+import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { SectionLabel, FeaturePlaceholder, EmptyState } from './parts';
 
 type ViewMode = 'timeline' | 'encounters';
@@ -23,8 +24,9 @@ function fmt(value?: string | null): string {
 }
 
 function encounterTitle(e: Encounter): string {
-  const cls = (e.encounterClass || 'Encounter').replace(/_/g, ' ');
-  return cls.charAt(0).toUpperCase() + cls.slice(1);
+  const raw = e.encounterType || e.encounterClass || 'Encounter';
+  const s = raw.replace(/_/g, ' ');
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 export function CareTimelinePanel({
@@ -39,6 +41,16 @@ export function CareTimelinePanel({
   onSelectEncounter: (id: string) => void;
 }) {
   const [view, setView] = React.useState<ViewMode>('timeline');
+
+  const { data: staff } = useStaffList();
+  const staffMap = React.useMemo(() => {
+    const m = new Map<string, string>();
+    (staff ?? []).forEach((s) =>
+      m.set(s.id, s.displayName || `${s.firstName ?? ''} ${s.lastName ?? ''}`.trim()),
+    );
+    return m;
+  }, [staff]);
+  const providerName = React.useCallback((id?: string) => (id ? staffMap.get(id) : undefined), [staffMap]);
 
   const ordered = React.useMemo(
     () => [...encounters].sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()),
@@ -119,8 +131,14 @@ export function CareTimelinePanel({
                 >
                   <p className="text-xs text-muted-foreground">{fmt(e.startTime)}</p>
                   <p className="text-sm font-semibold text-foreground">{encounterTitle(e)}</p>
-                  <div className="mt-1 flex items-center gap-2">
-                    <span className="font-mono text-xs text-muted-foreground">{e.encounterNumber}</span>
+                  {providerName(e.primaryStaffId) ? (
+                    <p className="text-xs text-muted-foreground">{providerName(e.primaryStaffId)}</p>
+                  ) : null}
+                  {e.notes ? (
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{e.notes}</p>
+                  ) : null}
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <span className="font-mono text-[11px] text-muted-foreground">{e.encounterNumber}</span>
                     <Badge variant="outline" className="capitalize">{e.status}</Badge>
                   </div>
                 </button>

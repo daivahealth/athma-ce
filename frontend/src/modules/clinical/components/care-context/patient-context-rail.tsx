@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { format, parseISO } from 'date-fns';
-import { Phone, MessageSquare, Plus } from 'lucide-react';
+import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import type { Patient } from '@/modules/clinical/types/patient';
 import { usePatientPolicies } from '@/modules/rcm/hooks/use-policies';
 import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
+import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { useLatestObservations, deriveVitals } from '@/modules/clinical/hooks/use-observations';
 import { SectionLabel, Field, StatTile, ChipList, EmptyState } from './parts';
 
@@ -37,6 +38,15 @@ function fmtDate(value?: string | null): string {
   }
 }
 
+function fmtDateTime(value?: string | null): string {
+  if (!value) return '—';
+  try {
+    return format(parseISO(value), 'MMM dd, yyyy · HH:mm');
+  } catch {
+    return value;
+  }
+}
+
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return 'P';
@@ -44,7 +54,14 @@ function initials(name: string): string {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
-export function PatientContextRail({ patient }: { patient: Patient }) {
+
+export function PatientContextRail({
+  patient,
+  onCollapse,
+}: {
+  patient: Patient;
+  onCollapse?: () => void;
+}) {
   const name = [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
   const age = calculateAge(patient.dateOfBirth);
 
@@ -62,6 +79,33 @@ export function PatientContextRail({ patient }: { patient: Patient }) {
       .filter((a) => new Date(a.startTime).getTime() >= now)
       .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())[0];
   }, [appointments]);
+
+  const { data: encounters } = usePatientEncounters(patient.id);
+  const previousEncounter = React.useMemo(() => {
+    if (!encounters) return undefined;
+    const now = Date.now();
+    return [...encounters]
+      .filter((e) => new Date(e.startTime).getTime() <= now)
+      .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())[0];
+  }, [encounters]);
+
+  // Patient-level clinical summary is sourced from the most recent encounter that
+  // carries it (the patients table has no allergy/problem/medication columns).
+  const clinicalEncounter = React.useMemo(() => {
+    return [...(encounters ?? [])]
+      .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
+      .find(
+        (e) =>
+          (e.allergies?.length ?? 0) > 0 ||
+          (e.currentMedications?.length ?? 0) > 0 ||
+          !!e.medicalHistory,
+      );
+  }, [encounters]);
+  const riskFlags = clinicalEncounter?.allergies ?? [];
+
+  const address = [patient.address, patient.city, patient.state, patient.country, patient.postalCode]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <div className="space-y-5">
@@ -85,9 +129,42 @@ export function PatientContextRail({ patient }: { patient: Patient }) {
             </p>
             <p className="font-mono text-xs text-muted-foreground">{patient.mrn}</p>
           </div>
+          {onCollapse ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 shrink-0 text-muted-foreground"
+              aria-label="Collapse patient panel"
+              title="Collapse panel"
+              onClick={onCollapse}
+            >
+              <PanelLeftClose className="h-4 w-4" />
+            </Button>
+          ) : null}
         </div>
 
-        <ChipList value={patient.allergies} empty="No allergies documented" />
+        {/* Risk flags (replaces Coverage) */}
+        <div className="space-y-1.5">
+          <SectionLabel className="text-destructive/80">
+            <span className="inline-flex items-center gap-1.5">
+              <AlertTriangle className="h-3.5 w-3.5" /> Risk Flags
+            </span>
+          </SectionLabel>
+          {riskFlags.length === 0 ? (
+            <EmptyState>No risk flags on file.</EmptyState>
+          ) : (
+            <div className="flex flex-wrap gap-1.5">
+              {riskFlags.map((flag, i) => (
+                <span
+                  key={`${flag}-${i}`}
+                  className="inline-flex items-center rounded-full bg-destructive/10 px-2.5 py-0.5 text-xs font-medium text-destructive"
+                >
+                  {flag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" disabled={!patient.phoneNumber}>
@@ -106,9 +183,7 @@ export function PatientContextRail({ patient }: { patient: Patient }) {
 
       {/* Vitals */}
       <div className="space-y-2">
-        <SectionLabel>
-          Vitals{lastCaptured ? ` · last captured ${fmtDate(lastCaptured)}` : ''}
-        </SectionLabel>
+        <SectionLabel>Vitals{lastCaptured ? ` · last captured ${fmtDate(lastCaptured)}` : ''}</SectionLabel>
         {vitals.length === 0 ? (
           <EmptyState>No vitals recorded.</EmptyState>
         ) : (
@@ -122,70 +197,126 @@ export function PatientContextRail({ patient }: { patient: Patient }) {
 
       <Separator />
 
-      {/* Demographics */}
+      {/* Personal Information */}
       <div className="space-y-2.5">
-        <SectionLabel>Demographics</SectionLabel>
-        <Field label="DOB" value={fmtDate(patient.dateOfBirth)} />
-        <Field label="Phone" value={patient.phoneNumber || '—'} />
-        <Field label="Email" value={patient.email || '—'} />
+        <SectionLabel>Personal Information</SectionLabel>
+        <Field label="Date of birth" value={fmtDate(patient.dateOfBirth)} />
+        <Field label="Gender" value={<span className="capitalize">{patient.gender}</span>} />
+        <Field label="Blood group" value={patient.bloodGroup || '—'} />
         <Field label="Nationality" value={patient.nationality || '—'} />
       </div>
 
       <Separator />
 
-      {/* Coverage */}
+      {/* Contact Information */}
       <div className="space-y-2.5">
-        <SectionLabel>Coverage</SectionLabel>
+        <SectionLabel>Contact Information</SectionLabel>
+        <Field label="Phone" value={patient.phoneNumber || '—'} />
+        <Field label="Alternate" value={patient.alternateContactNumber || '—'} />
+        <Field label="Email" value={patient.email || '—'} />
+        <Field label="Address" value={address || 'Address not provided'} />
+      </div>
+
+      <Separator />
+
+      {/* Emergency Contact */}
+      <div className="space-y-2.5">
+        <SectionLabel>Emergency Contact</SectionLabel>
+        <Field
+          label="Name"
+          value={
+            patient.emergencyContactName
+              ? `${patient.emergencyContactName}${patient.emergencyContactRelation ? ` (${patient.emergencyContactRelation})` : ''}`
+              : '—'
+          }
+        />
+        <Field label="Number" value={patient.emergencyContactNumber || 'No number on file'} />
+      </div>
+
+      <Separator />
+
+      {/* Medical Information */}
+      <div className="space-y-3">
+        <SectionLabel>Medical Information</SectionLabel>
+        <div className="space-y-1.5">
+          <p className="text-xs text-muted-foreground">Allergies</p>
+          <ChipList value={clinicalEncounter?.allergies} empty="No allergies documented" />
+        </div>
+        <div className="space-y-1.5">
+          <p className="text-xs text-muted-foreground">Active conditions</p>
+          <ChipList value={clinicalEncounter?.medicalHistory} empty="No conditions on file." />
+        </div>
+        <div className="space-y-1.5">
+          <p className="text-xs text-muted-foreground">Active medications</p>
+          <ChipList value={clinicalEncounter?.currentMedications} empty="No medications recorded." />
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Insurance Information */}
+      <div className="space-y-2.5">
+        <SectionLabel>Insurance Information</SectionLabel>
         {primaryPolicy ? (
-          <div className="space-y-1">
-            <p className="text-sm font-semibold text-foreground">{primaryPolicy.payerName}</p>
-            <p className="font-mono text-xs text-muted-foreground">{primaryPolicy.policyNumber}</p>
-            {primaryPolicy.groupNumber ? (
-              <p className="text-xs text-muted-foreground">Group {primaryPolicy.groupNumber}</p>
+          <>
+            <Field label="Payer" value={primaryPolicy.payerName} />
+            <Field label="Policy #" value={<span className="font-mono">{primaryPolicy.policyNumber}</span>} />
+            {primaryPolicy.groupNumber ? <Field label="Group" value={primaryPolicy.groupNumber} /> : null}
+            {primaryPolicy.expirationDate ? (
+              <Field label="Expires" value={fmtDate(primaryPolicy.expirationDate)} />
             ) : null}
-          </div>
+          </>
         ) : patient.insuranceProvider ? (
-          <div className="space-y-1">
-            <p className="text-sm font-semibold text-foreground">{patient.insuranceProvider}</p>
-            <p className="font-mono text-xs text-muted-foreground">{patient.insurancePolicyNumber || '—'}</p>
-          </div>
+          <>
+            <Field label="Provider" value={patient.insuranceProvider} />
+            <Field label="Policy #" value={<span className="font-mono">{patient.insurancePolicyNumber || '—'}</span>} />
+            {patient.insuranceExpiryDate ? (
+              <Field label="Expires" value={fmtDate(patient.insuranceExpiryDate)} />
+            ) : null}
+          </>
         ) : (
-          <EmptyState>No coverage on file.</EmptyState>
+          <EmptyState>No insurance on file.</EmptyState>
         )}
       </div>
 
       <Separator />
 
-      {/* Active conditions */}
-      <div className="space-y-2">
-        <SectionLabel>Active Conditions</SectionLabel>
-        <ChipList value={patient.chronicConditions} empty="No conditions on file." />
+      {/* Identity Documents */}
+      <div className="space-y-2.5">
+        <SectionLabel>Identity Documents</SectionLabel>
+        <Field
+          label="National ID"
+          value={patient.nationalId ? `${patient.nationalId}${patient.nationalIdType ? ` (${patient.nationalIdType})` : ''}` : '—'}
+        />
+        <Field label="Passport" value={patient.passportNumber || '—'} />
       </div>
 
       <Separator />
 
-      {/* Active medications */}
+      {/* Previous Encounter */}
       <div className="space-y-2">
-        <SectionLabel>Active Medications</SectionLabel>
-        <ChipList value={patient.currentMedications} empty="No medications recorded." />
+        <SectionLabel>Previous Encounter</SectionLabel>
+        {previousEncounter ? (
+          <div className="rounded-lg border border-border/60 bg-card/60 p-3">
+            <p className="text-sm font-semibold text-foreground">
+              {previousEncounter.encounterType || previousEncounter.encounterClass}
+            </p>
+            <p className="font-mono text-xs text-muted-foreground">{previousEncounter.encounterNumber}</p>
+            <p className="text-xs text-muted-foreground">{fmtDate(previousEncounter.startTime)}</p>
+          </div>
+        ) : (
+          <EmptyState>No previous encounters.</EmptyState>
+        )}
       </div>
 
       <Separator />
 
-      {/* Next appointment */}
+      {/* Next Appointment */}
       <div className="space-y-2">
         <SectionLabel>Next Appointment</SectionLabel>
         {nextAppointment ? (
           <div className="rounded-lg border border-border/60 bg-card/60 p-3">
-            <p className="text-sm font-semibold text-foreground">
-              {(() => {
-                try {
-                  return format(parseISO(nextAppointment.startTime), 'MMM dd, yyyy · HH:mm');
-                } catch {
-                  return nextAppointment.startTime;
-                }
-              })()}
-            </p>
+            <p className="text-sm font-semibold text-foreground">{fmtDateTime(nextAppointment.startTime)}</p>
             <p className="text-xs text-muted-foreground">
               {nextAppointment.visitType || nextAppointment.appointmentType || 'Appointment'}
             </p>
@@ -193,6 +324,15 @@ export function PatientContextRail({ patient }: { patient: Patient }) {
         ) : (
           <EmptyState>No upcoming appointments scheduled.</EmptyState>
         )}
+      </div>
+
+      <Separator />
+
+      {/* Audit Information */}
+      <div className="space-y-2.5">
+        <SectionLabel>Audit Information</SectionLabel>
+        <Field label="Created" value={fmtDateTime(patient.createdAt)} />
+        <Field label="Last updated" value={fmtDateTime(patient.updatedAt)} />
       </div>
     </div>
   );

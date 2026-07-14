@@ -4,6 +4,7 @@ import type { ClinicalObservation } from '../types/observation';
 
 const OBSERVATION_KEYS = {
   latest: (patientId: string) => ['patient-observations-latest', patientId] as const,
+  byEncounter: (encounterId: string) => ['encounter-observations', encounterId] as const,
 };
 
 /** Latest observation per code for a patient (backs the vitals panel). */
@@ -14,6 +15,17 @@ export function useLatestObservations(patientId: string) {
     enabled: !!patientId,
     staleTime: 30_000,
     retry: false, // vitals degrade gracefully to an empty state if the endpoint errors
+  });
+}
+
+/** All observations (labs/vitals) for a specific encounter (backs the Results section). */
+export function useEncounterObservations(encounterId?: string) {
+  return useQuery({
+    queryKey: OBSERVATION_KEYS.byEncounter(encounterId ?? ''),
+    queryFn: () => observationService.getByEncounter(encounterId!),
+    enabled: !!encounterId,
+    staleTime: 30_000,
+    retry: false,
   });
 }
 
