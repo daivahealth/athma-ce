@@ -18,6 +18,7 @@ import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
 import { SectionLabel, FeaturePlaceholder, EmptyState, EncounterClassChip } from './parts';
 import { buildNarrativePreview } from './narrative-preview';
 import { buildAdminSummary, type EncounterRcm } from './encounter-admin-summary';
+import { ExternalRecordsPanel } from './ExternalRecordsPanel';
 
 type ViewMode = 'timeline' | 'encounters';
 
@@ -324,6 +325,9 @@ export function CareTimelinePanel({
           })}
         </div>
       )}
+
+      {/* External / prior records fetched from the HIE (patient-level, consent-driven) */}
+      <ExternalRecordsPanel patientId={patient.id} patientReference={patient.mrn} />
     </div>
   );
 }
