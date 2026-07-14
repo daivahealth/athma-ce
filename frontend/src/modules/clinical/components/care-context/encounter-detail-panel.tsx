@@ -12,6 +12,7 @@ import { useClaims } from '@/modules/rcm/hooks/use-claims';
 import { usePreAuthRequests } from '@/modules/rcm/hooks/use-preauth';
 import { useEncounterCoverages } from '@/modules/rcm/hooks/use-encounter-coverages';
 import { useEncounterObservations } from '@/modules/clinical/hooks/use-observations';
+import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { Field, SectionLabel, FeaturePlaceholder, EmptyState } from './parts';
 
 function fmtDateTime(value?: string | null): string {
@@ -44,6 +45,13 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const { data: preauthData, isLoading: preauthLoading } = usePreAuthRequests(encounterId ? { encounterId } : undefined);
   const { data: coverages, isLoading: coveragesLoading } = useEncounterCoverages(encounterId);
   const { data: results, isLoading: resultsLoading } = useEncounterObservations(encounterId);
+  const { data: staff } = useStaffList();
+
+  const providerName = React.useMemo(() => {
+    if (!encounter?.primaryStaffId) return undefined;
+    const s = (staff ?? []).find((m) => m.id === encounter.primaryStaffId);
+    return s ? s.displayName || `${s.firstName ?? ''} ${s.lastName ?? ''}`.trim() : undefined;
+  }, [staff, encounter?.primaryStaffId]);
 
   const claims = encounterId ? claimsData?.claims ?? [] : [];
   const preauths = encounterId ? preauthData?.requests ?? [] : [];
@@ -86,26 +94,44 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="font-mono text-xs text-muted-foreground">{encounter.encounterNumber}</p>
-          <div className="flex items-center gap-2">
-            <h3 className="text-xl font-bold text-foreground">
-              {encounter.encounterType || titleCase(encounter.encounterClass)}
-            </h3>
-            <Badge variant="outline" className="capitalize">{encounter.status}</Badge>
+      {/* Header — context-setting only; full facts live on the selected timeline card */}
+      <div ref={setRef('encounter')} className="scroll-mt-20">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-mono text-xs text-muted-foreground">{encounter.encounterNumber}</p>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xl font-bold text-foreground">
+                {encounter.encounterType || titleCase(encounter.encounterClass)}
+              </h3>
+              <Badge variant="outline" className="capitalize">{encounter.status}</Badge>
+            </div>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              {[
+                fmtDateTime(encounter.startTime),
+                providerName ? `Dr ${providerName}` : null,
+                encounter.facilityName,
+                encounter.departmentName,
+                encounter.priority ? titleCase(encounter.priority) : null,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
+            </p>
           </div>
-          <p className="mt-0.5 text-sm text-muted-foreground">{fmtDateTime(encounter.startTime)}</p>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => scrollTo('results')}>
+              <FlaskConical className="mr-1.5 h-3.5 w-3.5" /> Results
+            </Button>
+            <Button variant="default" size="sm" disabled title="Requires claim-pipeline orchestration (follow-up)">
+              <Zap className="mr-1.5 h-3.5 w-3.5" /> Run claim pipeline
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => scrollTo('results')}>
-            <FlaskConical className="mr-1.5 h-3.5 w-3.5" /> Results
-          </Button>
-          <Button variant="default" size="sm" disabled title="Requires claim-pipeline orchestration (follow-up)">
-            <Zap className="mr-1.5 h-3.5 w-3.5" /> Run claim pipeline
-          </Button>
-        </div>
+        {encounter.chiefComplaint ? (
+          <p className="mt-2 text-sm text-foreground">
+            <span className="text-muted-foreground">Chief complaint — </span>
+            {encounter.chiefComplaint}
+          </p>
+        ) : null}
       </div>
 
       {/* Financials — no single aggregate endpoint yet */}
@@ -134,26 +160,6 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
 
       {/* Stacked sections (infinite scroll) */}
       <div className="space-y-6">
-        {/* Encounter info */}
-        <section ref={setRef('encounter')} className="scroll-mt-20 space-y-2">
-          <SectionLabel>Encounter Info</SectionLabel>
-          <div className="grid grid-cols-2 gap-3 rounded-lg border border-border/60 bg-card/40 p-4">
-            <Field label="Encounter #" value={<span className="font-mono">{encounter.encounterNumber}</span>} />
-            <Field label="Type" value={encounter.encounterType || titleCase(encounter.encounterClass)} />
-            <Field label="Status" value={<span className="capitalize">{encounter.status}</span>} />
-            <Field label="Priority" value={<span className="capitalize">{encounter.priority || '—'}</span>} />
-            <Field label="Facility" value={encounter.facilityName || '—'} />
-            <Field label="Department" value={encounter.departmentName || '—'} />
-            <Field label="Start" value={fmtDateTime(encounter.startTime)} />
-            <Field label="End" value={fmtDateTime(encounter.endTime)} />
-            {encounter.chiefComplaint ? (
-              <div className="col-span-2">
-                <Field label="Chief complaint" value={encounter.chiefComplaint} />
-              </div>
-            ) : null}
-          </div>
-        </section>
-
         {/* Results (encounter-linked observations) */}
         <section ref={setRef('results')} className="scroll-mt-20 space-y-2">
           <SectionLabel>Results</SectionLabel>
