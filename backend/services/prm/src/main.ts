@@ -92,6 +92,7 @@ async function bootstrap() {
     .addTag('Patients', 'Patient data')
     .addTag('Tasks', 'Patient tasks')
     .addTag('Providers', 'Provider callbacks')
+    .addTag('Notifications', 'Notification center and real-time event stream')
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
