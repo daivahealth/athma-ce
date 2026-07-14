@@ -302,6 +302,39 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const { flags: navFlags, isLoading: isLoadingNavFlags } = useNavFeatureFlags();
   const { sections: pluginSections } = usePluginNavSections();
 
+  // Hover-to-peek: when the rail is collapsed, hovering expands it as an overlay
+  // (it floats over the page content without reflowing it) and collapses on leave.
+  const [isPeeking, setIsPeeking] = React.useState(false);
+  const peekTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapsed = isCollapsed && !isPeeking;
+
+  const clearPeekTimeout = React.useCallback(() => {
+    if (peekTimeout.current) {
+      clearTimeout(peekTimeout.current);
+      peekTimeout.current = null;
+    }
+  }, []);
+
+  const PEEK_OPEN_DELAY = 220; // ignore quick, accidental passes over the rail
+  const PEEK_CLOSE_DELAY = 150; // avoid flicker when the cursor crosses sub-pixel gaps
+
+  const openPeek = React.useCallback(() => {
+    if (!isCollapsed) return; // no peek needed when pinned open
+    clearPeekTimeout(); // cancel any pending close
+    peekTimeout.current = setTimeout(() => setIsPeeking(true), PEEK_OPEN_DELAY);
+  }, [isCollapsed, clearPeekTimeout]);
+
+  const closePeek = React.useCallback(() => {
+    clearPeekTimeout(); // cancel any pending open
+    peekTimeout.current = setTimeout(() => setIsPeeking(false), PEEK_CLOSE_DELAY);
+  }, [clearPeekTimeout]);
+
+  // Drop peek state whenever the sidebar is pinned open, and clean up on unmount.
+  React.useEffect(() => {
+    if (!isCollapsed && isPeeking) setIsPeeking(false);
+  }, [isCollapsed, isPeeking]);
+  React.useEffect(() => () => clearPeekTimeout(), [clearPeekTimeout]);
+
   const visibleSections = React.useMemo(() => {
     const coreSections = isLoadingNavFlags
       ? navSections
@@ -442,7 +475,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       const Icon = item.icon;
 
       if (hasChildren) {
-        if (isCollapsed) {
+        if (collapsed) {
           return (
             <Popover key={itemKey}>
               <PopoverTrigger asChild>
@@ -507,14 +540,14 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
                 isChildActive
                   ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
                   : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground",
-                isCollapsed && "justify-center px-2"
+                collapsed && "justify-center px-2"
               )}
               aria-expanded={isOpen}
               aria-controls={`${itemKey}-submenu`}
             >
               <Icon className="h-4 w-4" />
-              {!isCollapsed && <span className="flex-1 text-left">{t(item.labelKey)}</span>}
-              {!isCollapsed && (
+              {!collapsed && <span className="flex-1 text-left">{t(item.labelKey)}</span>}
+              {!collapsed && (
                 <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")} />
               )}
             </button>
@@ -543,37 +576,55 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
             isActive
               ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
               : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground",
-            isCollapsed && "justify-center px-2"
+            collapsed && "justify-center px-2"
           )}
         >
           <Icon className="h-4 w-4" />
-          {!isCollapsed && <span>{t(item.labelKey)}</span>}
+          {!collapsed && <span>{t(item.labelKey)}</span>}
         </Link>
       );
     });
 
+  // Outer spacer reserves the persistent rail/expanded width so page content never
+  // reflows while peeking; the inner panel overlays content when peeking.
   return (
     <div
       className={cn(
-        "relative z-20 flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out shadow-lg border-r border-border/40",
+        "relative h-full shrink-0 transition-all duration-300 ease-in-out",
         isCollapsed ? "w-20" : "w-72"
       )}
     >
+      <div
+        onMouseEnter={openPeek}
+        onMouseLeave={closePeek}
+        onFocusCapture={openPeek}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) closePeek();
+        }}
+        className={cn(
+          "absolute inset-y-0 left-0 flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out border-r border-border/40",
+          collapsed ? "w-20" : "w-72",
+          // The peek panel overflows the reserved rail to overlay page content.
+          // Its parent sidebar column is elevated (z-50) above the topbar in the
+          // layout, so this only needs a heavier shadow while peeking.
+          isPeeking ? "z-20 shadow-2xl" : "z-20 shadow-lg"
+        )}
+      >
       {/* Header */}
       <div
         className={cn(
           'relative flex h-16 items-center',
-          isCollapsed ? 'justify-center px-3' : 'px-4'
+          collapsed ? 'justify-center px-3' : 'px-4'
         )}
       >
         <Link
           href={`/${locale}/dashboard`}
           className={cn(
             'flex items-center hover:opacity-80 transition-opacity group',
-            isCollapsed ? 'justify-center' : 'gap-3'
+            collapsed ? 'justify-center' : 'gap-3'
           )}
         >
-          {isCollapsed ? (
+          {collapsed ? (
             <>
               <Image
                 src="/athma-mark.svg"
@@ -616,7 +667,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       <nav className="flex-1 space-y-6 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
         {visibleSections.map((section, sectionIndex) => (
           <div key={`${section.labelKey ?? 'section'}-${sectionIndex}`} className="space-y-6">
-            {!isCollapsed && section.labelKey && (
+            {!collapsed && section.labelKey && (
               <p className="px-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">
                 {t(section.labelKey)}
               </p>
@@ -628,7 +679,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-4 border-t border-border/40 bg-background/50 backdrop-blur-sm">
-        {!isCollapsed && (
+        {!collapsed && (
           <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/40 px-3 py-3 shadow-sm hover:bg-card/60 transition-colors cursor-pointer group">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5 text-sm font-bold text-primary ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
               {initials}
@@ -643,7 +694,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
             </div>
           </div>
         )}
-        {isCollapsed && (
+        {collapsed && (
           <div className="flex justify-center">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5 text-xs font-bold text-primary hover:scale-105 transition-transform cursor-pointer">
               {initials}
@@ -671,6 +722,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
           <ChevronLeft className="h-4 w-4" />
         )}
       </Button>
+      </div>
     </div>
   );
 }

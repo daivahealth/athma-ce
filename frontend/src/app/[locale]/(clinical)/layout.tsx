@@ -38,7 +38,8 @@ export default function ClinicalLayout({
   return (
     <div className="flex min-h-screen w-full bg-muted/20">
       {/* Desktop Sidebar */}
-      <div className="hidden md:block sticky top-0 h-screen">
+      {/* z-50 keeps the sidebar (incl. its hover-peek overlay) above the sticky topbar (z-40) */}
+      <div className="hidden md:block sticky top-0 h-screen z-50">
         <Sidebar
           locale={locale}
           isCollapsed={isCollapsed}
