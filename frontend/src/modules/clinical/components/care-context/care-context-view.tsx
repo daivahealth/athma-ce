@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ClipboardList, Sparkles, FlaskConical, ShieldCheck, PanelLeftOpen } from 'lucide-react';
+import { ArrowLeft, ClipboardList, Sparkles, FlaskConical, ShieldCheck, PanelLeftOpen, Phone, MessageSquare, ClipboardPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
@@ -182,6 +182,38 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
                   {'   ·   '}
                   <span className="capitalize">{patient.gender}</span>
                 </span>
+              </div>
+
+              {/* Quick actions */}
+              <div className="flex flex-col items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  aria-label="Call"
+                  title="Call"
+                  disabled={!patient.phoneNumber}
+                >
+                  <Phone className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  aria-label="Message"
+                  title="Message"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="default"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  aria-label="New encounter"
+                  title="New encounter"
+                >
+                  <ClipboardPlus className="h-4 w-4" />
+                </Button>
               </div>
             </CardContent>
           </Card>
