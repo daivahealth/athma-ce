@@ -18,6 +18,9 @@ import { CareTimelinePanel } from './care-timeline-panel';
 import { EncounterDetailPanel } from './encounter-detail-panel';
 import { CARE_CONTEXT_MIN_ENCOUNTERS } from './care-context-entry-button';
 
+// Each pane fills its column and scrolls internally with a very subtle scrollbar.
+const PANE_SCROLL = 'h-full overflow-y-auto p-4 pane-scroll';
+
 function calcAge(dob?: string | null): number | null {
   if (!dob) return null;
   const birth = new Date(dob);
@@ -140,24 +143,24 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
         </div>
       </div>
 
-      {/* 3-pane workspace */}
+      {/* 3-pane workspace — each pane scrolls independently within the viewport */}
       <div
         className={cn(
-          'grid gap-4',
+          'grid gap-4 h-[calc(100vh-12rem)] min-h-0',
           railOpen
             ? 'lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(0,1.15fr)]'
             : 'lg:grid-cols-[52px_minmax(0,1fr)_minmax(0,1.15fr)]',
         )}
       >
         {railOpen ? (
-          <Card>
-            <CardContent className="p-4">
+          <Card className="overflow-hidden">
+            <CardContent className={PANE_SCROLL}>
               <PatientContextRail patient={patient} onCollapse={() => setRailOpen(false)} />
             </CardContent>
           </Card>
         ) : (
-          <Card className="sticky top-4 self-start">
-            <CardContent className="flex h-[calc(100vh-7rem)] flex-col items-center gap-4 p-2 py-4">
+          <Card className="overflow-hidden">
+            <CardContent className="flex h-full flex-col items-center gap-4 overflow-y-auto p-2 py-4 scrollbar-hidden">
               <Button
                 variant="ghost"
                 size="icon"
@@ -220,8 +223,8 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
           </Card>
         )}
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="overflow-hidden">
+          <CardContent className={PANE_SCROLL}>
             <CareTimelinePanel
               patient={patient}
               encounters={orderedEncounters}
@@ -232,8 +235,8 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="overflow-hidden">
+          <CardContent className={PANE_SCROLL}>
             <EncounterDetailPanel encounter={selectedEncounter} />
           </CardContent>
         </Card>

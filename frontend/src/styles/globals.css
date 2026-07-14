@@ -77,6 +77,37 @@ body {
   background-clip: content-box;
 }
 
+/* Very subtle, thin scrollbar for independently-scrolling panes (Care Context) */
+.pane-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.15) transparent;
+}
+.pane-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.pane-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pane-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.12);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+.pane-scroll:hover::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.35);
+  background-clip: content-box;
+}
+
+/* Fully hidden scrollbar (collapsed rail) */
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 /* Smooth page transitions */
 .page-transition {
   animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
