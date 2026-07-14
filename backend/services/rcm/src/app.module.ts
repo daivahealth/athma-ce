@@ -9,6 +9,7 @@ import { BillingModule } from './modules/billing/billing.module';
 import { MedicalCodingModule } from './modules/medical-coding/medical-coding.module';
 import { CatalogMappingModule } from './modules/catalog-mappings/catalog-mapping.module';
 import { ClaimsModule } from './modules/claims/claims.module';
+import { DenialsModule } from './modules/denials/denials.module';
 import { BatchesModule } from './modules/batches/batches.module';
 import { EligibilityModule } from './modules/eligibility/eligibility.module';
 import { PreAuthModule } from './modules/preauth/preauth.module';
@@ -29,6 +30,7 @@ import { PharmacyModule } from './modules/pharmacy/pharmacy.module';
     MedicalCodingModule,
     CatalogMappingModule,
     ClaimsModule,
+    DenialsModule,
     BatchesModule,
     EligibilityModule,
     PreAuthModule,
