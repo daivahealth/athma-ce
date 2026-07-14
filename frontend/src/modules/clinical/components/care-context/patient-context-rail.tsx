@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
 import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle } from 'lucide-react';
 
@@ -62,6 +63,10 @@ export function PatientContextRail({
   patient: Patient;
   onCollapse?: () => void;
 }) {
+  const router = useRouter();
+  const locale = (useParams().locale as string) ?? 'en';
+  const newEncounterHref = `/${locale}/encounters/new?patientId=${patient.id}`;
+
   const name = [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
   const age = calculateAge(patient.dateOfBirth);
 
@@ -109,8 +114,8 @@ export function PatientContextRail({
 
   return (
     <div className="space-y-5">
-      {/* Identity */}
-      <div className="space-y-3">
+      {/* Fixed identity header — stays put while everything below scrolls */}
+      <div className="sticky top-0 z-20 -mx-4 space-y-3 border-b border-border/60 bg-card/95 px-4 pb-3 pt-4 backdrop-blur">
         <div className="flex items-start gap-3">
           <Avatar className="h-14 w-14">
             <AvatarFallback className="bg-muted text-sm font-semibold text-muted-foreground">
@@ -173,13 +178,11 @@ export function PatientContextRail({
           <Button variant="outline" size="sm">
             <MessageSquare className="mr-1.5 h-3.5 w-3.5" /> Message
           </Button>
-          <Button variant="default" size="sm">
+          <Button variant="default" size="sm" onClick={() => router.push(newEncounterHref)}>
             <Plus className="mr-1.5 h-3.5 w-3.5" /> New
           </Button>
         </div>
       </div>
-
-      <Separator />
 
       {/* Vitals */}
       <div className="space-y-2">

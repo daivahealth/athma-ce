@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
 import { Zap, FileText, Shield, FlaskConical, Receipt, AlertOctagon } from 'lucide-react';
 
@@ -15,7 +16,7 @@ import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
 import { useDenials, useDraftAppeal, useFileAppeal } from '@/modules/rcm/hooks/use-denials';
 import { useEncounterObservations } from '@/modules/clinical/hooks/use-observations';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
-import { Field, SectionLabel, FeaturePlaceholder, EmptyState } from './parts';
+import { Field, SectionLabel, FeaturePlaceholder, EmptyState, Chip, EncounterClassChip } from './parts';
 
 function fmtDateTime(value?: string | null): string {
   if (!value) return '—';
@@ -50,6 +51,8 @@ function titleCase(value?: string | null): string {
 type SectionKey = 'encounter' | 'results' | 'documents' | 'claims' | 'preauth' | 'denials' | 'invoices' | 'policy';
 
 export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
+  const router = useRouter();
+  const locale = (useParams().locale as string) ?? 'en';
   const encounterId = encounter?.id;
 
   const { data: claimsData, isLoading: claimsLoading } = useClaims(encounterId ? { encounterId } : undefined);
@@ -111,7 +114,6 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   }
 
   const nav: { key: SectionKey; label: string }[] = [
-    { key: 'encounter', label: 'Encounter' },
     { key: 'results', label: `Results · ${encounterResults.length}` },
     { key: 'documents', label: 'Documents' },
     { key: 'claims', label: `Claims · ${claims.length}` },
@@ -127,9 +129,12 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
 
   return (
     <div className="space-y-4">
-      {/* Header — context-setting only; full facts live on the selected timeline card */}
-      <div ref={setRef('encounter')} className="scroll-mt-20">
-        <div className="flex flex-wrap items-start justify-between gap-3">
+      {/* Fixed encounter header — stays put while everything below scrolls; actions top-right */}
+      <div
+        ref={setRef('encounter')}
+        className="sticky top-0 z-20 -mx-4 border-b border-border/60 bg-card/95 px-4 pb-3 pt-4 backdrop-blur"
+      >
+        <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="font-mono text-xs text-muted-foreground">{encounter.encounterNumber}</p>
             <div className="flex items-center gap-2">
@@ -138,33 +143,41 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
               </h3>
               <Badge variant="outline" className="capitalize">{encounter.status}</Badge>
             </div>
-            <p className="mt-0.5 text-sm text-muted-foreground">
-              {[
-                fmtDateTime(encounter.startTime),
-                providerName ? `Dr ${providerName}` : null,
-                encounter.facilityName,
-                encounter.departmentName,
-                encounter.priority ? titleCase(encounter.priority) : null,
-              ]
-                .filter(Boolean)
-                .join(' · ')}
-            </p>
+            <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-muted-foreground">
+              <span>
+                {[
+                  fmtDateTime(encounter.startTime),
+                  providerName ? `Dr ${providerName}` : null,
+                  encounter.facilityName,
+                  encounter.departmentName,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+              <EncounterClassChip value={encounter.encounterClass} />
+              {encounter.priority ? <Chip className="capitalize">{titleCase(encounter.priority)}</Chip> : null}
+            </div>
+            {encounter.chiefComplaint ? (
+              <p className="mt-2 text-sm text-foreground">
+                <span className="text-muted-foreground">Chief complaint — </span>
+                {encounter.chiefComplaint}
+              </p>
+            ) : null}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Button variant="outline" size="sm" onClick={() => scrollTo('results')}>
               <FlaskConical className="mr-1.5 h-3.5 w-3.5" /> Results
             </Button>
-            <Button variant="default" size="sm" disabled title="Requires claim-pipeline orchestration (follow-up)">
-              <Zap className="mr-1.5 h-3.5 w-3.5" /> Run claim pipeline
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => router.push(`/${locale}/encounters/${encounter.id}/charting`)}
+              title="Open clinical charting for this encounter"
+            >
+              <Zap className="mr-1.5 h-3.5 w-3.5" /> Clinical charting
             </Button>
           </div>
         </div>
-        {encounter.chiefComplaint ? (
-          <p className="mt-2 text-sm text-foreground">
-            <span className="text-muted-foreground">Chief complaint — </span>
-            {encounter.chiefComplaint}
-          </p>
-        ) : null}
       </div>
 
       {/* Financials — derived from the encounter's invoices */}
@@ -183,8 +196,8 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         ))}
       </div>
 
-      {/* Sticky section nav — clicking scrolls to the section */}
-      <div className="sticky top-0 z-10 -mx-4 flex gap-1 overflow-x-auto border-b border-border/60 bg-card/95 px-4 py-2 backdrop-blur">
+      {/* Section nav — scrolls with the content; clicking jumps to the section */}
+      <div className="-mx-4 flex gap-1 overflow-x-auto border-b border-border/60 bg-card/95 px-4 py-2">
         {nav.map((n) => (
           <button
             key={n.key}
@@ -200,7 +213,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
       {/* Stacked sections (infinite scroll) */}
       <div className="space-y-6">
         {/* Results (encounter-linked observations) */}
-        <section ref={setRef('results')} className="scroll-mt-20 space-y-2">
+        <section ref={setRef('results')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Results</SectionLabel>
           {resultsLoading ? (
             <LoadingSpinner size="sm" text="Loading results..." />
@@ -228,7 +241,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         </section>
 
         {/* Documents — received/uploaded for this encounter */}
-        <section ref={setRef('documents')} className="scroll-mt-20 space-y-2">
+        <section ref={setRef('documents')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Documents</SectionLabel>
           <FeaturePlaceholder
             title="Encounter documents not yet wired"
@@ -238,7 +251,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         </section>
 
         {/* Claims */}
-        <section ref={setRef('claims')} className="scroll-mt-20 space-y-2">
+        <section ref={setRef('claims')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Claims</SectionLabel>
           {claimsLoading ? (
             <LoadingSpinner size="sm" text="Loading claims..." />
@@ -261,7 +274,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         </section>
 
         {/* Pre-Auth */}
-        <section ref={setRef('preauth')} className="scroll-mt-20 space-y-2">
+        <section ref={setRef('preauth')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Pre-Authorization</SectionLabel>
           {preauthLoading ? (
             <LoadingSpinner size="sm" text="Loading pre-authorizations..." />
@@ -286,7 +299,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         </section>
 
         {/* Denials & appeals */}
-        <section ref={setRef('denials')} className="scroll-mt-20 space-y-2">
+        <section ref={setRef('denials')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Denials & Appeals</SectionLabel>
           {denialsLoading ? (
             <LoadingSpinner size="sm" text="Loading denials..." />
@@ -348,7 +361,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         </section>
 
         {/* Invoices */}
-        <section ref={setRef('invoices')} className="scroll-mt-20 space-y-2">
+        <section ref={setRef('invoices')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Invoices</SectionLabel>
           {invoicesLoading ? (
             <LoadingSpinner size="sm" text="Loading invoices..." />
@@ -374,7 +387,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         </section>
 
         {/* Encounter-level Policy */}
-        <section ref={setRef('policy')} className="scroll-mt-20 space-y-2">
+        <section ref={setRef('policy')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Policy (this encounter)</SectionLabel>
           {coveragesLoading ? (
             <LoadingSpinner size="sm" text="Loading coverage..." />

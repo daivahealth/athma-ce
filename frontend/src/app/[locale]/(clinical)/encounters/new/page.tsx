@@ -31,6 +31,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 
 import { useCreateEncounter } from '@/modules/clinical/hooks/use-encounters';
+import { usePatient } from '@/modules/clinical/hooks/use-patients';
 import { useStaffMember, useStaffSearch } from '@/modules/foundation/hooks/use-staff';
 import { useAppointment } from '@/modules/clinical/hooks/use-appointments';
 import { PatientSearchSelect } from '@/components/patient-search-select';
@@ -58,6 +59,8 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
   const toast = useToast();
   const searchParams = useSearchParams();
   const appointmentId = searchParams.get('appointmentId');
+  const patientIdParam = searchParams.get('patientId');
+  const { data: prefillPatient } = usePatient(patientIdParam || '');
 
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [staffSearchQuery, setStaffSearchQuery] = useState('');
@@ -119,6 +122,18 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
       setSelectedStaff(appointmentStaff);
     }
   }, [appointmentStaff, selectedStaff]);
+
+  // Pre-select the patient when opened via ?patientId= (e.g. from Care Context "New").
+  useEffect(() => {
+    if (patientIdParam) {
+      setValue('patientId', patientIdParam, { shouldValidate: true });
+    }
+  }, [patientIdParam, setValue]);
+  useEffect(() => {
+    if (prefillPatient) {
+      setSelectedPatient(prefillPatient);
+    }
+  }, [prefillPatient]);
 
   const { data: staffSearchData, isLoading: isStaffLoading } = useStaffSearch({
     displayName: debouncedStaffQuery,

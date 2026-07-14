@@ -19,7 +19,10 @@ import { EncounterDetailPanel } from './encounter-detail-panel';
 import { CARE_CONTEXT_MIN_ENCOUNTERS } from './care-context-entry-button';
 
 // Each pane fills its column and scrolls internally with a very subtle scrollbar.
-const PANE_SCROLL = 'h-full overflow-y-auto p-4 pane-scroll';
+// No top padding: the sticky headers inside each pane carry their own top
+// spacing (pt-4) so they sit flush against the scrollport and fully mask the
+// content scrolling beneath them (padding-top would leave a leak band above).
+const PANE_SCROLL = 'h-full overflow-y-auto px-4 pb-4 pane-scroll';
 
 function calcAge(dob?: string | null): number | null {
   if (!dob) return null;
@@ -148,8 +151,8 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
         className={cn(
           'grid gap-4 h-[calc(100vh-12rem)] min-h-0',
           railOpen
-            ? 'lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(0,1.15fr)]'
-            : 'lg:grid-cols-[52px_minmax(0,1fr)_minmax(0,1.15fr)]',
+            ? 'lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(0,1.55fr)]'
+            : 'lg:grid-cols-[52px_minmax(0,1fr)_minmax(0,1.55fr)]',
         )}
       >
         {railOpen ? (
@@ -215,6 +218,7 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
                   className="h-8 w-8 rounded-full"
                   aria-label="New encounter"
                   title="New encounter"
+                  onClick={() => router.push(`/${locale}/encounters/new?patientId=${patientId}`)}
                 >
                   <ClipboardPlus className="h-4 w-4" />
                 </Button>

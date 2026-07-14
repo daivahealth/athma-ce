@@ -84,3 +84,53 @@ export function FeaturePlaceholder({
 export function EmptyState({ children }: { children: React.ReactNode }) {
   return <p className="text-sm text-muted-foreground">{children}</p>;
 }
+
+// HL7 v3 ActEncounterCode → readable label (falls back to the raw code).
+const ENCOUNTER_CLASS_LABELS: Record<string, string> = {
+  AMB: 'Ambulatory',
+  IMP: 'Inpatient',
+  EMER: 'Emergency',
+  ACUTE: 'Acute',
+  NONAC: 'Non-acute',
+  OBSENC: 'Observation',
+  PRENC: 'Pre-admission',
+  SS: 'Short stay',
+  VR: 'Virtual',
+  HH: 'Home health',
+  FLD: 'Field',
+};
+
+/** A small neutral chip used for encounter metadata (class, priority, …). */
+export function Chip({
+  children,
+  className,
+  title,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  title?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        'inline-flex shrink-0 items-center rounded-full border border-border/60 bg-muted/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground',
+        className,
+      )}
+      title={title}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** A small chip labelling an encounter's class (e.g. Ambulatory, Inpatient). */
+export function EncounterClassChip({ value, className }: { value?: string | null; className?: string }) {
+  const raw = (value ?? '').trim();
+  if (!raw) return null;
+  const label = ENCOUNTER_CLASS_LABELS[raw.toUpperCase()] ?? raw;
+  return (
+    <Chip className={className} title={`Encounter class · ${label}`}>
+      {label}
+    </Chip>
+  );
+}
