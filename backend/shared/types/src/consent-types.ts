@@ -340,6 +340,7 @@ export const CONSENT_REQUIREMENTS: Record<
     category: ConsentCategory.DATA_SHARING,
     required: false,
     requiresWitness: false,
+    validityDays: 365,
     legalBasis: LegalBasis.CONSENT,
     description: 'Consent to participate in Health Information Exchange',
   },
