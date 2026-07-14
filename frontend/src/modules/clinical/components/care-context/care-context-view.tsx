@@ -1,0 +1,124 @@
+'use client';
+
+import * as React from 'react';
+import Link from 'next/link';
+import { ArrowLeft, ClipboardList, Sparkles, FlaskConical, ShieldCheck } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { LoadingSpinner } from '@/components/ui/loading';
+import { usePatient } from '@/modules/clinical/hooks/use-patients';
+import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
+import type { Encounter } from '@/modules/clinical/types/encounter';
+import { PatientContextRail } from './patient-context-rail';
+import { CareTimelinePanel } from './care-timeline-panel';
+import { EncounterDetailPanel } from './encounter-detail-panel';
+
+export function CareContextView({ locale, patientId }: { locale: string; patientId: string }) {
+  const { data: patient, isLoading: patientLoading, error: patientError } = usePatient(patientId);
+  const { data: encounters, isLoading: encountersLoading } = usePatientEncounters(patientId);
+
+  const orderedEncounters = React.useMemo<Encounter[]>(
+    () =>
+      [...(encounters ?? [])].sort(
+        (a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
+      ),
+    [encounters],
+  );
+
+  const [selectedEncounterId, setSelectedEncounterId] = React.useState<string | undefined>(undefined);
+
+  // Default selection to the most recent encounter once loaded.
+  React.useEffect(() => {
+    if (!selectedEncounterId && orderedEncounters.length > 0) {
+      setSelectedEncounterId(orderedEncounters[0].id);
+    }
+  }, [orderedEncounters, selectedEncounterId]);
+
+  const selectedEncounter = orderedEncounters.find((e) => e.id === selectedEncounterId);
+
+  if (patientLoading) {
+    return (
+      <div className="flex h-[300px] items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading care context..." />
+      </div>
+    );
+  }
+
+  if (patientError || !patient) {
+    return (
+      <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+        Unable to load care context. {(patientError as Error)?.message}
+      </div>
+    );
+  }
+
+  const patientName = [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href={`/${locale}/patients`}>
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to patients
+          </Link>
+        </Button>
+        <div>
+          <h1 className="text-2xl font-bold leading-tight">Care Context</h1>
+          <p className="text-sm text-muted-foreground">
+            {patientName} · <span className="font-mono">{patient.mrn}</span>
+          </p>
+        </div>
+        <div className="ml-auto flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/${locale}/patients/${patientId}`}>
+              <ClipboardList className="mr-2 h-4 w-4" /> View chart
+            </Link>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/${locale}/patients-ai/${patientId}`}>
+              <Sparkles className="mr-2 h-4 w-4" /> Patient AI+
+            </Link>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/${locale}/patients/${patientId}/results`}>
+              <FlaskConical className="mr-2 h-4 w-4" /> Results
+            </Link>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/${locale}/patients/${patientId}/policies`}>
+              <ShieldCheck className="mr-2 h-4 w-4" /> Policies
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* 3-pane workspace */}
+      <div className="grid gap-4 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(0,1.15fr)]">
+        <Card>
+          <CardContent className="p-4">
+            <PatientContextRail patient={patient} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <CareTimelinePanel
+              encounters={orderedEncounters}
+              isLoading={encountersLoading}
+              selectedEncounterId={selectedEncounterId}
+              onSelectEncounter={setSelectedEncounterId}
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <EncounterDetailPanel encounter={selectedEncounter} />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

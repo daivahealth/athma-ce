@@ -10,7 +10,7 @@ import { LoadingSpinner } from '@/components/ui/loading';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
 import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
-import { Activity, AlertTriangle, ClipboardList, ClipboardCheck, ShieldCheck, Sparkles, Compass } from 'lucide-react';
+import { Activity, AlertTriangle, ClipboardList, ClipboardCheck, ShieldCheck, Sparkles, Compass, Plus } from 'lucide-react';
 
 interface PatientAiPlusPageProps {
   params: {
@@ -166,11 +166,25 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
             </Badge>
           </div>
           <CardDescription>Unified patient identity + AI briefing for instant context.</CardDescription>
-          <Button asChild size="sm" variant="outline" className="mt-3 w-fit">
-            <Link href={`/${params.locale}/patients/${params.patientId}/360`}>
-              <Compass className="mr-2 h-4 w-4" /> View Patient 360
-            </Link>
-          </Button>
+          <div className="mt-3 flex items-center gap-2">
+            <Button asChild size="sm" variant="outline" className="w-fit">
+              <Link href={`/${params.locale}/patients/${params.patientId}/360`}>
+                <Compass className="mr-2 h-4 w-4" /> View Patient 360
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="icon"
+              variant="outline"
+              className="h-8 w-8 rounded-full"
+              aria-label="Open Care Context"
+              title="Open Care Context"
+            >
+              <Link href={`/${params.locale}/patients/${params.patientId}/care-context`}>
+                <Plus className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">

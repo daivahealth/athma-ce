@@ -26,6 +26,7 @@ import {
   Stethoscope,
   LifeBuoy,
   Compass,
+  Plus,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
@@ -220,6 +221,16 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           >
             <Compass className="h-4 w-4 mr-2" />
             Patient 360
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-9 w-9 rounded-full"
+            aria-label="Open Care Context"
+            title="Open Care Context"
+            onClick={() => router.push(`/${params.locale}/patients/${patient.id}/care-context`)}
+          >
+            <Plus className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"

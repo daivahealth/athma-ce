@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, UserPlus, User, Eye, Compass } from 'lucide-react';
+import { Search, UserPlus, User, Eye, Compass, Plus } from 'lucide-react';
 import type { Patient } from '@/modules/clinical/types/patient';
 
 export default function PatientsPage({ params }: { params: { locale: string } }) {
@@ -215,6 +215,19 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                         >
                           <Compass className="h-4 w-4 mr-2" />
                           Patient 360
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 rounded-full"
+                          aria-label="Open Care Context"
+                          title="Open Care Context"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/${params.locale}/patients/${patient.id}/care-context`);
+                          }}
+                        >
+                          <Plus className="h-4 w-4" />
                         </Button>
                       </TableCell>
                     </TableRow>
