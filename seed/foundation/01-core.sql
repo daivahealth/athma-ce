@@ -82,3 +82,17 @@ ON CONFLICT (config_key) DO UPDATE SET value = 'true', updated_at = CURRENT_TIME
 INSERT INTO instance_configs (id, config_key, value, value_type, category, description, is_overridable, is_sensitive, created_at, updated_at)
 VALUES (gen_random_uuid(), 'feature.nav.oncology', 'true', 'boolean', 'feature', 'Enable Oncology module navigation', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (config_key) DO UPDATE SET value = 'true', updated_at = CURRENT_TIMESTAMP;
+
+-- Enable every navigation module for this install (full-feature demo/dev).
+INSERT INTO instance_configs (id, config_key, value, value_type, category, description, is_overridable, is_sensitive, created_at, updated_at)
+SELECT gen_random_uuid(), k, 'true', 'boolean', 'feature', 'Enable '||k||' navigation section', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+FROM (VALUES
+  ('feature.nav.revenueCycle'),
+  ('feature.nav.resultsReporting'),
+  ('feature.nav.inpatientCare'),
+  ('feature.nav.prm'),
+  ('feature.nav.analytics'),
+  ('feature.nav.wellness'),
+  ('feature.nav.membership')
+) AS t(k)
+ON CONFLICT (config_key) DO UPDATE SET value = 'true', updated_at = CURRENT_TIMESTAMP;
