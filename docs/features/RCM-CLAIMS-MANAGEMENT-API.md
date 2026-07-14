@@ -16,6 +16,7 @@ The Claims Management Suite provides APIs for the complete insurance workflow li
 | **Batches** | Batch claim submission management |
 | **Eligibility** | Coverage verification |
 | **PreAuth** | Prior authorization workflow |
+| **Denials & Appeals** | Payer denial tracking and appeal workflow |
 | **Remittance** | ERA/EOB processing and reconciliation |
 
 ### Common Headers
@@ -493,6 +494,107 @@ POST /preauth/:id/submit
 ```http
 DELETE /preauth/:id
 ```
+
+---
+
+## Denials & Appeals API
+
+Tracks payer claim denials and the appeal workflow raised against them. Denials
+are linked to a `Claim`; appeals are linked to a `Denial`. `encounterId` and
+`patientId` filters resolve through the denial's related claim.
+
+**Denial status:** `open` -> `appealing` -> `upheld` | `overturned`
+**Appeal status:** `draft` -> `filed` -> `accepted` | `rejected`
+
+### Record Denial
+```http
+POST /denials
+```
+
+**Request Body:**
+```typescript
+{
+  claimId: string;         // Required - Claim UUID (must exist in tenant)
+  denialCode: string;      // Required - CARC code, e.g. "CO-197"
+  denialReason: string;    // Required - human-readable reason
+  deniedAmount: number;    // Required
+  currency?: string;       // Default: claim currency or "AED"
+  remarkCodes?: string[];  // Optional - RARC codes
+  deniedAt?: Date;         // Default: now
+  appealDeadline?: Date;   // Optional
+  status?: "open" | "appealing" | "upheld" | "overturned"; // Default: "open"
+}
+```
+
+**Response:** `201 Created` — the `Denial` including `claim` and `appeals`.
+
+---
+
+### List Denials
+```http
+GET /denials
+```
+
+**Query Parameters:** `claimId`, `encounterId`, `patientId`, `status`, `limit`, `offset`
+
+**Response:**
+```typescript
+{
+  denials: Denial[];  // each includes claim + appeals
+  total: number;
+}
+```
+
+---
+
+### Get Denial Details
+```http
+GET /denials/:id
+```
+
+**Response:** `200 OK` — the `Denial` with `claim` and `appeals[]`.
+
+---
+
+### Draft Appeal
+```http
+POST /denials/:id/appeals
+```
+
+Creates a `draft` appeal and moves the denial to `appealing`.
+
+**Request Body:**
+```typescript
+{
+  narrative: string;       // Required - appeal case narrative
+  justification?: string;  // Optional
+  supportingRefs?: Array<{ type: string; ref: string; description?: string }>;
+}
+```
+
+**Response:** `201 Created` — the drafted `Appeal`.
+
+---
+
+### File Appeal
+```http
+POST /appeals/:id/file
+```
+
+Files a drafted appeal (must be in `draft` status). Sets status to `filed` and
+stamps `filedAt`. Optional body fields override the stored narrative /
+justification / supportingRefs at filing time.
+
+**Request Body (optional):**
+```typescript
+{
+  narrative?: string;
+  justification?: string;
+  supportingRefs?: Array<{ type: string; ref: string; description?: string }>;
+}
+```
+
+**Response:** `200 OK` — the filed `Appeal` including its `denial`.
 
 ---
 
