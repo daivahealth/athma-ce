@@ -18,6 +18,17 @@ import { CareTimelinePanel } from './care-timeline-panel';
 import { EncounterDetailPanel } from './encounter-detail-panel';
 import { CARE_CONTEXT_MIN_ENCOUNTERS } from './care-context-entry-button';
 
+function calcAge(dob?: string | null): number | null {
+  if (!dob) return null;
+  const birth = new Date(dob);
+  if (Number.isNaN(birth.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - birth.getFullYear();
+  const m = now.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
+  return age;
+}
+
 export function CareContextView({ locale, patientId }: { locale: string; patientId: string }) {
   const router = useRouter();
   const { isCollapsed, toggleSidebar } = useSidebar();
@@ -88,6 +99,7 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
   }
 
   const patientName = [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
+  const patientAge = calcAge(patient.dateOfBirth);
 
   return (
     <div className="space-y-4">
@@ -145,7 +157,7 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
           </Card>
         ) : (
           <Card>
-            <CardContent className="flex flex-col items-center gap-3 p-2 pt-4">
+            <CardContent className="flex flex-col items-center gap-4 p-2 pt-4">
               <Button
                 variant="ghost"
                 size="icon"
@@ -156,12 +168,21 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
               >
                 <PanelLeftOpen className="h-4 w-4" />
               </Button>
-              <span
-                className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70"
+              {/* Vertical top-to-bottom summary: glyph tops face right (vertical-rl). */}
+              <div
+                className="text-[0.825rem] font-bold text-foreground leading-relaxed"
                 style={{ writingMode: 'vertical-rl' }}
               >
-                Patient
-              </span>
+                <span className="font-mono">{patient.mrn}</span>
+                <span className="text-muted-foreground">{'   ·   '}</span>
+                <span>{patientName}</span>
+                <span className="text-muted-foreground">{'   ·   '}</span>
+                <span>
+                  {patientAge != null ? `${patientAge}y` : '—'}
+                  {'   ·   '}
+                  <span className="capitalize">{patient.gender}</span>
+                </span>
+              </div>
             </CardContent>
           </Card>
         )}
