@@ -5,6 +5,23 @@ set -euo pipefail
 CONTAINER_NAME=${CONTAINER_NAME:-zeal-postgres}
 DB_USER=${DB_USER:-zeal_user}
 
+# Seed files that write to the optional oncology plugin's schema
+# (plugin_oncology.*). That schema is created by the plugin's own
+# `db:push` (plugins/oncology/backend/prisma/schema.prisma), not by the
+# core seed flow - skipped below if it doesn't exist yet, rather than
+# aborting the rest of the clinical seed via ON_ERROR_STOP.
+ONCOLOGY_SCHEMA_FILES=(
+  "clinical/23-oncology-catalogs.sql"
+  "clinical/24-chemo-protocols.sql"
+)
+
+schema_exists() {
+  local db_name="$1" schema_name="$2"
+  docker exec -i "${CONTAINER_NAME}" psql -tA -U "${DB_USER}" -d "${db_name}" \
+    -c "SELECT 1 FROM information_schema.schemata WHERE schema_name = '${schema_name}'" \
+    | grep -q 1
+}
+
 FOUNDATION_FILES=(
   # Aligned with current Prisma schema
   "foundation/01-core.sql"           # creates base tenant and core structure
@@ -145,9 +162,21 @@ capitalize() {
 
 display_domain=$(capitalize "$DOMAIN")
 
+plugin_oncology_ready=0
+if [[ "$DOMAIN" == "clinical" ]] && schema_exists "$DB_NAME" "plugin_oncology"; then
+  plugin_oncology_ready=1
+fi
+
 for file in "${FILES[@]}"; do
   if [[ ! -f $file ]]; then
     echo "Skipping missing file: $file"
+    continue
+  fi
+  if [[ "$plugin_oncology_ready" -eq 0 ]] && printf '%s\n' "${ONCOLOGY_SCHEMA_FILES[@]}" | grep -qx "$file"; then
+    echo "⚠ Skipping ${file}: requires the optional oncology plugin's 'plugin_oncology' schema, which doesn't exist yet."
+    echo "  To seed this data, first run the plugin's own migration:"
+    echo "  cd plugins/oncology && CLINICAL_DATABASE_URL=<...> npm run db:push"
+    echo ""
     continue
   fi
   echo "→ ${display_domain}: applying ${file}"
