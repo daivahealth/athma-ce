@@ -41,7 +41,7 @@ Welcome to the athma-ce Healthcare Platform documentation. This folder contains 
 - [Main README](../README.md) — Project overview
 - [Backend README](../backend/README.md) — Backend services
 - [Frontend README](../frontend/README.md) — Frontend application
-- [GitHub Repository](https://github.com/sajithchandran/zeal)
+- [GitHub Repository](https://github.com/daivahealth/athma-ce)
 
 ## 💡 Contributing
 

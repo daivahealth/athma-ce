@@ -64,7 +64,7 @@ Healthcare systems today are:
 Athma CE is designed to be easy to run locally or in your own environment.
 
 ```bash
-git clone https://github.com/daiva-health/athma-ce.git
+git clone https://github.com/daivahealth/athma-ce.git
 cd athma-ce
 docker-compose up
 ```
