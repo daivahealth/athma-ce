@@ -156,8 +156,8 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
             </CardContent>
           </Card>
         ) : (
-          <Card>
-            <CardContent className="flex flex-col items-center gap-4 p-2 pt-4">
+          <Card className="sticky top-4 self-start">
+            <CardContent className="flex h-[calc(100vh-7rem)] flex-col items-center gap-4 p-2 py-4">
               <Button
                 variant="ghost"
                 size="icon"
@@ -168,10 +168,11 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
               >
                 <PanelLeftOpen className="h-4 w-4" />
               </Button>
-              {/* Vertical top-to-bottom summary: glyph tops face right (vertical-rl). */}
+              {/* Vertical top-to-bottom summary: glyph tops face right (vertical-rl),
+                  top-anchored under the expand toggle. */}
               <div
-                className="text-[0.825rem] font-bold text-foreground leading-relaxed"
-                style={{ writingMode: 'vertical-rl' }}
+                className="text-[0.99rem] font-bold leading-none text-foreground"
+                style={{ writingMode: 'vertical-rl', textAlign: 'start' }}
               >
                 <span className="font-mono">{patient.mrn}</span>
                 <span className="text-muted-foreground">{'   ·   '}</span>
@@ -184,8 +185,8 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
                 </span>
               </div>
 
-              {/* Quick actions */}
-              <div className="flex flex-col items-center gap-2">
+              {/* Quick actions — bottom aligned */}
+              <div className="mt-auto flex flex-col items-center gap-2">
                 <Button
                   variant="outline"
                   size="icon"
