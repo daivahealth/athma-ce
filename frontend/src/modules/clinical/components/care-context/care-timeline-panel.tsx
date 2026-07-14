@@ -15,7 +15,14 @@ import { useClaims } from '@/modules/rcm/hooks/use-claims';
 import { usePreAuthRequests } from '@/modules/rcm/hooks/use-preauth';
 import { useDenials } from '@/modules/rcm/hooks/use-denials';
 import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
-import { SectionLabel, FeaturePlaceholder, EmptyState, EncounterClassChip } from './parts';
+import { useCareNarrative } from '@/modules/clinical/hooks/use-care-narrative';
+import type { CareNarrativeAvailable, CareNarrativeResult } from '@/modules/clinical/types/care-narrative';
+import { SectionLabel, EmptyState, EncounterClassChip } from './parts';
+
+// Type guard: the LLM narrative is present (vs the { available:false } fallback).
+function isNarrativeReady(r: CareNarrativeResult | undefined): r is CareNarrativeAvailable {
+  return !!r && r.available;
+}
 import { buildNarrativePreview } from './narrative-preview';
 import { buildAdminSummary, type EncounterRcm } from './encounter-admin-summary';
 import { ExternalRecordsPanel } from './ExternalRecordsPanel';
@@ -59,6 +66,17 @@ export function CareTimelinePanel({
   const [view, setView] = React.useState<ViewMode>('timeline');
 
   const narrative = React.useMemo(() => buildNarrativePreview(patient, encounters), [patient, encounters]);
+
+  // Live AI narrative from the ai-gateway; specialty is seeded from the local preview's
+  // inference so the model tunes emphasis the same way. Falls back to the preview when
+  // the endpoint is unavailable (no LLM provider configured) — result.available === false.
+  const {
+    data: aiNarrative,
+    isFetching: aiFetching,
+    refetch: refetchNarrative,
+  } = useCareNarrative(patient.id, narrative?.specialty);
+  // Narrowed to the "available" variant (or null) so the LLM fields are type-safe.
+  const aiReady = isNarrativeReady(aiNarrative) ? aiNarrative : null;
 
   const { data: staff } = useStaffList();
   const staffMap = React.useMemo(() => {
@@ -195,7 +213,8 @@ export function CareTimelinePanel({
         </div>
       </div>
 
-      {/* Care narrative — client-side preview until the AI narrative endpoint exists */}
+      {/* Care narrative — live AI summary from the ai-gateway, with a client-side
+          preview fallback when no LLM provider is configured. */}
       <div className="space-y-2 rounded-xl border border-primary/30 bg-primary/5 p-4">
         <div className="flex items-center justify-between gap-2">
           <SectionLabel className="text-primary/80">
@@ -204,31 +223,49 @@ export function CareTimelinePanel({
             </span>
           </SectionLabel>
           <div className="flex items-center gap-2">
-            {narrative ? (
-              <Badge variant="secondary" className="text-primary">{narrative.specialty} review</Badge>
+            {aiReady ? (
+              <Badge variant="secondary" className="text-primary">{aiReady.specialty} review</Badge>
+            ) : narrative ? (
+              <Badge variant="outline" className="text-muted-foreground">Preview · {narrative.specialty}</Badge>
             ) : null}
-            <Button variant="outline" size="sm" disabled title="Live generation requires the ai-gateway narrative endpoint">
-              <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Refresh
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetchNarrative()}
+              disabled={aiFetching}
+              title="Regenerate the AI care narrative"
+            >
+              <RefreshCw className={cn('mr-1.5 h-3.5 w-3.5', aiFetching && 'animate-spin')} /> Refresh
             </Button>
           </div>
         </div>
-        {narrative ? (
+
+        {aiFetching && !aiNarrative ? (
+          <LoadingSpinner size="sm" text="Generating care narrative..." />
+        ) : aiReady ? (
+          <div className="space-y-2 text-sm">
+            <div className="whitespace-pre-wrap leading-relaxed text-foreground">{aiReady.narrative}</div>
+            <p className="pt-1 text-xs text-muted-foreground/70">
+              AI-generated from {aiReady.sourceCount} clinical record
+              {aiReady.sourceCount === 1 ? '' : 's'} · {aiReady.model} ·{' '}
+              {fmt(aiReady.generatedAt)}
+            </p>
+          </div>
+        ) : narrative ? (
           <div className="space-y-2 text-sm">
             <p className="font-semibold text-foreground">{narrative.snapshot}</p>
             {narrative.paragraphs.map((para, i) => (
               <p key={i} className="leading-relaxed text-muted-foreground">{para}</p>
             ))}
             <p className="pt-1 text-xs text-muted-foreground/70">
-              Preview synthesised from encounter data. The narrative endpoint will generate a full{' '}
-              {narrative.specialty.toLowerCase()}-tuned summary using the clinical summary prompt.
+              Local preview synthesised from encounter data — the AI narrative endpoint is
+              unavailable{aiNarrative && !aiNarrative.available ? ` (${aiNarrative.reason})` : ''}.
             </p>
           </div>
         ) : (
-          <FeaturePlaceholder
-            title="AI care narrative not yet available"
-            detail="A reverse-chronological synthesis across this patient's documents and encounters will appear here once the Care Context narrative endpoint is live."
-            requires="ai-gateway narrative endpoint"
-          />
+          <p className="text-sm text-muted-foreground">
+            No narrative available yet — this patient has no encounters to summarise.
+          </p>
         )}
       </div>
 
