@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class OidcStrategy extends PassportStrategy(Strategy, 'oidc') {
-  // @ts-ignore - configService is used in super() call
+  // @ts-expect-error - configService is used in super() call
   constructor(private configService: ConfigService) {
     super({
       issuer: configService.get<string>('oidc.issuer'),
