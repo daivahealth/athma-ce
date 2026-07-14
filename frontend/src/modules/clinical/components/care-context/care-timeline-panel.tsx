@@ -9,8 +9,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading';
 import type { Encounter } from '@/modules/clinical/types/encounter';
+import type { Patient } from '@/modules/clinical/types/patient';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { SectionLabel, FeaturePlaceholder, EmptyState } from './parts';
+import { buildNarrativePreview } from './narrative-preview';
 
 type ViewMode = 'timeline' | 'encounters';
 
@@ -30,17 +32,21 @@ function encounterTitle(e: Encounter): string {
 }
 
 export function CareTimelinePanel({
+  patient,
   encounters,
   isLoading,
   selectedEncounterId,
   onSelectEncounter,
 }: {
+  patient: Patient;
   encounters: Encounter[];
   isLoading: boolean;
   selectedEncounterId?: string;
   onSelectEncounter: (id: string) => void;
 }) {
   const [view, setView] = React.useState<ViewMode>('timeline');
+
+  const narrative = React.useMemo(() => buildNarrativePreview(patient, encounters), [patient, encounters]);
 
   const { data: staff } = useStaffList();
   const staffMap = React.useMemo(() => {
@@ -83,23 +89,41 @@ export function CareTimelinePanel({
         </button>
       </div>
 
-      {/* Care narrative — placeholder until the AI narrative endpoint exists */}
+      {/* Care narrative — client-side preview until the AI narrative endpoint exists */}
       <div className="space-y-2 rounded-xl border border-primary/30 bg-primary/5 p-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <SectionLabel className="text-primary/80">
             <span className="inline-flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5" /> Care Narrative · AI Summary
             </span>
           </SectionLabel>
-          <Button variant="outline" size="sm" disabled>
-            <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Refresh
-          </Button>
+          <div className="flex items-center gap-2">
+            {narrative ? (
+              <Badge variant="secondary" className="text-primary">{narrative.specialty} review</Badge>
+            ) : null}
+            <Button variant="outline" size="sm" disabled title="Live generation requires the ai-gateway narrative endpoint">
+              <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Refresh
+            </Button>
+          </div>
         </div>
-        <FeaturePlaceholder
-          title="AI care narrative not yet available"
-          detail="A reverse-chronological synthesis across this patient's documents and encounters will appear here once the Care Context narrative endpoint is live."
-          requires="ai-gateway narrative endpoint"
-        />
+        {narrative ? (
+          <div className="space-y-2 text-sm">
+            <p className="font-semibold text-foreground">{narrative.snapshot}</p>
+            {narrative.paragraphs.map((para, i) => (
+              <p key={i} className="leading-relaxed text-muted-foreground">{para}</p>
+            ))}
+            <p className="pt-1 text-xs text-muted-foreground/70">
+              Preview synthesised from encounter data. The narrative endpoint will generate a full{' '}
+              {narrative.specialty.toLowerCase()}-tuned summary using the clinical summary prompt.
+            </p>
+          </div>
+        ) : (
+          <FeaturePlaceholder
+            title="AI care narrative not yet available"
+            detail="A reverse-chronological synthesis across this patient's documents and encounters will appear here once the Care Context narrative endpoint is live."
+            requires="ai-gateway narrative endpoint"
+          />
+        )}
       </div>
 
       {/* Encounter stream */}
