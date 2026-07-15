@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { format, parseISO } from 'date-fns';
-import { List, Sparkles, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import { List, Sparkles, RefreshCw, ChevronLeft, ChevronRight, Activity } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -23,11 +23,17 @@ import { SectionLabel, EmptyState, EncounterClassChip } from './parts';
 function isNarrativeReady(r: CareNarrativeResult | undefined): r is CareNarrativeAvailable {
   return !!r && r.available;
 }
+import { usePatientTimeline } from '@/plugins/oncology/hooks/use-oncology';
 import { buildNarrativePreview } from './narrative-preview';
 import { buildAdminSummary, type EncounterRcm } from './encounter-admin-summary';
 import { ExternalRecordsPanel } from './ExternalRecordsPanel';
+import { CareCancerTimeline } from './care-cancer-timeline';
 
-type ViewMode = 'timeline' | 'encounters';
+type ViewMode = 'timeline' | 'encounters' | 'cancer';
+
+// The Cancer Timeline tab surfaces only for oncology patients with a
+// substantive recorded journey (more than this many timeline events).
+const CANCER_TIMELINE_MIN_EVENTS = 10;
 
 function fmt(value?: string | null): string {
   if (!value) return '—';
@@ -64,6 +70,14 @@ export function CareTimelinePanel({
   onSelectEncounter: (id: string) => void;
 }) {
   const [view, setView] = React.useState<ViewMode>('timeline');
+
+  // Cancer Timeline tab — surfaced only for oncology patients with a substantive
+  // recorded journey (> CANCER_TIMELINE_MIN_EVENTS cancer-timeline events).
+  const { data: cancerTimeline } = usePatientTimeline(patient.id);
+  const hasCancerTimeline = (cancerTimeline?.length ?? 0) > CANCER_TIMELINE_MIN_EVENTS;
+  React.useEffect(() => {
+    if (view === 'cancer' && !hasCancerTimeline) setView('timeline');
+  }, [view, hasCancerTimeline]);
 
   const narrative = React.useMemo(() => buildNarrativePreview(patient, encounters), [patient, encounters]);
 
@@ -164,8 +178,8 @@ export function CareTimelinePanel({
   return (
     <div className="flex flex-col gap-4">
       {/* Fixed top bar: view toggle + encounter cycler (does not scroll) */}
-      <div className="sticky top-0 z-20 -mx-4 flex items-center gap-2 border-b border-border/60 bg-card/95 px-4 pb-3 pt-4 backdrop-blur">
-        <div className="inline-flex w-fit rounded-lg border border-border/60 bg-muted/40 p-0.5 text-sm">
+      <div className="sticky top-0 z-20 -mx-4 flex flex-wrap items-center gap-2 border-b border-border/60 bg-card/95 px-4 pb-3 pt-4 backdrop-blur">
+        <div className="inline-flex w-fit flex-wrap rounded-lg border border-border/60 bg-muted/40 p-0.5 text-sm">
           <button
             type="button"
             onClick={() => setView('encounters')}
@@ -186,33 +200,53 @@ export function CareTimelinePanel({
           >
             <Sparkles className="h-3.5 w-3.5" /> Timeline
           </button>
+          {hasCancerTimeline ? (
+            <button
+              type="button"
+              onClick={() => setView('cancer')}
+              title="Cancer Timeline"
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium transition-colors',
+                view === 'cancer' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              <Activity className="h-3.5 w-3.5" /> Cancer
+            </button>
+          ) : null}
         </div>
-        <div className="inline-flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-7 w-7"
-            aria-label="Previous encounter"
-            title="Previous encounter (←)"
-            onClick={goPrev}
-            disabled={ordered.length < 2}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-7 w-7"
-            aria-label="Next encounter"
-            title="Next encounter (→)"
-            onClick={goNext}
-            disabled={ordered.length < 2}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+        {view !== 'cancer' ? (
+          <div className="inline-flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-7 w-7"
+              aria-label="Previous encounter"
+              title="Previous encounter (←)"
+              onClick={goPrev}
+              disabled={ordered.length < 2}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-7 w-7"
+              aria-label="Next encounter"
+              title="Next encounter (→)"
+              onClick={goNext}
+              disabled={ordered.length < 2}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : null}
       </div>
 
+      {/* Cancer Timeline — reuses the oncology plugin's grouped timeline rendering */}
+      {view === 'cancer' ? <CareCancerTimeline patientId={patient.id} /> : null}
+
+      {view !== 'cancer' ? (
+        <>
       {/* Care narrative — live AI summary from the ai-gateway, with a client-side
           preview fallback when no LLM provider is configured. */}
       <div className="space-y-2 rounded-xl border border-primary/30 bg-primary/5 p-4">
@@ -362,6 +396,8 @@ export function CareTimelinePanel({
           })}
         </div>
       )}
+        </>
+      ) : null}
 
       {/* External / prior records fetched from the HIE (patient-level, consent-driven) */}
       <ExternalRecordsPanel patientId={patient.id} patientReference={patient.mrn} />
