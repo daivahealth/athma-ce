@@ -4,10 +4,9 @@ import { BedController, BedStandaloneController } from './bed.controller';
 import { BedRepository } from './bed.repository';
 import { WardModule } from '../ward/ward.module';
 import { FoundationDatabaseModule } from '@zeal/database-foundation';
-import { ClinicalDatabaseModule } from '@zeal/database-clinical';
 
 @Module({
-  imports: [FoundationDatabaseModule, ClinicalDatabaseModule, WardModule],
+  imports: [FoundationDatabaseModule, WardModule],
   controllers: [BedController, BedStandaloneController],
   providers: [BedService, BedRepository],
   exports: [BedService, BedRepository],

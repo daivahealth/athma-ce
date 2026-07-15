@@ -96,6 +96,10 @@ psql -d zeal_clinical -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
 ### Starting the Service
 
+The development command regenerates the Foundation, Clinical, RCM, and
+Analytics Prisma clients (AI Gateway reads from all four domain databases)
+before starting. Generated clients are intentionally not committed.
+
 ```bash
 # Install dependencies
 npm install

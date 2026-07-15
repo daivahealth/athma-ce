@@ -1,19 +1,20 @@
-// Load environment variables from .env.local first
 import { config } from 'dotenv';
 import { resolve } from 'path';
-config({ path: resolve(__dirname, '../.env.local') });
 
-// Initialize observability BEFORE any other imports
-// This ensures proper instrumentation of all libraries
-import { initializeObservability, logger, PinoLoggerService } from '@zeal/observability';
+// This must run before importing AppModule: its database package creates a
+// Prisma client during module evaluation and requires RCM_DATABASE_URL.
+config({ path: resolve(__dirname, '../.env.local'), override: true });
+
+require('source-map-support/register');
+require('reflect-metadata');
+
+// Load application modules only after the environment is available.
+const { initializeObservability, logger, PinoLoggerService } = require('@zeal/observability');
 initializeObservability();
 
-// Enable source map support for better stack traces
-import 'source-map-support/register';
-
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
+const { NestFactory } = require('@nestjs/core');
+const { ValidationPipe } = require('@nestjs/common');
+const { AppModule } = require('./app.module');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

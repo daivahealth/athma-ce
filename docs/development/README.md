@@ -148,19 +148,17 @@ npm install --workspace=@zeal/clinical
 
 ### 2. Configure Environment Variables
 
-Create `.env` files in the backend directory:
+Foundation reads its development environment from
+`backend/services/foundation/.env.local`. Other services may use their own
+service-local environment files; consult the service README before starting
+them. Its values take precedence over inherited shell variables when the file
+is present. Configure Foundation with:
 
 ```env
-# Database connections (see infrastructure/database/ for details)
 FOUNDATION_DATABASE_URL="postgresql://user:password@localhost:5432/zeal_foundation"
-CLINICAL_DATABASE_URL="postgresql://user:password@localhost:5432/zeal_clinical"
-RCM_DATABASE_URL="postgresql://user:password@localhost:5432/zeal_rcm"
-ANALYTICS_DATABASE_URL="postgresql://user:password@localhost:5432/zeal_analytics"
 
-# Service ports
-CLINICAL_PORT=3011
-FOUNDATION_PORT=3001
-RCM_PORT=3012
+# Service port
+PORT=3010
 
 # JWT secrets
 JWT_SECRET="your-secret-key"

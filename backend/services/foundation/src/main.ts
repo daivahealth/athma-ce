@@ -1,24 +1,24 @@
-// Load environment variables from .env.local first
 import { config } from 'dotenv';
 import { resolve } from 'path';
-config({ path: resolve(__dirname, '../.env.local') });
 
-// Initialize observability BEFORE any other imports
-// This ensures proper instrumentation of all libraries
-import { initializeObservability } from '@zeal/observability';
+// This must run before importing AppModule: its database package creates a
+// Prisma client during module evaluation and requires FOUNDATION_DATABASE_URL.
+config({ path: resolve(__dirname, '../.env.local'), override: true });
+
+require('source-map-support/register');
+require('reflect-metadata');
+
+// Load application modules only after the environment is available.
+const { initializeObservability } = require('@zeal/observability');
 initializeObservability();
 
-// Enable source map support for better stack traces
-import 'source-map-support/register';
-import 'reflect-metadata';
-
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
-import { LoggerService } from './common/logger/logger.service';
-import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
-import { logger } from './common/logger/logger.config';
+const { NestFactory } = require('@nestjs/core');
+const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
+const { ValidationPipe } = require('@nestjs/common');
+const { AppModule } = require('./app.module');
+const { LoggerService } = require('./common/logger/logger.service');
+const { GlobalExceptionFilter } = require('./common/filters/global-exception.filter');
+const { logger } = require('./common/logger/logger.config');
 
 async function bootstrap() {
   // Create app with custom logger

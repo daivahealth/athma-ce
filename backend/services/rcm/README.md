@@ -248,6 +248,10 @@ FOUNDATION_API_URL=http://localhost:3010
 npm run dev --workspace=@zeal/rcm
 ```
 
+The development command regenerates the RCM Prisma client from
+`shared/database-rcm/prisma/schema.prisma` before starting. This is required
+because generated clients are intentionally not committed.
+
 ### API Documentation
 
 Swagger documentation available at:

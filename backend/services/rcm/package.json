@@ -6,6 +6,8 @@
   "type": "commonjs",
   "main": "dist/main.js",
   "scripts": {
+    "predev": "npm run prisma:generate",
+    "prisma:generate": "prisma generate --schema ../../shared/database-rcm/prisma/schema.prisma",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/main.js",
     "dev": "NODE_ENV=development ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
