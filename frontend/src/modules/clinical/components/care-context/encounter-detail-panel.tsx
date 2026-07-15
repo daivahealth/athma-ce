@@ -15,8 +15,10 @@ import { useEncounterCoverages } from '@/modules/rcm/hooks/use-encounter-coverag
 import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
 import { useDenials, useDraftAppeal, useFileAppeal } from '@/modules/rcm/hooks/use-denials';
 import { useEncounterObservations } from '@/modules/clinical/hooks/use-observations';
+import { useEncounterResults } from '@/modules/clinical/hooks/use-reporting';
+import type { PatientResult } from '@/modules/clinical/types/reporting';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
-import { Field, SectionLabel, FeaturePlaceholder, EmptyState, Chip, EncounterClassChip } from './parts';
+import { Field, SectionLabel, EmptyState, Chip, EncounterClassChip } from './parts';
 
 function fmtDateTime(value?: string | null): string {
   if (!value) return '—';
@@ -48,6 +50,28 @@ function titleCase(value?: string | null): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+// A short line describing an encounter document (report) by its type-specific summary.
+function documentSummary(d: PatientResult): string {
+  if (d.imagingSummary) {
+    return [d.imagingSummary.modality, d.imagingSummary.bodyPart, d.imagingSummary.impression]
+      .filter(Boolean)
+      .join(' · ');
+  }
+  if (d.labSummary) {
+    const parts = [`${d.labSummary.itemCount} result${d.labSummary.itemCount === 1 ? '' : 's'}`];
+    if (d.labSummary.abnormalCount > 0) parts.push(`${d.labSummary.abnormalCount} abnormal`);
+    if (d.labSummary.criticalCount > 0) parts.push(`${d.labSummary.criticalCount} critical`);
+    if (d.labSummary.labDiscipline) parts.unshift(d.labSummary.labDiscipline);
+    return parts.join(' · ');
+  }
+  if (d.procedureSummary) {
+    return [d.procedureSummary.procedureDescription, d.procedureSummary.complications]
+      .filter(Boolean)
+      .join(' · ');
+  }
+  return '';
+}
+
 type SectionKey = 'encounter' | 'results' | 'documents' | 'claims' | 'preauth' | 'denials' | 'invoices' | 'policy';
 
 export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
@@ -59,6 +83,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const { data: preauthData, isLoading: preauthLoading } = usePreAuthRequests(encounterId ? { encounterId } : undefined);
   const { data: coverages, isLoading: coveragesLoading } = useEncounterCoverages(encounterId);
   const { data: results, isLoading: resultsLoading } = useEncounterObservations(encounterId);
+  const { data: documentsData, isLoading: documentsLoading } = useEncounterResults(encounterId ?? '');
   const { data: invoicesData, isLoading: invoicesLoading } = useInvoices(encounterId ? { encounterId } : undefined);
   const { data: denialsData, isLoading: denialsLoading } = useDenials(encounterId ? { encounterId } : undefined);
   const { data: staff } = useStaffList();
@@ -75,6 +100,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const preauths = encounterId ? preauthData?.requests ?? [] : [];
   const encounterCoverages = coverages ?? [];
   const encounterResults = results ?? [];
+  const documents = encounterId ? documentsData ?? [] : [];
   const invoices = encounterId ? invoicesData ?? [] : [];
   const denials = encounterId ? denialsData?.denials ?? [] : [];
 
@@ -115,7 +141,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
 
   const nav: { key: SectionKey; label: string }[] = [
     { key: 'results', label: `Results · ${encounterResults.length}` },
-    { key: 'documents', label: 'Documents' },
+    { key: 'documents', label: `Documents · ${documents.length}` },
     { key: 'claims', label: `Claims · ${claims.length}` },
     { key: 'preauth', label: `Pre-Auth · ${preauths.length}` },
     { key: 'denials', label: `Denials · ${denials.length}` },
@@ -240,14 +266,39 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
           )}
         </section>
 
-        {/* Documents — received/uploaded for this encounter */}
+        {/* Documents — reports (lab / imaging / procedure) produced for this encounter */}
         <section ref={setRef('documents')} className="scroll-mt-36 space-y-2">
           <SectionLabel>Documents</SectionLabel>
-          <FeaturePlaceholder
-            title="Encounter documents not yet wired"
-            detail="Documents received and uploaded for this encounter (reports, DICOM, referrals) will be listed here once the encounter-document endpoint is connected."
-            requires="clinical encounter-documents endpoint"
-          />
+          {documentsLoading ? (
+            <LoadingSpinner size="sm" text="Loading documents..." />
+          ) : documents.length === 0 ? (
+            <EmptyState>No documents recorded for this encounter.</EmptyState>
+          ) : (
+            <div className="space-y-2">
+              {documents.map((d) => (
+                <div key={d.id} className="rounded-lg border border-border/60 bg-card/40 p-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex min-w-0 items-start gap-2">
+                      <FileText className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-foreground">{d.orderName}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {d.reportedAt ? fmtDateTime(d.reportedAt) : 'Not yet reported'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <Chip className="capitalize">{d.reportType}</Chip>
+                      <Badge variant="outline" className="capitalize">{d.reportStatus.toLowerCase()}</Badge>
+                    </div>
+                  </div>
+                  {documentSummary(d) ? (
+                    <p className="mt-1.5 pl-6 text-xs leading-relaxed text-muted-foreground">{documentSummary(d)}</p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Claims */}
