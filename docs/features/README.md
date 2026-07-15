@@ -11,6 +11,7 @@ This folder contains feature-specific documentation organized by domain and modu
   - Encounter management
   - Visit types and workflows
   - Lab module functionality and roadmap
+  - [Care Context workspace](./clinical/care-context-workspace.md) - three-pane patient view
 
 - **[ot/](./ot/)** - Operating theatre workflow
   - OT requests and review workflow
