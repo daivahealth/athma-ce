@@ -1,3 +1,5 @@
+import { IsOptional, IsString } from 'class-validator';
+
 // PreAuth status enum
 export enum PreAuthStatus {
     DRAFT = 'draft',
@@ -56,12 +58,12 @@ export class ApprovedService {
 
 // DTO for filtering pre-auth requests
 export class PreAuthFilterDto {
-    patientId?: string;
-    payerId?: string;
-    encounterId?: string;
-    status?: PreAuthStatus;
-    dateFrom?: Date;
-    dateTo?: Date;
-    limit?: number;
-    offset?: number;
+    @IsOptional() @IsString() patientId?: string;
+    @IsOptional() @IsString() payerId?: string;
+    @IsOptional() @IsString() encounterId?: string;
+    @IsOptional() status?: PreAuthStatus;
+    @IsOptional() dateFrom?: Date;
+    @IsOptional() dateTo?: Date;
+    @IsOptional() limit?: number;
+    @IsOptional() offset?: number;
 }

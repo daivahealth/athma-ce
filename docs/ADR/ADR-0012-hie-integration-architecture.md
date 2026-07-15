@@ -2,6 +2,16 @@
 
 ## Status
 **ACCEPTED** - 2024-10-15
+**AMENDED** - 2026-07-15 (see "Amendment: Generic, Region-Agnostic Provider Abstraction")
+
+> **Amendment summary (2026-07-15):** The first delivered increment implements a
+> **generic, region-agnostic HIE provider abstraction** inside the clinical
+> service rather than a UAE-specific service. The concrete network (UAE
+> NABIDH/Malaffi/Riayati, India ABDM, or any other HIE) is treated as a
+> **configuration/future concern** selected behind a single provider interface.
+> The original UAE-specific design below remains the target end-state for a
+> dedicated HIE microservice; the amendment section records what exists today
+> and why. See "Amendment: Generic, Region-Agnostic Provider Abstraction".
 
 ## Context
 
@@ -247,6 +257,80 @@ interface SyncPatterns {
 - **IHE Profiles**: Integrating the Healthcare Enterprise profiles
 - **OAuth 2.0**: Authorization framework
 - **TLS 1.3**: Transport layer security
+
+## Amendment: Generic, Region-Agnostic Provider Abstraction (2026-07-15)
+
+### Motivation
+
+The original decision scoped HIE integration tightly to the three UAE networks
+and a dedicated microservice. In practice the first shippable increment needs to
+be **region-neutral**: the same consent-driven "fetch external records" workflow
+must work whether the concrete network is UAE (NABIDH/Malaffi/Riayati), India
+(ABDM), or a sandbox/mock during development. Hardcoding a region into the code
+path couples clinical workflow to a specific regulatory network and blocks reuse.
+
+### Decision (delta)
+
+1. **Provider interface, not a hardcoded network.** External-record retrieval is
+   expressed through a single `HieProvider` interface. The concrete network is
+   an implementation detail selected at composition/config time, not in the
+   controller or service.
+
+   ```typescript
+   interface HieProvider {
+     readonly name: string;                                   // e.g. "mock", "abdm", "nabidh"
+     fetchRecords(request: HieFetchRequest): Promise<HieFetchResponse>;
+   }
+   ```
+
+   - `HieFetchRequest` carries a **provider-neutral** `patientReference`
+     (ABHA address / Emirates ID / MRN — the provider maps it) and an optional
+     `consentReference`.
+   - `HieFetchResponse` returns normalised `ExternalHealthRecord`s (lab report,
+     discharge summary, imaging, ...) that are ingested as patient documents.
+   - Providers signal transient failures via a `HieProviderError` carrying a
+     `retryable` flag, which the service maps onto a retryable job state.
+
+2. **First implementation is `MockHieProvider`.** It returns a small deterministic
+   set of sample records and can simulate a transient failure to exercise the
+   fetch/retry path. It is bound to the `HIE_PROVIDER` DI token; swapping in a
+   real network is a one-line provider binding (or a config-driven factory) with
+   **no change** to the controller, service, or data model.
+
+3. **Consent reuse, not a parallel consent system.** External fetch is gated on
+   the existing clinical consent module using the `hie_participation` consent
+   type (grant / expiry / renewal already supported). No new consent primitives
+   were introduced; `hie_participation` now carries a 365-day validity so
+   expiry/renewal semantics apply.
+
+4. **Lives in the clinical service (for now).** Rather than stand up a separate
+   HIE microservice immediately, the abstraction ships as a `hie` module inside
+   the clinical service, reusing consent and patient-document boundaries. The
+   dedicated-service end-state in the original decision is preserved as future
+   direction; the `HieProvider` seam is exactly what would move into that
+   service later.
+
+5. **Region specialisation is deferred to configuration.** Network selection,
+   FHIR mapping specifics, authentication (OAuth2 vs certificate), and endpoint
+   URLs are all provider-implementation concerns chosen by environment/config —
+   not baked into the generic workflow.
+
+### State model
+
+A `hie_fetch_jobs` table (clinical schema) tracks each consent-driven fetch:
+`status` (`pending` → `fetching` → `completed` | `failed`), `attempts`,
+`provider`, `record_types`, ingested `document_ids`, a fetch `summary`, and
+`error_code`/`error_message` for the retry path. Migration
+`009_add_hie_fetch_jobs.sql` is provided but **not auto-applied** to the shared
+database.
+
+### Consequences of the amendment
+
+- **Positive:** region-neutral, testable offline, no new consent system, minimal
+  surface area, clean seam for a future dedicated service and real networks.
+- **Trade-off:** the mock returns canned data; real FHIR mapping, network auth,
+  and conflict resolution from the original decision remain to be implemented per
+  provider.
 
 ## Conclusion
 

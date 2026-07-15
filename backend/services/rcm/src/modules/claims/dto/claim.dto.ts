@@ -1,3 +1,5 @@
+import { IsOptional, IsString } from 'class-validator';
+
 // Claims status enum
 export enum ClaimStatus {
     DRAFT = 'draft',
@@ -48,15 +50,15 @@ export class GenerateClaimsDto {
 
 // DTO for filtering claims list
 export class ClaimFilterDto {
-    patientId?: string;
-    encounterId?: string;
-    payerId?: string;
-    status?: ClaimStatus;
-    batchId?: string;
-    dateFrom?: Date;
-    dateTo?: Date;
-    limit?: number;
-    offset?: number;
+    @IsOptional() @IsString() patientId?: string;
+    @IsOptional() @IsString() encounterId?: string;
+    @IsOptional() @IsString() payerId?: string;
+    @IsOptional() status?: ClaimStatus;
+    @IsOptional() @IsString() batchId?: string;
+    @IsOptional() dateFrom?: Date;
+    @IsOptional() dateTo?: Date;
+    @IsOptional() limit?: number;
+    @IsOptional() offset?: number;
 }
 
 // DTO for claim validation result

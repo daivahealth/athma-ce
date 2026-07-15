@@ -27,6 +27,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { MessagesModule } from './messages/messages.module';
 import { PreferencesModule } from './preferences/preferences.module';
 import { ProvidersModule } from './providers/providers.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 // Client modules
 import { ConsentModule } from './clients/consent/consent.module';
@@ -64,6 +65,7 @@ import { ConsentModule } from './clients/consent/consent.module';
     PreferencesModule,
     ProvidersModule,
     JobsModule,
+    NotificationsModule,
 
     // External clients
     ConsentModule,

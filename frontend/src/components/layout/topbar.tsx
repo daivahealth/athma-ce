@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  Bell,
   LogOut,
   Settings,
   User,
@@ -30,6 +29,7 @@ import {
 import { ThemeToggle } from './theme-toggle';
 import { MobileMenuButton } from './sidebar';
 import { PatientSearch } from './patient-search';
+import { NotificationCenter } from './notification-center';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { decodeAccessToken } from '@/lib/auth/tokens';
@@ -172,10 +172,7 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
           <ThemeToggle />
 
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-destructive" />
-          </Button>
+          <NotificationCenter />
 
           <Separator orientation="vertical" className="h-6" />
 

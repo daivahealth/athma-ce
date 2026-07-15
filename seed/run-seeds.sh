@@ -85,6 +85,7 @@ PRM_FILES=(
   "prm/02-rules.sql"
   "prm/03-preferences.sql"
   "prm/04-provider-callbacks.sql"
+  "prm/05-notifications.sql"
 )
 
 ANALYTICS_FILES=(

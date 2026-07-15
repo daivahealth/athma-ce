@@ -91,6 +91,9 @@ model Claim {
   claimLines     ClaimLine[]
   claimDiagnoses ClaimDiagnosis[]
 
+  // Denials & Appeals
+  denials Denial[]
+
   @@unique([tenantId, claimNumber], map: "ux_claim_tenant_number")
   @@index([tenantId, status], map: "idx_claim_status")
   @@index([batchId], map: "idx_claim_batch")
@@ -2114,4 +2117,72 @@ model PharmacyDispensingItem {
   @@index([tenantId, drugCode], map: "idx_pharmacy_disp_items_drug")
   @@index([tenantId, prescriptionOrderId], map: "idx_pharmacy_disp_items_rx_order")
   @@map("pharmacy_dispensing_items")
+}
+
+// ========================================
+// DENIALS & APPEALS
+// ========================================
+
+model Denial {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+
+  claimId   String @map("claim_id") @db.Uuid
+
+  // Denial identification (e.g. CARC "CO-197", plus human-readable reason)
+  denialCode   String  @map("denial_code") @db.VarChar(30)
+  denialReason String  @map("denial_reason") @db.Text
+  remarkCodes  Json?   @map("remark_codes") @db.JsonB
+
+  deniedAmount Decimal @map("denied_amount") @db.Decimal(12, 2)
+  currency     String  @default("AED") @map("currency") @db.VarChar(10)
+
+  status String @default("open") @map("status") @db.VarChar(30)
+  // 'open', 'appealing', 'upheld', 'overturned'
+
+  deniedAt       DateTime  @map("denied_at") @db.Timestamptz(6)
+  appealDeadline DateTime? @map("appeal_deadline") @db.Date
+
+  // Audit
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String?   @map("created_by") @db.Uuid
+
+  claim   Claim    @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  appeals Appeal[]
+
+  @@index([tenantId, claimId], map: "idx_denial_claim")
+  @@index([tenantId, status], map: "idx_denial_status")
+  @@index([denialCode], map: "idx_denial_code")
+  @@map("denials")
+}
+
+model Appeal {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+
+  denialId  String @map("denial_id") @db.Uuid
+
+  status String @default("draft") @map("status") @db.VarChar(30)
+  // 'draft', 'filed', 'accepted', 'rejected'
+
+  // Case narrative supporting the appeal
+  narrative      String   @map("narrative") @db.Text
+  justification  String?  @map("justification") @db.Text
+  supportingRefs Json     @default("[]") @map("supporting_refs") @db.JsonB
+  // Array of { type, ref, description } (documents, notes, prior-auth numbers, etc.)
+
+  filedAt DateTime? @map("filed_at") @db.Timestamptz(6)
+  outcome String?   @map("outcome") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+
+  denial Denial @relation(fields: [denialId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, denialId], map: "idx_appeal_denial")
+  @@index([tenantId, status], map: "idx_appeal_status")
+  @@map("appeals")
 }

@@ -461,3 +461,42 @@ model ProviderCallback {
   @@index([tenantId, processed, receivedAt], name: "idx_callbacks_unprocessed")
   @@map("provider_callbacks")
 }
+
+// ========================================
+// NOTIFICATIONS
+// ========================================
+// User-facing notification center entries backed by the engagement event
+// stream. Surfaced in the app topbar and pushed in real time over SSE.
+
+model Notification {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Recipient targeting: userId is a specific staff member; when null the
+  // notification is broadcast to the whole tenant (optionally narrowed by
+  // an audience role such as nurse | physician | billing | admin).
+  userId   String? @map("user_id") @db.Uuid
+  audience String? // null | nurse | physician | billing | admin
+
+  // Classification
+  type     String // consent_expiring | claim_denied | lab_out_of_range | ...
+  severity String @default("info") // info | action | warning | error
+
+  // Content
+  title String
+  body  String? @db.Text
+
+  // Originating entity reference, e.g. "claim:abc" | "encounter:123"
+  entityRef String? @map("entity_ref")
+
+  // State
+  read   Boolean   @default(false)
+  readAt DateTime? @map("read_at") @db.Timestamptz(6)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([tenantId, userId, read, createdAt(sort: Desc)], name: "idx_notifications_recipient_unread")
+  @@index([tenantId, createdAt(sort: Desc)], name: "idx_notifications_tenant_time")
+  @@map("notifications")
+}

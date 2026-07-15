@@ -19,6 +19,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Search, UserPlus, User, Eye, Compass } from 'lucide-react';
+import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import type { Patient } from '@/modules/clinical/types/patient';
 
 export default function PatientsPage({ params }: { params: { locale: string } }) {
@@ -216,6 +217,11 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                           <Compass className="h-4 w-4 mr-2" />
                           Patient 360
                         </Button>
+                        <CareContextEntryButton
+                          patientId={patient.id}
+                          locale={params.locale as string}
+                          stopPropagation
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

@@ -17,7 +17,7 @@ const RCM_CLAIMS_BASE_URL = ensureApiBase(
   process.env.NEXT_PUBLIC_RCM_CLAIMS_BASE_URL,
   'http://localhost:3012',
 );
-const PRM_BASE_URL = process.env.NEXT_PUBLIC_PRM_BASE_URL ?? 'http://localhost:3013';
+export const PRM_BASE_URL = process.env.NEXT_PUBLIC_PRM_BASE_URL ?? 'http://localhost:3013';
 const AI_GATEWAY_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_AI_GATEWAY_BASE_URL, 'http://localhost:3015');
 
 export const authClient = axios.create({

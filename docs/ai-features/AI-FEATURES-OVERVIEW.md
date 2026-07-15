@@ -18,12 +18,14 @@ This document provides comprehensive technical documentation for the AI-powered 
 
 ## Overview
 
-The athma-ce AI Gateway service provides two AI-powered features:
+The athma-ce AI Gateway service provides these AI-powered features:
 
 | Feature | Purpose | LLM Provider | Database |
 |---------|---------|--------------|----------|
 | **Report Builder** | Convert natural language to SQL reports | Claude (Anthropic) | Foundation, Clinical, RCM |
 | **Semantic Search** | Vector search over clinical documents | OpenAI Embeddings | Clinical (pgvector) |
+| **Clinical Coding** | Suggest ICD-10/SNOMED codes from clinical text | Claude (Anthropic) | Clinical |
+| **AI Care Narrative** | Specialty-aware patient summary for the Care Context workspace | Claude (Anthropic) | Clinical |
 
 ### Service Details
 
@@ -793,6 +795,66 @@ Get embedding statistics.
 #### POST /api/v1/search/reindex
 
 Start bulk reindexing of documents.
+
+### Patient Narrative Endpoints
+
+#### POST /api/v1/ai/patients/:patientId/narrative
+
+Generate a specialty-aware **AI Care Narrative** for a patient. Used by the Care Context
+timeline panel. The service reads the patient's demographics, encounters, and latest
+observations from the Clinical database (all tenant-scoped), assembles a
+`ClinicalSummaryContext`, and calls the configured LLM with the shared clinical-summary
+prompt.
+
+**Path params:** `patientId` (UUID).
+
+**Query params:** `dryRun` (boolean, optional) — return the assembled prompt without
+calling the LLM.
+
+**Request body (optional):**
+```json
+{ "specialty": "Oncology" }
+```
+`specialty` tunes the emphasis of the summary. When omitted it is inferred from the
+patient's problem list and encounter types.
+
+**Response (200):**
+```json
+{
+  "available": true,
+  "narrative": "Snapshot — 61F, metastatic colorectal carcinoma ...",
+  "specialty": "Oncology",
+  "model": "claude-sonnet-4-20250514",
+  "sourceCount": 7,
+  "generatedAt": "2026-07-15T10:30:00.000Z"
+}
+```
+
+**Response (200, `?dryRun=true`):**
+```json
+{
+  "dryRun": true,
+  "specialty": "Oncology",
+  "sourceCount": 7,
+  "messages": [
+    { "role": "system", "content": "You are a clinical summarisation assistant ..." },
+    { "role": "user", "content": "READING CLINICIAN SPECIALTY: Oncology ..." }
+  ]
+}
+```
+
+**Graceful degradation (503):** when no LLM provider/API key is configured (the common
+dev case), or the patient's clinical data cannot be assembled, the endpoint returns a
+structured body so the frontend can fall back to its local narrative preview:
+```json
+{ "available": false, "reason": "The AI Gateway is missing an Anthropic API key ..." }
+```
+The frontend (`useCareNarrative` hook / `careNarrativeService`) treats this `503` as a
+non-error signal and renders the deterministic client-side `buildNarrativePreview()`
+output, clearly labelled as a preview.
+
+**Required headers:** `x-tenant-id` (and standard auth headers); the query is
+tenant-scoped.
 
 ---
 

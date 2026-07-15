@@ -14,6 +14,9 @@ import { userService } from '@/modules/foundation/services/user-service';
 import { useNavFeatureFlags } from '@/modules/foundation/hooks/use-nav-feature-flags';
 import { usePluginNavSections } from '@/lib/plugins/use-plugin-nav';
 import { pluginIconMap } from '@/lib/plugins/icon-map';
+// Register frontend plugins (oncology, …) wherever the sidebar renders, so their
+// nav sections appear across every route group — not only under (dashboard).
+import '@/plugins';
 import {
   LayoutDashboard,
   Users,

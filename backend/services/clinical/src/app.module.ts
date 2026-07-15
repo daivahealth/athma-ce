@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PatientModule } from './modules/patient/patient.module';
 import { ConsentModule } from './modules/consent/consent.module';
+import { HieModule } from './modules/hie/hie.module';
 import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { EncounterModule } from './modules/encounter/encounter.module';
 import { ChartingModule } from './modules/charting/charting.module';
@@ -39,6 +40,7 @@ import { LoggerService } from './common/logger/logger.service';
     StorageModule,
     PatientModule,
     ConsentModule,
+    HieModule,
     SchedulingModule,
     EncounterModule,
     ChartingModule,

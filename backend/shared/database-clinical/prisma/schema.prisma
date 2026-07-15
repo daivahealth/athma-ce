@@ -555,6 +555,7 @@ model Patient {
   membershipSubscriptions MembershipSubscription[]
   clinicalObservations    ClinicalObservation[]
   clinicalCodings         EncounterClinicalCoding[]
+  hieFetchJobs            HieFetchJob[]
 
   @@index([tenantId, mrn], map: "idx_patients_tenant_mrn")
   @@index([tenantId, nationalId], map: "idx_patients_tenant_national_id")
@@ -1104,6 +1105,51 @@ model PatientConsent {
   @@index([tenantId, effectiveFrom, effectiveUntil], map: "idx_patient_consent_validity")
   @@index([tenantId, linkedEntityType, linkedEntityId], map: "idx_patient_consent_linked")
   @@map("patient_consents")
+}
+
+/// Tracks a consent-driven fetch of external patient records from a Health
+/// Information Exchange (HIE). Region/network-agnostic: the concrete provider
+/// is selected in application config. See ADR-0012.
+model HieFetchJob {
+  id               String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  patientId        String    @map("patient_id") @db.Uuid
+
+  // Consent used to authorise this fetch (hie_participation)
+  consentId        String?   @map("consent_id") @db.Uuid
+
+  // Provider + request
+  provider         String    @map("provider") @db.VarChar(50)
+  patientReference String?   @map("patient_reference") @db.VarChar(200)
+  recordTypes      Json      @default("[]") @map("record_types")
+
+  // Lifecycle: pending | fetching | completed | failed
+  status           String    @default("pending") @map("status") @db.VarChar(20)
+  attempts         Int       @default(0) @map("attempts")
+
+  // Results
+  recordsFetched   Int       @default(0) @map("records_fetched")
+  documentIds      Json      @default("[]") @map("document_ids")
+  summary          Json?     @map("summary")
+
+  // Error / retry
+  errorCode        String?   @map("error_code") @db.VarChar(50)
+  errorMessage     String?   @map("error_message") @db.Text
+
+  // Audit
+  requestedBy      String?   @map("requested_by") @db.Uuid
+  startedAt        DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt      DateTime? @map("completed_at") @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  patient          Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, patientId], map: "idx_hie_fetch_jobs_tenant_patient")
+  @@index([tenantId, status], map: "idx_hie_fetch_jobs_tenant_status")
+  @@index([tenantId, consentId], map: "idx_hie_fetch_jobs_tenant_consent")
+  @@map("hie_fetch_jobs")
 }
 
 model ConsentTemplate {
