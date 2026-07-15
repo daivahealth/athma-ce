@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
-import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle, Stethoscope } from 'lucide-react';
+import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle, Stethoscope, TrendingUp } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -16,6 +16,7 @@ import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointment
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { useLatestObservations, deriveVitals } from '@/modules/clinical/hooks/use-observations';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
+import { usePatientBiomarkerResults, useBiomarkers } from '@/modules/wellness/hooks/use-biomarkers';
 import { SectionLabel, Field, StatTile, ChipList, EmptyState } from './parts';
 
 function titleCase(value?: string | null): string {
@@ -27,6 +28,27 @@ function titleCase(value?: string | null): string {
 // Doctors sort ahead of other care-team members (nurses, technicians, …).
 function isDoctorType(staffType?: string | null): boolean {
   return /doctor|physician|surgeon|consultant|registrar|oncologist|anesthes|anaesth/i.test(staffType ?? '');
+}
+
+// Actual shape of a biomarker result from the API (the shared type is stale).
+interface BiomarkerRow {
+  id: string;
+  biomarkerId: string;
+  value: string | number;
+  unit: string;
+  collectedAt: string;
+  interpretation?: string | null;
+  biomarker?: { name?: string; biomarkerName?: string } | null;
+}
+
+// Map a biomarker interpretation to a short status label + color class.
+function biomarkerStatus(interpretation?: string | null): { label: string; cls: string } {
+  const i = (interpretation ?? '').toLowerCase();
+  if (i === 'high') return { label: 'High', cls: 'text-amber-600 dark:text-amber-400' };
+  if (i === 'low') return { label: 'Low', cls: 'text-amber-600 dark:text-amber-400' };
+  if (i === 'borderline') return { label: 'Borderline', cls: 'text-amber-600 dark:text-amber-400' };
+  if (i === 'optimal') return { label: 'Optimal', cls: 'text-emerald-600 dark:text-emerald-400' };
+  return { label: 'In range', cls: 'text-emerald-600 dark:text-emerald-400' };
 }
 
 function calculateAge(dob?: string | null): number | null {
@@ -165,6 +187,29 @@ export function PatientContextRail({
     });
   }, [encounters, staffMap]);
 
+  // Biomarkers — recorded within the past 3 months (section hidden otherwise).
+  // The API response uses `collectedAt`/`interpretation`/`biomarker` (the shared
+  // BiomarkerResult type is out of sync), so read it via a local shape.
+  const biomarkerCutoff = React.useMemo(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 3);
+    return d;
+  }, []);
+  const { data: biomarkerResults } = usePatientBiomarkerResults(patient.id, {
+    startDate: biomarkerCutoff.toISOString(),
+  });
+  const { data: biomarkerDefs } = useBiomarkers();
+  const biomarkerDefMap = React.useMemo(
+    () => new Map((biomarkerDefs ?? []).map((d) => [d.id, (d as { name?: string; biomarkerName?: string }).name ?? d.biomarkerName])),
+    [biomarkerDefs],
+  );
+  const recentBiomarkers = React.useMemo<BiomarkerRow[]>(() => {
+    const cutoff = biomarkerCutoff.getTime();
+    return ((biomarkerResults ?? []) as unknown as BiomarkerRow[])
+      .filter((r) => r.collectedAt && new Date(r.collectedAt).getTime() >= cutoff)
+      .sort((a, b) => new Date(b.collectedAt).getTime() - new Date(a.collectedAt).getTime());
+  }, [biomarkerResults, biomarkerCutoff]);
+
   const address = [patient.address, patient.city, patient.state, patient.country, patient.postalCode]
     .filter(Boolean)
     .join(', ');
@@ -254,6 +299,42 @@ export function PatientContextRail({
           </div>
         )}
       </div>
+
+      {/* Biomarkers — only shown when recorded within the past 3 months */}
+      {recentBiomarkers.length > 0 ? (
+        <>
+          <Separator />
+          <div className="space-y-2">
+            <SectionLabel>
+              <span className="inline-flex items-center gap-1.5">
+                <TrendingUp className="h-3.5 w-3.5" /> Biomarkers · last 3 months
+              </span>
+            </SectionLabel>
+            <div className="space-y-2">
+              {recentBiomarkers.map((r) => {
+                const name =
+                  r.biomarker?.name ?? r.biomarker?.biomarkerName ?? biomarkerDefMap.get(r.biomarkerId) ?? 'Biomarker';
+                const status = biomarkerStatus(r.interpretation);
+                return (
+                  <div key={r.id} className="rounded-lg border border-border/60 bg-card/60 p-2.5">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <p className="min-w-0 truncate text-sm font-medium text-foreground">{name}</p>
+                      <p className="shrink-0 text-sm font-semibold text-foreground">
+                        {r.value}
+                        <span className="ml-1 text-xs font-normal text-muted-foreground">{r.unit}</span>
+                      </p>
+                    </div>
+                    <div className="mt-0.5 flex items-center justify-between gap-2">
+                      <span className={cn('text-xs font-medium', status.cls)}>{status.label}</span>
+                      <span className="text-[11px] text-muted-foreground">{fmtDate(r.collectedAt)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      ) : null}
 
       <Separator />
 
