@@ -27,6 +27,7 @@ import {
   HieProvider,
   HieProviderError,
   ExternalHealthRecord,
+  ExternalRecordType,
 } from './providers/hie-provider.interface';
 import { CreateHieConsentRequestDto, FetchExternalRecordsDto } from './dto/hie.dto';
 
@@ -190,12 +191,14 @@ export class HieService {
     });
 
     try {
+      const recordTypes = job.recordTypes as unknown as ExternalRecordType[] | null;
       const response = await this.provider.fetchRecords({
         tenantId: job.tenantId,
         patientId: job.patientId,
-        patientReference: job.patientReference ?? undefined,
-        recordTypes: (job.recordTypes as string[]) ?? undefined,
-        consentReference: job.consentId,
+        // Optional props are omitted (not set to undefined) for exactOptionalPropertyTypes.
+        ...(job.patientReference ? { patientReference: job.patientReference } : {}),
+        ...(Array.isArray(recordTypes) && recordTypes.length ? { recordTypes } : {}),
+        ...(job.consentId ? { consentReference: job.consentId } : {}),
         simulateFailure,
       });
 
