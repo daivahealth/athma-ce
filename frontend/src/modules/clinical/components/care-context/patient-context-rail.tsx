@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
-import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle } from 'lucide-react';
+import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle, Stethoscope } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +14,14 @@ import { usePatientPolicies } from '@/modules/rcm/hooks/use-policies';
 import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { useLatestObservations, deriveVitals } from '@/modules/clinical/hooks/use-observations';
+import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { SectionLabel, Field, StatTile, ChipList, EmptyState } from './parts';
+
+function titleCase(value?: string | null): string {
+  if (!value) return 'Visit';
+  const s = value.replace(/_/g, ' ');
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 function calculateAge(dob?: string | null): number | null {
   if (!dob) return null;
@@ -107,6 +114,38 @@ export function PatientContextRail({
       );
   }, [encounters]);
   const riskFlags = clinicalEncounter?.allergies ?? [];
+
+  // Care Team — every clinician the patient has seen, most-recent first, with the
+  // context (encounter type) and visit count for why they were involved.
+  const { data: staff } = useStaffList();
+  const staffMap = React.useMemo(() => {
+    const m = new Map<string, NonNullable<typeof staff>[number]>();
+    (staff ?? []).forEach((s) => m.set(s.id, s));
+    return m;
+  }, [staff]);
+
+  const careTeam = React.useMemo(() => {
+    const byStaff = new Map<
+      string,
+      { staffId: string; lastTime: number; lastEncounter: NonNullable<typeof encounters>[number]; count: number }
+    >();
+    for (const e of encounters ?? []) {
+      const id = e.primaryStaffId;
+      if (!id) continue;
+      const when = new Date(e.startTime).getTime();
+      const existing = byStaff.get(id);
+      if (!existing) {
+        byStaff.set(id, { staffId: id, lastTime: when, lastEncounter: e, count: 1 });
+      } else {
+        existing.count += 1;
+        if (when > existing.lastTime) {
+          existing.lastTime = when;
+          existing.lastEncounter = e;
+        }
+      }
+    }
+    return [...byStaff.values()].sort((a, b) => b.lastTime - a.lastTime);
+  }, [encounters]);
 
   const address = [patient.address, patient.city, patient.state, patient.country, patient.postalCode]
     .filter(Boolean)
@@ -253,6 +292,51 @@ export function PatientContextRail({
           <p className="text-xs text-muted-foreground">Active medications</p>
           <ChipList value={clinicalEncounter?.currentMedications} empty="No medications recorded." />
         </div>
+      </div>
+
+      <Separator />
+
+      {/* Care Team — clinicians seen, reverse-chronological, with context */}
+      <div className="space-y-2.5">
+        <SectionLabel>
+          <span className="inline-flex items-center gap-1.5">
+            <Stethoscope className="h-3.5 w-3.5" /> Care Team
+          </span>
+        </SectionLabel>
+        {careTeam.length === 0 ? (
+          <EmptyState>No care team recorded yet.</EmptyState>
+        ) : (
+          <div className="space-y-2">
+            {careTeam.map((member) => {
+              const s = staffMap.get(member.staffId);
+              // displayName already carries the title (e.g. "Dr Omar Al-Ketbi"),
+              // so use it directly rather than re-prepending the prefix.
+              const name = s?.displayName?.trim() || 'Clinician';
+              const specialty =
+                s?.staffSpecialties?.find((x) => x.primaryFlag)?.specialty?.name ??
+                s?.staffSpecialties?.[0]?.specialty?.name;
+              const role = [s?.staffType, specialty].filter(Boolean).join(' · ');
+              const context = titleCase(
+                member.lastEncounter.encounterType || member.lastEncounter.encounterClass,
+              );
+              return (
+                <div key={member.staffId} className="rounded-lg border border-border/60 bg-card/60 p-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="min-w-0 truncate text-sm font-semibold text-foreground">{name}</p>
+                    <span className="shrink-0 text-[11px] text-muted-foreground">
+                      {fmtDate(member.lastEncounter.startTime)}
+                    </span>
+                  </div>
+                  {role ? <p className="truncate text-xs text-muted-foreground">{role}</p> : null}
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Seen for {context}
+                    {member.count > 1 ? ` · ${member.count} visits` : ''}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <Separator />
