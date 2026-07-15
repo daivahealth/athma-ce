@@ -12,12 +12,12 @@ export function SectionLabel({ children, className }: { children: React.ReactNod
   );
 }
 
-/** A label/value pair (definition-list style). */
+/** A label/value pair on a single line — label left, value right-aligned. */
 export function Field({ label, value }: { label: React.ReactNode; value: React.ReactNode }) {
   return (
-    <div className="space-y-0.5">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <div className="text-sm font-medium text-foreground">{value ?? '—'}</div>
+    <div className="flex items-start justify-between gap-3">
+      <p className="shrink-0 pt-px text-xs text-muted-foreground">{label}</p>
+      <div className="min-w-0 break-words text-right text-sm font-medium text-foreground">{value ?? '—'}</div>
     </div>
   );
 }

@@ -62,12 +62,17 @@ export function CareTimelinePanel({
   isLoading,
   selectedEncounterId,
   onSelectEncounter,
+  staffFilterId,
+  onClearStaffFilter,
 }: {
   patient: Patient;
   encounters: Encounter[];
   isLoading: boolean;
   selectedEncounterId?: string;
   onSelectEncounter: (id: string) => void;
+  /** When set, only encounters for this practitioner are shown (Care Team filter). */
+  staffFilterId?: string;
+  onClearStaffFilter?: () => void;
 }) {
   const [view, setView] = React.useState<ViewMode>('timeline');
 
@@ -107,6 +112,13 @@ export function CareTimelinePanel({
     [encounters],
   );
 
+  // Care Team filter — narrow the encounter list to a single practitioner.
+  const displayed = React.useMemo(
+    () => (staffFilterId ? ordered.filter((e) => e.primaryStaffId === staffFilterId) : ordered),
+    [ordered, staffFilterId],
+  );
+  const staffFilterName = staffFilterId ? staffMap.get(staffFilterId) : undefined;
+
   // Revenue-cycle context for the *administrative* summary shown in the Encounters
   // view. Fetched once per patient and grouped by encounter, rather than per row.
   const { data: claimsData } = useClaims({ patientId: patient.id });
@@ -138,18 +150,18 @@ export function CareTimelinePanel({
 
   // Cycle through encounters (wraps around), also driven by the ← / → arrow keys.
   const goPrev = React.useCallback(() => {
-    if (ordered.length === 0) return;
-    const idx = ordered.findIndex((e) => e.id === selectedEncounterId);
-    const next = idx <= 0 ? ordered.length - 1 : idx - 1;
-    onSelectEncounter(ordered[next].id);
-  }, [ordered, selectedEncounterId, onSelectEncounter]);
+    if (displayed.length === 0) return;
+    const idx = displayed.findIndex((e) => e.id === selectedEncounterId);
+    const next = idx <= 0 ? displayed.length - 1 : idx - 1;
+    onSelectEncounter(displayed[next].id);
+  }, [displayed, selectedEncounterId, onSelectEncounter]);
 
   const goNext = React.useCallback(() => {
-    if (ordered.length === 0) return;
-    const idx = ordered.findIndex((e) => e.id === selectedEncounterId);
-    const next = idx === -1 ? 0 : (idx + 1) % ordered.length;
-    onSelectEncounter(ordered[next].id);
-  }, [ordered, selectedEncounterId, onSelectEncounter]);
+    if (displayed.length === 0) return;
+    const idx = displayed.findIndex((e) => e.id === selectedEncounterId);
+    const next = idx === -1 ? 0 : (idx + 1) % displayed.length;
+    onSelectEncounter(displayed[next].id);
+  }, [displayed, selectedEncounterId, onSelectEncounter]);
 
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -178,66 +190,74 @@ export function CareTimelinePanel({
   return (
     <div className="flex flex-col gap-4">
       {/* Fixed top bar: view toggle + encounter cycler (does not scroll) */}
-      <div className="sticky top-0 z-20 -mx-4 flex flex-wrap items-center gap-2 border-b border-border/60 bg-card/95 px-4 pb-3 pt-4 backdrop-blur">
-        <div className="inline-flex w-fit flex-wrap rounded-lg border border-border/60 bg-muted/40 p-0.5 text-sm">
-          <button
-            type="button"
-            onClick={() => setView('encounters')}
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium transition-colors',
-              view === 'encounters' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            <List className="h-3.5 w-3.5" /> Encounters · {ordered.length}
-          </button>
-          <button
-            type="button"
-            onClick={() => setView('timeline')}
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium transition-colors',
-              view === 'timeline' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            <Sparkles className="h-3.5 w-3.5" /> Timeline
-          </button>
-          {hasCancerTimeline ? (
-            <button
-              type="button"
-              onClick={() => setView('cancer')}
-              title="Cancer Timeline"
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium transition-colors',
-                view === 'cancer' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
-              )}
-            >
-              <Activity className="h-3.5 w-3.5" /> Cancer
-            </button>
+      <div className="sticky top-0 z-20 -mx-4 flex flex-col gap-2 border-b border-border/60 bg-card/95 px-4 pb-3 pt-4 backdrop-blur">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex w-fit flex-wrap items-center rounded-lg border border-border/60 bg-muted/40 p-0.5 text-sm">
+            {([
+              { key: 'encounters' as const, icon: List, label: `Encounters · ${displayed.length}`, show: true },
+              { key: 'timeline' as const, icon: Sparkles, label: 'Timeline', show: true },
+              { key: 'cancer' as const, icon: Activity, label: 'Cancer', show: hasCancerTimeline },
+            ]).filter((t) => t.show).map((t, i) => (
+              <React.Fragment key={t.key}>
+                {i > 0 ? <span className="mx-0.5 h-4 w-px bg-border/70" aria-hidden /> : null}
+                <button
+                  type="button"
+                  onClick={() => setView(t.key)}
+                  aria-pressed={view === t.key}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium transition-colors',
+                    view === t.key
+                      ? 'bg-background font-semibold text-primary shadow-sm ring-1 ring-primary/25'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  <t.icon className="h-3.5 w-3.5" /> {t.label}
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+          {view !== 'cancer' ? (
+            <div className="inline-flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                aria-label="Previous encounter"
+                title="Previous encounter (←)"
+                onClick={goPrev}
+                disabled={displayed.length < 2}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                aria-label="Next encounter"
+                title="Next encounter (→)"
+                onClick={goNext}
+                disabled={displayed.length < 2}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
           ) : null}
         </div>
-        {view !== 'cancer' ? (
-          <div className="inline-flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-7 w-7"
-              aria-label="Previous encounter"
-              title="Previous encounter (←)"
-              onClick={goPrev}
-              disabled={ordered.length < 2}
+
+        {/* Care Team filter indicator */}
+        {staffFilterId && view !== 'cancer' ? (
+          <div className="flex items-center justify-between gap-2 rounded-md border border-primary/30 bg-primary/5 px-2.5 py-1.5 text-xs">
+            <span className="min-w-0 truncate text-primary">
+              Filtered to <span className="font-semibold">{staffFilterName ?? 'practitioner'}</span> · {displayed.length}{' '}
+              {displayed.length === 1 ? 'encounter' : 'encounters'}
+            </span>
+            <button
+              type="button"
+              onClick={() => onClearStaffFilter?.()}
+              className="shrink-0 rounded px-1.5 py-0.5 font-medium text-primary hover:bg-primary/10"
             >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-7 w-7"
-              aria-label="Next encounter"
-              title="Next encounter (→)"
-              onClick={goNext}
-              disabled={ordered.length < 2}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+              Clear
+            </button>
           </div>
         ) : null}
       </div>
@@ -306,12 +326,12 @@ export function CareTimelinePanel({
       {/* Encounter stream */}
       {isLoading ? (
         <LoadingSpinner size="sm" text="Loading encounters..." />
-      ) : ordered.length === 0 ? (
+      ) : displayed.length === 0 ? (
         <EmptyState>No recorded encounters.</EmptyState>
       ) : view === 'timeline' ? (
         <ol className="relative space-y-4 pl-4">
           <span className="absolute left-[5px] top-1 bottom-1 w-px bg-border" aria-hidden />
-          {ordered.map((e) => {
+          {displayed.map((e) => {
             const active = e.id === selectedEncounterId;
             return (
               <li
@@ -356,7 +376,7 @@ export function CareTimelinePanel({
         </ol>
       ) : (
         <div className="space-y-2">
-          {ordered.map((e) => {
+          {displayed.map((e) => {
             const active = e.id === selectedEncounterId;
             return (
               <button

@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
 import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle, Stethoscope } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,11 @@ function titleCase(value?: string | null): string {
   if (!value) return 'Visit';
   const s = value.replace(/_/g, ' ');
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// Doctors sort ahead of other care-team members (nurses, technicians, …).
+function isDoctorType(staffType?: string | null): boolean {
+  return /doctor|physician|surgeon|consultant|registrar|oncologist|anesthes|anaesth/i.test(staffType ?? '');
 }
 
 function calculateAge(dob?: string | null): number | null {
@@ -66,9 +72,15 @@ function initials(name: string): string {
 export function PatientContextRail({
   patient,
   onCollapse,
+  selectedStaffId,
+  onSelectStaff,
 }: {
   patient: Patient;
   onCollapse?: () => void;
+  /** Currently active care-team filter (staff id), for highlighting. */
+  selectedStaffId?: string;
+  /** Click a care-team member to filter encounters by that practitioner (toggles). */
+  onSelectStaff?: (staffId: string) => void;
 }) {
   const router = useRouter();
   const locale = (useParams().locale as string) ?? 'en';
@@ -144,8 +156,14 @@ export function PatientContextRail({
         }
       }
     }
-    return [...byStaff.values()].sort((a, b) => b.lastTime - a.lastTime);
-  }, [encounters]);
+    // Doctors first, then everyone else; within each group, most-recent first.
+    return [...byStaff.values()].sort((a, b) => {
+      const da = isDoctorType(staffMap.get(a.staffId)?.staffType) ? 0 : 1;
+      const db = isDoctorType(staffMap.get(b.staffId)?.staffType) ? 0 : 1;
+      if (da !== db) return da - db;
+      return b.lastTime - a.lastTime;
+    });
+  }, [encounters, staffMap]);
 
   const address = [patient.address, patient.city, patient.state, patient.country, patient.postalCode]
     .filter(Boolean)
@@ -319,8 +337,21 @@ export function PatientContextRail({
               const context = titleCase(
                 member.lastEncounter.encounterType || member.lastEncounter.encounterClass,
               );
+              const active = selectedStaffId === member.staffId;
               return (
-                <div key={member.staffId} className="rounded-lg border border-border/60 bg-card/60 p-2.5">
+                <button
+                  key={member.staffId}
+                  type="button"
+                  onClick={() => onSelectStaff?.(member.staffId)}
+                  aria-pressed={active}
+                  title={active ? 'Clear filter' : `Show only ${name}'s encounters`}
+                  className={cn(
+                    'w-full rounded-lg border p-2.5 text-left transition-colors',
+                    active
+                      ? 'border-primary/50 bg-primary/5'
+                      : 'border-border/60 bg-card/60 hover:bg-accent/40',
+                  )}
+                >
                   <div className="flex items-start justify-between gap-2">
                     <p className="min-w-0 truncate text-sm font-semibold text-foreground">{name}</p>
                     <span className="shrink-0 text-[11px] text-muted-foreground">
@@ -332,7 +363,7 @@ export function PatientContextRail({
                     Seen for {context}
                     {member.count > 1 ? ` · ${member.count} visits` : ''}
                   </p>
-                </div>
+                </button>
               );
             })}
           </div>

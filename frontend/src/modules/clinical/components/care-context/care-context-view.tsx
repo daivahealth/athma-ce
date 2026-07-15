@@ -70,6 +70,21 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
 
   const [selectedEncounterId, setSelectedEncounterId] = React.useState<string | undefined>(undefined);
   const [railOpen, setRailOpen] = React.useState(true);
+  // Care-team filter: when a rail care-team member is clicked, the middle panel
+  // shows only that practitioner's encounters (click again to clear).
+  const [careTeamStaffId, setCareTeamStaffId] = React.useState<string | undefined>(undefined);
+
+  const handleSelectStaff = React.useCallback(
+    (staffId: string) => {
+      const next = careTeamStaffId === staffId ? undefined : staffId;
+      setCareTeamStaffId(next);
+      if (next) {
+        const firstForStaff = orderedEncounters.find((e) => e.primaryStaffId === next);
+        if (firstForStaff) setSelectedEncounterId(firstForStaff.id);
+      }
+    },
+    [careTeamStaffId, orderedEncounters],
+  );
 
   // Default selection to the most recent encounter once loaded.
   React.useEffect(() => {
@@ -158,7 +173,12 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
         {railOpen ? (
           <Card className="overflow-hidden">
             <CardContent className={PANE_SCROLL}>
-              <PatientContextRail patient={patient} onCollapse={() => setRailOpen(false)} />
+              <PatientContextRail
+                patient={patient}
+                onCollapse={() => setRailOpen(false)}
+                selectedStaffId={careTeamStaffId}
+                onSelectStaff={handleSelectStaff}
+              />
             </CardContent>
           </Card>
         ) : (
@@ -235,6 +255,8 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
               isLoading={encountersLoading}
               selectedEncounterId={selectedEncounterId}
               onSelectEncounter={setSelectedEncounterId}
+              staffFilterId={careTeamStaffId}
+              onClearStaffFilter={() => setCareTeamStaffId(undefined)}
             />
           </CardContent>
         </Card>
