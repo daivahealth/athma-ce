@@ -43,6 +43,7 @@ FOUNDATION_FILES=(
   "foundation/15-staff-specialties.sql" # staff specialty mappings
   "foundation/16-rbac-expanded.sql"  # expanded RBAC
   "foundation/17-user-facilities.sql" # user facility access
+  "foundation/20-clinical-configs.sql" # clinical workflow configuration defaults
 )
 
 CLINICAL_FILES=(

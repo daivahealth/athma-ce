@@ -12,11 +12,15 @@ import { LoadingSpinner } from '@/components/ui/loading';
 import { useSidebar } from '@/lib/contexts/sidebar-context';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import type { Encounter } from '@/modules/clinical/types/encounter';
 import { PatientContextRail } from './patient-context-rail';
 import { CareTimelinePanel } from './care-timeline-panel';
 import { EncounterDetailPanel } from './encounter-detail-panel';
-import { CARE_CONTEXT_MIN_ENCOUNTERS } from './care-context-entry-button';
+import {
+  CARE_CONTEXT_MIN_ENCOUNTERS_CONFIG_KEY,
+  CARE_CONTEXT_MIN_ENCOUNTERS_DEFAULT,
+} from './care-context-entry-button';
 
 // Each pane fills its column and scrolls internally with a very subtle scrollbar.
 // No top padding: the sticky headers inside each pane carry their own top
@@ -40,6 +44,8 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
   const { isCollapsed, toggleSidebar } = useSidebar();
   const { data: patient, isLoading: patientLoading, error: patientError } = usePatient(patientId);
   const { data: encounters, isLoading: encountersLoading } = usePatientEncounters(patientId);
+  const { data: minEncountersConfig } = useResolveConfig(CARE_CONTEXT_MIN_ENCOUNTERS_CONFIG_KEY);
+  const minEncounters = Number(minEncountersConfig?.value ?? CARE_CONTEXT_MIN_ENCOUNTERS_DEFAULT);
 
   // Collapse the left navbar once when the workspace opens, to maximise space.
   const didCollapse = React.useRef(false);
@@ -53,7 +59,7 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
   // Gate: Care Context is only for information-rich patients. If a patient with a
   // thin history is reached directly, fall back to the existing Patient 360 view.
   const encountersReady = !encountersLoading && encounters !== undefined;
-  const belowThreshold = encountersReady && (encounters?.length ?? 0) < CARE_CONTEXT_MIN_ENCOUNTERS;
+  const belowThreshold = encountersReady && (encounters?.length ?? 0) < minEncounters;
   React.useEffect(() => {
     if (belowThreshold) {
       router.replace(`/${locale}/patients/${patientId}/360`);

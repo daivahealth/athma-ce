@@ -7,14 +7,19 @@ import { Grid3x3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 
-/** Care Context is only offered for information-rich patients. */
-export const CARE_CONTEXT_MIN_ENCOUNTERS = 10;
+/** Care Context config key, editable at /configurations (category: clinical). */
+export const CARE_CONTEXT_MIN_ENCOUNTERS_CONFIG_KEY = 'care_context.min_encounters';
+
+/** Fallback used only while the config value is still loading. */
+export const CARE_CONTEXT_MIN_ENCOUNTERS_DEFAULT = 5;
 
 /**
  * Circular entry button (rubik-cube icon) that opens the Care Context workspace.
- * Renders nothing until the patient has at least CARE_CONTEXT_MIN_ENCOUNTERS
- * encounters, so patients with a thin history keep only the existing views.
+ * Renders nothing until the patient has at least the configured minimum number
+ * of encounters (care_context.min_encounters, see /configurations), so patients
+ * with a thin history keep only the existing views.
  */
 export function CareContextEntryButton({
   patientId,
@@ -29,8 +34,10 @@ export function CareContextEntryButton({
 }) {
   const router = useRouter();
   const { data: encounters } = usePatientEncounters(patientId);
+  const { data: minEncountersConfig } = useResolveConfig(CARE_CONTEXT_MIN_ENCOUNTERS_CONFIG_KEY);
+  const minEncounters = Number(minEncountersConfig?.value ?? CARE_CONTEXT_MIN_ENCOUNTERS_DEFAULT);
 
-  if ((encounters?.length ?? 0) < CARE_CONTEXT_MIN_ENCOUNTERS) return null;
+  if ((encounters?.length ?? 0) < minEncounters) return null;
 
   const dim = size === 'sm' ? 'h-8 w-8' : 'h-9 w-9';
 
