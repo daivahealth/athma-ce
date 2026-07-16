@@ -83,6 +83,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
     },
   });
 
+  const selectedAppointmentType = watch('appointmentType');
   const selectedDate = watch('appointmentDate');
   const selectedStaffId = watch('staffId');
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
@@ -159,6 +160,16 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
     setSelectedSlot(null);
     setSlotViewMode('available'); // Reset to available slots view
   }, [selectedDate, selectedStaffId, appointmentDuration]);
+
+  // For a Consultation, once a preferred staff member is picked, default the
+  // calendar to today so the Available Time Slots panel populates right away
+  // without an extra manual date pick. Only fires if the user hasn't already
+  // chosen a date themselves.
+  useEffect(() => {
+    if (selectedAppointmentType === 'consultation' && selectedStaffId && !selectedDate) {
+      setValue('appointmentDate', new Date(), { shouldValidate: true });
+    }
+  }, [selectedAppointmentType, selectedStaffId, selectedDate, setValue]);
 
   const { data: scheduledStaff } = useScheduledStaff();
 
