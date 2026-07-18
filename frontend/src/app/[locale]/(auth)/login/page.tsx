@@ -74,13 +74,15 @@ function LoginPageContent({ params }: { params: { locale: string } }) {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-slate-50 dark:bg-[#08090c] p-6 overflow-hidden">
-      {/* Subtle ambient background glow */}
-      <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[800px] rounded-full bg-primary/10 dark:bg-primary/5 opacity-50 blur-[100px] pointer-events-none" />
-      
-      <Card className="relative z-10 w-full max-w-[400px] border-border/40 bg-white/70 dark:bg-card/40 backdrop-blur-2xl shadow-2xl shadow-black/5 dark:shadow-black/50">
+    <div className="relative flex min-h-screen items-center justify-center bg-background p-6 overflow-hidden">
+      {/* Ambient gradient mesh: primary + warning blobs for a warmer, more dimensional glow */}
+      <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 h-[500px] w-[800px] rounded-full bg-primary/10 dark:bg-primary/5 opacity-60 blur-[100px] pointer-events-none animate-fade-in" />
+      <div className="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 h-[420px] w-[420px] rounded-full bg-warning/10 dark:bg-warning/5 opacity-50 blur-[110px] pointer-events-none animate-fade-in" />
+      <div className="absolute left-0 bottom-1/4 -translate-x-1/3 h-[320px] w-[320px] rounded-full bg-info/5 opacity-40 blur-[90px] pointer-events-none animate-fade-in" />
+
+      <Card className="relative z-10 w-full max-w-[400px] border-border/40 bg-white/70 dark:bg-card/40 backdrop-blur-2xl shadow-2xl shadow-black/5 dark:shadow-black/50 animate-scale-in">
         <CardHeader className="space-y-2 text-center pb-8 pt-8">
-          <div className="flex justify-center">
+          <div className="flex justify-center animate-fade-in">
             <>
               <Image
                 src="/athma-logo.svg"
@@ -126,7 +128,10 @@ function LoginPageContent({ params }: { params: { locale: string } }) {
             )}
             {error && <p className="text-sm text-destructive font-medium">{error}</p>}
             <div className="pt-2">
-              <Button type="submit" className="w-full h-11 text-base shadow-lg shadow-primary/20">
+              <Button
+                type="submit"
+                className="w-full h-11 text-base bg-gradient-to-b from-primary/90 to-primary shadow-lg shadow-primary/20"
+              >
                 {t('login')}
               </Button>
             </div>
