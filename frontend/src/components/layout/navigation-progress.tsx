@@ -44,7 +44,7 @@ export function NavigationProgress() {
   return (
     <div className="fixed inset-x-0 top-0 z-50 h-0.5">
       <div
-        className="h-full bg-primary transition-all duration-200"
+        className="h-full bg-gradient-to-r from-primary to-warning shadow-[0_0_8px_hsl(var(--primary)/0.6)] transition-all duration-200"
         style={{ width: `${width}%`, opacity: isVisible ? 1 : 0 }}
       />
     </div>

@@ -55,7 +55,7 @@ export default function DashboardLayout({
           locale={locale} 
           onSidebarToggle={handleMobileToggle}
         />
-        <main className="flex-1 space-y-4 p-4 bg-slate-50/50 dark:bg-transparent theme-transition">
+        <main className="flex-1 space-y-4 p-4 bg-muted/30 dark:bg-transparent theme-transition">
           <Suspense fallback={null}>
             <NavigationProgress />
           </Suspense>

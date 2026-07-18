@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { Badge } from '@/components/ui/badge';
+import { PageHeader } from '@/components/ui/page-header';
+import { EmptyState } from '@/components/ui/empty-state';
 import {
   Table,
   TableBody,
@@ -18,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, UserPlus, User, Eye, Compass } from 'lucide-react';
+import { Search, UserPlus, User, Eye, Compass, Users } from 'lucide-react';
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import type { Patient } from '@/modules/clinical/types/patient';
 
@@ -64,23 +66,18 @@ export default function PatientsPage({ params }: { params: { locale: string } })
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Patients</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage patient records and information
-          </p>
-        </div>
-        <Button
-          onClick={() => router.push(`/${params.locale}/patients/new`)}
-          className="gap-2"
-        >
-          <UserPlus className="h-4 w-4" />
-          New Patient
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Patients"
+        subtitle="Manage patient records and information"
+        icon={Users}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/patients/new`)} className="gap-2">
+            <UserPlus className="h-4 w-4" />
+            New Patient
+          </Button>
+        }
+      />
 
       {/* Search Bar */}
       <Card className="p-4">
@@ -127,19 +124,18 @@ export default function PatientsPage({ params }: { params: { locale: string } })
 
           {/* Patient Table */}
           {data.data.length === 0 ? (
-            <Card className="p-12 text-center">
-              <User className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-lg font-medium mb-2">No patients found</p>
-              <p className="text-muted-foreground mb-4">
-                {searchQuery ? 'Try a different search term' : 'Get started by adding your first patient'}
-              </p>
-              <Button
-                onClick={() => router.push(`/${params.locale}/patients/new`)}
-                variant="outline"
-              >
-                <UserPlus className="h-4 w-4 mr-2" />
-                Add Patient
-              </Button>
+            <Card>
+              <EmptyState
+                icon={User}
+                title="No patients found"
+                description={searchQuery ? 'Try a different search term' : 'Get started by adding your first patient'}
+                action={
+                  <Button onClick={() => router.push(`/${params.locale}/patients/new`)} variant="outline">
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Add Patient
+                  </Button>
+                }
+              />
             </Card>
           ) : (
             <Card>
@@ -159,8 +155,15 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                   {data.data.map((patient: Patient) => (
                     <TableRow
                       key={patient.id}
-                      className="cursor-pointer"
+                      className="cursor-pointer focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
                       onClick={() => router.push(`/${params.locale}/patients/${patient.id}`)}
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          router.push(`/${params.locale}/patients/${patient.id}`);
+                        }
+                      }}
                     >
                       <TableCell className="font-medium font-mono text-sm">
                         {patient.mrn}
@@ -182,13 +185,13 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant={patient.status === 'active' ? 'default' : 'secondary'}
+                          variant="secondary"
                           className={
                             patient.status === 'active'
-                              ? 'bg-green-500 hover:bg-green-600'
+                              ? 'bg-success/15 text-success hover:bg-success/25'
                               : patient.status === 'inactive'
-                              ? 'bg-yellow-500 hover:bg-yellow-600'
-                              : 'bg-gray-500 hover:bg-gray-600'
+                              ? 'bg-warning/15 text-warning hover:bg-warning/25'
+                              : 'bg-muted text-muted-foreground'
                           }
                         >
                           {patient.status}
