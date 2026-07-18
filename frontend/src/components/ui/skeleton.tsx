@@ -62,6 +62,41 @@ export function DashboardSkeleton() {
   );
 }
 
+export function StatRowSkeleton({ count = 4 }: { count?: number }) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="rounded-xl border border-border/40 bg-card/70 p-5">
+          <div className="flex items-start justify-between">
+            <div className="space-y-2">
+              <Skeleton className="h-3.5 w-20" />
+              <Skeleton className="h-7 w-16" />
+            </div>
+            <Skeleton className="h-9 w-9 rounded-xl" />
+          </div>
+          <Skeleton className="mt-4 h-8 w-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Generic full-page loading placeholder for route-level loading.tsx files. */
+export function PageSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-4 w-72" />
+      </div>
+      <StatRowSkeleton />
+      <div className="rounded-xl border border-border/40 bg-card/70 p-6">
+        <TableSkeleton />
+      </div>
+    </div>
+  );
+}
+
 export function FormSkeleton() {
   return (
     <div className="space-y-6">

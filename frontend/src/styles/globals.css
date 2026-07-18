@@ -185,3 +185,28 @@ body {
     hsl(var(--warning)) 100%
   );
 }
+
+/* Staggered entry fade for lists/grids of cards. Apply `.stagger` to the
+   container and each direct child fades in with an incrementing delay
+   (capped at 10 children so long lists don't feel sluggish). */
+.stagger > * {
+  animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 40ms; }
+.stagger > *:nth-child(3) { animation-delay: 80ms; }
+.stagger > *:nth-child(4) { animation-delay: 120ms; }
+.stagger > *:nth-child(5) { animation-delay: 160ms; }
+.stagger > *:nth-child(6) { animation-delay: 200ms; }
+.stagger > *:nth-child(7) { animation-delay: 240ms; }
+.stagger > *:nth-child(8) { animation-delay: 280ms; }
+.stagger > *:nth-child(9) { animation-delay: 320ms; }
+.stagger > *:nth-child(n+10) { animation-delay: 360ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger > *,
+  .page-transition,
+  .animate-fade-in {
+    animation: none !important;
+  }
+}
