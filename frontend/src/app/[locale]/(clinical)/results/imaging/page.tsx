@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { PageHeader } from '@/components/ui/page-header';
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -57,16 +58,13 @@ export default function ImagingResultsListPage() {
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold">Imaging Results</h1>
-          <p className="text-muted-foreground mt-1">
-            View and manage radiology and imaging reports
-          </p>
-        </div>
-        <NewReportDialog reportType="imaging" />
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Imaging Results"
+        subtitle="View and manage radiology and imaging reports"
+        icon={ScanLine}
+        actions={<NewReportDialog reportType="imaging" />}
+      />
 
       <Card className="p-4">
         <div className="flex gap-4 items-center">

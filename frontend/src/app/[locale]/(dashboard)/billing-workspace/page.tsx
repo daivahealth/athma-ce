@@ -17,6 +17,7 @@ import { useReceipts, useCreateReceipt } from '@/modules/rcm/hooks/use-receipts'
 import { InvoiceStatus } from '@/modules/rcm/types/invoice';
 import { PaymentMethod, type CreateReceiptInput } from '@/modules/rcm/types/receipt';
 import { useToast } from '@/components/ui/use-toast';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusVariant: Record<InvoiceStatus, 'default' | 'secondary' | 'outline' | 'destructive'> = {
   [InvoiceStatus.UNPAID]: 'destructive',
@@ -125,11 +126,12 @@ export default function BillingWorkspacePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Billing workspace</h1>
-        <p className="text-muted-foreground">Manage invoices and collect payments side by side.</p>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Billing Workspace"
+        subtitle="Manage invoices and collect payments side by side."
+        icon={CreditCard}
+      />
 
       <div className="grid gap-6 lg:grid-cols-[2fr_3fr]">
         <Card className="h-fit">

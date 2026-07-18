@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, Layers, ShieldCheck, ClipboardList, ReceiptText } from 'lucide-react';
+import { FileText, Layers, ShieldCheck, ClipboardList, ReceiptText, Landmark } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
 
 export default function RevenueCyclePage() {
   const params = useParams();
@@ -43,15 +44,14 @@ export default function RevenueCyclePage() {
   ];
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Revenue Cycle</h1>
-        <p className="text-muted-foreground">
-          Manage claims processing, eligibility checks, prior auth, and remittance workflows.
-        </p>
-      </div>
+    <div className="space-y-4 page-transition">
+      <PageHeader
+        title="Revenue Cycle"
+        subtitle="Manage claims processing, eligibility checks, prior auth, and remittance workflows."
+        icon={Landmark}
+      />
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 stagger md:grid-cols-2">
         {tiles.map((tile) => {
           const Icon = tile.icon;
           return (

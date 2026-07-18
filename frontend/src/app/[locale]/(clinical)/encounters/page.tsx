@@ -3,7 +3,9 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
-import { Plus, Search, FileText, Calendar, User, Stethoscope } from 'lucide-react';
+import { Plus, Search, FileText, Calendar, User, Stethoscope, ClipboardList } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
+import { EmptyState } from '@/components/ui/empty-state';
 import type { DateRange } from 'react-day-picker';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -34,12 +36,12 @@ import { useStaff } from '@/modules/foundation/hooks/use-staff';
 import type { StaffMember } from '@/modules/foundation/types/staff';
 
 const STATUS_COLORS: Record<string, string> = {
-  planned: 'bg-blue-100 text-blue-800',
+  planned: 'bg-info/10 text-info',
   arrived: 'bg-primary/10 text-primary',
-  triaged: 'bg-yellow-100 text-yellow-800',
-  'in-progress': 'bg-green-100 text-green-800',
-  finished: 'bg-gray-100 text-gray-800',
-  cancelled: 'bg-red-100 text-red-800',
+  triaged: 'bg-warning/10 text-warning',
+  'in-progress': 'bg-success/10 text-success',
+  finished: 'bg-muted text-muted-foreground',
+  cancelled: 'bg-destructive/10 text-destructive',
 };
 
 export default function EncountersPage({ params }: { params: { locale: string } }) {
@@ -117,7 +119,7 @@ export default function EncountersPage({ params }: { params: { locale: string } 
   }, [staffData]);
 
   const getStatusBadge = (status: string) => {
-    const colorClass = STATUS_COLORS[status] || 'bg-gray-100 text-gray-800';
+    const colorClass = STATUS_COLORS[status] || 'bg-muted text-muted-foreground';
     return (
       <Badge variant="outline" className={colorClass}>
         {status.replace('-', ' ').toUpperCase()}
@@ -126,17 +128,18 @@ export default function EncountersPage({ params }: { params: { locale: string } 
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Clinical Encounters</h1>
-          <p className="text-muted-foreground">Manage patient clinical encounters and visits</p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/encounters/new`)}>
-          <Plus className="mr-2 h-4 w-4" />
-          New Encounter
-        </Button>
-      </div>
+    <div className="space-y-4 page-transition">
+      <PageHeader
+        title="Clinical Encounters"
+        subtitle="Manage patient clinical encounters and visits"
+        icon={ClipboardList}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/encounters/new`)}>
+            <Plus className="mr-2 h-4 w-4" />
+            New Encounter
+          </Button>
+        }
+      />
 
       <Card>
         <CardContent className="pt-6">
@@ -213,25 +216,27 @@ export default function EncountersPage({ params }: { params: { locale: string } 
               <div className="text-muted-foreground">Loading encounters...</div>
             </div>
           ) : encounters.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <FileText className="mb-4 h-12 w-12 text-muted-foreground" />
-              <h3 className="mb-2 text-lg font-semibold">No encounters found</h3>
-              <p className="mb-4 text-sm text-muted-foreground">
-                {searchQuery || statusFilter !== 'all'
+            <EmptyState
+              icon={FileText}
+              title="No encounters found"
+              description={
+                searchQuery || statusFilter !== 'all'
                   ? 'Try adjusting your search criteria'
                   : dateFilter === 'today'
                     ? 'No encounters scheduled for today. Try selecting yesterday or a date range.'
                     : dateFilter === 'yesterday'
                       ? 'No encounters scheduled for yesterday. Try selecting today or a date range.'
-                      : 'No encounters in the selected date range. Try widening your range.'}
-              </p>
-              {!searchQuery && statusFilter === 'all' && dateFilter !== 'today' && (
-                <Button onClick={() => router.push(`/${params.locale}/encounters/new`)}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create New Encounter
-                </Button>
-              )}
-            </div>
+                      : 'No encounters in the selected date range. Try widening your range.'
+              }
+              action={
+                !searchQuery && statusFilter === 'all' && dateFilter !== 'today' ? (
+                  <Button onClick={() => router.push(`/${params.locale}/encounters/new`)}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create New Encounter
+                  </Button>
+                ) : undefined
+              }
+            />
           ) : (
             <>
               <Table>

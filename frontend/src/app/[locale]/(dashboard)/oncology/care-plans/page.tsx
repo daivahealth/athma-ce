@@ -11,6 +11,7 @@ import { FileText, Pencil, Plus, Search } from 'lucide-react';
 import { useOncologyCarePlans } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
+import { PageHeader } from '@/components/ui/page-header';
 import type { OncologyCarePlan } from '@/plugins/oncology/types';
 
 export default function CarePlansPage({ params }: { params: { locale: string } }) {
@@ -39,19 +40,18 @@ export default function CarePlansPage({ params }: { params: { locale: string } }
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Oncology Care Plans</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Treatment plans linking diagnosis, staging, and planned modalities
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/oncology/care-plans/new`)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Care Plan
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Oncology Care Plans"
+        subtitle="Treatment plans linking diagnosis, staging, and planned modalities"
+        icon={FileText}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/oncology/care-plans/new`)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Care Plan
+          </Button>
+        }
+      />
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[220px]">

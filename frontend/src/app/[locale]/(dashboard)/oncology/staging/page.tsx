@@ -10,6 +10,7 @@ import {
 import { Pencil, Plus, Search, Target } from 'lucide-react';
 import { useStagings } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState } from '@/plugins/oncology/components/shared';
+import { PageHeader } from '@/components/ui/page-header';
 import type { TumorStaging, OncologyPatientDisplay } from '@/plugins/oncology/types';
 
 const STAGING_TYPE_LABELS: Record<string, string> = {
@@ -18,9 +19,9 @@ const STAGING_TYPE_LABELS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  active: 'bg-green-100 text-green-700',
-  superseded: 'bg-gray-100 text-gray-500',
-  entered_in_error: 'bg-red-100 text-red-600',
+  active: 'bg-success/10 text-success',
+  superseded: 'bg-muted text-muted-foreground',
+  entered_in_error: 'bg-destructive/10 text-destructive',
 };
 
 export default function TumorStagingPage({ params }: { params: { locale: string } }) {
@@ -45,19 +46,18 @@ export default function TumorStagingPage({ params }: { params: { locale: string 
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Tumor Staging</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            TNM staging assessments linked to cancer diagnoses
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/oncology/staging/new`)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Staging
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Tumor Staging"
+        subtitle="TNM staging assessments linked to cancer diagnoses"
+        icon={Target}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/oncology/staging/new`)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Staging
+          </Button>
+        }
+      />
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[220px]">

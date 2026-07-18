@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { PageHeader } from '@/components/ui/page-header';
+import { ClipboardCheck } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -64,16 +66,13 @@ export default function ProcedureResultsListPage() {
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold">Procedure Results</h1>
-          <p className="text-muted-foreground mt-1">
-            View and manage procedure reports
-          </p>
-        </div>
-        <NewReportDialog reportType="procedure" />
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Procedure Results"
+        subtitle="View and manage procedure reports"
+        icon={ClipboardCheck}
+        actions={<NewReportDialog reportType="procedure" />}
+      />
 
       <Card className="p-4">
         <div className="flex gap-4 items-center">

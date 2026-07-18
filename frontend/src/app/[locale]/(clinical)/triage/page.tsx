@@ -15,6 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { PageHeader } from '@/components/ui/page-header';
 
 import { useEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { EncounterStatus } from '@/modules/clinical/types/encounter';
@@ -121,13 +122,12 @@ export default function TriageLandingPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Triage Queue</h1>
-        <p className="text-muted-foreground">
-          Review arrivals, prioritize them, and launch the triage workspace for each encounter.
-        </p>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Triage Queue"
+        subtitle="Review arrivals, prioritize them, and launch the triage workspace for each encounter."
+        icon={Activity}
+      />
 
       <Card>
         <CardHeader>

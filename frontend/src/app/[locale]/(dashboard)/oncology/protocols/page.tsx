@@ -8,13 +8,14 @@ import { Badge } from '@/components/ui/badge';
 import { FlaskConical, Pencil, Plus, PowerOff, Search } from 'lucide-react';
 import { useProtocols, useDeactivateProtocol } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState } from '@/plugins/oncology/components/shared';
+import { PageHeader } from '@/components/ui/page-header';
 import type { ChemoProtocol } from '@/plugins/oncology/types';
 
 const EMETOGENIC_COLORS: Record<string, string> = {
-  minimal: 'bg-green-100 text-green-700',
-  low: 'bg-blue-100 text-blue-700',
-  moderate: 'bg-yellow-100 text-yellow-700',
-  high: 'bg-red-100 text-red-700',
+  minimal: 'bg-success/10 text-success',
+  low: 'bg-info/10 text-info',
+  moderate: 'bg-warning/10 text-warning',
+  high: 'bg-destructive/10 text-destructive',
 };
 
 export default function ProtocolsPage({ params }: { params: { locale: string } }) {
@@ -37,18 +38,17 @@ export default function ProtocolsPage({ params }: { params: { locale: string } }
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Chemo Protocols</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Standardised chemotherapy regimen library
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/oncology/protocols/new`)}>
-          <Plus className="h-4 w-4 mr-2" />Create Protocol
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Chemo Protocols"
+        subtitle="Standardised chemotherapy regimen library"
+        icon={FlaskConical}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/oncology/protocols/new`)}>
+            <Plus className="h-4 w-4 mr-2" />Create Protocol
+          </Button>
+        }
+      />
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[220px]">

@@ -10,6 +10,7 @@ import {
 import { Pencil, Plus, Search, UserRound } from 'lucide-react';
 import { useOncologyRegistry } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
+import { PageHeader } from '@/components/ui/page-header';
 import type { CancerDiagnosis, OncologyPatientDisplay } from '@/plugins/oncology/types';
 
 export default function OncologyRegistryPage({ params }: { params: { locale: string } }) {
@@ -25,19 +26,18 @@ export default function OncologyRegistryPage({ params }: { params: { locale: str
   const entries: CancerDiagnosis[] = data?.data ?? [];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Oncology Registry</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            All registered cancer patients with diagnosis and staging summary
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/oncology/registry/new`)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add to Registry
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Oncology Registry"
+        subtitle="All registered cancer patients with diagnosis and staging summary"
+        icon={UserRound}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/oncology/registry/new`)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add to Registry
+          </Button>
+        }
+      />
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[220px]">

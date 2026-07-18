@@ -15,8 +15,10 @@ import {
   Edit,
   XCircle,
   Stethoscope,
+  CalendarClock,
 } from 'lucide-react';
 
+import { PageHeader } from '@/components/ui/page-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -112,17 +114,18 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Appointments</h1>
-          <p className="text-muted-foreground">View and manage appointments for your facility</p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/scheduling/appointments/new`)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Book Appointment
-        </Button>
-      </div>
+    <div className="space-y-4 page-transition">
+      <PageHeader
+        title="Appointments"
+        subtitle="View and manage appointments for your facility"
+        icon={CalendarClock}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/scheduling/appointments/new`)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Book Appointment
+          </Button>
+        }
+      />
 
       <Card>
         <CardContent className="pt-6">

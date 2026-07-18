@@ -21,6 +21,7 @@ import type {
   UpdateStaffScheduleInput,
 } from '@/modules/clinical/types/scheduling';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -538,15 +539,12 @@ export default function StaffSchedulingPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold">Staff Scheduling</h1>
-          <p className="text-muted-foreground mt-1">
-            Configure recurring availability slots for clinical staff.
-          </p>
-        </div>
-
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Staff Scheduling"
+        subtitle="Configure recurring availability slots for clinical staff."
+        icon={CalendarClock}
+        actions={
         <div className="flex gap-2">
           <Dialog open={isWeeklyDialogOpen} onOpenChange={setWeeklyDialogOpen}>
             <DialogTrigger asChild>
@@ -607,7 +605,8 @@ export default function StaffSchedulingPage() {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
+        }
+      />
 
       <Card className="p-4 space-y-4">
         <div className="grid gap-4 md:grid-cols-4">

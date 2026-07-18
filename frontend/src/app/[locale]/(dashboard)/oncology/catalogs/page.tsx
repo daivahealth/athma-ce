@@ -12,7 +12,8 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { Pencil, Plus, Search, Trash2 } from 'lucide-react';
+import { Pencil, Plus, Search, Trash2, Library } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
 import { LoadingState } from '@/plugins/oncology/components/shared';
 import {
   useCancerTypes, useCreateCancerType, useUpdateCancerType,
@@ -743,13 +744,12 @@ function HistologiesTab() {
 
 export default function OncologyCatalogsPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Oncology Catalogs</h1>
-        <p className="text-muted-foreground text-sm mt-1">
-          Master reference data — cancer types, primary sites, site mappings, and histologies
-        </p>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Oncology Catalogs"
+        subtitle="Master reference data — cancer types, primary sites, site mappings, and histologies"
+        icon={Library}
+      />
 
       <Tabs defaultValue="cancer-types">
         <TabsList>

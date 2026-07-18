@@ -10,14 +10,15 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { useRadiationPrescriptions } from '@/plugins/oncology/hooks/use-oncology';
+import { PageHeader } from '@/components/ui/page-header';
 import type { RadiationPrescription } from '@/plugins/oncology/types';
 
 const STATUS_COLORS: Record<string, string> = {
-  DRAFT: 'bg-gray-100 text-gray-700',
-  APPROVED: 'bg-blue-100 text-blue-700',
-  ACTIVE: 'bg-green-100 text-green-700',
-  COMPLETED: 'bg-purple-100 text-purple-700',
-  CANCELLED: 'bg-red-100 text-red-700',
+  DRAFT: 'bg-muted text-muted-foreground',
+  APPROVED: 'bg-info/10 text-info',
+  ACTIVE: 'bg-success/10 text-success',
+  COMPLETED: 'bg-primary/10 text-primary',
+  CANCELLED: 'bg-destructive/10 text-destructive',
 };
 
 export default function RadiationListPage({ params }: { params: { locale: string } }) {
@@ -40,21 +41,17 @@ export default function RadiationListPage({ params }: { params: { locale: string
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Radiation className="h-6 w-6" />
-            Radiation Oncology
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage radiation prescriptions, simulations, plans, and fractions
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/oncology/radiation/new`)}>
-          <Plus className="h-4 w-4 mr-2" />New Prescription
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Radiation Oncology"
+        subtitle="Manage radiation prescriptions, simulations, plans, and fractions"
+        icon={Radiation}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/oncology/radiation/new`)}>
+            <Plus className="h-4 w-4 mr-2" />New Prescription
+          </Button>
+        }
+      />
 
       {/* Filters */}
       <div className="flex gap-3">

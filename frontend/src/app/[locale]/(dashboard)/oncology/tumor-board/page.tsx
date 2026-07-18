@@ -11,6 +11,7 @@ import { Pencil, Plus, Search, Users } from 'lucide-react';
 import { useTumorBoardCases } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
+import { PageHeader } from '@/components/ui/page-header';
 import type { TumorBoardCase, OncologyPatientDisplay } from '@/plugins/oncology/types';
 
 export default function TumorBoardPage({ params }: { params: { locale: string } }) {
@@ -35,19 +36,18 @@ export default function TumorBoardPage({ params }: { params: { locale: string } 
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Tumor Board</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Multi-disciplinary team (MDT) case reviews and treatment decisions
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/oncology/tumor-board/new`)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Schedule Case
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Tumor Board"
+        subtitle="Multi-disciplinary team (MDT) case reviews and treatment decisions"
+        icon={Users}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/oncology/tumor-board/new`)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Schedule Case
+          </Button>
+        }
+      />
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[220px]">

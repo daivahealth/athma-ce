@@ -32,8 +32,10 @@ import {
   Video,
   AlertCircle,
   Users,
+  CalendarDays,
 } from 'lucide-react';
 
+import { PageHeader } from '@/components/ui/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -503,16 +505,12 @@ export default function StaffCalendarPage({ params }: { params: { locale: string
   const selectedStaff = staffList?.find((s) => s.staffId === selectedStaffId);
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Staff Calendar</h1>
-          <p className="text-muted-foreground">
-            View appointments and encounters for staff members
-          </p>
-        </div>
-      </div>
+    <div className="space-y-4 page-transition">
+      <PageHeader
+        title="Staff Calendar"
+        subtitle="View appointments and encounters for staff members"
+        icon={CalendarDays}
+      />
 
       {/* Controls */}
       <Card>

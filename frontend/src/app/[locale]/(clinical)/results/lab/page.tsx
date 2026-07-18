@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { PageHeader } from '@/components/ui/page-header';
 import {
   Table,
   TableBody,
@@ -62,16 +63,13 @@ export default function LabResultsListPage() {
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold">Lab Results</h1>
-          <p className="text-muted-foreground mt-1">
-            View and manage laboratory test reports
-          </p>
-        </div>
-        <NewReportDialog reportType="lab" />
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Lab Results"
+        subtitle="View and manage laboratory test reports"
+        icon={FlaskConical}
+        actions={<NewReportDialog reportType="lab" />}
+      />
 
       <Card className="p-4">
         <div className="flex gap-4 items-center">

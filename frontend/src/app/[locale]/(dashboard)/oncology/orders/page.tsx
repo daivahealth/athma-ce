@@ -10,6 +10,7 @@ import {
 import { ChevronRight, Plus, Search, Syringe } from 'lucide-react';
 import { useChemoOrders } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
+import { PageHeader } from '@/components/ui/page-header';
 import type { ChemoOrder } from '@/plugins/oncology/types';
 
 export default function ChemoOrdersPage({ params }: { params: { locale: string } }) {
@@ -33,18 +34,17 @@ export default function ChemoOrdersPage({ params }: { params: { locale: string }
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Chemo Orders</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Patient-specific chemotherapy orders with safety workflow
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/oncology/orders/new`)}>
-          <Plus className="h-4 w-4 mr-2" />New Order
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Chemo Orders"
+        subtitle="Patient-specific chemotherapy orders with safety workflow"
+        icon={Syringe}
+        actions={
+          <Button onClick={() => router.push(`/${params.locale}/oncology/orders/new`)}>
+            <Plus className="h-4 w-4 mr-2" />New Order
+          </Button>
+        }
+      />
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[220px]">

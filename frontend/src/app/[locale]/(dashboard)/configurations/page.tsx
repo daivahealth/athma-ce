@@ -19,6 +19,7 @@ import { Search, Settings2, Building2, Globe, RotateCcw, Check, X } from 'lucide
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PageHeader } from '@/components/ui/page-header';
 
 export default function ConfigurationsPage() {
   const params = useParams();
@@ -321,16 +322,12 @@ export default function ConfigurationsPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">System Configurations</h1>
-          <p className="text-muted-foreground">
-            View and edit configuration settings at instance, tenant, and facility levels
-          </p>
-        </div>
-        <Settings2 className="h-8 w-8 text-muted-foreground" />
-      </div>
+    <div className="space-y-4 page-transition">
+      <PageHeader
+        title="System Configurations"
+        subtitle="View and edit configuration settings at instance, tenant, and facility levels"
+        icon={Settings2}
+      />
 
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
