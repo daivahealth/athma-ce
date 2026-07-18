@@ -3,7 +3,9 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton, StatRowSkeleton } from '@/components/ui/skeleton';
+import { PageHeader } from '@/components/ui/page-header';
+import { StatCard } from '@/components/ui/stat-card';
 import { cn, formatCurrency } from '@/lib/utils';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import { useDashboardMetrics } from '@/modules/reporting/hooks';
@@ -11,13 +13,12 @@ import {
   Activity,
   AlertTriangle,
   BarChart3,
+  CalendarCheck,
   Clock,
-  FileText,
+  ReceiptText,
   RefreshCw,
-  ShieldCheck,
   Sparkles,
   Target,
-  TrendingDown,
   TrendingUp,
   Users,
 } from 'lucide-react';
@@ -28,19 +29,6 @@ const currencyLocaleMap: Record<string, string> = {
   INR: 'en-IN',
   USD: 'en-US',
 };
-
-function MetricSkeleton() {
-  return (
-    <div className="rounded-xl border border-border/60 bg-background/60 p-4 shadow-sm">
-      <div className="mb-3 flex items-center gap-2">
-        <Skeleton className="h-8 w-8 rounded-full" />
-        <Skeleton className="h-3 w-24" />
-      </div>
-      <Skeleton className="h-7 w-16 mb-1" />
-      <Skeleton className="h-4 w-28" />
-    </div>
-  );
-}
 
 function SnapshotSkeleton() {
   return (
@@ -81,39 +69,6 @@ export default function DashboardPage() {
       return null;
     }
   }, [metrics.cachedAt]);
-
-  // AI Pulse Metrics - derived from real data
-  const aiPulseMetrics = useMemo(() => {
-    const patientGrowthPositive = metrics.patientGrowth >= 0;
-    const revenueGrowthPositive = metrics.revenueGrowth >= 0;
-
-    return [
-      {
-        label: 'Patient Growth',
-        value: `${metrics.totalPatients.toLocaleString()}`,
-        delta: `${patientGrowthPositive ? '+' : ''}${metrics.newPatientsThisMonth} this month`,
-        tone: patientGrowthPositive ? 'text-emerald-500' : 'text-red-500',
-        bg: patientGrowthPositive ? 'bg-emerald-500/10' : 'bg-red-500/10',
-        icon: patientGrowthPositive ? TrendingUp : TrendingDown,
-      },
-      {
-        label: 'Revenue Trend',
-        value: formatCurrency(metrics.revenueMTD, resolvedCurrency, resolvedLocale),
-        delta: `${revenueGrowthPositive ? '+' : ''}${metrics.revenueGrowth.toFixed(1)}% vs last month`,
-        tone: revenueGrowthPositive ? 'text-sky-500' : 'text-amber-500',
-        bg: revenueGrowthPositive ? 'bg-sky-500/10' : 'bg-amber-500/10',
-        icon: revenueGrowthPositive ? TrendingUp : TrendingDown,
-      },
-      {
-        label: 'Clinical Load',
-        value: `${metrics.appointmentsToday} appts`,
-        delta: `${metrics.encountersToday} encounters today`,
-        tone: 'text-primary',
-        bg: 'bg-primary/10',
-        icon: Activity,
-      },
-    ];
-  }, [metrics, resolvedCurrency, resolvedLocale]);
 
   // Utilization Snapshots - derived from real data
   const utilizationSnapshots = useMemo(() => [
@@ -219,64 +174,61 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 page-transition theme-transition">
-      <Card className="border-primary/40 bg-gradient-to-br from-primary/5 via-background to-background">
-        <CardHeader className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-6 w-6 text-primary" />
-              <CardTitle className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Health AI+</CardTitle>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => refetch()}
-                disabled={isLoading}
-                className="h-8"
-              >
-                <RefreshCw className={cn('h-4 w-4 mr-1', isLoading && 'animate-spin')} />
-                Refresh
-              </Button>
-              <Badge variant="secondary" className="text-primary">
-                {fromCache ? 'Cached' : 'Live'} · {cachedTimeDisplay || 'Loading...'}
-              </Badge>
-            </div>
-          </div>
-          <CardDescription className="text-base">
-            Autonomous command center powered by real-time data from your Report Builder.
-            Metrics are refreshed automatically every 5 minutes.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            {isLoading ? (
-              <>
-                <MetricSkeleton />
-                <MetricSkeleton />
-                <MetricSkeleton />
-              </>
-            ) : (
-              aiPulseMetrics.map((metric) => {
-                const Icon = metric.icon;
-                return (
-                  <div key={metric.label} className="rounded-xl border border-border/60 bg-background/60 p-4 shadow-sm">
-                    <div className="mb-3 flex items-center gap-2">
-                      <span className={cn('rounded-full p-2', metric.bg)}>
-                        <Icon className={cn('h-4 w-4', metric.tone)} />
-                      </span>
-                      <p className="text-xs uppercase text-muted-foreground tracking-wide">{metric.label}</p>
-                    </div>
-                    <p className="text-2xl font-semibold leading-tight">{metric.value}</p>
-                    <p className="text-sm text-muted-foreground">{metric.delta}</p>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </CardContent>
-      </Card>
+      <PageHeader
+        title="Health AI+"
+        subtitle="Autonomous command center powered by real-time data from your Report Builder. Metrics refresh automatically every 5 minutes."
+        icon={Sparkles}
+        gradient
+        actions={
+          <>
+            <Button variant="ghost" size="sm" onClick={() => refetch()} disabled={isLoading} className="h-8">
+              <RefreshCw className={cn('h-4 w-4 mr-1', isLoading && 'animate-spin')} />
+              Refresh
+            </Button>
+            <Badge variant="secondary" className="text-primary">
+              {fromCache ? 'Cached' : 'Live'} · {cachedTimeDisplay || 'Loading...'}
+            </Badge>
+          </>
+        }
+      />
 
-      <div className="grid gap-6 lg:grid-cols-2" aria-label="AI insights">
+      {isLoading ? (
+        <StatRowSkeleton />
+      ) : (
+        <div className="grid gap-4 stagger sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard
+            label="Total Patients"
+            value={metrics.totalPatients}
+            icon={Users}
+            accent="info"
+            delta={metrics.patientGrowth}
+            deltaLabel="vs last month"
+          />
+          <StatCard
+            label="Revenue (MTD)"
+            value={metrics.revenueMTD}
+            formatValue={(n) => formatCurrency(n, resolvedCurrency, resolvedLocale)}
+            icon={BarChart3}
+            accent="success"
+            delta={metrics.revenueGrowth}
+            deltaLabel="vs last month"
+          />
+          <StatCard
+            label="Appts Today"
+            value={metrics.appointmentsToday}
+            icon={CalendarCheck}
+            accent="primary"
+          />
+          <StatCard
+            label="Unpaid Invoices"
+            value={metrics.unpaidInvoices}
+            icon={ReceiptText}
+            accent="warning"
+          />
+        </div>
+      )}
+
+      <div className="grid gap-6 stagger lg:grid-cols-2" aria-label="AI insights">
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
@@ -360,102 +312,42 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2" aria-label="Monitoring and stats">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
-              <CardTitle>Risk & Compliance Radar</CardTitle>
+      <Card aria-label="Risk and compliance">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-warning" />
+            <CardTitle>Risk & Compliance Radar</CardTitle>
+          </div>
+          <CardDescription>Autonomous monitoring based on real metrics.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="space-y-3">
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
             </div>
-            <CardDescription>Autonomous monitoring based on real metrics.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="space-y-3">
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-              </div>
-            ) : (
-              <ul className="space-y-3">
-                {riskSignals.map((risk) => (
-                  <li key={risk.label} className="rounded-lg border border-border/70 p-3">
-                    <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-                      <span>Severity: {risk.severity}</span>
-                      <Badge
-                        variant={risk.severity === 'high' ? 'destructive' : 'secondary'}
-                        className="text-foreground"
-                      >
-                        {risk.severity === 'high' ? 'Alert' : risk.severity === 'moderate' ? 'Watchlist' : 'Info'}
-                      </Badge>
-                    </div>
-                    <p className="mt-2 text-sm font-semibold text-foreground">{risk.label}</p>
-                    <p className="text-sm text-muted-foreground">{risk.description}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-primary" />
-              <CardTitle>Quick Stats</CardTitle>
-            </div>
-            <CardDescription>Summary of key operational metrics.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="space-y-3">
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-              </div>
-            ) : (
-              <div className="space-y-3 text-sm">
-                <div className="rounded-lg border border-border/70 p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-foreground font-semibold">Total Patients</span>
-                    </div>
-                    <span className="text-xl font-bold">{metrics.totalPatients.toLocaleString()}</span>
+          ) : (
+            <ul className="grid gap-3 stagger md:grid-cols-3">
+              {riskSignals.map((risk) => (
+                <li key={risk.label} className="rounded-lg border border-border/70 p-3">
+                  <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
+                    <span>Severity: {risk.severity}</span>
+                    <Badge
+                      variant={risk.severity === 'high' ? 'destructive' : 'secondary'}
+                      className="text-foreground"
+                    >
+                      {risk.severity === 'high' ? 'Alert' : risk.severity === 'moderate' ? 'Watchlist' : 'Info'}
+                    </Badge>
                   </div>
-                  <p className="text-muted-foreground mt-1">+{metrics.newPatientsThisMonth} new this month</p>
-                </div>
-                <div className="rounded-lg border border-border/70 p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-foreground font-semibold">Unpaid Invoices</span>
-                    </div>
-                    <span className="text-xl font-bold">{metrics.unpaidInvoices}</span>
-                  </div>
-                  <p className="text-muted-foreground mt-1">
-                    {formatCurrency(metrics.unpaidAmount, resolvedCurrency, resolvedLocale)} outstanding
-                  </p>
-                </div>
-                <div className="rounded-lg border border-border/70 p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-foreground font-semibold">Revenue (MTD)</span>
-                    </div>
-                    <span className="text-xl font-bold">
-                      {formatCurrency(metrics.revenueMTD, resolvedCurrency, resolvedLocale)}
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground mt-1">
-                    {metrics.revenueGrowth >= 0 ? '+' : ''}{metrics.revenueGrowth.toFixed(1)}% vs last month
-                  </p>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+                  <p className="mt-2 text-sm font-semibold text-foreground">{risk.label}</p>
+                  <p className="text-sm text-muted-foreground">{risk.description}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
