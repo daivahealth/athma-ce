@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format } from 'date-fns';
-import { ArrowLeft, Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { ArrowLeft, Calendar as CalendarIcon, Clock, Check } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -438,7 +438,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                         </p>
                       </div>
                     ) : (
-                      <div className="max-h-64 overflow-y-auto rounded-xl border border-slate-200/60 bg-gradient-to-br from-slate-50/50 to-white p-4 shadow-sm dark:border-slate-800/60 dark:from-slate-950/50 dark:to-slate-900">
+                      <div className="max-h-64 overflow-y-auto rounded-xl border border-border/60 bg-muted/20 p-4 shadow-sm">
                         <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 md:grid-cols-6">
                           {slotsToDisplay.map((slot, index) => {
                             const startTime = new Date(slot.startTime);
@@ -462,19 +462,17 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                                 onClick={() => isAvailable && handleSlotClick(slot)}
                                 disabled={!isAvailable}
                                 className={cn(
-                                  'relative rounded-lg px-3 py-2.5 text-xs font-semibold transition-all duration-200',
-                                  'focus:outline-none focus:ring-2 focus:ring-offset-1',
+                                  'relative flex items-center justify-center gap-1 rounded-lg border px-3 py-2.5 text-xs font-semibold transition-colors duration-150',
+                                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1',
                                   isSelected
-                                    ? 'bg-gradient-to-br from-primary to-warning text-primary-foreground shadow-lg shadow-primary/30 border-2 border-primary/60 scale-105 ring-2 ring-primary/20 dark:shadow-primary/30 dark:ring-primary/30'
+                                    ? 'border-primary bg-primary text-primary-foreground shadow-sm'
                                     : isAvailable
-                                      ? 'bg-white border border-slate-200 text-slate-700 shadow-sm hover:border-primary/40 hover:bg-gradient-to-br hover:from-primary/5 hover:to-warning/10 hover:text-primary hover:shadow-md hover:scale-105 dark:bg-slate-800/50 dark:border-slate-700/50 dark:text-slate-200 dark:hover:border-primary/50 dark:hover:from-primary/10 dark:hover:to-warning/10 dark:hover:text-primary focus:ring-primary/30'
-                                      : 'bg-slate-100/50 border border-slate-200/50 text-slate-400 cursor-not-allowed opacity-50 dark:bg-slate-800/30 dark:border-slate-700/30 dark:text-slate-600'
+                                      ? 'border-border bg-card text-foreground shadow-sm hover:border-primary/40 hover:bg-primary/5 hover:text-primary'
+                                      : 'border-border/40 bg-muted/40 text-muted-foreground/50 cursor-not-allowed'
                                 )}
                               >
-                                {isSelected && (
-                                  <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-white shadow-sm" />
-                                )}
-                                <span className="relative z-10">
+                                {isSelected && <Check className="h-3 w-3" />}
+                                <span>
                                   {startTime.toLocaleTimeString('en-US', {
                                     hour: '2-digit',
                                     minute: '2-digit',
