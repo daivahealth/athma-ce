@@ -305,38 +305,9 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const { flags: navFlags, isLoading: isLoadingNavFlags } = useNavFeatureFlags();
   const { sections: pluginSections } = usePluginNavSections();
 
-  // Hover-to-peek: when the rail is collapsed, hovering expands it as an overlay
-  // (it floats over the page content without reflowing it) and collapses on leave.
-  const [isPeeking, setIsPeeking] = React.useState(false);
-  const peekTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const collapsed = isCollapsed && !isPeeking;
-
-  const clearPeekTimeout = React.useCallback(() => {
-    if (peekTimeout.current) {
-      clearTimeout(peekTimeout.current);
-      peekTimeout.current = null;
-    }
-  }, []);
-
-  const PEEK_OPEN_DELAY = 220; // ignore quick, accidental passes over the rail
-  const PEEK_CLOSE_DELAY = 150; // avoid flicker when the cursor crosses sub-pixel gaps
-
-  const openPeek = React.useCallback(() => {
-    if (!isCollapsed) return; // no peek needed when pinned open
-    clearPeekTimeout(); // cancel any pending close
-    peekTimeout.current = setTimeout(() => setIsPeeking(true), PEEK_OPEN_DELAY);
-  }, [isCollapsed, clearPeekTimeout]);
-
-  const closePeek = React.useCallback(() => {
-    clearPeekTimeout(); // cancel any pending open
-    peekTimeout.current = setTimeout(() => setIsPeeking(false), PEEK_CLOSE_DELAY);
-  }, [clearPeekTimeout]);
-
-  // Drop peek state whenever the sidebar is pinned open, and clean up on unmount.
-  React.useEffect(() => {
-    if (!isCollapsed && isPeeking) setIsPeeking(false);
-  }, [isCollapsed, isPeeking]);
-  React.useEffect(() => () => clearPeekTimeout(), [clearPeekTimeout]);
+  // Collapse state is controlled entirely by explicit clicks on the toggle
+  // button (no hover-to-expand) so it doesn't fight the user's intent.
+  const collapsed = isCollapsed;
 
   const visibleSections = React.useMemo(() => {
     const coreSections = isLoadingNavFlags
@@ -588,8 +559,6 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       );
     });
 
-  // Outer spacer reserves the persistent rail/expanded width so page content never
-  // reflows while peeking; the inner panel overlays content when peeking.
   return (
     <div
       className={cn(
@@ -598,26 +567,16 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       )}
     >
       <div
-        onMouseEnter={openPeek}
-        onMouseLeave={closePeek}
-        onFocusCapture={openPeek}
-        onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) closePeek();
-        }}
         className={cn(
-          "absolute inset-y-0 left-0 flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out border-r border-border/40",
-          collapsed ? "w-20" : "w-72",
-          // The peek panel overflows the reserved rail to overlay page content.
-          // Its parent sidebar column is elevated (z-50) above the topbar in the
-          // layout, so this only needs a heavier shadow while peeking.
-          isPeeking ? "z-20 shadow-2xl" : "z-20 shadow-lg"
+          "absolute inset-y-0 left-0 z-20 flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out border-r border-border/40 shadow-lg",
+          collapsed ? "w-20" : "w-72"
         )}
       >
       {/* Header */}
       <div
         className={cn(
           'relative flex h-16 items-center',
-          collapsed ? 'justify-center px-3' : 'px-4'
+          collapsed ? 'flex-col justify-center gap-1.5 px-3 py-2' : 'justify-between px-4'
         )}
       >
         <Link
@@ -632,16 +591,16 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
               <Image
                 src="/athma-mark.svg"
                 alt="Athma"
-                width={40}
-                height={40}
-                className="h-10 w-10 transition-all group-hover:scale-105 dark:hidden"
+                width={28}
+                height={28}
+                className="h-7 w-7 transition-all group-hover:scale-105 dark:hidden"
               />
               <Image
                 src="/athma-mark-dark.svg"
                 alt="Athma"
-                width={40}
-                height={40}
-                className="hidden h-10 w-10 transition-all group-hover:scale-105 dark:block"
+                width={28}
+                height={28}
+                className="hidden h-7 w-7 transition-all group-hover:scale-105 dark:block"
               />
             </>
           ) : (
@@ -664,6 +623,26 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
           )}
         </Link>
 
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onToggle();
+          }}
+          className={cn(
+            'flex shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground transition-colors',
+            collapsed ? 'h-6 w-6' : 'h-7 w-7'
+          )}
+        >
+          {isCollapsed ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          )}
+        </Button>
       </div>
 
       {/* Navigation */}
@@ -706,25 +685,6 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
         )}
       </div>
 
-      {/* Toggle Button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onToggle();
-        }}
-        className={cn(
-          'absolute -right-4 top-1/2 z-50 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-md hover:bg-accent hover:text-foreground hover:scale-105 transition-all'
-        )}
-      >
-        {isCollapsed ? (
-          <ChevronRight className="h-4 w-4" />
-        ) : (
-          <ChevronLeft className="h-4 w-4" />
-        )}
-      </Button>
       </div>
     </div>
   );
