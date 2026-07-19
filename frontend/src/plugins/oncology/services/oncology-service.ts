@@ -42,6 +42,11 @@ export const oncologyService = {
     return data.data;
   },
 
+  async getRelevantLabs(patientId: string) {
+    const { data } = await clinicalClient.get(`${BASE_URL}/registry/${patientId}/labs`);
+    return data.data;
+  },
+
   // Tumor Staging
   async listStagings(params?: { patientId?: string; cancerDiagnosisId?: string; page?: number; limit?: number }) {
     const { data } = await clinicalClient.get(`${BASE_URL}/staging`, { params });

@@ -56,7 +56,7 @@ BEGIN
   INSERT INTO lab_reports (id, tenant_id, order_id, encounter_id, patient_id, report_status, version, specimen_type, reported_by, reported_at, created_at, updated_at)
   VALUES ('1a000001-0000-4000-8000-000000000009', v_tenant, '0d000001-0000-4000-8000-000000000009', e9, v_patient, 'FINAL', 1, 'Whole blood / serum', v_by, TIMESTAMPTZ '2021-08-15 14:00+00', NOW(), NOW());
   INSERT INTO lab_result_items (id, tenant_id, lab_report_id, sort_order, test_code, code_system, test_name, value_numeric, unit, ref_range_low, ref_range_high, abnormal_flag, critical_flag, created_at, updated_at) VALUES
-    (gen_random_uuid(), v_tenant, '1a000001-0000-4000-8000-000000000009', 1, '2039-6', 'LOINC', 'CEA',           3.2, 'ng/mL', 0,   5,    false, false, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant, '1a000001-0000-4000-8000-000000000009', 1, '83085-1', 'LOINC', 'CEA',           3.2, 'ng/mL', 0,   5,    false, false, NOW(), NOW()),
     (gen_random_uuid(), v_tenant, '1a000001-0000-4000-8000-000000000009', 2, '718-7',  'LOINC', 'Haemoglobin',  10.4, 'g/dL',  13,  17,   true,  false, NOW(), NOW()),
     (gen_random_uuid(), v_tenant, '1a000001-0000-4000-8000-000000000009', 3, '751-8',  'LOINC', 'Neutrophils',   1.3, 'x10^9/L', 2, 7,  true,  false, NOW(), NOW());
 
@@ -75,5 +75,5 @@ BEGIN
   INSERT INTO lab_reports (id, tenant_id, order_id, encounter_id, patient_id, report_status, version, specimen_type, reported_by, reported_at, created_at, updated_at)
   VALUES ('1a000001-0000-4000-8000-000000000011', v_tenant, '0d000001-0000-4000-8000-000000000011', e11, v_patient, 'FINAL', 1, 'Serum', v_by, TIMESTAMPTZ '2025-06-20 13:00+00', NOW(), NOW());
   INSERT INTO lab_result_items (id, tenant_id, lab_report_id, sort_order, test_code, code_system, test_name, value_numeric, unit, ref_range_low, ref_range_high, abnormal_flag, critical_flag, created_at, updated_at) VALUES
-    (gen_random_uuid(), v_tenant, '1a000001-0000-4000-8000-000000000011', 1, '2039-6', 'LOINC', 'CEA', 2.0, 'ng/mL', 0, 5, false, false, NOW(), NOW());
+    (gen_random_uuid(), v_tenant, '1a000001-0000-4000-8000-000000000011', 1, '83085-1', 'LOINC', 'CEA', 2.0, 'ng/mL', 0, 5, false, false, NOW(), NOW());
 END $$;

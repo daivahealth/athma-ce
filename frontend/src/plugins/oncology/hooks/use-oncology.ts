@@ -11,6 +11,7 @@ const oncologyKeys = {
   registry: () => [...oncologyKeys.all, 'registry'] as const,
   registryList: (params?: Record<string, unknown>) => [...oncologyKeys.registry(), 'list', params] as const,
   registrySummary: (patientId: string) => [...oncologyKeys.registry(), 'summary', patientId] as const,
+  registryLabs: (patientId: string) => [...oncologyKeys.registry(), 'labs', patientId] as const,
   staging: () => [...oncologyKeys.all, 'staging'] as const,
   stagingList: (params?: Record<string, unknown>) => [...oncologyKeys.staging(), 'list', params] as const,
   stagingDetail: (id: string) => [...oncologyKeys.staging(), 'detail', id] as const,
@@ -88,6 +89,14 @@ export function usePatientCancerSummary(patientId: string) {
   return useQuery({
     queryKey: oncologyKeys.registrySummary(patientId),
     queryFn: () => oncologyService.getRegistrySummary(patientId),
+    enabled: !!patientId,
+  });
+}
+
+export function usePatientOncologyLabs(patientId: string) {
+  return useQuery({
+    queryKey: oncologyKeys.registryLabs(patientId),
+    queryFn: () => oncologyService.getRelevantLabs(patientId),
     enabled: !!patientId,
   });
 }

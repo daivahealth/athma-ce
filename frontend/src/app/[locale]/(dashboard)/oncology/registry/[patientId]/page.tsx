@@ -4,9 +4,10 @@ import { useParams, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePatientCancerSummary } from '@/plugins/oncology/hooks/use-oncology';
+import { usePatientCancerSummary, usePatientOncologyLabs } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, EmptyState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
+import { Badge } from '@/components/ui/badge';
 
 export default function PatientCancerProfilePage() {
   const params = useParams();
@@ -14,6 +15,7 @@ export default function PatientCancerProfilePage() {
   const locale = useLocale();
   const patientId = params.patientId as string;
   const { data, isLoading } = usePatientCancerSummary(patientId);
+  const { data: labs = [] } = usePatientOncologyLabs(patientId);
 
   if (isLoading) return <LoadingState />;
   if (!data) return <EmptyState message="Patient not found in oncology registry" />;
@@ -65,6 +67,60 @@ export default function PatientCancerProfilePage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold">Recent Oncology Labs</h2>
+        {labs.length === 0 ? (
+          <EmptyState message="No oncology lab results on file" />
+        ) : (
+          <div className="border rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50">
+                <tr>
+                  <th className="text-left p-3 font-medium">Test</th>
+                  <th className="text-left p-3 font-medium">Result</th>
+                  <th className="text-left p-3 font-medium">Reference Range</th>
+                  <th className="text-left p-3 font-medium">Flag</th>
+                  <th className="text-left p-3 font-medium">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {labs.map((l: Record<string, unknown>) => {
+                  const value = l.value_numeric ?? l.value_string ?? l.value_code;
+                  const refRangeLow = l.ref_range_low as string | null;
+                  const refRangeHigh = l.ref_range_high as string | null;
+                  const refRange =
+                    refRangeLow != null && refRangeHigh != null
+                      ? `${refRangeLow} - ${refRangeHigh}`
+                      : (l.ref_range_text as string) || '-';
+                  return (
+                    <tr key={l.test_code as string} className="hover:bg-muted/30">
+                      <td className="p-3">{l.test_name as string}</td>
+                      <td className="p-3">
+                        {String(value)}
+                        {Boolean(l.unit) && <span className="text-muted-foreground"> {String(l.unit)}</span>}
+                      </td>
+                      <td className="p-3 text-muted-foreground">{refRange}</td>
+                      <td className="p-3">
+                        {l.critical_flag ? (
+                          <Badge variant="destructive">Critical</Badge>
+                        ) : l.abnormal_flag ? (
+                          <Badge variant="secondary" className="bg-warning/15 text-warning">Abnormal</Badge>
+                        ) : (
+                          <Badge variant="secondary" className="bg-success/15 text-success">Normal</Badge>
+                        )}
+                      </td>
+                      <td className="p-3 text-muted-foreground">
+                        {new Date(l.reported_at as string).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
       </section>

@@ -96,6 +96,12 @@ export class OncologyController {
     return { success: true, data: await this.oncologyService.getPatientCancerSummary(patientId) };
   }
 
+  @Get('registry/:patientId/labs')
+  @Permissions('oncology.registry.read')
+  async getRelevantLabs(@Param('patientId') patientId: string) {
+    return { success: true, data: await this.oncologyService.getRelevantLabs(patientId) };
+  }
+
   // ============================================
   // Oncology Care Plans
   // ============================================

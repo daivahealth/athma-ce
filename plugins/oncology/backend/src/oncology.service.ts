@@ -442,6 +442,30 @@ export class OncologyService {
     return { diagnoses, stagings, tumorBoardCases, carePlans };
   }
 
+  /**
+   * Most recent FINAL/AMENDED result for each oncology tumor-marker test the
+   * patient has on file, matched against the lab catalog (lab_test_master)
+   * rather than a hardcoded LOINC list so new oncology tests are picked up
+   * automatically. Read-only display only - not used for any safety gating.
+   */
+  async getRelevantLabs(patientId: string) {
+    const tenantId = this.getTenantId();
+
+    return this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT DISTINCT ON (lri.test_code)
+         lri.test_code, lri.test_name, lri.value_numeric, lri.value_string, lri.value_code,
+         lri.unit, lri.ref_range_low, lri.ref_range_high, lri.ref_range_text,
+         lri.interpretation, lri.abnormal_flag, lri.critical_flag, lr.reported_at
+       FROM lab_result_items lri
+       JOIN lab_reports lr ON lr.id = lri.lab_report_id
+       WHERE lr.patient_id = $1::uuid AND lr.tenant_id = $2::uuid
+         AND lr.report_status IN ('FINAL', 'AMENDED')
+         AND lri.test_code IN (SELECT loinc_code FROM lab_test_master WHERE test_category = 'Oncology')
+       ORDER BY lri.test_code, lr.reported_at DESC`,
+      patientId, tenantId,
+    );
+  }
+
   // ============================================
   // Tumor Staging
   // ============================================
