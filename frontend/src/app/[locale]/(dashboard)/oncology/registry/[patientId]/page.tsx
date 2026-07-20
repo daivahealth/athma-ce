@@ -8,6 +8,8 @@ import { usePatientCancerSummary, usePatientOncologyLabs } from '@/plugins/oncol
 import { LoadingState, EmptyState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
 import { Badge } from '@/components/ui/badge';
+import { useOtRequests } from '@/modules/ot/hooks/use-ot';
+import { OtRequestStatusBadge, OtReportStatusBadge } from '@/modules/ot/components/ot-status-badge';
 
 export default function PatientCancerProfilePage() {
   const params = useParams();
@@ -16,6 +18,7 @@ export default function PatientCancerProfilePage() {
   const patientId = params.patientId as string;
   const { data, isLoading } = usePatientCancerSummary(patientId);
   const { data: labs = [] } = usePatientOncologyLabs(patientId);
+  const { data: otRequests = [] } = useOtRequests({ patientId });
 
   if (isLoading) return <LoadingState />;
   if (!data) return <EmptyState message="Patient not found in oncology registry" />;
@@ -119,6 +122,46 @@ export default function PatientCancerProfilePage() {
                     </tr>
                   );
                 })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold">Surgical History (OT)</h2>
+        {otRequests.length === 0 ? (
+          <EmptyState message="No OT requests on file" />
+        ) : (
+          <div className="border rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50">
+                <tr>
+                  <th className="text-left p-3 font-medium">Procedure</th>
+                  <th className="text-left p-3 font-medium">Priority</th>
+                  <th className="text-left p-3 font-medium">Status</th>
+                  <th className="text-left p-3 font-medium">Preferred Date</th>
+                  <th className="text-left p-3 font-medium">Report</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {otRequests.map((r) => (
+                  <tr key={r.id} className="hover:bg-muted/30">
+                    <td className="p-3">{r.procedureName}</td>
+                    <td className="p-3 capitalize text-muted-foreground">{r.priority.toLowerCase()}</td>
+                    <td className="p-3"><OtRequestStatusBadge status={r.status} /></td>
+                    <td className="p-3 text-muted-foreground">
+                      {r.preferredDate ? new Date(r.preferredDate).toLocaleDateString() : '-'}
+                    </td>
+                    <td className="p-3">
+                      {r.reports?.length ? (
+                        <OtReportStatusBadge status={r.reports[0].reportStatus} />
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

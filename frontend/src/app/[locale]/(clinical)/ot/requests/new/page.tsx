@@ -20,6 +20,7 @@ import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { useOtRooms, useCreateOtRequest } from '@/modules/ot/hooks/use-ot';
 import { OT_REQUEST_PRIORITIES, type CreateOtRequestInput } from '@/modules/ot/types';
 import type { Patient } from '@/modules/clinical/types/patient';
+import { usePatientCancerSummary } from '@/plugins/oncology/hooks/use-oncology';
 
 const EMPTY_FORM: CreateOtRequestInput = {
   patientId: '',
@@ -70,6 +71,9 @@ export default function NewOtRequestPage({ params }: { params: { locale: string 
   const { data: staff } = useStaffList();
   const { data: rooms } = useOtRooms({ includeInactive: false });
   const createRequest = useCreateOtRequest();
+  const { data: cancerSummary } = usePatientCancerSummary(selectedPatient?.id ?? '');
+  const oncologyDiagnosis = cancerSummary?.diagnoses?.[0] as Record<string, unknown> | undefined;
+  const latestStaging = cancerSummary?.stagings?.[0] as Record<string, unknown> | undefined;
 
   const setField = <K extends keyof CreateOtRequestInput>(key: K, value: CreateOtRequestInput[K]) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -173,6 +177,19 @@ export default function NewOtRequestPage({ params }: { params: { locale: string 
               setField('encounterId', '');
             }}
           />
+
+          {oncologyDiagnosis && (
+            <div className="rounded-md bg-muted/40 px-3 py-2 text-xs space-y-1">
+              <div className="font-medium">
+                Oncology context: {oncologyDiagnosis.cancer_type as string}
+                {Boolean(oncologyDiagnosis.primary_site) && ` — ${oncologyDiagnosis.primary_site as string}`}
+              </div>
+              <div className="text-muted-foreground">
+                {latestStaging?.stage_group ? `Stage ${latestStaging.stage_group as string} · ` : ''}
+                Clinical status: {(oncologyDiagnosis.clinical_status as string)?.replace(/_/g, ' ')}
+              </div>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label>Active Encounter</Label>
