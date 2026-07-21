@@ -180,11 +180,40 @@ export class PatientResultsService {
     return configMap;
   }
 
+  private async buildSearchFilter(
+    tenantId: string,
+    search: string | undefined,
+  ): Promise<Record<string, unknown> | null> {
+    if (!search?.trim()) return null;
+
+    const matchingPatients = await this.prisma.patient.findMany({
+      where: {
+        tenantId,
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+          { mrn: { contains: search, mode: 'insensitive' } },
+        ],
+      },
+      select: { id: true },
+    });
+
+    return {
+      OR: [
+        { order: { orderName: { contains: search, mode: 'insensitive' } } },
+        ...(matchingPatients.length > 0
+          ? [{ patientId: { in: matchingPatients.map((p) => p.id) } }]
+          : []),
+      ],
+    };
+  }
+
   async getAll(
     tenantId: string,
     options?: {
       reportType?: string | undefined;
       reportStatus?: string | undefined;
+      search?: string | undefined;
       page?: number | undefined;
       limit?: number | undefined;
     },
@@ -193,10 +222,12 @@ export class PatientResultsService {
     const limit = options?.limit || 20;
     const skip = (page - 1) * limit;
 
+    const searchFilter = await this.buildSearchFilter(tenantId, options?.search);
+
     const results: Omit<PatientResultSummary, 'patientName'>[] = [];
 
     if (!options?.reportType || options.reportType === 'lab') {
-      const where: any = { tenantId };
+      const where: any = { tenantId, ...(searchFilter ?? {}) };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
 
       const labReports = await this.prisma.labReport.findMany({
@@ -274,7 +305,7 @@ export class PatientResultsService {
     }
 
     if (!options?.reportType || options.reportType === 'imaging') {
-      const where: any = { tenantId };
+      const where: any = { tenantId, ...(searchFilter ?? {}) };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
 
       const imagingReports = await this.prisma.imagingReport.findMany({
@@ -307,7 +338,7 @@ export class PatientResultsService {
     }
 
     if (!options?.reportType || options.reportType === 'procedure') {
-      const where: any = { tenantId };
+      const where: any = { tenantId, ...(searchFilter ?? {}) };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
 
       const procedureReports = await this.prisma.procedureReport.findMany({

@@ -378,7 +378,7 @@ export function useProcedureReportHistory(id: string) {
 // ========================================
 
 export function useAllResults(
-  params?: { type?: string; status?: string; page?: number; limit?: number },
+  params?: { type?: string; status?: string; search?: string; page?: number; limit?: number },
 ) {
   return useQuery({
     queryKey: ['all-results', params],

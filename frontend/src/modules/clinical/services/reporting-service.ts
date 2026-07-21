@@ -219,7 +219,7 @@ class ReportingService {
   // ========================================
 
   async getAllResults(
-    params?: { type?: string; status?: string; page?: number; limit?: number },
+    params?: { type?: string; status?: string; search?: string; page?: number; limit?: number },
   ): Promise<PatientResultsResponse> {
     const response = await clinicalClient.get('/patient-results', { params });
     return response.data;

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAllResults } from '@/modules/clinical/hooks/use-reporting';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { ResultStatusBadge } from '@/modules/clinical/components/reporting/ResultStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,15 +34,22 @@ export default function LabResultsListPage() {
   const params = useParams();
   const locale = params.locale as string;
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search, 300);
   const [page, setPage] = useState(1);
   const limit = 20;
 
   const { data, isLoading, error } = useAllResults({
     type: 'lab',
     status: statusFilter !== 'all' ? statusFilter : undefined,
+    search: debouncedSearch.trim() || undefined,
     page,
     limit,
   });
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   const errorMessage =
     error && typeof error === 'object' && 'response' in error
@@ -78,7 +86,8 @@ export default function LabResultsListPage() {
             <Input
               placeholder="Search lab results..."
               className="pl-10"
-              disabled
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setPage(1); }}>
