@@ -217,6 +217,33 @@ INSERT INTO lab_test_master (
   true,
   NOW(),
   NOW()
+),
+(
+  'b1111111-1111-1111-1111-111111111137',
+  NULL,
+  'Cancer Antigen 15-3 (CA 15-3)',
+  '6875-9',
+  '86300',
+  'LAB-027',
+  'Oncology',
+  'Tumor Marker',
+  'Serum',
+  'Venipuncture',
+  false,
+  NULL,
+  'No special preparation required. Serial monitoring should be done on the same assay platform when possible.',
+  'Not typically applicable',
+  '<30',
+  'Not established',
+  'U/mL',
+  'Immunoassay',
+  24,
+  'structured',
+  'oncology',
+  NULL,
+  true,
+  NOW(),
+  NOW()
 )
 ON CONFLICT (id) DO UPDATE
 SET

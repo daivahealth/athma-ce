@@ -11,8 +11,13 @@ DB_USER=${DB_USER:-zeal_user}
 # core seed flow - skipped below if it doesn't exist yet, rather than
 # aborting the rest of the clinical seed via ON_ERROR_STOP.
 ONCOLOGY_SCHEMA_FILES=(
-  "clinical/23-oncology-catalogs.sql"
-  "clinical/24-chemo-protocols.sql"
+  "plugins/oncology/00-catalogs.sql"
+  "plugins/oncology/01-chemo-protocols.sql"
+  "plugins/oncology/10-patient-john-smith.sql"
+  "plugins/oncology/11-patient-breast.sql"
+  "plugins/oncology/12-patient-lung.sql"
+  "plugins/oncology/13-patient-prostate.sql"
+  "plugins/oncology/14-patient-lymphoma.sql"
 )
 
 schema_exists() {
@@ -67,17 +72,23 @@ CLINICAL_FILES=(
   "clinical/17-membership-plans.sql"
   "clinical/18-pgvector-setup.sql"    # pgvector extension for semantic search
   "clinical/21-lab-test-result-templates.sql" # CBC analyte seed and lab test mapping
-  "clinical/23-oncology-catalogs.sql" # Oncology catalog master data (cancer types, primary sites, histologies, mappings)
-  "clinical/24-chemo-protocols.sql"  # Chemotherapy protocol library (22 protocols across 12 cancer types)
   "clinical/25-ot-room-configs.sql"  # OT room configuration data
   "clinical/26-lab-test-tat-backfill.sql" # Idempotent turnaround-time defaults for seeded lab tests
-  "clinical/27-oncology-lab-tests-backfill.sql" # Idempotent oncology-focused lab test master rows
+  "plugins/oncology/00-catalogs.sql" # Oncology catalog master data (cancer types, primary sites, histologies, mappings)
+  "plugins/oncology/01-chemo-protocols.sql" # Chemotherapy protocol library (29 protocols across 12 cancer types)
+  "plugins/oncology/02-lab-test-catalog.sql" # Idempotent oncology-focused lab test master rows
+  "plugins/oncology/10-patient-john-smith.sql" # Colorectal cancer: surgery + full 12-cycle FOLFOX
+  "plugins/oncology/11-patient-breast.sql"     # Breast cancer: surgery + AC-T chemo + full radiation pipeline
+  "plugins/oncology/12-patient-lung.sql"       # NSCLC Stage IV: palliative chemo only
+  "plugins/oncology/13-patient-prostate.sql"   # Prostate cancer: definitive radiation only
+  "plugins/oncology/14-patient-lymphoma.sql"   # DLBCL: R-CHOP chemo + tumor board
 )
 
 RCM_FILES=(
   "rcm/01-claims.sql"
   "rcm/07-catalog-mappings.sql"  # Billing items and clinical catalog mappings
   "rcm/08-pharmacy-stock.sql"    # Pharmacy stock batches (15 medications + OTC items)
+  "plugins/oncology/20-rcm-claims.sql" # Claims/preauth/denials/invoices for the 5 oncology demo patients
 )
 
 PRM_FILES=(
