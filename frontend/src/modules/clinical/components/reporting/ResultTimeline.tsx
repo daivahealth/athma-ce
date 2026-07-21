@@ -19,6 +19,7 @@ const typeLabels: Record<string, string> = {
 interface ResultTimelineProps {
   results: PatientResult[];
   onResultClick?: (result: PatientResult) => void;
+  selectedResultId?: string;
   className?: string;
 }
 
@@ -53,7 +54,7 @@ function getSummaryText(result: PatientResult): string | null {
   return null;
 }
 
-export function ResultTimeline({ results, onResultClick, className }: ResultTimelineProps) {
+export function ResultTimeline({ results, onResultClick, selectedResultId, className }: ResultTimelineProps) {
   if (results.length === 0) {
     return (
       <div className={cn('py-8 text-center text-muted-foreground', className)}>
@@ -91,6 +92,7 @@ export function ResultTimeline({ results, onResultClick, className }: ResultTime
                   className={cn(
                     'flex w-full items-start gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50',
                     hasCritical && 'border-red-200 bg-red-50',
+                    selectedResultId === result.id && 'border-primary bg-primary/5 hover:bg-primary/10',
                   )}
                 >
                   <span className="text-lg" title={typeLabels[result.reportType]}>
