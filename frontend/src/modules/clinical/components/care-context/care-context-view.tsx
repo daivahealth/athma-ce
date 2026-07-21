@@ -132,9 +132,9 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
     <div className="space-y-4">
       {/* Header */}
       <div className="flex flex-wrap items-center gap-3">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/${locale}/patients`}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to patients
+        <Button variant="ghost" size="icon" asChild>
+          <Link href={`/${locale}/patients`} aria-label="Back to patients">
+            <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
         <div>
