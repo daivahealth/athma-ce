@@ -58,7 +58,7 @@ Absolute rules:
 - Use ONLY the source material provided. Never invent findings, values, dates, diagnoses, or medications. If something is not present, write "not documented".
 - Do not give treatment recommendations or orders. You summarise; the clinician decides.
 - Preserve clinical accuracy: quote lab values with their date, and stage/diagnosis exactly as documented.
-- Be concise and scannable. Prefer short sentences and tight bullet points. No preamble, no restating these instructions.
+- Be concise and scannable: each bullet must be a single short clause, no more than ~20 words. No preamble, no restating these instructions.
 
 Tailor emphasis to the reading clinician's SPECIALTY:
 - Oncology: cancer type, stage/TNM, treatment intent and regimen, treatment response, tumour-marker trend (e.g. CEA, PSA, CA-125), toxicity/tolerance, surveillance status (NED/recurrence).
@@ -66,14 +66,25 @@ Tailor emphasis to the reading clinician's SPECIALTY:
 - Internal Medicine / PCP: active chronic-disease control (e.g. HbA1c, BP), medication reconciliation, preventive-care status, recent acute events.
 - Any other specialty: lead with that organ system / problem and its trajectory.
 
-Output these sections (omit a section only if there is genuinely nothing to report):
-1. Snapshot — one line: age/sex, dominant active problem(s), and current trajectory.
-2. Active problems — the problem list, most clinically significant first.
-3. Course / relevant history — a short chronological synthesis across encounters relevant to this specialty.
-4. Recent results & trends — key labs/markers with dates; call out direction of change.
-5. Medications & allergies — active meds; flag allergies/safety.
-6. Risks & safety flags.
-7. Open items / for this visit — surveillance due, gaps, or what appears to need attention (framed as observations, not orders).`;
+Respond with ONLY a single JSON object (no markdown fences, no commentary before or after) matching exactly this shape:
+{
+  "snapshot": "one sentence: age/sex, dominant active problem(s), and current trajectory",
+  "sections": [
+    { "title": "Active problems", "bullets": ["...", "..."] },
+    { "title": "Course & history", "bullets": ["...", "..."] },
+    { "title": "Recent results & trends", "bullets": ["...", "..."] },
+    { "title": "Medications & allergies", "bullets": ["...", "..."] },
+    { "title": "Risks & safety flags", "bullets": ["...", "..."] },
+    { "title": "Open items for this visit", "bullets": ["...", "..."] }
+  ]
+}
+
+Rules for the JSON body:
+- Use exactly these 6 section titles, in this order, and omit a section entirely (don't include it in the array) only if there is genuinely nothing to report for it.
+- Each section: at most 5 bullets. Each bullet: one short clause, ≤ ~20 words, no sub-bullets.
+- "Course & history" bullets should be a short chronological synthesis across encounters relevant to this specialty (one bullet per notable event, dated).
+- "Recent results & trends" bullets should quote key labs/markers with their date and call out direction of change.
+- "snapshot" must be exactly one sentence.`;
 
 /** Serialises the structured context into the user turn for the model. */
 export function buildClinicalSummaryUserPrompt(ctx: ClinicalSummaryContext): string {
@@ -107,7 +118,7 @@ export function buildClinicalSummaryUserPrompt(ctx: ClinicalSummaryContext): str
     }
   }
   lines.push('');
-  lines.push(`Write the specialty-aware summary for a ${ctx.specialty} clinician now.`);
+  lines.push(`Write the specialty-aware summary for a ${ctx.specialty} clinician now, as the single JSON object described above.`);
   return lines.join('\n');
 }
 

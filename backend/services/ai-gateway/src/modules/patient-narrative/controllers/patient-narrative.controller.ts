@@ -44,7 +44,10 @@ export class PatientNarrativeController {
       'specialty-aware clinical summary using the shared clinical-summary prompt. ' +
       'If no LLM provider/API key is configured, responds 503 with `{ available: false, reason }` ' +
       'so the client can fall back to its local narrative preview. ' +
-      'Pass `?dryRun=true` to return the assembled prompt without calling the LLM.',
+      'Pass `?dryRun=true` to return the assembled prompt without calling the LLM. ' +
+      'Results are cached in Redis keyed by the patient\'s current encounter count, so ' +
+      'repeat requests reuse the last narrative instead of spending tokens again until a ' +
+      'new encounter is recorded. Pass `?forceRefresh=true` to bypass the cache.',
   })
   @ApiParam({ name: 'patientId', description: 'Patient UUID', format: 'uuid' })
   @ApiQuery({
@@ -52,6 +55,12 @@ export class PatientNarrativeController {
     required: false,
     type: Boolean,
     description: 'Return the assembled prompt without calling the LLM',
+  })
+  @ApiQuery({
+    name: 'forceRefresh',
+    required: false,
+    type: Boolean,
+    description: 'Bypass the Redis cache and force a fresh LLM call',
   })
   @ApiResponse({
     status: 200,
@@ -74,12 +83,17 @@ export class PatientNarrativeController {
     @TenantId() tenantId: string,
     @Res({ passthrough: true }) res: Response,
     @Query('dryRun', new ParseBoolPipe({ optional: true })) dryRun?: boolean,
+    @Query('forceRefresh', new ParseBoolPipe({ optional: true })) forceRefresh?: boolean,
   ): Promise<CareNarrativeResponseDto | CareNarrativeUnavailableDto | CareNarrativeDryRunDto> {
-    logger.info({ tenantId, patientId, specialty: dto.specialty, dryRun: !!dryRun }, 'Care narrative requested');
+    logger.info(
+      { tenantId, patientId, specialty: dto.specialty, dryRun: !!dryRun, forceRefresh: !!forceRefresh },
+      'Care narrative requested',
+    );
 
     const result = await this.patientNarrativeService.generate(patientId, tenantId, {
       specialty: dto.specialty,
       dryRun: !!dryRun,
+      forceRefresh: !!forceRefresh,
     });
 
     if ('available' in result && result.available === false) {

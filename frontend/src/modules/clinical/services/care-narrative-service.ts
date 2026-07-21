@@ -17,6 +17,7 @@ class CareNarrativeService {
       const { data } = await aiGatewayClient.post<CareNarrativeResult>(
         `/ai/patients/${patientId}/narrative`,
         { specialty: params.specialty },
+        { params: params.forceRefresh ? { forceRefresh: true } : undefined },
       );
       return data;
     } catch (err) {

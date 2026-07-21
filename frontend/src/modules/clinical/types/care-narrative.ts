@@ -5,11 +5,20 @@
 export interface CareNarrativeRequest {
   /** Reading clinician specialty used to tune emphasis. Optional; inferred server-side if omitted. */
   specialty?: string;
+  /** Bypass the server-side Redis cache and force a fresh LLM call. */
+  forceRefresh?: boolean;
+}
+
+export interface CareNarrativeSection {
+  title: string;
+  bullets: string[];
 }
 
 export interface CareNarrativeAvailable {
   available: true;
   narrative: string;
+  snapshot: string;
+  sections: CareNarrativeSection[];
   specialty: string;
   model: string;
   sourceCount: number;

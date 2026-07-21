@@ -92,7 +92,7 @@ export function CareTimelinePanel({
   const {
     data: aiNarrative,
     isFetching: aiFetching,
-    refetch: refetchNarrative,
+    regenerate: regenerateNarrative,
   } = useCareNarrative(patient.id, narrative?.specialty);
   // Narrowed to the "available" variant (or null) so the LLM fields are type-safe.
   const aiReady = isNarrativeReady(aiNarrative) ? aiNarrative : null;
@@ -285,7 +285,7 @@ export function CareTimelinePanel({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => refetchNarrative()}
+              onClick={() => regenerateNarrative()}
               disabled={aiFetching}
               title="Regenerate the AI care narrative"
             >
@@ -297,8 +297,27 @@ export function CareTimelinePanel({
         {aiFetching && !aiNarrative ? (
           <LoadingSpinner size="sm" text="Generating care narrative..." />
         ) : aiReady ? (
-          <div className="space-y-2 text-sm">
-            <div className="whitespace-pre-wrap leading-relaxed text-foreground">{aiReady.narrative}</div>
+          <div className="space-y-3 text-sm">
+            {aiReady.snapshot && (
+              <p className="font-semibold leading-snug text-foreground">{aiReady.snapshot}</p>
+            )}
+            {aiReady.sections.length > 0 && (
+              <div className="space-y-3">
+                {aiReady.sections.map((section) => (
+                  <div
+                    key={section.title}
+                    className="rounded-lg border border-border/60 bg-card/40 p-3"
+                  >
+                    <SectionLabel>{section.title}</SectionLabel>
+                    <ul className="mt-1.5 list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+                      {section.bullets.map((bullet, i) => (
+                        <li key={i} className="leading-snug">{bullet}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
             <p className="pt-1 text-xs text-muted-foreground/70">
               AI-generated from {aiReady.sourceCount} clinical record
               {aiReady.sourceCount === 1 ? '' : 's'} · {aiReady.model} ·{' '}

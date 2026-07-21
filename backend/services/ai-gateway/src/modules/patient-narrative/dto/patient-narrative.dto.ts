@@ -25,14 +25,28 @@ export class GenerateNarrativeDto {
 
 // ---------- Responses ----------
 
+export class NarrativeSectionDto {
+  @ApiProperty({ description: 'Section title', example: 'Active problems' })
+  title: string;
+
+  @ApiProperty({ description: 'Concise bullet points for this section', type: [String] })
+  bullets: string[];
+}
+
 export class CareNarrativeResponseDto {
   @ApiProperty({ description: 'Whether the AI narrative was generated', example: true })
   available: true;
 
   @ApiProperty({
-    description: 'The specialty-aware clinical narrative (markdown-ish plain text)',
+    description: 'The specialty-aware clinical narrative, flattened to plain text',
   })
   narrative: string;
+
+  @ApiProperty({ description: 'One-sentence snapshot: age/sex, dominant problem(s), trajectory' })
+  snapshot: string;
+
+  @ApiProperty({ type: [NarrativeSectionDto], description: 'Structured, titled sections with concise bullets' })
+  sections: NarrativeSectionDto[];
 
   @ApiProperty({ description: 'Specialty the narrative was tuned for', example: 'Oncology' })
   specialty: string;

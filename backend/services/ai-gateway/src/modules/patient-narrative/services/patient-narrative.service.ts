@@ -17,6 +17,7 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { PrismaService as ClinicalPrismaService } from '@zeal/database-clinical';
 import { LLMClientService } from '../../../shared/llm-client/llm-client.service';
+import { NarrativeCacheService } from './narrative-cache.service';
 import {
   buildClinicalSummaryMessages,
   type ClinicalSummaryContext,
@@ -32,12 +33,21 @@ const MAX_OBSERVATIONS = 40;
 export interface GenerateNarrativeOptions {
   specialty?: string;
   dryRun?: boolean;
+  /** Bypass the Redis cache and force a fresh LLM call (used by the "Refresh" button). */
+  forceRefresh?: boolean;
+}
+
+export interface NarrativeSection {
+  title: string;
+  bullets: string[];
 }
 
 export type NarrativeResult =
   | {
       available: true;
       narrative: string;
+      snapshot: string;
+      sections: NarrativeSection[];
       specialty: string;
       model: string;
       sourceCount: number;
@@ -51,11 +61,51 @@ export type NarrativeResult =
       messages: { role: 'system' | 'user'; content: string }[];
     };
 
+/**
+ * Parses the model's JSON response into { snapshot, sections }. Strips a
+ * ```json fenced block if the model wrapped it despite instructions not to.
+ * Falls back to a single "Summary" section holding the raw text if the
+ * response isn't valid JSON, so a malformed reply still renders.
+ */
+function parseNarrativeJson(raw: string): { snapshot: string; sections: NarrativeSection[] } {
+  const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  const candidate = fenced ? fenced[1] : raw;
+  try {
+    const parsed = JSON.parse(candidate);
+    const snapshot = typeof parsed.snapshot === 'string' ? parsed.snapshot : '';
+    const sections: NarrativeSection[] = Array.isArray(parsed.sections)
+      ? parsed.sections
+          .filter((s: unknown): s is { title: unknown; bullets: unknown } => !!s && typeof s === 'object')
+          .map((s: { title: unknown; bullets: unknown }) => ({
+            title: typeof s.title === 'string' ? s.title : '',
+            bullets: Array.isArray(s.bullets) ? s.bullets.filter((b: unknown) => typeof b === 'string') : [],
+          }))
+          .filter((s: NarrativeSection) => s.title && s.bullets.length > 0)
+      : [];
+    if (!snapshot && sections.length === 0) throw new Error('Empty narrative JSON');
+    return { snapshot, sections };
+  } catch {
+    return { snapshot: '', sections: [{ title: 'Summary', bullets: [raw.trim()] }] };
+  }
+}
+
+/** Flattens structured sections back into plain text (dry-run / raw fallback). */
+function flattenNarrative(snapshot: string, sections: NarrativeSection[]): string {
+  const parts: string[] = [];
+  if (snapshot) parts.push(snapshot);
+  for (const s of sections) {
+    parts.push(`${s.title}:`);
+    parts.push(...s.bullets.map((b) => `- ${b}`));
+  }
+  return parts.join('\n');
+}
+
 @Injectable()
 export class PatientNarrativeService {
   constructor(
     private readonly clinicalPrisma: ClinicalPrismaService,
     private readonly llmClient: LLMClientService,
+    private readonly narrativeCache: NarrativeCacheService,
   ) {}
 
   async generate(
@@ -65,10 +115,12 @@ export class PatientNarrativeService {
   ): Promise<NarrativeResult> {
     let context: ClinicalSummaryContext;
     let sourceCount: number;
+    let encounterCount: number;
     try {
       const assembled = await this.buildContext(patientId, tenantId, options.specialty);
       context = assembled.context;
       sourceCount = assembled.sourceCount;
+      encounterCount = assembled.encounterCount;
     } catch (err) {
       // Missing patient / clinical-data read failure — degrade to the client preview.
       logger.warn(
@@ -90,6 +142,13 @@ export class PatientNarrativeService {
       };
     }
 
+    // Cache: a patient with an unchanged encounter count reuses the last narrative
+    // instead of spending LLM tokens again. "Refresh" (forceRefresh) bypasses this.
+    if (!options.forceRefresh) {
+      const cached = await this.narrativeCache.get(tenantId, patientId, context.specialty, encounterCount);
+      if (cached) return cached;
+    }
+
     try {
       const response = await this.llmClient.completion({
         messages,
@@ -97,14 +156,22 @@ export class PatientNarrativeService {
         maxTokens: 1500,
       });
 
-      return {
+      const { snapshot, sections } = parseNarrativeJson(response.content.trim());
+
+      const result: NarrativeResult = {
         available: true,
-        narrative: response.content.trim(),
+        narrative: flattenNarrative(snapshot, sections),
+        snapshot,
+        sections,
         specialty: context.specialty,
         model: response.model,
         sourceCount,
         generatedAt: new Date().toISOString(),
       };
+
+      await this.narrativeCache.set(tenantId, patientId, context.specialty, encounterCount, result);
+
+      return result;
     } catch (err) {
       // No provider/API key configured, unsupported provider, or upstream LLM error.
       // Degrade gracefully so the frontend can render its local preview instead.
@@ -123,7 +190,7 @@ export class PatientNarrativeService {
     patientId: string,
     tenantId: string,
     specialtyOverride?: string,
-  ): Promise<{ context: ClinicalSummaryContext; sourceCount: number }> {
+  ): Promise<{ context: ClinicalSummaryContext; sourceCount: number; encounterCount: number }> {
     const patient = await this.clinicalPrisma.patient.findFirst({
       where: { id: patientId, tenantId },
     });
@@ -188,7 +255,11 @@ export class PatientNarrativeService {
       purpose: 'Context synthesis ahead of a clinical encounter',
     };
 
-    return { context, sourceCount: encounterInputs.length + observationInputs.length };
+    return {
+      context,
+      sourceCount: encounterInputs.length + observationInputs.length,
+      encounterCount: encounterInputs.length,
+    };
   }
 
   // ─── Helpers ───────────────────────────────────────────────

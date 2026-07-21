@@ -7,6 +7,7 @@
  * result is unavailable, so this hook never throws for the "unavailable" case.
  */
 
+import { useCallback, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { careNarrativeService } from '../services/care-narrative-service';
 import type { CareNarrativeResult } from '../types/care-narrative';
@@ -18,12 +19,29 @@ const CARE_NARRATIVE_KEYS = {
 };
 
 export function useCareNarrative(patientId: string, specialty?: string, enabled: boolean = true) {
-  return useQuery<CareNarrativeResult>({
+  // Read once and cleared inside queryFn, so a normal refetch (e.g. query
+  // invalidation) still hits the server-side cache; only `regenerate()` forces
+  // a fresh LLM call by setting this before triggering the refetch.
+  const forceRefreshRef = useRef(false);
+
+  const query = useQuery<CareNarrativeResult>({
     queryKey: CARE_NARRATIVE_KEYS.patient(patientId, specialty),
-    queryFn: () => careNarrativeService.generate(patientId, { specialty }),
+    queryFn: () => {
+      const forceRefresh = forceRefreshRef.current;
+      forceRefreshRef.current = false;
+      return careNarrativeService.generate(patientId, { specialty, forceRefresh });
+    },
     enabled: enabled && !!patientId,
     staleTime: 10 * 60 * 1000, // 10 minutes — generation is relatively expensive
     gcTime: 30 * 60 * 1000,
     retry: false,
   });
+
+  /** Regenerate the narrative, bypassing the ai-gateway's Redis cache. */
+  const regenerate = useCallback(() => {
+    forceRefreshRef.current = true;
+    return query.refetch();
+  }, [query]);
+
+  return { ...query, regenerate };
 }
