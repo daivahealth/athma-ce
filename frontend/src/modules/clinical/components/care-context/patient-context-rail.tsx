@@ -3,13 +3,20 @@
 import * as React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
-import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle, Stethoscope, TrendingUp } from 'lucide-react';
+import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle, Stethoscope, TrendingUp, Info } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import type { Patient } from '@/modules/clinical/types/patient';
 import { usePatientPolicies } from '@/modules/rcm/hooks/use-policies';
 import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
@@ -283,6 +290,101 @@ export function PatientContextRail({
           <Button variant="default" size="sm" onClick={() => router.push(newEncounterHref)}>
             <Plus className="mr-1.5 h-3.5 w-3.5" /> New
           </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Info className="mr-1.5 h-3.5 w-3.5" /> Details
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>{name}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-5 pt-2">
+                {/* Personal Information */}
+                <div className="space-y-2.5">
+                  <SectionLabel>Personal Information</SectionLabel>
+                  <Field label="Date of birth" value={fmtDate(patient.dateOfBirth)} />
+                  <Field label="Gender" value={<span className="capitalize">{patient.gender}</span>} />
+                  <Field label="Blood group" value={patient.bloodGroup || '—'} />
+                  <Field label="Nationality" value={patient.nationality || '—'} />
+                </div>
+
+                <Separator />
+
+                {/* Contact Information */}
+                <div className="space-y-2.5">
+                  <SectionLabel>Contact Information</SectionLabel>
+                  <Field label="Phone" value={patient.phoneNumber || '—'} />
+                  <Field label="Alternate" value={patient.alternateContactNumber || '—'} />
+                  <Field label="Email" value={patient.email || '—'} />
+                  <Field label="Address" value={address || 'Address not provided'} />
+                </div>
+
+                <Separator />
+
+                {/* Emergency Contact */}
+                <div className="space-y-2.5">
+                  <SectionLabel>Emergency Contact</SectionLabel>
+                  <Field
+                    label="Name"
+                    value={
+                      patient.emergencyContactName
+                        ? `${patient.emergencyContactName}${patient.emergencyContactRelation ? ` (${patient.emergencyContactRelation})` : ''}`
+                        : '—'
+                    }
+                  />
+                  <Field label="Number" value={patient.emergencyContactNumber || 'No number on file'} />
+                </div>
+
+                <Separator />
+
+                {/* Insurance Information */}
+                <div className="space-y-2.5">
+                  <SectionLabel>Insurance Information</SectionLabel>
+                  {primaryPolicy ? (
+                    <>
+                      <Field label="Payer" value={primaryPolicy.payerName} />
+                      <Field label="Policy #" value={<span className="font-mono">{primaryPolicy.policyNumber}</span>} />
+                      {primaryPolicy.groupNumber ? <Field label="Group" value={primaryPolicy.groupNumber} /> : null}
+                      {primaryPolicy.expirationDate ? (
+                        <Field label="Expires" value={fmtDate(primaryPolicy.expirationDate)} />
+                      ) : null}
+                    </>
+                  ) : patient.insuranceProvider ? (
+                    <>
+                      <Field label="Provider" value={patient.insuranceProvider} />
+                      <Field
+                        label="Policy #"
+                        value={<span className="font-mono">{patient.insurancePolicyNumber || '—'}</span>}
+                      />
+                      {patient.insuranceExpiryDate ? (
+                        <Field label="Expires" value={fmtDate(patient.insuranceExpiryDate)} />
+                      ) : null}
+                    </>
+                  ) : (
+                    <EmptyState>No insurance on file.</EmptyState>
+                  )}
+                </div>
+
+                <Separator />
+
+                {/* Identity Documents */}
+                <div className="space-y-2.5">
+                  <SectionLabel>Identity Documents</SectionLabel>
+                  <Field
+                    label="National ID"
+                    value={
+                      patient.nationalId
+                        ? `${patient.nationalId}${patient.nationalIdType ? ` (${patient.nationalIdType})` : ''}`
+                        : '—'
+                    }
+                  />
+                  <Field label="Passport" value={patient.passportNumber || '—'} />
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -335,44 +437,6 @@ export function PatientContextRail({
           </div>
         </>
       ) : null}
-
-      <Separator />
-
-      {/* Personal Information */}
-      <div className="space-y-2.5">
-        <SectionLabel>Personal Information</SectionLabel>
-        <Field label="Date of birth" value={fmtDate(patient.dateOfBirth)} />
-        <Field label="Gender" value={<span className="capitalize">{patient.gender}</span>} />
-        <Field label="Blood group" value={patient.bloodGroup || '—'} />
-        <Field label="Nationality" value={patient.nationality || '—'} />
-      </div>
-
-      <Separator />
-
-      {/* Contact Information */}
-      <div className="space-y-2.5">
-        <SectionLabel>Contact Information</SectionLabel>
-        <Field label="Phone" value={patient.phoneNumber || '—'} />
-        <Field label="Alternate" value={patient.alternateContactNumber || '—'} />
-        <Field label="Email" value={patient.email || '—'} />
-        <Field label="Address" value={address || 'Address not provided'} />
-      </div>
-
-      <Separator />
-
-      {/* Emergency Contact */}
-      <div className="space-y-2.5">
-        <SectionLabel>Emergency Contact</SectionLabel>
-        <Field
-          label="Name"
-          value={
-            patient.emergencyContactName
-              ? `${patient.emergencyContactName}${patient.emergencyContactRelation ? ` (${patient.emergencyContactRelation})` : ''}`
-              : '—'
-          }
-        />
-        <Field label="Number" value={patient.emergencyContactNumber || 'No number on file'} />
-      </div>
 
       <Separator />
 
@@ -449,45 +513,6 @@ export function PatientContextRail({
             })}
           </div>
         )}
-      </div>
-
-      <Separator />
-
-      {/* Insurance Information */}
-      <div className="space-y-2.5">
-        <SectionLabel>Insurance Information</SectionLabel>
-        {primaryPolicy ? (
-          <>
-            <Field label="Payer" value={primaryPolicy.payerName} />
-            <Field label="Policy #" value={<span className="font-mono">{primaryPolicy.policyNumber}</span>} />
-            {primaryPolicy.groupNumber ? <Field label="Group" value={primaryPolicy.groupNumber} /> : null}
-            {primaryPolicy.expirationDate ? (
-              <Field label="Expires" value={fmtDate(primaryPolicy.expirationDate)} />
-            ) : null}
-          </>
-        ) : patient.insuranceProvider ? (
-          <>
-            <Field label="Provider" value={patient.insuranceProvider} />
-            <Field label="Policy #" value={<span className="font-mono">{patient.insurancePolicyNumber || '—'}</span>} />
-            {patient.insuranceExpiryDate ? (
-              <Field label="Expires" value={fmtDate(patient.insuranceExpiryDate)} />
-            ) : null}
-          </>
-        ) : (
-          <EmptyState>No insurance on file.</EmptyState>
-        )}
-      </div>
-
-      <Separator />
-
-      {/* Identity Documents */}
-      <div className="space-y-2.5">
-        <SectionLabel>Identity Documents</SectionLabel>
-        <Field
-          label="National ID"
-          value={patient.nationalId ? `${patient.nationalId}${patient.nationalIdType ? ` (${patient.nationalIdType})` : ''}` : '—'}
-        />
-        <Field label="Passport" value={patient.passportNumber || '—'} />
       </div>
 
       <Separator />
