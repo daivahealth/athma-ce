@@ -48,6 +48,14 @@ export class CareNarrativeResponseDto {
   @ApiProperty({ type: [NarrativeSectionDto], description: 'Structured, titled sections with concise bullets' })
   sections: NarrativeSectionDto[];
 
+  @ApiProperty({
+    type: [String],
+    description:
+      'Short, non-prescriptive clinician-facing considerations generated in the same call as the ' +
+      'narrative (e.g. "Consider ordering..."). Not rendered on Care Context — Patient AI+ only.',
+  })
+  recommendations: string[];
+
   @ApiProperty({ description: 'Specialty the narrative was tuned for', example: 'Oncology' })
   specialty: string;
 

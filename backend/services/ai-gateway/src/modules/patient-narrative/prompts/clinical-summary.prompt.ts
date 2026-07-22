@@ -76,7 +76,8 @@ Respond with ONLY a single JSON object (no markdown fences, no commentary before
     { "title": "Medications & allergies", "bullets": ["...", "..."] },
     { "title": "Risks & safety flags", "bullets": ["...", "..."] },
     { "title": "Open items for this visit", "bullets": ["...", "..."] }
-  ]
+  ],
+  "recommendations": ["...", "..."]
 }
 
 Rules for the JSON body:
@@ -84,7 +85,14 @@ Rules for the JSON body:
 - Each section: at most 5 bullets. Each bullet: one short clause, ≤ ~20 words, no sub-bullets.
 - "Course & history" bullets should be a short chronological synthesis across encounters relevant to this specialty (one bullet per notable event, dated).
 - "Recent results & trends" bullets should quote key labs/markers with their date and call out direction of change.
-- "snapshot" must be exactly one sentence.`;
+- "snapshot" must be exactly one sentence.
+
+Rules for "recommendations" (a distinct, narrowly-scoped field — read carefully, it has different rules than the sections above):
+- 3 to 6 items. Each item is a short clinician-facing CONSIDERATION, not a prescriptive order.
+- Start each with a verb like "Consider", "Review", "Discuss", "Confirm", or "Schedule" — e.g. "Consider ordering HbA1c — none on file despite documented diabetes."
+- Never include a specific drug name with a new dose/route as if prescribing it. You may reference an existing documented medication when suggesting a review (e.g. "Review metformin dosing given renal trend"), but never introduce a new drug/dose.
+- Base every item strictly on the supplied source material — surface care gaps, notable trends worth discussing, or overdue surveillance/follow-up, exactly as you would for the sections above. Never invent a finding to justify a recommendation.
+- These are the treating clinician's own considerations to evaluate, not instructions to execute.`;
 
 /** Serialises the structured context into the user turn for the model. */
 export function buildClinicalSummaryUserPrompt(ctx: ClinicalSummaryContext): string {

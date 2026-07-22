@@ -19,6 +19,12 @@ export interface CareNarrativeAvailable {
   narrative: string;
   snapshot: string;
   sections: CareNarrativeSection[];
+  /**
+   * Short, non-prescriptive clinician-facing considerations generated in the
+   * same call as the narrative. Intentionally not rendered on Care Context —
+   * only the Patient AI+ page shows these.
+   */
+  recommendations: string[];
   specialty: string;
   model: string;
   sourceCount: number;

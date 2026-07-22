@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,10 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
-import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
-import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
-import { Activity, AlertTriangle, ClipboardList, ClipboardCheck, ShieldCheck, Sparkles, Compass } from 'lucide-react';
+import { Sparkles, Compass, Lightbulb, NotebookText } from 'lucide-react';
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
+import { PatientContextRail } from '@/modules/clinical/components/care-context/patient-context-rail';
+import { SectionLabel } from '@/modules/clinical/components/care-context/parts';
+import { useCareNarrative } from '@/modules/clinical/hooks/use-care-narrative';
+import type { CareNarrativeAvailable, CareNarrativeResult } from '@/modules/clinical/types/care-narrative';
+
+function isNarrativeReady(r: CareNarrativeResult | undefined): r is CareNarrativeAvailable {
+  return !!r && r.available;
+}
 
 interface PatientAiPlusPageProps {
   params: {
@@ -29,108 +34,14 @@ const formatDateTime = (dateString?: string | null) => {
   }
 };
 
-const calculateAge = (dob?: string | null) => {
-  if (!dob) return null;
-  const birthDate = parseISO(dob);
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-  return age;
-};
-
 export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
   const { data: patient, isLoading, error } = usePatient(params.patientId);
-  const { data: appointments } = usePatientAppointments(params.patientId);
-  const { data: encounters } = usePatientEncounters(params.patientId);
 
-  const upcomingAppointment = useMemo(() => {
-    if (!appointments || appointments.length === 0) return null;
-    const now = Date.now();
-    return (
-      appointments
-        .filter((appointment) => new Date(appointment.startTime).getTime() >= now)
-        .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())[0] || null
-    );
-  }, [appointments]);
-
-  const previousEncounter = useMemo(() => {
-    if (!encounters || encounters.length === 0) return null;
-    return [...encounters].sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())[0] || null;
-  }, [encounters]);
-
-  const aiSummary = useMemo(() => {
-    if (!patient) return 'AI summary will appear once patient data is available.';
-    const age = calculateAge(patient.dateOfBirth);
-    const parts = [
-      `${patient.firstName} ${patient.lastName}`,
-      age ? `${age}-year-old ${patient.gender}` : patient.gender,
-      patient.chronicConditions ? `with chronic history of ${patient.chronicConditions}` : null,
-      patient.allergies ? `allergies: ${patient.allergies}` : null,
-    ].filter(Boolean);
-
-    const appointmentBit = upcomingAppointment
-      ? `Next visit scheduled for ${formatDateTime(upcomingAppointment.startTime)}.`
-      : 'No upcoming appointments scheduled.';
-
-    const encounterBit = previousEncounter
-      ? `Last encounter recorded ${formatDateTime(previousEncounter.startTime)}.`
-      : 'No prior encounters logged yet.';
-
-    return `${parts.join(', ')}. ${appointmentBit} ${encounterBit}`;
-  }, [patient, upcomingAppointment, previousEncounter]);
-
-  const aiActionItems = useMemo(() => {
-    if (!patient) return [] as string[];
-    const actions: string[] = [];
-    if (!upcomingAppointment) {
-      actions.push('Book a follow-up appointment to maintain continuity of care.');
-    }
-    if (patient.chronicConditions) {
-      actions.push('Review chronic condition care plans for possible adjustments.');
-    }
-    if (!patient.insuranceExpiryDate) {
-      actions.push('Confirm insurance coverage and attach policy details.');
-    }
-    if (previousEncounter && !previousEncounter.endTime) {
-      actions.push('Close the last encounter with disposition notes.');
-    }
-    if (actions.length === 0) {
-      actions.push('All critical tasks look up to date. Keep monitoring vitals and adherence.');
-    }
-    return actions;
-  }, [patient, upcomingAppointment, previousEncounter]);
-
-  const riskFlags = useMemo(() => {
-    if (!patient) return [] as { label: string; severity: 'low' | 'moderate' | 'high' }[];
-    const flags: { label: string; severity: 'low' | 'moderate' | 'high' }[] = [];
-    const age = calculateAge(patient.dateOfBirth);
-    if (age && age >= 65) {
-      flags.push({ label: 'Senior patient – monitor fall risk & polypharmacy', severity: 'moderate' });
-    }
-    if (patient.chronicConditions) {
-      flags.push({ label: 'Chronic conditions documented', severity: 'moderate' });
-    }
-    if (patient.allergies) {
-      flags.push({ label: 'Allergy profile present – verify before prescribing', severity: 'high' });
-    }
-    if (!patient.emergencyContactNumber) {
-      flags.push({ label: 'Missing emergency contact number', severity: 'low' });
-    }
-    return flags;
-  }, [patient]);
-
-  const dataGaps = useMemo(() => {
-    if (!patient) return [] as string[];
-    const gaps: string[] = [];
-    if (!patient.email) gaps.push('Email address not on file');
-    if (!patient.address) gaps.push('Mailing address incomplete');
-    if (!patient.insuranceProvider) gaps.push('Insurance provider not captured');
-    if (!patient.bloodGroup) gaps.push('Blood group undocumented');
-    return gaps;
-  }, [patient]);
+  // Live LLM-generated Care Narrative + Recommendations — same endpoint/cache as
+  // Care Context's narrative card, so viewing that page first means this loads
+  // from the Redis cache instead of spending tokens again.
+  const { data: aiNarrative, isFetching: aiFetching } = useCareNarrative(params.patientId);
+  const aiReady = isNarrativeReady(aiNarrative) ? aiNarrative : null;
 
   if (isLoading) {
     return (
@@ -151,175 +62,109 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
     );
   }
 
-  const patientAge = calculateAge(patient.dateOfBirth);
-
   return (
     <div className="space-y-6">
-      <Card className="border-primary/50 bg-primary/5">
-        <CardHeader>
-          <div className="flex flex-wrap items-center justify-between gap-4 text-primary">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5" />
-              <CardTitle>Patient AI+</CardTitle>
-            </div>
-            <Badge variant="secondary" className="text-primary">
-              Beta · AI generated
-            </Badge>
-          </div>
-          <CardDescription>Unified patient identity + AI briefing for instant context.</CardDescription>
-          <div className="mt-3 flex items-center gap-2">
-            <Button asChild size="sm" variant="outline" className="w-fit">
-              <Link href={`/${params.locale}/patients/${params.patientId}/360`}>
-                <Compass className="mr-2 h-4 w-4" /> View Patient 360
-              </Link>
-            </Button>
-            <CareContextEntryButton patientId={params.patientId} locale={params.locale as string} />
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            These insights are generated automatically from the latest charted data, encounters, and scheduling
-            context. Validate recommendations before acting.
-          </p>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-lg border bg-background p-4 shadow-sm">
-              <h3 className="mt-1 text-2xl font-semibold">
-                {patient.firstName} {patient.middleName && `${patient.middleName} `}
-                {patient.lastName}
-              </h3>
-              <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                <div>
-                  <dt className="text-muted-foreground">MRN</dt>
-                  <dd className="font-medium">{patient.mrn}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Status</dt>
-                  <dd className="font-medium capitalize">{patient.status}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Age / Gender</dt>
-                  <dd className="font-medium">
-                    {patientAge ? `${patientAge} yrs` : '—'} · {patient.gender}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Phone</dt>
-                  <dd className="font-medium">{patient.phoneNumber || 'No phone on file'}</dd>
-                </div>
-              </dl>
-            </div>
-            <div className="rounded-lg border bg-background p-4 shadow-sm">
-              <h3 className="mt-1 text-lg font-semibold">AI Snapshot</h3>
-              <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <span className="font-medium text-foreground">Upcoming:</span>{' '}
-                  {upcomingAppointment
-                    ? `${upcomingAppointment.appointmentType || 'Visit'} · ${formatDateTime(
-                        upcomingAppointment.startTime
-                      )}`
-                    : 'No appointment scheduled'}
-                </li>
-                <li>
-                  <span className="font-medium text-foreground">Last encounter:</span>{' '}
-                  {previousEncounter
-                    ? `${previousEncounter.encounterClass} · ${formatDateTime(previousEncounter.startTime)}`
-                    : 'No encounter history yet'}
-                </li>
-                <li>
-                  <span className="font-medium text-foreground">Primary focus:</span>{' '}
-                  {patient.chronicConditions || patient.allergies || 'Monitoring general wellness'}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ClipboardList className="h-5 w-5 text-primary" />
-              AI Clinical Summary
-            </CardTitle>
-            <CardDescription>Context-aware overview for quick preparation.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-base leading-relaxed text-muted-foreground">{aiSummary}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ClipboardCheck className="h-5 w-5 text-primary" />
-              Suggested Next Actions
-            </CardTitle>
-            <CardDescription>AI-prioritized to-do list based on current data.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2 text-sm">
-              {aiActionItems.map((item, index) => (
-                <li key={`${item}-${index}`} className="flex items-start gap-2">
-                  <Badge variant="secondary" className="mt-0.5 flex-shrink-0">
-                    {index + 1}
-                  </Badge>
-                  <span className="text-muted-foreground">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-2 text-primary">
+          <Sparkles className="h-5 w-5" />
+          <h1 className="text-xl font-semibold">Patient AI+</h1>
+          <Badge variant="secondary" className="text-primary">
+            Beta · AI generated
+          </Badge>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button asChild size="sm" variant="outline">
+            <Link href={`/${params.locale}/patients/${params.patientId}/360`}>
+              <Compass className="mr-2 h-4 w-4" /> View Patient 360
+            </Link>
+          </Button>
+          <CareContextEntryButton patientId={params.patientId} locale={params.locale as string} />
+        </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-[320px_1fr] lg:items-start">
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
-              Risk Flags
-            </CardTitle>
-            <CardDescription>Automatically detected considerations.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {riskFlags.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No elevated risks detected.</p>
-            ) : (
-              <ul className="space-y-2">
-                {riskFlags.map((flag, index) => (
-                  <li key={`${flag.label}-${index}`} className="flex items-center gap-3 rounded-md border p-3">
-                    <Activity className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{flag.label}</p>
-                      <p className="text-xs uppercase text-muted-foreground">Severity: {flag.severity}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+          <CardContent className="pt-4">
+            <PatientContextRail patient={patient} />
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-emerald-500" />
-              Data Quality + Gaps
-            </CardTitle>
-            <CardDescription>Areas to enrich for better AI outcomes.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {dataGaps.length === 0 ? (
-              <p className="text-sm text-muted-foreground">All core demographic and coverage fields are populated.</p>
-            ) : (
-              <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-                {dataGaps.map((gap) => (
-                  <li key={gap}>{gap}</li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <NotebookText className="h-5 w-5 text-primary" />
+                AI Care Narrative
+              </CardTitle>
+              <CardDescription>
+                Live, LLM-generated clinical synthesis — the same engine behind Care Context.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {aiFetching && !aiNarrative ? (
+                <LoadingSpinner size="sm" text="Generating care narrative..." />
+              ) : aiReady ? (
+                <div className="space-y-3 text-sm">
+                  {aiReady.snapshot && (
+                    <p className="font-semibold leading-snug text-foreground">{aiReady.snapshot}</p>
+                  )}
+                  <div className="space-y-3">
+                    {aiReady.sections.map((section) => (
+                      <div key={section.title}>
+                        <SectionLabel>{section.title}</SectionLabel>
+                        <ul className="mt-1.5 list-disc space-y-1 pl-4 text-muted-foreground">
+                          {section.bullets.map((bullet, i) => (
+                            <li key={i} className="leading-snug">{bullet}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="pt-1 text-xs text-muted-foreground/70">
+                    AI generated · {aiReady.model} · {formatDateTime(aiReady.generatedAt)}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">AI narrative unavailable for this patient right now.</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Lightbulb className="h-5 w-5 text-primary" />
+                AI Recommendations
+              </CardTitle>
+              <CardDescription>Considerations for the clinician to evaluate — not orders.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {aiFetching && !aiNarrative ? (
+                <LoadingSpinner size="sm" text="Generating recommendations..." />
+              ) : aiReady && (aiReady.recommendations?.length ?? 0) > 0 ? (
+                <div className="space-y-3">
+                  <ul className="space-y-2 text-sm">
+                    {aiReady.recommendations.map((item, index) => (
+                      <li key={`${item}-${index}`} className="flex items-start gap-2">
+                        <Badge variant="secondary" className="mt-0.5 flex-shrink-0">
+                          {index + 1}
+                        </Badge>
+                        <span className="text-muted-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="pt-1 text-xs text-muted-foreground/70">
+                    AI generated · {aiReady.model} · {formatDateTime(aiReady.generatedAt)}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  AI recommendations unavailable for this patient right now.
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

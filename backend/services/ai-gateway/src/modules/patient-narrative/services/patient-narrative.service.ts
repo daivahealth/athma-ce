@@ -48,6 +48,12 @@ export type NarrativeResult =
       narrative: string;
       snapshot: string;
       sections: NarrativeSection[];
+      /**
+       * Short, non-prescriptive clinician-facing considerations generated in the
+       * same LLM call as the narrative. Intentionally not rendered on Care
+       * Context — only the Patient AI+ page surfaces these.
+       */
+      recommendations: string[];
       specialty: string;
       model: string;
       sourceCount: number;
@@ -67,7 +73,9 @@ export type NarrativeResult =
  * Falls back to a single "Summary" section holding the raw text if the
  * response isn't valid JSON, so a malformed reply still renders.
  */
-function parseNarrativeJson(raw: string): { snapshot: string; sections: NarrativeSection[] } {
+function parseNarrativeJson(
+  raw: string,
+): { snapshot: string; sections: NarrativeSection[]; recommendations: string[] } {
   const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
   const candidate = fenced ? fenced[1] : raw;
   try {
@@ -82,20 +90,27 @@ function parseNarrativeJson(raw: string): { snapshot: string; sections: Narrativ
           }))
           .filter((s: NarrativeSection) => s.title && s.bullets.length > 0)
       : [];
+    const recommendations: string[] = Array.isArray(parsed.recommendations)
+      ? parsed.recommendations.filter((r: unknown): r is string => typeof r === 'string' && r.trim().length > 0).slice(0, 6)
+      : [];
     if (!snapshot && sections.length === 0) throw new Error('Empty narrative JSON');
-    return { snapshot, sections };
+    return { snapshot, sections, recommendations };
   } catch {
-    return { snapshot: '', sections: [{ title: 'Summary', bullets: [raw.trim()] }] };
+    return { snapshot: '', sections: [{ title: 'Summary', bullets: [raw.trim()] }], recommendations: [] };
   }
 }
 
-/** Flattens structured sections back into plain text (dry-run / raw fallback). */
-function flattenNarrative(snapshot: string, sections: NarrativeSection[]): string {
+/** Flattens structured sections + recommendations back into plain text (dry-run / raw fallback). */
+function flattenNarrative(snapshot: string, sections: NarrativeSection[], recommendations: string[]): string {
   const parts: string[] = [];
   if (snapshot) parts.push(snapshot);
   for (const s of sections) {
     parts.push(`${s.title}:`);
     parts.push(...s.bullets.map((b) => `- ${b}`));
+  }
+  if (recommendations.length > 0) {
+    parts.push('Recommendations:');
+    parts.push(...recommendations.map((r) => `- ${r}`));
   }
   return parts.join('\n');
 }
@@ -156,13 +171,14 @@ export class PatientNarrativeService {
         maxTokens: 1500,
       });
 
-      const { snapshot, sections } = parseNarrativeJson(response.content.trim());
+      const { snapshot, sections, recommendations } = parseNarrativeJson(response.content.trim());
 
       const result: NarrativeResult = {
         available: true,
-        narrative: flattenNarrative(snapshot, sections),
+        narrative: flattenNarrative(snapshot, sections, recommendations),
         snapshot,
         sections,
+        recommendations,
         specialty: context.specialty,
         model: response.model,
         sourceCount,
