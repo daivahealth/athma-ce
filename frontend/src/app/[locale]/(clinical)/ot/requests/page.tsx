@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { Ban, CheckCircle2, FileText, Filter, Plus, Search, Send, ShieldCheck, User } from 'lucide-react';
+import { Ban, CheckCircle2, Eye, FileText, Filter, Plus, Search, Send, ShieldCheck, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -164,10 +164,14 @@ export default function OtRequestsPage({ params }: { params: { locale: string } 
               </TableHeader>
               <TableBody>
                 {orderedRequests.map((request) => (
-                  <TableRow key={request.id}>
+                  <TableRow
+                    key={request.id}
+                    className="cursor-pointer"
+                    onClick={() => router.push(`/${params.locale}/ot/requests/${request.id}`)}
+                  >
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="font-medium">{request.procedureName}</div>
+                        <div className="font-medium text-primary hover:underline">{request.procedureName}</div>
                         <div className="text-sm text-muted-foreground">
                           {request.procedureCode || request.surgeryType || 'Procedure details pending'}
                         </div>
@@ -211,7 +215,15 @@ export default function OtRequestsPage({ params }: { params: { locale: string } 
                       {format(new Date(request.requestedAt), 'dd MMM yyyy, HH:mm')}
                     </TableCell>
                     <TableCell>
-                      <div className="flex justify-end gap-2">
+                      <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => router.push(`/${params.locale}/ot/requests/${request.id}`)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          View
+                        </Button>
                         {request.status === 'DRAFT' && (
                           <Button
                             size="sm"

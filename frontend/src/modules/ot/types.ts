@@ -88,6 +88,7 @@ export interface OtReport {
   remarks?: string | null;
   versions?: OtReportVersion[];
   patientDisplay?: PatientDisplay | null;
+  schedule?: { scheduledStartTime: string; scheduledEndTime: string } | null;
 }
 
 export interface OtSchedule {

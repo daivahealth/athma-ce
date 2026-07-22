@@ -87,6 +87,9 @@ export class OtReportsService {
           where: { isCurrent: true },
           take: 1,
         },
+        schedule: {
+          select: { scheduledStartTime: true, scheduledEndTime: true },
+        },
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -103,6 +106,9 @@ export class OtReportsService {
       include: {
         versions: {
           orderBy: { versionNo: 'desc' },
+        },
+        schedule: {
+          select: { scheduledStartTime: true, scheduledEndTime: true },
         },
       },
     });

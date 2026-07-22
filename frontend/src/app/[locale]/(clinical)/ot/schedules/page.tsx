@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { CalendarClock, Filter, PauseCircle, Plus, Search, StopCircle, User } from 'lucide-react';
+import { CalendarClock, Eye, Filter, PauseCircle, Plus, Search, StopCircle, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -180,10 +180,14 @@ export default function OtSchedulesPage({ params }: { params: { locale: string }
               </TableHeader>
               <TableBody>
                 {orderedSchedules.map((schedule) => (
-                  <TableRow key={schedule.id}>
+                  <TableRow
+                    key={schedule.id}
+                    className="cursor-pointer"
+                    onClick={() => router.push(`/${params.locale}/ot/schedules/${schedule.id}`)}
+                  >
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="font-medium">
+                        <div className="font-medium text-primary hover:underline">
                           {format(new Date(schedule.scheduledStartTime), 'dd MMM yyyy, HH:mm')}
                         </div>
                         <div className="text-sm text-muted-foreground">
@@ -233,7 +237,15 @@ export default function OtSchedulesPage({ params }: { params: { locale: string }
                     <TableCell>{schedule.anaesthesiaType || 'Not set'}</TableCell>
                     <TableCell>{schedule.isCurrent ? 'Current' : 'Historical'}</TableCell>
                     <TableCell>
-                      <div className="flex justify-end gap-2">
+                      <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => router.push(`/${params.locale}/ot/schedules/${schedule.id}`)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          View
+                        </Button>
                         {schedule.status === 'PLANNED' && (
                           <Button
                             size="sm"

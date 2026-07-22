@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { FileSignature, Filter, Plus, RotateCcw, Search, StopCircle, User } from 'lucide-react';
+import { Eye, FileSignature, Filter, Plus, RotateCcw, Search, StopCircle, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -160,10 +160,14 @@ export default function OtReportsPage({ params }: { params: { locale: string } }
               </TableHeader>
               <TableBody>
                 {orderedReports.map((report) => (
-                  <TableRow key={report.id}>
+                  <TableRow
+                    key={report.id}
+                    className="cursor-pointer"
+                    onClick={() => router.push(`/${params.locale}/ot/reports/${report.id}`)}
+                  >
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="font-medium">{report.reportNumber}</div>
+                        <div className="font-medium text-primary hover:underline">{report.reportNumber}</div>
                         {report.remarks ? (
                           <div className="line-clamp-1 text-sm text-muted-foreground">
                             {report.remarks}
@@ -175,7 +179,15 @@ export default function OtReportsPage({ params }: { params: { locale: string } }
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>{report.scheduleId}</TableCell>
+                    <TableCell>
+                      {report.schedule ? (
+                        <span className="text-sm">
+                          {format(new Date(report.schedule.scheduledStartTime), 'dd MMM yyyy, HH:mm')}
+                        </span>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4 text-muted-foreground" />
@@ -209,7 +221,15 @@ export default function OtReportsPage({ params }: { params: { locale: string } }
                     </TableCell>
                     <TableCell>{report.versions?.length ?? 0}</TableCell>
                     <TableCell>
-                      <div className="flex justify-end gap-2">
+                      <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => router.push(`/${params.locale}/ot/reports/${report.id}`)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          View
+                        </Button>
                         {['DRAFT', 'AMENDED'].includes(report.reportStatus) && (
                           <Button
                             size="sm"
