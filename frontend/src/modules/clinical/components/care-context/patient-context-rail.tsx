@@ -7,7 +7,6 @@ import { Phone, MessageSquare, Plus, PanelLeftClose, AlertTriangle, Stethoscope,
 
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -234,9 +233,6 @@ export function PatientContextRail({
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h2 className="truncate text-lg font-bold text-foreground">{name}</h2>
-              <Badge variant={patient.status === 'active' ? 'default' : 'secondary'} className="capitalize">
-                {patient.status}
-              </Badge>
             </div>
             <p className="text-xs text-muted-foreground">
               {age != null ? `${age}y` : '—'} · <span className="capitalize">{patient.gender}</span>

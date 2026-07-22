@@ -139,9 +139,6 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
         </Button>
         <div>
           <h1 className="text-2xl font-bold leading-tight">Care Context</h1>
-          <p className="text-sm text-muted-foreground">
-            {patientName} · <span className="font-mono">{patient.mrn}</span>
-          </p>
         </div>
         <div className="ml-auto flex flex-wrap gap-2">
           <Button variant="outline" size="sm" asChild>
