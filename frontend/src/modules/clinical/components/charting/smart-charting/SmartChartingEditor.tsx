@@ -1,9 +1,10 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import { NodeSelection, TextSelection } from '@tiptap/pm/state';
 import StarterKit from '@tiptap/starter-kit';
+import { format, parseISO } from 'date-fns';
 import {
   FileText,
   Clock,
@@ -12,6 +13,7 @@ import {
   ClipboardList,
   Pill,
   Plus,
+  Sparkles,
   type LucideIcon,
 } from 'lucide-react';
 import {
@@ -40,10 +42,37 @@ import {
 import { NoteType } from '@/modules/clinical/types/charting';
 import { useToast } from '@/components/ui/use-toast';
 import { extractClinicalText } from '@/modules/clinical/utils/extract-clinical-text';
+import {
+  readAiChartPrefill,
+  clearAiChartPrefill,
+  type AiChartPrefillPayload,
+} from '@/modules/clinical/utils/ai-chart-prefill';
 import { AiCodingSuggestionsPanel } from './AiCodingSuggestionsPanel';
 import type { AiCodingSuggestionsPanelHandle } from './AiCodingSuggestionsPanel';
 import type { SmartChartingEditorProps, SmartChartingStorageFormat } from './types';
 import type { CreateClinicalCodingInput } from '@/modules/clinical/types/clinical-coding';
+
+const formatDateTime = (dateString?: string | null) => {
+  if (!dateString) return 'Unknown';
+  try {
+    return format(parseISO(dateString), 'MMM dd, yyyy • h:mm a');
+  } catch {
+    return 'Invalid date';
+  }
+};
+
+// Builds a textBlock node with one paragraph per non-empty line of `text`,
+// so multi-line AI content (e.g. a bulleted history section) renders as
+// separate paragraphs instead of one run-on line.
+function buildTextBlockNode(schema: Editor['schema'], blockType: SmartChartingBlockType, text: string) {
+  const header = BLOCK_HEADERS[blockType];
+  const blockId = `blk_${Math.random().toString(36).slice(2, 10)}`;
+  const lines = text.split('\n').filter((line) => line.trim().length > 0);
+  const paragraphs = (lines.length ? lines : ['']).map((line) =>
+    schema.nodes.paragraph.create(undefined, line ? schema.text(line) : undefined)
+  );
+  return schema.nodes.textBlock.create({ blockType, header, blockId }, paragraphs);
+}
 
 const ICON_MAP: Record<string, LucideIcon> = {
   FileText,
@@ -106,11 +135,13 @@ export function SmartChartingEditor({
   const [existingBlockTypes, setExistingBlockTypes] = useState<Set<string>>(new Set());
   const [clinicalText, setClinicalText] = useState('');
   const [clinicalBlockTypes, setClinicalBlockTypes] = useState<string[]>([]);
+  const [aiPrefill, setAiPrefill] = useState<AiChartPrefillPayload | null>(null);
+  const checkedAiPrefillRef = useRef(false);
 
   // Ref to the AI suggestions panel for reading current suggestions on Save
   const aiPanelRef = useRef<AiCodingSuggestionsPanelHandle>(null);
 
-  const { data: encounterNotes = [] } = useClinicalNotesByEncounter(encounterId);
+  const { data: encounterNotes = [], isLoading: notesLoading } = useClinicalNotesByEncounter(encounterId);
   const { mutateAsync: createClinicalNote, isPending: isCreatingNote } = useCreateClinicalNote();
   const { mutateAsync: updateNote, isPending: isUpdatingNote } = useUpdateClinicalNote();
   const { mutateAsync: saveClinicalCodings } = useSaveClinicalCodings();
@@ -172,22 +203,26 @@ export function SmartChartingEditor({
     },
   });
 
-  // Load saved content
+  // Load saved content. Waits for the notes query to settle so a brand-new
+  // encounter (no note yet) still flips to initialized instead of hanging —
+  // otherwise nothing gated on `isInitialized` (e.g. the AI prefill check
+  // below) would ever run for a fresh chart.
   useEffect(() => {
-    if (!editor || isInitialized || !smartChartingNote) return;
+    if (!editor || isInitialized || notesLoading) return;
 
-    const stored = smartChartingNote.content as SmartChartingStorageFormat | undefined;
-    if (stored?.editorType === 'smart-charting' && stored.tiptapJson) {
-      try {
-        editor.commands.setContent(stored.tiptapJson);
-        setExistingBlockTypes(getExistingBlockTypes(editor));
-        setIsInitialized(true);
-      } catch (err) {
-        console.error('Failed to restore editor content:', err);
+    if (smartChartingNote) {
+      const stored = smartChartingNote.content as SmartChartingStorageFormat | undefined;
+      if (stored?.editorType === 'smart-charting' && stored.tiptapJson) {
+        try {
+          editor.commands.setContent(stored.tiptapJson);
+          setExistingBlockTypes(getExistingBlockTypes(editor));
+        } catch (err) {
+          console.error('Failed to restore editor content:', err);
+        }
       }
     }
     setIsInitialized(true);
-  }, [editor, smartChartingNote, isInitialized]);
+  }, [editor, smartChartingNote, isInitialized, notesLoading]);
 
   // Update existing block types on mount
   useEffect(() => {
@@ -195,6 +230,71 @@ export function SmartChartingEditor({
       setExistingBlockTypes(getExistingBlockTypes(editor));
     }
   }, [editor]);
+
+  // Check once (after the saved note has loaded) whether the clinician copied
+  // an AI draft over from Patient AI+ for this encounter. Only offer to insert
+  // it if there's something left to insert that isn't already in the chart.
+  useEffect(() => {
+    if (!isInitialized || checkedAiPrefillRef.current) return;
+    checkedAiPrefillRef.current = true;
+
+    const payload = readAiChartPrefill(encounterId);
+    if (!payload) return;
+
+    const hasInsertable =
+      (!!payload.chiefHpi?.trim() && !existingBlockTypes.has('chiefHpi')) ||
+      (!!payload.history?.trim() && !existingBlockTypes.has('history')) ||
+      (!!payload.notes?.trim() && !existingBlockTypes.has('notes'));
+
+    if (!hasInsertable) {
+      clearAiChartPrefill(encounterId);
+      return;
+    }
+    setAiPrefill(payload);
+  }, [isInitialized, encounterId, existingBlockTypes]);
+
+  const handleInsertAiPrefill = useCallback(() => {
+    if (!editor || !aiPrefill) return;
+
+    const entries: Array<[SmartChartingBlockType, string | undefined]> = [
+      ['chiefHpi', aiPrefill.chiefHpi],
+      ['history', aiPrefill.history],
+      ['notes', aiPrefill.notes],
+    ];
+    const toInsert = entries.filter(
+      (entry): entry is [SmartChartingBlockType, string] =>
+        !!entry[1]?.trim() && !existingBlockTypes.has(entry[0])
+    );
+
+    if (toInsert.length === 0) {
+      clearAiChartPrefill(encounterId);
+      setAiPrefill(null);
+      return;
+    }
+
+    const { schema } = editor.state;
+    const { tr } = editor.state;
+    let insertPos = tr.doc.content.size;
+    for (const [blockType, text] of toInsert) {
+      const node = buildTextBlockNode(schema, blockType, text);
+      tr.insert(insertPos, node);
+      insertPos += node.nodeSize;
+    }
+    editor.view.dispatch(tr);
+
+    setExistingBlockTypes(getExistingBlockTypes(editor));
+    clearAiChartPrefill(encounterId);
+    setAiPrefill(null);
+    toast({
+      title: 'AI draft inserted',
+      description: 'Review the inserted content, then Save when ready.',
+    });
+  }, [editor, aiPrefill, existingBlockTypes, encounterId, toast]);
+
+  const handleDismissAiPrefill = useCallback(() => {
+    clearAiChartPrefill(encounterId);
+    setAiPrefill(null);
+  }, [encounterId]);
 
   // Keyboard shortcut: Cmd/Ctrl + / to open Add Block menu
   useEffect(() => {
@@ -442,6 +542,27 @@ export function SmartChartingEditor({
             lastSaved={lastSaved}
             onSave={handleSave}
           />
+
+          {aiPrefill && (
+            <div className="mt-4 flex items-start gap-3 rounded-lg border border-violet-800/40 bg-gradient-to-r from-violet-950 to-indigo-950 p-4 text-violet-100">
+              <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-violet-300" />
+              <div className="flex-1 space-y-2">
+                <p className="text-sm font-medium">AI-drafted content is ready for this encounter</p>
+                <p className="text-xs text-violet-300/70">
+                  Copied from Patient AI+ · generated {formatDateTime(aiPrefill.generatedAt)}. Nothing
+                  is saved until you insert it below and click Save.
+                </p>
+                <div className="flex gap-2 pt-1">
+                  <Button size="sm" onClick={handleInsertAiPrefill}>
+                    Insert AI Draft
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={handleDismissAiPrefill}>
+                    Dismiss
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-3">
             <EditorContent editor={editor} className="smart-charting-editor" />

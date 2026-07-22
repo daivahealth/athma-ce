@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
-import { Search, FileText, Calendar, Stethoscope } from 'lucide-react';
+import { Search, FileText, Calendar, Stethoscope, Sparkles } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -287,7 +287,15 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
                         </div>
                       </TableCell>
                       <TableCell>{renderStatusBadge(encounter.status)}</TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right space-x-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => router.push(`/${params.locale}/patients-ai/${encounter.patientId}`)}
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          AI+
+                        </Button>
                         <Button
                           size="sm"
                           onClick={() => handleOpenCharting(encounter.id)}
