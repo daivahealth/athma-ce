@@ -1,13 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
-import { Sparkles, Compass, Lightbulb, NotebookText } from 'lucide-react';
+import { Sparkles, Lightbulb, NotebookText } from 'lucide-react';
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import { PatientContextRail } from '@/modules/clinical/components/care-context/patient-context-rail';
 import { SectionLabel } from '@/modules/clinical/components/care-context/parts';
@@ -73,11 +71,6 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button asChild size="sm" variant="outline">
-            <Link href={`/${params.locale}/patients/${params.patientId}/360`}>
-              <Compass className="mr-2 h-4 w-4" /> View Patient 360
-            </Link>
-          </Button>
           <CareContextEntryButton patientId={params.patientId} locale={params.locale as string} />
         </div>
       </div>
@@ -132,13 +125,15 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
         </div>
 
         <div>
-          <Card>
+          <Card className="border-violet-800/50 bg-gradient-to-b from-violet-950 to-indigo-950 text-violet-100 shadow-lg shadow-violet-950/40">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Lightbulb className="h-4 w-4 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-base text-violet-100">
+                <Lightbulb className="h-4 w-4 text-violet-300" />
                 AI Recommendations
               </CardTitle>
-              <CardDescription>Considerations for the clinician to evaluate — not orders.</CardDescription>
+              <CardDescription className="text-violet-300/70">
+                Considerations for the clinician to evaluate — not orders.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {aiFetching && !aiNarrative ? (
@@ -148,19 +143,19 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
                   <ul className="space-y-2 text-sm">
                     {aiReady.recommendations.map((item, index) => (
                       <li key={`${item}-${index}`} className="flex items-start gap-2">
-                        <Badge variant="secondary" className="mt-0.5 flex-shrink-0">
+                        <Badge className="mt-0.5 flex-shrink-0 border-transparent bg-violet-500 text-white hover:bg-violet-500">
                           {index + 1}
                         </Badge>
-                        <span className="text-muted-foreground">{item}</span>
+                        <span className="text-violet-100/90">{item}</span>
                       </li>
                     ))}
                   </ul>
-                  <p className="pt-1 text-xs text-muted-foreground/70">
+                  <p className="pt-1 text-xs text-violet-300/60">
                     AI generated · {aiReady.model} · {formatDateTime(aiReady.generatedAt)}
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-violet-300/70">
                   AI recommendations unavailable for this patient right now.
                 </p>
               )}

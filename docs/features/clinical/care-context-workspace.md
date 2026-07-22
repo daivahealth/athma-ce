@@ -14,10 +14,11 @@ paths, and renders honest placeholders where a backing service is absent.
 
 ## Access & gating
 
-- Entry points: a circular icon button next to every **View Patient 360**
-  button (patients list, patient chart, Patient AI+).
+- Entry points: a circular icon button on the patients list, patient chart, and
+  Patient AI+ pages.
 - The workspace is intended for information-rich patients. A patient with fewer
-  than 10 encounters is redirected to the existing Patient 360 view.
+  encounters than the `care_context.min_encounters` config threshold is
+  redirected to the patient chart instead.
 - Opening the workspace auto-collapses the app sidebar to maximize width.
 
 ## Layout

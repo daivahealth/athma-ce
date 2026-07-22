@@ -57,12 +57,12 @@ export function CareContextView({ locale, patientId }: { locale: string; patient
   }, [isCollapsed, toggleSidebar]);
 
   // Gate: Care Context is only for information-rich patients. If a patient with a
-  // thin history is reached directly, fall back to the existing Patient 360 view.
+  // thin history is reached directly, fall back to the patient chart.
   const encountersReady = !encountersLoading && encounters !== undefined;
   const belowThreshold = encountersReady && (encounters?.length ?? 0) < minEncounters;
   React.useEffect(() => {
     if (belowThreshold) {
-      router.replace(`/${locale}/patients/${patientId}/360`);
+      router.replace(`/${locale}/patients/${patientId}`);
     }
   }, [belowThreshold, router, locale, patientId]);
 

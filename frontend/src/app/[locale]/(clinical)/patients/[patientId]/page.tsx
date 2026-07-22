@@ -25,7 +25,7 @@ import {
   Activity,
   Stethoscope,
   LifeBuoy,
-  Compass,
+  Sparkles,
 } from 'lucide-react';
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import { format, parseISO } from 'date-fns';
@@ -217,10 +217,10 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => router.push(`/${params.locale}/patients/${patient.id}/360`)}
+            onClick={() => router.push(`/${params.locale}/patients-ai/${patient.id}`)}
           >
-            <Compass className="h-4 w-4 mr-2" />
-            Patient 360
+            <Sparkles className="h-4 w-4 mr-2" />
+            Patient AI+
           </Button>
           <CareContextEntryButton patientId={patient.id} locale={params.locale as string} size="md" />
           <Button

@@ -71,11 +71,11 @@ function getDocumentUrl(result: SearchResult, locale: string): string {
     case 'radiology_report':
     case 'lab_report':
     case 'pathology_report':
-      // Navigate to patient 360 view or encounter
+      // Navigate to encounter, or fall back to the patient chart
       if (encounterId) {
         return `/${locale}/encounters/${encounterId}`;
       }
-      return `/${locale}/patients/${patientId}/360`;
+      return `/${locale}/patients/${patientId}`;
 
     default:
       return `/${locale}/patients/${patientId}`;
