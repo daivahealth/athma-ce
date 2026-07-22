@@ -82,14 +82,14 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[320px_1fr] lg:items-start">
+      <div className="grid gap-6 lg:grid-cols-[320px_1fr_280px] lg:items-start">
         <Card>
           <CardContent className="pt-4">
             <PatientContextRail patient={patient} />
           </CardContent>
         </Card>
 
-        <div className="space-y-6">
+        <div>
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -129,11 +129,13 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
               )}
             </CardContent>
           </Card>
+        </div>
 
+        <div>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Lightbulb className="h-4 w-4 text-primary" />
                 AI Recommendations
               </CardTitle>
               <CardDescription>Considerations for the clinician to evaluate — not orders.</CardDescription>
