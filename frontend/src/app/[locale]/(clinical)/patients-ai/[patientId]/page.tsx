@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
-import { Sparkles, Lightbulb, NotebookText, Stethoscope, ArrowRight, Grid3x3 } from 'lucide-react';
+import { Sparkles, Lightbulb, NotebookText, Stethoscope, ArrowRight, ArrowLeft, Grid3x3 } from 'lucide-react';
 import { PatientContextRail } from '@/modules/clinical/components/care-context/patient-context-rail';
 import { SectionLabel } from '@/modules/clinical/components/care-context/parts';
 import { useCareNarrative } from '@/modules/clinical/hooks/use-care-narrative';
@@ -114,12 +114,17 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-primary">
-          <Sparkles className="h-5 w-5" />
-          <h1 className="text-xl font-semibold">Patient AI+</h1>
-          <Badge variant="secondary" className="text-primary">
-            Beta · AI generated
-          </Badge>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={() => router.back()} aria-label="Back">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div className="flex items-center gap-2 text-primary">
+            <Sparkles className="h-5 w-5" />
+            <h1 className="text-xl font-semibold">Patient AI+</h1>
+            <Badge variant="secondary" className="text-primary">
+              Beta · AI generated
+            </Badge>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <Button asChild size="sm" variant="outline">
