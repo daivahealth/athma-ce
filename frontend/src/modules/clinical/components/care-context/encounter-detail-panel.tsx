@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
-import { Zap, FileText, Shield, FlaskConical, Receipt, AlertOctagon } from 'lucide-react';
+import { Zap, FileText, Shield, FlaskConical, Receipt } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -13,26 +13,16 @@ import { useClaims } from '@/modules/rcm/hooks/use-claims';
 import { usePreAuthRequests } from '@/modules/rcm/hooks/use-preauth';
 import { useEncounterCoverages } from '@/modules/rcm/hooks/use-encounter-coverages';
 import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
-import { useDenials, useDraftAppeal, useFileAppeal } from '@/modules/rcm/hooks/use-denials';
 import { useEncounterObservations } from '@/modules/clinical/hooks/use-observations';
 import { useEncounterResults } from '@/modules/clinical/hooks/use-reporting';
-import type { PatientResult } from '@/modules/clinical/types/reporting';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
+import { ResultDetailPane } from '@/modules/clinical/components/reporting/ResultDetailPane';
 import { Field, SectionLabel, EmptyState, Chip, EncounterClassChip } from './parts';
 
 function fmtDateTime(value?: string | null): string {
   if (!value) return '—';
   try {
     return format(parseISO(value), 'MMM dd, yyyy · HH:mm');
-  } catch {
-    return value;
-  }
-}
-
-function fmtDate(value?: string | null): string {
-  if (!value) return '—';
-  try {
-    return format(parseISO(value), 'MMM dd, yyyy');
   } catch {
     return value;
   }
@@ -50,29 +40,7 @@ function titleCase(value?: string | null): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-// A short line describing an encounter document (report) by its type-specific summary.
-function documentSummary(d: PatientResult): string {
-  if (d.imagingSummary) {
-    return [d.imagingSummary.modality, d.imagingSummary.bodyPart, d.imagingSummary.impression]
-      .filter(Boolean)
-      .join(' · ');
-  }
-  if (d.labSummary) {
-    const parts = [`${d.labSummary.itemCount} result${d.labSummary.itemCount === 1 ? '' : 's'}`];
-    if (d.labSummary.abnormalCount > 0) parts.push(`${d.labSummary.abnormalCount} abnormal`);
-    if (d.labSummary.criticalCount > 0) parts.push(`${d.labSummary.criticalCount} critical`);
-    if (d.labSummary.labDiscipline) parts.unshift(d.labSummary.labDiscipline);
-    return parts.join(' · ');
-  }
-  if (d.procedureSummary) {
-    return [d.procedureSummary.procedureDescription, d.procedureSummary.complications]
-      .filter(Boolean)
-      .join(' · ');
-  }
-  return '';
-}
-
-type SectionKey = 'encounter' | 'results' | 'documents' | 'claims' | 'preauth' | 'denials' | 'invoices' | 'policy';
+type SectionKey = 'encounter' | 'results' | 'documents' | 'claims' | 'preauth' | 'invoices' | 'policy';
 
 export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const router = useRouter();
@@ -85,10 +53,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const { data: results, isLoading: resultsLoading } = useEncounterObservations(encounterId);
   const { data: documentsData, isLoading: documentsLoading } = useEncounterResults(encounterId ?? '');
   const { data: invoicesData, isLoading: invoicesLoading } = useInvoices(encounterId ? { encounterId } : undefined);
-  const { data: denialsData, isLoading: denialsLoading } = useDenials(encounterId ? { encounterId } : undefined);
   const { data: staff } = useStaffList();
-  const draftAppeal = useDraftAppeal();
-  const fileAppeal = useFileAppeal();
 
   const providerName = React.useMemo(() => {
     if (!encounter?.primaryStaffId) return undefined;
@@ -102,7 +67,6 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
   const encounterResults = results ?? [];
   const documents = encounterId ? documentsData ?? [] : [];
   const invoices = encounterId ? invoicesData ?? [] : [];
-  const denials = encounterId ? denialsData?.denials ?? [] : [];
 
   // Encounter financials derived from its invoices.
   const financials = React.useMemo(() => {
@@ -124,7 +88,6 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
     documents: null,
     claims: null,
     preauth: null,
-    denials: null,
     invoices: null,
     policy: null,
   });
@@ -144,7 +107,6 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
     { key: 'documents', label: `Documents · ${documents.length}` },
     { key: 'claims', label: `Claims · ${claims.length}` },
     { key: 'preauth', label: `Pre-Auth · ${preauths.length}` },
-    { key: 'denials', label: `Denials · ${denials.length}` },
     { key: 'invoices', label: `Invoices · ${invoices.length}` },
     { key: 'policy', label: `Policy · ${encounterCoverages.length}` },
   ];
@@ -258,7 +220,7 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
           ) : documents.length === 0 ? (
             <EmptyState>No documents recorded for this encounter.</EmptyState>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {documents.map((d) => (
                 <div key={d.id} className="rounded-lg border border-border/60 bg-card/40 p-3">
                   <div className="flex items-start justify-between gap-2">
@@ -276,9 +238,10 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
                       <Badge variant="outline" className="capitalize">{d.reportStatus.toLowerCase()}</Badge>
                     </div>
                   </div>
-                  {documentSummary(d) ? (
-                    <p className="mt-1.5 pl-6 text-xs leading-relaxed text-muted-foreground">{documentSummary(d)}</p>
-                  ) : null}
+                  {/* Full report content shown inline — no click-through needed to read it */}
+                  <div className="mt-3 border-t border-border/60 pt-3 pl-6">
+                    <ResultDetailPane result={d} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -346,68 +309,6 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
                 <Badge variant="outline" className="capitalize">{String(p.status).toLowerCase()}</Badge>
               </div>
             ))
-          )}
-        </section>
-
-        {/* Denials & appeals */}
-        <section ref={setRef('denials')} className="scroll-mt-36 space-y-2">
-          <SectionLabel>Denials & Appeals</SectionLabel>
-          {denialsLoading ? (
-            <LoadingSpinner size="sm" text="Loading denials..." />
-          ) : denials.length === 0 ? (
-            <EmptyState>No denials for this encounter.</EmptyState>
-          ) : (
-            denials.map((d) => {
-              const draft = d.appeals?.find((a) => a.status === 'draft');
-              const filed = d.appeals?.find((a) => a.status !== 'draft');
-              return (
-                <div key={d.id} className="space-y-2 rounded-lg border border-border/60 bg-card/40 p-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-start gap-2">
-                      <AlertOctagon className="mt-0.5 h-4 w-4 text-destructive" />
-                      <div>
-                        <p className="text-sm font-medium text-foreground">
-                          <span className="font-mono">{d.denialCode}</span> · {money(d.deniedAmount, d.currency)}
-                        </p>
-                        <p className="text-xs text-muted-foreground">{d.denialReason}</p>
-                        {d.appealDeadline ? (
-                          <p className="mt-0.5 text-xs text-muted-foreground">Appeal by {fmtDate(d.appealDeadline)}</p>
-                        ) : null}
-                      </div>
-                    </div>
-                    <Badge variant="outline" className="capitalize">{String(d.status).toLowerCase()}</Badge>
-                  </div>
-                  <div>
-                    {filed ? (
-                      <Badge variant="secondary" className="capitalize">Appeal {String(filed.status)}</Badge>
-                    ) : draft ? (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={fileAppeal.isPending}
-                        onClick={() => fileAppeal.mutate({ appealId: draft.id })}
-                      >
-                        File appeal
-                      </Button>
-                    ) : (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={draftAppeal.isPending}
-                        onClick={() =>
-                          draftAppeal.mutate({
-                            denialId: d.id,
-                            payload: { narrative: `Appeal for ${d.denialCode}: ${d.denialReason}` },
-                          })
-                        }
-                      >
-                        Draft appeal
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              );
-            })
           )}
         </section>
 
