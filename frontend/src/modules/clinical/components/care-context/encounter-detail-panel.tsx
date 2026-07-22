@@ -206,22 +206,6 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
         </div>
       </div>
 
-      {/* Financials — derived from the encounter's invoices */}
-      <div className="grid grid-cols-3 gap-2">
-        {([
-          ['Total Billed', financials?.billed],
-          ['Total Paid', financials?.paid],
-          ['Patient Owes', financials?.owes],
-        ] as const).map(([label, value]) => (
-          <div key={label} className="rounded-lg border border-border/60 bg-card/60 px-3 py-2">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">{label}</p>
-            <p className="mt-0.5 text-base font-semibold text-foreground">
-              {value == null ? '—' : money(value, financials?.currency)}
-            </p>
-          </div>
-        ))}
-      </div>
-
       {/* Section nav — scrolls with the content; clicking jumps to the section */}
       <div className="-mx-4 flex gap-1 overflow-x-auto border-b border-border/60 bg-card/95 px-4 py-2">
         {nav.map((n) => (
@@ -300,6 +284,22 @@ export function EncounterDetailPanel({ encounter }: { encounter?: Encounter }) {
             </div>
           )}
         </section>
+
+        {/* Financials — derived from the encounter's invoices */}
+        <div className="grid grid-cols-3 gap-2">
+          {([
+            ['Total Billed', financials?.billed],
+            ['Total Paid', financials?.paid],
+            ['Patient Owes', financials?.owes],
+          ] as const).map(([label, value]) => (
+            <div key={label} className="rounded-lg border border-border/60 bg-card/60 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">{label}</p>
+              <p className="mt-0.5 text-base font-semibold text-foreground">
+                {value == null ? '—' : money(value, financials?.currency)}
+              </p>
+            </div>
+          ))}
+        </div>
 
         {/* Claims */}
         <section ref={setRef('claims')} className="scroll-mt-36 space-y-2">
