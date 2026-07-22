@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, UserPlus, User, Eye, Users } from 'lucide-react';
+import { Search, UserPlus, User, Eye, Users, Sparkles } from 'lucide-react';
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import type { Patient } from '@/modules/clinical/types/patient';
 
@@ -208,6 +208,17 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           View
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/${params.locale}/patients-ai/${patient.id}`);
+                          }}
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          AI+
                         </Button>
                         <CareContextEntryButton
                           patientId={patient.id}
