@@ -40,3 +40,11 @@ export {
 
 // Export note template enums
 export { NoteTemplateType } from '../generated';
+
+// Export Form Master enums (OpenMedForm integration)
+export {
+  FormMasterStatus,
+  FrequencyType,
+  FrequencyUnit,
+  FormResponseStatus,
+} from '../generated';

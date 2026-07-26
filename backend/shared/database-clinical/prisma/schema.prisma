@@ -4808,3 +4808,88 @@ model OtScheduleStatusEvent {
   @@index([tenantId, toStatus], map: "idx_ot_schedule_status_events_tenant_status")
   @@map("ot_schedule_status_events")
 }
+
+// ============================================================================
+// Form Master — OpenMedForm integration (master forms + patient/encounter fill)
+// ============================================================================
+
+enum FormMasterStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum FrequencyType {
+  EVERY_N_HOURS
+  EVERY_N_DAYS
+  DAILY
+  WEEKLY
+  ONCE_PER_SHIFT
+  ONCE_PER_ADMISSION
+  ONCE_PER_EPISODE
+  ON_DEMAND
+  EVENT_BASED
+}
+
+enum FrequencyUnit {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+}
+
+enum FormResponseStatus {
+  DRAFT
+  FINAL
+  AMENDED
+}
+
+model FormMaster {
+  id             String            @id @default(uuid()) @map("id") @db.Uuid
+  tenantId       String            @map("tenant_id") @db.Uuid
+  facilityId     String?           @map("facility_id") @db.Uuid
+  formCode       String            @map("form_code") @db.VarChar(100)
+  formVersion    String            @map("form_version") @db.VarChar(20)
+  engine         String            @map("engine") @db.VarChar(20)
+  name           String            @map("name") @db.VarChar(255)
+  language       String?           @map("language") @db.VarChar(10)
+  status         FormMasterStatus  @default(ACTIVE) @map("status")
+  frequencyType  FrequencyType     @map("frequency_type")
+  frequencyValue Int?              @map("frequency_value")
+  frequencyUnit  FrequencyUnit?    @map("frequency_unit")
+  bundle         Json              @map("bundle") @db.JsonB
+  uploadedBy     String            @map("uploaded_by") @db.Uuid
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  responses      FormResponse[]
+
+  @@unique([tenantId, formCode, formVersion], map: "unique_form_master_code_version")
+  @@index([tenantId, status], map: "idx_form_master_tenant_status")
+  @@map("form_master")
+}
+
+model FormResponse {
+  id           String              @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String              @map("tenant_id") @db.Uuid
+  facilityId   String?             @map("facility_id") @db.Uuid
+  formMasterId String              @map("form_master_id") @db.Uuid
+  formCode     String              @map("form_code") @db.VarChar(100)
+  formVersion  String              @map("form_version") @db.VarChar(20)
+  engine       String              @map("engine") @db.VarChar(20)
+  patientId    String              @map("patient_id") @db.Uuid
+  encounterId  String              @map("encounter_id") @db.Uuid
+  status       FormResponseStatus  @default(DRAFT) @map("status")
+  data         Json                @map("data") @db.JsonB
+  completedBy  String?             @map("completed_by") @db.Uuid
+  completedAt  DateTime?           @map("completed_at") @db.Timestamptz(6)
+  createdBy    String              @map("created_by") @db.Uuid
+  createdAt    DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  formMaster   FormMaster          @relation(fields: [formMasterId], references: [id])
+
+  @@index([tenantId, patientId], map: "idx_form_response_tenant_patient")
+  @@index([tenantId, encounterId], map: "idx_form_response_tenant_encounter")
+  @@index([tenantId, formMasterId], map: "idx_form_response_tenant_master")
+  @@map("form_response")
+}

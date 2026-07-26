@@ -243,6 +243,16 @@ export const CHECKLIST_TEMPLATE_CREATE = 'checklist_template.create';
 export const CHECKLIST_TEMPLATE_UPDATE = 'checklist_template.update';
 
 // ============================================
+// FORM MASTER PERMISSIONS (OpenMedForm integration)
+// ============================================
+export const FORM_MASTER_READ = 'form_master.read';
+export const FORM_MASTER_CREATE = 'form_master.create';
+export const FORM_MASTER_UPDATE = 'form_master.update';
+export const FORM_RESPONSE_READ = 'form_response.read';
+export const FORM_RESPONSE_CREATE = 'form_response.create';
+export const FORM_RESPONSE_UPDATE = 'form_response.update';
+
+// ============================================
 // DISCHARGE SUMMARY PERMISSIONS
 // ============================================
 export const DISCHARGE_SUMMARY_READ = 'discharge_summary.read';
@@ -661,6 +671,14 @@ export const ALL_PERMISSIONS = [
   { code: CHECKLIST_TEMPLATE_READ, name: 'Read Checklist Templates', resource: 'checklist_template', action: 'read' },
   { code: CHECKLIST_TEMPLATE_CREATE, name: 'Create Checklist Templates', resource: 'checklist_template', action: 'create' },
   { code: CHECKLIST_TEMPLATE_UPDATE, name: 'Update Checklist Templates', resource: 'checklist_template', action: 'update' },
+
+  // Form Master (OpenMedForm integration)
+  { code: FORM_MASTER_READ, name: 'Read Form Masters', resource: 'form_master', action: 'read' },
+  { code: FORM_MASTER_CREATE, name: 'Create Form Masters', resource: 'form_master', action: 'create' },
+  { code: FORM_MASTER_UPDATE, name: 'Update Form Masters', resource: 'form_master', action: 'update' },
+  { code: FORM_RESPONSE_READ, name: 'Read Form Responses', resource: 'form_response', action: 'read' },
+  { code: FORM_RESPONSE_CREATE, name: 'Create Form Responses', resource: 'form_response', action: 'create' },
+  { code: FORM_RESPONSE_UPDATE, name: 'Update Form Responses', resource: 'form_response', action: 'update' },
 
   // Discharge Summary
   { code: DISCHARGE_SUMMARY_READ, name: 'Read Discharge Summaries', resource: 'discharge_summary', action: 'read' },

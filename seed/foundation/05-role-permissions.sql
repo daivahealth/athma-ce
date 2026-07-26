@@ -38,7 +38,8 @@ WHERE p.resource IN (
   'ward', 'triage', 'consent', 'clinical_order', 'availability',
   'ot_request', 'ot_schedule', 'ot_room', 'ot_report',
   'care_channel', 'care_team', 'care_message', 'checklist',
-  'discharge_summary', 'note_template', 'catalog', 'valueset'
+  'discharge_summary', 'note_template', 'catalog', 'valueset',
+  'form_master', 'form_response'
 )
 AND p.action IN ('read', 'create', 'update', 'sign', 'close', 'add', 'enter', 'verify', 'amend', 'review', 'approve', 'cancel', 'advance')
 ON CONFLICT (role_id, permission_id) DO NOTHING;
@@ -70,6 +71,9 @@ WHERE (
   OR (p.resource IN ('care_channel', 'care_team', 'care_message') AND p.action IN ('read', 'create', 'add'))
   -- Checklist access
   OR (p.resource IN ('checklist', 'checklist_template') AND p.action IN ('read', 'create', 'update'))
+  -- Form Master access (fill responses; uploading master forms is admin-only)
+  OR (p.resource = 'form_response' AND p.action IN ('read', 'create', 'update'))
+  OR (p.resource = 'form_master' AND p.action = 'read')
   -- Discharge summary read
   OR (p.resource = 'discharge_summary' AND p.action = 'read')
   -- Note template read

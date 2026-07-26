@@ -373,3 +373,13 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0037-000000000018', 'oncology.catalog.read',          'Oncology: Read Catalogs',           'View oncology master catalogs (cancer types, sites, histologies)', 'oncology', 'read',   NOW(), NOW()),
   ('00000000-0000-0000-0037-000000000019', 'oncology.catalog.write',         'Oncology: Write Catalogs',          'Create and update oncology master catalog entries',                'oncology', 'write',  NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
+
+-- Form Master Permissions (OpenMedForm integration)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0039-000000000001', 'form_master.read', 'Read Form Masters', 'View uploaded master forms', 'form_master', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0039-000000000002', 'form_master.create', 'Create Form Masters', 'Upload new master forms', 'form_master', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0039-000000000003', 'form_master.update', 'Update Form Masters', 'Update master form metadata/status', 'form_master', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0039-000000000004', 'form_response.read', 'Read Form Responses', 'View filled form responses', 'form_response', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0039-000000000005', 'form_response.create', 'Create Form Responses', 'Start filling a form for a patient/encounter', 'form_response', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0039-000000000006', 'form_response.update', 'Update Form Responses', 'Save draft or submit a filled form', 'form_response', 'update', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
