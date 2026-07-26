@@ -12,6 +12,7 @@ This folder contains feature-specific documentation organized by domain and modu
   - Visit types and workflows
   - Lab module functionality and roadmap
   - [Care Context workspace](./clinical/care-context-workspace.md) - three-pane patient view
+  - [Form Master](./clinical/form-master.md) - OpenMedForm integration: upload master forms, fill against patient/encounter
 
 - **[ot/](./ot/)** - Operating theatre workflow
   - OT requests and review workflow

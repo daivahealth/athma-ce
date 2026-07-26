@@ -136,6 +136,7 @@ Refer to individual service documentation:
 - [Clinical APIs](../features/patient-management/)
 - [Lab Operations API](./LAB-OPERATIONS-API.md)
 - [OT APIs](./OT-API-ENDPOINTS.md)
+- [Form Master APIs](./FORM-MASTER-API-ENDPOINTS.md) — OpenMedForm integration: master form upload, patient/encounter form responses
 - [Facility APIs](./postman/FACILITY-ENDPOINTS-GUIDE.md)
 - [Specialty APIs](../features/specialty-management/)
 - [User APIs](../features/user-management/)
