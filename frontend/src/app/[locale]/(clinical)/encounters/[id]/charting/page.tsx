@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { SmartChartingEditor } from '@/modules/clinical/components/charting/smart-charting';
+import { EncounterFormsSection } from '@/modules/clinical/components/charting/encounter-forms-section';
 import { useEncounter } from '@/modules/clinical/hooks/use-encounters';
 import { useTriageByEncounter } from '@/modules/clinical/hooks/use-triage';
 import type { TriageAllergy, TriageVitalSigns } from '@/modules/clinical/types/triage';
@@ -198,6 +199,8 @@ export default function ChartingPage() {
         patientId={encounter.patientId}
         authorStaffId={encounter.primaryStaffId}
       />
+
+      <EncounterFormsSection encounterId={encounterId} patientId={encounter.patientId} />
     </div>
   );
 }

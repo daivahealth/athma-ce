@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity, ClipboardCheck, Sparkles, Waypoints } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity, ClipboardCheck, Sparkles, Waypoints, LayoutTemplate } from 'lucide-react';
 import { useCatalogPopulationHistory } from '@/modules/clinical/hooks/use-catalog-population';
 
 export default function CatalogsPage() {
@@ -100,6 +100,13 @@ export default function CatalogsPage() {
       description: 'Manage template-driven checklists for inpatient and outpatient workflows',
       icon: ClipboardCheck,
       href: `/${locale}/catalogs/checklists`,
+      count: '—',
+    },
+    {
+      title: 'Form Master',
+      description: 'Upload OpenMedForm form definitions for clinicians to fill against a patient encounter',
+      icon: LayoutTemplate,
+      href: `/${locale}/catalogs/form-master`,
       count: '—',
     },
   ];
