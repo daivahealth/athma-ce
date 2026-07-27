@@ -6,9 +6,10 @@ Lets a clinician fill structured, externally-designed forms against a patient's 
 
 1. **Design** the form in [OpenMedForm](https://github.com/daivahealth/openmedform)'s own UI and publish it.
 2. **Export** the published form as a JSON bundle (OpenMedForm's Download button, or `GET /api/forms/:formId/export` on the OpenMedForm side) — a self-contained document with `dataSchema` (JSON Schema 2020-12), `uiSchema`, `printSchema`, `translations`, and optional `assets`, uniquely identified by `formCode` + `version`. Published OpenMedForm versions are immutable.
-3. **Upload** that JSON into athma-ce at `/forms/master/new` (Clinical → Form Master → Upload Form). An admin pastes or picks the file, sets the form's frequency (see below), and submits. This creates a `FormMaster` row storing the entire bundle. Import is manual only — athma-ce never calls OpenMedForm's API directly.
+3. **Upload** that JSON into athma-ce at Administration → Catalogs → Form Master (`/catalogs/form-master/new`). An admin pastes or picks the file, sets the form's frequency (see below), and submits. This creates a `FormMaster` row storing the entire bundle. Import is manual only — athma-ce never calls OpenMedForm's API directly.
 4. **Fill** the form from an encounter's Clinical Charting page — a "Forms" section lists active master forms available to start and any responses already begun for that encounter. Filling opens `@openmedform/react-form-renderer`'s `JsonFormsRenderer`, the same open-source JSON Forms engine OpenMedForm itself uses, bound to the stored `dataSchema`/`uiSchema`.
 5. **Save** progress as a draft at any time, or **submit** — submission re-validates the response against `dataSchema` (client-side always; server-side via Ajv as a second check) before accepting it as `FINAL`.
+6. **Revise**: when a form changes in OpenMedForm, export the new version and upload it via the "New Version" action on that form's row or detail page (`/catalogs/form-master/new?formCode=...`). Uploading a new version automatically archives the previously active one for the same `formCode`, so the encounter charting page's Forms section — and every other screen — always offers the latest version. Older versions remain viewable (status `ARCHIVED`) and any responses already filled against them stay intact.
 
 ## Frequency
 

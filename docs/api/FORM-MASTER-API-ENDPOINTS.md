@@ -61,6 +61,8 @@ Uploads a new master form. Body:
 
 The `bundle` must contain `formCode`, `version`, `engine`, `dataSchema`, `uiSchema` — validated as a shape check, not full JSON-Schema-of-JSON-Schema validation. Rejects with 400 if a `FormMaster` already exists for this tenant with the same `formCode` + `formVersion` (published OpenMedForm versions are immutable; a revision must be uploaded as a new `version`).
 
+**Versioning**: after a successful upload, any other `FormMaster` for the same tenant + `formCode` that is currently `ACTIVE` is automatically set to `ARCHIVED`, so at most one version per `formCode` is ever `ACTIVE` at a time. Every consumer that filters by `status: ACTIVE` — the Form Master list's default view, the encounter charting page's "Forms" section, etc. — therefore always sees only the latest version of a form, with no extra grouping/dedup logic needed on the read side. Responses already filled against an archived version are unaffected (`FormResponse` denormalizes `formCode`/`formVersion`/`engine` at creation time, so it stays readable regardless of the master's current status).
+
 ### `GET /form-master?status=`
 
 Lists master forms for the tenant (`status` optional: `ACTIVE | ARCHIVED`). Returns metadata only — `bundle` is omitted from list responses (it can be large: schemas + translations + assets).

@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, History } from 'lucide-react';
 import { JsonFormsRenderer } from '@openmedform/react-form-renderer/jsonforms';
 import type { JsonFormsFormDefinition } from '@openmedform/form-schema-types';
 import { Button } from '@/components/ui/button';
@@ -94,6 +94,20 @@ export default function FormMasterDetailPage() {
         <Badge variant={formMaster.status === 'ACTIVE' ? 'default' : 'secondary'} className="capitalize">
           {formMaster.status.toLowerCase()}
         </Badge>
+        {formMaster.status === 'ACTIVE' && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              router.push(
+                `/${locale}/catalogs/form-master/new?formCode=${encodeURIComponent(formMaster.formCode)}`
+              )
+            }
+          >
+            <History className="mr-2 h-4 w-4" />
+            New Version
+          </Button>
+        )}
       </div>
 
       <Card>

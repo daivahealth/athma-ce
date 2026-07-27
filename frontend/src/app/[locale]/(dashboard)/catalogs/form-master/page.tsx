@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Plus, LayoutTemplate, Eye } from 'lucide-react';
+import { Plus, LayoutTemplate, Eye, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -103,7 +103,7 @@ export default function FormMasterListPage({ params }: { params: { locale: strin
                     <TableCell className="text-sm text-muted-foreground">
                       {new Date(fm.createdAt).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right space-x-1">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -115,6 +115,21 @@ export default function FormMasterListPage({ params }: { params: { locale: strin
                         <Eye className="mr-2 h-4 w-4" />
                         View
                       </Button>
+                      {fm.status === 'ACTIVE' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(
+                              `/${params.locale}/catalogs/form-master/new?formCode=${encodeURIComponent(fm.formCode)}`
+                            );
+                          }}
+                        >
+                          <History className="mr-2 h-4 w-4" />
+                          New Version
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -61,7 +61,22 @@ export class FormMasterService {
       },
     });
 
-    this.logger.log(`Created form master ${created.id} (${formCode} v${formVersion})`);
+    // Only one version of a given form should be ACTIVE (fillable) at a time —
+    // superseding a form auto-archives any other active version with the same
+    // formCode, so charting and every other consumer that filters by
+    // status: ACTIVE always see the latest version without extra grouping logic.
+    // Responses already filled against an archived version remain untouched
+    // and still readable (FormResponse denormalizes formCode/formVersion/engine
+    // at creation time).
+    const { count: archivedCount } = await this.prisma.formMaster.updateMany({
+      where: { tenantId, formCode, status: FormMasterStatus.ACTIVE, id: { not: created.id } },
+      data: { status: FormMasterStatus.ARCHIVED },
+    });
+
+    this.logger.log(
+      `Created form master ${created.id} (${formCode} v${formVersion})` +
+        (archivedCount > 0 ? `; archived ${archivedCount} superseded version(s)` : ''),
+    );
     return created;
   }
 

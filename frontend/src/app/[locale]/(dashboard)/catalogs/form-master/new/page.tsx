@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { Upload, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Upload, ArrowLeft, CheckCircle2, AlertTriangle, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-import { useCreateFormMaster } from '@/modules/clinical/hooks/use-form-master';
+import { useCreateFormMaster, useFormMasters } from '@/modules/clinical/hooks/use-form-master';
 import { FrequencyType, FrequencyUnit, type OpenMedFormBundle } from '@/modules/clinical/types/form-master';
 
 const FREQUENCY_OPTIONS: { value: FrequencyType; label: string }[] = [
@@ -36,8 +36,13 @@ const FIXED_VALUE_UNIT: Partial<Record<FrequencyType, { value: number; unit: Fre
 
 export default function UploadFormMasterPage({ params }: { params: { locale: string } }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const toast = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Present when arriving via a form's "Upload New Version" action — the
+  // currently active version with this formCode is what gets superseded.
+  const expectedFormCode = searchParams.get('formCode');
 
   const [rawJson, setRawJson] = useState('');
   const [parsedBundle, setParsedBundle] = useState<OpenMedFormBundle | null>(null);
@@ -47,6 +52,20 @@ export default function UploadFormMasterPage({ params }: { params: { locale: str
   const [frequencyUnit, setFrequencyUnit] = useState<FrequencyUnit>(FrequencyUnit.DAY);
 
   const createFormMaster = useCreateFormMaster();
+  const { data: formMasters } = useFormMasters();
+  const currentVersion = expectedFormCode
+    ? formMasters?.find((fm) => fm.formCode === expectedFormCode && fm.status === 'ACTIVE')
+    : undefined;
+
+  // Pre-fill frequency from the version being replaced, so re-uploading a
+  // revised form doesn't silently reset its cadence.
+  useEffect(() => {
+    if (!currentVersion) return;
+    setFrequencyType(currentVersion.frequencyType);
+    if (currentVersion.frequencyValue != null) setFrequencyValue(String(currentVersion.frequencyValue));
+    if (currentVersion.frequencyUnit) setFrequencyUnit(currentVersion.frequencyUnit);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentVersion?.id]);
 
   const parseBundle = (text: string) => {
     setRawJson(text);
@@ -115,12 +134,26 @@ export default function UploadFormMasterPage({ params }: { params: { locale: str
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Upload Form</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            {expectedFormCode ? 'Upload New Version' : 'Upload Form'}
+          </h1>
           <p className="text-muted-foreground">
             Paste or upload the JSON bundle exported from OpenMedForm.
           </p>
         </div>
       </div>
+
+      {expectedFormCode && (
+        <div className="flex items-start gap-2 rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+          <History className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <p className="text-foreground">
+            Uploading a new version of <span className="font-mono">{expectedFormCode}</span>
+            {currentVersion ? ` (currently v${currentVersion.formVersion})` : ''}. Once uploaded, the
+            previous version is archived automatically — encounter charting and every other screen
+            always use the latest active version of a form.
+          </p>
+        </div>
+      )}
 
       <Card>
         <CardHeader>
@@ -152,6 +185,17 @@ export default function UploadFormMasterPage({ params }: { params: { locale: str
           />
 
           {parseError && <p className="text-sm text-destructive">{parseError}</p>}
+
+          {parsedBundle && expectedFormCode && parsedBundle.formCode !== expectedFormCode && (
+            <div className="flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-sm">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+              <p className="text-foreground">
+                This bundle&apos;s formCode (<span className="font-mono">{parsedBundle.formCode}</span>) doesn&apos;t
+                match <span className="font-mono">{expectedFormCode}</span> — it will be uploaded as a
+                separate form, not a new version of the one you started from.
+              </p>
+            </div>
+          )}
 
           {parsedBundle && (
             <div className="flex items-start gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3 text-sm">
