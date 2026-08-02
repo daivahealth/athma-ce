@@ -68,6 +68,18 @@ VALUES
   (gen_random_uuid(), 'feature.nav.pharmacy', 'true', 'boolean', 'feature', 'Enable Pharmacy module navigation', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'feature.nav.oncology', 'true', 'boolean', 'feature', 'Enable Oncology module navigation', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
+  -- NATIONAL IDENTITY CONFIGS
+  (gen_random_uuid(), 'identity.enabled_providers', '["AE:emirates_id", "INTL:passport"]', 'json', 'identity', 'National identity providers offered, as COUNTRY:type (e.g. IN:abha). Add IN:abha once ABDM is configured.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+  -- ABDM / ABHA CONFIGS (India). Disabled by default — enabling without valid
+  -- NHA credentials would surface a broken flow, so this is opt-in per tenant.
+  (gen_random_uuid(), 'abdm.enabled', 'false', 'boolean', 'identity', 'Enable the ABHA (ABDM) national identity integration', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'abdm.environment', '"sandbox"', 'string', 'identity', 'ABDM environment: sandbox or production', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'abdm.base_url', '"https://abhasbx.abdm.gov.in/abha/api"', 'string', 'identity', 'ABHA enrolment/profile API base URL', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'abdm.gateway_url', '"https://dev.abdm.gov.in"', 'string', 'identity', 'ABDM gateway host used to issue session tokens', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'abdm.cm_id', '"sbx"', 'string', 'identity', 'Consent Manager id sent as the X-CM-ID header (sbx or abdm)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'abdm.consent_version', '"1.4"', 'string', 'identity', 'Version string sent in the ABHA enrolment consent block', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
   -- AI CATALOG POPULATION CONFIGS
   (gen_random_uuid(), 'ai.catalog_population.enabled', 'true', 'boolean', 'ai', 'Enable AI-powered catalog auto-population for new tenants', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'ai.catalog_population.batch_size', '30', 'number', 'ai', 'Number of catalog items to process per LLM batch call', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

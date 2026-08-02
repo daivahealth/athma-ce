@@ -55,6 +55,21 @@ export const CONFIG_DEFAULTS: Partial<ConfigValues> = {
   'system.enable_mfa': false,
   'system.password_min_length': 8,
   'system.password_require_special_char': true,
+
+  // National identity
+  // Which national identity providers are offered. Emirates ID is offline
+  // validate-only; ABHA additionally supports online OTP verification/enrolment.
+  'identity.enabled_providers': ['AE:emirates_id', 'INTL:passport'],
+
+  // ABDM / ABHA (India). Disabled by default: enabling it without valid NHA
+  // credentials would surface a broken flow, so the feature must be turned on
+  // deliberately per tenant.
+  'abdm.enabled': false,
+  'abdm.environment': 'sandbox',
+  'abdm.base_url': 'https://abhasbx.abdm.gov.in/abha/api',
+  'abdm.gateway_url': 'https://dev.abdm.gov.in',
+  'abdm.cm_id': 'sbx',
+  'abdm.consent_version': '1.4',
 };
 
 /**

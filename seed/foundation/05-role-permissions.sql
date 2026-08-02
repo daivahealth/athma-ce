@@ -39,7 +39,7 @@ WHERE p.resource IN (
   'ot_request', 'ot_schedule', 'ot_room', 'ot_report',
   'care_channel', 'care_team', 'care_message', 'checklist',
   'discharge_summary', 'note_template', 'catalog', 'valueset',
-  'form_master', 'form_response'
+  'form_master', 'form_response', 'patient_identity'
 )
 AND p.action IN ('read', 'create', 'update', 'sign', 'close', 'add', 'enter', 'verify', 'amend', 'review', 'approve', 'cancel', 'advance')
 ON CONFLICT (role_id, permission_id) DO NOTHING;
@@ -74,6 +74,8 @@ WHERE (
   -- Form Master access (fill responses; uploading master forms is admin-only)
   OR (p.resource = 'form_response' AND p.action IN ('read', 'create', 'update'))
   OR (p.resource = 'form_master' AND p.action = 'read')
+  -- Patient identity: front-line staff capture and verify IDs, but cannot delete
+  OR (p.resource = 'patient_identity' AND p.action IN ('read', 'create', 'update', 'verify'))
   -- Discharge summary read
   OR (p.resource = 'discharge_summary' AND p.action = 'read')
   -- Note template read
@@ -94,6 +96,8 @@ FROM permissions p
 WHERE (
   -- Patient registration and viewing
   (p.resource = 'patient' AND p.action IN ('read', 'create', 'update'))
+  -- Patient identity capture/verification is part of front-desk registration
+  OR (p.resource = 'patient_identity' AND p.action IN ('read', 'create', 'update', 'verify'))
   -- Appointment management
   OR (p.resource = 'appointment' AND p.action IN ('read', 'create', 'update', 'cancel', 'reschedule', 'checkin'))
   -- Schedule/calendar/availability read

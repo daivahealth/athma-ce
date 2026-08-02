@@ -27,6 +27,7 @@
     "@zeal/observability": "file:../../shared/observability",
     "@zeal/shared-types": "file:../../shared/types",
     "@zeal/shared-utils": "file:../../shared/utils",
+    "@zeal/validators": "file:../../shared/validators",
     "ajv": "^8.20.0",
     "axios": "^1.6.0",
     "mime-types": "^2.1.35",

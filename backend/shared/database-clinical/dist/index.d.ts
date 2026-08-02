@@ -9,4 +9,5 @@ export { ChecklistCategory, ChecklistTemplateStatus, ChecklistItemType, Checklis
 export { DischargeTransactionStatus, DischargeType, DischargeDestination, DischargeSummaryStatus, } from '../generated';
 export { NoteTemplateType } from '../generated';
 export { FormMasterStatus, FrequencyType, FrequencyUnit, FormResponseStatus, } from '../generated';
+export { IdentityVerificationStatus } from '../generated';
 //# sourceMappingURL=index.d.ts.map

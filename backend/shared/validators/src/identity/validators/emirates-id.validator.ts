@@ -111,7 +111,7 @@ export class EmiratesIdValidator implements IIdentityValidator {
 
     // Process digits from right to left (excluding check digit)
     for (let i = cleanValue.length - 2; i >= 0; i--) {
-      let digit = parseInt(cleanValue[i], 10);
+      let digit = parseInt(cleanValue[i]!, 10);
 
       if (isEven) {
         digit *= 2;
@@ -125,7 +125,7 @@ export class EmiratesIdValidator implements IIdentityValidator {
     }
 
     const checkDigit = (10 - (sum % 10)) % 10;
-    return checkDigit === parseInt(cleanValue[cleanValue.length - 1], 10);
+    return checkDigit === parseInt(cleanValue[cleanValue.length - 1]!, 10);
   }
 
   extractMetadata(value: string): Record<string, any> {

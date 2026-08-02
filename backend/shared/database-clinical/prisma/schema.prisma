@@ -540,6 +540,7 @@ model Patient {
   history              PatientHistory[]
   consents             PatientConsent[]
   appointmentSeries    AppointmentSeries[]
+  identities           PatientIdentity[]
 
   // Wellness & Longevity Relations
   wellnessAssessments     WellnessAssessment[]
@@ -4892,4 +4893,70 @@ model FormResponse {
   @@index([tenantId, encounterId], map: "idx_form_response_tenant_encounter")
   @@index([tenantId, formMasterId], map: "idx_form_response_tenant_master")
   @@map("form_response")
+}
+
+// ============================================================================
+// National Identity — pluggable national ID documents (Emirates ID, ABHA, ...)
+// ============================================================================
+
+/// Outcome of proving an identity value against its issuing authority.
+/// UNVERIFIED = well-formed but never proven (e.g. keyed in at registration).
+enum IdentityVerificationStatus {
+  UNVERIFIED
+  VERIFIED
+  FAILED
+  EXPIRED
+}
+
+/// One national identity document held by a patient.
+///
+/// A patient legitimately holds several (ABHA number + ABHA address, or
+/// Emirates ID + passport), each with independent verification state — which
+/// the flat patients.national_id column cannot express. patients.national_id /
+/// national_id_type / issuing_country are retained as the denormalised
+/// "primary" identity (existing search indexes depend on them) and kept in
+/// sync with the row flagged isPrimary.
+///
+/// PRIVACY: never store a raw Aadhaar number, an OTP, or an ABDM user token
+/// here. Only the resulting ABHA number/address plus masked, non-sensitive
+/// metadata belong in this table.
+model PatientIdentity {
+  id                 String                     @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String                     @map("tenant_id") @db.Uuid
+  patientId          String                     @map("patient_id") @db.Uuid
+
+  /// ISO 3166-1 alpha-2 issuing country, e.g. 'IN', 'AE'.
+  country            String                     @map("country") @db.VarChar(2)
+  /// Provider/document type, e.g. 'abha', 'emirates_id', 'passport'.
+  identityType       String                     @map("identity_type") @db.VarChar(50)
+  /// Normalised document number (ABHA number for identityType 'abha').
+  value              String                     @map("value") @db.VarChar(100)
+  /// Optional companion handle — the ABHA address for identityType 'abha'.
+  secondaryValue     String?                    @map("secondary_value") @db.VarChar(100)
+
+  verificationStatus IdentityVerificationStatus @default(UNVERIFIED) @map("verification_status")
+  /// How it was proven, e.g. 'aadhaar_otp', 'mobile_otp', 'offline_checksum'.
+  verificationMethod String?                    @map("verification_method") @db.VarChar(50)
+  verifiedAt         DateTime?                  @map("verified_at") @db.Timestamptz(6)
+  verifiedBy         String?                    @map("verified_by") @db.Uuid
+
+  isPrimary          Boolean                    @default(false) @map("is_primary")
+  /// Non-sensitive extras only (masked mobile, kyc flags, provider echo).
+  metadata           Json?                      @map("metadata") @db.JsonB
+
+  createdAt          DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime                   @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy          String                     @map("created_by") @db.Uuid
+
+  patient            Patient                    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  // NOTE: migration 011 also creates a partial unique index
+  // (tenant_id, patient_id) WHERE is_primary, enforcing at most one primary
+  // identity per patient. Prisma cannot express partial indexes, so it exists
+  // in SQL only — do not "fix" the apparent drift by dropping it.
+  @@unique([tenantId, country, identityType, value], map: "unique_patient_identity_value")
+  @@index([tenantId, patientId], map: "idx_patient_identity_tenant_patient")
+  @@index([tenantId, value], map: "idx_patient_identity_tenant_value")
+  @@index([tenantId, identityType], map: "idx_patient_identity_tenant_type")
+  @@map("patient_identity")
 }

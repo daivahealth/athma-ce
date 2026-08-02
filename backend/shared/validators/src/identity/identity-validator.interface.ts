@@ -8,8 +8,11 @@
 export interface ValidationResult {
   isValid: boolean;
   errors: string[];
-  warnings?: string[];
-  normalizedValue?: string;
+  // `| undefined` is explicit because the repo compiles with
+  // exactOptionalPropertyTypes: assigning an undefined-valued property is only
+  // legal when the type admits undefined.
+  warnings?: string[] | undefined;
+  normalizedValue?: string | undefined;
 }
 
 export interface IdentityMetadata {

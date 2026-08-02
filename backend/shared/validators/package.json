@@ -1,0 +1,16 @@
+{
+  "name": "@zeal/validators",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "type-check": "tsc --noEmit -p tsconfig.build.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

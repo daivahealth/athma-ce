@@ -374,6 +374,15 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0037-000000000019', 'oncology.catalog.write',         'Oncology: Write Catalogs',          'Create and update oncology master catalog entries',                'oncology', 'write',  NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
 
+-- Patient Identity Permissions (national ID / ABHA)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0041-000000000001', 'patient_identity.read', 'Read Patient Identities', 'View a patient''s national identity documents', 'patient_identity', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0041-000000000002', 'patient_identity.create', 'Create Patient Identities', 'Attach a national identity document to a patient', 'patient_identity', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0041-000000000003', 'patient_identity.update', 'Update Patient Identities', 'Update a patient identity (e.g. set primary)', 'patient_identity', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0041-000000000004', 'patient_identity.delete', 'Delete Patient Identities', 'Remove a national identity document from a patient', 'patient_identity', 'delete', NOW(), NOW()),
+  ('00000000-0000-0000-0041-000000000005', 'patient_identity.verify', 'Verify Patient Identities', 'Run an online identity verification (e.g. ABHA OTP)', 'patient_identity', 'verify', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
 -- Form Master Permissions (OpenMedForm integration)
 INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
   ('00000000-0000-0000-0039-000000000001', 'form_master.read', 'Read Form Masters', 'View uploaded master forms', 'form_master', 'read', NOW(), NOW()),

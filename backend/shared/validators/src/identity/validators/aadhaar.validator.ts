@@ -3,6 +3,7 @@ import {
   ValidationResult,
   IdentityMetadata,
 } from '../identity-validator.interface';
+import { isValidVerhoeff } from '../verhoeff';
 
 /**
  * Aadhaar Number Validator
@@ -29,33 +30,6 @@ export class AadhaarValidator implements IIdentityValidator {
     requiresExpiry: false,
     isGovernmentIssued: true,
   };
-
-  // Verhoeff algorithm tables
-  private readonly d = [
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
-    [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
-    [3, 4, 0, 1, 2, 8, 9, 5, 6, 7],
-    [4, 0, 1, 2, 3, 9, 5, 6, 7, 8],
-    [5, 9, 8, 7, 6, 0, 4, 3, 2, 1],
-    [6, 5, 9, 8, 7, 1, 0, 4, 3, 2],
-    [7, 6, 5, 9, 8, 2, 1, 0, 4, 3],
-    [8, 7, 6, 5, 9, 3, 2, 1, 0, 4],
-    [9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-  ];
-
-  private readonly p = [
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
-    [5, 8, 0, 3, 7, 9, 6, 1, 4, 2],
-    [8, 9, 1, 6, 0, 4, 3, 5, 2, 7],
-    [9, 4, 5, 3, 1, 2, 6, 8, 7, 0],
-    [4, 2, 8, 6, 5, 7, 3, 9, 0, 1],
-    [2, 7, 9, 3, 8, 0, 6, 4, 1, 5],
-    [7, 0, 4, 6, 9, 1, 3, 2, 5, 8],
-  ];
-
-  private readonly inv = [0, 4, 3, 2, 1, 5, 6, 7, 8, 9];
 
   validate(value: string): ValidationResult {
     const errors: string[] = [];
@@ -115,20 +89,7 @@ export class AadhaarValidator implements IIdentityValidator {
 
   validateChecksum(value: string): boolean {
     const cleanValue = value.replace(/\D/g, '');
-
-    if (cleanValue.length !== 12) {
-      return false;
-    }
-
-    // Verhoeff algorithm
-    let c = 0;
-    const reversedDigits = cleanValue.split('').map(Number).reverse();
-
-    for (let i = 0; i < reversedDigits.length; i++) {
-      c = this.d[c][this.p[(i % 8)][reversedDigits[i]]];
-    }
-
-    return c === 0;
+    return cleanValue.length === 12 && isValidVerhoeff(cleanValue);
   }
 
   extractMetadata(value: string): Record<string, any> {

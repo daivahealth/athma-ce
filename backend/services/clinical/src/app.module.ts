@@ -15,6 +15,7 @@ import { CatalogModule } from './modules/catalog/catalog.module';
 import { ValueSetModule } from './modules/valueset/valueset.module';
 import { InpatientModule } from './modules/inpatient/inpatient.module';
 import { FormMasterModule } from './modules/form-master/form-master.module';
+import { NationalIdentityModule } from './modules/national-identity/national-identity.module';
 import { BedSearchModule } from './modules/bed-search/bed-search.module';
 import { WellnessModule } from './modules/wellness/wellness.module';
 import { LongevityModule } from './modules/longevity/longevity.module';
@@ -50,6 +51,7 @@ import { LoggerService } from './common/logger/logger.service';
     ValueSetModule,
     InpatientModule,
     FormMasterModule,
+    NationalIdentityModule,
     BedSearchModule,
     WellnessModule,
     LongevityModule,

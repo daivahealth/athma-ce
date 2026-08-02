@@ -243,6 +243,16 @@ export const CHECKLIST_TEMPLATE_CREATE = 'checklist_template.create';
 export const CHECKLIST_TEMPLATE_UPDATE = 'checklist_template.update';
 
 // ============================================
+// PATIENT IDENTITY PERMISSIONS (national ID / ABHA)
+// ============================================
+export const PATIENT_IDENTITY_READ = 'patient_identity.read';
+export const PATIENT_IDENTITY_CREATE = 'patient_identity.create';
+export const PATIENT_IDENTITY_UPDATE = 'patient_identity.update';
+export const PATIENT_IDENTITY_DELETE = 'patient_identity.delete';
+/** Run an online verification (e.g. ABHA OTP) against an issuing authority. */
+export const PATIENT_IDENTITY_VERIFY = 'patient_identity.verify';
+
+// ============================================
 // FORM MASTER PERMISSIONS (OpenMedForm integration)
 // ============================================
 export const FORM_MASTER_READ = 'form_master.read';
@@ -671,6 +681,13 @@ export const ALL_PERMISSIONS = [
   { code: CHECKLIST_TEMPLATE_READ, name: 'Read Checklist Templates', resource: 'checklist_template', action: 'read' },
   { code: CHECKLIST_TEMPLATE_CREATE, name: 'Create Checklist Templates', resource: 'checklist_template', action: 'create' },
   { code: CHECKLIST_TEMPLATE_UPDATE, name: 'Update Checklist Templates', resource: 'checklist_template', action: 'update' },
+
+  // Patient Identity (national ID / ABHA)
+  { code: PATIENT_IDENTITY_READ, name: 'Read Patient Identities', resource: 'patient_identity', action: 'read' },
+  { code: PATIENT_IDENTITY_CREATE, name: 'Create Patient Identities', resource: 'patient_identity', action: 'create' },
+  { code: PATIENT_IDENTITY_UPDATE, name: 'Update Patient Identities', resource: 'patient_identity', action: 'update' },
+  { code: PATIENT_IDENTITY_DELETE, name: 'Delete Patient Identities', resource: 'patient_identity', action: 'delete' },
+  { code: PATIENT_IDENTITY_VERIFY, name: 'Verify Patient Identities', resource: 'patient_identity', action: 'verify' },
 
   // Form Master (OpenMedForm integration)
   { code: FORM_MASTER_READ, name: 'Read Form Masters', resource: 'form_master', action: 'read' },

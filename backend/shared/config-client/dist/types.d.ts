@@ -93,6 +93,19 @@ export interface ConfigValues {
     'system.enable_mfa': boolean;
     'system.password_min_length': number;
     'system.password_require_special_char': boolean;
+    /** Offered identity providers as `COUNTRY:type`, e.g. `IN:abha`. */
+    'identity.enabled_providers': string[];
+    /** Master switch for the ABHA integration. Off unless deliberately enabled. */
+    'abdm.enabled': boolean;
+    'abdm.environment': 'sandbox' | 'production';
+    /** ABHA profile/enrolment API base, e.g. https://abhasbx.abdm.gov.in/abha/api */
+    'abdm.base_url': string;
+    /** Gateway host issuing session tokens, e.g. https://dev.abdm.gov.in */
+    'abdm.gateway_url': string;
+    /** Consent Manager id sent as the X-CM-ID header (`sbx` | `abdm`). */
+    'abdm.cm_id': string;
+    /** Version string sent in the ABHA enrolment consent block. */
+    'abdm.consent_version': string;
 }
 /**
  * Configuration change event

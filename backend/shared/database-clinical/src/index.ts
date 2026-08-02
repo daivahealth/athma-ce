@@ -48,3 +48,6 @@ export {
   FrequencyUnit,
   FormResponseStatus,
 } from '../generated';
+
+// Export National Identity enums
+export { IdentityVerificationStatus } from '../generated';

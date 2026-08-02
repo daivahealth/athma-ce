@@ -1,6 +1,7 @@
 import { IIdentityValidator, ValidationResult } from './identity-validator.interface';
 import { EmiratesIdValidator } from './validators/emirates-id.validator';
 import { AadhaarValidator } from './validators/aadhaar.validator';
+import { AbhaNumberValidator } from './validators/abha-number.validator';
 import { PassportValidator } from './validators/passport.validator';
 
 /**
@@ -19,6 +20,7 @@ export class IdentityValidationRegistry {
     // Register default validators
     this.register(new EmiratesIdValidator());
     this.register(new AadhaarValidator());
+    this.register(new AbhaNumberValidator());
     this.register(new PassportValidator());
   }
 

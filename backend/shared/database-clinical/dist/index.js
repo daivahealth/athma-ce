@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FormResponseStatus = exports.FrequencyUnit = exports.FrequencyType = exports.FormMasterStatus = exports.NoteTemplateType = exports.DischargeSummaryStatus = exports.DischargeDestination = exports.DischargeType = exports.DischargeTransactionStatus = exports.ChecklistContext = exports.ChecklistInstanceStatus = exports.ChecklistItemType = exports.ChecklistTemplateStatus = exports.ChecklistCategory = exports.MessagePriority = exports.MessageVisibility = exports.MessageType = exports.CareTeamRole = exports.ChannelStatus = exports.InpatientEventType = exports.InpatientAcuity = exports.InpatientDischargeStatus = exports.InpatientAdmissionStatus = exports.ClinicalDatabaseModule = exports.PrismaService = exports.prisma = exports.ZealPrismaClient = exports.PrismaClient = void 0;
+exports.IdentityVerificationStatus = exports.FormResponseStatus = exports.FrequencyUnit = exports.FrequencyType = exports.FormMasterStatus = exports.NoteTemplateType = exports.DischargeSummaryStatus = exports.DischargeDestination = exports.DischargeType = exports.DischargeTransactionStatus = exports.ChecklistContext = exports.ChecklistInstanceStatus = exports.ChecklistItemType = exports.ChecklistTemplateStatus = exports.ChecklistCategory = exports.MessagePriority = exports.MessageVisibility = exports.MessageType = exports.CareTeamRole = exports.ChannelStatus = exports.InpatientEventType = exports.InpatientAcuity = exports.InpatientDischargeStatus = exports.InpatientAdmissionStatus = exports.ClinicalDatabaseModule = exports.PrismaService = exports.prisma = exports.ZealPrismaClient = exports.PrismaClient = void 0;
 var generated_1 = require("../generated");
 Object.defineProperty(exports, "PrismaClient", { enumerable: true, get: function () { return generated_1.PrismaClient; } });
 var client_1 = require("./client");
@@ -45,4 +45,7 @@ Object.defineProperty(exports, "FormMasterStatus", { enumerable: true, get: func
 Object.defineProperty(exports, "FrequencyType", { enumerable: true, get: function () { return generated_7.FrequencyType; } });
 Object.defineProperty(exports, "FrequencyUnit", { enumerable: true, get: function () { return generated_7.FrequencyUnit; } });
 Object.defineProperty(exports, "FormResponseStatus", { enumerable: true, get: function () { return generated_7.FormResponseStatus; } });
+// Export National Identity enums
+var generated_8 = require("../generated");
+Object.defineProperty(exports, "IdentityVerificationStatus", { enumerable: true, get: function () { return generated_8.IdentityVerificationStatus; } });
 //# sourceMappingURL=index.js.map
