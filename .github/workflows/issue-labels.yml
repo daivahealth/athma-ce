@@ -1,0 +1,58 @@
+name: Label issues
+
+# Auto-labels issues at creation. Issue templates already pre-apply labels;
+# this catches issues filed WITHOUT a template (gh CLI, API, blank form) so
+# nothing lands unlabeled. It only ever ADDS labels — humans remove/refine.
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.issue.title ?? '';
+            const existing = (context.payload.issue.labels ?? []).map(l => l.name);
+
+            // Match TITLE ONLY. Issue bodies in this repo are long prose that
+            // enumerate services/modules, so full-body regexes over-label
+            // (verified empirically against all open issues). The templates
+            // already capture Area/Service as a structured field, and titles
+            // carry the real signal. Additive only: matched labels are ADDED
+            // to whatever the template or a human already set, never removed.
+            const rules = [
+              ['epic',             /^epic:/i],
+              ['integration',      /\b(openEHR|FHIR|HL7|OpenMedForm|ABDM|HIE|EMR|CDR|interop\w*|composition|questionnaire)\b/i],
+              ['area: foundation', /\b(foundation|tenant|tenancy|RBAC|role\w*|permission\w*|auth|JWT|keycloak|config)\b/i],
+              ['area: clinical',   /\b(clinical|charting|encounter|order\w*|consent|bed-?search|valueset|inpatient|outpatient|OT|lab|oncology|scheduling|observation\w*|device-?sync|form[\s-]?master|national-?identity|patient|national[_-]?id)\b/i],
+              ['area: rcm',        /\b(rcm|revenue|billing|claim\w*|denial\w*|payment\w*|catalog|tariff)\b/i],
+              ['area: prm',        /\b(prm|patient relationship|wellness|lifestyle|longevity)\b/i],
+              ['area: ai-gateway', /\b(AI|LLM|RAG|semantic search|embedding\w*|prompt\w*|agent\w*|charting ai)\b/i],
+              ['area: web',        /\b(Next\.js|frontend|dashboard|UI|theme|branding)\b/i],
+              ['area: ci-release', /\b(CI|release|deploy|Docker|workflow\w*|staging|production|infrastructure)\b/i],
+              ['security',         /\b(security|compliance|PHI|PII|HIPAA|injection|audit|tenant isolation|RBAC|encryption|secret\w*)\b/i],
+              ['documentation',    /\b(docs|ADR-?\d*|documentation)\b/],
+              ['bug',              /\b(bug|regression|broken|crash)\b/i],
+            ];
+
+            const matched = rules
+              .filter(([, re]) => re.test(title))
+              .map(([label]) => label)
+              .filter(l => !existing.includes(l));
+
+            // Guarantee at least one label on every new issue.
+            const labels = (matched.length || existing.length) ? matched : ['needs-triage'];
+            if (labels.length) {
+              await github.rest.issues.addLabels({
+                ...context.repo,
+                issue_number: context.payload.issue.number,
+                labels,
+              });
+            }

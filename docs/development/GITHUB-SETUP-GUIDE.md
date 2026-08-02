@@ -18,6 +18,7 @@ The athma-ce monorepo uses GitHub Actions for continuous integration and deploym
 - **CI Pipeline**: Runs on every PR and push to `main` or `release/**` branches
 - **Staging Deployment**: Triggered by RC tags (e.g., `v1.2.0-rc.1`)
 - **Production Deployment**: Triggered by release tags (e.g., `v1.2.0`)
+- **Issue Labeling**: Auto-labels new issues on open (see [Issue Labeling](#issue-labeling))
 
 ## Files Created
 
@@ -28,10 +29,13 @@ The athma-ce monorepo uses GitHub Actions for continuous integration and deploym
 ├── workflows/
 │   ├── ci.yml              # Main CI pipeline
 │   ├── staging-rc.yml      # Staging deployment
-│   └── release-prod.yml    # Production deployment
+│   ├── release-prod.yml    # Production deployment
+│   └── issue-labels.yml    # Auto-label new issues (additive, title-only)
 ├── ISSUE_TEMPLATE/
-│   ├── bug_report.yml      # Bug report template
-│   └── feature_request.yml # Feature request template
+│   ├── bug_report.yml      # Bug report template (pre-applies `bug`)
+│   ├── feature_request.yml # Feature request template (pre-applies `enhancement`)
+│   ├── epic.yml            # Multi-phase initiative template (pre-applies `epic`)
+│   └── config.yml          # Blank issues kept enabled
 └── PULL_REQUEST_TEMPLATE.md # PR template
 ```
 
@@ -194,6 +198,23 @@ Recommended team permissions:
 | `*-team` (services)| Write          | Push to branches (except protected) |
 | `devops-team`     | Maintain        | Manage deployments         |
 | `db-team`         | Write           | Approve migration PRs      |
+
+## Issue Labeling
+
+New issues are auto-labeled on open by `.github/workflows/issue-labels.yml`:
+
+- **Taxonomy** (`gh label list`): `epic`, `integration`, `needs-triage`, plus
+  `area: foundation` / `area: clinical` / `area: rcm` / `area: prm` /
+  `area: ai-gateway` / `area: web` / `area: ci-release`, alongside the stock
+  `bug` / `enhancement` / `documentation` / `security` labels.
+- **Matching** is title-only (issue bodies are long prose and over-match),
+  additive (never removes labels set by templates or humans), and guarantees
+  every issue lands with at least one label — an issue that matches nothing
+  and arrives unlabeled gets `needs-triage`.
+- Templates pre-apply their own labels (`bug`, `enhancement`, `epic`); the
+  workflow catches issues filed without a template (gh CLI, API, blank form).
+
+Keep the rule regexes in `issue-labels.yml` in sync with the label taxonomy.
 
 ## Workflow Testing
 
