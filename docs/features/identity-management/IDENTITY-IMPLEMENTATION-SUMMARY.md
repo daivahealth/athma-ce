@@ -1,5 +1,7 @@
 # Identity Management Implementation Summary
 
+> **DEPRECATED (2026-08-28):** this document describes the retired `tenants.settings.identity_config` design (2025-10), which was never wired to code. The implemented mechanism is the config-key hierarchy — see [TENANT-IDENTITY-CONFIG-REFERENCE.md](../../multitenancy/TENANT-IDENTITY-CONFIG-REFERENCE.md). Kept for historical context only.
+
 **Date:** 2025-10-23
 **Approach:** Option 1 - Tenant-Level Configuration
 **Status:** ✅ Complete

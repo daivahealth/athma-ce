@@ -1,5 +1,7 @@
 # Identity Management System
 
+> **DEPRECATED (2026-08-28):** this document describes the retired `tenants.settings.identity_config` design (2025-10), which was never wired to code. The implemented mechanism is the config-key hierarchy — see [TENANT-IDENTITY-CONFIG-REFERENCE.md](../../multitenancy/TENANT-IDENTITY-CONFIG-REFERENCE.md). Kept for historical context only.
+
 ## Overview
 
 The athma-ce platform implements a flexible, country-agnostic identity management system that supports multiple identity document types across different countries. This allows the platform to be deployed globally while respecting local identity requirements.
