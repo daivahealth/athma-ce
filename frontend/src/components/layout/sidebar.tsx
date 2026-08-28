@@ -278,6 +278,7 @@ const navSections: NavSection[] = [
         labelKey: 'nav.administration',
         children: [
           { href: '/configurations', icon: Settings, labelKey: 'nav.configurations' },
+          { href: '/configurations/abdm', icon: ShieldCheck, labelKey: 'nav.abdmSettings' },
           { href: '/catalogs', icon: Database, labelKey: 'nav.catalogs' },
           { href: '/rcm-setup', icon: Landmark, labelKey: 'nav.rcmSetup' },
           { href: '/pe-setup', icon: Bell, labelKey: 'nav.peSetup' },

@@ -88,6 +88,7 @@
     "rcmSetup": "RCM Setup",
     "peSetup": "PE Setup",
     "configurations": "Configurations",
+    "abdmSettings": "ABDM Settings",
     "section": {
       "overview": "Overview",
       "clinical": "Clinical",

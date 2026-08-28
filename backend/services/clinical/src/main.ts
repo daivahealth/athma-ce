@@ -46,7 +46,8 @@ async function bootstrap() {
 
   // Enable CORS with credentials support
   app.enableCors({
-    origin: [
+    // Overridable for non-default dev ports/deployments (comma-separated).
+    origin: process.env.CORS_ORIGINS?.split(',').map((o) => o.trim()) ?? [
       'http://localhost:3000',
       'http://localhost:3001',
       'http://127.0.0.1:3000',

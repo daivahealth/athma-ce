@@ -77,6 +77,12 @@ export const nationalIdentityService = {
 
   // ---- ABHA-specific -------------------------------------------------------
 
+  /** Activation health for this tenant/facility: ok | mock | error. */
+  async getAbhaHealth(): Promise<{ status: 'ok' | 'mock' | 'error'; gateway: string; detail?: string }> {
+    const response = await clinicalClient.get('/national-identity/abha/health');
+    return response.data;
+  },
+
   async getAbhaAddressSuggestions(txnId: string): Promise<string[]> {
     const response = await clinicalClient.post('/national-identity/abha/address/suggestions', {
       txnId,
