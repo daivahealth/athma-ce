@@ -4,6 +4,8 @@
  */
 
 export { ConfigClient, createConfigClient } from './config-client';
+export { SecretClient, SecretNotConfiguredError } from './secret-client';
+export type { SecretClientOptions, SecretRef } from './secret-client';
 export { getDefaultValue, CONFIG_DEFAULTS } from './defaults';
 export type {
   ConfigContext,

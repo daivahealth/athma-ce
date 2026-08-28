@@ -383,6 +383,14 @@ export const PLUGIN_ACTIVATE = 'plugin.activate';
 export const PLUGIN_DEACTIVATE = 'plugin.deactivate';
 
 // ============================================
+// TENANT SECRET PERMISSIONS (encrypted credential storage)
+// ============================================
+/** List secret metadata (never values). */
+export const SECRET_READ = 'secret.read';
+/** Write, delete and rotate secrets (values are write-only). */
+export const SECRET_MANAGE = 'secret.manage';
+
+// ============================================
 // PERMISSION GROUPS (for convenience)
 // ============================================
 
@@ -788,6 +796,10 @@ export const ALL_PERMISSIONS = [
   { code: PLUGIN_INSTALL, name: 'Install Plugins', resource: 'plugin', action: 'install' },
   { code: PLUGIN_ACTIVATE, name: 'Activate Plugins', resource: 'plugin', action: 'activate' },
   { code: PLUGIN_DEACTIVATE, name: 'Deactivate Plugins', resource: 'plugin', action: 'deactivate' },
+
+  // Tenant Secrets
+  { code: SECRET_READ, name: 'View Secret Metadata', resource: 'secret', action: 'read' },
+  { code: SECRET_MANAGE, name: 'Manage Secrets', resource: 'secret', action: 'manage' },
 ];
 
 /**

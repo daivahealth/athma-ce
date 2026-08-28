@@ -56,7 +56,7 @@ exports.CONFIG_DEFAULTS = {
     // National identity
     // Which national identity providers are offered. Emirates ID is offline
     // validate-only; ABHA additionally supports online OTP verification/enrolment.
-    'identity.enabled_providers': ['AE:emirates_id', 'IN:passport'],
+    'identity.enabled_providers': ['AE:emirates_id', 'INTL:passport'],
     // ABDM / ABHA (India). Disabled by default: enabling it without valid NHA
     // credentials would surface a broken flow, so the feature must be turned on
     // deliberately per tenant.

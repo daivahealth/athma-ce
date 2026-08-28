@@ -128,6 +128,8 @@ export class ConfigService {
       throw new NotFoundException(`Instance config '${key}' not found. Cannot update non-existent config.`);
     }
 
+    this.assertNotSensitive(existing);
+
     // Update config
     const updated = await this.prisma.instanceConfig.update({
       where: { configKey: key },
@@ -184,6 +186,8 @@ export class ConfigService {
     if (!instanceConfig.isOverridable) {
       throw new BadRequestException(`Config '${key}' cannot be overridden at tenant level`);
     }
+
+    this.assertNotSensitive(instanceConfig);
 
     // Check if tenant config already exists
     const existing = await this.prisma.tenantConfig.findUnique({
@@ -301,6 +305,8 @@ export class ConfigService {
       throw new BadRequestException(`Config '${key}' cannot be overridden at facility level`);
     }
 
+    this.assertNotSensitive(instanceConfig);
+
     // Check if facility config already exists
     const existing = await this.prisma.facilityConfig.findUnique({
       where: {
@@ -387,6 +393,18 @@ export class ConfigService {
     };
 
     await this.prisma.configAuditLog.create({ data: auditData });
+  }
+
+  /**
+   * Keys flagged isSensitive are credentials: they belong in the encrypted
+   * TenantSecret store (write-only, audited), never in plain config tables.
+   */
+  private assertNotSensitive(schema: { configKey: string; isSensitive: boolean }): void {
+    if (schema.isSensitive) {
+      throw new BadRequestException(
+        `Config '${schema.configKey}' is sensitive — store it via the secrets API (/secrets/tenant/{tenantId}/{key}), not plain config`,
+      );
+    }
   }
 
   /**

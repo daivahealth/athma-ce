@@ -19,6 +19,7 @@ import { ConfigModule as AppConfigModule } from './modules/config/config.module'
 import { SpaceModule } from './modules/space/space.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { PluginModule } from './modules/plugin/plugin.module';
+import { SecretModule } from './modules/secret/secret.module';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
 
@@ -47,6 +48,7 @@ import { LoggerService } from './common/logger/logger.service';
     SpaceModule,
     RbacModule,
     PluginModule,
+    SecretModule,
     // CatalogModule removed - catalog models moved to Clinical database
     // ValueSetModule removed - valueset models moved to Clinical database
   ],

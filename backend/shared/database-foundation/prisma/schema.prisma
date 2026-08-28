@@ -614,3 +614,48 @@ model PluginActivation {
   @@map("plugin_activations")
 }
 
+
+// Per-tenant encrypted secret storage (ADR-0015 §5, issue #81).
+// Values are envelope-encrypted: a random per-secret data key encrypts the
+// value (AES-256-GCM); the data key is wrapped by a versioned master key.
+// Plaintext is never at rest and never returned by the admin API.
+model TenantSecret {
+  id         String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  /// ABDM & co. hold credentials per facility (each facility is its own HIP).
+  facilityId String?   @map("facility_id") @db.Uuid
+  /// Owning integration identity, e.g. 'abdm', 'nhcx', 'ai-gateway'.
+  ownerId    String    @map("owner_id")
+  key        String    @map("key")
+  /// JSON envelope: {v, iv, tag, ct, dekIv, dekTag, wrappedDek} — all base64.
+  ciphertext String    @map("ciphertext")
+  /// Master key version that wrapped the data key (for rotation).
+  keyVersion Int       @map("key_version")
+  createdBy  String?   @map("created_by") @db.Uuid
+  updatedBy  String?   @map("updated_by") @db.Uuid
+  rotatedAt  DateTime? @map("rotated_at") @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Uniqueness on (tenant, facility, owner, key) is enforced by two partial
+  // unique indexes in SQL (NULL facility would defeat a plain unique index).
+  @@index([tenantId, ownerId])
+  @@map("tenant_secrets")
+}
+
+/// Append-only audit of every secret access. Never contains values.
+model SecretAccessLog {
+  id         String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  facilityId String?  @map("facility_id") @db.Uuid
+  ownerId    String   @map("owner_id")
+  key        String   @map("key")
+  action     String   @map("action") // write | read | delete | rotate
+  /// User id for admin actions; service consumer name for internal reads.
+  actor      String?  @map("actor")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([tenantId, key])
+  @@index([createdAt])
+  @@map("secret_access_logs")
+}

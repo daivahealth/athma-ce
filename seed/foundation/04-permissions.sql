@@ -400,3 +400,9 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0042-000000000003', 'plugin.activate', 'Activate Plugins', 'Enable an installed plugin for a tenant', 'plugin', 'activate', NOW(), NOW()),
   ('00000000-0000-0000-0042-000000000004', 'plugin.deactivate', 'Deactivate Plugins', 'Disable a plugin for a tenant', 'plugin', 'deactivate', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
+
+-- Tenant Secret Permissions (encrypted credential storage, issue #81)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0043-000000000001', 'secret.read', 'View Secret Metadata', 'List which secrets are configured (never values)', 'secret', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0043-000000000002', 'secret.manage', 'Manage Secrets', 'Write, delete and rotate tenant secrets (values are write-only)', 'secret', 'manage', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;

@@ -1115,3 +1115,58 @@ For security concerns or vulnerabilities, contact the security team through appr
 
 *Document Version: 1.0*
 *Last Updated: January 2026*
+
+## Tenant Secrets (Encrypted Credential Storage)
+
+External-service credentials (ABDM client secrets, payer credentials, LLM API
+keys) are stored per tenant/facility in the Foundation `tenant_secrets` table,
+never in plain config or env vars in multi-tenant deployments (issue #81,
+ADR-0015 §5).
+
+### Encryption model
+
+Envelope encryption: each secret value is encrypted with its own random
+256-bit data key (AES-256-GCM); the data key is wrapped with a versioned
+master key. Rotation re-wraps only the data keys — value ciphertext is never
+touched. Plaintext is never at rest and never logged.
+
+Master key configuration (env-sourced for self-hosted; a KMS-backed provider
+can replace this source without changing the envelope format):
+
+```bash
+SECRETS_MASTER_KEY=<base64 of 32 random bytes>     # openssl rand -base64 32
+SECRETS_MASTER_KEY_VERSION=1
+# During rotation only:
+SECRETS_MASTER_KEY_PREVIOUS=<old key>
+SECRETS_MASTER_KEY_PREVIOUS_VERSION=1
+```
+
+**Fail-closed:** a missing/invalid master key disables secret operations with
+`503` — dependent integrations become unavailable rather than silently
+running with empty credentials.
+
+### API surface
+
+| Route | Auth | Behavior |
+|---|---|---|
+| `PUT /api/v1/secrets/tenant/:tenantId/:key` | JWT + `secret.manage` | Write a secret (`{value, ownerId, facilityId?}`). Response is metadata only — the value is never echoed. |
+| `GET /api/v1/secrets/tenant/:tenantId` | JWT + `secret.read` | Metadata list (`configured`, `keyVersion`, `rotatedAt`); never values or ciphertext. |
+| `DELETE /api/v1/secrets/tenant/:tenantId/:key` | JWT + `secret.manage` | Remove a secret. |
+| `POST /api/v1/secrets/rotate` | JWT + `secret.manage`, super_admin only | Re-wrap all data keys onto the current master key version. |
+| `GET /api/v1/secrets/internal/value` | `X-Internal-Api-Key` | Value release for internal service consumers; `x-service-name` names the consumer for the audit trail. Facility-scoped lookups fall back to the tenant-scoped secret. |
+
+Tenant-scoped users can only manage their own tenant's secrets; `super_admin`
+can manage any. Every write/read/delete/rotate is recorded in
+`secret_access_logs` (actor or consumer, scope, action — never values).
+
+### Sensitive config keys
+
+Config keys flagged `isSensitive` in the schema are rejected by the config
+set endpoints (instance/tenant/facility) with a pointer to the secrets API —
+credentials can no longer land in plain config tables.
+
+### Consumers
+
+Services fetch secrets with `SecretClient` from `@zeal/config-client`
+(in-memory cache only, 60s default, fail-closed; `getOptional()` for
+integrations with a documented env-var fallback in single-tenant dev).
