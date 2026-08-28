@@ -28,7 +28,7 @@ export class CallbackController {
       body: req.body,
     };
 
-    const verification = this.verifier.verify(req);
+    const verification = await this.verifier.verify(req);
     if (!verification.ok) {
       await this.callbackService.quarantine(callback, 'verification_failed', verification.reason);
       return { accepted: true };

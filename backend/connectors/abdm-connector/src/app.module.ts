@@ -21,6 +21,9 @@ import { EventsController } from './modules/events/events.controller';
 import { InboxProcessorService } from './modules/events/inbox-processor.service';
 import { CareContextService } from './modules/care-context/care-context.service';
 import { CareContextController } from './modules/care-context/care-context.controller';
+import { ConsentService } from './modules/consent/consent.service';
+import { ConsentController } from './modules/consent/consent.controller';
+import { JwksVerifierService } from './modules/callback/jwks-verifier.service';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] })],
@@ -33,6 +36,7 @@ import { CareContextController } from './modules/care-context/care-context.contr
     RegistriesController,
     EventsController,
     CareContextController,
+    ConsentController,
   ],
   providers: [
     PrismaService,
@@ -49,6 +53,8 @@ import { CareContextController } from './modules/care-context/care-context.contr
     RegistriesService,
     CareContextService,
     InboxProcessorService,
+    ConsentService,
+    JwksVerifierService,
   ],
 })
 export class AppModule {}

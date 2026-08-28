@@ -11,7 +11,8 @@
 | `PORT` | HTTP port (default 3016) |
 | `ABDM_DATABASE_URL` | Postgres URL for `zeal_abdm` |
 | `INTERNAL_API_KEY` | Shared key for the internal API (same value as clinical/foundation) |
-| `ABDM_CALLBACK_AUTH` | `bearer` (default) or `none` (local dev only — never production) |
+| `ABDM_CALLBACK_AUTH` | `jwks` (full signature verification — REQUIRED in production), `bearer` (default; structural check), or `none` (local dev only) |
+| `ABDM_JWKS_URL` | Gateway certs endpoint for `jwks` mode, e.g. https://dev.abdm.gov.in/api/hiecm/gateway/v3/certs |
 | `FOUNDATION_BASE_URL` | Foundation service URL — per-tenant ABDM settings (config) and per-facility credentials (TenantSecret store) resolve through it |
 | `ABDM_CLIENT_ID` / `ABDM_CLIENT_SECRET` | Optional single-tenant/self-hosted credential fallback, used only when a tenant has NO stored secret |
 

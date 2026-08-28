@@ -119,14 +119,32 @@ Clinical exposes the counterpart lookup for the connector:
 `GET /api/v1/internal/national-identity/patients/:patientId/abha?tenantId=`
 (internal key + `x-tenant-id` header) → `{abhaNumber, abhaAddress, verificationStatus}` or 404.
 
+## Consents (HIE-CM)
+
+Consent notifications arrive on the public callback ingress
+(`.../consents/hip/notify`), resolve tenancy via the HIP id (header or
+`notification.consentDetail.hip.id`), and are handled as:
+1. artefact stored verbatim in `consent_artefacts` (idempotent by consent id;
+   revocation/expiry updates `status`, the original artefact is retained),
+2. surfaced into core as a generic `PatientConsent`
+   (`consentCategory: abdm`, idempotent via `linkedEntityType/Id`) through
+   clinical's `POST /internal/national-identity/abdm-consents`; a surfacing
+   failure is recorded on the artefact (`surfaced=false` + error), never
+   dropped,
+3. gateway `on-notify` acknowledged best-effort on the live path.
+
+### `GET /internal/consents?tenantId=&abhaAddress=`
+- Artefact state: `{consentId, abhaAddress, status, hiTypes, fromDate, toDate, expiresAt, surfaced, surfaceError}`.
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`
 - The single endpoint registered with the ABDM gateway per environment.
 - Always answers `202 {"accepted": true}` — processing outcome is never leaked.
-- Verification: `Authorization: Bearer <gateway JWT>` required
-  (`ABDM_CALLBACK_AUTH=bearer`, default). Full JWKS signature verification
-  is tracked as follow-up work for the M2/HIP phase (#82).
+- Verification modes (`ABDM_CALLBACK_AUTH`): `jwks` — full RS256 signature
+  verification against `ABDM_JWKS_URL` (**required in production**; enforces
+  exp/nbf, rejects non-RS256, refreshes keys hourly and once on unknown kid);
+  `bearer` (default) — structural JWT check only; `none` — local dev only.
 - Tenant resolution order: `request-id`/`x-request-id` header or
   `resp.requestId`/`requestId`/`txnId` in the body → correlation store;
   else `x-hip-id` header or `hip.id`/`hipId` in the body → HIP mapping;

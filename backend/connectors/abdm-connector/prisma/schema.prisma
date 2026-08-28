@@ -121,3 +121,31 @@ model CareContext {
   @@index([status])
   @@map("care_contexts")
 }
+
+/// HIE-CM consent artefacts (issue #115, ABDM M2). The artefact — patient,
+/// hiTypes, date range, expiry — is the authorization every HIP data
+/// provision must be able to point back to; stored verbatim, never edited.
+model ConsentArtefact {
+  id           String    @id @default(uuid()) @map("id") @db.Uuid
+  /// HIE-CM's consent artefact id.
+  consentId    String    @unique @map("consent_id")
+  tenantId     String    @map("tenant_id") @db.Uuid
+  facilityId   String?   @map("facility_id") @db.Uuid
+  abhaAddress  String    @map("abha_address")
+  status       String    @map("status") // GRANTED | REVOKED | EXPIRED
+  hiTypes      Json      @map("hi_types")
+  fromDate     DateTime? @map("from_date") @db.Timestamptz(6)
+  toDate       DateTime? @map("to_date") @db.Timestamptz(6)
+  expiresAt    DateTime? @map("expires_at") @db.Timestamptz(6)
+  /// The full artefact as received — the audit/legal record.
+  artefact     Json      @map("artefact")
+  /// Whether the generic PatientConsent record was created in clinical.
+  surfaced     Boolean   @default(false) @map("surfaced")
+  surfaceError String?   @map("surface_error")
+  receivedAt   DateTime  @default(now()) @map("received_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, abhaAddress])
+  @@index([status])
+  @@map("consent_artefacts")
+}

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import type { Request } from 'express';
+import { JwksVerifierService } from './jwks-verifier.service';
 
 export interface VerificationResult {
   ok: boolean;
@@ -14,6 +15,8 @@ export interface VerificationResult {
  * follow-up work for the M2/HIP phase (#82) — for now this enforces the presence and
  * basic shape of the bearer token, controlled by ABDM_CALLBACK_AUTH:
  *
+ *   'jwks'             — full RS256 signature verification against
+ *                         ABDM_JWKS_URL (REQUIRED in production)
  *   'bearer' (default) — require a structurally valid JWT bearer token
  *   'none'             — accept unauthenticated callbacks (local dev only)
  *
@@ -24,7 +27,9 @@ export interface VerificationResult {
 export class AbdmCallbackVerifier {
   private readonly logger = new Logger(AbdmCallbackVerifier.name);
 
-  verify(req: Request): VerificationResult {
+  constructor(private readonly jwks: JwksVerifierService) {}
+
+  async verify(req: Request): Promise<VerificationResult> {
     const mode = process.env.ABDM_CALLBACK_AUTH ?? 'bearer';
     if (mode === 'none') {
       this.logger.warn('ABDM_CALLBACK_AUTH=none — callback verification disabled (dev only)');
@@ -36,10 +41,16 @@ export class AbdmCallbackVerifier {
       return { ok: false, reason: 'Missing bearer token' };
     }
     const token = header.slice('Bearer '.length);
-    // Structural JWT check only until JWKS verification is wired (M2, #82).
     if (token.split('.').length !== 3) {
       return { ok: false, reason: 'Malformed bearer token' };
     }
+
+    if (mode === 'jwks') {
+      const reason = await this.jwks.verify(token);
+      return reason ? { ok: false, reason } : { ok: true };
+    }
+
+    // 'bearer': structural check only — use 'jwks' in production.
     return { ok: true };
   }
 }

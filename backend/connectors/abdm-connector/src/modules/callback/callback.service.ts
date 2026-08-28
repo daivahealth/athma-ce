@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CorrelationService } from '../correlation/correlation.service';
 import { CareContextService } from '../care-context/care-context.service';
+import { ConsentService } from '../consent/consent.service';
 
 export interface InboundCallback {
   path: string;
@@ -35,12 +36,23 @@ export class CallbackService {
     private readonly prisma: PrismaService,
     private readonly correlationService: CorrelationService,
     private readonly careContexts: CareContextService,
+    private readonly consents: ConsentService,
   ) {}
 
   async handle(callback: InboundCallback): Promise<void> {
     const resolved = await this.resolveTenancy(callback);
     if (!resolved) {
       await this.quarantine(callback, 'unresolvable', 'No known transaction id or HIP id');
+      return;
+    }
+
+    // Path-dispatched handlers first: consent notifications are
+    // gateway-initiated (no correlation of ours) and carry their own content.
+    if (/consent/i.test(callback.path) && /notify/i.test(callback.path)) {
+      await this.consents.handleNotification(
+        { tenantId: resolved.tenantId, facilityId: resolved.facilityId ?? undefined },
+        callback.body,
+      );
       return;
     }
 
@@ -135,7 +147,8 @@ export class CallbackService {
     if (typeof header === 'string' && header) return header;
 
     const body = callback.body as Record<string, any> | undefined;
-    const candidate = body?.hip?.id ?? body?.hipId;
+    const candidate =
+      body?.hip?.id ?? body?.hipId ?? body?.notification?.consentDetail?.hip?.id;
     return typeof candidate === 'string' && candidate ? candidate : undefined;
   }
 }
