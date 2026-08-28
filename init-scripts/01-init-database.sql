@@ -128,3 +128,16 @@ VALUES ('database', 'INIT', '{"message": "zeal domain databases provisioned"}', 
 
 
 
+
+\echo '>>> Creating zeal_abdm (ABDM connector: correlation/routing state, no PHI)'
+SELECT 'CREATE DATABASE zeal_abdm OWNER zeal_user ENCODING ''UTF8'' TEMPLATE template0'
+WHERE NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'zeal_abdm');
+\gexec
+
+\connect zeal_abdm
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+GRANT ALL PRIVILEGES ON DATABASE zeal_abdm TO zeal_user;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO zeal_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO zeal_user;
+ALTER DEFAULT PRIVILEGES FOR USER zeal_user IN SCHEMA public GRANT ALL ON TABLES TO zeal_user;
+ALTER DEFAULT PRIVILEGES FOR USER zeal_user IN SCHEMA public GRANT ALL ON SEQUENCES TO zeal_user;

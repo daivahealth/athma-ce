@@ -6,6 +6,7 @@
   "workspaces": [
     "services/*",
     "shared/*",
+    "connectors/*",
     "contracts"
   ],
   "scripts": {

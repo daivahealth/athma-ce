@@ -1,0 +1,73 @@
+// ABDM connector database (zeal_abdm): protocol state only — correlation of
+// async gateway transactions to tenants, HIP↔facility routing, and the
+// quarantine of unresolvable callbacks. PHI never lives here; clinical data
+// stays in the clinical service and is fetched per use (ADR-0015).
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("ABDM_DATABASE_URL")
+}
+
+/// Every outbound async gateway request records its transaction here BEFORE
+/// leaving, so the later callback can be routed to the right tenant. This is
+/// the only place callbacks may resolve tenancy from — never the payload.
+model CorrelationEntry {
+  id          String    @id @default(uuid()) @map("id") @db.Uuid
+  /// ABDM request/transaction id used to correlate the callback.
+  txnId       String    @unique @map("txn_id")
+  /// Workflow this transaction belongs to, e.g. 'abha.enrol', 'abha.verify'.
+  flow        String    @map("flow")
+  tenantId    String    @map("tenant_id") @db.Uuid
+  facilityId  String?   @map("facility_id") @db.Uuid
+  status      String    @default("pending") @map("status") // pending | completed | failed | expired
+  /// Non-sensitive routing context only — never OTPs, tokens, or identifiers.
+  metadata    Json?     @map("metadata")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt   DateTime  @map("expires_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+
+  @@index([tenantId, flow])
+  @@index([expiresAt])
+  @@map("correlation_entries")
+}
+
+/// Routes gateway-initiated flows (discovery, consent notifications) that
+/// carry a HIP id instead of a transaction id. Each facility is its own HIP
+/// in ABDM's HRP model; the mapping is maintained via the internal API when
+/// a facility is onboarded (HFR linking, issue #96+).
+model HipFacilityMapping {
+  id         String   @id @default(uuid()) @map("id") @db.Uuid
+  hipId      String   @unique @map("hip_id")
+  tenantId   String   @map("tenant_id") @db.Uuid
+  facilityId String   @map("facility_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId])
+  @@map("hip_facility_mappings")
+}
+
+/// Callbacks that could not be verified or resolved to a tenant. Never
+/// processed, never guessed — held for operator triage (see the ABDM
+/// connector runbook).
+model QuarantinedCallback {
+  id         String    @id @default(uuid()) @map("id") @db.Uuid
+  path       String    @map("path")
+  reason     String    @map("reason") // verification_failed | unresolvable | malformed
+  detail     String?   @map("detail")
+  /// Correlation-relevant headers only (request ids, hip id) — never Authorization.
+  headers    Json      @map("headers")
+  body       Json?     @map("body")
+  receivedAt DateTime  @default(now()) @map("received_at") @db.Timestamptz(6)
+  resolvedAt DateTime? @map("resolved_at") @db.Timestamptz(6)
+  resolvedBy String?   @map("resolved_by")
+
+  @@index([receivedAt])
+  @@index([reason, resolvedAt])
+  @@map("quarantined_callbacks")
+}

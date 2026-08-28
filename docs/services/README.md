@@ -4,6 +4,36 @@ This directory contains comprehensive documentation for all athma-ce backend ser
 
 ## Available Services
 
+### ABDM Connector
+
+**Port:** 3016 | **Database:** `zeal_abdm` | **Location:** `backend/connectors/abdm-connector`
+
+Deployed connector service owning the ABDM gateway edge for all Indian tenants
+(ADR-0015 hybrid runtime — connectors host national-infrastructure integrations
+outside the PHI-serving core services). One deployment serves every tenant;
+self-hosted installs run the same service single-tenant.
+
+**Key Features:**
+- Correlation store: every outbound async gateway transaction records
+  `txnId → (tenantId, facilityId)` before it leaves; callbacks resolve tenancy
+  only through it (never from payload claims)
+- `hipId → facility` routing for gateway-initiated flows (each facility is its
+  own HIP in ABDM's HRP model)
+- Single public callback ingress (`/api/v1/callbacks/abdm/v3/*`), always `202`;
+  verification hook (bearer today, gateway JWKS with #97)
+- Quarantine queue for unverifiable/unresolvable callbacks — triaged by
+  operators, never guessed
+- Internal API (`X-Internal-Api-Key`) for the clinical service — see
+  [ABDM Connector Internal API](../api/ABDM-CONNECTOR-INTERNAL-API.md)
+- No PHI at rest: the `zeal_abdm` database holds protocol/routing state only
+
+**Quick Links:**
+- [Runbook](../runbooks/abdm-connector.md)
+- [Internal API Reference](../api/ABDM-CONNECTOR-INTERNAL-API.md)
+- [Database Schema](../../backend/connectors/abdm-connector/prisma/schema.prisma)
+
+---
+
 ### [PRM Service - Patient Relationship Management](./PRM-SERVICE-GUIDE.md)
 
 **Port:** 3013 | **Database:** `zeal_prm`
