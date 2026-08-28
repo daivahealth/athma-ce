@@ -27,7 +27,7 @@ import { AbdmSessionService } from './providers/abha/abdm-session.service';
 import { AbdmCryptoService } from './providers/abha/abdm-crypto.service';
 import { AbdmHttpGateway } from './providers/abha/abdm-http.gateway';
 import { MockAbdmGateway } from './providers/abha/mock-abdm.gateway';
-import { ABDM_GATEWAY } from './providers/abha/abdm-gateway.interface';
+import { AbdmCredentialsService } from './providers/abha/abdm-credentials.service';
 
 @Module({
   imports: [ClinicalDatabaseModule],
@@ -36,6 +36,7 @@ import { ABDM_GATEWAY } from './providers/abha/abdm-gateway.interface';
     NationalIdentityService,
     IdentityChallengeStore,
     AbdmConfigService,
+    AbdmCredentialsService,
     AbdmSessionService,
     AbdmCryptoService,
     AbdmHttpGateway,
@@ -43,20 +44,9 @@ import { ABDM_GATEWAY } from './providers/abha/abdm-gateway.interface';
     EmiratesIdProvider,
     AbhaProvider,
 
-    /**
-     * Real gateway when NHA credentials are deployed, offline mock otherwise —
-     * mirroring the MockHieProvider precedent. Bound once at boot: changing
-     * credentials requires a restart.
-     */
-    {
-      provide: ABDM_GATEWAY,
-      inject: [AbdmConfigService, AbdmHttpGateway, MockAbdmGateway],
-      useFactory: (
-        config: AbdmConfigService,
-        live: AbdmHttpGateway,
-        mock: MockAbdmGateway,
-      ) => (config.hasCredentials ? live : mock),
-    },
+    // Gateway selection is per request inside AbhaProvider (issue #96):
+    // per-facility credentials from the TenantSecret store decide live vs
+    // mock for each call — nothing is bound at boot.
 
     /** The registry the service iterates. Add new countries here. */
     {

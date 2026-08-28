@@ -18,7 +18,8 @@ import { IdentityProviderError } from '../national-identity-provider.interface';
 import { AbdmConfigService } from './abdm-config.service';
 import { AbdmSessionService } from './abdm-session.service';
 import { AbdmCryptoService } from './abdm-crypto.service';
-import { AbdmGateway, AbhaOtpChallenge, AbhaProfile } from './abdm-gateway.interface';
+import { AbdmCredentialsService } from './abdm-credentials.service';
+import { AbdmGateway, AbdmScope, AbhaOtpChallenge, AbhaProfile } from './abdm-gateway.interface';
 
 @Injectable()
 export class AbdmHttpGateway implements AbdmGateway {
@@ -29,10 +30,11 @@ export class AbdmHttpGateway implements AbdmGateway {
     private readonly config: AbdmConfigService,
     private readonly session: AbdmSessionService,
     private readonly crypto: AbdmCryptoService,
+    private readonly credentials: AbdmCredentialsService,
   ) {}
 
-  async requestEnrolOtp(tenantId: string, aadhaar: string): Promise<AbhaOtpChallenge> {
-    const { baseUrl, token, headers } = await this.prepare(tenantId);
+  async requestEnrolOtp(scope: AbdmScope, aadhaar: string): Promise<AbhaOtpChallenge> {
+    const { baseUrl, token, headers } = await this.prepare(scope);
     const encrypted = await this.crypto.encrypt(baseUrl, token, aadhaar);
 
     const data = await this.post(
@@ -56,13 +58,13 @@ export class AbdmHttpGateway implements AbdmGateway {
   }
 
   async enrolByAadhaar(
-    tenantId: string,
+    scope: AbdmScope,
     txnId: string,
     otp: string,
     mobile?: string,
   ): Promise<AbhaProfile> {
-    const settings = await this.config.getSettings(tenantId);
-    const { baseUrl, token, headers } = await this.prepare(tenantId);
+    const settings = await this.config.getSettings(scope.tenantId);
+    const { baseUrl, token, headers } = await this.prepare(scope);
 
     const encryptedOtp = await this.crypto.encrypt(baseUrl, token, otp);
     const encryptedMobile = mobile ? await this.crypto.encrypt(baseUrl, token, mobile) : undefined;
@@ -90,11 +92,11 @@ export class AbdmHttpGateway implements AbdmGateway {
   }
 
   async requestLoginOtp(
-    tenantId: string,
+    scope: AbdmScope,
     loginHint: string,
     loginId: string,
   ): Promise<AbhaOtpChallenge> {
-    const { baseUrl, token, headers } = await this.prepare(tenantId);
+    const { baseUrl, token, headers } = await this.prepare(scope);
     const encrypted = await this.crypto.encrypt(baseUrl, token, loginId);
 
     // ABDM routes the OTP through Aadhaar for aadhaar/abha-number hints and
@@ -120,8 +122,8 @@ export class AbdmHttpGateway implements AbdmGateway {
     };
   }
 
-  async verifyLogin(tenantId: string, txnId: string, otp: string): Promise<AbhaProfile> {
-    const { baseUrl, token, headers } = await this.prepare(tenantId);
+  async verifyLogin(scope: AbdmScope, txnId: string, otp: string): Promise<AbhaProfile> {
+    const { baseUrl, token, headers } = await this.prepare(scope);
     const encryptedOtp = await this.crypto.encrypt(baseUrl, token, otp);
 
     const data = await this.post(
@@ -140,8 +142,8 @@ export class AbdmHttpGateway implements AbdmGateway {
     return this.toProfile(data);
   }
 
-  async getAbhaAddressSuggestions(tenantId: string, txnId: string): Promise<string[]> {
-    const { baseUrl, headers } = await this.prepare(tenantId);
+  async getAbhaAddressSuggestions(scope: AbdmScope, txnId: string): Promise<string[]> {
+    const { baseUrl, headers } = await this.prepare(scope);
 
     try {
       const response = await axios.get(`${baseUrl}/v3/enrollment/enrol/suggestion`, {
@@ -155,8 +157,8 @@ export class AbdmHttpGateway implements AbdmGateway {
     }
   }
 
-  async createAbhaAddress(tenantId: string, txnId: string, abhaAddress: string): Promise<string> {
-    const { baseUrl, headers } = await this.prepare(tenantId);
+  async createAbhaAddress(scope: AbdmScope, txnId: string, abhaAddress: string): Promise<string> {
+    const { baseUrl, headers } = await this.prepare(scope);
 
     const data = await this.post(
       `${baseUrl}/v3/enrollment/enrol/abha-address`,
@@ -168,14 +170,23 @@ export class AbdmHttpGateway implements AbdmGateway {
     return String(data?.preferredAbhaAddress ?? data?.abhaAddress ?? abhaAddress);
   }
 
+  /**
+   * Side-effect-free credential check used by the activation health check:
+   * resolves settings + credentials and performs the gateway session
+   * handshake. Throws IdentityProviderError on any failure.
+   */
+  async checkSession(scope: AbdmScope): Promise<void> {
+    await this.prepare(scope);
+  }
+
   // ---------------------------------------------------------------- internals
 
-  private async prepare(tenantId: string): Promise<{
+  private async prepare(scope: AbdmScope): Promise<{
     baseUrl: string;
     token: string;
     headers: Record<string, string>;
   }> {
-    const settings = await this.config.getSettings(tenantId);
+    const settings = await this.config.getSettings(scope.tenantId);
 
     if (!settings.baseUrl || !settings.gatewayUrl) {
       throw new IdentityProviderError(
@@ -184,10 +195,20 @@ export class AbdmHttpGateway implements AbdmGateway {
       );
     }
 
+    // Per-facility credentials from the TenantSecret store (falls back to
+    // tenant scope, then deployment env — see AbdmCredentialsService).
+    const creds = await this.credentials.getCredentials(scope);
+    if (!creds) {
+      throw new IdentityProviderError(
+        'ABDM_NOT_CONFIGURED',
+        'ABDM credentials are not configured for this tenant/facility',
+      );
+    }
+
     const token = await this.session.getAccessToken(
       settings.gatewayUrl,
-      this.config.clientId,
-      this.config.clientSecret,
+      creds.clientId,
+      creds.clientSecret,
     );
 
     return {

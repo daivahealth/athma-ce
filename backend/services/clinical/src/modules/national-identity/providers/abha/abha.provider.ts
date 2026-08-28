@@ -10,7 +10,7 @@
  * number/address and masked metadata leave this class.
  */
 
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AbhaNumberValidator, type ValidationResult } from '@zeal/validators';
 import {
   IdentityCapability,
@@ -21,7 +21,10 @@ import {
   IdentityVerificationResult,
   NationalIdentityProvider,
 } from '../national-identity-provider.interface';
-import { ABDM_GATEWAY, AbdmGateway, AbhaProfile } from './abdm-gateway.interface';
+import { AbdmGateway, AbdmScope, AbhaProfile } from './abdm-gateway.interface';
+import { AbdmCredentialsService } from './abdm-credentials.service';
+import { AbdmHttpGateway } from './abdm-http.gateway';
+import { MockAbdmGateway } from './mock-abdm.gateway';
 
 @Injectable()
 export class AbhaProvider implements NationalIdentityProvider {
@@ -40,11 +43,53 @@ export class AbhaProvider implements NationalIdentityProvider {
 
   private readonly validator = new AbhaNumberValidator();
 
-  constructor(@Inject(ABDM_GATEWAY) private readonly gateway: AbdmGateway) {}
+  constructor(
+    private readonly credentials: AbdmCredentialsService,
+    private readonly liveGateway: AbdmHttpGateway,
+    private readonly mockGateway: MockAbdmGateway,
+  ) {}
 
-  /** Which gateway is live — surfaced so the UI can badge "mock" in dev. */
-  get gatewayName(): string {
-    return this.gateway.name;
+  /**
+   * Gateway selection is PER REQUEST, per tenant/facility (issue #96): a
+   * tenant with stored credentials talks to the live gateway; one without
+   * gets the fully-exercisable mock. Sandbox and production tenants coexist
+   * in one deployment — nothing is bound at boot any more.
+   */
+  private async gateway(scope: AbdmScope): Promise<AbdmGateway> {
+    return (await this.credentials.hasCredentials(scope)) ? this.liveGateway : this.mockGateway;
+  }
+
+  /** Which gateway a tenant would use — surfaced so the UI can badge "mock". */
+  async getGatewayName(scope: AbdmScope): Promise<string> {
+    return (await this.gateway(scope)).name;
+  }
+
+  /**
+   * Activation health check (ADR-0015 plugin lifecycle): resolves credentials
+   * and, when live, performs a real gateway session handshake so a tenant
+   * cannot be switched on with broken credentials.
+   */
+  async healthCheck(scope: AbdmScope): Promise<{
+    status: 'ok' | 'mock' | 'error';
+    gateway: string;
+    detail?: string;
+  }> {
+    const creds = await this.credentials.getCredentials(scope);
+    if (!creds) {
+      return { status: 'mock', gateway: this.mockGateway.name };
+    }
+    try {
+      // A login-OTP request would send a real OTP; the session handshake is
+      // the side-effect-free way to prove the credentials work.
+      await this.liveGateway.checkSession(scope);
+      return { status: 'ok', gateway: this.liveGateway.name };
+    } catch (error) {
+      return {
+        status: 'error',
+        gateway: this.liveGateway.name,
+        detail: error instanceof Error ? error.message : String(error),
+      };
+    }
   }
 
   validate(value: string): ValidationResult {
@@ -65,7 +110,7 @@ export class AbhaProvider implements NationalIdentityProvider {
           'Creating an ABHA requires an Aadhaar number',
         );
       }
-      return this.gateway.requestEnrolOtp(req.tenantId, req.loginId);
+      return (await this.gateway(this.scopeOf(req))).requestEnrolOtp(this.scopeOf(req), req.loginId);
     }
 
     if (!this.loginHints.includes(req.loginHint)) {
@@ -75,7 +120,7 @@ export class AbhaProvider implements NationalIdentityProvider {
       );
     }
 
-    return this.gateway.requestLoginOtp(req.tenantId, req.loginHint, req.loginId);
+    return (await this.gateway(this.scopeOf(req))).requestLoginOtp(this.scopeOf(req), req.loginHint, req.loginId);
   }
 
   async completeChallenge(req: IdentityChallengeCompletion): Promise<IdentityVerificationResult> {
@@ -83,27 +128,34 @@ export class AbhaProvider implements NationalIdentityProvider {
       throw new IdentityProviderError('IDENTITY_MISSING_OTP', 'An OTP is required');
     }
 
+    const scope = this.scopeOf(req);
+    const gateway = await this.gateway(scope);
     const profile =
       req.purpose === 'enroll'
-        ? await this.gateway.enrolByAadhaar(req.tenantId, req.txnId, req.otp, req.mobile)
-        : await this.gateway.verifyLogin(req.tenantId, req.txnId, req.otp);
+        ? await gateway.enrolByAadhaar(scope, req.txnId, req.otp, req.mobile)
+        : await gateway.verifyLogin(scope, req.txnId, req.otp);
 
-    return this.toResult(profile, req.purpose);
+    return this.toResult(profile, req.purpose, gateway.name);
   }
 
   /** Candidate ABHA addresses for a freshly enrolled account. */
-  async getAddressSuggestions(tenantId: string, txnId: string): Promise<string[]> {
-    return this.gateway.getAbhaAddressSuggestions(tenantId, txnId);
+  async getAddressSuggestions(scope: AbdmScope, txnId: string): Promise<string[]> {
+    return (await this.gateway(scope)).getAbhaAddressSuggestions(scope, txnId);
   }
 
   /** Claims an ABHA address for a freshly enrolled account. */
-  async createAddress(tenantId: string, txnId: string, abhaAddress: string): Promise<string> {
-    return this.gateway.createAbhaAddress(tenantId, txnId, abhaAddress);
+  async createAddress(scope: AbdmScope, txnId: string, abhaAddress: string): Promise<string> {
+    return (await this.gateway(scope)).createAbhaAddress(scope, txnId, abhaAddress);
+  }
+
+  private scopeOf(req: { tenantId: string; facilityId?: string | undefined }): AbdmScope {
+    return { tenantId: req.tenantId, facilityId: req.facilityId };
   }
 
   private toResult(
     profile: AbhaProfile,
     purpose: 'verify' | 'enroll',
+    gatewayName: string,
   ): IdentityVerificationResult {
     if (!profile.abhaNumber) {
       throw new IdentityProviderError(
@@ -131,7 +183,7 @@ export class AbhaProvider implements NationalIdentityProvider {
       ...(profile.userToken ? { providerToken: profile.userToken } : {}),
       // Only non-sensitive values — no token, no Aadhaar, no OTP.
       metadata: {
-        gateway: this.gateway.name,
+        gateway: gatewayName,
         isNew: profile.isNew ?? false,
         ...(profile.maskedMobile ? { maskedMobile: profile.maskedMobile } : {}),
       },

@@ -5,10 +5,10 @@
  *
  *  - `abdm.enabled` (per-tenant Foundation config) decides whether ABHA is
  *    *offered* to that tenant at all. This is the feature flag.
- *  - `ABDM_CLIENT_ID` / `ABDM_CLIENT_SECRET` (service env) decide whether we
- *    can talk to the *real* NHA gateway. Credentials are a deployment concern,
- *    not a tenant preference — and there is no encrypted per-tenant secret
- *    store yet (see issue #81).
+ *  - Credentials decide whether we can talk to the *real* NHA gateway. They
+ *    live in the encrypted TenantSecret store, scoped per facility — see
+ *    AbdmCredentialsService (issues #81/#96). ABDM_CLIENT_ID/SECRET env vars
+ *    remain a single-tenant/self-hosted fallback only.
  *
  * With the flag on but no credentials present, the mock gateway is used so the
  * whole flow stays exercisable in dev/sandbox-less environments.
@@ -29,19 +29,6 @@ export interface AbdmSettings {
 @Injectable()
 export class AbdmConfigService {
   private readonly logger = new Logger(AbdmConfigService.name);
-
-  /** True when real NHA credentials are present in the environment. */
-  get hasCredentials(): boolean {
-    return Boolean(process.env['ABDM_CLIENT_ID'] && process.env['ABDM_CLIENT_SECRET']);
-  }
-
-  get clientId(): string {
-    return process.env['ABDM_CLIENT_ID'] ?? '';
-  }
-
-  get clientSecret(): string {
-    return process.env['ABDM_CLIENT_SECRET'] ?? '';
-  }
 
   async getSettings(tenantId: string): Promise<AbdmSettings> {
     const context = { tenantId };

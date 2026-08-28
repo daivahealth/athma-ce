@@ -42,6 +42,8 @@ export type IdentityChallengePurpose = 'verify' | 'enroll';
 export interface IdentityChallengeRequest {
   /** Endpoint configuration (base URLs, CM id, ...) resolves per tenant. */
   tenantId: string;
+  /** Credentials may be facility-scoped (e.g. ABDM per-HIP registrations). */
+  facilityId?: string | undefined;
   purpose: IdentityChallengePurpose;
   /**
    * Which kind of value `loginId` holds, e.g. 'aadhaar' | 'mobile' |
@@ -67,6 +69,8 @@ export interface IdentityChallenge {
 
 export interface IdentityChallengeCompletion {
   tenantId: string;
+  /** Must match the facility scope the challenge was started under. */
+  facilityId?: string | undefined;
   txnId: string;
   purpose: IdentityChallengePurpose;
   /** The OTP the patient received. SENSITIVE — never logged or persisted. */

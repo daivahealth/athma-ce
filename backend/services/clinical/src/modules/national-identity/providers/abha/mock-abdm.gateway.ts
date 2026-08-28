@@ -14,7 +14,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { verhoeffCheckDigit } from '@zeal/validators';
 import { IdentityProviderError } from '../national-identity-provider.interface';
-import { AbdmGateway, AbhaOtpChallenge, AbhaProfile } from './abdm-gateway.interface';
+import { AbdmGateway, AbdmScope, AbhaOtpChallenge, AbhaProfile } from './abdm-gateway.interface';
 
 /** The only OTP the mock accepts — documented so tests/demos are predictable. */
 const MOCK_OTP = '123456';
@@ -41,7 +41,7 @@ export class MockAbdmGateway implements AbdmGateway {
   private readonly logger = new Logger(MockAbdmGateway.name);
   private readonly txns = new Map<string, MockTxn>();
 
-  async requestEnrolOtp(_tenantId: string, aadhaar: string): Promise<AbhaOtpChallenge> {
+  async requestEnrolOtp(_scope: AbdmScope, aadhaar: string): Promise<AbhaOtpChallenge> {
     const digits = aadhaar.replace(/\D/g, '');
     if (digits.length !== 12) {
       throw new IdentityProviderError('ABDM_INVALID_AADHAAR', 'Aadhaar number must be 12 digits');
@@ -50,7 +50,7 @@ export class MockAbdmGateway implements AbdmGateway {
   }
 
   async enrolByAadhaar(
-    _tenantId: string,
+    _scope: AbdmScope,
     txnId: string,
     otp: string,
     mobile?: string,
@@ -73,7 +73,7 @@ export class MockAbdmGateway implements AbdmGateway {
   }
 
   async requestLoginOtp(
-    _tenantId: string,
+    _scope: AbdmScope,
     loginHint: string,
     loginId: string,
   ): Promise<AbhaOtpChallenge> {
@@ -90,7 +90,7 @@ export class MockAbdmGateway implements AbdmGateway {
     return challenge;
   }
 
-  async verifyLogin(_tenantId: string, txnId: string, otp: string): Promise<AbhaProfile> {
+  async verifyLogin(_scope: AbdmScope, txnId: string, otp: string): Promise<AbhaProfile> {
     const txn = this.consume(txnId, otp);
     const abhaNumber = txn.abhaNumber ?? this.deterministicAbha(txn.loginIdSuffix);
 
@@ -108,14 +108,14 @@ export class MockAbdmGateway implements AbdmGateway {
     };
   }
 
-  async getAbhaAddressSuggestions(_tenantId: string, txnId: string): Promise<string[]> {
+  async getAbhaAddressSuggestions(_scope: AbdmScope, txnId: string): Promise<string[]> {
     const txn = this.txns.get(txnId);
     const suffix = txn?.loginIdSuffix ?? '0000';
     return [`test.patient${suffix}@sbx`, `patient.${suffix}@sbx`, `tp${suffix}@sbx`];
   }
 
   async createAbhaAddress(
-    _tenantId: string,
+    _scope: AbdmScope,
     _txnId: string,
     abhaAddress: string,
   ): Promise<string> {

@@ -23,6 +23,8 @@ const KEY_PREFIX = 'identity:challenge:';
 
 export interface StoredChallenge {
   tenantId: string;
+  /** Facility the challenge was started under — credential scope must match on completion. */
+  facilityId?: string;
   country: string;
   identityType: string;
   purpose: IdentityChallengePurpose;

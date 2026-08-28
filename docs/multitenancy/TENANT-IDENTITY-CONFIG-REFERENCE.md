@@ -59,6 +59,36 @@ curl -X PUT "$FOUNDATION/api/v1/configs/tenant/$TENANT_ID/abdm.enabled" \
   -d '{"value": true}'
 ```
 
+## ABDM credentials (per facility)
+
+Gateway credentials are **not** config keys — they live in the encrypted
+TenantSecret store (owner `abdm`), scoped per **facility** (each facility is
+its own HIP in ABDM's HRP model) with automatic fallback to a tenant-scoped
+secret for tenant-wide registrations:
+
+```bash
+curl -X PUT "$FOUNDATION/api/v1/secrets/tenant/$TENANT_ID/abdm.client_id" \
+  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  -d '{"value": "<client id>", "ownerId": "abdm", "facilityId": "<facility uuid>"}'
+```
+
+```bash
+curl -X PUT "$FOUNDATION/api/v1/secrets/tenant/$TENANT_ID/abdm.client_secret" \
+  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  -d '{"value": "<client secret>", "ownerId": "abdm", "facilityId": "<facility uuid>"}'
+```
+
+Gateway selection is **per request, per tenant/facility**: stored credentials
+→ live NHA gateway; none → the fully-exercisable mock (the provider listing's
+`gateway` field badges which one a tenant gets). Sandbox and production
+tenants coexist in one deployment. The `ABDM_CLIENT_ID`/`ABDM_CLIENT_SECRET`
+env vars remain a fallback for single-tenant/self-hosted installs only —
+they apply when a tenant has **no** stored secret.
+
+Verify a tenant's setup with `GET /api/v1/national-identity/abha/health`
+(clinical): `ok` (live handshake succeeded) | `mock` (no credentials stored) |
+`error` (credentials present but the gateway session handshake failed).
+
 ## How it takes effect
 
 `GET /api/v1/national-identity/providers` (clinical service) resolves these

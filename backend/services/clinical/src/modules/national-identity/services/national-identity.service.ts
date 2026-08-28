@@ -83,7 +83,10 @@ export class NationalIdentityService {
         capabilities: Array.from(provider.capabilities),
         loginHints: provider.loginHints,
         ...(provider.identityType === 'abha'
-          ? { gateway: this.abhaProvider.gatewayName, environment: abdm.environment }
+          ? {
+              gateway: await this.abhaProvider.getGatewayName({ tenantId }),
+              environment: abdm.environment,
+            }
           : {}),
       });
     }
@@ -139,6 +142,7 @@ export class NationalIdentityService {
     const challenge = await this.callProvider(() =>
       provider.startChallenge!({
         tenantId: context.tenantId,
+        facilityId: context.facilityId,
         purpose: dto.purpose,
         loginHint: dto.loginHint,
         loginId: dto.loginId,
@@ -151,6 +155,7 @@ export class NationalIdentityService {
 
     await this.challenges.put(challenge.txnId, {
       tenantId: context.tenantId,
+      ...(context.facilityId ? { facilityId: context.facilityId } : {}),
       country: provider.country,
       identityType: provider.identityType,
       purpose: dto.purpose,
@@ -188,6 +193,7 @@ export class NationalIdentityService {
     const result = await this.callProvider(() =>
       provider.completeChallenge!({
         tenantId: context.tenantId,
+        facilityId: stored.facilityId,
         txnId,
         purpose: stored.purpose,
         otp: dto.otp,

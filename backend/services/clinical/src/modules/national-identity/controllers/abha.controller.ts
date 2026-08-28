@@ -11,6 +11,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -23,7 +24,7 @@ import { AbhaProvider } from '../providers/abha/abha.provider';
 import { AbdmConfigService } from '../providers/abha/abdm-config.service';
 import { NationalIdentityService } from '../services/national-identity.service';
 import { AbhaAddressSuggestionsDto, CreateAbhaAddressDto } from '../dto/national-identity.dto';
-import { TenantId, Context } from '../../../common/decorators/tenant-context.decorator';
+import { TenantId, FacilityId, Context } from '../../../common/decorators/tenant-context.decorator';
 
 @Controller('national-identity/abha')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -38,10 +39,27 @@ export class AbhaController {
   @Post('address/suggestions')
   @HttpCode(HttpStatus.OK)
   @Permissions(PATIENT_IDENTITY_VERIFY)
-  async suggestions(@Body() dto: AbhaAddressSuggestionsDto, @TenantId() tenantId: string) {
+  async suggestions(
+    @Body() dto: AbhaAddressSuggestionsDto,
+    @TenantId() tenantId: string,
+    @FacilityId() facilityId?: string,
+  ) {
     await this.requireEnabled(tenantId);
-    const suggestions = await this.abha.getAddressSuggestions(tenantId, dto.txnId);
+    const suggestions = await this.abha.getAddressSuggestions({ tenantId, facilityId }, dto.txnId);
     return { suggestions };
+  }
+
+  /**
+   * GET /api/v1/national-identity/abha/health — activation health check
+   * (ADR-0015 lifecycle): resolves this tenant/facility's credentials and,
+   * when live, performs a real gateway session handshake. status: 'ok' |
+   * 'mock' (no credentials stored — flows run against the offline mock) |
+   * 'error' (credentials present but the gateway handshake failed).
+   */
+  @Get('health')
+  @Permissions(PATIENT_IDENTITY_VERIFY)
+  async health(@TenantId() tenantId: string, @FacilityId() facilityId?: string) {
+    return this.abha.healthCheck({ tenantId, facilityId });
   }
 
   /** POST /api/v1/national-identity/abha/address — claims an address. */
@@ -60,7 +78,7 @@ export class AbhaController {
     }
 
     const abhaAddress = await this.abha.createAddress(
-      context.tenantId,
+      { tenantId: context.tenantId, facilityId: context.facilityId },
       dto.txnId,
       validation.normalizedValue ?? dto.abhaAddress,
     );
