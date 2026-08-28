@@ -197,6 +197,19 @@ Returns `{status: responded, correlationId, response}` (mock/synchronous) or `{s
 ### `GET /internal/nhcx/exchanges/:tenantId/:correlationId`
 Exchange state: `{kind, status: submitted|responded|error, gateway, response?, error?}`.
 
+### `GET /internal/nhcx/exchanges/:tenantId/by-source/:sourceRef`
+Latest exchanges for a caller reference (RCM preauth/claim id) — the reverse
+lookup RCM's `nhcx-sync`/`nhcx-status` endpoints reconcile from. Submit
+accepts an optional `sourceRef` for this purpose.
+
+**RCM lifecycle wiring (#124)**: a payer whose configuration carries
+`nhcxParticipantCode` routes pre-auth submission (`POST /preauth/:id/submit`)
+and claim submission (`POST /claims/:id/submit`) through the exchange as FHIR
+`Claim` resources (`use: preauthorization|claim`); responses map onto the
+local lifecycle (approved/partially_approved/denied + `authNumber` from
+`preAuthRef`). Live async responses reconcile via
+`POST /preauth/:id/nhcx-sync` and `GET /claims/:id/nhcx-status`.
+
 **Payer-response ingress** (`/callbacks/nhcx/v1/*`): no gateway JWT —
 authenticity is the JWE (only content addressed to our participant key
 decrypts) plus correlation to an exchange we initiated; anything else is

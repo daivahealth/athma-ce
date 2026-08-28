@@ -40,6 +40,11 @@ class SubmitDto {
 
   @IsObject()
   payload!: Record<string, unknown>;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  sourceRef?: string;
 }
 
 /** Internal exchange surface for RCM (issue #122/#123). */
@@ -57,7 +62,17 @@ export class NhcxController {
       recipientCode: dto.recipientCode,
       recipientCertPem: dto.recipientCertPem,
       payload: dto.payload,
+      sourceRef: dto.sourceRef,
     });
+  }
+
+  @Get('exchanges/:tenantId/by-source/:sourceRef')
+  async bySource(
+    @Param('tenantId') tenantId: string,
+    @Param('sourceRef') sourceRef: string,
+  ) {
+    if (!UUID_SHAPE.test(tenantId)) throw new NotFoundException('Unknown exchange');
+    return { success: true, data: await this.nhcx.getBySourceRef(tenantId, sourceRef) };
   }
 
   @Get('exchanges/:tenantId/:correlationId')

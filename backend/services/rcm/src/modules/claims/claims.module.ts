@@ -6,6 +6,7 @@ import { ClaimsController } from './claims.controller';
 import { ClaimsService } from './claims.service';
 import { ClaimGeneratorFactory } from './generators/claim-generator.factory';
 import { GenericJsonGenerator } from './generators/generic-json.generator';
+import { NhcxExchangeClient } from '../../common/nhcx/nhcx-exchange.client';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { GenericJsonGenerator } from './generators/generic-json.generator';
         ClaimsService,
         ClaimGeneratorFactory,
         GenericJsonGenerator,
+        NhcxExchangeClient,
     ],
     exports: [ClaimsService, ClaimGeneratorFactory],
 })

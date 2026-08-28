@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
+import { NhcxExchangeClient } from '../../common/nhcx/nhcx-exchange.client';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -34,6 +35,7 @@ export class PreAuthService {
 
     constructor(
         private readonly prisma: PrismaService,
+        private readonly nhcx: NhcxExchangeClient,
         private readonly httpService: HttpService,
     ) { }
 
@@ -162,6 +164,36 @@ export class PreAuthService {
             throw new Error('Pre-auth request is not in a submittable state');
         }
 
+        // NHCX-configured payers submit through the claims exchange (issue
+        // #124); everyone else keeps the local status transition.
+        const payerConfig = (preauth.payer?.configuration ?? null) as Record<string, unknown> | null;
+        if (payerConfig && this.nhcx.isNhcxPayer(payerConfig)) {
+            const fhirClaim = this.buildPreauthFhirClaim(preauth);
+            const outcome = await this.nhcx.submit({
+                tenantId,
+                kind: 'preauth',
+                payerConfig,
+                payload: fhirClaim,
+                sourceRef: preauth.id,
+            });
+
+            const submitted = await this.prisma.preAuthRequest.update({
+                where: { id },
+                data: {
+                    status: PreAuthStatus.SUBMITTED,
+                    submittedAt: new Date(),
+                    requestPayload: fhirClaim as object,
+                    responsePayload: { nhcxCorrelationId: outcome.correlationId } as object,
+                },
+                include: { payer: true, policy: true },
+            });
+
+            if (outcome.status === 'responded' && outcome.response) {
+                return this.applyNhcxPreauthResponse(id, outcome.correlationId, outcome.response);
+            }
+            return submitted;
+        }
+
         // In real implementation, this would call payer connector
         // For now, we just update status to pending
         return this.prisma.preAuthRequest.update({
@@ -169,6 +201,91 @@ export class PreAuthService {
             data: {
                 status: PreAuthStatus.SUBMITTED,
                 submittedAt: new Date(),
+            },
+            include: { payer: true, policy: true },
+        });
+    }
+
+    /**
+     * Pull the latest NHCX exchange for this pre-auth and reconcile the payer
+     * response into the local lifecycle (live exchanges answer via callback,
+     * so this is the poll/refresh path; mock exchanges reconcile at submit).
+     */
+    async syncFromNhcx(tenantId: string, id: string) {
+        const preauth = await this.findById(tenantId, id);
+        const exchanges = await this.nhcx.getBySourceRef(tenantId, id);
+        const responded = exchanges.find((e) => e.kind === 'preauth' && e.status === 'responded');
+        if (!responded?.response) {
+            return { synced: false, status: preauth.status, exchanges: exchanges.length };
+        }
+        const updated = await this.applyNhcxPreauthResponse(id, responded.correlationId, responded.response);
+        return { synced: true, status: updated.status, authNumber: updated.authNumber };
+    }
+
+    /** FHIR Claim (use: preauthorization) from the pre-auth request. */
+    private buildPreauthFhirClaim(preauth: {
+        id: string;
+        patientId: string;
+        requestedServices: unknown;
+        diagnosisCodes?: string[];
+        urgencyLevel?: string;
+    }): Record<string, unknown> {
+        const services = Array.isArray(preauth.requestedServices)
+            ? (preauth.requestedServices as Array<Record<string, unknown>>)
+            : [];
+        return {
+            resourceType: 'Claim',
+            status: 'active',
+            use: 'preauthorization',
+            type: { coding: [{ system: 'http://terminology.hl7.org/CodeSystem/claim-type', code: 'institutional' }] },
+            priority: { coding: [{ code: preauth.urgencyLevel === 'emergency' ? 'stat' : 'normal' }] },
+            patient: { reference: `Patient/${preauth.patientId}` },
+            created: new Date().toISOString(),
+            ...(preauth.diagnosisCodes?.length
+                ? {
+                      diagnosis: preauth.diagnosisCodes.map((code, i) => ({
+                          sequence: i + 1,
+                          diagnosisCodeableConcept: { coding: [{ system: 'http://hl7.org/fhir/sid/icd-10', code }] },
+                      })),
+                  }
+                : {}),
+            item: services.map((svc, i) => ({
+                sequence: i + 1,
+                productOrService: {
+                    coding: [{ code: String(svc['procedureCode'] ?? 'unknown') }],
+                    text: String(svc['description'] ?? ''),
+                },
+                quantity: { value: Number(svc['quantity'] ?? 1) },
+                unitPrice: { value: Number(svc['estimatedCost'] ?? 0), currency: 'INR' },
+            })),
+        };
+    }
+
+    /** Maps a ClaimResponse(use=preauthorization) onto the local lifecycle. */
+    private async applyNhcxPreauthResponse(
+        id: string,
+        correlationId: string,
+        response: Record<string, unknown>,
+    ) {
+        const outcome = String(response['outcome'] ?? '');
+        const status =
+            outcome === 'complete'
+                ? PreAuthStatus.APPROVED
+                : outcome === 'partial'
+                  ? PreAuthStatus.PARTIALLY_APPROVED
+                  : outcome === 'error'
+                    ? PreAuthStatus.DENIED
+                    : PreAuthStatus.SUBMITTED;
+        return this.prisma.preAuthRequest.update({
+            where: { id },
+            data: {
+                status,
+                ...(status !== PreAuthStatus.SUBMITTED ? { decidedAt: new Date() } : {}),
+                ...(typeof response['preAuthRef'] === 'string' ? { authNumber: response['preAuthRef'] } : {}),
+                ...(status === PreAuthStatus.DENIED && typeof response['disposition'] === 'string'
+                    ? { denialReason: response['disposition'] }
+                    : {}),
+                responsePayload: { nhcxCorrelationId: correlationId, ...response } as object,
             },
             include: { payer: true, policy: true },
         });

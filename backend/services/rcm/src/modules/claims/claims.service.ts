@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
+import { NhcxExchangeClient } from '../../common/nhcx/nhcx-exchange.client';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -36,6 +37,7 @@ export class ClaimsService {
 
     constructor(
         private readonly prisma: PrismaService,
+        private readonly nhcx: NhcxExchangeClient,
         private readonly generatorFactory: ClaimGeneratorFactory,
         private readonly httpService: HttpService,
     ) { }
@@ -383,6 +385,35 @@ export class ClaimsService {
     async submitClaim(tenantId: string, id: string) {
         const claim = await this.findById(tenantId, id);
         const payerConfig = claim.payer?.configuration as Record<string, unknown> | null;
+
+        // NHCX-configured payers submit through the claims exchange (issue
+        // #124) — the exchange IS the submission, no claim file is generated.
+        if (payerConfig && this.nhcx.isNhcxPayer(payerConfig)) {
+            const fhirClaim = this.buildNhcxFhirClaim(claim);
+            const outcome = await this.nhcx.submit({
+                tenantId,
+                kind: 'claim',
+                payerConfig,
+                payload: fhirClaim,
+                sourceRef: claim.id,
+            });
+            await this.prisma.claim.update({
+                where: { id },
+                data: { status: ClaimStatus.SUBMITTED, submittedAt: new Date() },
+            });
+            return {
+                success: true,
+                claimId: id,
+                submittedAt: new Date(),
+                exchange: {
+                    channel: 'NHCX',
+                    correlationId: outcome.correlationId,
+                    status: outcome.status,
+                    ...(outcome.response ? { response: outcome.response } : {}),
+                },
+            };
+        }
+
         const generator = this.generatorFactory.getGeneratorForPayer(payerConfig);
 
         // Validate first
@@ -422,6 +453,55 @@ export class ClaimsService {
                 mimeType: generatedFile.mimeType,
             },
             validation,
+        };
+    }
+
+    /** Latest NHCX exchange state for a claim (poll/refresh path). */
+    async nhcxStatus(tenantId: string, id: string) {
+        await this.findById(tenantId, id);
+        const exchanges = await this.nhcx.getBySourceRef(tenantId, id);
+        const latest = exchanges.find((e) => e.kind === 'claim');
+        if (!latest) return { channel: 'NHCX', found: false };
+        return {
+            channel: 'NHCX',
+            found: true,
+            correlationId: latest.correlationId,
+            status: latest.status,
+            ...(latest.response ? { response: latest.response } : {}),
+            ...(latest.error ? { error: latest.error } : {}),
+        };
+    }
+
+    /** FHIR Claim (use: claim) from the local claim + lines. */
+    private buildNhcxFhirClaim(claim: {
+        id: string;
+        patientId?: string | null;
+        claimNumber?: string | null;
+        totalAmount?: unknown;
+        claimLines?: Array<Record<string, unknown>> | null;
+    }): Record<string, unknown> {
+        const lines = Array.isArray(claim.claimLines) ? claim.claimLines : [];
+        return {
+            resourceType: 'Claim',
+            status: 'active',
+            use: 'claim',
+            type: { coding: [{ system: 'http://terminology.hl7.org/CodeSystem/claim-type', code: 'institutional' }] },
+            priority: { coding: [{ code: 'normal' }] },
+            ...(claim.patientId ? { patient: { reference: `Patient/${claim.patientId}` } } : {}),
+            ...(claim.claimNumber ? { identifier: [{ value: claim.claimNumber }] } : {}),
+            created: new Date().toISOString(),
+            item: lines.map((line, i) => ({
+                sequence: i + 1,
+                productOrService: {
+                    coding: [{ code: String(line['serviceCode'] ?? line['code'] ?? 'unknown') }],
+                    text: String(line['description'] ?? ''),
+                },
+                quantity: { value: Number(line['quantity'] ?? 1) },
+                unitPrice: { value: Number(line['unitPrice'] ?? line['amount'] ?? 0), currency: 'INR' },
+            })),
+            ...(claim.totalAmount !== undefined && claim.totalAmount !== null
+                ? { total: { value: Number(claim.totalAmount), currency: 'INR' } }
+                : {}),
         };
     }
 

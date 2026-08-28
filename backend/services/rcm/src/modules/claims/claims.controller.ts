@@ -116,6 +116,12 @@ export class ClaimsController {
         return this.claimsService.submitClaim(tenantId, id);
     }
 
+    /** Latest NHCX exchange state for this claim (poll/refresh path). */
+    @Get(':id/nhcx-status')
+    nhcxStatus(@Param('id') id: string, @Headers('x-tenant-id') tenantId: string) {
+        return this.claimsService.nhcxStatus(tenantId, id);
+    }
+
     @Delete(':id')
     @ApiOperation({ summary: 'Cancel/void a claim' })
     async cancel(

@@ -4,6 +4,7 @@ import { PrismaService } from '@zeal/database-rcm';
 
 import { PreAuthController } from './preauth.controller';
 import { PreAuthService } from './preauth.service';
+import { NhcxExchangeClient } from '../../common/nhcx/nhcx-exchange.client';
 
 @Module({
     imports: [
@@ -13,7 +14,9 @@ import { PreAuthService } from './preauth.service';
         }),
     ],
     controllers: [PreAuthController],
-    providers: [PrismaService, PreAuthService],
+    providers: [PrismaService, PreAuthService,
+        NhcxExchangeClient,
+    ],
     exports: [PreAuthService],
 })
 export class PreAuthModule { }

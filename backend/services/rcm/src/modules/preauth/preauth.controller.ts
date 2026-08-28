@@ -85,6 +85,12 @@ export class PreAuthController {
         return this.preAuthService.submit(tenantId, id);
     }
 
+    /** Reconcile the payer's NHCX response into this pre-auth (poll path). */
+    @Post(':id/nhcx-sync')
+    nhcxSync(@Param('id') id: string, @Headers('x-tenant-id') tenantId: string) {
+        return this.preAuthService.syncFromNhcx(tenantId, id);
+    }
+
     @Delete(':id')
     @ApiOperation({ summary: 'Cancel pre-authorization request' })
     async cancel(

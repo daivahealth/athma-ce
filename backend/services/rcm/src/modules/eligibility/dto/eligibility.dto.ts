@@ -1,3 +1,5 @@
+import { IsArray, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+
 // Eligibility request status
 export enum EligibilityStatus {
     PENDING = 'pending',
@@ -13,14 +15,33 @@ export enum EligibilityRequestType {
     BENEFITS = 'benefits',
 }
 
-// DTO for checking eligibility
+// DTO for checking eligibility. NOTE: previously undecorated — the global
+// whitelist ValidationPipe stripped every property (see issue #128).
 export class CheckEligibilityDto {
+    @IsUUID()
     patientId!: string;
+
+    @IsUUID()
     payerId!: string;
+
+    @IsOptional()
+    @IsUUID()
     policyId?: string;
+
+    @IsOptional()
+    @IsUUID()
     encounterId?: string;
+
+    @IsOptional()
+    @IsEnum(EligibilityRequestType)
     requestType?: EligibilityRequestType;
+
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
     serviceTypes?: string[];
+
+    @IsOptional()
     serviceDate?: Date;
 }
 

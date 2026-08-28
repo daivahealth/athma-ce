@@ -1,4 +1,13 @@
-import { IsOptional, IsString } from 'class-validator';
+import {
+    IsArray,
+    IsEnum,
+    IsNumber,
+    IsOptional,
+    IsString,
+    IsUUID,
+    ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 // PreAuth status enum
 export enum PreAuthStatus {
@@ -20,24 +29,65 @@ export enum PreAuthUrgency {
 }
 
 // DTO for creating a pre-authorization request
-export class CreatePreAuthDto {
-    patientId!: string;
-    payerId!: string;
-    policyId?: string;
-    encounterId?: string;
-    urgency?: PreAuthUrgency;
-    requestedServices!: RequestedService[];
-    clinicalNotes?: string;
-    scheduledDate?: Date;
+// NOTE: these DTOs previously had no class-validator decorators, so the
+// global whitelist ValidationPipe stripped every property and create/submit
+// could never work over HTTP. Decorated as part of #124.
+export class RequestedService {
+    @IsString()
+    procedureCode!: string;
+
+    @IsOptional()
+    @IsString()
+    procedureCodeType?: string;
+
+    @IsOptional()
+    @IsString()
+    description?: string;
+
+    @IsOptional()
+    @IsNumber()
+    quantity?: number;
+
+    @IsOptional()
+    @IsNumber()
+    estimatedCost?: number;
+
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
+    diagnosisCodes?: string[];
 }
 
-export class RequestedService {
-    procedureCode!: string;
-    procedureCodeType?: string;
-    description?: string;
-    quantity?: number;
-    estimatedCost?: number;
-    diagnosisCodes?: string[];
+export class CreatePreAuthDto {
+    @IsUUID()
+    patientId!: string;
+
+    @IsUUID()
+    payerId!: string;
+
+    @IsOptional()
+    @IsUUID()
+    policyId?: string;
+
+    @IsOptional()
+    @IsUUID()
+    encounterId?: string;
+
+    @IsOptional()
+    @IsEnum(PreAuthUrgency)
+    urgency?: PreAuthUrgency;
+
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => RequestedService)
+    requestedServices!: RequestedService[];
+
+    @IsOptional()
+    @IsString()
+    clinicalNotes?: string;
+
+    @IsOptional()
+    scheduledDate?: Date;
 }
 
 // DTO for updating a pre-authorization

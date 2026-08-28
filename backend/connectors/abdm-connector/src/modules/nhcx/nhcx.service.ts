@@ -27,6 +27,8 @@ export type ExchangeKind = 'eligibility' | 'preauth' | 'claim';
 export interface SubmitInput {
   scope: AbdmScope;
   kind: ExchangeKind;
+  /** Caller's own reference (e.g. RCM preauth/claim id) for reverse lookup. */
+  sourceRef?: string | undefined;
   /** HCX participant code of the payer. */
   recipientCode: string;
   /** Payer's encryption certificate (PEM) for the live JWE path. */
@@ -66,6 +68,7 @@ export class NhcxService {
       tenantId: input.scope.tenantId,
       facilityId: input.scope.facilityId ?? null,
       kind: input.kind,
+      sourceRef: input.sourceRef ?? null,
       recipientCode: input.recipientCode,
       request: input.payload as never,
     };
@@ -166,6 +169,15 @@ export class NhcxService {
     const exchange = await this.prisma.nhcxExchange.findUnique({ where: { correlationId } });
     if (!exchange || exchange.tenantId !== tenantId) return null;
     return exchange;
+  }
+
+  /** Latest exchanges for a caller reference (RCM preauth/claim id). */
+  async getBySourceRef(tenantId: string, sourceRef: string) {
+    return this.prisma.nhcxExchange.findMany({
+      where: { tenantId, sourceRef },
+      orderBy: { submittedAt: 'desc' },
+      take: 10,
+    });
   }
 
   // ---------------------------------------------------------------- helpers
