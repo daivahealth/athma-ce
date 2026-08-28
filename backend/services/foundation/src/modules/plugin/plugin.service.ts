@@ -15,21 +15,29 @@ import * as path from 'path';
 @Injectable()
 export class PluginService {
   private readonly logger = new Logger(PluginService.name);
-  private readonly validateManifestSchema = new Ajv({ allErrors: true }).compile(
+  private readonly validateManifestSchema = new Ajv({ allErrors: true, allowUnionTypes: true }).compile(
     PLUGIN_MANIFEST_SCHEMA as unknown as Record<string, unknown>,
   );
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async listPlugins(filters?: { status?: string; targetService?: string }) {
+  async listPlugins(filters?: { status?: string; targetService?: string; capability?: string }) {
     const where: Record<string, unknown> = {};
     if (filters?.status) where.status = filters.status;
     if (filters?.targetService) where.targetService = filters.targetService;
 
-    return this.prisma.pluginRegistry.findMany({
+    const plugins = await this.prisma.pluginRegistry.findMany({
       where,
       include: { activations: true },
       orderBy: { installedAt: 'desc' },
+    });
+
+    if (!filters?.capability) return plugins;
+
+    // Manifest v2 declares capabilities; plugin counts are small, filter in JS.
+    return plugins.filter((p) => {
+      const capabilities = (p.manifest as { capabilities?: Array<{ key?: string }> })?.capabilities;
+      return Array.isArray(capabilities) && capabilities.some((c) => c?.key === filters.capability);
     });
   }
 

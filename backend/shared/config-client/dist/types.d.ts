@@ -93,8 +93,14 @@ export interface ConfigValues {
     'system.enable_mfa': boolean;
     'system.password_min_length': number;
     'system.password_require_special_char': boolean;
-    /** Offered identity providers as `COUNTRY:type`, e.g. `IN:abha`. */
+    /** Offered identity providers as `COUNTRY:type`, e.g. `IN:abha`. This is
+     *  also the (grandfathered) binding for the `national.identity` capability. */
     'identity.enabled_providers': string[];
+    'capability.registry.facility.provider': string;
+    'capability.registry.practitioner.provider': string;
+    'capability.national.exchange.provider': string;
+    'capability.claims.exchange.provider': string;
+    'plugins.available': string[];
     /** Master switch for the ABHA integration. Off unless deliberately enabled. */
     'abdm.enabled': boolean;
     'abdm.environment': 'sandbox' | 'production';

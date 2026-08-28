@@ -57,6 +57,14 @@ exports.CONFIG_DEFAULTS = {
     // Which national identity providers are offered. Emirates ID is offline
     // validate-only; ABHA additionally supports online OTP verification/enrolment.
     'identity.enabled_providers': ['AE:emirates_id', 'INTL:passport'],
+    // Capability bindings (ADR-0015). Unbound by default — the generic tenant
+    // runs with no national integrations and everything degrades gracefully.
+    'capability.registry.facility.provider': '',
+    'capability.registry.practitioner.provider': '',
+    'capability.national.exchange.provider': '',
+    'capability.claims.exchange.provider': '',
+    // No plugins offered until a country pack (or an admin) makes them available.
+    'plugins.available': [],
     // ABDM / ABHA (India). Disabled by default: enabling it without valid NHA
     // credentials would surface a broken flow, so the feature must be turned on
     // deliberately per tenant.

@@ -109,8 +109,20 @@ export interface ConfigValues {
   'system.password_require_special_char': boolean;
 
   // National identity
-  /** Offered identity providers as `COUNTRY:type`, e.g. `IN:abha`. */
+  /** Offered identity providers as `COUNTRY:type`, e.g. `IN:abha`. This is
+   *  also the (grandfathered) binding for the `national.identity` capability. */
   'identity.enabled_providers': string[];
+
+  // Capability bindings (ADR-0015): which provider serves a capability for a
+  // tenant/facility. Empty string = unbound; callers degrade gracefully.
+  'capability.registry.facility.provider': string;
+  'capability.registry.practitioner.provider': string;
+  'capability.national.exchange.provider': string;
+  'capability.claims.exchange.provider': string;
+
+  // Plugins a country pack has made offerable to this tenant (activation is a
+  // separate admin step through the plugin API).
+  'plugins.available': string[];
 
   // ABDM / ABHA (India)
   /** Master switch for the ABHA integration. Off unless deliberately enabled. */

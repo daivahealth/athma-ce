@@ -1,0 +1,14 @@
+{
+  "code": "IN",
+  "name": "India",
+  "version": "1.0.0",
+  "description": "India country pack: ABHA identity offered (activation is a separate admin step requiring ABDM credentials), ABDM sandbox defaults, HFR/HPR capability bindings, ABDM and NHCX plugins offerable.",
+  "config": {
+    "identity.enabled_providers": ["IN:abha", "INTL:passport"],
+    "abdm.environment": "sandbox",
+    "capability.registry.facility.provider": "hfr",
+    "capability.registry.practitioner.provider": "hpr",
+    "capability.national.exchange.provider": "abdm",
+    "plugins.available": ["abdm", "nhcx"]
+  }
+}

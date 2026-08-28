@@ -95,6 +95,11 @@ Every plugin must have an `athma-plugin.json` at its root:
 | `backend.permissions` | No | Permission codes to register (format: `resource.action`) |
 | `frontend.navigation` | No | Sidebar nav sections with feature flag gating |
 | `configKeys` | No | Config entries seeded on install; include `feature.nav.{id}` |
+| `manifestVersion` | No | `2` unlocks the v2 fields below (v1 manifests keep working) |
+| `countries` | No | ISO 3166-1 alpha-2 codes the plugin targets; omit for country-neutral |
+| `capabilities` | No | `[{key, provider}]` — capability implementations (see [Capabilities & Country Packs](../architecture/CAPABILITIES-AND-COUNTRY-PACKS.md)); makes the registry queryable via `GET /plugins?capability=` |
+| `secrets` | No | `[{key, scope: tenant\|facility}]` — write-only secret slots admins fill via the secrets API |
+| `callbacks` | No | Public ingress paths a companion connector exposes |
 
 ## Backend Development
 

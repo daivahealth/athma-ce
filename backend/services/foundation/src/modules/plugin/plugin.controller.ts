@@ -35,10 +35,12 @@ export class PluginController {
   async listPlugins(
     @Query('status') status?: string,
     @Query('targetService') targetService?: string,
+    @Query('capability') capability?: string,
   ) {
-    const filters: { status?: string; targetService?: string } = {};
+    const filters: { status?: string; targetService?: string; capability?: string } = {};
     if (status) filters.status = status;
     if (targetService) filters.targetService = targetService;
+    if (capability) filters.capability = capability;
     return {
       success: true,
       data: await this.pluginService.listPlugins(filters),

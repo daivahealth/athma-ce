@@ -1,0 +1,10 @@
+{
+  "code": "AE",
+  "name": "United Arab Emirates",
+  "version": "1.0.0",
+  "description": "UAE country pack: Emirates ID + passport identity (offline validation), no national integrations bound yet (NABIDH/Riayati arrive as future plugins).",
+  "config": {
+    "identity.enabled_providers": ["AE:emirates_id", "INTL:passport"],
+    "plugins.available": []
+  }
+}

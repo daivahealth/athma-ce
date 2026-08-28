@@ -14,6 +14,44 @@ export const PLUGIN_MANIFEST_SCHEMA = {
   required: ['id', 'name', 'version', 'backend'],
   additionalProperties: true,
   properties: {
+    manifestVersion: { enum: [1, 2] },
+    countries: {
+      type: 'array',
+      items: { type: 'string', pattern: '^[A-Z]{2}$' },
+    },
+    capabilities: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['key', 'provider'],
+        properties: {
+          key: { type: 'string', pattern: '^[a-z][a-z0-9_.]*$' },
+          provider: { type: 'string', pattern: '^[a-z][a-z0-9-]*$' },
+        },
+      },
+    },
+    secrets: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['key', 'scope'],
+        properties: {
+          key: { type: 'string', pattern: '^[a-z][a-z0-9_.]*$' },
+          scope: { enum: ['tenant', 'facility'] },
+        },
+      },
+    },
+    callbacks: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['path'],
+        properties: {
+          path: { type: 'string', minLength: 1 },
+          verification: { type: 'string' },
+        },
+      },
+    },
     id: {
       type: 'string',
       // kebab-case identifier; also used for the plugin_{id} PG schema and

@@ -68,6 +68,14 @@ VALUES
   (gen_random_uuid(), 'feature.nav.pharmacy', 'true', 'boolean', 'feature', 'Enable Pharmacy module navigation', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'feature.nav.oncology', 'true', 'boolean', 'feature', 'Enable Oncology module navigation', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
+  -- CAPABILITY BINDINGS (ADR-0015): which provider serves a capability for a
+  -- tenant. Unbound by default; country packs or admins set them per tenant.
+  (gen_random_uuid(), 'capability.registry.facility.provider', '""', 'string', 'capability', 'Provider bound to the registry.facility capability (e.g. hfr). Empty = unbound.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'capability.registry.practitioner.provider', '""', 'string', 'capability', 'Provider bound to the registry.practitioner capability (e.g. hpr). Empty = unbound.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'capability.national.exchange.provider', '""', 'string', 'capability', 'Provider bound to the national.exchange capability (e.g. abdm). Empty = unbound.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'capability.claims.exchange.provider', '""', 'string', 'capability', 'Provider bound to the claims.exchange capability (e.g. nhcx). Empty = unbound.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'plugins.available', '[]', 'json', 'capability', 'Plugins a country pack has made offerable to this tenant (activation is separate).', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
   -- NATIONAL IDENTITY CONFIGS
   (gen_random_uuid(), 'identity.enabled_providers', '["AE:emirates_id", "INTL:passport"]', 'json', 'identity', 'National identity providers offered, as COUNTRY:type (e.g. IN:abha). Add IN:abha once ABDM is configured.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 

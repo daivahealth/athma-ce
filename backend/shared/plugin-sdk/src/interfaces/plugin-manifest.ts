@@ -1,4 +1,6 @@
 export interface PluginManifest {
+  /** 1 (implicit for legacy manifests) or 2. v2 adds the fields below. */
+  manifestVersion?: number;
   id: string;
   name: string;
   version: string;
@@ -9,11 +11,38 @@ export interface PluginManifest {
 
   specialty?: PluginSpecialty;
 
+  /** ISO 3166-1 alpha-2 codes this plugin targets; omit for country-neutral. */
+  countries?: string[];
+  /** Capability implementations this plugin provides (ADR-0015). */
+  capabilities?: PluginCapabilityDeclaration[];
+  /** Secret slots the framework should provision (values via the secrets API). */
+  secrets?: PluginSecretDeclaration[];
+  /** Callback ingress paths a companion connector exposes. */
+  callbacks?: PluginCallbackDeclaration[];
+
   backend: PluginBackendConfig;
   frontend?: PluginFrontendConfig;
   configKeys?: PluginConfigKey[];
   dependencies?: string[];
   i18n?: Record<string, string>;
+}
+
+export interface PluginCapabilityDeclaration {
+  /** Capability key, e.g. 'registry.facility'. */
+  key: string;
+  /** Provider id usable in capability bindings, e.g. 'hfr'. */
+  provider: string;
+}
+
+export interface PluginSecretDeclaration {
+  /** Secret key, e.g. 'abdm.client_secret'. */
+  key: string;
+  scope: 'tenant' | 'facility';
+}
+
+export interface PluginCallbackDeclaration {
+  path: string;
+  verification?: string;
 }
 
 export interface PluginSpecialty {

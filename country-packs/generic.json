@@ -1,0 +1,14 @@
+{
+  "code": "GENERIC",
+  "name": "Generic (no national integrations)",
+  "version": "1.0.0",
+  "description": "Baseline pack: passport as the only national identity document, every capability unbound, no plugins offered. The permanent proof that the core runs country-neutral.",
+  "config": {
+    "identity.enabled_providers": ["INTL:passport"],
+    "capability.registry.facility.provider": "",
+    "capability.registry.practitioner.provider": "",
+    "capability.national.exchange.provider": "",
+    "capability.claims.exchange.provider": "",
+    "plugins.available": []
+  }
+}
