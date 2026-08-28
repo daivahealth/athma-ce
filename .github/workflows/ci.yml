@@ -41,6 +41,9 @@ jobs:
           restore-keys: |
             turbo-${{ runner.os }}-
 
+      - name: Architecture boundary check (ADR-0015)
+        run: node scripts/check-boundaries.mjs
+
       - name: Lint
         working-directory: backend
         run: npx turbo run lint --cache-dir=.turbo
