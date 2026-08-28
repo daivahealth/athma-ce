@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CorrelationService } from '../correlation/correlation.service';
+import { CareContextService } from '../care-context/care-context.service';
 
 export interface InboundCallback {
   path: string;
@@ -33,6 +34,7 @@ export class CallbackService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly correlationService: CorrelationService,
+    private readonly careContexts: CareContextService,
   ) {}
 
   async handle(callback: InboundCallback): Promise<void> {
@@ -42,11 +44,21 @@ export class CallbackService {
       return;
     }
 
-    // Skeleton behavior: acknowledge the callback against its correlation and
-    // log under restored tenant context. Flow handlers land with #96/#97.
     const txnId = this.extractTxnId(callback);
     if (resolved.via === 'txn' && txnId) {
-      await this.correlationService.complete(txnId);
+      const entry = await this.correlationService.resolve(txnId);
+      // Gateway v3 callbacks carry an `error` object on failure.
+      const body = callback.body as { error?: unknown } | undefined;
+      const ok = !body?.error;
+      await this.correlationService.complete(txnId, ok ? 'completed' : 'failed');
+
+      if (entry?.flow === 'link.care-context') {
+        await this.careContexts.completeLink(
+          txnId,
+          ok,
+          ok ? undefined : JSON.stringify(body?.error).slice(0, 500),
+        );
+      }
     }
     this.logger.log(
       `Callback ${callback.path} resolved via ${resolved.via} to tenant ${resolved.tenantId}` +

@@ -42,9 +42,12 @@ aggregateType, aggregateId, occurredAt, payload}`.
 ## Consuming (connector side)
 
 The abdm-connector persists deliveries into its `event_inbox` (idempotent by
-event id; duplicates ack `200 {duplicate: true}`), keeping relevant types in
-status `received` for the M2 handlers (care-context linking #114, consent
-#115) and storing everything else as `ignored` for traceability.
+event id; duplicates ack `200 {duplicate: true}`). A 5s inbox processor
+consumes `received` rows with bounded retries (5 attempts → `failed` for
+operator triage): `encounter.closed` for an ABHA-linked patient becomes a
+care context (HIP linking, #114 — mock links immediately, live is async via
+the correlation store); other types are marked `processed`/`ignored`.
+Handlers are idempotent — replaying a processed event creates nothing twice.
 
 ## Adding an event type
 

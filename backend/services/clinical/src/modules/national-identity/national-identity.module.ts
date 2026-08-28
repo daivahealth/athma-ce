@@ -19,6 +19,7 @@ import {
   PatientIdentityController,
 } from './controllers/national-identity.controller';
 import { AbhaController } from './controllers/abha.controller';
+import { InternalIdentityController } from './controllers/internal-identity.controller';
 import { NATIONAL_IDENTITY_PROVIDERS } from './providers/national-identity-provider.interface';
 import { EmiratesIdProvider } from './providers/emirates-id/emirates-id.provider';
 import { AbhaProvider } from './providers/abha/abha.provider';
@@ -27,7 +28,12 @@ import { AbdmConnectorGateway } from './providers/abha/abdm-connector.gateway';
 
 @Module({
   imports: [ClinicalDatabaseModule],
-  controllers: [NationalIdentityController, PatientIdentityController, AbhaController],
+  controllers: [
+    NationalIdentityController,
+    PatientIdentityController,
+    AbhaController,
+    InternalIdentityController,
+  ],
   providers: [
     NationalIdentityService,
     IdentityChallengeStore,

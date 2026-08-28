@@ -18,6 +18,9 @@ import { MockAbdmGateway } from './modules/abha/mock-abdm.gateway';
 import { RegistriesController } from './modules/registries/registries.controller';
 import { RegistriesService } from './modules/registries/registries.service';
 import { EventsController } from './modules/events/events.controller';
+import { InboxProcessorService } from './modules/events/inbox-processor.service';
+import { CareContextService } from './modules/care-context/care-context.service';
+import { CareContextController } from './modules/care-context/care-context.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] })],
@@ -29,6 +32,7 @@ import { EventsController } from './modules/events/events.controller';
     AbhaController,
     RegistriesController,
     EventsController,
+    CareContextController,
   ],
   providers: [
     PrismaService,
@@ -43,6 +47,8 @@ import { EventsController } from './modules/events/events.controller';
     AbdmHttpGateway,
     MockAbdmGateway,
     RegistriesService,
+    CareContextService,
+    InboxProcessorService,
   ],
 })
 export class AppModule {}

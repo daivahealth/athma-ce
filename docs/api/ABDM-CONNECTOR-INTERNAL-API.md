@@ -103,6 +103,22 @@ as `422 {code, message, retryable}`.
 - Idempotent by event `id` — duplicates ack `200 {accepted: true, duplicate: true}`.
 - Relevant types are stored `received` in `event_inbox` for the M2 handlers; others `ignored`. See [DOMAIN-EVENTS.md](../architecture/DOMAIN-EVENTS.md).
 
+## Care contexts (HIP linking)
+
+Populated by the inbox processor from `encounter.closed` events: when the
+patient is ABHA-linked (resolved via clinical's internal ABHA endpoint —
+event payloads carry ids only), the encounter becomes a care context under
+the patient's ABHA address. Mock path links immediately; the live path fires
+the async NHA v3 link request (correlation-tracked) and stays `pending` until
+the gateway callback confirms it.
+
+### `GET /internal/care-contexts?tenantId=&patientId=`
+- Care-context state: `{careContextRef (encounter id), abhaAddress, gateway, status: pending|linked|failed, linkTxnId?, error?}`.
+
+Clinical exposes the counterpart lookup for the connector:
+`GET /api/v1/internal/national-identity/patients/:patientId/abha?tenantId=`
+(internal key + `x-tenant-id` header) → `{abhaNumber, abhaAddress, verificationStatus}` or 404.
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`

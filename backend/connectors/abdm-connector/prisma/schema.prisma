@@ -87,10 +87,37 @@ model EventInbox {
   occurredAt  DateTime  @map("occurred_at") @db.Timestamptz(6)
   receivedAt  DateTime  @default(now()) @map("received_at") @db.Timestamptz(6)
   status      String    @default("received") @map("status") // received | processed | failed | ignored
+  attempts    Int       @default(0) @map("attempts")
   processedAt DateTime? @map("processed_at") @db.Timestamptz(6)
   error       String?   @map("error")
 
   @@index([status, receivedAt])
   @@index([eventType])
   @@map("event_inbox")
+}
+
+/// Care contexts built from encounter.closed events for ABHA-linked patients
+/// (issue #114, ABDM M2). Protocol state only: which encounter is (being)
+/// linked under which ABHA address — clinical content stays in clinical.
+model CareContext {
+  id             String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  facilityId     String?   @map("facility_id") @db.Uuid
+  patientId      String    @map("patient_id") @db.Uuid
+  abhaAddress    String    @map("abha_address")
+  /// Our care-context reference — the clinical encounter id.
+  careContextRef String    @map("care_context_ref") @db.Uuid
+  display        String    @map("display")
+  status         String    @default("pending") @map("status") // pending | linked | failed
+  /// Gateway transaction of the async link request (live path).
+  linkTxnId      String?   @map("link_txn_id")
+  gateway        String    @map("gateway") // abdm | mock
+  error          String?   @map("error")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  linkedAt       DateTime? @map("linked_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, careContextRef])
+  @@index([tenantId, patientId])
+  @@index([status])
+  @@map("care_contexts")
 }
