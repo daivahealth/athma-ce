@@ -15,6 +15,10 @@ export interface EligibilityCheckPayload {
     serviceDate?: Date;
     providerNpi?: string;
     facilityId?: string;
+    /** Tenant scope, for connectors that call platform services. */
+    tenantId?: string;
+    /** The payer's configuration blob (e.g. NHCX participant code/cert). */
+    payerMetadata?: Record<string, unknown>;
 }
 
 /**

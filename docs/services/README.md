@@ -28,7 +28,7 @@ self-hosted installs run the same service single-tenant.
   and holds no ABDM credentials
 - Internal API (`X-Internal-Api-Key`) for the clinical service — see
   [ABDM Connector Internal API](../api/ABDM-CONNECTOR-INTERNAL-API.md)
-- No PHI at rest: the `zeal_abdm` database holds protocol/routing state only
+- The `zeal_abdm` database holds protocol/routing state and transient exchange spools (decrypted HIU records, claim responses) pending reconciliation into core — clinical source of truth stays in `zeal_clinical`
 
 **Quick Links:**
 - [Runbook](../runbooks/abdm-connector.md)

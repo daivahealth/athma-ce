@@ -2,7 +2,7 @@
 
 ## Scope
 - Service: `@zeal/abdm-connector` (`backend/connectors/abdm-connector`), port 3016
-- Database: `zeal_abdm` (`ABDM_DATABASE_URL`) — correlation/routing state only, no PHI
+- Database: `zeal_abdm` (`ABDM_DATABASE_URL`) — correlation/routing state plus transient exchange spools (HIU records, NHCX responses) pending reconciliation into core
 - Role: owns the ABDM gateway edge (callbacks, correlation, tenant routing) for all tenants; shared multi-tenant platform service in SaaS, single-tenant self-hosted (ADR-0015)
 
 ## Environment
@@ -57,4 +57,4 @@ The `zeal_abdm` database is created by `init-scripts/01-init-database.sql` on a 
 
 ## Escalation
 - Gateway-side outage (ABDM sandbox/production down) degrades ABHA verification and exchange flows platform-wide for India tenants — user-facing flows must degrade to "verification unavailable, saved as unverified" (clinical side), not error.
-- PHI is never in this service's DB or logs; a suspected leak here is a security incident regardless.
+- Clinical source-of-truth data never lives here; exchange spools (HIU records, claim responses) are transient and reconciled into core. A suspected leak is a security incident regardless.

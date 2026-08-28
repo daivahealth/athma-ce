@@ -180,6 +180,28 @@ transfer-scoped private key, checksums verified; the key is ERASED on
 success. Mock mode is a real loopback: our own HIP provision path serves the
 fetch, so both directions of the Fidelius crypto run in dev/CI.
 
+## NHCX claims exchange (Phase 5)
+
+NHCX is a separate capability (`claims.exchange`) hosted as a cleanly-bounded
+`nhcx` module in this deployable — own secret owner (`nhcx`: participant code,
+client secret, encryption private key; env fallback `NHCX_*`), own callback
+path. Payloads are HCX compact JWEs (RSA-OAEP-256 + A256GCM, x-hcx-* protocol
+headers integrity-protected in the JWE header). Mock exchanges (no
+credentials) answer instantly; live exchanges are async via the correlation
+store. RCM selects NHCX per payer via `payer.configuration.eligibilityConnector
+= "NHCX"` (+ `nhcxParticipantCode`, `nhcxEncryptionCert`).
+
+### `POST /internal/nhcx/submit` — `{tenantId, facilityId?, kind: eligibility|preauth|claim, recipientCode, recipientCertPem?, payload}`
+Returns `{status: responded, correlationId, response}` (mock/synchronous) or `{status: submitted, correlationId}` (live async).
+
+### `GET /internal/nhcx/exchanges/:tenantId/:correlationId`
+Exchange state: `{kind, status: submitted|responded|error, gateway, response?, error?}`.
+
+**Payer-response ingress** (`/callbacks/nhcx/v1/*`): no gateway JWT —
+authenticity is the JWE (only content addressed to our participant key
+decrypts) plus correlation to an exchange we initiated; anything else is
+quarantined. Always `202`.
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`

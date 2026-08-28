@@ -5,6 +5,7 @@ import { PrismaService } from '@zeal/database-rcm';
 import { EligibilityController } from './eligibility.controller';
 import { EligibilityService } from './eligibility.service';
 import { MockEligibilityConnector } from './connectors/mock.connector';
+import { NhcxEligibilityConnector } from './connectors/nhcx.connector';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { MockEligibilityConnector } from './connectors/mock.connector';
         PrismaService,
         EligibilityService,
         MockEligibilityConnector,
+        NhcxEligibilityConnector,
     ],
     exports: [EligibilityService],
 })

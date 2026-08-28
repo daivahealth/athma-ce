@@ -76,6 +76,9 @@ VALUES
   (gen_random_uuid(), 'capability.claims.exchange.provider', '""', 'string', 'capability', 'Provider bound to the claims.exchange capability (e.g. nhcx). Empty = unbound.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'plugins.available', '[]', 'json', 'capability', 'Plugins a country pack has made offerable to this tenant (activation is separate).', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
+  -- NHCX (India claims exchange)
+  (gen_random_uuid(), 'nhcx.base_url', '"https://apisandbox.nhcx.abdm.gov.in"', 'string', 'nhcx', 'HCX gateway API base (sandbox default; reconcile with NHA docs).', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
   -- NATIONAL IDENTITY CONFIGS
   (gen_random_uuid(), 'identity.enabled_providers', '["AE:emirates_id", "INTL:passport"]', 'json', 'identity', 'National identity providers offered, as COUNTRY:type (e.g. IN:abha). Add IN:abha once ABDM is configured.', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 

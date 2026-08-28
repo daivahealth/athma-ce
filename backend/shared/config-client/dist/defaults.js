@@ -76,6 +76,8 @@ exports.CONFIG_DEFAULTS = {
     'abdm.hfr_base_url': 'https://facilitysbx.abdm.gov.in',
     'abdm.hpr_base_url': 'https://hpridsbx.abdm.gov.in',
     'abdm.consent_version': '1.4',
+    // NHCX (India claims exchange); sandbox default pending NHA reconciliation.
+    'nhcx.base_url': 'https://apisandbox.nhcx.abdm.gov.in',
 };
 /**
  * Get default value for a configuration key

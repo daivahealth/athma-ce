@@ -140,6 +140,10 @@ export interface ConfigValues {
   'abdm.hpr_base_url': string;
   /** Version string sent in the ABHA enrolment consent block. */
   'abdm.consent_version': string;
+
+  // NHCX / HCX (India claims exchange)
+  /** HCX gateway API base; sandbox default, reconcile with NHA docs. */
+  'nhcx.base_url': string;
 }
 
 /**

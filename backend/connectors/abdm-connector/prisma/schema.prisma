@@ -217,3 +217,27 @@ model HiuTransfer {
   @@index([tenantId, status])
   @@map("hiu_transfers")
 }
+
+/// NHCX/HCX exchange state (issue #122): one row per outbound
+/// eligibility/preauth/claim exchange. This is a transient exchange spool —
+/// requests/responses are retained for correlation and RCM polling, then
+/// eligible for cleanup once reconciled into RCM.
+model NhcxExchange {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  correlationId String    @unique @map("correlation_id")
+  apiCallId     String    @map("api_call_id")
+  tenantId      String    @map("tenant_id") @db.Uuid
+  facilityId    String?   @map("facility_id") @db.Uuid
+  kind          String    @map("kind") // eligibility | preauth | claim
+  recipientCode String    @map("recipient_code")
+  status        String    @default("submitted") @map("status") // submitted | responded | error
+  gateway       String    @map("gateway") // nhcx | mock
+  request       Json      @map("request")
+  response      Json?     @map("response")
+  error         String?   @map("error")
+  submittedAt   DateTime  @default(now()) @map("submitted_at") @db.Timestamptz(6)
+  respondedAt   DateTime? @map("responded_at") @db.Timestamptz(6)
+
+  @@index([tenantId, kind, status])
+  @@map("nhcx_exchanges")
+}

@@ -9,6 +9,7 @@ import {
     EligibilityRequestType,
 } from './dto/eligibility.dto';
 import { MockEligibilityConnector } from './connectors/mock.connector';
+import { NhcxEligibilityConnector } from './connectors/nhcx.connector';
 import { EligibilityConnector } from './connectors/eligibility-connector.interface';
 
 export interface PatientDisplayDto {
@@ -37,10 +38,12 @@ export class EligibilityService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly mockConnector: MockEligibilityConnector,
+        private readonly nhcxConnector: NhcxEligibilityConnector,
         private readonly httpService: HttpService,
     ) {
         // Register available connectors
         this.registerConnector(mockConnector);
+        this.registerConnector(nhcxConnector);
     }
 
     // ---------------------------------------------------------------------------
@@ -191,6 +194,8 @@ export class EligibilityService {
                 payerId: dto.payerId,
                 requestType: dto.requestType ?? EligibilityRequestType.ELIGIBILITY,
                 serviceTypes: dto.serviceTypes ?? [],
+                tenantId,
+                ...(payerConfig ? { payerMetadata: payerConfig } : {}),
             } as const;
 
             const eligibilityPayload: typeof payload & {
