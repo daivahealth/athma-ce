@@ -28,7 +28,12 @@ export class CallbackController {
       body: req.body,
     };
 
-    const verification = await this.verifier.verify(req);
+    // HIP→HIU data pushes carry no gateway JWT — acceptance is by transaction
+    // correlation: receivePush() only proceeds for a transactionId we
+    // registered, and content must decrypt against OUR transfer-scoped key.
+    // Anything else lands in quarantine via the malformed path.
+    const skipBearer = /health-information\/hiu\/push/i.test(req.path);
+    const verification = skipBearer ? { ok: true as const } : await this.verifier.verify(req);
     if (!verification.ok) {
       await this.callbackService.quarantine(callback, 'verification_failed', verification.reason);
       return { accepted: true };

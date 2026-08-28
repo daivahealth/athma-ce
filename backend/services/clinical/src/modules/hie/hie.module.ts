@@ -15,16 +15,20 @@ import { HieController } from './hie.controller';
 import { HieService } from './hie.service';
 import { HIE_PROVIDER } from './providers/hie-provider.interface';
 import { MockHieProvider } from './providers/mock-hie.provider';
+import { AbdmHieProvider } from './providers/abdm-hie.provider';
+import { CapabilityRoutedHieProvider } from './providers/capability-routed-hie.provider';
 
 @Module({
   imports: [ClinicalDatabaseModule, ConsentModule, PatientModule],
   controllers: [HieController],
   providers: [
     HieService,
-    // Region-agnostic seam: the active HIE network is selected here.
-    // Replace MockHieProvider with a config-driven factory when a real
-    // network integration is available.
-    { provide: HIE_PROVIDER, useClass: MockHieProvider },
+    MockHieProvider,
+    AbdmHieProvider,
+    // Region-agnostic seam (ADR-0012): the tenant's
+    // capability.national.exchange.provider binding routes to the concrete
+    // network per request — 'abdm' → AbdmHieProvider, else the mock.
+    { provide: HIE_PROVIDER, useClass: CapabilityRoutedHieProvider },
   ],
   exports: [HieService],
 })

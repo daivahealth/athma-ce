@@ -4,6 +4,7 @@ import { CorrelationService } from '../correlation/correlation.service';
 import { CareContextService } from '../care-context/care-context.service';
 import { ConsentService } from '../consent/consent.service';
 import { DataFlowService } from '../data-flow/data-flow.service';
+import { HiuService } from '../hiu/hiu.service';
 
 export interface InboundCallback {
   path: string;
@@ -39,6 +40,7 @@ export class CallbackService {
     private readonly careContexts: CareContextService,
     private readonly consents: ConsentService,
     private readonly dataFlow: DataFlowService,
+    private readonly hiu: HiuService,
   ) {}
 
   async handle(callback: InboundCallback): Promise<void> {
@@ -50,6 +52,10 @@ export class CallbackService {
 
     // Path-dispatched handlers first: these gateway-initiated flows carry
     // their own content and correlate via HIP id or consent id, not our txns.
+    if (/health-information/i.test(callback.path) && /hiu\/push/i.test(callback.path)) {
+      await this.hiu.receivePush(callback.body);
+      return;
+    }
     if (/health-information/i.test(callback.path) && /request/i.test(callback.path)) {
       await this.dataFlow.handleRequest(
         { tenantId: resolved.tenantId, facilityId: resolved.facilityId ?? undefined },
@@ -157,7 +163,11 @@ export class CallbackService {
 
     const body = callback.body as Record<string, any> | undefined;
     const candidate =
-      body?.resp?.requestId ?? body?.response?.requestId ?? body?.requestId ?? body?.txnId;
+      body?.resp?.requestId ??
+      body?.response?.requestId ??
+      body?.transactionId ??
+      body?.requestId ??
+      body?.txnId;
     return typeof candidate === 'string' && candidate ? candidate : undefined;
   }
 

@@ -172,3 +172,48 @@ model DataRequest {
   @@index([status])
   @@map("data_requests")
 }
+
+/// HIU-side consent requests we raise toward a patient's Consent Manager
+/// (issue #83, ABDM M3). Mock path auto-grants so the whole fetch journey is
+/// demo/CI-able; live path completes via the hiu on-notify callback.
+model HiuConsentRequest {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  facilityId        String?   @map("facility_id") @db.Uuid
+  abhaAddress       String    @map("abha_address")
+  purpose           String    @map("purpose")
+  hiTypes           Json      @map("hi_types")
+  status            String    @default("REQUESTED") @map("status") // REQUESTED | GRANTED | DENIED | EXPIRED
+  /// The granted consent artefact id (authorises health-information requests).
+  consentArtefactId String?   @map("consent_artefact_id")
+  gateway           String    @map("gateway") // abdm | mock
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, abhaAddress, status])
+  @@map("hiu_consent_requests")
+}
+
+/// One HIU health-information transfer: our ephemeral key material, and the
+/// decrypted, normalised records once the HIP pushes. The private key is
+/// TRANSFER-SCOPED and erased the moment decryption succeeds.
+model HiuTransfer {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  transactionId     String    @unique @map("transaction_id")
+  consentArtefactId String    @map("consent_artefact_id")
+  tenantId          String    @map("tenant_id") @db.Uuid
+  facilityId        String?   @map("facility_id") @db.Uuid
+  abhaAddress       String    @map("abha_address")
+  /// Ephemeral X25519 private key (PKCS8 base64) — erased after decryption.
+  privateKey        String?   @map("private_key")
+  nonce             String    @map("nonce")
+  status            String    @default("requested") @map("status") // requested | received | failed
+  /// Normalised records: [{externalId, recordType, title, sourceSystem, issuedAt, metadata}]
+  records           Json?     @map("records")
+  error             String?   @map("error")
+  requestedAt       DateTime  @default(now()) @map("requested_at") @db.Timestamptz(6)
+  receivedAt        DateTime? @map("received_at") @db.Timestamptz(6)
+
+  @@index([tenantId, status])
+  @@map("hiu_transfers")
+}

@@ -28,6 +28,8 @@ import { DataFlowService } from './modules/data-flow/data-flow.service';
 import { DataFlowController } from './modules/data-flow/data-flow.controller';
 import { FideliusCryptoService } from './modules/data-flow/fidelius-crypto.service';
 import { FhirBundleService } from './modules/data-flow/fhir-bundle.service';
+import { HiuService } from './modules/hiu/hiu.service';
+import { HiuController } from './modules/hiu/hiu.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] })],
@@ -42,6 +44,7 @@ import { FhirBundleService } from './modules/data-flow/fhir-bundle.service';
     CareContextController,
     ConsentController,
     DataFlowController,
+    HiuController,
   ],
   providers: [
     PrismaService,
@@ -63,6 +66,7 @@ import { FhirBundleService } from './modules/data-flow/fhir-bundle.service';
     DataFlowService,
     FideliusCryptoService,
     FhirBundleService,
+    HiuService,
   ],
 })
 export class AppModule {}

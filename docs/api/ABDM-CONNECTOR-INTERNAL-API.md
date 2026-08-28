@@ -155,6 +155,31 @@ are built from.
 ### `GET /internal/data-requests?tenantId=`
 - Provision state: `{transactionId, consentId, status: received|pushed|denied|failed, contextsSent, error?}`.
 
+## HIU flows (M3)
+
+The clinical `AbdmHieProvider` (bound per tenant via
+`capability.national.exchange.provider = "abdm"` behind the ADR-0012
+`HIE_PROVIDER` seam) drives fetches through:
+
+### `POST /internal/hiu/fetch` — `{tenantId, facilityId?, abhaAddress, purpose?}`
+Ensures a GRANTED consent (mock: auto-granted and mirrored into
+`consent_artefacts` so the loopback HIP path authorizes it; live: async
+consent-request init, returns `consent_pending`), then raises the
+health-information request with transfer-scoped X25519 key material and our
+public `hiu/push` callback as `dataPushUrl`. Returns
+`{status: completed, transactionId, records[]}` when the push arrives within
+the wait window, else `consent_pending`/`transfer_pending` — the clinical
+fetch-job machinery retries.
+
+### `GET /internal/hiu/transfers/:tenantId/:transactionId`
+Transfer state (never the private key): `{status, records?, error?}`.
+
+**Push ingress** (`.../health-information/hiu/push`): carries no gateway JWT —
+acceptance is by transaction correlation, content must decrypt against OUR
+transfer-scoped private key, checksums verified; the key is ERASED on
+success. Mock mode is a real loopback: our own HIP provision path serves the
+fetch, so both directions of the Fidelius crypto run in dev/CI.
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`
