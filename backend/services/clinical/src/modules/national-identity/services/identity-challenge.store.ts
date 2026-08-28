@@ -4,20 +4,22 @@
  *
  * The provider returns an opaque `txnId`; we need to remember which tenant,
  * provider and purpose it belongs to when the OTP comes back, without trusting
- * the client to tell us. Entries are intentionally in-memory and short-lived —
- * this is transient auth state, not a record. Nothing sensitive (Aadhaar, OTP,
- * provider token) is ever stored here.
+ * the client to tell us. Entries are short-lived — this is transient auth
+ * state, not a record. Nothing sensitive (Aadhaar, OTP, provider token) is
+ * ever stored here.
  *
- * NOTE: in-memory means transactions do not survive a restart and are not
- * shared across replicas. An OTP round-trip is seconds long and the user can
- * simply request a new OTP, so this is an acceptable trade for M1; move to
- * Redis if the clinical service is ever load-balanced without sticky sessions.
+ * Backed by Redis when REDIS_URL is set, so challenges survive restarts and
+ * work across load-balanced replicas. Falls back to an in-memory Map for
+ * single-node dev without Redis (transactions then don't survive a restart —
+ * the user simply requests a new OTP).
  */
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
+import Redis from 'ioredis';
 import type { IdentityChallengePurpose } from '../providers/national-identity-provider.interface';
 
 const TTL_MS = 10 * 60 * 1000;
+const KEY_PREFIX = 'identity:challenge:';
 
 export interface StoredChallenge {
   tenantId: string;
@@ -31,23 +33,58 @@ export interface StoredChallenge {
 }
 
 @Injectable()
-export class IdentityChallengeStore {
+export class IdentityChallengeStore implements OnModuleDestroy {
   private readonly logger = new Logger(IdentityChallengeStore.name);
   private readonly entries = new Map<string, StoredChallenge>();
+  private readonly redis?: Redis;
 
-  put(txnId: string, challenge: Omit<StoredChallenge, 'createdAt'>): void {
+  constructor() {
+    if (process.env.REDIS_URL) {
+      this.redis = new Redis(process.env.REDIS_URL, {
+        maxRetriesPerRequest: 2,
+        lazyConnect: false,
+      });
+      this.redis.on('error', (err) =>
+        this.logger.warn(`Redis error in identity challenge store: ${err.message}`),
+      );
+      this.logger.log('Identity challenge store using Redis');
+    } else {
+      this.logger.warn(
+        'REDIS_URL not set — identity challenge store is in-memory only (not multi-replica safe)',
+      );
+    }
+  }
+
+  async put(txnId: string, challenge: Omit<StoredChallenge, 'createdAt'>): Promise<void> {
+    const entry: StoredChallenge = { ...challenge, createdAt: Date.now() };
+    if (this.redis) {
+      await this.redis.set(KEY_PREFIX + txnId, JSON.stringify(entry), 'PX', TTL_MS);
+      return;
+    }
     this.sweep();
-    this.entries.set(txnId, { ...challenge, createdAt: Date.now() });
+    this.entries.set(txnId, entry);
   }
 
   /** Returns the challenge if it exists, is unexpired and belongs to `tenantId`. */
-  get(txnId: string, tenantId: string): StoredChallenge | undefined {
-    const entry = this.entries.get(txnId);
-    if (!entry) return undefined;
+  async get(txnId: string, tenantId: string): Promise<StoredChallenge | undefined> {
+    let entry: StoredChallenge | undefined;
 
-    if (Date.now() - entry.createdAt > TTL_MS) {
-      this.entries.delete(txnId);
-      return undefined;
+    if (this.redis) {
+      const raw = await this.redis.get(KEY_PREFIX + txnId);
+      if (!raw) return undefined;
+      try {
+        entry = JSON.parse(raw) as StoredChallenge;
+      } catch {
+        await this.redis.del(KEY_PREFIX + txnId);
+        return undefined;
+      }
+    } else {
+      entry = this.entries.get(txnId);
+      if (!entry) return undefined;
+      if (Date.now() - entry.createdAt > TTL_MS) {
+        this.entries.delete(txnId);
+        return undefined;
+      }
     }
 
     // Prevents a transaction started by one tenant being completed by another.
@@ -59,8 +96,18 @@ export class IdentityChallengeStore {
     return entry;
   }
 
-  delete(txnId: string): void {
+  async delete(txnId: string): Promise<void> {
+    if (this.redis) {
+      await this.redis.del(KEY_PREFIX + txnId);
+      return;
+    }
     this.entries.delete(txnId);
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    if (this.redis) {
+      await this.redis.quit().catch(() => this.redis?.disconnect());
+    }
   }
 
   private sweep(): void {

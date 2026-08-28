@@ -149,7 +149,7 @@ export class NationalIdentityService {
       throw new ServiceUnavailableException('Identity provider did not return a transaction id');
     }
 
-    this.challenges.put(challenge.txnId, {
+    await this.challenges.put(challenge.txnId, {
       tenantId: context.tenantId,
       country: provider.country,
       identityType: provider.identityType,
@@ -175,7 +175,7 @@ export class NationalIdentityService {
   }
 
   async completeChallenge(txnId: string, dto: CompleteChallengeDto, context: RequestContext) {
-    const stored = this.challenges.get(txnId, context.tenantId);
+    const stored = await this.challenges.get(txnId, context.tenantId);
     if (!stored) {
       throw new BadRequestException('Transaction not found or expired — request a new OTP');
     }
@@ -196,7 +196,7 @@ export class NationalIdentityService {
     );
 
     // A verified transaction is single-use.
-    this.challenges.delete(txnId);
+    await this.challenges.delete(txnId);
 
     const patientId = dto.patientId ?? stored.patientId;
     let identity = null;
