@@ -1,3 +1,4 @@
+import { EventsModule } from './common/events/events.module';
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ClinicalDatabaseModule } from '@zeal/database-clinical';
 import { RequestContextModule, SharedAuthModule } from '@zeal/shared-utils';
@@ -60,6 +61,7 @@ import { LoggerService } from './common/logger/logger.service';
     ReportingModule,
     LabOperationsModule,
     OtModule,
+    EventsModule,
     PluginLoaderModule.forRoot(),
   ],
   controllers: [AppController],

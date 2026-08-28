@@ -10,6 +10,8 @@ import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
 import { EncounterNumberGeneratorService } from './encounter-number-generator.service';
+import { OutboxService } from '../../common/events/outbox.service';
+import { DOMAIN_EVENTS } from '../../common/events/domain-events';
 import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
 import { PatientDisplayDto } from '@zeal/contracts';
 
@@ -17,7 +19,8 @@ import { PatientDisplayDto } from '@zeal/contracts';
 export class EncounterService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly encounterNumberGenerator: EncounterNumberGeneratorService
+    private readonly encounterNumberGenerator: EncounterNumberGeneratorService,
+    private readonly outbox: OutboxService,
   ) { }
 
   /**
@@ -317,25 +320,62 @@ export class EncounterService {
     if (dto.dischargeDisposition !== undefined) updateData.dischargeDisposition = dto.dischargeDisposition;
     if (dto.followUpInstructions !== undefined) updateData.followUpInstructions = dto.followUpInstructions;
 
-    const updated = await this.prisma.encounter.update({
-      where: { id },
-      data: updateData,
-      include: {
-        patient: {
-          select: {
-            id: true,
-            mrn: true,
-            firstName: true,
-            lastName: true,
-            dateOfBirth: true,
-            gender: true,
+    const closing = dto.status === 'finished' && existing.status !== 'finished';
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const enc = await tx.encounter.update({
+        where: { id },
+        data: updateData,
+        include: {
+          patient: {
+            select: {
+              id: true,
+              mrn: true,
+              firstName: true,
+              lastName: true,
+              dateOfBirth: true,
+              gender: true,
+            },
           },
+          appointment: true,
         },
-        appointment: true,
-      },
+      });
+      if (closing) {
+        await this.writeClosedEvent(tx, enc);
+      }
+      return enc;
     });
 
     return updated;
+  }
+
+  /**
+   * encounter.closed outbox event, written in the same transaction as the
+   * status change (ADR-0015 §5). Ids only — consumers fetch details via API.
+   */
+  private async writeClosedEvent(
+    tx: Parameters<OutboxService['write']>[0],
+    encounter: {
+      id: string;
+      tenantId: string;
+      facilityId?: string | null;
+      patientId: string;
+      encounterType?: string | null;
+      endTime?: Date | null;
+    },
+  ): Promise<void> {
+    await this.outbox.write(tx, {
+      eventType: DOMAIN_EVENTS.ENCOUNTER_CLOSED,
+      tenantId: encounter.tenantId,
+      facilityId: encounter.facilityId ?? undefined,
+      aggregateType: 'encounter',
+      aggregateId: encounter.id,
+      payload: {
+        encounterId: encounter.id,
+        patientId: encounter.patientId,
+        ...(encounter.encounterType ? { encounterType: encounter.encounterType } : {}),
+        ...(encounter.endTime ? { endedAt: encounter.endTime.toISOString() } : {}),
+      },
+    });
   }
 
   /**
@@ -357,15 +397,22 @@ export class EncounterService {
       throw new NotFoundException(`Encounter with ID ${id} not found`);
     }
 
-    return this.prisma.encounter.update({
-      where: { id },
-      data: {
-        status,
-        // If finishing encounter, set end time
-        ...(status === 'finished' && !encounter.endTime
-          ? { endTime: new Date() }
-          : {}),
-      },
+    const closing = status === 'finished' && encounter.status !== 'finished';
+    return this.prisma.$transaction(async (tx) => {
+      const updated = await tx.encounter.update({
+        where: { id },
+        data: {
+          status,
+          // If finishing encounter, set end time
+          ...(status === 'finished' && !encounter.endTime
+            ? { endTime: new Date() }
+            : {}),
+        },
+      });
+      if (closing) {
+        await this.writeClosedEvent(tx, updated);
+      }
+      return updated;
     });
   }
 

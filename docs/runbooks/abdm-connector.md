@@ -15,6 +15,8 @@
 | `FOUNDATION_BASE_URL` | Foundation service URL — per-tenant ABDM settings (config) and per-facility credentials (TenantSecret store) resolve through it |
 | `ABDM_CLIENT_ID` / `ABDM_CLIENT_SECRET` | Optional single-tenant/self-hosted credential fallback, used only when a tenant has NO stored secret |
 
+On the clinical side, `OUTBOX_SUBSCRIBERS` (JSON `[{id, url}]`) overrides the default event subscription (this connector at `$ABDM_CONNECTOR_URL/api/v1/internal/events`); stuck deliveries surface in clinical's `outbox_cursors.last_error` and `outbox_dead_letters` — see [DOMAIN-EVENTS.md](../architecture/DOMAIN-EVENTS.md).
+
 ## Health
 - `GET /health` → `{status, database}`; `degraded` means the `zeal_abdm` DB is unreachable — callbacks are still answered `202` but everything quarantines, so treat as an incident.
 

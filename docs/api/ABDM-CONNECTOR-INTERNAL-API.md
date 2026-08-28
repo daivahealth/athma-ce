@@ -96,6 +96,13 @@ config; sandbox defaults pending reconciliation with NHA docs); tenants
 without stored credentials get deterministic mock results. Failures serialize
 as `422 {code, message, retryable}`.
 
+## Domain-event ingestion
+
+### `POST /internal/events`
+- Receives the clinical outbox dispatcher's deliveries (envelope: `{id, seq, type, version, tenantId, facilityId?, aggregateType, aggregateId, occurredAt, payload}`).
+- Idempotent by event `id` — duplicates ack `200 {accepted: true, duplicate: true}`.
+- Relevant types are stored `received` in `event_inbox` for the M2 handlers; others `ignored`. See [DOMAIN-EVENTS.md](../architecture/DOMAIN-EVENTS.md).
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`

@@ -28,6 +28,8 @@ import {
 import { AbdmConfigService } from '../providers/abha/abdm-config.service';
 import { AbhaProvider } from '../providers/abha/abha.provider';
 import { IdentityChallengeStore } from './identity-challenge.store';
+import { OutboxService } from '../../../common/events/outbox.service';
+import { DOMAIN_EVENTS } from '../../../common/events/domain-events';
 import {
   CompleteChallengeDto,
   CreatePatientIdentityDto,
@@ -49,6 +51,7 @@ export class NationalIdentityService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly challenges: IdentityChallengeStore,
+    private readonly outbox: OutboxService,
     private readonly abdmConfig: AbdmConfigService,
     private readonly abhaProvider: AbhaProvider,
     @Inject(NATIONAL_IDENTITY_PROVIDERS)
@@ -396,19 +399,40 @@ export class NationalIdentityService {
       createdBy: userId,
     };
 
-    const identity = existing
-      ? await this.prisma.patientIdentity.update({
-          where: { id: existing.id },
-          data: {
-            ...(data.secondaryValue ? { secondaryValue: data.secondaryValue } : {}),
-            verificationStatus: payload.verificationStatus,
-            ...(data.verificationMethod ? { verificationMethod: data.verificationMethod } : {}),
-            ...(verified ? { verifiedAt: new Date(), verifiedBy: userId } : {}),
-            isPrimary,
-            ...(data.metadata ? { metadata: data.metadata as any } : {}),
-          },
-        })
-      : await this.prisma.patientIdentity.create({ data: payload });
+    // Identity write + outbox event commit atomically: the event exists iff
+    // the identity change did (ADR-0015 §5).
+    const identity = await this.prisma.$transaction(async (tx) => {
+      const saved = existing
+        ? await tx.patientIdentity.update({
+            where: { id: existing.id },
+            data: {
+              ...(data.secondaryValue ? { secondaryValue: data.secondaryValue } : {}),
+              verificationStatus: payload.verificationStatus,
+              ...(data.verificationMethod ? { verificationMethod: data.verificationMethod } : {}),
+              ...(verified ? { verifiedAt: new Date(), verifiedBy: userId } : {}),
+              isPrimary,
+              ...(data.metadata ? { metadata: data.metadata as any } : {}),
+            },
+          })
+        : await tx.patientIdentity.create({ data: payload });
+
+      // Ids and status only — never the identity value.
+      await this.outbox.write(tx, {
+        eventType: DOMAIN_EVENTS.PATIENT_IDENTITY_LINKED,
+        tenantId,
+        aggregateType: 'patient',
+        aggregateId: patientId,
+        payload: {
+          patientId,
+          identityId: saved.id,
+          country: payload.country,
+          identityType: data.identityType,
+          verificationStatus: payload.verificationStatus,
+          isPrimary,
+        },
+      });
+      return saved;
+    });
 
     if (isPrimary) {
       await this.syncPatientPrimary(patientId, tenantId, identity);

@@ -4960,3 +4960,56 @@ model PatientIdentity {
   @@index([tenantId, identityType], map: "idx_patient_identity_tenant_type")
   @@map("patient_identity")
 }
+
+// Transactional outbox (ADR-0015 §5, issue #112). Events are written in the
+// SAME transaction as the domain change and delivered by a polling
+// dispatcher. Payloads carry ids and minimal denormalization — consumers
+// fetch PHI through authorized APIs, never from the event stream.
+model DomainEvent {
+  id            String   @id @default(uuid()) @map("id") @db.Uuid
+  /// Strictly ordered dispatch position.
+  seq           BigInt   @unique @default(autoincrement()) @map("seq")
+  eventType     String   @map("event_type")
+  eventVersion  Int      @default(1) @map("event_version")
+  tenantId      String   @map("tenant_id") @db.Uuid
+  facilityId    String?  @map("facility_id") @db.Uuid
+  aggregateType String   @map("aggregate_type")
+  aggregateId   String   @map("aggregate_id") @db.Uuid
+  payload       Json     @map("payload")
+  occurredAt    DateTime @default(now()) @map("occurred_at") @db.Timestamptz(6)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([eventType])
+  @@index([tenantId, aggregateType, aggregateId])
+  @@map("domain_events")
+}
+
+/// One row per subscriber: how far it has consumed the outbox, with retry
+/// state for the event currently failing.
+model OutboxCursor {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  subscriberId  String    @unique @map("subscriber_id")
+  /// seq of the last successfully delivered (or dead-lettered) event.
+  position      BigInt    @default(0) @map("position")
+  attempts      Int       @default(0) @map("attempts")
+  nextAttemptAt DateTime? @map("next_attempt_at") @db.Timestamptz(6)
+  lastError     String?   @map("last_error")
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("outbox_cursors")
+}
+
+/// Events a subscriber permanently failed on (after max retries). The cursor
+/// advances past them so one poison event never blocks the stream; operators
+/// triage here.
+model OutboxDeadLetter {
+  id           String   @id @default(uuid()) @map("id") @db.Uuid
+  subscriberId String   @map("subscriber_id")
+  eventId      String   @map("event_id") @db.Uuid
+  seq          BigInt   @map("seq")
+  error        String   @map("error")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([subscriberId, createdAt])
+  @@map("outbox_dead_letters")
+}

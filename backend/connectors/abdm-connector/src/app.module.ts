@@ -17,6 +17,7 @@ import { AbdmHttpGateway } from './modules/abha/abdm-http.gateway';
 import { MockAbdmGateway } from './modules/abha/mock-abdm.gateway';
 import { RegistriesController } from './modules/registries/registries.controller';
 import { RegistriesService } from './modules/registries/registries.service';
+import { EventsController } from './modules/events/events.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] })],
@@ -27,6 +28,7 @@ import { RegistriesService } from './modules/registries/registries.service';
     QuarantineController,
     AbhaController,
     RegistriesController,
+    EventsController,
   ],
   providers: [
     PrismaService,
