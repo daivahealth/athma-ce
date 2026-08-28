@@ -79,6 +79,8 @@ export const CONFIG_DEFAULTS: Partial<ConfigValues> = {
   'abdm.base_url': 'https://abhasbx.abdm.gov.in/abha/api',
   'abdm.gateway_url': 'https://dev.abdm.gov.in',
   'abdm.cm_id': 'sbx',
+  'abdm.hfr_base_url': 'https://facilitysbx.abdm.gov.in',
+  'abdm.hpr_base_url': 'https://hpridsbx.abdm.gov.in',
   'abdm.consent_version': '1.4',
 };
 

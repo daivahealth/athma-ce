@@ -110,6 +110,10 @@ export interface ConfigValues {
     'abdm.gateway_url': string;
     /** Consent Manager id sent as the X-CM-ID header (`sbx` | `abdm`). */
     'abdm.cm_id': string;
+    /** HFR (facility registry) API base; sandbox default, reconcile with NHA docs. */
+    'abdm.hfr_base_url': string;
+    /** HPR (practitioner registry) API base; sandbox default, reconcile with NHA docs. */
+    'abdm.hpr_base_url': string;
     /** Version string sent in the ABHA enrolment consent block. */
     'abdm.consent_version': string;
 }

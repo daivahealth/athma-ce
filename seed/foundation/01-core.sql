@@ -86,6 +86,8 @@ VALUES
   (gen_random_uuid(), 'abdm.base_url', '"https://abhasbx.abdm.gov.in/abha/api"', 'string', 'identity', 'ABHA enrolment/profile API base URL', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'abdm.gateway_url', '"https://dev.abdm.gov.in"', 'string', 'identity', 'ABDM gateway host used to issue session tokens', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'abdm.cm_id', '"sbx"', 'string', 'identity', 'Consent Manager id sent as the X-CM-ID header (sbx or abdm)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'abdm.hfr_base_url', '"https://facilitysbx.abdm.gov.in"', 'string', 'abdm', 'HFR facility-registry API base (sandbox default; reconcile with NHA docs).', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'abdm.hpr_base_url', '"https://hpridsbx.abdm.gov.in"', 'string', 'abdm', 'HPR practitioner-registry API base (sandbox default; reconcile with NHA docs).', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'abdm.consent_version', '"1.4"', 'string', 'identity', 'Version string sent in the ABHA enrolment consent block', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
   -- AI CATALOG POPULATION CONFIGS

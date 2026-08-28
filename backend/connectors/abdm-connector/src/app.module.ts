@@ -15,6 +15,8 @@ import { AbdmSessionService } from './modules/abha/abdm-session.service';
 import { AbdmCryptoService } from './modules/abha/abdm-crypto.service';
 import { AbdmHttpGateway } from './modules/abha/abdm-http.gateway';
 import { MockAbdmGateway } from './modules/abha/mock-abdm.gateway';
+import { RegistriesController } from './modules/registries/registries.controller';
+import { RegistriesService } from './modules/registries/registries.service';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] })],
@@ -24,6 +26,7 @@ import { MockAbdmGateway } from './modules/abha/mock-abdm.gateway';
     CallbackController,
     QuarantineController,
     AbhaController,
+    RegistriesController,
   ],
   providers: [
     PrismaService,
@@ -37,6 +40,7 @@ import { MockAbdmGateway } from './modules/abha/mock-abdm.gateway';
     AbdmCryptoService,
     AbdmHttpGateway,
     MockAbdmGateway,
+    RegistriesService,
   ],
 })
 export class AppModule {}

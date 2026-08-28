@@ -82,6 +82,20 @@ Provider failures are returned as `422 {code, message, retryable}` and
 re-raised by the clinical client as `IdentityProviderError` — the seam above
 the gateway is unchanged.
 
+## Registries (HFR / HPR)
+
+| Route | Body | Returns |
+|---|---|---|
+| `POST /internal/registries/facility/search` | `{tenantId, facilityId?, name?, registryId?, filters?}` | `{records[], gateway}` |
+| `POST /internal/registries/facility/link` | `{tenantId, entityId, registryId}` | `{registryId, record, gateway}` — also registers the `hipId → facility` callback routing |
+| `POST /internal/registries/practitioner/search` | same shape | `{records[], gateway}` |
+| `POST /internal/registries/practitioner/link` | `{tenantId, entityId, registryId}` | `{registryId, record, gateway}` |
+
+Live calls hit the HFR/HPR APIs (`abdm.hfr_base_url` / `abdm.hpr_base_url`
+config; sandbox defaults pending reconciliation with NHA docs); tenants
+without stored credentials get deterministic mock results. Failures serialize
+as `422 {code, message, retryable}`.
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`

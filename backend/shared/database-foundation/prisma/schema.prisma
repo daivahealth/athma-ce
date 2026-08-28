@@ -68,6 +68,8 @@ model Facility {
   code          String? @db.VarChar(50)
   facilityType  String  @default("clinic") @map("facility_type")
   licenseNumber String? @map("license_number")
+  /// National facility-registry id (HFR, ODS, ...) — generic, provider decided by the registry.facility capability binding.
+  externalRegistryId String? @map("external_registry_id")
 
   // Location Information
   addressLine1 String? @map("address_line1")
@@ -267,6 +269,8 @@ model Staff {
   specialties      Json              @default("[]")
   licenseNumber    String?           @map("license_number")
   licenseExpiry    DateTime?         @map("license_expiry") @db.Date
+  /// National practitioner-registry id (HPR, SDS, ...) — generic, provider decided by the registry.practitioner capability binding.
+  externalRegistryId String?         @map("external_registry_id")
   qualification    String?           @map("qualification") @db.VarChar(150)
   languages        String[]          @default([]) @map("languages") @db.VarChar(50)
   displayName      String?           @map("display_name") @db.VarChar(255)

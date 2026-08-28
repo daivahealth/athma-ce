@@ -21,6 +21,7 @@ import { RbacModule } from './modules/rbac/rbac.module';
 import { PluginModule } from './modules/plugin/plugin.module';
 import { SecretModule } from './modules/secret/secret.module';
 import { CountryPackModule } from './modules/country-pack/country-pack.module';
+import { RegistryLinkModule } from './modules/registry-link/registry-link.module';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
 
@@ -51,6 +52,7 @@ import { LoggerService } from './common/logger/logger.service';
     PluginModule,
     SecretModule,
     CountryPackModule,
+    RegistryLinkModule,
     // CatalogModule removed - catalog models moved to Clinical database
     // ValueSetModule removed - valueset models moved to Clinical database
   ],

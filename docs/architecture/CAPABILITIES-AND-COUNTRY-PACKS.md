@@ -102,6 +102,23 @@ API (Foundation, JWT + tenant permissions):
 Packs ship with the platform (`country-packs/` at the repo root, overridable
 via `COUNTRY_PACKS_DIR`). Shipped: `in` (India), `ae` (UAE), `generic`.
 
+## Registry linking (registry.facility / registry.practitioner)
+
+Foundation exposes country-neutral registry endpoints (JWT + facility/staff
+permissions), served by whichever provider the tenant's binding names:
+
+- `GET /api/v1/registry/facilities/search?name=|registryId=`
+- `PUT /api/v1/registry/facilities/:facilityId/link {registryId}`
+- `GET /api/v1/registry/facilities/:facilityId/status`
+- `GET /api/v1/registry/practitioners/search`, `PUT .../:staffId/link`, `GET .../:staffId/status`
+
+Unbound capability → `409` telling the admin to apply a country pack or set
+the binding. Links persist only the generic `externalRegistryId` on
+Facility/Staff. The HFR provider's `link` additionally registers the
+connector's `hipId → facility` routing, which is how gateway-initiated ABDM
+callbacks find the right tenant. Providers run mock (no credentials) or live
+(stored credentials), exactly like the ABHA flows.
+
 ## Adding a country (checklist)
 
 1. Write the pack (`country-packs/<code>.json`) — config values only.
