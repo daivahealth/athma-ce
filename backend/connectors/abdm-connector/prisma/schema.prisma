@@ -149,3 +149,26 @@ model ConsentArtefact {
   @@index([status])
   @@map("consent_artefacts")
 }
+
+/// Consented health-information requests from HIUs (issue #116, ABDM M2).
+/// Every request must point at a GRANTED consent artefact; the provision is
+/// processed asynchronously and pushed encrypted to the HIU's dataPushUrl.
+model DataRequest {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  transactionId String    @unique @map("transaction_id")
+  consentId     String    @map("consent_id")
+  tenantId      String    @map("tenant_id") @db.Uuid
+  facilityId    String?   @map("facility_id") @db.Uuid
+  dataPushUrl   String    @map("data_push_url")
+  /// The HIU's key material (public key + nonce) for ECDH.
+  keyMaterial   Json      @map("key_material")
+  status        String    @default("received") @map("status") // received | pushed | denied | failed
+  contextsSent  Int       @default(0) @map("contexts_sent")
+  error         String?   @map("error")
+  receivedAt    DateTime  @default(now()) @map("received_at") @db.Timestamptz(6)
+  pushedAt      DateTime? @map("pushed_at") @db.Timestamptz(6)
+
+  @@index([tenantId, consentId])
+  @@index([status])
+  @@map("data_requests")
+}

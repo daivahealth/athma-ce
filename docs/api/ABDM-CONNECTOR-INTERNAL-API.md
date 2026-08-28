@@ -136,6 +136,25 @@ Consent notifications arrive on the public callback ingress
 ### `GET /internal/consents?tenantId=&abhaAddress=`
 - Artefact state: `{consentId, abhaAddress, status, hiTypes, fromDate, toDate, expiresAt, surfaced, surfaceError}`.
 
+## Health-information provision (HIP data flow)
+
+HIU requests arrive on the public ingress (`.../health-information/hip/request`),
+resolve tenancy via the named consent artefact, and are **denied** (recorded,
+for audit) unless that artefact is GRANTED, unexpired, and belongs to the
+resolved tenant. Approved requests process asynchronously: for every linked
+care context of the consented patient, the encounter summary is fetched from
+clinical, built into an NRCES OPConsultRecord FHIR bundle, Fidelius-encrypted
+(ECDH-Curve25519 → HKDF-SHA256 → AES-256-GCM, fresh sender key pair per
+provision), and pushed to the HIU's `dataPushUrl` with SHA-256 checksums; the
+gateway transfer notification fires best-effort on the live path.
+
+Clinical counterpart: `GET /api/v1/internal/encounters/:id/summary?tenantId=`
+(internal key + `x-tenant-id`) — the minimal patient+encounter summary bundles
+are built from.
+
+### `GET /internal/data-requests?tenantId=`
+- Provision state: `{transactionId, consentId, status: received|pushed|denied|failed, contextsSent, error?}`.
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`

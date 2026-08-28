@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CorrelationService } from '../correlation/correlation.service';
 import { CareContextService } from '../care-context/care-context.service';
 import { ConsentService } from '../consent/consent.service';
+import { DataFlowService } from '../data-flow/data-flow.service';
 
 export interface InboundCallback {
   path: string;
@@ -37,6 +38,7 @@ export class CallbackService {
     private readonly correlationService: CorrelationService,
     private readonly careContexts: CareContextService,
     private readonly consents: ConsentService,
+    private readonly dataFlow: DataFlowService,
   ) {}
 
   async handle(callback: InboundCallback): Promise<void> {
@@ -46,8 +48,15 @@ export class CallbackService {
       return;
     }
 
-    // Path-dispatched handlers first: consent notifications are
-    // gateway-initiated (no correlation of ours) and carry their own content.
+    // Path-dispatched handlers first: these gateway-initiated flows carry
+    // their own content and correlate via HIP id or consent id, not our txns.
+    if (/health-information/i.test(callback.path) && /request/i.test(callback.path)) {
+      await this.dataFlow.handleRequest(
+        { tenantId: resolved.tenantId, facilityId: resolved.facilityId ?? undefined },
+        callback.body,
+      );
+      return;
+    }
     if (/consent/i.test(callback.path) && /notify/i.test(callback.path)) {
       await this.consents.handleNotification(
         { tenantId: resolved.tenantId, facilityId: resolved.facilityId ?? undefined },
@@ -126,6 +135,16 @@ export class CallbackService {
       const mapping = await this.correlationService.getHipMapping(hipId);
       if (mapping) {
         return { tenantId: mapping.tenantId, facilityId: mapping.facilityId, via: 'hip' };
+      }
+    }
+
+    // Health-information requests carry neither of ours — but they must name
+    // a consent artefact we hold, which pins the tenant.
+    const consentId = (callback.body as Record<string, any> | undefined)?.hiRequest?.consent?.id;
+    if (typeof consentId === 'string' && consentId) {
+      const consent = await this.dataFlow.tenancyForConsent(consentId);
+      if (consent) {
+        return { tenantId: consent.tenantId, facilityId: consent.facilityId, via: 'hip' };
       }
     }
 

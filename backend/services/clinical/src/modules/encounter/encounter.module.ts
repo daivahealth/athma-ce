@@ -7,6 +7,7 @@
 import { Module } from '@nestjs/common';
 import { ClinicalDatabaseModule } from '@zeal/database-clinical';
 import { EncounterController } from './encounter.controller';
+import { InternalEncounterController } from './internal-encounter.controller';
 import { EncounterService } from './encounter.service';
 import { EncounterNumberGeneratorService } from './encounter-number-generator.service';
 import { TriageController } from './triage.controller';
@@ -15,7 +16,7 @@ import { ObservationsModule } from '../observations/observations.module';
 
 @Module({
   imports: [ClinicalDatabaseModule, ObservationsModule],
-  controllers: [EncounterController, TriageController],
+  controllers: [EncounterController, TriageController, InternalEncounterController],
   providers: [EncounterService, EncounterNumberGeneratorService, TriageService],
   exports: [EncounterService, EncounterNumberGeneratorService, TriageService],
 })

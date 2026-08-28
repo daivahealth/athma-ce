@@ -24,6 +24,10 @@ import { CareContextController } from './modules/care-context/care-context.contr
 import { ConsentService } from './modules/consent/consent.service';
 import { ConsentController } from './modules/consent/consent.controller';
 import { JwksVerifierService } from './modules/callback/jwks-verifier.service';
+import { DataFlowService } from './modules/data-flow/data-flow.service';
+import { DataFlowController } from './modules/data-flow/data-flow.controller';
+import { FideliusCryptoService } from './modules/data-flow/fidelius-crypto.service';
+import { FhirBundleService } from './modules/data-flow/fhir-bundle.service';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] })],
@@ -37,6 +41,7 @@ import { JwksVerifierService } from './modules/callback/jwks-verifier.service';
     EventsController,
     CareContextController,
     ConsentController,
+    DataFlowController,
   ],
   providers: [
     PrismaService,
@@ -55,6 +60,9 @@ import { JwksVerifierService } from './modules/callback/jwks-verifier.service';
     InboxProcessorService,
     ConsentService,
     JwksVerifierService,
+    DataFlowService,
+    FideliusCryptoService,
+    FhirBundleService,
   ],
 })
 export class AppModule {}
