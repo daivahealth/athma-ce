@@ -7,13 +7,17 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-foundation';
 import type { Prisma } from '@zeal/database-foundation';
-import { PluginManifest } from '@athma/plugin-sdk';
+import { PluginManifest, PLUGIN_MANIFEST_SCHEMA } from '@athma/plugin-sdk';
+import Ajv from 'ajv';
 import * as fs from 'fs';
 import * as path from 'path';
 
 @Injectable()
 export class PluginService {
   private readonly logger = new Logger(PluginService.name);
+  private readonly validateManifestSchema = new Ajv({ allErrors: true }).compile(
+    PLUGIN_MANIFEST_SCHEMA as unknown as Record<string, unknown>,
+  );
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -131,12 +135,7 @@ export class PluginService {
     return plugin;
   }
 
-  async activateForTenant(
-    pluginId: string,
-    tenantId: string,
-    settings?: Record<string, unknown>,
-    enabledBy?: string,
-  ) {
+  async activateForTenant(pluginId: string, tenantId: string, enabledBy?: string) {
     const plugin = await this.getPluginByPluginId(pluginId);
 
     const existing = await this.prisma.pluginActivation.findUnique({
@@ -160,7 +159,6 @@ export class PluginService {
               enabledAt: new Date(),
               disabledAt: null,
               enabledBy: enabledBy ?? null,
-              settings: (settings ?? {}) as Prisma.InputJsonValue,
             },
           })
         : await tx.pluginActivation.create({
@@ -169,7 +167,6 @@ export class PluginService {
               tenantId,
               isEnabled: true,
               enabledBy: enabledBy ?? null,
-              settings: (settings ?? {}) as Prisma.InputJsonValue,
             },
           });
 
@@ -241,6 +238,56 @@ export class PluginService {
     });
   }
 
+  /**
+   * Single-activation lookup used by PluginGuard in plugin-hosting services.
+   * PluginActivation is the source of truth for enforcement; the
+   * feature.nav.{id} config key is only a derived UI-visibility flag.
+   */
+  async getActivation(pluginId: string, tenantId: string) {
+    const plugin = await this.getPluginByPluginId(pluginId);
+    const activation = await this.prisma.pluginActivation.findUnique({
+      where: { pluginId_tenantId: { pluginId: plugin.id, tenantId } },
+    });
+    return {
+      pluginId,
+      tenantId,
+      isEnabled: activation?.isEnabled === true && plugin.status !== 'error',
+      pluginStatus: plugin.status,
+    };
+  }
+
+  /**
+   * Recorded by plugin-hosting services after boot: 'active' when the module
+   * loaded and initialized, 'error' when it was quarantined. Never overrides
+   * an operator-set 'disabled'.
+   */
+  async updateLoadStatus(pluginId: string, status: 'active' | 'error', error?: string) {
+    const plugin = await this.getPluginByPluginId(pluginId);
+    if (plugin.status === 'disabled') return plugin;
+
+    const manifest = (plugin.manifest ?? {}) as Record<string, unknown>;
+    const updated = await this.prisma.pluginRegistry.update({
+      where: { id: plugin.id },
+      data: {
+        status,
+        manifest: {
+          ...manifest,
+          _lastLoad: {
+            status,
+            error: error ?? null,
+            at: new Date().toISOString(),
+          },
+        } as Prisma.InputJsonValue,
+      },
+    });
+    if (status === 'error') {
+      this.logger.error(`Plugin '${pluginId}' quarantined by host service: ${error ?? 'unknown error'}`);
+    } else {
+      this.logger.log(`Plugin '${pluginId}' reported loaded by host service`);
+    }
+    return updated;
+  }
+
   private resolvePluginPath(packagePath: string): string {
     if (path.isAbsolute(packagePath)) return packagePath;
     // Resolve relative to project root (3 levels up from backend/services/foundation/)
@@ -261,21 +308,11 @@ export class PluginService {
   }
 
   private validateManifest(manifest: PluginManifest): void {
-    if (!manifest.id) throw new BadRequestException('Plugin manifest must have an id');
-    if (!manifest.name) throw new BadRequestException('Plugin manifest must have a name');
-    if (!manifest.version) throw new BadRequestException('Plugin manifest must have a version');
-    if (!manifest.backend?.targetService) {
-      throw new BadRequestException('Plugin manifest must specify backend.targetService');
-    }
-    if (!manifest.backend?.moduleEntrypoint) {
-      throw new BadRequestException('Plugin manifest must specify backend.moduleEntrypoint');
-    }
-
-    const validServices = ['clinical', 'foundation', 'rcm', 'prm'];
-    if (!validServices.includes(manifest.backend.targetService)) {
-      throw new BadRequestException(
-        `Invalid targetService '${manifest.backend.targetService}'. Must be one of: ${validServices.join(', ')}`,
-      );
+    if (!this.validateManifestSchema(manifest)) {
+      const detail = (this.validateManifestSchema.errors ?? [])
+        .map((e) => `${e.instancePath || 'manifest'} ${e.message}`)
+        .join('; ');
+      throw new BadRequestException(`Invalid plugin manifest: ${detail}`);
     }
   }
 }

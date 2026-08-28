@@ -20,7 +20,19 @@ SELECT
   p.id,
   NOW()
 FROM permissions p
-WHERE p.resource NOT IN ('tenant')
+WHERE p.resource NOT IN ('tenant', 'plugin')
+ON CONFLICT (role_id, permission_id) DO NOTHING;
+
+-- Tenant Admin may view and (de)activate plugins for their tenant, but
+-- plugin.install stays instance-level (super_admin only).
+INSERT INTO role_permissions (id, role_id, permission_id, created_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000102', -- tenant_admin role
+  p.id,
+  NOW()
+FROM permissions p
+WHERE p.code IN ('plugin.read', 'plugin.activate', 'plugin.deactivate')
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
 -- Physician gets clinical permissions

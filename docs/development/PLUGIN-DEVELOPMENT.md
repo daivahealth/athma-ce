@@ -402,9 +402,15 @@ curl -X POST http://localhost:3010/api/v1/plugins/install \
 ```
 
 This does the following:
+- Validates the manifest against the SDK's JSON Schema (`PLUGIN_MANIFEST_SCHEMA`) — malformed manifests are rejected with the exact validation errors
 - Stores the manifest in the `PluginRegistry` table
 - Seeds `configKeys` into `InstanceConfig` (e.g., `feature.nav.my-specialty = false`)
 - Registers plugin permissions into the RBAC permission list
+
+The plugin management endpoints require a JWT with plugin permissions:
+`plugin.read` to list/inspect, `plugin.install` (super-admin only by default)
+to install, and `plugin.activate` / `plugin.deactivate` for tenant activation
+(granted to tenant admins by the seed data).
 
 ### Step 7: Activate for a Tenant
 
@@ -417,7 +423,11 @@ curl -X PUT http://localhost:3010/api/v1/plugins/my-specialty/activate \
   -d '{"tenantId": "<tenant-uuid>"}'
 ```
 
-This sets `feature.nav.my-specialty = true` in the tenant's config, making the module visible to users in that tenant.
+This upserts a `PluginActivation` row — **the source of truth for API
+enforcement** (`PluginGuard` checks it via Foundation's internal activation
+endpoint, cached for 60s) — and derives `feature.nav.my-specialty = true` in
+the tenant's config for UI visibility. Editing the config key by hand changes
+sidebar visibility only; it can never grant API access.
 
 ### Step 8: Assign Permissions to Roles
 
@@ -525,8 +535,8 @@ Your plugin automatically inherits athma-ce's three-layer tenant isolation:
 | Problem | Cause | Fix |
 |---|---|---|
 | Plugin not discovered at startup | Wrong directory or missing `athma-plugin.json` | Ensure the plugin is in `plugins/`, `node_modules/@athma-plugins/`, or `ATHMA_PLUGIN_DIR` with a valid manifest |
-| `Skipping plugin` warning in logs | Manifest parse error, module import failure, or TypeScript compile error during `require()` | Check the manifest JSON, the `moduleEntrypoint` path, and for any `tsc` type errors in the plugin (`npm run type-check`) — the loader swallows all exceptions silently |
-| All plugin routes return 404 | TypeScript error in plugin code caused `require()` to throw, and the loader skipped the plugin silently | Run `npm run type-check --workspace=@zeal/clinical` (or `tsc --noEmit` from the plugin's backend dir) to surface compile errors |
+| `QUARANTINED plugin '<id>'` error in logs | Manifest parse error, module import failure, `onPluginInit` throw, or TypeScript compile error during `require()` | The error log names the failing stage (`manifest`/`load`/`init`) with the stack. The service still boots without the plugin; the quarantine is also reported to Foundation (`PluginRegistry.status = 'error'`, visible via `GET /plugins`) when `INTERNAL_API_KEY` is configured |
+| All plugin routes return 404 | The plugin was quarantined at startup (see above) — its controllers are never registered | Check the startup summary line (`Plugin startup: N loaded, M QUARANTINED`) and fix the reported stage error |
 | Sidebar section not showing | Feature flag not enabled for tenant | Activate the plugin via `PUT /plugins/:id/activate` with the tenant ID |
 | 403 on plugin API endpoints | Plugin not activated or permissions not assigned | Check tenant activation and role permissions |
 | Database errors (relation does not exist) | Plugin schema or tables not created | Run `CREATE SCHEMA` and `prisma db push` for the plugin |

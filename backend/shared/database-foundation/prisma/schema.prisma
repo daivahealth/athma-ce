@@ -605,7 +605,6 @@ model PluginActivation {
   enabledAt  DateTime  @default(now()) @map("enabled_at") @db.Timestamptz(6)
   disabledAt DateTime? @map("disabled_at") @db.Timestamptz(6)
   enabledBy  String?   @map("enabled_by") @db.Uuid
-  settings   Json      @default("{}")
 
   plugin PluginRegistry @relation(fields: [pluginId], references: [id], onDelete: Cascade)
 

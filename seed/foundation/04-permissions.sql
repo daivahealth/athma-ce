@@ -392,3 +392,11 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0039-000000000005', 'form_response.create', 'Create Form Responses', 'Start filling a form for a patient/encounter', 'form_response', 'create', NOW(), NOW()),
   ('00000000-0000-0000-0039-000000000006', 'form_response.update', 'Update Form Responses', 'Save draft or submit a filled form', 'form_response', 'update', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
+
+-- Plugin Management Permissions (plugin install/activation lifecycle)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0042-000000000001', 'plugin.read', 'View Plugins', 'List installed plugins and tenant activations', 'plugin', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0042-000000000002', 'plugin.install', 'Install Plugins', 'Install a plugin into the platform registry (instance-level)', 'plugin', 'install', NOW(), NOW()),
+  ('00000000-0000-0000-0042-000000000003', 'plugin.activate', 'Activate Plugins', 'Enable an installed plugin for a tenant', 'plugin', 'activate', NOW(), NOW()),
+  ('00000000-0000-0000-0042-000000000004', 'plugin.deactivate', 'Deactivate Plugins', 'Disable a plugin for a tenant', 'plugin', 'deactivate', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
