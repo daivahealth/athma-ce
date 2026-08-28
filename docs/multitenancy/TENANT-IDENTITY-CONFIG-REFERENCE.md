@@ -105,6 +105,25 @@ Whether an identity type supports online verification is a property of the
 validate-only; ABHA supports validate/verify/enroll/demographics/card. There
 is no per-tenant "document verification" toggle.
 
+## Backfilling pre-M1 patients
+
+Patients created before the national-identity work hold their identity only
+in the flat `patients.national_id/…` columns and are invisible to the
+multi-identity API. Backfill them once per environment:
+
+```bash
+cd backend
+node scripts/backfill-patient-identities.mjs           # dry run + report
+node scripts/backfill-patient-identities.mjs --apply   # write rows
+```
+
+Idempotent (re-runs skip existing rows). Country falls back to the tenant's
+`clinical.default_country_iso`, values are normalised through the matching
+validator, invalid values are backfilled as `UNVERIFIED` and listed, and
+cross-patient duplicate ids are SKIPPED and reported for triage as potential
+duplicate patient records. Requires `CLINICAL_DATABASE_URL` and
+`FOUNDATION_DATABASE_URL`.
+
 ## Related
 
 - `backend/services/clinical/src/modules/national-identity/` — providers and enablement logic
