@@ -30,6 +30,9 @@ import { FideliusCryptoService } from './modules/data-flow/fidelius-crypto.servi
 import { FhirBundleService } from './modules/data-flow/fhir-bundle.service';
 import { HiuService } from './modules/hiu/hiu.service';
 import { HiuController } from './modules/hiu/hiu.controller';
+import { NhcxService } from './modules/nhcx/nhcx.service';
+import { HcxJweService } from './modules/nhcx/hcx-jwe.service';
+import { NhcxController, NhcxCallbackController } from './modules/nhcx/nhcx.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] })],
@@ -45,6 +48,8 @@ import { HiuController } from './modules/hiu/hiu.controller';
     ConsentController,
     DataFlowController,
     HiuController,
+    NhcxController,
+    NhcxCallbackController,
   ],
   providers: [
     PrismaService,
@@ -67,6 +72,8 @@ import { HiuController } from './modules/hiu/hiu.controller';
     FideliusCryptoService,
     FhirBundleService,
     HiuService,
+    NhcxService,
+    HcxJweService,
   ],
 })
 export class AppModule {}
