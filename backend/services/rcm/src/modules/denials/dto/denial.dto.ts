@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsEnum, IsInt } from 'class-validator';
+import { Allow, IsArray, IsEnum, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 // Denial status enum
@@ -26,28 +26,54 @@ export class AppealSupportingRef {
 
 // DTO for recording a denial against a claim
 export class CreateDenialDto {
+    @IsString()
     claimId!: string;
+    @IsString()
     denialCode!: string;
+    @IsString()
     denialReason!: string;
+    @IsNumber()
     deniedAmount!: number;
+    @IsOptional()
+    @IsString()
     currency?: string;
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
     remarkCodes?: string[];
+    @IsOptional()
+    @Allow()
     deniedAt?: Date;
+    @IsOptional()
+    @Allow()
     appealDeadline?: Date;
+    @IsOptional()
+    @Allow()
     status?: DenialStatus;
 }
 
 // DTO for drafting an appeal against a denial
 export class CreateAppealDto {
+    @IsString()
     narrative!: string;
+    @IsOptional()
+    @IsString()
     justification?: string;
+    @IsOptional()
+    @Allow()
     supportingRefs?: AppealSupportingRef[];
 }
 
 // DTO for filing a drafted appeal
 export class FileAppealDto {
+    @IsOptional()
+    @IsString()
     narrative?: string;
+    @IsOptional()
+    @IsString()
     justification?: string;
+    @IsOptional()
+    @Allow()
     supportingRefs?: AppealSupportingRef[];
 }
 

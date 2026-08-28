@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { RcmDatabaseModule } from '@zeal/database-rcm';
-import { RequestContextModule } from '@zeal/shared-utils';
+import { RequestContextModule, SharedAuthModule, JwtAuthGuard, PermissionsGuard } from '@zeal/shared-utils';
+import { APP_GUARD } from '@nestjs/core';
+import { TenantContextGuard } from './common/guards/tenant-context.guard';
 import { ObservabilityModule } from '@zeal/observability';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -25,6 +27,7 @@ import { PharmacyModule } from './modules/pharmacy/pharmacy.module';
     }),
     RcmDatabaseModule,
     RequestContextModule,
+    SharedAuthModule,
     InsuranceModule,
     BillingModule,
     MedicalCodingModule,
@@ -39,6 +42,14 @@ import { PharmacyModule } from './modules/pharmacy/pharmacy.module';
     PharmacyModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    // Service-wide auth (issue #73): every route requires a valid JWT unless
+    // marked @Public; @Permissions is enforced where declared; and the
+    // x-tenant-id/x-user-id headers RCM controllers read are bound to the
+    // authenticated JWT (spoofed tenants rejected). Order matters.
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: PermissionsGuard },
+    { provide: APP_GUARD, useClass: TenantContextGuard },
+  ],
 })
 export class AppModule { }

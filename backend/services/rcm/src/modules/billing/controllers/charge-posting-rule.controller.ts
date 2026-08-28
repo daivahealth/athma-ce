@@ -8,8 +8,11 @@ import {
   Param,
   Query,
   Headers,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { Public } from '@zeal/shared-utils';
+import { InternalApiKeyGuard } from '../../../common/guards/internal-api-key.guard';
 import { ChargePostingService } from '../services/charge-posting.service';
 import {
   CreateChargePostingRuleDto,
@@ -136,7 +139,11 @@ export class ChargePostingRuleController {
   // EVENT PROCESSING ENDPOINTS
   // ========================================
 
+  // Service-to-service: called by clinical's charge-posting emitter with the
+  // shared internal key; exempt from the JWT guard (issue #73).
   @Post('process-event')
+  @Public()
+  @UseGuards(InternalApiKeyGuard)
   @ApiOperation({ summary: 'Process a clinical event and create charges based on rules' })
   @ApiResponse({ status: 201, description: 'Event processed successfully' })
   async processEvent(

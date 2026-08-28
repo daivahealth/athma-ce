@@ -66,6 +66,10 @@ export class ChargePostingEmitter {
           headers: {
             'x-tenant-id': tenantId,
             'Content-Type': 'application/json',
+            // RCM's process-event endpoint is internal-key guarded (issue #73).
+            ...(process.env.INTERNAL_API_KEY
+              ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY }
+              : {}),
           },
           timeout: 5000, // 5 second timeout
         }

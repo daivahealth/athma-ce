@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Allow, IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 // Eligibility request status
 export enum EligibilityStatus {
@@ -47,24 +47,27 @@ export class CheckEligibilityDto {
 
 // DTO for filtering eligibility requests
 export class EligibilityFilterDto {
+    @IsOptional()
+    @IsString()
     patientId?: string;
+    @IsOptional()
+    @IsString()
     payerId?: string;
+    @IsOptional()
+    @Allow()
     status?: EligibilityStatus;
+    @IsOptional()
+    @Allow()
     dateFrom?: Date;
+    @IsOptional()
+    @Allow()
     dateTo?: Date;
+    @IsOptional()
+    @IsNumber()
     limit?: number;
+    @IsOptional()
+    @IsNumber()
     offset?: number;
-}
-
-// Eligibility response structure
-export class EligibilityResponseDto {
-    requestId!: string;
-    status!: EligibilityStatus;
-    isEligible?: boolean;
-    eligibilityStart?: Date;
-    eligibilityEnd?: Date;
-    benefitsSummary?: BenefitsSummary;
-    errors?: EligibilityError[];
 }
 
 export class BenefitsSummary {
@@ -78,6 +81,30 @@ export class BenefitsSummary {
     planName?: string;
     networkStatus?: string;
 }
+
+// Eligibility response structure
+export class EligibilityResponseDto {
+    @IsString()
+    requestId!: string;
+    @Allow()
+    status!: EligibilityStatus;
+    @IsOptional()
+    @IsBoolean()
+    isEligible?: boolean;
+    @IsOptional()
+    @Allow()
+    eligibilityStart?: Date;
+    @IsOptional()
+    @Allow()
+    eligibilityEnd?: Date;
+    @IsOptional()
+    @Allow()
+    benefitsSummary?: BenefitsSummary;
+    @IsOptional()
+    @Allow()
+    errors?: EligibilityError[];
+}
+
 
 export class EligibilityError {
     code!: string;

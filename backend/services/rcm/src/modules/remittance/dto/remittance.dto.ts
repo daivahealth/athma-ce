@@ -1,3 +1,4 @@
+import { Allow, IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 // Remittance status enum
 export enum RemittanceStatus {
     RECEIVED = 'received',
@@ -17,25 +18,52 @@ export enum RemittanceFormat {
 
 // DTO for uploading/creating a remittance
 export class CreateRemittanceDto {
+    @IsString()
     payerId!: string;
+    @Allow()
     format!: RemittanceFormat;
+    @IsOptional()
+    @IsString()
     checkNumber?: string;
+    @IsOptional()
+    @Allow()
     checkDate?: Date;
+    @IsNumber()
     paymentAmount!: number;
+    @IsOptional()
+    @IsString()
     fileContent?: string;
+    @IsOptional()
+    @IsString()
     fileName?: string;
 }
 
 // DTO for remittance line items
 export class RemittanceLineDto {
+    @IsOptional()
+    @IsString()
     claimId?: string;
+    @IsString()
     claimNumber!: string;
+    @IsOptional()
+    @Allow()
     serviceDate?: Date;
+    @IsNumber()
     billedAmount!: number;
+    @IsOptional()
+    @IsNumber()
     allowedAmount?: number;
+    @IsNumber()
     paidAmount!: number;
+    @IsOptional()
+    @IsNumber()
     patientResponsibility?: number;
+    @IsOptional()
+    @Allow()
     adjustmentCodes?: AdjustmentCode[];
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
     remarkCodes?: string[];
 }
 
@@ -47,26 +75,46 @@ export class AdjustmentCode {
 
 // DTO for filtering remittances
 export class RemittanceFilterDto {
+    @IsOptional()
+    @IsString()
     payerId?: string;
+    @IsOptional()
+    @Allow()
     status?: RemittanceStatus;
+    @IsOptional()
+    @Allow()
     dateFrom?: Date;
+    @IsOptional()
+    @Allow()
     dateTo?: Date;
+    @IsOptional()
+    @IsNumber()
     limit?: number;
+    @IsOptional()
+    @IsNumber()
     offset?: number;
 }
 
 // Reconciliation result
 export class ReconciliationResultDto {
+    @IsString()
     remittanceId!: string;
+    @IsNumber()
     matchedLines!: number;
+    @IsNumber()
     unmatchedLines!: number;
+    @IsNumber()
     totalPaid!: number;
+    @IsNumber()
     totalAdjusted!: number;
+    @Allow()
     matchedClaims!: Array<{
         claimId: string;
         claimNumber: string;
         paidAmount: number;
     }>;
+    @IsOptional()
+    @Allow()
     unmatchedLines_details?: Array<{
         claimNumber: string;
         reason: string;

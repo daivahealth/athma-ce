@@ -1,12 +1,4 @@
-import {
-    IsArray,
-    IsEnum,
-    IsNumber,
-    IsOptional,
-    IsString,
-    IsUUID,
-    ValidateNested,
-} from 'class-validator';
+import { Allow, IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 // PreAuth status enum
@@ -92,17 +84,33 @@ export class CreatePreAuthDto {
 
 // DTO for updating a pre-authorization
 export class UpdatePreAuthDto {
+    @IsOptional()
+    @Allow()
     status?: PreAuthStatus;
+    @IsOptional()
+    @IsString()
     authorizationNumber?: string;
+    @IsOptional()
+    @Allow()
     approvedServices?: ApprovedService[];
+    @IsOptional()
+    @IsString()
     denialReason?: string;
+    @IsOptional()
+    @Allow()
     validFrom?: Date;
+    @IsOptional()
+    @Allow()
     validTo?: Date;
 }
 
 export class ApprovedService {
+    @IsString()
     procedureCode!: string;
+    @IsNumber()
     approvedQuantity!: number;
+    @IsOptional()
+    @IsNumber()
     approvedAmount?: number;
 }
 

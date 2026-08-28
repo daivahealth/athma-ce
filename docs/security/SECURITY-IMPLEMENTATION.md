@@ -1170,3 +1170,27 @@ credentials can no longer land in plain config tables.
 Services fetch secrets with `SecretClient` from `@zeal/config-client`
 (in-memory cache only, 60s default, fail-closed; `getOptional()` for
 integrations with a documented env-var fallback in single-tenant dev).
+
+
+## RCM Service Authentication (issue #73)
+
+RCM historically derived `x-tenant-id`/`x-user-id` from raw client headers
+with no guards — any caller could read/write another tenant's billing data.
+Fixed service-wide:
+
+- Global guard chain (`APP_GUARD`): shared `JwtAuthGuard` (every route needs a
+  valid JWT unless `@Public()`), `PermissionsGuard` (enforced where
+  `@Permissions` is declared), and RCM's `TenantContextGuard`.
+- `TenantContextGuard` binds the headers RCM controllers read to the JWT:
+  `x-user-id` is always overwritten from the token; a missing `x-tenant-id`
+  is injected from the token; a mismatching `x-tenant-id` is rejected with
+  403 unless the caller is `super_admin`.
+- `POST /charge-posting-rules/process-event` is `@Public` +
+  `InternalApiKeyGuard` (clinical's emitter now sends `x-internal-api-key`).
+- Deploy note: RCM needs `JWT_SECRET` (same value foundation signs with) and
+  the shared `INTERNAL_API_KEY`.
+
+Related: RCM DTOs previously lacked class-validator decorators, so the global
+whitelist ValidationPipe stripped every request property (issue #128) — all
+RCM DTO fields are now decorated (typed validators for scalars, `@Allow()`
+for complex shapes pending per-field refinement).
