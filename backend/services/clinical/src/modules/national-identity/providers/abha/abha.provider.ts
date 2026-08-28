@@ -21,10 +21,8 @@ import {
   IdentityVerificationResult,
   NationalIdentityProvider,
 } from '../national-identity-provider.interface';
-import { AbdmGateway, AbdmScope, AbhaProfile } from './abdm-gateway.interface';
-import { AbdmCredentialsService } from './abdm-credentials.service';
-import { AbdmHttpGateway } from './abdm-http.gateway';
-import { MockAbdmGateway } from './mock-abdm.gateway';
+import { AbdmScope, AbhaProfile } from './abdm-gateway.interface';
+import { AbdmConnectorGateway } from './abdm-connector.gateway';
 
 @Injectable()
 export class AbhaProvider implements NationalIdentityProvider {
@@ -43,53 +41,27 @@ export class AbhaProvider implements NationalIdentityProvider {
 
   private readonly validator = new AbhaNumberValidator();
 
-  constructor(
-    private readonly credentials: AbdmCredentialsService,
-    private readonly liveGateway: AbdmHttpGateway,
-    private readonly mockGateway: MockAbdmGateway,
-  ) {}
+  constructor(private readonly gateway: AbdmConnectorGateway) {}
 
   /**
-   * Gateway selection is PER REQUEST, per tenant/facility (issue #96): a
-   * tenant with stored credentials talks to the live gateway; one without
-   * gets the fully-exercisable mock. Sandbox and production tenants coexist
-   * in one deployment — nothing is bound at boot any more.
+   * The ABDM edge lives in the abdm-connector (issue #97): the clinical
+   * service holds no ABDM credentials, sessions, or crypto. The connector
+   * selects live vs mock per tenant/facility and stamps every response with
+   * the gateway that served it.
    */
-  private async gateway(scope: AbdmScope): Promise<AbdmGateway> {
-    return (await this.credentials.hasCredentials(scope)) ? this.liveGateway : this.mockGateway;
-  }
 
   /** Which gateway a tenant would use — surfaced so the UI can badge "mock". */
   async getGatewayName(scope: AbdmScope): Promise<string> {
-    return (await this.gateway(scope)).name;
+    return this.gateway.gatewayName(scope);
   }
 
-  /**
-   * Activation health check (ADR-0015 plugin lifecycle): resolves credentials
-   * and, when live, performs a real gateway session handshake so a tenant
-   * cannot be switched on with broken credentials.
-   */
+  /** Activation health check (ADR-0015 plugin lifecycle), via the connector. */
   async healthCheck(scope: AbdmScope): Promise<{
     status: 'ok' | 'mock' | 'error';
     gateway: string;
     detail?: string;
   }> {
-    const creds = await this.credentials.getCredentials(scope);
-    if (!creds) {
-      return { status: 'mock', gateway: this.mockGateway.name };
-    }
-    try {
-      // A login-OTP request would send a real OTP; the session handshake is
-      // the side-effect-free way to prove the credentials work.
-      await this.liveGateway.checkSession(scope);
-      return { status: 'ok', gateway: this.liveGateway.name };
-    } catch (error) {
-      return {
-        status: 'error',
-        gateway: this.liveGateway.name,
-        detail: error instanceof Error ? error.message : String(error),
-      };
-    }
+    return this.gateway.healthCheck(scope);
   }
 
   validate(value: string): ValidationResult {
@@ -110,7 +82,7 @@ export class AbhaProvider implements NationalIdentityProvider {
           'Creating an ABHA requires an Aadhaar number',
         );
       }
-      return (await this.gateway(this.scopeOf(req))).requestEnrolOtp(this.scopeOf(req), req.loginId);
+      return this.gateway.requestEnrolOtp(this.scopeOf(req), req.loginId);
     }
 
     if (!this.loginHints.includes(req.loginHint)) {
@@ -120,7 +92,7 @@ export class AbhaProvider implements NationalIdentityProvider {
       );
     }
 
-    return (await this.gateway(this.scopeOf(req))).requestLoginOtp(this.scopeOf(req), req.loginHint, req.loginId);
+    return this.gateway.requestLoginOtp(this.scopeOf(req), req.loginHint, req.loginId);
   }
 
   async completeChallenge(req: IdentityChallengeCompletion): Promise<IdentityVerificationResult> {
@@ -129,34 +101,29 @@ export class AbhaProvider implements NationalIdentityProvider {
     }
 
     const scope = this.scopeOf(req);
-    const gateway = await this.gateway(scope);
     const profile =
       req.purpose === 'enroll'
-        ? await gateway.enrolByAadhaar(scope, req.txnId, req.otp, req.mobile)
-        : await gateway.verifyLogin(scope, req.txnId, req.otp);
+        ? await this.gateway.enrolByAadhaar(scope, req.txnId, req.otp, req.mobile)
+        : await this.gateway.verifyLogin(scope, req.txnId, req.otp);
 
-    return this.toResult(profile, req.purpose, gateway.name);
+    return this.toResult(profile, req.purpose);
   }
 
   /** Candidate ABHA addresses for a freshly enrolled account. */
   async getAddressSuggestions(scope: AbdmScope, txnId: string): Promise<string[]> {
-    return (await this.gateway(scope)).getAbhaAddressSuggestions(scope, txnId);
+    return this.gateway.getAbhaAddressSuggestions(scope, txnId);
   }
 
   /** Claims an ABHA address for a freshly enrolled account. */
   async createAddress(scope: AbdmScope, txnId: string, abhaAddress: string): Promise<string> {
-    return (await this.gateway(scope)).createAbhaAddress(scope, txnId, abhaAddress);
+    return this.gateway.createAbhaAddress(scope, txnId, abhaAddress);
   }
 
   private scopeOf(req: { tenantId: string; facilityId?: string | undefined }): AbdmScope {
     return { tenantId: req.tenantId, facilityId: req.facilityId };
   }
 
-  private toResult(
-    profile: AbhaProfile,
-    purpose: 'verify' | 'enroll',
-    gatewayName: string,
-  ): IdentityVerificationResult {
+  private toResult(profile: AbhaProfile, purpose: 'verify' | 'enroll'): IdentityVerificationResult {
     if (!profile.abhaNumber) {
       throw new IdentityProviderError(
         'ABDM_NO_ABHA_RETURNED',
@@ -183,7 +150,7 @@ export class AbhaProvider implements NationalIdentityProvider {
       ...(profile.userToken ? { providerToken: profile.userToken } : {}),
       // Only non-sensitive values — no token, no Aadhaar, no OTP.
       metadata: {
-        gateway: gatewayName,
+        gateway: profile.gateway ?? 'abdm-connector',
         isNew: profile.isNew ?? false,
         ...(profile.maskedMobile ? { maskedMobile: profile.maskedMobile } : {}),
       },

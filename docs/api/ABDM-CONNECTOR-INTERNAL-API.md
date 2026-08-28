@@ -58,6 +58,30 @@ for operator triage (see the [runbook](../runbooks/abdm-connector.md)).
 ### `PUT /internal/quarantine/:id/resolve`
 - Marks an entry handled after remediation.
 
+## ABHA flows (issue #97)
+
+The clinical service's `AbhaProvider` is a thin client of these routes — the
+connector owns credentials, gateway sessions, and payload crypto, and selects
+the live NHA gateway vs the offline mock per tenant/facility (stored
+credentials → live; none → mock). Every response carries `gateway: 'abdm' |
+'mock'`. Sensitive values (Aadhaar, OTP) transit request bodies on the
+internal network only and are never logged.
+
+| Route | Body | Returns |
+|---|---|---|
+| `POST /internal/abha/enrol/request-otp` | `{tenantId, facilityId?, aadhaar}` | `{txnId, maskedTarget?, message?, gateway}` |
+| `POST /internal/abha/enrol/verify` | `{tenantId, facilityId?, txnId, otp, mobile?}` | ABHA profile + `gateway` |
+| `POST /internal/abha/login/request-otp` | `{tenantId, facilityId?, loginHint, loginId}` | `{txnId, ..., gateway}` |
+| `POST /internal/abha/login/verify` | `{tenantId, facilityId?, txnId, otp}` | ABHA profile + `gateway` |
+| `POST /internal/abha/address/suggestions` | `{tenantId, facilityId?, txnId}` | `{suggestions[], gateway}` |
+| `POST /internal/abha/address` | `{tenantId, facilityId?, txnId, abhaAddress}` | `{abhaAddress, gateway}` |
+| `GET /internal/abha/gateway` | query `tenantId`, `facilityId?` | `{gateway}` (credential presence only) |
+| `GET /internal/abha/health` | query `tenantId`, `facilityId?` | `{status: ok\|mock\|error, gateway, detail?}` — live status performs the real gateway session handshake |
+
+Provider failures are returned as `422 {code, message, retryable}` and
+re-raised by the clinical client as `IdentityProviderError` — the seam above
+the gateway is unchanged.
+
 ## Public callback ingress
 
 ### `ANY /callbacks/abdm/v3/*`
@@ -65,7 +89,7 @@ for operator triage (see the [runbook](../runbooks/abdm-connector.md)).
 - Always answers `202 {"accepted": true}` — processing outcome is never leaked.
 - Verification: `Authorization: Bearer <gateway JWT>` required
   (`ABDM_CALLBACK_AUTH=bearer`, default). Full JWKS signature verification
-  lands with the live gateway wiring (#97).
+  is tracked as follow-up work for the M2/HIP phase (#82).
 - Tenant resolution order: `request-id`/`x-request-id` header or
   `resp.requestId`/`requestId`/`txnId` in the body → correlation store;
   else `x-hip-id` header or `hip.id`/`hipId` in the body → HIP mapping;

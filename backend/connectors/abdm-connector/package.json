@@ -23,6 +23,8 @@
     "@zeal/config-client": "file:../../shared/config-client",
     "@zeal/contracts": "file:../../contracts",
     "@zeal/observability": "file:../../shared/observability",
+    "@zeal/validators": "file:../../shared/validators",
+    "axios": "^1.20.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dotenv": "^16.3.1",

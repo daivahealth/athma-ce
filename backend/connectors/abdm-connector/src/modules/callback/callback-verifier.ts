@@ -10,8 +10,8 @@ export interface VerificationResult {
  * Verification hook for inbound ABDM gateway callbacks.
  *
  * ABDM signs callbacks with a gateway-issued JWT (Authorization: Bearer ...).
- * Full JWKS signature verification against the gateway's certs endpoint lands
- * with the live gateway wiring (#97) — the skeleton enforces the presence and
+ * Full JWKS signature verification against the gateway's certs endpoint is
+ * follow-up work for the M2/HIP phase (#82) — for now this enforces the presence and
  * basic shape of the bearer token, controlled by ABDM_CALLBACK_AUTH:
  *
  *   'bearer' (default) — require a structurally valid JWT bearer token
@@ -36,7 +36,7 @@ export class AbdmCallbackVerifier {
       return { ok: false, reason: 'Missing bearer token' };
     }
     const token = header.slice('Bearer '.length);
-    // Structural JWT check only until JWKS verification is wired (#97).
+    // Structural JWT check only until JWKS verification is wired (M2, #82).
     if (token.split('.').length !== 3) {
       return { ok: false, reason: 'Malformed bearer token' };
     }

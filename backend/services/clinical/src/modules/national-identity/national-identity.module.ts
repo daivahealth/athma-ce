@@ -23,11 +23,7 @@ import { NATIONAL_IDENTITY_PROVIDERS } from './providers/national-identity-provi
 import { EmiratesIdProvider } from './providers/emirates-id/emirates-id.provider';
 import { AbhaProvider } from './providers/abha/abha.provider';
 import { AbdmConfigService } from './providers/abha/abdm-config.service';
-import { AbdmSessionService } from './providers/abha/abdm-session.service';
-import { AbdmCryptoService } from './providers/abha/abdm-crypto.service';
-import { AbdmHttpGateway } from './providers/abha/abdm-http.gateway';
-import { MockAbdmGateway } from './providers/abha/mock-abdm.gateway';
-import { AbdmCredentialsService } from './providers/abha/abdm-credentials.service';
+import { AbdmConnectorGateway } from './providers/abha/abdm-connector.gateway';
 
 @Module({
   imports: [ClinicalDatabaseModule],
@@ -36,17 +32,13 @@ import { AbdmCredentialsService } from './providers/abha/abdm-credentials.servic
     NationalIdentityService,
     IdentityChallengeStore,
     AbdmConfigService,
-    AbdmCredentialsService,
-    AbdmSessionService,
-    AbdmCryptoService,
-    AbdmHttpGateway,
-    MockAbdmGateway,
+    AbdmConnectorGateway,
     EmiratesIdProvider,
     AbhaProvider,
 
-    // Gateway selection is per request inside AbhaProvider (issue #96):
-    // per-facility credentials from the TenantSecret store decide live vs
-    // mock for each call — nothing is bound at boot.
+    // The ABDM edge (sessions, crypto, live/mock selection, credentials)
+    // lives in the abdm-connector (issue #97); AbhaProvider talks to it over
+    // the internal API through AbdmConnectorGateway.
 
     /** The registry the service iterates. Add new countries here. */
     {

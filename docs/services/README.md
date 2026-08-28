@@ -20,9 +20,12 @@ self-hosted installs run the same service single-tenant.
 - `hipId → facility` routing for gateway-initiated flows (each facility is its
   own HIP in ABDM's HRP model)
 - Single public callback ingress (`/api/v1/callbacks/abdm/v3/*`), always `202`;
-  verification hook (bearer today, gateway JWKS with #97)
+  verification hook (bearer today, gateway JWKS with the M2/HIP phase)
 - Quarantine queue for unverifiable/unresolvable callbacks — triaged by
   operators, never guessed
+- **ABHA flows**: gateway sessions, RSA payload crypto, and live-vs-mock
+  selection per tenant/facility — the clinical `AbhaProvider` is a thin client
+  and holds no ABDM credentials
 - Internal API (`X-Internal-Api-Key`) for the clinical service — see
   [ABDM Connector Internal API](../api/ABDM-CONNECTOR-INTERNAL-API.md)
 - No PHI at rest: the `zeal_abdm` database holds protocol/routing state only

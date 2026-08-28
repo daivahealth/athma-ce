@@ -1,4 +1,4 @@
-import { createConfigClient, SecretClient } from '@zeal/config-client';
+import { createConfigClient } from '@zeal/config-client';
 
 /**
  * Global configuration client instance for Clinical service
@@ -16,16 +16,6 @@ export const configClient = createConfigClient({
   foundationBaseUrl: process.env.FOUNDATION_BASE_URL || 'http://localhost:3010',
   enableCache: true,
   cacheConfig,
-});
-
-/**
- * Tenant-secret client (Foundation TenantSecret store, issue #81). Values are
- * fetched over the internal API, cached in memory only, and every read is
- * audited on the Foundation side under this service's name.
- */
-export const secretClient = new SecretClient({
-  foundationBaseUrl: process.env.FOUNDATION_BASE_URL || 'http://localhost:3010',
-  serviceName: 'clinical',
 });
 
 /**

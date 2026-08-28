@@ -19,12 +19,9 @@
  */
 
 import { Injectable, Logger } from '@nestjs/common';
-import { secretClient } from '../../../../config';
+import { secretClient } from '../../config';
 
-export interface AbdmScope {
-  tenantId: string;
-  facilityId?: string | undefined;
-}
+import type { AbdmScope } from './abdm-types';
 
 export interface AbdmCredentials {
   clientId: string;

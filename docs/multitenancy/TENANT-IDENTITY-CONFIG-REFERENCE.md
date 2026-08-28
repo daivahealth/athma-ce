@@ -82,8 +82,10 @@ Gateway selection is **per request, per tenant/facility**: stored credentials
 → live NHA gateway; none → the fully-exercisable mock (the provider listing's
 `gateway` field badges which one a tenant gets). Sandbox and production
 tenants coexist in one deployment. The `ABDM_CLIENT_ID`/`ABDM_CLIENT_SECRET`
-env vars remain a fallback for single-tenant/self-hosted installs only —
-they apply when a tenant has **no** stored secret.
+env vars (on the **abdm-connector**, which owns the ABDM edge — the clinical
+service holds no credentials and needs only `ABDM_CONNECTOR_URL` +
+`INTERNAL_API_KEY`) remain a fallback for single-tenant/self-hosted installs
+only — they apply when a tenant has **no** stored secret.
 
 Verify a tenant's setup with `GET /api/v1/national-identity/abha/health`
 (clinical): `ok` (live handshake succeeded) | `mock` (no credentials stored) |

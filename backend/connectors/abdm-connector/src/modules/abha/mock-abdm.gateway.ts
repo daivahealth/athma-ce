@@ -13,8 +13,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { verhoeffCheckDigit } from '@zeal/validators';
-import { IdentityProviderError } from '../national-identity-provider.interface';
-import { AbdmGateway, AbdmScope, AbhaOtpChallenge, AbhaProfile } from './abdm-gateway.interface';
+import { AbdmProviderError } from './abdm-error';
+import { AbdmGateway, AbdmScope, AbhaOtpChallenge, AbhaProfile } from './abdm-types';
 
 /** The only OTP the mock accepts — documented so tests/demos are predictable. */
 const MOCK_OTP = '123456';
@@ -44,7 +44,7 @@ export class MockAbdmGateway implements AbdmGateway {
   async requestEnrolOtp(_scope: AbdmScope, aadhaar: string): Promise<AbhaOtpChallenge> {
     const digits = aadhaar.replace(/\D/g, '');
     if (digits.length !== 12) {
-      throw new IdentityProviderError('ABDM_INVALID_AADHAAR', 'Aadhaar number must be 12 digits');
+      throw new AbdmProviderError('ABDM_INVALID_AADHAAR', 'Aadhaar number must be 12 digits');
     }
     return this.newChallenge('enroll', 'aadhaar', digits);
   }
@@ -79,7 +79,7 @@ export class MockAbdmGateway implements AbdmGateway {
   ): Promise<AbhaOtpChallenge> {
     const digits = loginId.replace(/\D/g, '');
     if (!digits) {
-      throw new IdentityProviderError('ABDM_INVALID_LOGIN_ID', 'A login identifier is required');
+      throw new AbdmProviderError('ABDM_INVALID_LOGIN_ID', 'A login identifier is required');
     }
     const challenge = this.newChallenge('verify', loginHint, digits);
 
@@ -148,15 +148,15 @@ export class MockAbdmGateway implements AbdmGateway {
     const txn = this.txns.get(txnId);
 
     if (!txn || txn.used) {
-      throw new IdentityProviderError('ABDM_TXN_NOT_FOUND', 'Transaction not found or already used');
+      throw new AbdmProviderError('ABDM_TXN_NOT_FOUND', 'Transaction not found or already used');
     }
     if (Date.now() - txn.createdAt > TXN_TTL_MS) {
       this.txns.delete(txnId);
-      throw new IdentityProviderError('ABDM_TXN_EXPIRED', 'Transaction has expired, request a new OTP');
+      throw new AbdmProviderError('ABDM_TXN_EXPIRED', 'Transaction has expired, request a new OTP');
     }
     if (otp !== MOCK_OTP) {
       // Left in place so the caller can retry with the correct OTP.
-      throw new IdentityProviderError('ABDM_INVALID_OTP', 'The OTP entered is incorrect');
+      throw new AbdmProviderError('ABDM_INVALID_OTP', 'The OTP entered is incorrect');
     }
 
     txn.used = true;

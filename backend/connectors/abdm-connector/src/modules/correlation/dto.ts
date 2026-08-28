@@ -1,4 +1,8 @@
-import { IsInt, IsObject, IsOptional, IsString, IsUUID, Max, MaxLength, Min } from 'class-validator';
+import { IsInt, IsObject, IsOptional, IsString, Matches, Max, MaxLength, Min } from 'class-validator';
+
+// Seeded platform ids are UUID-shaped but not RFC-variant, so IsUUID() rejects them.
+const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 
 export class RegisterCorrelationDto {
   @IsString()
@@ -10,11 +14,11 @@ export class RegisterCorrelationDto {
   @MaxLength(100)
   flow!: string;
 
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   tenantId!: string;
 
   @IsOptional()
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   facilityId?: string;
 
   @IsOptional()
@@ -34,9 +38,9 @@ export class PutHipMappingDto {
   @MaxLength(200)
   hipId!: string;
 
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   tenantId!: string;
 
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   facilityId!: string;
 }

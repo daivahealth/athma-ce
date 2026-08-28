@@ -11,7 +11,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import * as crypto from 'crypto';
-import { IdentityProviderError } from '../national-identity-provider.interface';
+import { AbdmProviderError } from './abdm-error';
 
 /** Refresh this long before actual expiry to avoid racing the boundary. */
 const EXPIRY_SKEW_MS = 60_000;
@@ -94,7 +94,7 @@ export class AbdmSessionService {
           ? error.message
           : 'unknown error';
 
-      throw new IdentityProviderError(
+      throw new AbdmProviderError(
         'ABDM_SESSION_FAILED',
         `Unable to obtain an ABDM session token (${detail})`,
         true,

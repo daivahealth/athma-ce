@@ -14,12 +14,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import * as crypto from 'crypto';
-import { IdentityProviderError } from '../national-identity-provider.interface';
-import { AbdmConfigService } from './abdm-config.service';
+import { AbdmProviderError } from './abdm-error';
+import { AbdmSettingsService } from './abdm-settings.service';
 import { AbdmSessionService } from './abdm-session.service';
 import { AbdmCryptoService } from './abdm-crypto.service';
 import { AbdmCredentialsService } from './abdm-credentials.service';
-import { AbdmGateway, AbdmScope, AbhaOtpChallenge, AbhaProfile } from './abdm-gateway.interface';
+import { AbdmGateway, AbdmScope, AbhaOtpChallenge, AbhaProfile } from './abdm-types';
 
 @Injectable()
 export class AbdmHttpGateway implements AbdmGateway {
@@ -27,7 +27,7 @@ export class AbdmHttpGateway implements AbdmGateway {
   private readonly logger = new Logger(AbdmHttpGateway.name);
 
   constructor(
-    private readonly config: AbdmConfigService,
+    private readonly config: AbdmSettingsService,
     private readonly session: AbdmSessionService,
     private readonly crypto: AbdmCryptoService,
     private readonly credentials: AbdmCredentialsService,
@@ -173,7 +173,7 @@ export class AbdmHttpGateway implements AbdmGateway {
   /**
    * Side-effect-free credential check used by the activation health check:
    * resolves settings + credentials and performs the gateway session
-   * handshake. Throws IdentityProviderError on any failure.
+   * handshake. Throws AbdmProviderError on any failure.
    */
   async checkSession(scope: AbdmScope): Promise<void> {
     await this.prepare(scope);
@@ -189,7 +189,7 @@ export class AbdmHttpGateway implements AbdmGateway {
     const settings = await this.config.getSettings(scope.tenantId);
 
     if (!settings.baseUrl || !settings.gatewayUrl) {
-      throw new IdentityProviderError(
+      throw new AbdmProviderError(
         'ABDM_NOT_CONFIGURED',
         'ABDM base_url/gateway_url are not configured for this tenant',
       );
@@ -199,7 +199,7 @@ export class AbdmHttpGateway implements AbdmGateway {
     // tenant scope, then deployment env — see AbdmCredentialsService).
     const creds = await this.credentials.getCredentials(scope);
     if (!creds) {
-      throw new IdentityProviderError(
+      throw new AbdmProviderError(
         'ABDM_NOT_CONFIGURED',
         'ABDM credentials are not configured for this tenant/facility',
       );
@@ -240,11 +240,11 @@ export class AbdmHttpGateway implements AbdmGateway {
   }
 
   /**
-   * Maps an axios failure onto an IdentityProviderError. Only the upstream
+   * Maps an axios failure onto an AbdmProviderError. Only the upstream
    * status and ABDM's own message are surfaced — the request body (which may
    * hold an encrypted Aadhaar or OTP) is never included.
    */
-  private toProviderError(error: unknown, code: string): IdentityProviderError {
+  private toProviderError(error: unknown, code: string): AbdmProviderError {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<any>;
       const status = axiosError.response?.status;
@@ -257,14 +257,14 @@ export class AbdmHttpGateway implements AbdmGateway {
       const retryable = !status || status >= 500;
       this.logger.warn(`ABDM call failed [${code}] status=${status ?? 'network'}`);
 
-      return new IdentityProviderError(
+      return new AbdmProviderError(
         code,
         `ABDM request failed${status ? ` (${status})` : ''}: ${upstream}`,
         retryable,
       );
     }
 
-    return new IdentityProviderError(
+    return new AbdmProviderError(
       code,
       error instanceof Error ? error.message : 'Unknown ABDM error',
     );

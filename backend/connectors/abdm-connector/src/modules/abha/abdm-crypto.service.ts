@@ -13,7 +13,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import axios from 'axios';
-import { IdentityProviderError } from '../national-identity-provider.interface';
+import { AbdmProviderError } from './abdm-error';
 
 /** Public certificates are stable; re-fetching per request is wasteful. */
 const CERT_TTL_MS = 60 * 60 * 1000; // 1 hour
@@ -50,7 +50,7 @@ export class AbdmCryptoService {
         .toString('base64');
     } catch (error) {
       // Deliberately does not include `value` in the message.
-      throw new IdentityProviderError(
+      throw new AbdmProviderError(
         'ABDM_ENCRYPTION_FAILED',
         `Unable to encrypt payload for ABDM: ${error instanceof Error ? error.message : 'unknown error'}`,
       );
@@ -97,7 +97,7 @@ export class AbdmCryptoService {
       }
       return key;
     } catch (error) {
-      throw new IdentityProviderError(
+      throw new AbdmProviderError(
         'ABDM_CERT_UNAVAILABLE',
         `Unable to fetch the ABDM public certificate: ${
           error instanceof Error ? error.message : 'unknown error'

@@ -1,4 +1,8 @@
-import { IsOptional, IsString, IsUUID, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+
+// Seeded platform ids are UUID-shaped but not RFC-variant, so IsUUID() rejects them.
+const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 
 const KEY_PATTERN = /^[a-z][a-z0-9_.]*$/;
 const OWNER_PATTERN = /^[a-z][a-z0-9-]*$/;
@@ -17,7 +21,7 @@ export class PutSecretDto {
 
   /** Facility scope for per-facility credentials (e.g. ABDM per-HIP). */
   @IsOptional()
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   facilityId?: string;
 }
 
@@ -27,16 +31,16 @@ export class SecretScopeQueryDto {
   ownerId!: string;
 
   @IsOptional()
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   facilityId?: string;
 }
 
 export class InternalSecretQueryDto {
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   tenantId!: string;
 
   @IsOptional()
-  @IsUUID()
+  @Matches(UUID_SHAPE)
   facilityId?: string;
 
   @IsString()

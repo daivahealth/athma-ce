@@ -30,11 +30,8 @@ export interface AbhaProfile {
   userToken?: string | undefined;
   /** True when ABDM reported the account as newly created. */
   isNew?: boolean | undefined;
-  /** Which gateway served this ('abdm' | 'mock') — stamped by the connector. */
-  gateway?: string | undefined;
 }
 
-/** Credentials and gateway selection resolve per tenant/facility. */
 export interface AbdmScope {
   tenantId: string;
   facilityId?: string | undefined;

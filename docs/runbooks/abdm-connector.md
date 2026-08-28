@@ -12,9 +12,20 @@
 | `ABDM_DATABASE_URL` | Postgres URL for `zeal_abdm` |
 | `INTERNAL_API_KEY` | Shared key for the internal API (same value as clinical/foundation) |
 | `ABDM_CALLBACK_AUTH` | `bearer` (default) or `none` (local dev only — never production) |
+| `FOUNDATION_BASE_URL` | Foundation service URL — per-tenant ABDM settings (config) and per-facility credentials (TenantSecret store) resolve through it |
+| `ABDM_CLIENT_ID` / `ABDM_CLIENT_SECRET` | Optional single-tenant/self-hosted credential fallback, used only when a tenant has NO stored secret |
 
 ## Health
 - `GET /health` → `{status, database}`; `degraded` means the `zeal_abdm` DB is unreachable — callbacks are still answered `202` but everything quarantines, so treat as an incident.
+
+## ABHA flows
+
+The connector owns the entire ABDM edge for ABHA (issue #97): gateway
+sessions, RSA payload encryption, live-vs-mock selection per tenant/facility.
+The clinical service calls `/internal/abha/*` and holds no ABDM credentials.
+`GET /internal/abha/health?tenantId=` is the activation gate: `mock` = no
+credentials stored, `error` = credentials present but the NHA session
+handshake failed (check credential validity and `abdm.gateway_url`).
 
 ## Key invariants
 1. The public callback ingress always returns `202` — outcome (processed vs quarantined) is never leaked to the caller.
