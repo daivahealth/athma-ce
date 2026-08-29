@@ -126,7 +126,7 @@ export default function NewUserPage({ params }: { params: { locale: string } }) 
                 <Label htmlFor="password">
                   Temporary Password <span className="text-red-500">*</span>
                 </Label>
-                <Input id="password" type="password" {...register('password')} />
+                <Input id="password" type="password" autoComplete="new-password" {...register('password')} />
                 {errors.password && (
                   <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
                 )}

@@ -167,7 +167,7 @@ export default function AbdmSettingsPage() {
                   <Input
                     id={key}
                     type="password"
-                    autoComplete="off"
+                    autoComplete="new-password"
                     placeholder={meta ? 'Enter a new value to rotate' : 'Enter value'}
                     value={drafts[key] ?? ''}
                     onChange={(e) => setDrafts((d) => ({ ...d, [key]: e.target.value }))}

@@ -85,6 +85,13 @@ export function PatientSearch({ locale }: PatientSearchProps) {
         <div className="relative flex w-full max-w-xl items-center group">
           <Search className="absolute left-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <Input
+            // type/name/autoComplete stop Chrome's password manager from
+            // pairing this box as the "username" for password fields
+            // elsewhere on the page (e.g. ABDM credential inputs) and
+            // autofilling the saved login into it.
+            type="search"
+            name="patient-search"
+            autoComplete="off"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={handleKeyDown}
