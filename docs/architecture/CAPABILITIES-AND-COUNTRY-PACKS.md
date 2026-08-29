@@ -119,6 +119,23 @@ connector's `hipId → facility` routing, which is how gateway-initiated ABDM
 callbacks find the right tenant. Providers run mock (no credentials) or live
 (stored credentials), exactly like the ABHA flows.
 
+## Admin UI surfaces
+
+Two distinct lifecycles, two surfaces — deliberately not merged:
+
+- **Plugin Management** (`/plugin-management`) lists embedded plugins from the
+  Foundation plugin registry (installed via `POST /plugins/install`, e.g.
+  oncology) with per-tenant activation toggles. It also shows a read-only
+  **Connectors & Capabilities** section: each connector service (currently the
+  ABDM connector) appears with its enabled state (resolved from config, e.g.
+  `abdm.enabled`), the tenant's `capability.*.provider` bindings that point at
+  it, and a link to its own settings page. Connectors never get registry rows —
+  the section exists so the plugin page gives a complete picture without
+  conflating connector lifecycle with the embedded-plugin loader.
+- **Connector settings pages** (e.g. `/configurations/abdm`) own connector
+  configuration: credentials (write-only secrets), activation switches, and
+  gateway health.
+
 ## Adding a country (checklist)
 
 1. Write the pack (`country-packs/<code>.json`) — config values only.
