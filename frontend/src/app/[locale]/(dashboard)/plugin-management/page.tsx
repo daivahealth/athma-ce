@@ -1,12 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import {
   usePlugins,
   useActivatePlugin,
   useDeactivatePlugin,
 } from '@/modules/foundation/hooks/use-plugins';
+import { useResolveConfig, useTenantConfigs } from '@/modules/foundation/hooks/use-configs';
 import { getSession, clinicalClient } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { Badge } from '@/components/ui/badge';
@@ -39,6 +42,8 @@ import {
   AlertCircle,
   Wifi,
   WifiOff,
+  Cable,
+  Settings2,
 } from 'lucide-react';
 import type { PluginRegistryEntry } from '@/modules/foundation/types/plugin';
 
@@ -61,6 +66,103 @@ function useBackendHealth(): BackendHealthMap {
   return {
     clinical: clinicalHealth.isLoading ? 'checking' : clinicalHealth.isSuccess ? 'online' : 'offline',
   };
+}
+
+/**
+ * Connector services (ADR-0015 hybrid runtime) are not registry plugins:
+ * they run as their own processes and are wired to tenants through
+ * `capability.<key>.provider` config bindings, managed on their own
+ * configuration pages. This section surfaces them here so the plugin page
+ * gives a complete picture of what extends the platform.
+ */
+const CONNECTORS = [
+  {
+    id: 'abdm',
+    name: 'ABDM Connector',
+    description:
+      'Ayushman Bharat Digital Mission — ABHA identity, HFR/HPR registries, consent and health information exchange, NHCX claims.',
+    enabledConfigKey: 'abdm.enabled',
+    providerIds: ['abdm', 'hfr', 'hpr', 'nhcx'],
+    configureHref: '/configurations/abdm',
+  },
+] as const;
+
+function ConnectorsSection({ tenantId }: { tenantId: string }) {
+  const params = useParams<{ locale: string }>();
+  const locale = params?.locale ?? 'en';
+  const { data: tenantConfigs } = useTenantConfigs(tenantId);
+  const { data: abdmEnabledConfig } = useResolveConfig('abdm.enabled');
+
+  const capabilityBindings = (tenantConfigs ?? []).filter(
+    (c) => c.configKey.startsWith('capability.') && c.configKey.endsWith('.provider') && c.value,
+  );
+
+  const bindingsForConnector = (providerIds: readonly string[]) =>
+    capabilityBindings.filter((c) => providerIds.includes(String(c.value)));
+
+  return (
+    <div className="space-y-4">
+      <Separator />
+      <div>
+        <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+          <Cable className="h-5 w-5 text-muted-foreground" /> Connectors &amp; Capabilities
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Standalone connector services wired to this tenant through capability bindings.
+          They are configured on their own settings pages, not installed through the plugin
+          registry.
+        </p>
+      </div>
+      <div className="grid gap-6 md:grid-cols-2">
+        {CONNECTORS.map((connector) => {
+          const enabled =
+            connector.id === 'abdm' &&
+            (abdmEnabledConfig?.value === true || String(abdmEnabledConfig?.value) === 'true');
+          const bindings = bindingsForConnector(connector.providerIds);
+
+          return (
+            <Card key={connector.id}>
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="rounded-lg p-2 bg-muted">
+                      <Cable className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <div className="min-w-0">
+                      <CardTitle className="text-base truncate">{connector.name}</CardTitle>
+                      <CardDescription className="text-xs mt-0.5">
+                        Connector service
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <Badge variant={enabled ? 'default' : 'secondary'}>
+                    {enabled ? 'Enabled' : 'Disabled'}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-muted-foreground">{connector.description}</p>
+                {bindings.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {bindings.map((b) => (
+                      <Badge key={b.configKey} variant="outline" className="font-mono text-[11px]">
+                        {b.configKey.replace(/^capability\./, '').replace(/\.provider$/, '')}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+                <Button asChild variant="outline" size="sm">
+                  <Link href={`/${locale}${connector.configureHref}`}>
+                    <Settings2 className="h-4 w-4 mr-2" /> Configure
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default function PluginManagementPage() {
@@ -338,6 +440,8 @@ export default function PluginManagementPage() {
           })}
         </div>
       )}
+
+      <ConnectorsSection tenantId={tenantId} />
 
       <PluginDetailDialog
         plugin={selectedPlugin}
