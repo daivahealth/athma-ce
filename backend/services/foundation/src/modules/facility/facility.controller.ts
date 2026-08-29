@@ -4,6 +4,8 @@ import { FacilityService } from './facility.service';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { UpdateFacilityDto } from './dto/update-facility.dto';
 import { SpecialtyService } from '../specialty/specialty.service';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { FACILITY_CREATE, FACILITY_DELETE, FACILITY_READ, FACILITY_UPDATE } from '@zeal/contracts';
 
 @ApiTags('Facilities')
 @ApiSecurity('x-tenant-id')
@@ -16,6 +18,7 @@ export class FacilityController {
   ) {}
 
   @Post()
+  @Permissions(FACILITY_CREATE)
   @ApiOperation({
     summary: 'Create new facility',
     description: 'Creates a new healthcare facility (hospital, clinic, etc.)'
@@ -41,6 +44,7 @@ export class FacilityController {
   }
 
   @Get()
+  @Permissions(FACILITY_READ)
   @ApiOperation({
     summary: 'List all facilities',
     description: 'Retrieves all facilities for a tenant'
@@ -77,6 +81,7 @@ export class FacilityController {
   }
 
   @Get(':id')
+  @Permissions(FACILITY_READ)
   @ApiOperation({
     summary: 'Get facility by ID',
     description: 'Retrieves a single facility by its UUID'
@@ -109,6 +114,7 @@ export class FacilityController {
   }
 
   @Put(':id')
+  @Permissions(FACILITY_UPDATE)
   @ApiOperation({
     summary: 'Update facility',
     description: 'Updates an existing facility\'s information'
@@ -127,6 +133,7 @@ export class FacilityController {
   }
 
   @Delete(':id')
+  @Permissions(FACILITY_DELETE)
   @ApiOperation({
     summary: 'Archive facility',
     description: 'Soft deletes (archives) a facility. It will no longer appear in active lists but data is retained.'
@@ -144,6 +151,7 @@ export class FacilityController {
   }
 
   @Get(':id/specialties')
+  @Permissions(FACILITY_READ)
   @ApiOperation({
     summary: 'Get facility specialties',
     description: 'Retrieves all medical specialties available at a facility with optional localization'

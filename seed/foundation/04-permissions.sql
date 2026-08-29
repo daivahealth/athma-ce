@@ -406,3 +406,16 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0043-000000000001', 'secret.read', 'View Secret Metadata', 'List which secrets are configured (never values)', 'secret', 'read', NOW(), NOW()),
   ('00000000-0000-0000-0043-000000000002', 'secret.manage', 'Manage Secrets', 'Write, delete and rotate tenant secrets (values are write-only)', 'secret', 'manage', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
+
+-- Org-structure permissions (foundation granular guards, issue #135)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0044-000000000001', 'bed.read', 'Read Beds', 'View bed information', 'bed', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000002', 'department.read', 'Read Departments', 'View departments', 'department', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000003', 'department.manage', 'Manage Departments', 'Create/update/delete departments', 'department', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000004', 'clinic.read', 'Read Clinics', 'View clinics', 'clinic', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000005', 'clinic.manage', 'Manage Clinics', 'Create/update/delete clinics', 'clinic', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000006', 'space.read', 'Read Spaces', 'View spaces', 'space', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000007', 'space.manage', 'Manage Spaces', 'Create/update/delete spaces', 'space', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000008', 'specialty.read', 'Read Specialties', 'View specialties', 'specialty', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0044-000000000009', 'specialty.manage', 'Manage Specialties', 'Create/update/delete specialties', 'specialty', 'manage', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;

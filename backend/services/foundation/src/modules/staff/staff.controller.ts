@@ -4,6 +4,8 @@ import { StaffService } from './staff.service';
 import { CreateStaffDto } from './dto/create-staff.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
 import { SearchStaffDto } from './dto/search-staff.dto';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { STAFF_CREATE, STAFF_DELETE, STAFF_READ, STAFF_UPDATE } from '@zeal/contracts';
 
 @ApiTags('Staff')
 @ApiSecurity('x-tenant-id')
@@ -13,6 +15,7 @@ export class StaffController {
   constructor(private readonly staffService: StaffService) {}
 
   @Post()
+  @Permissions(STAFF_CREATE)
   @ApiOperation({
     summary: 'Create new staff member',
     description: 'Creates a new healthcare staff member (doctor, nurse, technician, etc.) in the system'
@@ -39,6 +42,7 @@ export class StaffController {
   }
 
   @Get()
+  @Permissions(STAFF_READ)
   @ApiOperation({
     summary: 'List all staff members',
     description: 'Retrieves all staff members for a tenant. Requires tenantId as query parameter or x-tenant-id header.'
@@ -76,6 +80,7 @@ export class StaffController {
   }
 
   @Get('search')
+  @Permissions(STAFF_READ)
   @ApiOperation({
     summary: 'Search staff members',
     description: 'Search and filter staff members by display name, staff type, specialty, and facility. Returns paginated results with specialty information.'
@@ -175,6 +180,7 @@ export class StaffController {
   }
 
   @Get(':id')
+  @Permissions(STAFF_READ)
   @ApiOperation({
     summary: 'Get staff member by ID',
     description: 'Retrieves a single staff member by their UUID'
@@ -208,6 +214,7 @@ export class StaffController {
   }
 
   @Put(':id')
+  @Permissions(STAFF_UPDATE)
   @ApiOperation({
     summary: 'Update staff member',
     description: 'Updates an existing staff member\'s information'
@@ -226,6 +233,7 @@ export class StaffController {
   }
 
   @Delete(':id')
+  @Permissions(STAFF_DELETE)
   @ApiOperation({
     summary: 'Archive staff member',
     description: 'Soft deletes (archives) a staff member. They will no longer appear in active lists but data is retained.'

@@ -4,6 +4,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LinkStaffDto } from './dto/link-staff.dto';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { USER_CREATE, USER_DELETE, USER_READ, USER_UPDATE } from '@zeal/contracts';
 
 @ApiTags('Users')
 @ApiSecurity('x-tenant-id')
@@ -13,6 +15,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @Permissions(USER_CREATE)
   @ApiOperation({
     summary: 'Create new user',
     description: 'Creates a new user account in the system'
@@ -38,6 +41,7 @@ export class UserController {
   }
 
   @Get()
+  @Permissions(USER_READ)
   @ApiOperation({
     summary: 'List all users',
     description: 'Retrieves all users for a tenant'
@@ -73,6 +77,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @Permissions(USER_READ)
   @ApiOperation({
     summary: 'Get user by ID',
     description: 'Retrieves a single user by their UUID'
@@ -104,6 +109,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @Permissions(USER_UPDATE)
   @ApiOperation({
     summary: 'Update user',
     description: 'Updates an existing user\'s information'
@@ -122,6 +128,7 @@ export class UserController {
   }
 
   @Patch(':id/staff')
+  @Permissions(USER_UPDATE)
   @ApiOperation({
     summary: 'Link user to staff member',
     description: 'Links a user account to a staff member profile. Pass staffId to link, or null to unlink.'
@@ -150,6 +157,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Permissions(USER_DELETE)
   @ApiOperation({
     summary: 'Delete user',
     description: 'Soft deletes a user account. The user will be deactivated but data is retained.'

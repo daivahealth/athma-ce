@@ -164,6 +164,15 @@ export const ADMISSION_UPDATE = 'admission.update';
 export const DISCHARGE_CREATE = 'discharge.create';
 export const DISCHARGE_UPDATE = 'discharge.update';
 export const BED_MANAGE = 'bed.manage';
+export const BED_READ = 'bed.read';
+export const DEPARTMENT_READ = 'department.read';
+export const DEPARTMENT_MANAGE = 'department.manage';
+export const CLINIC_READ = 'clinic.read';
+export const CLINIC_MANAGE = 'clinic.manage';
+export const SPACE_READ = 'space.read';
+export const SPACE_MANAGE = 'space.manage';
+export const SPECIALTY_READ = 'specialty.read';
+export const SPECIALTY_MANAGE = 'specialty.manage';
 export const WARD_READ = 'ward.read';
 export const WARD_MANAGE = 'ward.manage';
 
@@ -796,6 +805,17 @@ export const ALL_PERMISSIONS = [
   { code: PLUGIN_INSTALL, name: 'Install Plugins', resource: 'plugin', action: 'install' },
   { code: PLUGIN_ACTIVATE, name: 'Activate Plugins', resource: 'plugin', action: 'activate' },
   { code: PLUGIN_DEACTIVATE, name: 'Deactivate Plugins', resource: 'plugin', action: 'deactivate' },
+
+  // Org structure (foundation)
+  { code: BED_READ, name: 'Read Beds', resource: 'bed', action: 'read' },
+  { code: DEPARTMENT_READ, name: 'Read Departments', resource: 'department', action: 'read' },
+  { code: DEPARTMENT_MANAGE, name: 'Manage Departments', resource: 'department', action: 'manage' },
+  { code: CLINIC_READ, name: 'Read Clinics', resource: 'clinic', action: 'read' },
+  { code: CLINIC_MANAGE, name: 'Manage Clinics', resource: 'clinic', action: 'manage' },
+  { code: SPACE_READ, name: 'Read Spaces', resource: 'space', action: 'read' },
+  { code: SPACE_MANAGE, name: 'Manage Spaces', resource: 'space', action: 'manage' },
+  { code: SPECIALTY_READ, name: 'Read Specialties', resource: 'specialty', action: 'read' },
+  { code: SPECIALTY_MANAGE, name: 'Manage Specialties', resource: 'specialty', action: 'manage' },
 
   // Tenant Secrets
   { code: SECRET_READ, name: 'View Secret Metadata', resource: 'secret', action: 'read' },
