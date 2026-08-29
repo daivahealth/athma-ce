@@ -84,24 +84,33 @@ This guide will help you get started with backend development on the athma-ce he
 
 ```bash
 # Clone repository
-git clone <repo-url>
-cd zeal/backend
+git clone https://github.com/daivahealth/athma-ce.git
+cd athma-ce
 
-# Install dependencies
+# Start infrastructure (Postgres + Redis) — docker-compose only runs infra,
+# not the app services
+docker-compose up -d postgres redis
+
+# Install backend dependencies
+cd backend
 npm install
 
-# Configure environment
-cp .env.example .env
-# Edit .env with your database URLs
+# Configure environment (per-service .env files; see config.env.example
+# at backend/ for the shared database/Redis values)
 
-# Generate Prisma clients
-npm run db:generate
+# Create database schemas and seed baseline data:
+# follow docs/seeding/00-complete-seed-guide.md (prisma db push per
+# database package, then seed/run-seeds.sh)
 
-# Run migrations
-npm run db:migrate
+# Start development servers (one terminal each)
+npm run dev --workspace=@zeal/foundation   # port 3010
+npm run dev --workspace=@zeal/clinical     # port 3011
 
-# Start development server
-npm run dev --workspace=@zeal/clinical
+# Frontend (separate terminal)
+cd ../frontend
+cp .env.example .env.local
+npm install
+npm run dev                                # http://localhost:3000
 ```
 
 ### 2. Building a New Feature
