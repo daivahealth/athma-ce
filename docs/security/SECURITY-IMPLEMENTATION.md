@@ -1217,5 +1217,9 @@ guards. Fixed service-wide:
   the seeded grants.
 - Config WRITE endpoints (instance/tenant/facility PUT/DELETE), previously
   unauthenticated, now require a JWT.
-- Granular `@Permissions` for the remaining foundation controllers is tracked
-  in issue #135.
+- Granular `@Permissions` (issue #135): every foundation controller now
+  declares per-route permissions — `user.*`, `staff.*`, `facility.*`,
+  `ward.read/manage`, `bed.read/manage`, and the new
+  `department/clinic/space/specialty` `.read`/`.manage` codes (seeded;
+  tenant admins receive them via the standard grants). GETs require the
+  resource's read code; mutations require create/update/delete or manage.

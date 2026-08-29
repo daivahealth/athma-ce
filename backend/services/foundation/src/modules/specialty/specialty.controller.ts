@@ -14,6 +14,8 @@ import {
 import { SpecialtyService } from './specialty.service';
 import { AssignSpecialtyDto, BulkAssignSpecialtiesDto } from './dto/assign-specialty.dto';
 import { SearchStaffBySpecialtyDto } from './dto/search-staff.dto';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { SPECIALTY_MANAGE, SPECIALTY_READ } from '@zeal/contracts';
 
 // =====================================================
 // Specialty Management Controller
@@ -28,6 +30,7 @@ export class SpecialtyController {
   // =====================================================
 
   @Get()
+  @Permissions(SPECIALTY_READ)
   async getAllSpecialties(
     @Query('includeInactive') includeInactive?: string,
     @Query('locale') locale?: string
@@ -39,6 +42,7 @@ export class SpecialtyController {
   }
 
   @Get('stats')
+  @Permissions(SPECIALTY_READ)
   async getSpecialtyStats(
     @Headers('x-tenant-id') tenantId: string,
     @Query('locale') locale?: string
@@ -47,6 +51,7 @@ export class SpecialtyController {
   }
 
   @Get('code/:code')
+  @Permissions(SPECIALTY_READ)
   async getSpecialtyByCode(
     @Param('code') code: string,
     @Query('locale') locale?: string
@@ -55,6 +60,7 @@ export class SpecialtyController {
   }
 
   @Get(':id')
+  @Permissions(SPECIALTY_READ)
   async getSpecialtyById(
     @Param('id') id: string,
     @Query('locale') locale?: string
@@ -76,6 +82,7 @@ export class StaffSpecialtyController {
   // =====================================================
 
   @Get('search/by-specialty')
+  @Permissions(SPECIALTY_READ)
   async searchStaffBySpecialty(
     @Headers('x-tenant-id') tenantId: string,
     @Query() dto: SearchStaffBySpecialtyDto
@@ -84,6 +91,7 @@ export class StaffSpecialtyController {
   }
 
   @Get('doctors/specialty/:specialtyCode')
+  @Permissions(SPECIALTY_READ)
   async findDoctorsBySpecialty(
     @Headers('x-tenant-id') tenantId: string,
     @Param('specialtyCode') specialtyCode: string,
@@ -108,6 +116,7 @@ export class StaffSpecialtyController {
   // =====================================================
 
   @Post(':staffId/specialties')
+  @Permissions(SPECIALTY_MANAGE)
   async assignSpecialtyToStaff(
     @Headers('x-tenant-id') tenantId: string,
     @Param('staffId') staffId: string,
@@ -117,6 +126,7 @@ export class StaffSpecialtyController {
   }
 
   @Post(':staffId/specialties/bulk')
+  @Permissions(SPECIALTY_MANAGE)
   async bulkAssignSpecialties(
     @Headers('x-tenant-id') tenantId: string,
     @Param('staffId') staffId: string,
@@ -126,6 +136,7 @@ export class StaffSpecialtyController {
   }
 
   @Get(':staffId/specialties')
+  @Permissions(SPECIALTY_READ)
   async getStaffSpecialties(
     @Param('staffId') staffId: string,
     @Query('facilityId') facilityId?: string,
@@ -135,6 +146,7 @@ export class StaffSpecialtyController {
   }
 
   @Put(':staffId/specialties/facility/:facilityId/primary/:specialtyId')
+  @Permissions(SPECIALTY_MANAGE)
   @HttpCode(HttpStatus.OK)
   async changePrimarySpecialty(
     @Param('staffId') staffId: string,
@@ -145,6 +157,7 @@ export class StaffSpecialtyController {
   }
 
   @Delete(':staffId/specialties/facility/:facilityId/specialty/:specialtyId')
+  @Permissions(SPECIALTY_MANAGE)
   @HttpCode(HttpStatus.OK)
   async removeSpecialtyFromStaff(
     @Param('staffId') staffId: string,
