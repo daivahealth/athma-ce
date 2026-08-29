@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from './config.service';
 import { SetConfigDto } from './dto/set-config.dto';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('configs')
 export class ConfigController {
@@ -20,6 +21,9 @@ export class ConfigController {
    * Resolve a config value for the current context
    * GET /api/v1/configs/resolve?key=locale.timezone
    */
+  // Services resolve config via ConfigClient without a JWT; values are
+  // non-sensitive by policy (sensitive keys are barred from config tables).
+  @Public()
   @Get('resolve')
   async resolve(
     @Query('key') key: string,
@@ -36,6 +40,7 @@ export class ConfigController {
    * Get all effective configs for current context
    * GET /api/v1/configs/effective
    */
+  @Public()
   @Get('effective')
   async getEffective(
     @Headers('x-tenant-id') tenantId?: string,

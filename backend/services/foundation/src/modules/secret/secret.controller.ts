@@ -17,6 +17,7 @@ import { PutSecretDto, SecretScopeQueryDto, InternalSecretQueryDto } from './dto
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import { InternalApiKeyGuard } from '../../common/guards/internal-api-key.guard';
 import { SECRET_READ, SECRET_MANAGE } from '@zeal/contracts';
 import type { JwtClaims } from '@zeal/contracts';
@@ -120,6 +121,7 @@ export class SecretController {
  * Value release for internal service consumers only (shared internal API
  * key). Every read is audited with the consumer name from x-service-name.
  */
+@Public() // exempt from the global JWT guard — InternalApiKeyGuard applies
 @Controller('secrets/internal')
 @UseGuards(InternalApiKeyGuard)
 export class SecretInternalController {

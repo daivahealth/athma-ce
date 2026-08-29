@@ -17,6 +17,7 @@ import { InstallPluginDto, ActivatePluginDto, UpdateLoadStatusDto } from './dto'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import { InternalApiKeyGuard } from '../../common/guards/internal-api-key.guard';
 import {
   PLUGIN_READ,
@@ -116,6 +117,7 @@ export class PluginController {
  * user JWT. Split into its own controller so the class-level JWT guards above
  * never apply to it.
  */
+@Public() // exempt from the global JWT guard — InternalApiKeyGuard applies
 @Controller('plugins/internal')
 @UseGuards(InternalApiKeyGuard)
 export class PluginInternalController {

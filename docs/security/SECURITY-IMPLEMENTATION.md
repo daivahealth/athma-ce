@@ -1194,3 +1194,28 @@ Related: RCM DTOs previously lacked class-validator decorators, so the global
 whitelist ValidationPipe stripped every request property (issue #128) — all
 RCM DTO fields are now decorated (typed validators for scalars, `@Allow()`
 for complex shapes pending per-field refinement).
+
+
+## Foundation Service Authentication (issue #134)
+
+Twelve foundation controllers (tenant, user, staff, facility, department,
+ward, bed, clinic, space, specialty, user-facility) historically had no auth
+guards. Fixed service-wide:
+
+- Global guard chain (`APP_GUARD`, registered in AuthModule): foundation's
+  `JwtAuthGuard` (every route requires a valid JWT unless `@Public()`) and
+  `PermissionsGuard` (enforced where `@Permissions` is declared).
+- `@Public()` routes: health; auth `login` / `refresh` / `reset-password` /
+  `confirm-reset-password` / `mfa/verify`; `GET /configs/resolve` and
+  `GET /configs/effective` (services' ConfigClient resolves config without a
+  JWT; config values are non-sensitive by policy since sensitive keys are
+  barred from config tables); and the internal-key surfaces
+  (`/plugins/internal/*`, `/secrets/internal/*`), which remain protected by
+  `InternalApiKeyGuard`.
+- `TenantController` additionally declares granular `tenant.read/create/
+  update/delete` permissions per route — tenant CRUD is super_admin-only via
+  the seeded grants.
+- Config WRITE endpoints (instance/tenant/facility PUT/DELETE), previously
+  unauthenticated, now require a JWT.
+- Granular `@Permissions` for the remaining foundation controllers is tracked
+  in issue #135.

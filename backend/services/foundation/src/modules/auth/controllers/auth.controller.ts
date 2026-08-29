@@ -12,6 +12,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import type { JwtClaims } from '@zeal/contracts';
 import { AuthService, type LoginResponse, type RefreshTokenResponse } from '../services/auth.service';
 import { MfaService } from '../services/mfa.service';
+import { Public } from '../decorators/public.decorator';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ChangePasswordDto,
@@ -38,6 +39,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'User login',
@@ -66,6 +68,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Refresh access token',
@@ -128,6 +131,7 @@ export class AuthController {
   }
 
   @Post('reset-password')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Request password reset',
@@ -139,6 +143,7 @@ export class AuthController {
   }
 
   @Post('confirm-reset-password')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Confirm password reset',
@@ -153,6 +158,7 @@ export class AuthController {
   }
 
   @Post('mfa/verify')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Verify MFA code',

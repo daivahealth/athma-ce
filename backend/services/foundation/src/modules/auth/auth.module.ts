@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
@@ -21,6 +22,11 @@ import { DEFAULT_ACCESS_TOKEN_EXPIRY, resolveExpiresIn } from './utils/jwt-expir
   ],
   controllers: [AuthController],
   providers: [
+    // Service-wide auth (issue #134): every foundation route requires a valid
+    // JWT unless @Public; @Permissions is enforced where declared. Declared
+    // here so the guards resolve inside AuthModule's DI context (JwtModule).
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: PermissionsGuard },
     AuthService,
     UserService,
     MfaService,
