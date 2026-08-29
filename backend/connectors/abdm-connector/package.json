@@ -12,7 +12,8 @@
     "start": "node --enable-source-maps dist/main.js",
     "dev": "NODE_ENV=development ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
     "type-check": "npm run prisma:generate && tsc --noEmit -p tsconfig.build.json",
-    "clean": "rm -rf dist generated"
+    "clean": "rm -rf dist generated",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.0",
@@ -39,5 +40,20 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
+    }
   }
 }

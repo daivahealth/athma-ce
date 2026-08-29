@@ -257,3 +257,22 @@ sudo service docker restart    # Linux
 
 
 
+
+
+## Testing
+
+`npx turbo run test` (from `backend/`) runs Jest across every workspace that
+declares a `test` script — CI runs the same command. First suites (issue #65,
+targeting the highest-risk surfaces first):
+
+- `@zeal/validators` — Verhoeff + national-identity validators
+- `@zeal/shared-utils` — `JwtAuthGuard` / `PermissionsGuard`
+- `@zeal/database-clinical` — the tenant-isolation Prisma middleware
+- `@athma/plugin-sdk` — capability registry + plugin-manifest schema
+- `@zeal/abdm-connector` — Fidelius (ABDM) and HCX JWE encryption
+- `@zeal/foundation` — tenant-secret envelope encryption
+
+Add tests as `src/**/__tests__/*.spec.ts`; to give a new workspace tests, add
+`"test": "jest --passWithNoTests"` plus the standard `jest` block to its
+package.json (see any of the packages above). Spec files are excluded from
+builds via each tsconfig's `exclude`.

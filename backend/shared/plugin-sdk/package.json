@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.0",
@@ -25,5 +26,20 @@
   },
   "peerDependencies": {
     "@prisma/client": "~6.19.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
+    }
   }
 }

@@ -8,9 +8,25 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
-    "type-check": "tsc --noEmit -p tsconfig.build.json"
+    "type-check": "tsc --noEmit -p tsconfig.build.json",
+    "test": "jest --passWithNoTests"
   },
   "devDependencies": {
     "typescript": "^5.5.4"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
+    }
   }
 }

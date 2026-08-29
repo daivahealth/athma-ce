@@ -13,7 +13,8 @@
     "dev": "NODE_ENV=development ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
     "dev:debug": "NODE_ENV=development LOG_LEVEL=debug ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
     "type-check": "tsc --noEmit -p tsconfig.build.json",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@athma/plugin-sdk": "file:../../shared/plugin-sdk",
@@ -47,5 +48,20 @@
     "@types/source-map-support": "^0.5.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
+    }
   }
 }
