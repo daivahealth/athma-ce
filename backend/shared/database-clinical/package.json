@@ -6,7 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "prisma generate --schema prisma/schema.prisma && tsc -p tsconfig.build.json"
+    "build": "prisma generate --schema prisma/schema.prisma && tsc -p tsconfig.build.json",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",
@@ -17,5 +18,20 @@
     "@types/node": "^20.10.0",
     "prisma": "^6.19.0",
     "typescript": "^5.3.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
+    }
   }
 }
