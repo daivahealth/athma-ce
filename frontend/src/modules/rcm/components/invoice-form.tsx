@@ -232,7 +232,7 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
     const existingChargeLines = computed.parsedLines.filter((l) => l.chargeId);
     const newLines = computed.parsedLines.filter((l) => !l.chargeId && l.billingItemId);
 
-    let allChargeIds: Record<number, string> = {};
+    const allChargeIds: Record<number, string> = {};
 
     // Map existing charge lines
     for (const line of existingChargeLines) {

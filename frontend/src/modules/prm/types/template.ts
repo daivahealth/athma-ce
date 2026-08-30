@@ -16,6 +16,6 @@ export interface CreateTemplateInput {
   is_active?: boolean;
 }
 
-export interface UpdateTemplateInput extends Partial<CreateTemplateInput> {}
+export type UpdateTemplateInput = Partial<CreateTemplateInput>;
 
 export type Template = Record<string, unknown>;

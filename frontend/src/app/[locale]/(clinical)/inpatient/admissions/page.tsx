@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useAdmissionsSearch } from '@/modules/clinical/hooks/use-inpatient';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
-import { AdmissionStatus } from '@/modules/clinical/types/inpatient';
+import type { AdmissionStatus } from '@/modules/clinical/types/inpatient';
 import { wardService } from '@/modules/foundation/services/ward-service';
 
 export default function InpatientAdmissionsPage() {

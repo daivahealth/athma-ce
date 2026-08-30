@@ -121,15 +121,6 @@ export default function InpatientDischargesPage() {
 
   const initiateDischargeMutation = useInitiateDischarge(selectedAdmission?.id ?? '');
 
-  const openInitiateDialog = (admission: any) => {
-    setSelectedAdmission(admission);
-    setTargetDischargeDate('');
-    setTargetDischargeTime('');
-    setApprovalRequired(Boolean(admission?.approvalRequired));
-    setInternalNotes('');
-    setDialogOpen(true);
-  };
-
   const handleInitiateDischarge = async () => {
     if (!selectedAdmission?.id) return;
     try {

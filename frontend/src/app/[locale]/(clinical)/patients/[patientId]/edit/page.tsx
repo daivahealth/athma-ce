@@ -10,6 +10,7 @@ import { ArrowLeft, AlertCircle } from 'lucide-react';
 import type { PatientFormData } from '@/components/clinical/patient-form';
 import { PatientForm } from '@/components/clinical/patient-form';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export default function EditPatientPage() {
   const params = useParams() as { locale: string; patientId: string; };
@@ -32,11 +33,11 @@ export default function EditPatientPage() {
       });
 
       router.push(`/${params.locale}/patients/${params.patientId}`);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating patient:', error);
       publishToast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to update patient',
+        description: getApiErrorMessage(error, 'Failed to update patient'),
         variant: 'destructive',
       });
     }
@@ -73,7 +74,7 @@ export default function EditPatientPage() {
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Patient Not Found</h3>
               <p className="text-muted-foreground mb-4">
-                The patient you're trying to edit doesn't exist or you don't have permission to edit it.
+                The patient you&apos;re trying to edit doesn&apos;t exist or you don&apos;t have permission to edit it.
               </p>
               <Button onClick={() => router.push(`/${params.locale}/patients`)}>
                 Back to Patient List

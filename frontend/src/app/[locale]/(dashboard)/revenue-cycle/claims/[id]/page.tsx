@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { ArrowLeft, Send, ShieldCheck, User } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,6 @@ const statusLabels: Record<ClaimStatus, string> = {
 
 export default function ClaimDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const locale = params.locale as string;
   const id = params.id as string;
   const toast = useToast();

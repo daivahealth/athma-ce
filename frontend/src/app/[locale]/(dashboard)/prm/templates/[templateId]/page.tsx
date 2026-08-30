@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { TemplateForm } from '@/modules/prm/components/template-form';
 import { useDeleteTemplate, useTemplate, useUpdateTemplate } from '@/modules/prm/hooks/use-templates';
 import type { CreateTemplateInput } from '@/modules/prm/types/template';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const toFormInitial = (data: any): Partial<CreateTemplateInput> => ({
   code: data?.code,
@@ -37,8 +38,8 @@ export default function TemplateDetailPage() {
     try {
       await updateTemplate.mutateAsync(payload);
       toast({ title: 'Template updated', description: 'Changes saved successfully.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to update template.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to update template.');
       toast({ title: 'Update failed', description: message, variant: 'destructive' });
     }
   };
@@ -49,8 +50,8 @@ export default function TemplateDetailPage() {
       await deleteTemplate.mutateAsync(params.templateId);
       toast({ title: 'Template deleted', description: 'The template has been removed.', variant: 'success' });
       router.push(`/${params.locale}/prm/templates`);
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to delete template.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to delete template.');
       toast({ title: 'Delete failed', description: message, variant: 'destructive' });
     }
   };

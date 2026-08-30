@@ -5,6 +5,7 @@ import { useCreatePatient } from '@/modules/clinical/hooks/use-patients';
 import { useToast } from '@/components/ui/use-toast';
 import { PatientForm } from '@/components/clinical/patient-form';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export default function NewPatientPage() {
   const params = useParams() as { locale: string };
@@ -23,11 +24,11 @@ export default function NewPatientPage() {
       });
 
       router.push(`/${params.locale}/patients`);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error creating patient:', error);
       publishToast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to register patient',
+        description: getApiErrorMessage(error, 'Failed to register patient'),
         variant: 'destructive',
       });
     }

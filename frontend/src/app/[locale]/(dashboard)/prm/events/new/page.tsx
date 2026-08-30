@@ -19,6 +19,7 @@ import { PRM_EVENT_SUBTYPES, PRM_EVENT_TYPES } from '@/modules/prm/constants/eve
 import { PRM_ENTITY_TYPES } from '@/modules/prm/constants/entity-types';
 import { PRM_SOURCE_SYSTEMS } from '@/modules/prm/constants/source-systems';
 import type { EventResponse, IngestEventInput, PatientGender } from '@/modules/prm/types/event';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const eventSchema = z.object({
   patient_id: z.string().uuid('Enter a valid patient UUID'),
@@ -81,7 +82,7 @@ export default function PrmEventNewPage() {
     let payload: Record<string, unknown>;
     try {
       payload = JSON.parse(values.payload);
-    } catch (err) {
+    } catch {
       setError('payload', { type: 'manual', message: 'Payload must be valid JSON' });
       return;
     }
@@ -128,8 +129,8 @@ export default function PrmEventNewPage() {
         description: `${response.jobs_created} jobs created · ${response.rules_evaluated} rules evaluated`,
         variant: response.duplicate ? 'default' : 'success',
       });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to ingest event.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to ingest event.');
       toast({ title: 'Ingestion failed', description: message, variant: 'destructive' });
     }
   };

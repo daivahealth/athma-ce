@@ -36,7 +36,6 @@ import {
   ReceiptText,
   Wallet,
   Split,
-  Handshake,
   Stethoscope,
   Bell,
   Layers,
@@ -45,7 +44,6 @@ import {
   BookOpen,
   Heart,
   Dumbbell,
-  Salad,
   Smartphone,
   TestTube,
   Target,
@@ -61,8 +59,7 @@ import {
   Scissors,
   Pill,
   Package,
-  MonitorPlay,
-} from 'lucide-react';
+  MonitorPlay } from 'lucide-react';
 
 type NavItem = {
   href?: string;

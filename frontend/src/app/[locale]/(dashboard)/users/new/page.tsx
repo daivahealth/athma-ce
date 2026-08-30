@@ -17,6 +17,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { useCreateUser } from '@/modules/foundation/hooks/use-user';
 import type { CreateUserDTO } from '@/modules/foundation/types/user';
+import { getErrorMessage } from '@/lib/api/errors';
 
 const userFormSchema = z.object({
   email: z.string().email('Enter a valid email'),
@@ -80,8 +81,8 @@ export default function NewUserPage() {
         description: `${user.firstName} ${user.lastName} has been added.`,
       });
       router.push(`/${params.locale}/users/${user.id}`);
-    } catch (err: any) {
-      const message = err?.response?.data?.message || err.message || 'Failed to create user';
+    } catch (err) {
+      const message = getErrorMessage(err, 'Failed to create user');
       setError(message);
       toast({ title: 'Error', description: message, variant: 'destructive' });
     }

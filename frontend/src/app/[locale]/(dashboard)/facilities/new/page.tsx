@@ -15,6 +15,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { getSession } from '@/lib/api/client';
 import { useCreateFacility } from '@/modules/foundation/hooks/use-facility';
 import type { CreateFacilityDTO } from '@/modules/foundation/types/facility';
+import { getErrorMessage } from '@/lib/api/errors';
 
 const facilitySchema = z.object({
   name: z.string().min(2, 'Facility name is required').max(150),
@@ -80,8 +81,8 @@ export default function NewFacilityPage() {
         description: `${facility.name} has been added.`,
       });
       router.push(`/${params.locale}/facilities/${facility.id}`);
-    } catch (err: any) {
-      const message = err?.response?.data?.message || err.message || 'Failed to create facility';
+    } catch (err) {
+      const message = getErrorMessage(err, 'Failed to create facility');
       setError(message);
       toast({ title: 'Error', description: message, variant: 'destructive' });
     }

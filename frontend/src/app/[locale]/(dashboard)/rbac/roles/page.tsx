@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { getSession } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/api/errors';
 
 const columns: ColumnDef<Role>[] = [
   { accessorKey: 'code', header: 'Code' },
@@ -90,10 +91,10 @@ export default function RolesPage() {
       reset();
       setOpen(false);
       router.push(`/${params.locale}/rbac/roles/${role.id}`);
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to create role',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }

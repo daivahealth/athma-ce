@@ -102,6 +102,9 @@ export default function ChemoOrderDetailPage() {
   const [showCancelForm, setShowCancelForm] = useState(false);
 
   // ── Drug Preparation + Nurse Verification (status: approved) ──────────
+  // The value is never read - only the setter is called. Elided binding keeps
+  // that explicit rather than implying the flag drives anything.
+  const [, setShowAdverseForm] = useState(false);
   const [showVerifyForm, setShowVerifyForm] = useState(false);
   const [drugPrep, setDrugPrep] = useState<DrugPreparationDetail[]>([]);
   const [nurseChecklist, setNurseChecklist] = useState<NurseVerificationChecklist>(emptyNurseChecklist());
@@ -110,7 +113,6 @@ export default function ChemoOrderDetailPage() {
   // ── Administration progress (status: in_progress) ────────────────────
   const [adminDetails, setAdminDetails] = useState<AdministrationDetail[]>([]);
   const [adverseReactions, setAdverseReactions] = useState<AdverseReaction[]>([]);
-  const [showAdverseForm, setShowAdverseForm] = useState(false);
 
   // ── Complete Administration ───────────────────────────────────────────
   const [showCompleteForm, setShowCompleteForm] = useState(false);

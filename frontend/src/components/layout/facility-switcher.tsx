@@ -16,6 +16,7 @@ import { getSession, switchFacility } from '@/lib/api/client';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import type { Facility } from '@/types/auth';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export function FacilitySwitcher() {
   const { toast } = useToast();
@@ -37,8 +38,7 @@ export function FacilitySwitcher() {
       // TODO: Fetch from foundation service or use data from session
       // For now, we'll construct from JWT claims
       const facilityIds = claims.facilityIds || [];
-      const currentFacilityId = claims.facilityId;
-      const defaultFacilityId = claims.defaultFacilityId;
+          const defaultFacilityId = claims.defaultFacilityId;
 
       // Mock facility data - in production, fetch from API
       const mockFacilities: Facility[] = facilityIds.map((id: string) => ({
@@ -69,11 +69,11 @@ export function FacilitySwitcher() {
 
       // Reload to update UI with new facility context
       window.location.reload();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to switch facility:', error);
       toast({
         title: 'Unable to switch facility',
-        description: error?.response?.data?.message || 'Please try again.',
+        description: getApiErrorMessage(error, 'Please try again.'),
         variant: 'destructive',
       });
     } finally {

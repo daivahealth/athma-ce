@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { RuleForm } from '@/modules/prm/components/rule-form';
 import { useDeleteRule, useRule, useUpdateRule } from '@/modules/prm/hooks/use-rules';
 import type { CreateRuleInput } from '@/modules/prm/types/rule';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const toFormInitial = (data: any): Partial<CreateRuleInput> => ({
   code: data?.code,
@@ -43,8 +44,8 @@ export default function RuleDetailPage() {
     try {
       await updateRule.mutateAsync(payload);
       toast({ title: 'Rule updated', description: 'Changes saved successfully.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to update rule.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to update rule.');
       toast({ title: 'Update failed', description: message, variant: 'destructive' });
     }
   };
@@ -55,8 +56,8 @@ export default function RuleDetailPage() {
       await deleteRule.mutateAsync(params.ruleId);
       toast({ title: 'Rule deleted', description: 'The rule has been removed.', variant: 'success' });
       router.push(`/${params.locale}/prm/rules`);
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to delete rule.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to delete rule.');
       toast({ title: 'Delete failed', description: message, variant: 'destructive' });
     }
   };

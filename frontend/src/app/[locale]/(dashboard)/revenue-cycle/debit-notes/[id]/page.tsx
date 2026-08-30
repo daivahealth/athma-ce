@@ -111,7 +111,7 @@ export default function DebitNoteDetailPage() {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="font-medium">This debit note is in draft status</p>
-                <p className="text-sm text-muted-foreground">Post it to apply the charge to the patient's account</p>
+                <p className="text-sm text-muted-foreground">Post it to apply the charge to the patient&apos;s account</p>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
@@ -244,7 +244,7 @@ export default function DebitNoteDetailPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Voiding this debit note will reverse the charge from the patient's ledger.
+              Voiding this debit note will reverse the charge from the patient&apos;s ledger.
             </p>
             <div className="space-y-2">
               <Label>Reason for voiding *</Label>

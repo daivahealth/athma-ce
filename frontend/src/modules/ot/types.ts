@@ -313,7 +313,7 @@ export interface CreateOtRequestInput {
   remarks?: string;
 }
 
-export interface UpdateOtRequestInput extends Partial<CreateOtRequestInput> {}
+export type UpdateOtRequestInput = Partial<CreateOtRequestInput>;
 
 export interface OtTransitionInput {
   reason?: string;

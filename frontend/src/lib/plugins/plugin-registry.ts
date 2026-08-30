@@ -1,4 +1,4 @@
-import { FrontendPluginManifest } from './types';
+import type { FrontendPluginManifest } from './types';
 
 class PluginRegistryImpl {
   private plugins: Map<string, FrontendPluginManifest> = new Map();

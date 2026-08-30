@@ -1,6 +1,5 @@
 'use client';
 
-
 import { useParams } from 'next/navigation';import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,7 +22,7 @@ export default function ResetPasswordPage() {
     try {
       await authClient.post('/reset-password', values);
       setStatus('success');
-    } catch (error) {
+    } catch {
       setStatus('error');
     }
   }

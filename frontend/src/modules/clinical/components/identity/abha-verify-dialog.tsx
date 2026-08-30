@@ -43,6 +43,7 @@ import type {
   IdentityProviderInfo,
   IdentityVerificationResult,
 } from '../../types/national-identity';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 interface AbhaVerifyDialogProps {
   patientId: string;
@@ -127,8 +128,8 @@ export function AbhaVerifyDialog({
       // The identifier has served its purpose — drop it immediately.
       setLoginId('');
       setStep('otp');
-    } catch (err: any) {
-      setError(err?.response?.data?.message ?? 'Could not send the OTP. Please try again.');
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Could not send the OTP. Please try again.'));
     }
   };
 
@@ -164,8 +165,8 @@ export function AbhaVerifyDialog({
 
       setStep('done');
       toast({ title: 'ABHA verified', description: verification.identityValue });
-    } catch (err: any) {
-      setError(err?.response?.data?.message ?? 'Verification failed. Please try again.');
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Verification failed. Please try again.'));
     }
   };
 
@@ -175,8 +176,8 @@ export function AbhaVerifyDialog({
       await createAddress.mutateAsync({ txnId, abhaAddress: abhaAddress.trim(), patientId });
       toast({ title: 'ABHA created', description: abhaAddress.trim() });
       setStep('done');
-    } catch (err: any) {
-      setError(err?.response?.data?.message ?? 'Could not claim this address.');
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Could not claim this address.'));
     }
   };
 

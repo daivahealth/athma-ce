@@ -2,13 +2,11 @@ import { foundationClient } from '@/lib/api/client';
 import type {
   User,
   FacilityUser,
-  UserWithFacility,
   CreateUserDTO,
   UpdateUserDTO,
   UserFacilityAccessResponse,
   AssignFacilityDTO,
-  SetDefaultFacilityDTO,
-} from '../types/user';
+  SetDefaultFacilityDTO } from '../types/user';
 
 class UserService {
   async listByTenant(tenantId: string): Promise<User[]> {

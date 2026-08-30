@@ -9,7 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { useFormMaster } from '@/modules/clinical/hooks/use-form-master';
-import { FrequencyType, FrequencyUnit } from '@/modules/clinical/types/form-master';
+import type { FrequencyUnit } from '@/modules/clinical/types/form-master';
+import { FrequencyType } from '@/modules/clinical/types/form-master';
 
 const FREQUENCY_LABELS: Record<FrequencyType, string> = {
   [FrequencyType.EVERY_N_HOURS]: 'Every {n} hours',

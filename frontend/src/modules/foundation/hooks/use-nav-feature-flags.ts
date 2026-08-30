@@ -8,7 +8,7 @@ export type NavFeatureFlags = Record<string, boolean>;
  * While configs are loading, isLoading=true and the sidebar shows all sections.
  */
 export function useNavFeatureFlags(): { flags: NavFeatureFlags; isLoading: boolean } {
-  const { data, isLoading } = useEffectiveConfigs();
+  const { data } = useEffectiveConfigs();
 
   if (!data) return { flags: {}, isLoading: true };
 

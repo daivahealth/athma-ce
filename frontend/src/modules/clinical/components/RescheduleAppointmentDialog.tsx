@@ -25,6 +25,7 @@ import { useRescheduleAppointment } from '@/modules/clinical/hooks/use-appointme
 import { useAvailableSlots } from '@/modules/clinical/hooks/use-availability';
 import type { Appointment } from '@/modules/clinical/types/scheduling';
 import type { TimeSlot } from '@/modules/clinical/services/availability-service';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 interface RescheduleAppointmentDialogProps {
   appointment: Appointment | null;
@@ -138,11 +139,11 @@ export function RescheduleAppointmentDialog({
       });
       onOpenChange(false);
       onSuccess?.();
-    } catch (error: any) {
+    } catch (error) {
       publishToast({
         variant: 'destructive',
         title: 'Unable to reschedule',
-        description: error.response?.data?.message || 'Failed to reschedule appointment.',
+        description: getApiErrorMessage(error, 'Failed to reschedule appointment.'),
       });
     }
   };

@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/use-toast';
 import { useTransferPatient } from '@/modules/clinical/hooks/use-inpatient';
 import { TransferType, type TransferPatientInput } from '@/modules/clinical/types/inpatient';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const transferSchema = z.object({
   toWardId: z.string().uuid('Ward ID must be a UUID'),
@@ -53,8 +54,8 @@ export default function TransferPage() {
     try {
       await transferPatient.mutateAsync(payload);
       toast({ title: 'Transfer completed', description: 'Patient moved successfully.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to transfer patient.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to transfer patient.');
       toast({ title: 'Transfer failed', description: message, variant: 'destructive' });
     }
   };

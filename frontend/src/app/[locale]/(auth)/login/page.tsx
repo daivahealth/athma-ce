@@ -8,13 +8,14 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { login, setSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useToast } from '@/components/ui/use-toast';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -67,8 +68,8 @@ function LoginPageContent() {
       } else {
         setError('Login response missing tokens.');
       }
-    } catch (err: any) {
-      const message = err?.response?.data?.message ?? 'Unable to authenticate.';
+    } catch (err) {
+      const message = getApiErrorMessage(err, 'Unable to authenticate.');
       setError(message);
       toast({ title: 'Authentication failed', description: message, variant: 'destructive' });
     }

@@ -43,7 +43,7 @@ export function ExportButtons({ result, title, disabled = false, currency }: Exp
         title: 'Export successful',
         description: `Report exported as ${format.toUpperCase()}.`,
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'Export failed',
         description: 'There was an error exporting the report. Please try again.',

@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useSendProviderWebhook } from '@/modules/prm/hooks/use-providers';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export default function ProviderWebhooksPage() {
   const params = useParams();
@@ -38,8 +39,8 @@ export default function ProviderWebhooksPage() {
     try {
       await sendWebhook.mutateAsync({ channel: channel.trim(), payload: parsed });
       toast({ title: 'Webhook sent', description: 'Provider webhook was posted successfully.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to send webhook.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to send webhook.');
       toast({ title: 'Webhook failed', description: message, variant: 'destructive' });
     }
   };

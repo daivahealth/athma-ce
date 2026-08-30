@@ -55,6 +55,7 @@ import { useUserRoles, useAssignUserRole, useRemoveUserRole } from '@/modules/fo
 import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
 import { getSession } from '@/lib/api/client';
 import { ArrowLeft, AlertCircle, Briefcase, Link2, Mail, Unlink } from 'lucide-react';
+import { getErrorMessage } from '@/lib/api/errors';
 
 const editUserSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -139,10 +140,10 @@ export default function UserDetailPage() {
       setIsLinking(false);
       setSelectedStaffId('');
       toast({ title: 'Staff linked', description: 'User has been linked to staff profile.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to link staff',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -153,10 +154,10 @@ export default function UserDetailPage() {
       await unlinkStaffMutation.mutateAsync(params.userId);
       setShowUnlinkDialog(false);
       toast({ title: 'Staff unlinked', description: 'Staff profile has been unlinked.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to unlink staff',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -175,10 +176,10 @@ export default function UserDetailPage() {
       });
       setShowEditDialog(false);
       toast({ title: 'User updated', description: 'User details have been saved.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to update',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -192,10 +193,10 @@ export default function UserDetailPage() {
       setShowDeleteDialog(false);
       toast({ title: 'User deleted', description: 'User account has been removed.' });
       router.push(`/${params.locale}/users`);
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to delete user',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -207,10 +208,10 @@ export default function UserDetailPage() {
       await assignRoleMutation.mutateAsync({ userId: params.userId, roleId: selectedRoleId });
       setSelectedRoleId('');
       toast({ title: 'Role assigned', description: 'User role assignment updated.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to assign role',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -220,10 +221,10 @@ export default function UserDetailPage() {
     try {
       await removeRoleMutation.mutateAsync({ userId: params.userId, roleId });
       toast({ title: 'Role removed', description: 'Role has been removed from user.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to remove role',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -244,10 +245,10 @@ export default function UserDetailPage() {
       setAccessLevel('standard');
       setSetAsDefault(false);
       toast({ title: 'Facility assigned', description: 'Facility access updated.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to assign facility',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -260,10 +261,10 @@ export default function UserDetailPage() {
         data: { facilityId },
       });
       toast({ title: 'Default facility set', description: 'Default facility updated.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to set default',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -273,10 +274,10 @@ export default function UserDetailPage() {
     try {
       await revokeFacilityMutation.mutateAsync({ userId: params.userId, facilityId });
       toast({ title: 'Facility revoked', description: 'Facility access removed.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to revoke facility',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
 import {
   FileText,
   Star,
@@ -16,7 +15,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -58,9 +56,6 @@ interface SavedReportsListProps {
 }
 
 export function SavedReportsList({ onSelect, className }: SavedReportsListProps) {
-  const router = useRouter();
-  const params = useParams();
-  const locale = params.locale as string;
   const { toast } = useToast();
 
   const [search, setSearch] = useState('');
@@ -81,7 +76,7 @@ export function SavedReportsList({ onSelect, className }: SavedReportsListProps)
         title: 'Report deleted',
         description: 'The saved report has been deleted.',
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'Failed to delete',
         description: 'There was an error deleting the report.',
@@ -95,7 +90,7 @@ export function SavedReportsList({ onSelect, className }: SavedReportsListProps)
   const handleToggleFavorite = async (id: string) => {
     try {
       await favoriteMutation.mutateAsync(id);
-    } catch (error) {
+    } catch {
       toast({
         title: 'Failed to update',
         description: 'There was an error updating the favorite status.',

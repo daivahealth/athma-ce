@@ -37,6 +37,7 @@ import {
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import type { QueryResult } from '@/modules/reporting/types';
 import type { GenerateReportResponse } from '@/modules/reporting/services/report-service';
+import { getErrorMessage } from '@/lib/api/errors';
 
 export default function ReportsPage() {
   const { toast } = useToast();
@@ -96,8 +97,8 @@ export default function ReportsPage() {
           setResult(null);
           refetchHistory();
         }
-      } catch (err: any) {
-        const errorMessage = err.response?.data?.message || err.message || 'An error occurred';
+      } catch (err) {
+        const errorMessage = getErrorMessage(err, 'An error occurred');
         setError(errorMessage);
         setResult(null);
         toast({

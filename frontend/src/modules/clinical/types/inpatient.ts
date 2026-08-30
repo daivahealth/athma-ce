@@ -380,7 +380,7 @@ export interface AdmissionsSearchResponse {
 export type WardDashboardResponse = Record<string, unknown>;
 export type WardPatientsResponse = InpatientAdmission[];
 
-import { PatientDisplayDto } from '../../../../../backend/contracts/src/types/patient';
+import type { PatientDisplayDto } from '../../../../../backend/contracts/src/types/patient';
 
 export type WardBoardOccupancy = 'occupied' | 'empty' | 'cleaning' | string;
 export type WardBoardAction = 'TRANSFER' | 'MEDS' | 'DETAILS' | 'ADMIT_PATIENT' | 'CONFIRM_DISCHARGE' | string;

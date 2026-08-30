@@ -36,6 +36,7 @@ import { useDeleteRole, useUpdateRole } from '@/modules/foundation/hooks/use-rol
 import { usePermissions } from '@/modules/foundation/hooks/use-rbac';
 import type { Permission } from '@/modules/foundation/types/role';
 import { ArrowLeft } from 'lucide-react';
+import { getErrorMessage } from '@/lib/api/errors';
 
 const updateRoleSchema = z.object({
   name: z.string().min(2, 'Name is required').max(100),
@@ -146,10 +147,10 @@ export default function RoleDetailPage() {
         permissionIds: selectedPermissionIds,
       });
       toast({ title: 'Permissions updated', description: 'Role permissions saved.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to update permissions',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -167,10 +168,10 @@ export default function RoleDetailPage() {
       });
       setShowEditDialog(false);
       toast({ title: 'Role updated', description: 'Role details have been saved.' });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to update role',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }
@@ -182,10 +183,10 @@ export default function RoleDetailPage() {
       await deleteRoleMutation.mutateAsync(role.id);
       toast({ title: 'Role deleted', description: 'Role has been removed.' });
       router.push(`/${params.locale}/rbac/roles`);
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to delete role',
-        description: err?.response?.data?.message || err.message || 'Please try again.',
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }

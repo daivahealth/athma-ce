@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ExternalLink, User, Calendar, Building2, Stethoscope, FileText, Hash, X, Loader2 } from 'lucide-react';
+import { ExternalLink, User, Calendar, Building2, Stethoscope, FileText, Hash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -45,7 +44,7 @@ function getDocumentTypeColor(type: DocumentType): string {
  * Get the navigation URL for a document based on its type
  */
 function getDocumentUrl(result: SearchResult, locale: string): string {
-  const { documentType, encounterId, patientId, documentId } = result;
+  const { documentType, encounterId, patientId } = result;
 
   switch (documentType) {
     case 'encounter_note':

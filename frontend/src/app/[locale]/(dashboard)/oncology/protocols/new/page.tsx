@@ -16,7 +16,6 @@ import type { RegimenItem, LabPrerequisite, HydrationOrder, OncologyCancerType }
 interface RegimenRow extends RegimenItem { day: number }
 
 const emptyDrug = (): RegimenRow => ({ drug: '', dose: 0, unit: 'mg/m²', route: 'IV', day: 1, doseFormula: 'bsa' });
-const emptyPremed = (): string => '';
 const emptyHydration = (): HydrationOrder => ({ fluid: '', ratePerHour: 0, durationHours: 0, timing: 'pre' });
 const emptyLab = (): LabPrerequisite => ({ test: '', parameter: '', unit: '', timing: 'within 7 days' });
 

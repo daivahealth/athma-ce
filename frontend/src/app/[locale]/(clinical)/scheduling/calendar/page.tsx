@@ -16,24 +16,18 @@ import {
   addWeeks,
   subWeeks,
   parseISO,
-  isWithinInterval,
-  addDays,
-} from 'date-fns';
+  addDays } from 'date-fns';
 import {
   Calendar as CalendarIcon,
   Clock,
   User,
   ChevronLeft,
   ChevronRight,
-  LayoutGrid,
-  List,
-  Eye,
   Stethoscope,
   Video,
   AlertCircle,
   Users,
-  CalendarDays,
-} from 'lucide-react';
+  CalendarDays } from 'lucide-react';
 
 import { PageHeader } from '@/components/ui/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -104,7 +98,7 @@ interface CalendarEventCardProps {
   onClick?: () => void;
 }
 
-function CalendarEventCard({ event, locale, compact = false, onClick }: CalendarEventCardProps) {
+function CalendarEventCard({ event, compact = false, onClick }: CalendarEventCardProps) {
   const SourceIcon = SOURCE_ICONS[event.source] || CalendarIcon;
   const statusColor = getEventStatusColor(event);
   const typeColor = getEventTypeColor(event);

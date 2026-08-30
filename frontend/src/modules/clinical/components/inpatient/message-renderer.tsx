@@ -10,8 +10,7 @@ import {
   Info,
   Activity,
   FileCheck,
-  AlertCircle,
-  Paperclip
+  AlertCircle
 } from 'lucide-react';
 
 interface MessageRendererProps {

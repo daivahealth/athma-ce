@@ -38,7 +38,7 @@ import {
   useCreateCatalogMapping,
   useDeleteCatalogMapping,
 } from '@/modules/rcm/hooks/use-catalog-mappings';
-import { useBillingItems, useBillingItem } from '@/modules/rcm/hooks/use-billing-items';
+import { useBillingItems } from '@/modules/rcm/hooks/use-billing-items';
 import { useMedications, useLabTests, useImagingStudies, useProcedures } from '@/modules/foundation/hooks/use-catalogs';
 import { useAdministrativeServices } from '@/modules/clinical/hooks/use-administrative-services';
 import { usePackages } from '@/modules/clinical/hooks/use-packages';

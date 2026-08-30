@@ -137,6 +137,8 @@ export function PatientDocuments({ patientId }: PatientDocumentsProps) {
   const getFileIcon = (doc: PatientDocument) => {
     const mimeType = doc.metadata?.mimeType || '';
     if (mimeType.startsWith('image/')) {
+      // `Image` is the lucide-react icon, not next/image - an alt prop would be wrong.
+      // eslint-disable-next-line jsx-a11y/alt-text
       return <Image className="h-5 w-5 text-blue-500" />;
     }
     return <File className="h-5 w-5 text-red-500" />;

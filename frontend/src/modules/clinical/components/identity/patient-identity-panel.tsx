@@ -31,6 +31,7 @@ import {
 import type { IdentityProviderInfo, PatientIdentity } from '../../types/national-identity';
 import { AddIdentityDialog } from './add-identity-dialog';
 import { AbhaVerifyDialog } from './abha-verify-dialog';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 interface PatientIdentityPanelProps {
   patientId: string;
@@ -69,11 +70,11 @@ export function PatientIdentityPanel({ patientId, passportNumber }: PatientIdent
         payload: { isPrimary: true },
       });
       toast({ title: 'Primary identity updated', description: labelFor(identity, providers) });
-    } catch (error: any) {
+    } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Could not set primary',
-        description: error?.response?.data?.message ?? 'Please try again.',
+        description: getApiErrorMessage(error, 'Please try again.'),
       });
     }
   };
@@ -82,11 +83,11 @@ export function PatientIdentityPanel({ patientId, passportNumber }: PatientIdent
     try {
       await deleteIdentity.mutateAsync({ patientId, id: identity.id });
       toast({ title: 'Identity removed' });
-    } catch (error: any) {
+    } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Could not remove identity',
-        description: error?.response?.data?.message ?? 'Please try again.',
+        description: getApiErrorMessage(error, 'Please try again.'),
       });
     }
   };

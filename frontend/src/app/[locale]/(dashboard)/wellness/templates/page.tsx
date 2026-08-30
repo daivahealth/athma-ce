@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Loader2, FileText, Pencil } from 'lucide-react';
 import { useAssessmentTemplates } from '@/modules/wellness/hooks/use-wellness-assessments';
-import type { WellnessAssessmentTemplate } from '@/modules/wellness/types/wellness-assessment';
 
 function TemplateList({ locale }: { locale: string }) {
     const router = useRouter();
@@ -84,8 +82,7 @@ function TemplateList({ locale }: { locale: string }) {
 
 export default function AssessmentTemplatesPage() {
   const params = useParams() as { locale: string };
-    const t = useTranslations();
-
+  
     return (
         <div className="container mx-auto p-6 space-y-6">
             <div className="flex items-center justify-between">

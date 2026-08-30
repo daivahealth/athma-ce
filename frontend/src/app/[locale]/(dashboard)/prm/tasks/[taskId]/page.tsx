@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/use-toast';
 import { useDeleteTask, useTask, useUpdateTask } from '@/modules/prm/hooks/use-tasks';
 import type { UpdateTaskInput } from '@/modules/prm/types/task';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 type UpdateFormValues = {
   status?: string;
@@ -60,8 +61,8 @@ export default function TaskDetailPage() {
     try {
       await updateTask.mutateAsync(payload);
       toast({ title: 'Task updated', description: 'Changes saved successfully.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to update task.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to update task.');
       toast({ title: 'Update failed', description: message, variant: 'destructive' });
     }
   };
@@ -72,8 +73,8 @@ export default function TaskDetailPage() {
       await deleteTask.mutateAsync(params.taskId);
       toast({ title: 'Task deleted', description: 'The task has been removed.', variant: 'success' });
       router.push(`/${params.locale}/prm/tasks`);
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to delete task.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to delete task.');
       toast({ title: 'Delete failed', description: message, variant: 'destructive' });
     }
   };

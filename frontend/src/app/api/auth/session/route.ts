@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { authClient } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export async function POST(request: Request) {
   const payload = await request.json();
@@ -26,8 +27,8 @@ export async function POST(request: Request) {
       accessToken: data.accessToken,
       user: decodeAccessToken(data.accessToken),
     });
-  } catch (error: any) {
-    return NextResponse.json({ message: error?.response?.data?.message ?? 'Login failed' }, { status: 401 });
+  } catch (error) {
+    return NextResponse.json({ message: getApiErrorMessage(error, 'Login failed') }, { status: 401 });
   }
 }
 

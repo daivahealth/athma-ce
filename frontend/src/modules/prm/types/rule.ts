@@ -22,6 +22,6 @@ export interface CreateRuleInput {
   is_active?: boolean;
 }
 
-export interface UpdateRuleInput extends Partial<CreateRuleInput> {}
+export type UpdateRuleInput = Partial<CreateRuleInput>;
 
 export type Rule = Record<string, unknown>;

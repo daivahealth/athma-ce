@@ -60,7 +60,7 @@ export function useDeleteStaffSchedule() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, staffId }: { id: string; staffId: string }) =>
+    mutationFn: ({ id }: { id: string; staffId: string }) =>
       schedulingService.deleteStaffSchedule(id),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: staffScheduleKeys.staff(variables.staffId) });
