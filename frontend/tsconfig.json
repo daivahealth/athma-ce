@@ -61,7 +61,6 @@
     "next-env.d.ts",
     "src/**/*",
     "scripts/**/*",
-    ".storybook",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
