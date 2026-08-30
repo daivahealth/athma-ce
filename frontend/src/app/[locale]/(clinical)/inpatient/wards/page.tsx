@@ -25,6 +25,7 @@ import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { useQueryClient } from '@tanstack/react-query';
 import { AlertTriangle, Circle, LayoutGrid, List, Plus, User } from 'lucide-react';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 type FilterKey = 'all' | 'occupied' | 'available' | 'cleaning' | 'maintenance';
 
@@ -358,8 +359,8 @@ export default function InpatientWardsPage() {
       queryClient.invalidateQueries({ queryKey: ['inpatient', 'bed-browser'] });
       toast({ title: 'Transfer completed', description: 'Patient moved successfully.', variant: 'success' });
       resetTransferState();
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to transfer patient.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to transfer patient.');
       toast({ title: 'Transfer failed', description: message, variant: 'destructive' });
     }
   };

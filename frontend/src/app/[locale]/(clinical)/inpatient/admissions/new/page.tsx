@@ -42,6 +42,7 @@ import {
   VitalsFrequency,
   type CreateAdmissionInput,
 } from '@/modules/clinical/types/inpatient';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const admissionSchema = z
   .object({
@@ -257,8 +258,8 @@ export default function NewAdmissionPage() {
       if (result?.id) {
         router.push(`/${params.locale}/inpatient/admissions/${result.id}`);
       }
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to create admission.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to create admission.');
       toast({ title: 'Admission failed', description: message, variant: 'destructive' });
     }
   };

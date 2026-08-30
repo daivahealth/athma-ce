@@ -721,7 +721,7 @@ export default function WardBoardAdmissionDetailPage() {
                                 <SelectValue placeholder="Select staff" />
                               </SelectTrigger>
                               <SelectContent>
-                                {staffListQuery.data?.map((staff: any) => {
+                                {staffListQuery.data?.map((staff) => {
                                   const staffName =
                                     staff.displayName ??
                                     [staff.firstName, staff.lastName].filter(Boolean).join(' ') ??
@@ -1017,7 +1017,7 @@ export default function WardBoardAdmissionDetailPage() {
                   ) : (
                     <ScrollArea className="h-[600px] pr-4">
                       <div className="space-y-3">
-                        {prescriptionsQuery.data?.map((prescription: any) => (
+                        {prescriptionsQuery.data?.map((prescription) => (
                           <div
                             key={prescription.id}
                             className="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 p-3 transition-all hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/50 dark:hover:bg-slate-800/80"

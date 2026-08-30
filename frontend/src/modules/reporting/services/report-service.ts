@@ -14,6 +14,7 @@ import type {
   CreateSavedReportRequest,
   UpdateSavedReportRequest,
 } from '../types/report';
+import { getErrorMessage } from '@/lib/api/errors';
 
 // Local storage key for report history
 const HISTORY_KEY = 'zeal_report_history';
@@ -84,8 +85,8 @@ class ReportService {
         success: true,
         result,
       };
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to generate report';
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to generate report');
 
       // Add failed query to history
       this.addToHistory({
@@ -151,10 +152,10 @@ class ReportService {
         errors: response.data.errors,
         suggestions: response.data.suggestions,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         valid: false,
-        errors: [error.response?.data?.message || error.message],
+        errors: [getErrorMessage(error, 'Validation failed.')],
       };
     }
   }

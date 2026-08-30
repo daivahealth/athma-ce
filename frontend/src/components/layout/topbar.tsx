@@ -39,6 +39,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { Facility } from '@/types/auth';
 import { userService } from '@/modules/foundation/services/user-service';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 interface TopbarProps {
   locale: string;
@@ -98,11 +99,11 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
 
       // Reload to update UI with new facility context
       window.location.reload();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to switch facility:', error);
       toast({
         title: 'Unable to switch facility',
-        description: error?.response?.data?.message || 'Please try again.',
+        description: getApiErrorMessage(error, 'Please try again.'),
         variant: 'destructive',
       });
     } finally {

@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useToast } from '@/components/ui/use-toast';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -67,8 +68,8 @@ function LoginPageContent() {
       } else {
         setError('Login response missing tokens.');
       }
-    } catch (err: any) {
-      const message = err?.response?.data?.message ?? 'Unable to authenticate.';
+    } catch (err) {
+      const message = getApiErrorMessage(err, 'Unable to authenticate.');
       setError(message);
       toast({ title: 'Authentication failed', description: message, variant: 'destructive' });
     }

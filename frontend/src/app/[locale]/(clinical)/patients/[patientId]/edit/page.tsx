@@ -10,6 +10,7 @@ import { ArrowLeft, AlertCircle } from 'lucide-react';
 import type { PatientFormData } from '@/components/clinical/patient-form';
 import { PatientForm } from '@/components/clinical/patient-form';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export default function EditPatientPage() {
   const params = useParams() as { locale: string; patientId: string; };
@@ -32,11 +33,11 @@ export default function EditPatientPage() {
       });
 
       router.push(`/${params.locale}/patients/${params.patientId}`);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating patient:', error);
       publishToast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to update patient',
+        description: getApiErrorMessage(error, 'Failed to update patient'),
         variant: 'destructive',
       });
     }

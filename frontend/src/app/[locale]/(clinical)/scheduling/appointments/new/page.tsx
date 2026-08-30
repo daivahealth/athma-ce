@@ -30,6 +30,7 @@ import { useAvailableSlots } from '@/modules/clinical/hooks/use-availability';
 import type { BookAppointmentInput } from '@/modules/clinical/types/scheduling';
 import type { Patient } from '@/modules/clinical/types/patient';
 import type { TimeSlot } from '@/modules/clinical/services/availability-service';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const bookAppointmentSchema = z.object({
   patientId: z.string().uuid('Please select a patient'),
@@ -226,11 +227,11 @@ export default function NewAppointmentPage() {
       });
 
       router.push(`/${params.locale}/scheduling/appointments/${result.id}`);
-    } catch (error: any) {
+    } catch (error) {
       publishToast({
         variant: 'destructive',
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to book appointment',
+        description: getApiErrorMessage(error, 'Failed to book appointment'),
       });
     }
   };

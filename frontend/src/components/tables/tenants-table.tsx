@@ -19,6 +19,7 @@ import { foundationClient } from '@/lib/api/client';
 import { useToast } from '@/components/ui/use-toast';
 import { Building2, Globe, Clock, Settings } from 'lucide-react';
 import Link from 'next/link';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const createTenantSchema = z.object({
   name: z.string().min(2),
@@ -122,10 +123,10 @@ export function TenantsTable({ locale }: { locale: string }) {
       toast({ title: 'Tenant created', description: `${values.name} is now available.`, variant: 'success' });
       form.reset();
       await refetch();
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: 'Unable to create tenant',
-        description: error?.response?.data?.message ?? 'Please check inputs and retry.',
+        description: getApiErrorMessage(error, 'Please check inputs and retry.'),
         variant: 'destructive',
       });
     }

@@ -46,6 +46,7 @@ import {
   Settings2,
 } from 'lucide-react';
 import type { PluginRegistryEntry } from '@/modules/foundation/types/plugin';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 type ServiceKey = 'clinical' | 'foundation' | string;
 
@@ -218,10 +219,10 @@ export default function PluginManagementPage() {
           description: `${plugin.name} has been activated for this tenant.`,
         });
       }
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: active ? 'Deactivation failed' : 'Activation failed',
-        description: err?.response?.data?.message || 'Please try again.',
+        description: getApiErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }

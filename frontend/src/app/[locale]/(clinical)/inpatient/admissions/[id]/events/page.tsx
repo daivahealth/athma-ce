@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/use-toast';
 import { useAdmissionEvents, useCreateAdmissionEvent } from '@/modules/clinical/hooks/use-inpatient';
 import { EventCategory, InpatientEventType, type CreateInpatientEventInput } from '@/modules/clinical/types/inpatient';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const eventSchema = z.object({
   eventType: z.nativeEnum(InpatientEventType),
@@ -60,8 +61,8 @@ export default function AdmissionEventsPage() {
       const response = await createEvent.mutateAsync(payload);
       setLastEvent(response);
       toast({ title: 'Event created', description: 'Event added to the timeline.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to create event.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to create event.');
       toast({ title: 'Event failed', description: message, variant: 'destructive' });
     }
   };

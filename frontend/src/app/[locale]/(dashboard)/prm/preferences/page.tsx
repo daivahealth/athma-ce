@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 import { usePatientPreferences, useUpdatePatientPreferences } from '@/modules/prm/hooks/use-preferences';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export default function PrmPreferencesPage() {
   const params = useParams();
@@ -60,8 +61,8 @@ export default function PrmPreferencesPage() {
     try {
       await updatePreferences.mutateAsync(parsed);
       toast({ title: 'Preferences updated', description: 'Patient preferences saved.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to update preferences.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to update preferences.');
       toast({ title: 'Update failed', description: message, variant: 'destructive' });
     }
   };

@@ -56,6 +56,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const checklistSchema = z.object({
   // Medical Clearance
@@ -251,8 +252,8 @@ export default function DischargePage() {
         description: 'Discharge checklist saved successfully.',
         variant: 'default',
       });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to update checklist.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to update checklist.');
       toast({ title: 'Checklist failed', description: message, variant: 'destructive' });
     }
   };
@@ -274,8 +275,8 @@ export default function DischargePage() {
       });
       setShowDischargeDialog(false);
       router.push(`/${params.locale}/inpatient/admissions/${params.id}`);
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to discharge patient.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to discharge patient.');
       toast({ title: 'Discharge failed', description: message, variant: 'destructive' });
     }
   };

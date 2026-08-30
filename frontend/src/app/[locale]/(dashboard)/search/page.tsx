@@ -27,6 +27,7 @@ import type {
   SearchResponse,
   SearchResult,
 } from '@/modules/semantic-search/types';
+import { getErrorMessage } from '@/lib/api/errors';
 
 export default function SemanticSearchPage() {
   const { toast } = useToast();
@@ -66,8 +67,8 @@ export default function SemanticSearchPage() {
           minSimilarity: 0.3,
         });
         setResponse(result);
-      } catch (err: any) {
-        const errorMessage = err.response?.data?.message || err.message || 'Search failed';
+      } catch (err) {
+        const errorMessage = getErrorMessage(err, 'Search failed');
         setError(errorMessage);
         setResponse(null);
         toast({
@@ -107,10 +108,10 @@ export default function SemanticSearchPage() {
         title: 'Similar documents found',
         description: `Found ${similar.totalCount} similar documents.`,
       });
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: 'Failed to find similar documents',
-        description: err.message,
+        description: getErrorMessage(err, 'Please try again.'),
         variant: 'destructive',
       });
     }

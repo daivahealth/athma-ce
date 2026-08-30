@@ -30,6 +30,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { AlertCircle } from 'lucide-react';
 import { useCreatePatientIdentity, useValidateIdentity } from '../../hooks/use-national-identity';
 import type { IdentityProviderInfo } from '../../types/national-identity';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 interface AddIdentityDialogProps {
   patientId: string;
@@ -85,8 +86,8 @@ export function AddIdentityDialog({
       await createIdentity.mutateAsync({ patientId, payload: { ...payload, isPrimary } });
       toast({ title: 'Identity added', description: `${selected.label} recorded.` });
       onOpenChange(false);
-    } catch (error: any) {
-      setErrors([error?.response?.data?.message ?? 'Could not save this identity.']);
+    } catch (error) {
+      setErrors([getApiErrorMessage(error, 'Could not save this identity.')]);
     }
   };
 

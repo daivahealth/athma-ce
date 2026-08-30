@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { RuleForm } from '@/modules/prm/components/rule-form';
 import { useCreateRule } from '@/modules/prm/hooks/use-rules';
 import type { CreateRuleInput } from '@/modules/prm/types/rule';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export default function NewRulePage() {
   const params = useParams() as { locale: string };
@@ -21,8 +22,8 @@ export default function NewRulePage() {
       await createRule.mutateAsync(payload);
       toast({ title: 'Rule created', description: 'The rule is now active in PRM.', variant: 'success' });
       router.push(`/${params.locale}/prm/rules`);
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to create rule.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to create rule.');
       toast({ title: 'Creation failed', description: message, variant: 'destructive' });
     }
   };

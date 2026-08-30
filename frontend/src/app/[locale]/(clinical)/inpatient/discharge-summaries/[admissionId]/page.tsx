@@ -72,7 +72,7 @@ export default function DischargeSummaryPage() {
     if (currentData && typeof currentData === 'object' && 'sections' in currentData) {
       const existingSections = (currentData as any).sections;
       if (Array.isArray(existingSections) && existingSections.length > 0) {
-        setSections(existingSections.map((s: any) => ({
+        setSections(existingSections.map((s) => ({
           id: s.id,
           type: s.type || 'textarea',
           label: s.label || { en: 'Section' },
@@ -130,7 +130,7 @@ export default function DischargeSummaryPage() {
     }
 
     // Map schema sections to form sections
-    const mappedSections: TemplateSection[] = schemaSections.map((section: any) => ({
+    const mappedSections: TemplateSection[] = schemaSections.map((section) => ({
       id: section.id,
       type: section.type || 'textarea',
       label: section.label || { en: 'Section' },

@@ -16,6 +16,7 @@ import { getSession, switchFacility } from '@/lib/api/client';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import type { Facility } from '@/types/auth';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 export function FacilitySwitcher() {
   const { toast } = useToast();
@@ -68,11 +69,11 @@ export function FacilitySwitcher() {
 
       // Reload to update UI with new facility context
       window.location.reload();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to switch facility:', error);
       toast({
         title: 'Unable to switch facility',
-        description: error?.response?.data?.message || 'Please try again.',
+        description: getApiErrorMessage(error, 'Please try again.'),
         variant: 'destructive',
       });
     } finally {

@@ -19,6 +19,7 @@ import { useWard } from '@/modules/foundation/hooks/use-ward';
 import { useStaffMember } from '@/modules/foundation/hooks/use-staff';
 import { IsolationType, VitalsFrequency, type UpdateAdmissionInput } from '@/modules/clinical/types/inpatient';
 import { CheckCircle2, Clock, FileCheck } from 'lucide-react';
+import { getApiErrorMessage } from '@/lib/api/errors';
 
 const updateSchema = z.object({
   attendingPhysicianId: z.string().optional(),
@@ -163,8 +164,8 @@ export default function AdmissionDetailPage() {
     try {
       await updateAdmission.mutateAsync(payload);
       toast({ title: 'Admission updated', description: 'Changes saved successfully.', variant: 'success' });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to update admission.';
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Failed to update admission.');
       toast({ title: 'Update failed', description: message, variant: 'destructive' });
     }
   };

@@ -268,7 +268,7 @@ function NewEncounterPageContent() {
                   )}
                   {staffResults.length > 0 && (
                     <div className="max-h-40 overflow-auto rounded-md border p-2">
-                      {staffResults.map((staff: any) => (
+                      {staffResults.map((staff) => (
                         <button
                           key={staff.id}
                           type="button"

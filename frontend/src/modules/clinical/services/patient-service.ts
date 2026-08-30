@@ -6,6 +6,7 @@ import type {
   UpdatePatientDto,
   SearchPatientsDto,
 } from '../types/patient';
+import { getApiErrorStatus } from '@/lib/api/errors';
 
 /**
  * Patient Service
@@ -51,8 +52,8 @@ class PatientService extends BaseApiService<Patient> {
     try {
       const response = await this.client.get(`${this.basePath}/mrn/${mrn}`);
       return response.data;
-    } catch (error: any) {
-      if (error.response?.status === 404) {
+    } catch (error) {
+      if (getApiErrorStatus(error) === 404) {
         return null;
       }
       throw error;
