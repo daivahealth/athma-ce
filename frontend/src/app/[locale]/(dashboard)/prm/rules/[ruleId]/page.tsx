@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,11 +31,8 @@ const toFormInitial = (data: any): Partial<CreateRuleInput> => ({
   is_active: data?.is_active,
 });
 
-export default function RuleDetailPage({
-  params,
-}: {
-  params: { locale: string; ruleId: string };
-}) {
+export default function RuleDetailPage() {
+  const params = useParams() as { locale: string; ruleId: string };
   const router = useRouter();
   const { toast } = useToast();
   const { data, isLoading } = useRule(params.ruleId);

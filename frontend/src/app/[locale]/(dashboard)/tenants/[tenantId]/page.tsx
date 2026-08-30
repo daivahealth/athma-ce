@@ -1,17 +1,15 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useParams } from 'next/navigation';import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTenant, useTenants } from '@/hooks/use-tenants';
 import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
 import { FacilityHierarchyTree } from '@/components/structure/facility-hierarchy';
 
-export default function TenantDetailPage({
-  params,
-}: {
-  params: { locale: string; tenantId: string };
-}) {
+export default function TenantDetailPage() {
+  const params = useParams() as { locale: string; tenantId: string };
   const { data: tenant, isLoading: tenantLoading } = useTenant(params.tenantId);
   const { data: fallbackTenants = [] } = useTenants();
   const resolvedTenant = tenant ?? fallbackTenants.find((item) => item.id === params.tenantId);

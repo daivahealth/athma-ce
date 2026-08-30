@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { format, parseISO, isToday } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -43,13 +43,6 @@ function buildRecommendationsNote(recommendations: string[]): string {
   ].join('\n');
 }
 
-interface PatientAiPlusPageProps {
-  params: {
-    locale: string;
-    patientId: string;
-  };
-}
-
 const formatDateTime = (dateString?: string | null) => {
   if (!dateString) return 'Unknown';
   try {
@@ -59,7 +52,8 @@ const formatDateTime = (dateString?: string | null) => {
   }
 };
 
-export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
+export default function PatientAiPlusPage() {
+  const params = useParams() as { locale: string; patientId: string; };
   const router = useRouter();
   const { data: patient, isLoading, error } = usePatient(params.patientId);
 

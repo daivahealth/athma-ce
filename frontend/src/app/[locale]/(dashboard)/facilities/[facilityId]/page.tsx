@@ -1,16 +1,14 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useParams } from 'next/navigation';import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FacilityHierarchyTree } from '@/components/structure/facility-hierarchy';
 import { useFacility } from '@/modules/foundation/hooks/use-facility';
 
-export default function FacilityDetailPage({
-  params,
-}: {
-  params: { locale: string; facilityId: string };
-}) {
+export default function FacilityDetailPage() {
+  const params = useParams() as { locale: string; facilityId: string };
   const { data: facility, isLoading } = useFacility(params.facilityId);
 
   return (

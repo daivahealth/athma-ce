@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, CheckCircle2, ChevronDown, ChevronRight, Plus, User, Dna } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -63,11 +63,8 @@ function SectionHeader({ title, open, onToggle, action }: {
   );
 }
 
-export default function RadiationPrescriptionDetailPage({
-  params,
-}: {
-  params: { locale: string; id: string };
-}) {
+export default function RadiationPrescriptionDetailPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const { id } = params;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, User, Calendar, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -78,11 +78,8 @@ const MANUAL_CATEGORY_OPTIONS: { value: string; label: string }[] = [
   { value: 'follow_up', label: 'Follow-up' },
 ];
 
-export default function CancerTimelinePage({
-  params,
-}: {
-  params: { locale: string; patientId: string };
-}) {
+export default function CancerTimelinePage() {
+  const params = useParams() as { locale: string; patientId: string };
   const router = useRouter();
   const { locale, patientId } = params;
 
