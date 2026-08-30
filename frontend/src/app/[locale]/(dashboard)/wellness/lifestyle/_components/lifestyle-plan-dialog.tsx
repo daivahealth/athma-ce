@@ -105,7 +105,7 @@ export function LifestylePlanDialog({ children }: { children: React.ReactNode })
             setOpen(false);
             nutritionForm.reset();
             setSelectedPatient(null);
-        } catch (error) {
+        } catch {
             toast({ title: 'Failed to create nutrition plan', variant: 'destructive' });
         }
     };
@@ -121,7 +121,7 @@ export function LifestylePlanDialog({ children }: { children: React.ReactNode })
             setOpen(false);
             exerciseForm.reset();
             setSelectedPatient(null);
-        } catch (error) {
+        } catch {
             toast({ title: 'Failed to create exercise prescription', variant: 'destructive' });
         }
     };

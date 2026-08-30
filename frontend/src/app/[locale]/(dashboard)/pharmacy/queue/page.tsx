@@ -86,7 +86,6 @@ function PrescriptionCard({
   item,
   onProcess,
   isPending,
-  locale,
 }: {
   item: PharmacyQueueItem;
   onProcess: (item: PharmacyQueueItem) => void;

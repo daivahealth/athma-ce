@@ -97,7 +97,6 @@ async function refreshDashboardMetrics(currency: string): Promise<DashboardRefre
  * Uses a single cached API call for all metrics
  */
 export function useDashboardMetrics(currency: string = 'INR') {
-  const queryClient = useQueryClient();
 
   const query = useQuery({
     queryKey: DASHBOARD_KEYS.metrics(currency),

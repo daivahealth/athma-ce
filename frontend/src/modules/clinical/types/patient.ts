@@ -106,7 +106,7 @@ export interface CreatePatientDto {
 /**
  * DTO for updating a patient
  */
-export interface UpdatePatientDto extends Partial<CreatePatientDto> { }
+export type UpdatePatientDto = Partial<CreatePatientDto>;
 
 /**
  * DTO for searching patients

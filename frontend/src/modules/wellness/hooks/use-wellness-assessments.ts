@@ -4,9 +4,7 @@ import type {
   CreateAssessmentTemplateInput,
   CreateAssessmentInput,
   SubmitAssessmentInput,
-  AssessmentFilters,
-  WellnessAssessmentStatus,
-} from '../types/wellness-assessment';
+  AssessmentFilters } from '../types/wellness-assessment';
 
 // Templates
 export function useAssessmentTemplates(filters?: { category?: string; isActive?: boolean }) {

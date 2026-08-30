@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
-import { CheckCircle2, Circle, Calendar, Clock, FileCheck, AlertCircle } from 'lucide-react';
+import { CheckCircle2, Calendar, Clock, FileCheck, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -17,16 +16,12 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   useChecklistInstance,
   useSaveChecklistResponse,
-  useSaveChecklistResponsesBulk,
   useCompleteChecklistInstance,
   useVerifyChecklistInstance,
 } from '@/modules/clinical/hooks/use-checklists';
 import type {
-  ChecklistInstance,
   ChecklistTemplateItem,
-  ChecklistItemType,
-  ChecklistInstanceStatus,
-} from '@/modules/clinical/types/checklist';
+  ChecklistInstanceStatus } from '@/modules/clinical/types/checklist';
 
 interface ChecklistFormProps {
   instanceId: string;
@@ -42,7 +37,6 @@ interface ChecklistSection {
 export function ChecklistForm({ instanceId, onComplete, onVerify }: ChecklistFormProps) {
   const { data: instance, isLoading } = useChecklistInstance(instanceId);
   const saveResponse = useSaveChecklistResponse(instanceId);
-  const saveResponsesBulk = useSaveChecklistResponsesBulk(instanceId);
   const completeInstance = useCompleteChecklistInstance(instanceId);
   const verifyInstance = useVerifyChecklistInstance(instanceId);
 

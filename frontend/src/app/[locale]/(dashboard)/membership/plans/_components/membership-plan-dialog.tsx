@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Plus, Trash2, Loader2, Info } from 'lucide-react';
+import { Plus, Trash2, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -87,7 +87,7 @@ export function MembershipPlanDialog({ children }: { children: React.ReactNode }
             toast({ title: 'Membership plan created successfully', variant: 'success' });
             setOpen(false);
             form.reset();
-        } catch (error) {
+        } catch {
             toast({ title: 'Failed to create membership plan', variant: 'destructive' });
         }
     };

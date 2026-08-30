@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
 import {
   useInstanceConfigs,
   useTenantConfigs,
@@ -22,8 +21,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageHeader } from '@/components/ui/page-header';
 
 export default function ConfigurationsPage() {
-  const params = useParams();
-  const locale = params.locale as string;
   const [search, setSearch] = useState('');
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
@@ -32,7 +29,6 @@ export default function ConfigurationsPage() {
   const claims = decodeAccessToken(session.accessToken);
   const tenantId = claims?.tenantId ?? session.user?.tenantId;
   const facilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? session.user?.defaultFacilityId;
-  const userId = claims?.userId ?? session.user?.userId ?? '';
 
   const { data: instanceConfigs, isLoading: instanceLoading, error: instanceError } = useInstanceConfigs();
   const { data: tenantConfigs, isLoading: tenantLoading } = useTenantConfigs(tenantId || '');

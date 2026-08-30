@@ -57,7 +57,7 @@ export function EmbeddingStats({ className }: EmbeddingStatsProps) {
         title: 'Reindex cancelled',
         description: 'The reindex job has been cancelled.',
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'Failed to cancel reindex',
         description: 'There was an error cancelling the reindex job.',

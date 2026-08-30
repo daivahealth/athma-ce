@@ -17,7 +17,7 @@ import { useParams } from 'next/navigation';
 import { ArrowLeft, Sparkles, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -27,7 +27,7 @@ import { useAdministrativeServices } from '@/modules/clinical/hooks/use-administ
 import { usePackages } from '@/modules/clinical/hooks/use-packages';
 import { useCatalogMappings, useCreateCatalogMapping } from '@/modules/rcm/hooks/use-catalog-mappings';
 import type { CatalogType } from '@/modules/rcm/types/catalog-mapping';
-import { ItemType, BillingCodeType } from '@/modules/rcm/types/billing-item';
+import { ItemType } from '@/modules/rcm/types/billing-item';
 import type { BillingItem } from '@/modules/rcm/types/billing-item';
 
 // ─── Types ────────────────────────────────────────────────────────────────────

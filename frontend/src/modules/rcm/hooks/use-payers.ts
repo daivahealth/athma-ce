@@ -3,9 +3,7 @@ import { payerService } from '../services/payer-service';
 import type {
   CreatePayerInput,
   UpdatePayerInput,
-  PayerFilters,
-  PayerStatus,
-} from '../types/payer';
+  PayerFilters } from '../types/payer';
 
 export function usePayers(filters?: PayerFilters) {
   return useQuery({

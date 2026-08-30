@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { Button } from '@/components/ui/button';
@@ -27,7 +26,6 @@ import type { Patient } from '@/modules/clinical/types/patient';
 export default function PatientsPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
-  const t = useTranslations('patients');
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebouncedValue(searchQuery, 300);
 
@@ -56,14 +54,6 @@ export default function PatientsPage() {
       age--;
     }
     return age;
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
   };
 
   return (
@@ -110,7 +100,7 @@ export default function PatientsPage() {
           </p>
           {(error as any)?.response?.status === 400 && (
             <p className="text-xs text-muted-foreground mt-2">
-              Tip: Make sure you're logged in with a valid account.
+              Tip: Make sure you&apos;re logged in with a valid account.
             </p>
           )}
         </Card>

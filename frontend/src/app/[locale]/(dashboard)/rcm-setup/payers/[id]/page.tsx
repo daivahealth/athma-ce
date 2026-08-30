@@ -26,7 +26,7 @@ export default function PayerDetailPage() {
   const toast = useToast();
 
   const { data: payer, isLoading, error } = usePayer(payerId);
-  const { mutateAsync: archivePayer, isPending } = useArchivePayer();
+  const { mutateAsync: archivePayer } = useArchivePayer();
   const [isArchiving, setIsArchiving] = useState(false);
 
   const formattedContact = useMemo(() => JSON.stringify(payer?.contactInfo ?? {}, null, 2), [payer]);

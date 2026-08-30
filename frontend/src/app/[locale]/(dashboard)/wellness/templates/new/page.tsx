@@ -2,13 +2,11 @@
 
 
 import { useParams } from 'next/navigation';import { Suspense } from 'react';
-import { useTranslations } from 'next-intl';
 import { CreateTemplateForm } from '../_components/create-template-form';
 
 function NewTemplatePageContent() {
   const params = useParams() as { locale: string };
-    const t = useTranslations();
-
+  
     return (
         <div className="container mx-auto p-6 space-y-6 max-w-5xl">
             <div>

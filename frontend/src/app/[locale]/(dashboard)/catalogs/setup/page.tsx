@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -50,7 +50,6 @@ type WizardStep = 'country' | 'catalogs' | 'confirm' | 'progress';
 
 export default function CatalogSetupPage() {
   const params = useParams();
-  const router = useRouter();
   const locale = params.locale as string;
 
   // Wizard state
@@ -88,7 +87,7 @@ export default function CatalogSetupPage() {
       });
       setJobId(result.jobId);
       setStep('progress');
-    } catch (error) {
+    } catch {
       // error handled by mutation state
     }
   };
@@ -153,7 +152,7 @@ export default function CatalogSetupPage() {
           <CardHeader>
             <CardTitle>Select Country</CardTitle>
             <CardDescription>
-              Choose the country for your healthcare facility. Catalog data will be tailored to your country's healthcare standards and regulations.
+              Choose the country for your healthcare facility. Catalog data will be tailored to your country&apos;s healthcare standards and regulations.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

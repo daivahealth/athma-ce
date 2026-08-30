@@ -37,8 +37,7 @@ export function FacilitySwitcher() {
       // TODO: Fetch from foundation service or use data from session
       // For now, we'll construct from JWT claims
       const facilityIds = claims.facilityIds || [];
-      const currentFacilityId = claims.facilityId;
-      const defaultFacilityId = claims.defaultFacilityId;
+          const defaultFacilityId = claims.defaultFacilityId;
 
       // Mock facility data - in production, fetch from API
       const mockFacilities: Facility[] = facilityIds.map((id: string) => ({

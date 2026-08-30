@@ -31,7 +31,6 @@ import type { PharmacyStockMovement } from '@/modules/pharmacy/types/stock';
 export default function StockDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const locale = params.locale as string;
   const id = params.id as string;
 
   const { data: stock, isLoading } = usePharmacyStockById(id);

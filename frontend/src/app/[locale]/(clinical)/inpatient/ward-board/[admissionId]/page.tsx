@@ -30,14 +30,11 @@ import {
   Pill,
   ClipboardList,
   Activity,
-  ArrowRightLeft,
   AlertCircle,
   CheckCircle2,
-  FileText,
   UserPlus,
   X,
-  FileCheck,
-} from 'lucide-react';
+  FileCheck } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
@@ -170,7 +167,8 @@ export default function WardBoardAdmissionDetailPage() {
   const admissionId = typeof params?.admissionId === 'string' ? params.admissionId : '';
   const [messageBody, setMessageBody] = useState('');
   const [messagePriority, setMessagePriority] = useState<MessagePriority>('NORMAL');
-  const [showMemberHistory, setShowMemberHistory] = useState(false);
+  // NOTE: nothing sets this yet, so member history stays collapsed.
+  const [showMemberHistory] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [isMedsOpen, setIsMedsOpen] = useState(false);
@@ -199,8 +197,10 @@ export default function WardBoardAdmissionDetailPage() {
   const wardQuery = useWard(currentWardId);
   const bedQuery = useBed(currentBedId);
   const prescriptionsQuery = usePrescriptionsByEncounter(encounterId ?? '');
-  const ordersQuery = useClinicalOrdersByEncounter(encounterId ?? '');
-  const transferHistoryQuery = useTransferHistory(admissionId, { enabled: Boolean(admissionId) });
+  // TODO: results are not rendered yet - the requests are kept so the
+  // ward board keeps warming this data. Drop them if the panels are cut.
+  const _ordersQuery = useClinicalOrdersByEncounter(encounterId ?? '');
+  const _transferHistoryQuery = useTransferHistory(admissionId, { enabled: Boolean(admissionId) });
   const checklistsQuery = useAdmissionChecklists(admissionId);
   const channelQuery = useCareChannelByAdmission(admissionId);
   const channel = channelQuery.data;
@@ -255,7 +255,7 @@ export default function WardBoardAdmissionDetailPage() {
       if (ward.ward.id && ward.ward.name) {
         map.set(ward.ward.id, ward.ward.name);
       }
-      ward.beds.forEach((bed) => {
+      ward.beds.forEach(() => {
         const wardId = ward.ward.id;
         if (wardId && ward.ward.name) {
           map.set(wardId, ward.ward.name);

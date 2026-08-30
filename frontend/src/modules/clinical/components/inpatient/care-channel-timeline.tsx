@@ -22,7 +22,6 @@ interface CareChannelTimelineProps {
 }
 
 export function CareChannelTimeline({
-  channelId,
   messages,
   isLoading,
   onPostMessage,
@@ -33,7 +32,6 @@ export function CareChannelTimeline({
   const [messageText, setMessageText] = useState('');
   const [isPosting, setIsPosting] = useState(false);
   const [selectedChecklistId, setSelectedChecklistId] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom on new messages

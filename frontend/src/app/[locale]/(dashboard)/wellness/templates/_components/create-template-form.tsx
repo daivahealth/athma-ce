@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plus, Trash2, Save, ArrowLeft, GripVertical, Loader2 } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,9 +22,7 @@ import {
     CardContent,
     CardDescription,
     CardHeader,
-    CardTitle,
-    CardFooter,
-} from '@/components/ui/card';
+    CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { useCreateAssessmentTemplate } from '@/modules/wellness/hooks/use-wellness-assessments';
 
@@ -123,7 +120,7 @@ export function CreateTemplateForm({ locale }: { locale: string }) {
             });
 
             router.push(`/${locale}/wellness/templates`);
-        } catch (error) {
+        } catch {
             toast({
                 variant: 'destructive',
                 title: 'Error',

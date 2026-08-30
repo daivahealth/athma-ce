@@ -81,7 +81,7 @@ export default function PrmEventNewPage() {
     let payload: Record<string, unknown>;
     try {
       payload = JSON.parse(values.payload);
-    } catch (err) {
+    } catch {
       setError('payload', { type: 'manual', message: 'Payload must be valid JSON' });
       return;
     }

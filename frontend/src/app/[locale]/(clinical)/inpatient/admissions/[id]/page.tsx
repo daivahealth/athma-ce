@@ -1,12 +1,10 @@
 'use client';
 
-
 import { useParams } from 'next/navigation';import { useEffect, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,7 +18,7 @@ import { useBed } from '@/modules/foundation/hooks/use-bed';
 import { useWard } from '@/modules/foundation/hooks/use-ward';
 import { useStaffMember } from '@/modules/foundation/hooks/use-staff';
 import { IsolationType, VitalsFrequency, type UpdateAdmissionInput } from '@/modules/clinical/types/inpatient';
-import { ClipboardList, CheckCircle2, Clock, FileCheck } from 'lucide-react';
+import { CheckCircle2, Clock, FileCheck } from 'lucide-react';
 
 const updateSchema = z.object({
   attendingPhysicianId: z.string().optional(),

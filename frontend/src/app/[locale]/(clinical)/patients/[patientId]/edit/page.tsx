@@ -73,7 +73,7 @@ export default function EditPatientPage() {
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Patient Not Found</h3>
               <p className="text-muted-foreground mb-4">
-                The patient you're trying to edit doesn't exist or you don't have permission to edit it.
+                The patient you&apos;re trying to edit doesn&apos;t exist or you don&apos;t have permission to edit it.
               </p>
               <Button onClick={() => router.push(`/${params.locale}/patients`)}>
                 Back to Patient List

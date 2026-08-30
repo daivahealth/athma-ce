@@ -41,7 +41,7 @@ export interface CreatePayerInput {
   status?: PayerStatus;
 }
 
-export interface UpdatePayerInput extends CreatePayerInput {}
+export type UpdatePayerInput = CreatePayerInput;
 
 export interface PayerFilters {
   status?: PayerStatus;

@@ -68,7 +68,7 @@ export function SaveReportDialog({
       setOpen(false);
       resetForm();
       onSaved?.(saved.id);
-    } catch (error) {
+    } catch {
       toast({
         title: 'Failed to save',
         description: 'There was an error saving the report. Please try again.',

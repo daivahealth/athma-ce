@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { decodeAccessToken, isTokenExpired } from '@/lib/auth/tokens';
-import type { AuthSession, JwtClaims } from '@/types/auth';
+import { isTokenExpired } from '@/lib/auth/tokens';
+import type { AuthSession } from '@/types/auth';
 
 interface AuthState {
   session: AuthSession;

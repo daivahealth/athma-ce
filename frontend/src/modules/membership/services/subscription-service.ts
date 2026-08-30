@@ -1,7 +1,6 @@
 import { rcmClient } from '@/lib/api/client';
 import type {
   Subscription,
-  SubscriptionSummary,
   CreateSubscriptionInput,
   UpdateSubscriptionInput,
   ChangePlanInput,
@@ -13,8 +12,7 @@ import type {
   MembershipDashboard,
   PatientMembership,
   SubscriptionFilters,
-  UpcomingRenewal,
-} from '../types/subscription';
+  UpcomingRenewal } from '../types/subscription';
 
 class SubscriptionService {
   // CRUD
