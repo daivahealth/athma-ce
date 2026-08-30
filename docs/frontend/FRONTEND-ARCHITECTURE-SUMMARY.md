@@ -60,7 +60,7 @@ athma-ce Frontend (Single Next.js App)
 
 | Category | Choice | Why |
 |----------|--------|-----|
-| Framework | Next.js 14+ (App Router) | Server components, routing, API routes |
+| Framework | Next.js 16 (App Router) | Server components, routing, API routes |
 | Language | TypeScript | Type safety, better developer experience |
 | Styling | Tailwind CSS + shadcn/ui | Fast development, consistent design |
 | State | Zustand | Lightweight, simple, better than Redux for this scale |

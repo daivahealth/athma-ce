@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, ChevronsUpDown, Check, Search, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +28,8 @@ import type {
 } from '@/plugins/oncology/types';
 import type { Patient } from '@/modules/clinical/types/patient';
 
-export default function NewDiagnosisPage({ params }: { params: { locale: string } }) {
+export default function NewDiagnosisPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/registry`);
 

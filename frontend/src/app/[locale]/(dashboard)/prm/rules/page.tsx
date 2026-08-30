@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useParams } from 'next/navigation';import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +11,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useRules } from '@/modules/prm/hooks/use-rules';
 
-export default function PrmRulesPage({ params }: { params: { locale: string } }) {
+export default function PrmRulesPage() {
+  const params = useParams() as { locale: string };
   const [category, setCategory] = useState('');
   const [isActive, setIsActive] = useState('all');
 

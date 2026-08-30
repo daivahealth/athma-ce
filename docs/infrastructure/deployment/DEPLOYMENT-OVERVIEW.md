@@ -14,7 +14,7 @@ athma-ce consists of multiple microservices, databases, and supporting infrastru
                  +----------+----------+
                  |                     |
           [Frontend]            [API Gateway / Ingress]
-          Next.js 14                   |
+          Next.js 16                   |
           Port 3000         +----------+----------+----------+----------+
                             |          |          |          |          |
                        Foundation  Clinical    RCM      Analytics   PRM

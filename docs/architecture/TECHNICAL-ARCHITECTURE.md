@@ -78,7 +78,7 @@ flowchart TB
         Admin(["Admin"])
     end
 
-    WebApp["Next.js 14 Frontend<br/>TypeScript · Tailwind · React Query"]
+    WebApp["Next.js 16 Frontend<br/>TypeScript · Tailwind · React Query"]
 
     APIGW["API Gateway<br/>Nginx / Kong"]
 
@@ -179,7 +179,7 @@ flowchart TB
 
 | Layer | Component | Technology | Purpose |
 |-------|-----------|------------|---------|
-| **Frontend** | Web App | Next.js 14, TypeScript | Unified SPA for all user roles |
+| **Frontend** | Web App | Next.js 16, TypeScript | Unified SPA for all user roles |
 | **Gateway** | API Gateway | Nginx/Kong | SSL, routing, rate limiting |
 | **Services** | Foundation | NestJS :3010 | Auth, RBAC, tenants, users, facilities |
 | | Clinical | NestJS :3011 | Patients, encounters, scheduling, charting |
@@ -229,7 +229,7 @@ sequenceDiagram
 
 | Layer | Technology | Version | Purpose | Status |
 |-------|------------|---------|---------|--------|
-| **Frontend** | Next.js | 14.x | App Router, SSR, RSC | ✅ Active |
+| **Frontend** | Next.js | 16.x | App Router, Turbopack, RSC | ✅ Active |
 | | TypeScript | 5.x | Type Safety | ✅ Active |
 | | Tailwind CSS | 3.x | Utility Styling | ✅ Active |
 | | shadcn/ui | Latest | Component Library | ✅ Active |
@@ -433,11 +433,11 @@ services/<service>/src/
 
 ### 4.1 Application Structure
 
-The frontend is a **Modular Monolith** built with Next.js 14 App Router, logically separating business domains while sharing core infrastructure.
+The frontend is a **Modular Monolith** built with Next.js 16 App Router, logically separating business domains while sharing core infrastructure.
 
 ```mermaid
 graph TD
-    subgraph "Next.js 14 Application"
+    subgraph "Next.js 16 Application"
         subgraph "App Router"
             Layout[Root Layout]
             AuthRoutes["(auth)/ - Login, Reset"]

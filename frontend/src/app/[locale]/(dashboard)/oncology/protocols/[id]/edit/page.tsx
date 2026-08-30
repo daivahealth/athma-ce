@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,8 @@ import type { RegimenItem, LabPrerequisite, HydrationOrder, OncologyCancerType }
 
 interface RegimenRow extends RegimenItem { day: number }
 
-export default function EditProtocolPage({ params }: { params: { locale: string; id: string } }) {
+export default function EditProtocolPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/protocols`);
   const { data: protocol, isLoading } = useProtocol(params.id);

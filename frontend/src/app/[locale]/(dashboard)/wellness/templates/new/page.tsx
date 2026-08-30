@@ -1,10 +1,12 @@
 'use client';
 
-import { Suspense } from 'react';
+
+import { useParams } from 'next/navigation';import { Suspense } from 'react';
 import { useTranslations } from 'next-intl';
 import { CreateTemplateForm } from '../_components/create-template-form';
 
-function NewTemplatePageContent({ params }: { params: { locale: string } }) {
+function NewTemplatePageContent() {
+  const params = useParams() as { locale: string };
     const t = useTranslations();
 
     return (
@@ -21,10 +23,10 @@ function NewTemplatePageContent({ params }: { params: { locale: string } }) {
     );
 }
 
-export default function NewAssessmentTemplatePage({ params }: { params: { locale: string } }) {
+export default function NewAssessmentTemplatePage() {
     return (
         <Suspense fallback={null}>
-            <NewTemplatePageContent params={params} />
+            <NewTemplatePageContent />
         </Suspense>
     );
 }

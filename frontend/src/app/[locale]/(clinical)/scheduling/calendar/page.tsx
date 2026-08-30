@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import {
   format,
   startOfWeek,
@@ -402,7 +402,8 @@ function MonthView({ currentMonth, events, locale, onEventClick, onDayClick }: M
   );
 }
 
-export default function StaffCalendarPage({ params }: { params: { locale: string } }) {
+export default function StaffCalendarPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
 
   const [selectedStaffId, setSelectedStaffId] = useState<string>('');

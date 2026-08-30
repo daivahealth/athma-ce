@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, CheckCircle, ChevronRight, Clock, Plus, Trash2, XCircle, AlertTriangle, FlaskConical, Stethoscope, Activity, User, Dna } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -81,7 +81,8 @@ function ctcaeBadgeClass(grade: number) {
   return 'bg-yellow-100 text-yellow-700';
 }
 
-export default function ChemoOrderDetailPage({ params }: { params: { locale: string; id: string } }) {
+export default function ChemoOrderDetailPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/orders`);
   const { data: order, isLoading } = useChemoOrder(params.id);

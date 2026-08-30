@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,8 @@ const EMETOGENIC_COLORS: Record<string, string> = {
   high: 'bg-destructive/10 text-destructive',
 };
 
-export default function ProtocolsPage({ params }: { params: { locale: string } }) {
+export default function ProtocolsPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [cancerTypeFilter, setCancerTypeFilter] = useState('');

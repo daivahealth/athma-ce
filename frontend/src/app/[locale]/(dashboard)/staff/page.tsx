@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
@@ -85,7 +85,8 @@ function transformStaffToRow(staff: StaffMember): StaffRow {
   };
 }
 
-export default function StaffPage({ params }: { params: { locale: string } }) {
+export default function StaffPage() {
+  const params = useParams() as { locale: string };
   const { data: staffMembers, isLoading, error } = useStaffList();
   const [selectedStaffType, setSelectedStaffType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');

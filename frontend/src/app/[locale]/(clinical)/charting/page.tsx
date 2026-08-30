@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import { Search, FileText, Calendar, Stethoscope, Sparkles } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
@@ -40,7 +40,8 @@ const STATUS_FILTERS: { value: 'all' | EncounterStatus; label: string }[] = [
   { value: EncounterStatus.CANCELLED, label: 'Cancelled' },
 ];
 
-export default function ChartingLandingPage({ params }: { params: { locale: string } }) {
+export default function ChartingLandingPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EncounterStatus>('all');

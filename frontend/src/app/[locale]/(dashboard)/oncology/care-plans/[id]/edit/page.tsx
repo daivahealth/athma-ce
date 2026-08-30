@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2, User, Dna } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +20,8 @@ interface ModalityRow {
   details: string;
 }
 
-export default function EditCarePlanPage({ params }: { params: { locale: string; id: string } }) {
+export default function EditCarePlanPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/care-plans`);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,8 @@ const STATUS_COLORS: Record<string, string> = {
   entered_in_error: 'bg-destructive/10 text-destructive',
 };
 
-export default function TumorStagingPage({ params }: { params: { locale: string } }) {
+export default function TumorStagingPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [stagingTypeFilter, setStagingTypeFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useParams } from 'next/navigation';import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,7 +12,8 @@ import { useMessages } from '@/modules/prm/hooks/use-messages';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
 
-export default function PrmMessagesPage({ params }: { params: { locale: string } }) {
+export default function PrmMessagesPage() {
+  const params = useParams() as { locale: string };
   const [patientId, setPatientId] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [channel, setChannel] = useState('all');

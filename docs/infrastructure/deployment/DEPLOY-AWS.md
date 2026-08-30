@@ -41,7 +41,7 @@ Amazon Web Services is the recommended primary cloud provider for the athma-ce h
 
 | Service | Port | Description |
 |---------|------|-------------|
-| Frontend (Next.js 14) | 3000 | Web application |
+| Frontend (Next.js 16) | 3000 | Web application |
 | Foundation | 3010 | Tenants, users, facilities, RBAC |
 | Clinical | 3020 | Patients, appointments, encounters |
 | RCM | 3030 | Billing, claims, payments |

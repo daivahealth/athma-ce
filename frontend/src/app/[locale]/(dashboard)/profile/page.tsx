@@ -6,7 +6,7 @@ import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import type { JwtClaims } from '@/types/auth';
 
-export default function ProfilePage({ params }: { params: { locale: string } }) {
+export default function ProfilePage() {
   const [claims, setClaims] = useState<JwtClaims | null>(null);
 
   useEffect(() => {

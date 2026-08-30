@@ -55,7 +55,7 @@ import {
   AlertCircle,
   ArrowLeft,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const checklistSchema = z.object({
   // Medical Clearance
@@ -117,7 +117,8 @@ const defaultDateTime = () => {
   return iso.slice(0, 16);
 };
 
-export default function DischargePage({ params }: { params: { locale: string; id: string } }) {
+export default function DischargePage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const { toast } = useToast();
   const [showDischargeDialog, setShowDischargeDialog] = useState(false);

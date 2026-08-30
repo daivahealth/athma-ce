@@ -77,6 +77,38 @@ Module not found: Can't resolve '@/lib/api/client'
 npm install
 ```
 
+#### Failed to Patch Lockfile / `Cannot read properties of undefined (reading 'os')`
+```
+⚠ Found lockfile missing swc dependencies, patching...
+⨯ Failed to patch lockfile, please try uninstalling and reinstalling next
+TypeError: Cannot read properties of undefined (reading 'os')
+    at fetchPkgInfo (.../next/dist/lib/patch-incorrect-lockfile.js)
+```
+
+**Cause**: `node_modules` is stale relative to `package-lock.json` — typically
+after pulling a branch where a dependency bump changed the Next.js version. The
+installed Next binary sees `@next/swc-*` entries for a different version and its
+lockfile-patching routine fails.
+
+**Solution**: reinstall so `node_modules` matches the lockfile:
+```bash
+cd frontend && rm -rf node_modules .next && npm ci
+```
+
+If `npm ci` aborts with `ERESOLVE`, the lockfile itself is inconsistent — fix the
+offending dependency range in `package.json` before reinstalling. Do not reach for
+`--legacy-peer-deps`, which hides the conflict rather than resolving it.
+
+#### `sync-dynamic-apis` Error After a Next.js Upgrade
+```
+Error: Route "/[locale]" used `params.locale`. `params` is a Promise and must be
+unwrapped with `await` or `React.use()` before accessing its properties.
+```
+
+**Solution**: See [Route Parameters](../frontend/README.md#route-parameters).
+Client components must read route params via `useParams()`; server components
+must `await params`.
+
 #### Hydration Mismatch
 ```
 Warning: Text content did not match.

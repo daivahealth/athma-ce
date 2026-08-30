@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ClipboardList, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +12,8 @@ import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { useToast } from '@/components/ui/use-toast';
 import { AdmissionStatus } from '@/modules/clinical/types/inpatient';
 
-export default function NewDischargePage({ params }: { params: { locale: string } }) {
+export default function NewDischargePage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const toast = useToast();
   const [searchQuery, setSearchQuery] = useState('');

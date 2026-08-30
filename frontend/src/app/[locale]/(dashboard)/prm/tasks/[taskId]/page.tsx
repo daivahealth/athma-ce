@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +22,8 @@ type UpdateFormValues = {
 
 const normalizeOptional = (value?: string) => (value?.trim() ? value.trim() : undefined);
 
-export default function TaskDetailPage({ params }: { params: { locale: string; taskId: string } }) {
+export default function TaskDetailPage() {
+  const params = useParams() as { locale: string; taskId: string };
   const router = useRouter();
   const { toast } = useToast();
   const { data, isLoading } = useTask(params.taskId);

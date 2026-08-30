@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+
+import { useParams } from 'next/navigation';import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useWardBedBoard } from '@/modules/clinical/hooks/use-inpatient';
 import type { WardBoardBed, WardBoardFlags } from '@/modules/clinical/types/inpatient';
@@ -151,7 +152,8 @@ function getDisplayPhysician(admission: WardBoardBed['admission']) {
   );
 }
 
-export default function BedBoardPage({ params }: { params: { locale: string; wardId: string } }) {
+export default function BedBoardPage() {
+  const params = useParams() as { locale: string; wardId: string };
   const [includeDischarged, setIncludeDischarged] = useState(false);
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');

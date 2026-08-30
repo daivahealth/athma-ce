@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useParams } from 'next/navigation';import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,7 +53,8 @@ const bedStatusMeta: Record<
   },
 };
 
-export default function BedBrowserPage({ params }: { params: { locale: string } }) {
+export default function BedBrowserPage() {
+  const params = useParams() as { locale: string };
   const [wardFilter, setWardFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState<BedBrowserStatus | 'all'>('all');
   const [selectedBed, setSelectedBed] = useState<BedBrowserBed | null>(null);

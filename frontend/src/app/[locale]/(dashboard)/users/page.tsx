@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
+
+import { useParams } from 'next/navigation';import { useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { getSession } from '@/lib/api/client';
@@ -17,7 +18,8 @@ interface UserRow {
   createdAt: string;
 }
 
-export default function UsersPage({ params }: { params: { locale: string } }) {
+export default function UsersPage() {
+  const params = useParams() as { locale: string };
   const session = getSession();
   const tenantId = session.user?.tenantId;
 

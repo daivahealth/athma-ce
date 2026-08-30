@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2, User, Dna } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +26,8 @@ const ROLES = [
 
 interface AttendeeRow { role: string; specialty: string }
 
-export default function EditTumorBoardPage({ params }: { params: { locale: string; id: string } }) {
+export default function EditTumorBoardPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/tumor-board`);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Plus, LayoutTemplate, Eye, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -34,7 +34,8 @@ function formatFrequency(type: FrequencyType, value?: number | null, unit?: Freq
   return label;
 }
 
-export default function FormMasterListPage({ params }: { params: { locale: string } }) {
+export default function FormMasterListPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { data: formMasters, isLoading, error } = useFormMasters();
 

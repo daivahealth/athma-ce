@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+
+import { useParams } from 'next/navigation';import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -15,7 +16,8 @@ const schema = z.object({
   newPassword: z.string().min(8),
 });
 
-export default function ConfirmResetPage({ params }: { params: { locale: string } }) {
+export default function ConfirmResetPage() {
+  const params = useParams() as { locale: string };
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const form = useForm({ resolver: zodResolver(schema), defaultValues: { token: '', newPassword: '' } });
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2, User, Dna, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,7 +21,8 @@ interface ModalityRow {
   details: string;
 }
 
-export default function NewCarePlanPage({ params }: { params: { locale: string } }) {
+export default function NewCarePlanPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/care-plans`);
 

@@ -155,7 +155,7 @@ Centralized in `/shared/lib/auth/`:
 
 | Category | Choice | Rationale |
 |----------|--------|-----------|
-| Framework | Next.js 14+ (App Router) | Server components, built-in routing, API routes |
+| Framework | Next.js 16 (App Router) | Server components, built-in routing, API routes |
 | Language | TypeScript | Type safety, better DX, catches errors early |
 | UI Library | React 18+ | Industry standard, team familiarity |
 | Styling | Tailwind CSS + shadcn/ui | Fast development, consistent design system |

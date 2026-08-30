@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 
-export default function PrmPage({ params }: { params: { locale: string } }) {
-  redirect(`/${params.locale}/prm/events`);
+export default async function PrmPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  redirect(`/${locale}/prm/events`);
 }

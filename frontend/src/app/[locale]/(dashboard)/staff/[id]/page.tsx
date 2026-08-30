@@ -27,11 +27,12 @@ import { staffService } from '@/modules/foundation/services/staff-service';
 import { useUsers, useLinkStaff, useUnlinkStaff } from '@/modules/foundation/hooks/use-user';
 import type { StaffMember } from '@/modules/foundation/types/staff';
 import { ArrowLeft, Mail, Phone, Calendar, FileText, User, Link2, Unlink, AlertCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 
-export default function StaffDetailPage({ params }: { params: { locale: string; id: string } }) {
+export default function StaffDetailPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const session = getSession();
   const claims = decodeAccessToken(session.accessToken);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +20,8 @@ const emptyPremed = (): string => '';
 const emptyHydration = (): HydrationOrder => ({ fluid: '', ratePerHour: 0, durationHours: 0, timing: 'pre' });
 const emptyLab = (): LabPrerequisite => ({ test: '', parameter: '', unit: '', timing: 'within 7 days' });
 
-export default function NewProtocolPage({ params }: { params: { locale: string } }) {
+export default function NewProtocolPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/protocols`);
   const createProtocol = useCreateProtocol();

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -63,7 +63,8 @@ const VISIT_TYPES = [
   { value: 'home_visit', label: 'Home Visit' },
 ];
 
-export default function NewAppointmentPage({ params }: { params: { locale: string } }) {
+export default function NewAppointmentPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);

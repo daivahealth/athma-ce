@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+
+import { useParams } from 'next/navigation';import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,7 +13,8 @@ import { authClient } from '@/lib/api/client';
 
 const schema = z.object({ email: z.string().email() });
 
-export default function ResetPasswordPage({ params }: { params: { locale: string } }) {
+export default function ResetPasswordPage() {
+  const params = useParams() as { locale: string };
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const form = useForm({ resolver: zodResolver(schema), defaultValues: { email: '' } });
 

@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-export default function DebugPage({ params }: { params: { locale: string } }) {
+export default function DebugPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [sessionInfo, setSessionInfo] = useState<any>(null);
 

@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useParams } from 'next/navigation';import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +11,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTemplates } from '@/modules/prm/hooks/use-templates';
 
-export default function PrmTemplatesPage({ params }: { params: { locale: string } }) {
+export default function PrmTemplatesPage() {
+  const params = useParams() as { locale: string };
   const [channel, setChannel] = useState('all');
   const [language, setLanguage] = useState('');
   const [category, setCategory] = useState('');

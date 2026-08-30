@@ -15,7 +15,7 @@ Internet
 [Cloud Armor WAF]
    |
 [GKE Standard Cluster]
-   |-- frontend (Next.js 14)
+   |-- frontend (Next.js 16)
    |-- foundation-service (NestJS :3010)
    |-- clinical-service   (NestJS :3020)
    |-- rcm-service         (NestJS :3030)

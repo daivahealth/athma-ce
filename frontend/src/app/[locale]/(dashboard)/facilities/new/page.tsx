@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -33,7 +33,8 @@ const facilitySchema = z.object({
 
 type FacilityFormData = z.infer<typeof facilitySchema>;
 
-export default function NewFacilityPage({ params }: { params: { locale: string } }) {
+export default function NewFacilityPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { toast } = useToast();
   const session = getSession();

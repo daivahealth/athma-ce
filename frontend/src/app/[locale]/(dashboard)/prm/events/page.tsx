@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+
+import { useParams } from 'next/navigation';import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -11,7 +12,8 @@ import { PatientSearchSelect } from '@/components/patient-search-select';
 import { PRM_EVENT_TYPES } from '@/modules/prm/constants/event-types';
 import { PRM_ENTITY_TYPES } from '@/modules/prm/constants/entity-types';
 
-export default function PrmEventsPage({ params }: { params: { locale: string } }) {
+export default function PrmEventsPage() {
+  const params = useParams() as { locale: string };
   const [patientId, setPatientId] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [eventType, setEventType] = useState('all');

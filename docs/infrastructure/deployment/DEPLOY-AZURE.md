@@ -44,7 +44,7 @@ Azure serves as the recommended DR/secondary cloud for athma-ce (per ADR-0008) a
 
 | Service       | Internal Port | Description                        |
 |---------------|---------------|------------------------------------|
-| frontend      | 3000          | Next.js 14 application             |
+| frontend      | 3000          | Next.js 16 application             |
 | foundation    | 3010          | Tenancy, identity, RBAC            |
 | clinical      | 3020          | Patient, appointments, encounters  |
 | rcm           | 3030          | Billing, claims, payments          |

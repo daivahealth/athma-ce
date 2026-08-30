@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useParams } from 'next/navigation';import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useTasks } from '@/modules/prm/hooks/use-tasks';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 
-export default function PrmTasksPage({ params }: { params: { locale: string } }) {
+export default function PrmTasksPage() {
+  const params = useParams() as { locale: string };
   const [patientId, setPatientId] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [assignedToUserId, setAssignedToUserId] = useState('');

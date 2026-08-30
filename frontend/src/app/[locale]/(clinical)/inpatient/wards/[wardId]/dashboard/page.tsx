@@ -1,9 +1,11 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { useParams } from 'next/navigation';import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useWardDashboard } from '@/modules/clinical/hooks/use-inpatient';
 
-export default function WardDashboardPage({ params }: { params: { locale: string; wardId: string } }) {
+export default function WardDashboardPage() {
+  const params = useParams() as { locale: string; wardId: string };
   const { data, isLoading } = useWardDashboard(params.wardId);
 
   return (

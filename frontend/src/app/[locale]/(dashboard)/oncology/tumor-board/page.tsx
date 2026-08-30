@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,8 @@ import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentInt
 import { PageHeader } from '@/components/ui/page-header';
 import type { TumorBoardCase, OncologyPatientDisplay } from '@/plugins/oncology/types';
 
-export default function TumorBoardPage({ params }: { params: { locale: string } }) {
+export default function TumorBoardPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');

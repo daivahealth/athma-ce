@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useForm, Controller } from 'react-hook-form';
@@ -86,7 +86,8 @@ const defaultDateTime = () => {
   return iso.slice(0, 16);
 };
 
-export default function NewAdmissionPage({ params }: { params: { locale: string } }) {
+export default function NewAdmissionPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { toast } = useToast();
   const createAdmission = useCreateAdmission();

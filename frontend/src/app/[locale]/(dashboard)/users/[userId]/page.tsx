@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -65,7 +65,8 @@ const editUserSchema = z.object({
 
 type EditUserForm = z.infer<typeof editUserSchema>;
 
-export default function UserDetailPage({ params }: { params: { locale: string; userId: string } }) {
+export default function UserDetailPage() {
+  const params = useParams() as { locale: string; userId: string };
   const router = useRouter();
   const { toast } = useToast();
   const session = getSession();

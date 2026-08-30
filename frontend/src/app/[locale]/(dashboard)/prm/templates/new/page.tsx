@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +10,8 @@ import { TemplateForm } from '@/modules/prm/components/template-form';
 import { useCreateTemplate } from '@/modules/prm/hooks/use-templates';
 import type { CreateTemplateInput } from '@/modules/prm/types/template';
 
-export default function NewTemplatePage({ params }: { params: { locale: string } }) {
+export default function NewTemplatePage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { toast } = useToast();
   const createTemplate = useCreateTemplate();

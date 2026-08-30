@@ -137,7 +137,7 @@ export function AddIdentityDialog({
             <Checkbox
               id="identity-primary"
               checked={isPrimary}
-              onCheckedChange={(checked) => setIsPrimary(checked === true)}
+              onChange={(event) => setIsPrimary(event.target.checked)}
             />
             <Label htmlFor="identity-primary" className="font-normal">
               Set as the patient&apos;s primary identity
