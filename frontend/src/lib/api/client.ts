@@ -4,6 +4,23 @@ import axios from 'axios';
 import { isTokenExpired, decodeAccessToken } from '@/lib/auth/tokens';
 import type { AuthSession } from '@/types/auth';
 
+/**
+ * Verbose per-request API tracing. Off unless NEXT_PUBLIC_DEBUG_API=true.
+ *
+ * These logs include tenant and user identifiers, so they must never be on by
+ * default - in a multi-tenant clinical app the browser console is a place other
+ * people can see (screen shares, session recordings, support calls).
+ */
+const API_DEBUG = process.env.NEXT_PUBLIC_DEBUG_API === 'true';
+
+const debugLog = (...args: unknown[]) => {
+  if (API_DEBUG) console.log(...args);
+};
+
+const debugError = (...args: unknown[]) => {
+  if (API_DEBUG) console.error(...args);
+};
+
 const ensureApiBase = (base: string | undefined, fallback: string) => {
   const url = base ?? fallback;
   if (url.endsWith('/api/v1')) return url;
@@ -131,11 +148,11 @@ const createApiInterceptor = (client: typeof foundationClient) => {
     async (config) => {
       try {
         if (!session.accessToken || isTokenExpired(session.accessToken)) {
-          console.log('[Interceptor] Token expired or missing, refreshing...');
+          debugLog('[Interceptor] Token expired or missing, refreshing...');
           await refreshAccessToken();
         }
       } catch (error) {
-        console.error('[Interceptor] Token refresh failed:', error);
+        debugError('[Interceptor] Token refresh failed:', error);
         // Continue without auth - let the server reject if needed
       }
 
@@ -158,7 +175,7 @@ const createApiInterceptor = (client: typeof foundationClient) => {
       }
 
       // Debug logging
-      console.log('[Interceptor] API Request:', {
+      debugLog('[Interceptor] API Request:', {
         method: config.method,
         url: config.url,
         baseURL: config.baseURL,
@@ -171,7 +188,7 @@ const createApiInterceptor = (client: typeof foundationClient) => {
       return config;
     },
     (error) => {
-      console.error('[Interceptor] Request interceptor error:', error);
+      debugError('[Interceptor] Request interceptor error:', error);
       return Promise.reject(error);
     }
   );
@@ -179,18 +196,23 @@ const createApiInterceptor = (client: typeof foundationClient) => {
   // Add response interceptor for debugging
   client.interceptors.response.use(
     (response) => {
-      console.log('[Interceptor] Response:', {
+      debugLog('[Interceptor] Response:', {
         url: response.config.url,
         status: response.status,
       });
       return response;
     },
     (error) => {
-      console.error('[Interceptor] Response error:', {
+      // Log the raw rejection alongside the parsed fields: a cancelled request
+      // or a non-axios throw has no config/response, which previously rendered
+      // as an unhelpful empty object.
+      debugError('[Interceptor] Response error:', {
         url: error.config?.url,
         status: error.response?.status,
         message: error.message,
+        code: error.code,
         data: error.response?.data,
+        raw: error,
       });
       return Promise.reject(error);
     }

@@ -87,6 +87,26 @@ All clients automatically include:
 - **403 Forbidden**: Redirects to access denied
 - **Network errors**: Throws with user-friendly message
 
+### Debug Logging
+
+The interceptors can trace every request and response to the browser console.
+This is **off by default** and gated behind an explicit flag:
+
+```bash
+# frontend/.env.local
+NEXT_PUBLIC_DEBUG_API=true
+```
+
+Keep it off unless you are actively debugging. The request trace includes
+`x-tenant-id` and `x-user-id`, and the browser console is visible in screen
+shares, session recordings and support calls — tenant and user identifiers should
+not be broadcast there by default.
+
+The flag is read at build time, so a running dev server must be restarted after
+changing it. Errors are still propagated to callers via `Promise.reject`
+regardless of the flag; the interceptor only decides whether to *log* them, never
+whether to surface them.
+
 ### Protected Route Guarding
 
 - Dashboard and clinical layouts call `useAuthGuard(locale)` before mounting protected route content.
