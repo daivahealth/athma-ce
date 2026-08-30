@@ -95,16 +95,29 @@ docker-compose up -d postgres redis
 cd backend
 npm install
 
-# Configure environment (per-service .env files; see config.env.example
-# at backend/ for the shared database/Redis values)
+# Configure environment - REQUIRED. Every service reads services/<name>/.env.local
+# and will not start (or will fail at runtime) without it. Each service ships a
+# .env.example with working local-dev values:
+cp services/foundation/.env.example services/foundation/.env.local
+cp services/clinical/.env.example  services/clinical/.env.local
+cp services/rcm/.env.example       services/rcm/.env.local
+cp services/prm/.env.example       services/prm/.env.local
+cp services/ai-gateway/.env.example services/ai-gateway/.env.local
+
+# IMPORTANT: JWT_SECRET must be identical in foundation and rcm, and
+# INTERNAL_API_KEY identical in foundation and clinical. The defaults in the
+# .env.example files already match - keep them in sync if you change them.
 
 # Create database schemas and seed baseline data:
 # follow docs/seeding/00-complete-seed-guide.md (prisma db push per
 # database package, then seed/run-seeds.sh)
 
 # Start development servers (one terminal each)
-npm run dev --workspace=@zeal/foundation   # port 3010
-npm run dev --workspace=@zeal/clinical     # port 3011
+npm run dev --workspace=@zeal/foundation    # port 3010
+npm run dev --workspace=@zeal/clinical      # port 3011
+npm run dev --workspace=@zeal/rcm           # port 3012
+npm run dev --workspace=@zeal/prm           # port 3013
+npm run dev --workspace=@zeal/ai-gateway    # port 3015
 
 # Frontend (separate terminal)
 cd ../frontend
