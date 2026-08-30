@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,8 @@ import { useAdmissionsSearch } from '@/modules/clinical/hooks/use-inpatient';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { AdmissionStatus } from '@/modules/clinical/types/inpatient';
 
-export default function DischargeSummariesPage({ params }: { params: { locale: string } }) {
+export default function DischargeSummariesPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebouncedValue(searchQuery, 300);

@@ -1,6 +1,7 @@
 'use client';
 
-import { useForm, Controller } from 'react-hook-form';
+
+import { useParams } from 'next/navigation';import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +24,8 @@ const transferSchema = z.object({
 
 type TransferFormValues = z.infer<typeof transferSchema>;
 
-export default function TransferPage({ params }: { params: { locale: string; id: string } }) {
+export default function TransferPage() {
+  const params = useParams() as { locale: string; id: string };
   const { toast } = useToast();
   const transferPatient = useTransferPatient(params.id);
 

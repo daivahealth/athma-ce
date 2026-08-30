@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,7 +49,8 @@ function parseCsv(value: string) {
     .filter(Boolean);
 }
 
-export default function NewOtRequestPage({ params }: { params: { locale: string } }) {
+export default function NewOtRequestPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);

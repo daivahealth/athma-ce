@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { format } from 'date-fns';
 import { ArrowLeft, FilePenLine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,8 @@ const DEFAULT_REPORT_JSON = JSON.stringify(
   2
 );
 
-export default function NewOtReportPage({ params }: { params: { locale: string } }) {
+export default function NewOtReportPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const searchParams = useSearchParams();
   const publishToast = useToast();

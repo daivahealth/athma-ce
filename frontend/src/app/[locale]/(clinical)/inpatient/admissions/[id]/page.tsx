@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+
+import { useParams } from 'next/navigation';import { useEffect, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -61,7 +62,8 @@ const getAge = (dateOfBirth?: string | null) => {
   return age;
 };
 
-export default function AdmissionDetailPage({ params }: { params: { locale: string; id: string } }) {
+export default function AdmissionDetailPage() {
+  const params = useParams() as { locale: string; id: string };
   const { toast } = useToast();
   const { data, isLoading } = useAdmission(params.id);
   const updateAdmission = useUpdateAdmission(params.id);

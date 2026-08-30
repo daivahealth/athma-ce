@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
+
+import { useParams } from 'next/navigation';import { useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
@@ -16,7 +17,8 @@ interface FacilityRow {
   status: string;
 }
 
-export default function FacilitiesPage({ params }: { params: { locale: string } }) {
+export default function FacilitiesPage() {
+  const params = useParams() as { locale: string };
   const session = getSession();
   const tenantId = session.user?.tenantId;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { Search, CheckCircle2, Clock, FileCheck } from 'lucide-react';
@@ -20,7 +20,8 @@ import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { AdmissionStatus } from '@/modules/clinical/types/inpatient';
 import { wardService } from '@/modules/foundation/services/ward-service';
 
-export default function InpatientAdmissionsPage({ params }: { params: { locale: string } }) {
+export default function InpatientAdmissionsPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [wardId, setWardId] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');

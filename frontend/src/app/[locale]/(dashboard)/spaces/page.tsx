@@ -22,7 +22,7 @@ const columns: ColumnDef<SpaceRow>[] = [
   { accessorKey: 'status', header: 'Status' },
 ];
 
-export default function SpacesPage({ params }: { params: { locale: string } }) {
+export default function SpacesPage() {
   const session = getSession();
   const claims = decodeAccessToken(session.accessToken);
   const facilityId = claims?.facilityId;

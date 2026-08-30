@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -36,7 +36,8 @@ const staffFormSchema = z.object({
 
 type StaffFormData = z.infer<typeof staffFormSchema>;
 
-export default function NewStaffPage({ params }: { params: { locale: string } }) {
+export default function NewStaffPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const queryClient = useQueryClient();
   const { toast } = useToast();

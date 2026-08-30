@@ -85,7 +85,7 @@
       "isOverridable": true
     },
     {
-      "key": "oncology.chemo.requireDualSign",
+      "key": "oncology.chemo.require_dual_sign",
       "defaultValue": true,
       "valueType": "boolean",
       "category": "oncology",

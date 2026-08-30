@@ -399,7 +399,7 @@ export default function LabTestDetailPage() {
           : Number.parseInt(editForm.turnaroundTimeHours.trim(), 10);
 
       if (
-        editForm.turnaroundTimeHours.trim() !== '' &&
+        normalizedTurnaround !== null &&
         (!Number.isFinite(normalizedTurnaround) || normalizedTurnaround < 0)
       ) {
         toast({

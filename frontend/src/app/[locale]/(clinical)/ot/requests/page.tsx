@@ -1,7 +1,7 @@
 'use client';
 
 import { useDeferredValue, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { Ban, CheckCircle2, Eye, FileText, Filter, Plus, Search, Send, ShieldCheck, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,8 @@ import { useOtRequests, useTransitionOtRequest } from '@/modules/ot/hooks/use-ot
 import { OT_REQUEST_STATUSES, type OtRequestStatus } from '@/modules/ot/types';
 import { OtRequestStatusBadge } from '@/modules/ot/components/ot-status-badge';
 
-export default function OtRequestsPage({ params }: { params: { locale: string } }) {
+export default function OtRequestsPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
   const [searchQuery, setSearchQuery] = useState('');

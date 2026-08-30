@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,8 @@ import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentInt
 import { PageHeader } from '@/components/ui/page-header';
 import type { OncologyCarePlan } from '@/plugins/oncology/types';
 
-export default function CarePlansPage({ params }: { params: { locale: string } }) {
+export default function CarePlansPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');

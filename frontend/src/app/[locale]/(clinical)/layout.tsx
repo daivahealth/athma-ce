@@ -2,6 +2,7 @@
 
 import type { ReactNode} from 'react';
 import { Suspense, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Topbar } from '@/components/layout/topbar';
 import { MobileSidebar } from '@/components/layout/mobile-sidebar';
@@ -14,14 +15,9 @@ import { NavigationProgress } from '@/components/layout/navigation-progress';
  * Layout for Clinical domain routes
  * Uses the same dashboard layout structure
  */
-export default function ClinicalLayout({
-  children,
-  params,
-}: {
-  children: ReactNode;
-  params: { locale: string };
-}) {
-  const locale = params.locale ?? 'en';
+export default function ClinicalLayout({ children }: { children: ReactNode }) {
+  const params = useParams();
+  const locale = (params?.locale as string) ?? 'en';
   const { isCollapsed, toggleSidebar } = useSidebar();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 

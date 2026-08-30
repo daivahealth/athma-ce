@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Plus, Radiation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,7 +21,8 @@ const STATUS_COLORS: Record<string, string> = {
   CANCELLED: 'bg-destructive/10 text-destructive',
 };
 
-export default function RadiationListPage({ params }: { params: { locale: string } }) {
+export default function RadiationListPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState('');
   const [search, setSearch] = useState('');

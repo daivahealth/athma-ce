@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,8 @@ import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared'
 import { PageHeader } from '@/components/ui/page-header';
 import type { CancerDiagnosis, OncologyPatientDisplay } from '@/plugins/oncology/types';
 
-export default function OncologyRegistryPage({ params }: { params: { locale: string } }) {
+export default function OncologyRegistryPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [clinicalStatusFilter, setClinicalStatusFilter] = useState('');

@@ -1,7 +1,7 @@
 'use client';
 
 import { useDeferredValue, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { CalendarClock, Eye, Filter, PauseCircle, Plus, Search, StopCircle, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,8 @@ import { useOtSchedules, useTransitionOtSchedule } from '@/modules/ot/hooks/use-
 import { OT_SCHEDULE_STATUSES, type OtScheduleStatus } from '@/modules/ot/types';
 import { OtScheduleStatusBadge } from '@/modules/ot/components/ot-status-badge';
 
-export default function OtSchedulesPage({ params }: { params: { locale: string } }) {
+export default function OtSchedulesPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
   const [searchQuery, setSearchQuery] = useState('');

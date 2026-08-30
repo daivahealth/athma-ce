@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
@@ -24,7 +24,8 @@ import { Search, UserPlus, User, Eye, Users, Sparkles } from 'lucide-react';
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import type { Patient } from '@/modules/clinical/types/patient';
 
-export default function PatientsPage({ params }: { params: { locale: string } }) {
+export default function PatientsPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const t = useTranslations('patients');
   const [searchQuery, setSearchQuery] = useState('');

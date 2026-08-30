@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
     }
 
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     if (data.refreshToken) {
       cookieStore.set('zeal_refresh_token', data.refreshToken, {
         httpOnly: true,
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   cookieStore.delete('zeal_refresh_token');
   return NextResponse.json({ success: true });
 }

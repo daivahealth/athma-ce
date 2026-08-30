@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import { Plus, Search, FileText, Calendar, User, Stethoscope, ClipboardList } from 'lucide-react';
 import { PageHeader } from '@/components/ui/page-header';
@@ -44,7 +44,8 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled: 'bg-destructive/10 text-destructive',
 };
 
-export default function EncountersPage({ params }: { params: { locale: string } }) {
+export default function EncountersPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');

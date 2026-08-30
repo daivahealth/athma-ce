@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2, User, Dna, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +26,8 @@ function calcDose(protocolDose: number, formula: string, bsa: number, weight: nu
   return protocolDose;
 }
 
-export default function NewChemoOrderPage({ params }: { params: { locale: string } }) {
+export default function NewChemoOrderPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/orders`);
   const createOrder = useCreateChemoOrder();

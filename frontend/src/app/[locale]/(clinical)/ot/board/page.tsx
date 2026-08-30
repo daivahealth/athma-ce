@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+
+import { useParams } from 'next/navigation';import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import {
@@ -253,7 +254,8 @@ function RoomCard({ room }: { room: OtBoardRoom }) {
   );
 }
 
-export default function OtBoardPage({ params }: { params: { locale: string } }) {
+export default function OtBoardPage() {
+  const params = useParams() as { locale: string };
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const { data, isLoading, error, refetch, isFetching } = useOtBoard(date);
 

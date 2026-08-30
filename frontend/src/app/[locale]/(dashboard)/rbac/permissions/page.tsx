@@ -22,7 +22,7 @@ const data: PermissionRow[] = [
   { id: 'perm-3', resource: 'rbac', action: 'manage', description: 'Manage roles and permissions (MFA required)' },
 ];
 
-export default function PermissionsPage({ params }: { params: { locale: string } }) {
+export default function PermissionsPage() {
   return (
     <div className="space-y-6">
       <ResourceTable title="Permissions" columns={columns} data={data} />

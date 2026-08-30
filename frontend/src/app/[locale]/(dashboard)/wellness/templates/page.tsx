@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -82,7 +82,8 @@ function TemplateList({ locale }: { locale: string }) {
     );
 }
 
-export default function AssessmentTemplatesPage({ params }: { params: { locale: string } }) {
+export default function AssessmentTemplatesPage() {
+  const params = useParams() as { locale: string };
     const t = useTranslations();
 
     return (

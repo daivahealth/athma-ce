@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Upload, ArrowLeft, CheckCircle2, AlertTriangle, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,7 +34,8 @@ const FIXED_VALUE_UNIT: Partial<Record<FrequencyType, { value: number; unit: Fre
   [FrequencyType.WEEKLY]: { value: 1, unit: FrequencyUnit.WEEK },
 };
 
-export default function UploadFormMasterPage({ params }: { params: { locale: string } }) {
+export default function UploadFormMasterPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();

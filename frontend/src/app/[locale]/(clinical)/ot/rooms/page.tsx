@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Building2, DoorOpen, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,7 +15,8 @@ import {
 } from '@/components/ui/table';
 import { useOtRooms } from '@/modules/ot/hooks/use-ot';
 
-export default function OtRoomsPage({ params }: { params: { locale: string } }) {
+export default function OtRoomsPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { data: rooms, isLoading, error } = useOtRooms({
     facilityId: undefined,

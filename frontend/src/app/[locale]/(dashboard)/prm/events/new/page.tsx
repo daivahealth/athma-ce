@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -42,7 +42,8 @@ const defaultOccurredAt = () => {
   return iso.slice(0, 16);
 };
 
-export default function PrmEventNewPage({ params }: { params: { locale: string } }) {
+export default function PrmEventNewPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { toast } = useToast();
   const ingestMutation = useIngestEvent();

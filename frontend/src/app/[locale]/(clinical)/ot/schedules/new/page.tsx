@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowLeft, CalendarCheck2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,7 +45,8 @@ function toDateTimeInput(value: string | null | undefined) {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-export default function NewOtSchedulePage({ params }: { params: { locale: string } }) {
+export default function NewOtSchedulePage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
   const [form, setForm] = useState(EMPTY_FORM);

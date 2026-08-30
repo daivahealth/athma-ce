@@ -1,8 +1,8 @@
 /**
  * Next.js Instrumentation
  *
- * This file is automatically loaded by Next.js when the experimental
- * instrumentationHook is enabled in next.config.js.
+ * This file is automatically loaded by Next.js. The instrumentation hook is
+ * stable since Next 15, so no next.config flag is required.
  *
  * It initializes OpenTelemetry for server-side tracing.
  */

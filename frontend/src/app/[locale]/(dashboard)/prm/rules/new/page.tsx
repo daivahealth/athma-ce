@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +10,8 @@ import { RuleForm } from '@/modules/prm/components/rule-form';
 import { useCreateRule } from '@/modules/prm/hooks/use-rules';
 import type { CreateRuleInput } from '@/modules/prm/types/rule';
 
-export default function NewRulePage({ params }: { params: { locale: string } }) {
+export default function NewRulePage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { toast } = useToast();
   const createRule = useCreateRule();

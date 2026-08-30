@@ -123,8 +123,20 @@ export class PluginLoaderModule {
     const apiKey = process.env.INTERNAL_API_KEY;
     if (!apiKey) return;
 
-    const reports: Array<{ pluginId: string; status: 'active' | 'error'; error?: string }> = [
-      ...loaded.map((p) => ({ pluginId: p.manifest.id, status: 'active' as const })),
+    const reports: Array<{
+      pluginId: string;
+      status: 'active' | 'error';
+      error?: string;
+      manifest?: PluginManifest;
+    }> = [
+      // Send the manifest we actually loaded: Foundation writes its registry
+      // snapshot at install time and never revisits it, so without this the
+      // recorded version/description/permissions drift on every version bump.
+      ...loaded.map((p) => ({
+        pluginId: p.manifest.id,
+        status: 'active' as const,
+        manifest: p.manifest,
+      })),
       ...quarantined.map((q) => ({
         pluginId: q.pluginId,
         status: 'error' as const,
@@ -140,7 +152,21 @@ export class PluginLoaderModule {
             'content-type': 'application/json',
             'x-internal-api-key': apiKey,
           },
-          body: JSON.stringify({ status: report.status, error: report.error }),
+          body: JSON.stringify({
+            status: report.status,
+            error: report.error,
+            manifest: report.manifest,
+          }),
+        }).then(async (res) => {
+          // fetch only rejects on transport errors, so a 4xx here would
+          // otherwise pass silently and leave the registry quietly stale.
+          if (!res.ok) {
+            const detail = await res.text().catch(() => '');
+            PluginLoaderModule.logger.warn(
+              `Foundation rejected the load-status report for '${report.pluginId}' ` +
+                `(HTTP ${res.status}): ${detail.slice(0, 500)}`,
+            );
+          }
         });
       } catch (error) {
         PluginLoaderModule.logger.warn(

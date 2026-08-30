@@ -1,7 +1,7 @@
 'use client';
 
 import { useDeferredValue, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { Eye, FileSignature, Filter, Plus, RotateCcw, Search, StopCircle, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,8 @@ import { useCancelOtReport, useOtReports, useSignOtReport } from '@/modules/ot/h
 import { OT_REPORT_STATUSES, type OtReportStatus } from '@/modules/ot/types';
 import { OtReportStatusBadge } from '@/modules/ot/components/ot-status-badge';
 
-export default function OtReportsPage({ params }: { params: { locale: string } }) {
+export default function OtReportsPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
   const [searchQuery, setSearchQuery] = useState('');

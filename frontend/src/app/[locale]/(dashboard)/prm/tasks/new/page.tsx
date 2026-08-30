@@ -1,13 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { TaskForm } from '@/modules/prm/components/task-form';
 import { useCreateTask } from '@/modules/prm/hooks/use-tasks';
 import type { CreateTaskInput } from '@/modules/prm/types/task';
 
-export default function NewTaskPage({ params }: { params: { locale: string } }) {
+export default function NewTaskPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const { toast } = useToast();
   const createTask = useCreateTask();

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, User, Dna, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,8 @@ import { PatientSearchSelect } from '@/components/patient-search-select';
 import { useCancerDiagnoses, useCreateStaging } from '@/plugins/oncology/hooks/use-oncology';
 import type { CancerDiagnosis } from '@/plugins/oncology/types';
 
-export default function NewStagingPage({ params }: { params: { locale: string } }) {
+export default function NewStagingPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/staging`);
 

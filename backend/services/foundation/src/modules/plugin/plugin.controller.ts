@@ -126,7 +126,10 @@ export class PluginInternalController {
   /**
    * Called by a plugin-hosting service (e.g. clinical) after boot to record
    * whether each installed plugin actually loaded ('active') or was
-   * quarantined ('error').
+   * quarantined ('error'). An 'active' report may carry the manifest that was
+   * actually loaded, which re-syncs the registry snapshot (version,
+   * description, permissions) — install writes that snapshot once and never
+   * revisits it, so without this the row drifts on every version bump.
    */
   @Put(':pluginId/load-status')
   async updateLoadStatus(
@@ -135,7 +138,12 @@ export class PluginInternalController {
   ) {
     return {
       success: true,
-      data: await this.pluginService.updateLoadStatus(pluginId, dto.status, dto.error),
+      data: await this.pluginService.updateLoadStatus(
+        pluginId,
+        dto.status,
+        dto.error,
+        dto.manifest,
+      ),
     };
   }
 

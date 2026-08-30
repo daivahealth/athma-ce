@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +17,8 @@ import { useFacilitySpaces } from '@/modules/foundation/hooks/use-facility-space
 import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
 import { useUpsertOtRoomConfig } from '@/modules/ot/hooks/use-ot';
 
-export default function NewOtRoomPage({ params }: { params: { locale: string } }) {
+export default function NewOtRoomPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
   const claims = decodeAccessToken(getSession().accessToken);

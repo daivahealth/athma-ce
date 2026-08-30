@@ -368,7 +368,7 @@ services:
       start_period: 30s
 
   # ===========================================================================
-  # Frontend -- Next.js 14
+  # Frontend -- Next.js 16
   # ===========================================================================
   frontend:
     image: zeal/frontend:${IMAGE_TAG:-latest}

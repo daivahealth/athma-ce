@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,7 +23,8 @@ const loginSchema = z.object({
   mfaCode: z.string().optional(),
 });
 
-function LoginPageContent({ params }: { params: { locale: string } }) {
+function LoginPageContent() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('actions');
@@ -158,10 +159,10 @@ function LoginPageContent({ params }: { params: { locale: string } }) {
   );
 }
 
-export default function LoginPage({ params }: { params: { locale: string } }) {
+export default function LoginPage() {
   return (
     <Suspense fallback={null}>
-      <LoginPageContent params={params} />
+      <LoginPageContent />
     </Suspense>
   );
 }

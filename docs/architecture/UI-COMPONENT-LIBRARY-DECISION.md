@@ -97,7 +97,7 @@ node_modules/antd/
 #### Current athma-ce Tech Stack:
 ```json
 {
-  "framework": "Next.js 14 App Router",
+  "framework": "Next.js 16 App Router",
   "styling": "Tailwind CSS",
   "forms": "React Hook Form + Zod",
   "state": "TanStack Query + Zustand",
@@ -496,7 +496,7 @@ For the athma-ce healthcare platform, shadcn/ui is the superior choice because:
 1. ✅ **Compliance First** - Code ownership for HIPAA audits
 2. ✅ **Performance Critical** - Smaller bundles for faster patient data loads
 3. ✅ **Medical Specialization** - Full control to build specialty-specific UIs
-4. ✅ **Stack Harmony** - Perfect with Tailwind + Next.js 14
+4. ✅ **Stack Harmony** - Perfect with Tailwind + Next.js 16
 5. ✅ **Already Invested** - Existing components and patterns
 
 Ant Design is excellent for standard business apps, but healthcare requires the precision and control that shadcn/ui provides.

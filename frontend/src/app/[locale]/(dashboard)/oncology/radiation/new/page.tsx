@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, User, Dna, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +20,8 @@ import type { CancerDiagnosis } from '@/plugins/oncology/types';
 const MODALITIES = ['PHOTON', 'ELECTRON', 'PROTON', 'BRACHY'];
 const TECHNIQUES = ['3DCRT', 'IMRT', 'VMAT', 'SBRT', 'SRS', 'ELECTRON', 'HDR', 'LDR'];
 
-export default function NewRadiationPrescriptionPage({ params }: { params: { locale: string } }) {
+export default function NewRadiationPrescriptionPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const back = () => router.push(`/${params.locale}/oncology/radiation`);
 

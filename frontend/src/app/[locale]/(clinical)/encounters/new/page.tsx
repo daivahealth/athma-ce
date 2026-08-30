@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -54,7 +54,8 @@ const createEncounterSchema = z.object({
 
 type CreateEncounterFormValues = z.infer<typeof createEncounterSchema>;
 
-function NewEncounterPageContent({ params }: { params: { locale: string } }) {
+function NewEncounterPageContent() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const toast = useToast();
   const searchParams = useSearchParams();
@@ -443,10 +444,10 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
   );
 }
 
-export default function NewEncounterPage({ params }: { params: { locale: string } }) {
+export default function NewEncounterPage() {
   return (
     <Suspense fallback={null}>
-      <NewEncounterPageContent params={params} />
+      <NewEncounterPageContent />
     </Suspense>
   );
 }

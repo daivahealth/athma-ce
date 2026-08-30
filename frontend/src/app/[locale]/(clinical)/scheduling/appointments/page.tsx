@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { format, startOfDay, endOfDay, addDays } from 'date-fns';
 import {
   Calendar as CalendarIcon,
@@ -63,7 +63,8 @@ const STATUS_COLORS: Record<string, string> = {
   no_show: 'bg-orange-100 text-orange-800',
 };
 
-export default function AppointmentsPage({ params }: { params: { locale: string } }) {
+export default function AppointmentsPage() {
+  const params = useParams() as { locale: string };
   const router = useRouter();
   const publishToast = useToast();
 

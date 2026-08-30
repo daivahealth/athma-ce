@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+
+import { useParams } from 'next/navigation';import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,7 +23,8 @@ const eventSchema = z.object({
 
 type EventFormValues = z.infer<typeof eventSchema>;
 
-export default function AdmissionEventsPage({ params }: { params: { locale: string; id: string } }) {
+export default function AdmissionEventsPage() {
+  const params = useParams() as { locale: string; id: string };
   const { toast } = useToast();
   const { data, isLoading } = useAdmissionEvents(params.id);
   const createEvent = useCreateAdmissionEvent(params.id);

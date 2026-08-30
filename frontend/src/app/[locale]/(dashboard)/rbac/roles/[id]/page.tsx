@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -44,7 +44,8 @@ const updateRoleSchema = z.object({
 
 type UpdateRoleForm = z.infer<typeof updateRoleSchema>;
 
-export default function RoleDetailPage({ params }: { params: { locale: string; id: string } }) {
+export default function RoleDetailPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const { toast } = useToast();
   const roleId = params.id;

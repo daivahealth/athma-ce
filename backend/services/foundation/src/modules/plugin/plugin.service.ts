@@ -93,48 +93,7 @@ export class PluginService {
         },
       });
 
-      if (manifest.configKeys?.length) {
-        for (const configKey of manifest.configKeys) {
-          const existingConfig = await tx.instanceConfig.findUnique({
-            where: { configKey: configKey.key },
-          });
-
-          if (!existingConfig) {
-            await tx.instanceConfig.create({
-              data: {
-                configKey: configKey.key,
-                value: configKey.defaultValue as Prisma.InputJsonValue,
-                valueType: configKey.valueType,
-                category: configKey.category,
-                description: configKey.description,
-                isOverridable: configKey.isOverridable,
-              },
-            });
-          }
-        }
-      }
-
-      if (manifest.backend.permissions?.length) {
-        for (const permCode of manifest.backend.permissions) {
-          const existingPerm = await tx.permission.findUnique({
-            where: { code: permCode },
-          });
-
-          if (!existingPerm) {
-            const parts = permCode.split('.');
-            const resource = parts[0] ?? null;
-            const action = parts.slice(1).join('.') || null;
-            await tx.permission.create({
-              data: {
-                code: permCode,
-                name: `${manifest.name}: ${permCode}`,
-                resource,
-                action,
-              },
-            });
-          }
-        }
-      }
+      await this.syncManifestArtifacts(tx, manifest);
 
       return registered;
     });
@@ -269,31 +228,148 @@ export class PluginService {
    * loaded and initialized, 'error' when it was quarantined. Never overrides
    * an operator-set 'disabled'.
    */
-  async updateLoadStatus(pluginId: string, status: 'active' | 'error', error?: string) {
+  async updateLoadStatus(
+    pluginId: string,
+    status: 'active' | 'error',
+    error?: string,
+    reportedManifest?: Record<string, unknown>,
+  ) {
     const plugin = await this.getPluginByPluginId(pluginId);
     if (plugin.status === 'disabled') return plugin;
 
-    const manifest = (plugin.manifest ?? {}) as Record<string, unknown>;
-    const updated = await this.prisma.pluginRegistry.update({
-      where: { id: plugin.id },
-      data: {
-        status,
-        manifest: {
-          ...manifest,
-          _lastLoad: {
-            status,
-            error: error ?? null,
-            at: new Date().toISOString(),
-          },
-        } as Prisma.InputJsonValue,
-      },
+    // A quarantined plugin's manifest is not authoritative — keep the stored
+    // snapshot and only record the failure.
+    const incoming =
+      status === 'active' && reportedManifest
+        ? this.validateReportedManifest(pluginId, reportedManifest)
+        : null;
+
+    const manifest = (incoming ??
+      ((plugin.manifest ?? {}) as unknown as PluginManifest)) as unknown as Record<string, unknown>;
+
+    const metadata = incoming
+      ? {
+          name: incoming.name,
+          version: incoming.version,
+          description: incoming.description ?? null,
+          author: incoming.author ?? null,
+          license: incoming.license ?? null,
+          specialtyCode: incoming.specialty?.code ?? null,
+          targetService: incoming.backend.targetService,
+        }
+      : {};
+
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const row = await tx.pluginRegistry.update({
+        where: { id: plugin.id },
+        data: {
+          ...metadata,
+          status,
+          manifest: {
+            ...manifest,
+            _lastLoad: {
+              status,
+              error: error ?? null,
+              at: new Date().toISOString(),
+            },
+          } as Prisma.InputJsonValue,
+        },
+      });
+
+      // A version bump can introduce new permissions and config keys; create
+      // the missing ones so RBAC matches what the registry now advertises.
+      if (incoming) await this.syncManifestArtifacts(tx, incoming);
+
+      return row;
     });
+
+    if (incoming && incoming.version !== plugin.version) {
+      this.logger.log(
+        `Plugin '${pluginId}' registry metadata re-synced from host service: ` +
+          `v${plugin.version} -> v${incoming.version}`,
+      );
+    }
     if (status === 'error') {
       this.logger.error(`Plugin '${pluginId}' quarantined by host service: ${error ?? 'unknown error'}`);
     } else {
       this.logger.log(`Plugin '${pluginId}' reported loaded by host service`);
     }
     return updated;
+  }
+
+  /**
+   * Create the config keys and permissions a manifest declares, skipping any
+   * that already exist. Shared by install and by load-status re-sync so a
+   * version bump cannot leave the registry advertising permissions that RBAC
+   * has never heard of.
+   */
+  private async syncManifestArtifacts(
+    tx: Prisma.TransactionClient,
+    manifest: PluginManifest,
+  ): Promise<void> {
+    if (manifest.configKeys?.length) {
+      for (const configKey of manifest.configKeys) {
+        const existingConfig = await tx.instanceConfig.findUnique({
+          where: { configKey: configKey.key },
+        });
+
+        if (!existingConfig) {
+          await tx.instanceConfig.create({
+            data: {
+              configKey: configKey.key,
+              value: configKey.defaultValue as Prisma.InputJsonValue,
+              valueType: configKey.valueType,
+              category: configKey.category,
+              description: configKey.description,
+              isOverridable: configKey.isOverridable,
+            },
+          });
+        }
+      }
+    }
+
+    if (manifest.backend.permissions?.length) {
+      for (const permCode of manifest.backend.permissions) {
+        const existingPerm = await tx.permission.findUnique({
+          where: { code: permCode },
+        });
+
+        if (!existingPerm) {
+          const parts = permCode.split('.');
+          const resource = parts[0] ?? null;
+          const action = parts.slice(1).join('.') || null;
+          await tx.permission.create({
+            data: {
+              code: permCode,
+              name: `${manifest.name}: ${permCode}`,
+              resource,
+              action,
+            },
+          });
+        }
+      }
+    }
+  }
+
+  /**
+   * Validate a manifest reported by a host service before it overwrites the
+   * registry snapshot. The id must match the route so one plugin can never
+   * rewrite another's row.
+   */
+  private validateReportedManifest(
+    pluginId: string,
+    reported: Record<string, unknown>,
+  ): PluginManifest {
+    const manifest = reported as unknown as PluginManifest;
+    this.validateManifest(manifest);
+
+    if (manifest.id !== pluginId) {
+      throw new BadRequestException(
+        `Reported manifest id '${manifest.id}' does not match plugin '${pluginId}'`,
+      );
+    }
+
+    return manifest;
   }
 
   private resolvePluginPath(packagePath: string): string {

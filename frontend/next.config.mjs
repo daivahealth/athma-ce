@@ -28,14 +28,9 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  // Enable instrumentation for OpenTelemetry
-  // Only enabled when NEXT_PUBLIC_OBSERVABILITY_ENABLED=true
-  experimental: {
-    instrumentationHook: process.env.NEXT_PUBLIC_OBSERVABILITY_ENABLED === 'true',
-  },
+  // OpenTelemetry instrumentation is loaded from src/instrumentation.ts.
+  // The hook is stable since Next 15, so no experimental flag is needed; the
+  // register() body self-gates on NEXT_PUBLIC_OBSERVABILITY_ENABLED.
   headers: async () => [
     {
       source: '/(.*)',

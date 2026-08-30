@@ -736,18 +736,25 @@ export function register() {
 
 #### 3. Next.js Config
 
-```javascript
-// frontend/next.config.js
+No config flag is required. The instrumentation hook is stable since Next.js 15,
+so `frontend/src/instrumentation.ts` is loaded automatically and its `register()`
+body self-gates on `NEXT_PUBLIC_OBSERVABILITY_ENABLED`:
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    instrumentationHook: process.env.NEXT_PUBLIC_OBSERVABILITY_ENABLED === 'true',
-  },
-};
+```typescript
+// frontend/src/instrumentation.ts
 
-module.exports = nextConfig;
+export async function register() {
+  if (
+    process.env.NEXT_RUNTIME === 'nodejs' &&
+    process.env.NEXT_PUBLIC_OBSERVABILITY_ENABLED === 'true'
+  ) {
+    // ... OpenTelemetry SDK initialisation
+  }
+}
 ```
+
+> The former `experimental.instrumentationHook` flag in `next.config.mjs` was
+> removed during the Next.js 16 upgrade; Next 16 rejects it as an unknown key.
 
 ### Infrastructure Setup (Docker Compose)
 

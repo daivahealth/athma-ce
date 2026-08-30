@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 
-export default function DashboardRedirect({ params }: { params: { locale: string } }) {
-  redirect(`/${params.locale}/dashboard`);
+export default async function DashboardRedirect({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  redirect(`/${locale}/dashboard`);
 }

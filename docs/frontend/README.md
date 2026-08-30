@@ -4,7 +4,7 @@ This folder contains documentation specific to the athma-ce frontend application
 
 ## Overview
 
-The athma-ce frontend is a Next.js 14 application built with TypeScript, providing the user interface for the healthcare platform. It follows a domain-driven module structure aligned with the backend services.
+The athma-ce frontend is a Next.js 16 application built with TypeScript, providing the user interface for the healthcare platform. It follows a domain-driven module structure aligned with the backend services.
 
 ## Contents
 
@@ -29,6 +29,7 @@ frontend/src/
 │   │   ├── (clinical)/     # Clinical domain routes
 │   │   └── (dashboard)/    # Foundation/admin routes
 │   └── api/                # API routes
+├── proxy.ts                # Locale routing (next-intl); `middleware.ts` in Next <16
 ├── components/             # Shared UI components
 │   ├── layout/             # Sidebar, topbar, breadcrumb
 │   ├── tables/             # Data tables
@@ -48,6 +49,47 @@ frontend/src/
 ├── hooks/                  # Shared React hooks
 └── providers/              # React providers
 ```
+
+## Route Parameters
+
+Next.js 16 delivers route `params` as a **Promise**. How you read them depends on
+the component type — do not accept `params` as a prop in a client component.
+
+**Client components** (the overwhelming majority here) use the `useParams()` hook:
+
+```tsx
+'use client';
+import { useParams } from 'next/navigation';
+
+export default function PatientsPage() {
+  const params = useParams() as { locale: string };
+  // ...
+}
+```
+
+**Server components** accept the Promise and await it:
+
+```tsx
+export default async function LocaleLayout({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale = 'en' } = await params;
+  // ...
+}
+```
+
+`React.use(params)` is not an option while the app is on React 18 — `use()` ships
+with React 19. The same rule applies to `cookies()` and `headers()` from
+`next/headers`, which must now be awaited:
+
+```ts
+const cookieStore = await cookies();
+```
+
+Accessing `params.locale` synchronously still renders, but logs a
+`sync-dynamic-apis` error and is removed in a future major.
 
 ## Domain Modules
 
@@ -72,7 +114,7 @@ modules/<domain>/
 
 ## Technology Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router, Turbopack)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui
 - **State**: Zustand (global) + React Query (server)
