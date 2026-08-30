@@ -239,9 +239,12 @@ npx prisma generate
 ### Testing Service Integration
 
 ```bash
+# Each service needs services/<name>/.env.local first:
+#   cp services/<name>/.env.example services/<name>/.env.local
+
 # Start dependent services first
-npm run dev --workspace=@zeal/foundation
-npm run dev --workspace=@zeal/clinical
+npm run dev --workspace=@zeal/foundation    # port 3010
+npm run dev --workspace=@zeal/clinical      # port 3011
 
 # Then start your service
 npm run dev --workspace=@zeal/<your-service>

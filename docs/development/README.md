@@ -47,18 +47,24 @@ This folder contains developer-focused guides and reference materials for workin
 ### Start Development Environment
 
 ```bash
-# Terminal 1 - Backend Services
+# Backend services - one terminal each. Each needs services/<name>/.env.local;
+# see Developer Onboarding for the one-time `cp .env.example .env.local` step.
 cd backend
-npm run dev --workspace=@zeal/clinical
-# or
-npm run dev --workspace=@zeal/foundation
-# or
-npm run dev --workspace=@zeal/rcm
+npm run dev --workspace=@zeal/foundation    # port 3010
+npm run dev --workspace=@zeal/clinical      # port 3011
+npm run dev --workspace=@zeal/rcm           # port 3012
+npm run dev --workspace=@zeal/prm           # port 3013
+npm run dev --workspace=@zeal/ai-gateway    # port 3015
 
-# Terminal 2 - Frontend (if applicable)
+# Frontend (separate terminal)
 cd frontend
-npm run dev
+npm run dev                                 # port 3000
 ```
+
+Start only the services your work needs, but note the frontend calls PRM (3013)
+for notifications and ai-gateway (3015) for dashboard metrics on most screens -
+if those are down you will see `Network Error` with `status: undefined` in the
+browser console.
 
 ### Common Development Tasks
 

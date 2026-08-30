@@ -51,12 +51,56 @@ Error: listen EADDRINUSE :::3010
 lsof -ti:3010 | xargs kill -9
 ```
 
+#### Service Exits on Boot with "Config validation error"
+```
+ERROR: Config validation error: "PRM_DATABASE_URL" is required. "OIDC_ISSUER" is
+required. ...
+```
+
+**Cause**: the service has no `services/<name>/.env.local`. Every backend service
+loads that file from its own directory; PRM validates its config strictly and so
+fails loudly, while the others start and then fail later against a missing
+database URL.
+
+**Solution**:
+```bash
+cd backend
+cp services/<name>/.env.example services/<name>/.env.local
+```
+
+#### Frontend Shows `Network Error` with `status: undefined`
+```
+[Interceptor] Response error: { message: 'Network Error', status: undefined,
+  url: '/v1/notifications' }
+```
+
+**Cause**: a backend service is not running. `status: undefined` means the
+connection was refused before any HTTP response - distinct from a 4xx/5xx, which
+means the service answered.
+
+**Solution**: match the failing URL to its owning service and start it.
+
+| Frontend path | Service | Port |
+|---------------|---------|------|
+| `/v1/notifications*` | PRM | 3013 |
+| `/reports/*` | ai-gateway | 3015 |
+| `/patients`, `/encounters`, clinical routes | Clinical | 3011 |
+| `/auth`, `/users`, `/facilities`, `/configs` | Foundation | 3010 |
+| `/claims`, `/invoices`, billing routes | RCM | 3012 |
+
+```bash
+cd backend && npm run dev --workspace=@zeal/prm
+```
+
 #### JWT Token Invalid
 ```
 Error: JsonWebTokenError: invalid signature
 ```
 
-**Solution**: Ensure JWT secrets match between services. Check `.env.local` files.
+**Solution**: `JWT_SECRET` must be identical in `services/foundation/.env.local`
+and `services/rcm/.env.local`. Likewise `INTERNAL_API_KEY` must match between
+foundation and clinical. The values shipped in each `.env.example` already agree -
+this usually means one `.env.local` was edited in isolation.
 
 #### Tenant Not Found
 ```
