@@ -120,7 +120,6 @@ modules/<domain>/
 - **State**: Zustand (global) + React Query (server)
 - **Forms**: React Hook Form + Zod
 - **Testing**: Vitest + Testing Library
-- **Documentation**: Storybook 8
 
 ## Related Documentation
 

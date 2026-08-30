@@ -1,15 +1,14 @@
 # Zeal Frontend
 
-Elegant multi-tenant PMS/EHR/ECM interface for Zeal Healthcare, built with Next.js 14, TypeScript, shadcn/ui, and Tailwind CSS. The UI aligns with architecture decisions (ADR-0001, ADR-0003, ADR-0005) and is ready for PDPL/GDPR compliance.
+Elegant multi-tenant PMS/EHR/ECM interface for Zeal Healthcare, built with Next.js 16, TypeScript, shadcn/ui, and Tailwind CSS. The UI aligns with architecture decisions (ADR-0001, ADR-0003, ADR-0005) and is ready for PDPL/GDPR compliance.
 
 ## Stack
-- Next.js 14 (App Router) with TypeScript
+- Next.js 16 (App Router, Turbopack) with TypeScript
 - Tailwind CSS + shadcn/ui for light/dark design system
 - React Query for data fetching
 - next-intl + react-i18next scaffolding (English + Arabic placeholder)
 - Axios API client with JWT + refresh handling
 - Vitest + Testing Library for unit tests
-- Storybook 8 for component docs
 - Husky + lint-staged + Prettier for workflow
 
 ## Getting Started
@@ -30,7 +29,6 @@ NEXT_PUBLIC_FOUNDATION_BASE_URL=http://localhost:3010
 - `npm run build` – build for production
 - `npm run lint` / `npm run lint:fix`
 - `npm run test` / `npm run test:watch`
-- `npm run storybook` / `npm run storybook:build`
 - `npm run mock` – seed demo data via backend APIs
 
 ## Structure
@@ -61,12 +59,6 @@ src/
 - Audit & consent language surfaced in profile screen
 - Dark/light mode accessible and WCAG AA compliant
 - RTL ready; switching to Arabic sets `dir="rtl"`
-
-## Storybook
-```bash
-npm run storybook
-```
-Stories consume the same Tailwind + Theme providers for parity with app UI.
 
 ## Testing
 ```bash

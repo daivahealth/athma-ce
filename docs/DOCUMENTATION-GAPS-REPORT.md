@@ -278,7 +278,7 @@ docs/
 
 | Area | Gap | Impact |
 |------|-----|--------|
-| Component Props | No documentation | Storybook can compensate |
+| Component Props | No documentation | Rely on TypeScript prop types and JSDoc |
 | Utility Functions | Some missing JSDoc | Usually self-explanatory |
 
 ---
