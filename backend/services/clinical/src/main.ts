@@ -76,6 +76,51 @@ async function bootstrap() {
     },
     `Clinical service started successfully on http://localhost:${port}`,
   );
+
+  logPluginSummary(app);
+}
+
+/**
+ * Re-state the plugin load outcome after boot. PluginLoaderModule already logs
+ * this while resolving the dynamic module, but that happens hundreds of lines
+ * earlier in the startup output; repeating it here gives a single, reliable
+ * place to see which plugins are live after every restart.
+ */
+function logPluginSummary(app: any): void {
+  let loaded: Array<{ id: string; name?: string; version: string }> = [];
+  let quarantined: Array<{ pluginId: string; stage: string; error: string }> = [];
+
+  try {
+    loaded = app.get('LOADED_PLUGINS', { strict: false }) ?? [];
+    quarantined = app.get('QUARANTINED_PLUGINS', { strict: false }) ?? [];
+  } catch {
+    // Plugin loader not registered (or resolution failed) — nothing to report.
+    return;
+  }
+
+  if (loaded.length === 0) {
+    logger.warn({ pluginCount: 0 }, 'Plugins loaded: none');
+  } else {
+    logger.info(
+      {
+        pluginCount: loaded.length,
+        plugins: loaded.map((p) => ({ id: p.id, name: p.name, version: p.version })),
+      },
+      `Plugins loaded (${loaded.length}): ${loaded.map((p) => `${p.id}@${p.version}`).join(', ')}`,
+    );
+  }
+
+  if (quarantined.length > 0) {
+    logger.error(
+      {
+        quarantinedCount: quarantined.length,
+        quarantined: quarantined.map((q) => ({ pluginId: q.pluginId, stage: q.stage })),
+      },
+      `Plugins QUARANTINED (${quarantined.length}): ${quarantined
+        .map((q) => `${q.pluginId} [${q.stage}]`)
+        .join(', ')} — see errors above`,
+    );
+  }
 }
 
 bootstrap().catch((error) => {

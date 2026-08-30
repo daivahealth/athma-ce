@@ -412,6 +412,24 @@ This does the following:
 - Seeds `configKeys` into `InstanceConfig` (e.g., `feature.nav.my-specialty = false`)
 - Registers plugin permissions into the RBAC permission list
 
+`install` refuses to run twice (`Plugin '<id>' is already installed`), so it
+writes the registry snapshot only once. **Version bumps are picked up from the
+host service instead**: after boot, the plugin loader reports each loaded
+plugin's manifest to `PUT /plugins/internal/:pluginId/load-status`, and
+Foundation re-syncs `version`, `name`, `description`, `author`, `license`,
+`specialtyCode`, `targetService`, and the stored manifest, then creates any
+newly declared `configKeys` and permissions. Restarting the host service is
+therefore all that is needed to bring the registry up to date — there is no
+upgrade endpoint.
+
+The report is only honoured for `status: 'active'`; a quarantined plugin's
+manifest is not treated as authoritative, and a manifest whose `id` does not
+match the route is rejected. The reported manifest is validated against the
+same JSON Schema as install, so **a plugin whose manifest violates the schema
+loads fine in the host service but cannot re-sync** — the host service logs
+`Foundation rejected the load-status report for '<id>' (HTTP 400)` with the
+validation error.
+
 The plugin management endpoints require a JWT with plugin permissions:
 `plugin.read` to list/inspect, `plugin.install` (super-admin only by default)
 to install, and `plugin.activate` / `plugin.deactivate` for tenant activation
@@ -433,6 +451,17 @@ enforcement** (`PluginGuard` checks it via Foundation's internal activation
 endpoint, cached for 60s) — and derives `feature.nav.my-specialty = true` in
 the tenant's config for UI visibility. Editing the config key by hand changes
 sidebar visibility only; it can never grant API access.
+
+> **`INTERNAL_API_KEY` is required for this check to work.** `PluginGuard` calls
+> Foundation's internal activation endpoint with that key and **fails closed**
+> when it is unset: it logs `INTERNAL_API_KEY not configured — plugin activation
+> checks fail closed` once and then returns 403 for every `@PluginController`
+> route, even when the `PluginActivation` row exists and is enabled. Set the
+> **same value** in both the plugin-hosting service's `.env.local` (e.g.
+> `backend/services/clinical/.env.local`) and
+> `backend/services/foundation/.env.local`, and restart both. The plugin
+> loader's load-status reporting uses the same key, so `PluginRegistry`'s
+> `status` and version metadata also stay stale until it is set.
 
 ### Step 8: Assign Permissions to Roles
 
@@ -468,7 +497,10 @@ Once the `feature.nav.my-specialty` flag is enabled for the tenant, the plugin's
 
 After completing all steps, verify the plugin is working:
 
-1. **Backend loaded**: Check clinical service startup logs for `Loaded plugin 'my-specialty'`
+1. **Backend loaded**: Check clinical service startup logs for `Loaded plugin 'my-specialty'`.
+   The last line of every boot — printed after `Clinical service started successfully` — repeats the
+   outcome so it is easy to find without scrolling: `Plugins loaded (N): my-specialty@0.1.0, ...`,
+   followed by `Plugins QUARANTINED (M): ...` when any plugin failed
 2. **API accessible**: `GET http://localhost:3011/api/v1/plugins/my-specialty/...` returns data (with valid auth headers)
 3. **Frontend visible**: Log in as a user in the activated tenant — the plugin's sidebar section should appear
 4. **Permissions enforced**: Users without assigned plugin permissions should receive 403 responses
@@ -541,11 +573,13 @@ Your plugin automatically inherits athma-ce's three-layer tenant isolation:
 |---|---|---|
 | Plugin not discovered at startup | Wrong directory or missing `athma-plugin.json` | Ensure the plugin is in `plugins/`, `node_modules/@athma-plugins/`, or `ATHMA_PLUGIN_DIR` with a valid manifest |
 | `QUARANTINED plugin '<id>'` error in logs | Manifest parse error, module import failure, `onPluginInit` throw, or TypeScript compile error during `require()` | The error log names the failing stage (`manifest`/`load`/`init`) with the stack. The service still boots without the plugin; the quarantine is also reported to Foundation (`PluginRegistry.status = 'error'`, visible via `GET /plugins`) when `INTERNAL_API_KEY` is configured |
-| All plugin routes return 404 | The plugin was quarantined at startup (see above) — its controllers are never registered | Check the startup summary line (`Plugin startup: N loaded, M QUARANTINED`) and fix the reported stage error |
+| All plugin routes return 404 | The plugin was quarantined at startup (see above) — its controllers are never registered | Check the summary printed after `Clinical service started successfully` (`Plugins loaded (N): ...` / `Plugins QUARANTINED (M): ...`) and fix the reported stage error |
 | Sidebar section not showing | Feature flag not enabled for tenant | Activate the plugin via `PUT /plugins/:id/activate` with the tenant ID |
+| 403 `Plugin '<id>' is not enabled for this tenant` on **every** plugin endpoint, but `plugin_activations` shows `is_enabled = true` | `INTERNAL_API_KEY` is unset in the plugin-hosting service, so `PluginGuard` cannot reach Foundation's activation endpoint and fails closed | Set the same `INTERNAL_API_KEY` in both that service's and Foundation's `.env.local`, then restart both. The clinical log shows `INTERNAL_API_KEY not configured — plugin activation checks fail closed` |
 | 403 on plugin API endpoints | Plugin not activated or permissions not assigned | Check tenant activation and role permissions |
 | Database errors (relation does not exist) | Plugin schema or tables not created | Run `CREATE SCHEMA` and `prisma db push` for the plugin |
 | Module import errors (`Cannot find module`) | Path alias not configured | Ensure `@athma/plugin-sdk` is mapped in the clinical service's `tsconfig.json` |
+| `PluginRegistry` version/description/permission count stale after a version bump | `install` writes the snapshot once and refuses to re-run; re-sync happens via the host service's load-status report | Restart the host service. If it stays stale, check its log for `Foundation rejected the load-status report` — a manifest that violates `PLUGIN_MANIFEST_SCHEMA` still loads locally but is refused by Foundation (e.g. a `configKeys[].key` must match `^[a-z][a-z0-9_.]*$`, so camelCase keys fail) |
 | `ERROR 42883: operator does not exist: uuid = text` | `$queryRawUnsafe` sends strings as text OID — PostgreSQL has no `uuid = text` operator | Add `::uuid` to every UUID parameter in WHERE clauses: `WHERE tenant_id = $1::uuid AND id = $2::uuid` |
 | `ERROR 42804: column "X" is of type uuid but expression is of type text` | Same root cause in INSERT VALUES or UPDATE SET positions | Add `::uuid` to every UUID parameter in INSERT/UPDATE: `VALUES ($1::uuid, $2::uuid, ...)` |
 | TypeScript error `Type 'string \| undefined' is not assignable` | `exactOptionalPropertyTypes: true` — `@Query()` returns `string \| undefined` but the service filter type uses `prop?: string` | Add `\| undefined` to all optional filter properties: `{ patientId?: string \| undefined }` |
