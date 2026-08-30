@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,11 +25,8 @@ const toFormInitial = (data: any): Partial<CreateTemplateInput> => ({
   is_active: data?.is_active,
 });
 
-export default function TemplateDetailPage({
-  params,
-}: {
-  params: { locale: string; templateId: string };
-}) {
+export default function TemplateDetailPage() {
+  const params = useParams() as { locale: string; templateId: string };
   const router = useRouter();
   const { toast } = useToast();
   const { data, isLoading } = useTemplate(params.templateId);

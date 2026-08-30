@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import type { AxiosError } from 'axios';
 import { format } from 'date-fns';
 import { ArrowLeft, Calendar, FileText, Stethoscope, Shield, Plus } from 'lucide-react';
@@ -68,11 +68,8 @@ const buildInitialCoverageForm = () => ({
 
 type CoverageFormState = ReturnType<typeof buildInitialCoverageForm>;
 
-export default function EncounterDetailPage({
-  params,
-}: {
-  params: { locale: string; id: string };
-}) {
+export default function EncounterDetailPage() {
+  const params = useParams() as { locale: string; id: string };
   const router = useRouter();
   const toast = useToast();
   const { data: encounter, isLoading } = useEncounter(params.id);

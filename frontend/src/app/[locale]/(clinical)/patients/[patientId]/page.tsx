@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
 import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
@@ -30,14 +30,8 @@ import {
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import { format, parseISO } from 'date-fns';
 
-interface PatientDetailPageProps {
-  params: {
-    locale: string;
-    patientId: string;
-  };
-}
-
-export default function PatientDetailPage({ params }: PatientDetailPageProps) {
+export default function PatientDetailPage() {
+  const params = useParams() as { locale: string; patientId: string; };
   const router = useRouter();
   const { data: patient, isLoading, error } = usePatient(params.patientId);
   const { data: appointments, isLoading: isAppointmentsLoading } = usePatientAppointments(params.patientId);

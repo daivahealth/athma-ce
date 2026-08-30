@@ -1,13 +1,11 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { useParams } from 'next/navigation';import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMessage } from '@/modules/prm/hooks/use-messages';
 
-export default function MessageDetailPage({
-  params,
-}: {
-  params: { locale: string; messageId: string };
-}) {
+export default function MessageDetailPage() {
+  const params = useParams() as { locale: string; messageId: string };
   const { data, isLoading } = useMessage(params.messageId);
 
   if (isLoading) {

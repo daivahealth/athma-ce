@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { usePatient, useUpdatePatient } from '@/modules/clinical/hooks/use-patients';
 import { useToast } from '@/components/ui/use-toast';
 import { LoadingSpinner } from '@/components/ui/loading';
@@ -11,14 +11,8 @@ import type { PatientFormData } from '@/components/clinical/patient-form';
 import { PatientForm } from '@/components/clinical/patient-form';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
-interface EditPatientPageProps {
-  params: {
-    locale: string;
-    patientId: string;
-  };
-}
-
-export default function EditPatientPage({ params }: EditPatientPageProps) {
+export default function EditPatientPage() {
+  const params = useParams() as { locale: string; patientId: string; };
   const router = useRouter();
   const publishToast = useToast();
   const { data: patient, isLoading, error } = usePatient(params.patientId);
