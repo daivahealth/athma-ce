@@ -43,7 +43,7 @@
     "@zeal/shared-utils": "file:../../shared/utils",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
-    "joi": "^17.11.0",
+    "joi": "^17.13.6",
     "mustache": "^4.2.0",
     "passport": "^0.7.0",
     "passport-openidconnect": "^0.1.1",
