@@ -110,6 +110,9 @@ model ChemoProtocol {
   doseFormula     String   @default("bsa") @map("dose_formula") @db.VarChar(10)
   labPrerequisites Json    @default("[]") @map("lab_prerequisites")
   hydration        Json    @default("[]")
+  // Phase-based regimen (schema v2) — source of truth when non-empty.
+  // regimen / totalCycles / cycleDurationDays are derived from it on save.
+  phases           Json    @default("[]")
 
   isActive        Boolean  @default(true) @map("is_active")
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)

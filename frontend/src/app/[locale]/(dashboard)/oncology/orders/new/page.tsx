@@ -15,6 +15,7 @@ import {
   useCancerDiagnoses, useOncologyCarePlans, useProtocols, useCreateChemoOrder,
 } from '@/plugins/oncology/hooks/use-oncology';
 import type { CancerDiagnosis, ChemoProtocol, OncologyCarePlan, DoseAdjustment, PreChemoChecklist } from '@/plugins/oncology/types';
+import { getProtocolPhases, resolveCycle } from '@/plugins/oncology/lib/protocol-phases';
 
 function calcBSA(heightCm: number, weightKg: number): number {
   return Math.sqrt((heightCm * weightKg) / 3600);
@@ -111,20 +112,30 @@ export default function NewChemoOrderPage() {
     return 0;
   }, [height, weight, bsaOverride]);
 
+  // Drugs for the selected cycle: phased protocols change drugs/doses by cycle
+  const cycleRegimen = useMemo(() => {
+    if (!selectedProtocol) return null;
+    return resolveCycle(getProtocolPhases(selectedProtocol), parseInt(cycleNumber, 10) || 1) ?? null;
+  }, [selectedProtocol, cycleNumber]);
+
   const calculatedDoses = useMemo(() => {
-    if (!selectedProtocol || !bsa) return [];
+    if (!selectedProtocol || !bsa || !cycleRegimen) return [];
     const w = parseFloat(weight) || 0;
-    return selectedProtocol.regimen.map((drug) => ({
-      drug: drug.drug,
-      protocolDose: drug.dose,
-      unit: drug.unit,
-      formula: drug.doseFormula,
-      calculatedDose: parseFloat(calcDose(drug.dose, drug.doseFormula, bsa, w).toFixed(2)),
-      route: drug.route,
-      day: drug.day,
-      infusionDurationMin: drug.infusionDurationMin,
-    }));
-  }, [selectedProtocol, bsa, weight]);
+    return cycleRegimen.drugs.filter((d) => !d.omitted).map((drug) => {
+      const raw = calcDose(drug.dose, drug.doseFormula, bsa, w);
+      const capped = drug.maxDose && raw > drug.maxDose ? drug.maxDose : raw;
+      return {
+        drug: drug.drug,
+        protocolDose: drug.dose,
+        unit: drug.unit,
+        formula: drug.doseFormula,
+        calculatedDose: parseFloat(capped.toFixed(2)),
+        route: drug.route,
+        day: drug.days.length === 1 ? drug.days[0] : drug.days,
+        infusionDurationMin: drug.infusionDurationMin,
+      };
+    });
+  }, [selectedProtocol, cycleRegimen, bsa, weight]);
 
   const handleSelectPatient = (p: any) => {
     setSelectedPatient(p);
@@ -426,6 +437,15 @@ export default function NewChemoOrderPage() {
                       {selectedProtocol.regimen.length} drug{selectedProtocol.regimen.length !== 1 ? 's' : ''} ·{' '}
                       Emetogenic: {selectedProtocol.emetogenic_risk ?? 'not specified'}
                     </div>
+                    {cycleRegimen ? (
+                      <div className="text-muted-foreground">
+                        Cycle {cycleRegimen.cycle}: <span className="font-medium text-foreground">{cycleRegimen.phase.name}</span>
+                        {getProtocolPhases(selectedProtocol).length > 1 && ` (phase cycle ${cycleRegimen.phaseCycle} of ${cycleRegimen.phase.cycles})`}
+                        {' · '}{cycleRegimen.drugs.filter((d) => !d.omitted).map((d) => d.drug).join(', ')}
+                      </div>
+                    ) : (
+                      <div className="text-destructive">Cycle {cycleNumber} is beyond this protocol&apos;s {selectedProtocol.total_cycles} cycles.</div>
+                    )}
                     {selectedProtocol.lab_prerequisites?.length > 0 && (
                       <div className="text-amber-600">
                         Lab prerequisites: {selectedProtocol.lab_prerequisites.map((l) => `${l.parameter} ≥ ${l.minValue ?? '?'} ${l.unit} (${l.timing})`).join(', ')}

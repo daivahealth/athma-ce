@@ -301,6 +301,8 @@ GET /api/v1/plugins/oncology/protocols?cancerType=&page=1&limit=20
 ```
 **Permission:** `oncology.chemo_protocol.read`
 
+Every protocol in the response carries `phases` (see below) and `supportive_care`.
+
 ---
 
 ### Get Protocol
@@ -308,6 +310,11 @@ GET /api/v1/plugins/oncology/protocols?cancerType=&page=1&limit=20
 GET /api/v1/plugins/oncology/protocols/:id
 ```
 **Permission:** `oncology.chemo_protocol.read`
+
+Protocols saved before the phase model (stored `phases = []`) are returned with a
+single synthesised phase named `Main` built from `regimen`, `total_cycles` and
+`cycle_duration_days`. Synthesised phase/drug ids change per request until the
+protocol is saved.
 
 ---
 
@@ -317,7 +324,47 @@ POST /api/v1/plugins/oncology/protocols
 ```
 **Permission:** `oncology.chemo_protocol.write`
 
-Required: `code`, `name`, `cancerType`, `intent`, `regimen` (≥1 drug), `totalCycles`, `cycleDurationDays`.
+Required: `code`, `name`, `cancerType`, `intent`, and `phases` (preferred) — or the legacy
+`regimen` (≥1 drug) + `totalCycles` + `cycleDurationDays`.
+
+#### Phase-based regimen (`phases`)
+
+`phases` is an ordered array; cycles run phase after phase (phase 2 starts at the cycle after
+phase 1's last cycle).
+
+```jsonc
+[
+  {
+    "id": "uuid",                 // optional on write; generated if missing
+    "name": "AC",
+    "cycles": 4,                  // integer ≥ 1
+    "cycleDurationDays": 14,      // integer ≥ 1
+    "notes": "optional",
+    "drugs": [
+      {
+        "id": "uuid",
+        "drug": "Doxorubicin",
+        "dose": 60, "unit": "mg/m²", "route": "IV",
+        "days": [1],              // cycle days, each ≤ cycleDurationDays
+        "doseFormula": "bsa",     // bsa | weight | fixed | auc
+        "infusionDurationMin": 15, "diluent": "NS 100 mL",
+        "maxDose": 2,             // optional cap per administration, mg
+        "doseLevels": [{ "level": -1, "dose": 50 }],
+        "overrides": [            // optional cycle-specific changes
+          { "cycles": [1], "dose": 8, "days": [1, 8], "omit": false, "note": "loading dose" }
+        ]
+      }
+    ]
+  }
+]
+```
+
+- `overrides[].cycles` are **phase-relative** (1 = first cycle of that phase) and must be within
+  `1..cycles`. Later overrides win field-by-field; `omit: true` drops the drug for those cycles.
+- When `phases` is sent, the server **derives** `regimen` (one entry per phase drug line, base
+  dose, with a `phase` name), `total_cycles` (sum of phase cycles) and `cycle_duration_days`
+  (first phase); any `regimen` / `totalCycles` / `cycleDurationDays` in the body are ignored.
+- Validation failures return `400` with `{ message: "Invalid protocol phases", errors: string[] }`.
 
 ---
 
@@ -327,7 +374,8 @@ PUT /api/v1/plugins/oncology/protocols/:id
 ```
 **Permission:** `oncology.chemo_protocol.write`
 
-Partial update — only provided fields are changed.
+Partial update — only provided fields are changed. Sending `phases` replaces the whole regimen
+and re-derives `regimen` / `total_cycles` / `cycle_duration_days`.
 
 ---
 
@@ -358,6 +406,11 @@ GET /api/v1/plugins/oncology/orders/:id
 **Permission:** `oncology.chemo_order.read`
 
 Returns order with joined protocol and cancer diagnosis context.
+
+For phased protocols, `protocol_regimen` holds only the drugs given in the order's
+`cycle_number`, with that cycle's overrides applied (dose, days; omitted drugs removed), plus
+`phase` / `phaseCycle` / `note` on each entry. `protocol_phases` carries the full phase list.
+Legacy (unphased) protocols return the flat `regimen` unchanged.
 
 ---
 

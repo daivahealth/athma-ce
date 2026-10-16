@@ -10,6 +10,10 @@ import { useProtocols, useDeactivateProtocol } from '@/plugins/oncology/hooks/us
 import { LoadingState } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
 import type { ChemoProtocol } from '@/plugins/oncology/types';
+import { getProtocolPhases } from '@/plugins/oncology/lib/protocol-phases';
+
+const drugCount = (p: ChemoProtocol) =>
+  new Set(getProtocolPhases(p).flatMap((ph) => ph.drugs.map((d) => d.drug.trim().toLowerCase()))).size;
 
 const EMETOGENIC_COLORS: Record<string, string> = {
   minimal: 'bg-success/10 text-success',
@@ -116,7 +120,9 @@ export default function ProtocolsPage() {
                   <td className="p-3 text-muted-foreground text-xs">{p.cancer_type}</td>
                   <td className="p-3 capitalize text-xs">{p.intent}</td>
                   <td className="p-3 text-muted-foreground text-xs">
-                    {p.total_cycles} × {p.cycle_duration_days}d
+                    {getProtocolPhases(p).length > 1
+                      ? getProtocolPhases(p).map((ph) => `${ph.name} ${ph.cycles}×${ph.cycleDurationDays}d`).join(' → ')
+                      : `${p.total_cycles} × ${p.cycle_duration_days}d`}
                   </td>
                   <td className="p-3">
                     {p.emetogenic_risk ? (
@@ -126,7 +132,7 @@ export default function ProtocolsPage() {
                     ) : <span className="text-muted-foreground text-xs">—</span>}
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    {p.regimen?.length ?? 0} drug{(p.regimen?.length ?? 0) !== 1 ? 's' : ''}
+                    {drugCount(p)} drug{drugCount(p) !== 1 ? 's' : ''}
                   </td>
                   <td className="p-3">
                     <Badge variant={p.is_active ? 'default' : 'secondary'} className="text-xs">

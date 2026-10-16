@@ -527,3 +527,52 @@ VALUES
  'moderate', 'bsa', true, NOW(), NOW())
 
 ON CONFLICT (id) DO NOTHING;
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- PHASED REGIMENS (protocol schema v2)
+-- `phases` is the source of truth; `regimen` / total_cycles / cycle_duration_days
+-- are the derived legacy columns (the API derives them the same way on save).
+-- Protocols not listed here keep phases = '[]' and are read as a single phase.
+-- ─────────────────────────────────────────────────────────────────────────────
+
+-- AC-T: AC q14d × 4, then paclitaxel q14d × 4 (paclitaxel is NOT given with AC)
+UPDATE plugin_oncology.chemo_protocols SET
+  phases = '[
+    {"id":"act-ph-ac","name":"AC","cycles":4,"cycleDurationDays":14,"drugs":[
+      {"id":"act-dox","drug":"Doxorubicin","dose":60,"unit":"mg/m²","route":"IV","days":[1],"doseFormula":"bsa","infusionDurationMin":15,"doseLevels":[{"level":-1,"dose":50},{"level":-2,"dose":45}]},
+      {"id":"act-cyc","drug":"Cyclophosphamide","dose":600,"unit":"mg/m²","route":"IV","days":[1],"doseFormula":"bsa","infusionDurationMin":30,"doseLevels":[{"level":-1,"dose":500},{"level":-2,"dose":450}]}
+    ]},
+    {"id":"act-ph-t","name":"Paclitaxel","cycles":4,"cycleDurationDays":14,"drugs":[
+      {"id":"act-pac","drug":"Paclitaxel","dose":175,"unit":"mg/m²","route":"IV","days":[1],"doseFormula":"bsa","infusionDurationMin":180,"diluent":"NS 500 mL","doseLevels":[{"level":-1,"dose":135},{"level":-2,"dose":110}]}
+    ]}
+  ]'::jsonb,
+  regimen = '[
+    {"drug":"Doxorubicin","dose":60,"unit":"mg/m²","route":"IV","day":1,"doseFormula":"bsa","infusionDurationMin":15,"phase":"AC"},
+    {"drug":"Cyclophosphamide","dose":600,"unit":"mg/m²","route":"IV","day":1,"doseFormula":"bsa","infusionDurationMin":30,"phase":"AC"},
+    {"drug":"Paclitaxel","dose":175,"unit":"mg/m²","route":"IV","day":1,"doseFormula":"bsa","infusionDurationMin":180,"diluent":"NS 500 mL","phase":"Paclitaxel"}
+  ]'::jsonb,
+  total_cycles = 8, cycle_duration_days = 14
+WHERE id = uuid_from_text('chemo-protocol-ac-t');
+
+-- TCH: TCH q21d × 6 (trastuzumab 8 mg/kg loading on C1, 6 mg/kg after),
+-- then trastuzumab maintenance q21d × 11 → 17 doses ≈ 1 year
+UPDATE plugin_oncology.chemo_protocols SET
+  phases = '[
+    {"id":"tch-ph-tch","name":"TCH","cycles":6,"cycleDurationDays":21,"drugs":[
+      {"id":"tch-doc","drug":"Docetaxel","dose":75,"unit":"mg/m²","route":"IV","days":[1],"doseFormula":"bsa","infusionDurationMin":60,"diluent":"NS 250 mL","doseLevels":[{"level":-1,"dose":60}]},
+      {"id":"tch-carbo","drug":"Carboplatin","dose":6,"unit":"AUC","route":"IV","days":[1],"doseFormula":"auc","infusionDurationMin":30,"diluent":"D5W 250 mL","doseLevels":[{"level":-1,"dose":5}]},
+      {"id":"tch-tras","drug":"Trastuzumab","dose":6,"unit":"mg/kg","route":"IV","days":[1],"doseFormula":"weight","infusionDurationMin":30,
+       "overrides":[{"cycles":[1],"dose":8,"note":"Loading dose — infuse over 90 min"}]}
+    ]},
+    {"id":"tch-ph-maint","name":"Trastuzumab maintenance","cycles":11,"cycleDurationDays":21,"drugs":[
+      {"id":"tch-tras-m","drug":"Trastuzumab","dose":6,"unit":"mg/kg","route":"IV","days":[1],"doseFormula":"weight","infusionDurationMin":30}
+    ]}
+  ]'::jsonb,
+  regimen = '[
+    {"drug":"Docetaxel","dose":75,"unit":"mg/m²","route":"IV","day":1,"doseFormula":"bsa","infusionDurationMin":60,"diluent":"NS 250 mL","phase":"TCH"},
+    {"drug":"Carboplatin","dose":6,"unit":"AUC","route":"IV","day":1,"doseFormula":"auc","infusionDurationMin":30,"diluent":"D5W 250 mL","phase":"TCH"},
+    {"drug":"Trastuzumab","dose":6,"unit":"mg/kg","route":"IV","day":1,"doseFormula":"weight","infusionDurationMin":30,"phase":"TCH"},
+    {"drug":"Trastuzumab","dose":6,"unit":"mg/kg","route":"IV","day":1,"doseFormula":"weight","infusionDurationMin":30,"phase":"Trastuzumab maintenance"}
+  ]'::jsonb,
+  total_cycles = 17, cycle_duration_days = 21
+WHERE id = uuid_from_text('chemo-protocol-tch');

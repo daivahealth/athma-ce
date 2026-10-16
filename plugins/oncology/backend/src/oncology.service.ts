@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import { RequestContext } from '@zeal/shared-utils';
+import { deriveLegacyColumns, normalizeProtocolRow, parsePhases, regimenForCycle } from './protocol-phases';
 
 // Matches PatientDisplayDto from @zeal/contracts — defined locally because the plugin
 // directory is outside backend/node_modules and cannot resolve @zeal/contracts at runtime.
@@ -1124,7 +1125,7 @@ export class OncologyService {
       limit,
       (page - 1) * limit,
     );
-    return { data: results };
+    return { data: results.map(normalizeProtocolRow) };
   }
 
   async getProtocol(id: string) {
@@ -1135,22 +1136,25 @@ export class OncologyService {
       tenantId,
     );
     if (!results.length) throw new NotFoundException(`Protocol '${id}' not found`);
-    return results[0];
+    return normalizeProtocolRow(results[0]);
   }
 
   async createProtocol(data: Record<string, unknown>) {
     const tenantId = this.getTenantId();
+    // v2: phases are the source of truth; legacy columns are derived from them
+    const phases = data.phases !== undefined ? parsePhases(data.phases) : null;
+    if (phases) Object.assign(data, deriveLegacyColumns(phases));
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `INSERT INTO plugin_oncology.chemo_protocols (
         id, tenant_id, code, name, description, cancer_type, intent,
         regimen, total_cycles, cycle_duration_days, premedications,
-        supportive_care, emetogenic_risk, dose_formula, lab_prerequisites, hydration,
-        is_active, created_at, updated_at, created_by
+        "supportiveCare", emetogenic_risk, dose_formula, lab_prerequisites, hydration,
+        is_active, created_at, updated_at, created_by, phases
       ) VALUES (
         gen_random_uuid(), $1::uuid, $2, $3, $4, $5, $6,
         $7::jsonb, $8, $9, $10::jsonb,
         $11::jsonb, $12, $13, $14::jsonb, $15::jsonb,
-        $16, NOW(), NOW(), $17::uuid
+        $16, NOW(), NOW(), $17::uuid, $18::jsonb
       ) RETURNING *`,
       tenantId,
       data.code,
@@ -1169,8 +1173,9 @@ export class OncologyService {
       JSON.stringify(data.hydration ?? []),
       data.isActive ?? true,
       this.getCurrentUserId(),
+      JSON.stringify(phases ?? []),
     );
-    return results[0];
+    return normalizeProtocolRow(results[0]);
   }
 
   async updateProtocol(id: string, data: Record<string, unknown>) {
@@ -1180,6 +1185,9 @@ export class OncologyService {
       id, tenantId,
     );
     if (!existing.length) throw new NotFoundException(`Protocol '${id}' not found`);
+
+    const phases = data.phases !== undefined ? parsePhases(data.phases) : null;
+    if (phases) Object.assign(data, deriveLegacyColumns(phases));
 
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.chemo_protocols SET
@@ -1191,11 +1199,12 @@ export class OncologyService {
         total_cycles        = COALESCE($8, total_cycles),
         cycle_duration_days = COALESCE($9, cycle_duration_days),
         premedications      = COALESCE($10::jsonb, premedications),
-        supportive_care     = COALESCE($11::jsonb, supportive_care),
+        "supportiveCare"    = COALESCE($11::jsonb, "supportiveCare"),
         emetogenic_risk     = COALESCE($12, emetogenic_risk),
         dose_formula        = COALESCE($13, dose_formula),
         lab_prerequisites   = COALESCE($14::jsonb, lab_prerequisites),
         hydration           = COALESCE($15::jsonb, hydration),
+        phases              = COALESCE($16::jsonb, phases),
         updated_at          = NOW()
       WHERE id = $1::uuid AND tenant_id = $2::uuid
       RETURNING *`,
@@ -1214,8 +1223,9 @@ export class OncologyService {
       data.doseFormula ?? null,
       data.labPrerequisites ? JSON.stringify(data.labPrerequisites) : null,
       data.hydration ? JSON.stringify(data.hydration) : null,
+      phases ? JSON.stringify(phases) : null,
     );
-    return results[0];
+    return normalizeProtocolRow(results[0]);
   }
 
   async deactivateProtocol(id: string) {
@@ -1275,7 +1285,7 @@ export class OncologyService {
     const tenantId = this.getTenantId();
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `SELECT co.*, cp.name as protocol_name, cp.code as protocol_code,
-        cp.regimen as protocol_regimen, cp.premedications as protocol_premedications,
+        cp.regimen as protocol_regimen, cp.phases as protocol_phases, cp.premedications as protocol_premedications,
         cp.hydration as protocol_hydration, cp.lab_prerequisites as protocol_lab_prerequisites,
         cp.emetogenic_risk as protocol_emetogenic_risk, cp.total_cycles as protocol_total_cycles,
         cp.cycle_duration_days as protocol_cycle_duration_days, cp.dose_formula as protocol_dose_formula,
@@ -1297,6 +1307,11 @@ export class OncologyService {
     );
     if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
     const r = results[0];
+    // Phased protocols: show only what this order's cycle gives, with its
+    // cycle-specific doses/days. Legacy protocols keep the flat regimen.
+    if (Array.isArray(r.protocol_phases) && r.protocol_phases.length) {
+      r.protocol_regimen = regimenForCycle(r.protocol_phases, r.cycle_number) ?? r.protocol_regimen;
+    }
     const pd = this.buildPatientDisplay(r);
     const clean = { ...r };
     for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_'))) delete clean[k];

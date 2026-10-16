@@ -155,6 +155,8 @@ export interface ChemoProtocol {
   cancer_type: string;
   intent: 'curative' | 'palliative' | 'adjuvant' | 'neoadjuvant';
   regimen: RegimenItem[];
+  /** Phase-based regimen (schema v2) — source of truth; `regimen` is derived. */
+  phases: ProtocolPhase[];
   total_cycles: number;
   cycle_duration_days: number;
   premedications: string[];
@@ -171,6 +173,53 @@ export interface RegimenItem {
   route: string;
   day: number;
   cycle: string;
+}
+
+// ── Phase-based regimen (protocol schema v2) ────────────────────────────────
+// Protocol → phases (sequential blocks of identical cycles) → drug lines.
+// Per-cycle exceptions live on the drug line as sparse overrides, keyed by the
+// cycle number *within the phase* so they survive edits to earlier phases.
+
+/** Predefined dose reduction for a drug line (e.g. DL−1 = 80 mg/m²). */
+export interface ProtocolDoseLevel {
+  level: number; // −1, −2, −3
+  dose: number; // same unit as the drug line
+}
+
+/** Exception to a drug line for specific cycles of its phase. */
+export interface ProtocolDrugOverride {
+  cycles: number[]; // phase-relative cycle numbers (1-based)
+  dose?: number;
+  unit?: string;
+  days?: number[];
+  omit?: boolean;
+  note?: string;
+}
+
+export interface ProtocolPhaseDrug {
+  id: string;
+  drug: string;
+  dose: number;
+  unit: string;
+  route: string;
+  days: number[];
+  /** 'auc' = Calvert (carboplatin); dose is the target AUC. */
+  doseFormula: 'bsa' | 'weight' | 'fixed' | 'auc';
+  infusionDurationMin?: number;
+  diluent?: string;
+  /** Absolute cap per administration in mg (e.g. vincristine 2 mg). */
+  maxDose?: number;
+  doseLevels?: ProtocolDoseLevel[];
+  overrides?: ProtocolDrugOverride[];
+}
+
+export interface ProtocolPhase {
+  id: string;
+  name: string;
+  cycles: number;
+  cycleDurationDays: number;
+  drugs: ProtocolPhaseDrug[];
+  notes?: string;
 }
 
 export interface ChemoOrder {

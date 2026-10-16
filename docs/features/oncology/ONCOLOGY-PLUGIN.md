@@ -119,16 +119,39 @@ Reusable protocol templates. Unique per `(tenant_id, code)`.
 | `name` | VARCHAR(200) | Full protocol name |
 | `cancer_type` | VARCHAR(200) | Target cancer type |
 | `intent` | VARCHAR(50) | curative, adjuvant, neoadjuvant, palliative |
-| `regimen` | JSONB | Array of `{ drug, dose, unit, route, day, doseFormula, infusionDurationMin, diluent }` |
-| `total_cycles` | INT | |
-| `cycle_duration_days` | INT | |
+| `phases` | JSONB | **Source of truth (schema v2).** Ordered phases `{ id, name, cycles, cycleDurationDays, drugs[] }`; each drug line `{ id, drug, dose, unit, route, days[], doseFormula, infusionDurationMin?, diluent?, maxDose?, doseLevels?[], overrides?[] }`. `[]` on rows saved before v2 — the API reads those as one `Main` phase. Shape and rules: [API — Phase-based regimen](../../api/ONCOLOGY-API-ENDPOINTS.md#phase-based-regimen-phases) |
+| `regimen` | JSONB | Derived from `phases` on save (one entry per phase drug line, base dose, `phase` name) — kept for legacy readers. Array of `{ drug, dose, unit, route, day, doseFormula, infusionDurationMin, diluent, phase? }` |
+| `total_cycles` | INT | Derived: sum of phase cycles |
+| `cycle_duration_days` | INT | Derived: first phase's cycle length |
 | `premedications` | JSONB | Antiemetics, steroids, H2 blockers |
 | `hydration` | JSONB | Array of `{ fluid, ratePerHour, durationHours, timing }` |
 | `lab_prerequisites` | JSONB | Array of `{ test, parameter, minValue, unit, timing }` — e.g. ANC ≥ 1500 |
 | `emetogenic_risk` | VARCHAR(20)? | minimal, low, moderate, high |
 | `dose_formula` | VARCHAR(10) | bsa (default), weight, fixed — protocol-level default |
-| `supportive_care` | JSONB | G-CSF, growth factors, etc. |
+| `supportiveCare` | JSONB | G-CSF, growth factors, etc. Column is camel-cased (no `@map`); the API exposes it as `supportive_care` |
 | `is_active` | BOOLEAN | Soft-delete; existing orders retain reference |
+
+#### Phase-based regimens
+
+A protocol is an ordered list of **phases**: blocks of identical cycles, each with its own cycle
+count, cycle length and drugs. Cycles are numbered continuously across phases. Examples:
+AC-T = `AC` × 4 (q14d) → `Paclitaxel` × 4 (q14d); TCH = `TCH` × 6 (q21d) → `Trastuzumab
+maintenance` × 11.
+
+- **Cycle-specific changes** are sparse overrides on a drug line (dose, days, omit, note), keyed by
+  the cycle number *within the phase*, so changing an earlier phase's cycle count doesn't move them.
+  Example: trastuzumab 6 mg/kg with a cycle-1 override of 8 mg/kg (loading).
+- **Dose levels** (DL−1, DL−2) are stored per drug line for later use at order time.
+- **Builder UI** (new/edit protocol): phase cards, a drug × cycle **matrix** (click a cell to change
+  that one cycle; changed cells are highlighted) and a **day-by-day schedule preview** (treatment
+  day, week, `C{n} D{d}`, optional sample start date that flags weekends). The preview is not a
+  patient schedule; patient treatment plans are not built yet.
+- **Orders:** the new-order form calculates doses only for the drugs of the entered cycle (with
+  overrides and `maxDose` applied), and `GET /orders/:id` returns that cycle's drugs as
+  `protocol_regimen`.
+- **Schema change:** `phases JSONB NOT NULL DEFAULT '[]'` — apply with the plugin `prisma db push`
+  (see [PLUGIN-DEVELOPMENT](../../development/PLUGIN-DEVELOPMENT.md)). Existing rows need no data
+  migration; they are read as one phase and written as v2 on the next save.
 
 ### `chemo_orders`
 
@@ -270,8 +293,8 @@ frontend/src/app/[locale]/(dashboard)/oncology/
 │   └── [id]/edit/page.tsx
 ├── protocols/                        # Phase 2 — Chemo Protocols
 │   ├── page.tsx                      # Protocol list with deactivate toggle
-│   ├── new/page.tsx                  # Regimen builder (drug rows, hydration, lab prerequisites)
-│   └── [id]/edit/page.tsx
+│   ├── new/page.tsx                  # Phase-based regimen builder, hydration, lab prerequisites
+│   └── [id]/edit/page.tsx            # Same builder (plugins/oncology/components/protocol-builder/)
 └── orders/                           # Phase 2 — Chemo Orders
     ├── page.tsx                      # Order list with status filter
     ├── new/page.tsx                  # BSA calculator, dose calculator, pre-chemo checklist
@@ -346,7 +369,7 @@ The Phase 2 chemotherapy module implements ASCO/ONS Chemotherapy Administration 
 | ASCO/ONS Standard | Implementation |
 |---|---|
 | Standardised protocol naming | `ChemoProtocol.code` unique per tenant |
-| Complete regimen specification | `regimen` JSON with drug, dose, route, day, formula, infusion duration |
+| Complete regimen specification | `phases` JSON: per-phase cycles and drugs (dose, route, days, formula, infusion), cycle-specific overrides, dose levels |
 | Dose calculation (BSA/weight) | Auto-calculated in orders/new; stored in `dose_adjustments` |
 | Organ function dose adjustment | `hepatic_adjustment_grade`, `renal_adjustment_grade`; manual adjustment rows |
 | Lab prerequisites before cycle | `lab_prerequisites` on protocol; checklist review on order |
