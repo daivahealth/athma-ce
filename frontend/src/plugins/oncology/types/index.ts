@@ -166,6 +166,15 @@ export interface PlannedModality {
   startDate?: string;
   endDate?: string;
   responsibleSubspecialty?: OncologySubspecialty;
+  // Per-modality schedule (cycles for systemic therapy, fractions for radiation)
+  plannedCycles?: number;
+  cycleDurationDays?: number;
+  plannedFractions?: number;
+  // Chemo protocol selected at planning time (chemotherapy modality only);
+  // pre-populates the protocol when placing chemo orders against this plan
+  protocolId?: string;
+  protocolCode?: string;
+  protocolName?: string;
 }
 
 export interface OncologyCarePlan {
@@ -279,8 +288,13 @@ export interface ChemoProtocol {
   description?: string;
   cancer_type: string;
   intent: 'curative' | 'palliative' | 'adjuvant' | 'neoadjuvant';
+  /** Flat drug list derived from `phases` on save — kept for legacy readers. */
   regimen: RegimenItem[];
+  /** Source of truth for the regimen (v2). Always present on API responses. */
+  phases: ProtocolPhase[];
+  /** Sum of phase cycles (derived). */
   total_cycles: number;
+  /** First phase's cycle length (derived). */
   cycle_duration_days: number;
   premedications: string[];
   supportive_care: string[];

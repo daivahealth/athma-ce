@@ -104,7 +104,7 @@ Treatment plan originating from tumor board or direct oncologist decision.
 | `parent_plan_id` | UUID? | Previous version for revised plans |
 | `treatment_intent` | VARCHAR(50) | curative, adjuvant, neoadjuvant, palliative, surveillance, supportive |
 | `oncology_subspecialty` | VARCHAR(50)? | medical_oncology, surgical_oncology, radiation_oncology, hemato_oncology, gynec_oncology |
-| `planned_modalities` | JSONB | Array of `{ modality, sequence, status, details, startDate, endDate }` |
+| `planned_modalities` | JSONB | Array of `{ modality, sequence, status, details, startDate, endDate, plannedCycles?, cycleDurationDays?, plannedFractions?, protocolId?, protocolCode?, protocolName? }` — each modality carries its own schedule; `protocol*` fields (chemotherapy only) snapshot the chemo protocol chosen at planning time and pre-populate the protocol on new chemo orders linked to the plan. Plan-level `planned_cycles`/`cycle_duration_days` are derived from the chemotherapy modality for list views. |
 | `status` | VARCHAR(30) | draft, active, on_hold, completed, cancelled, revised |
 | `approved_by` | UUID? | Provider who approved |
 | `approved_at` | TIMESTAMPTZ? | |

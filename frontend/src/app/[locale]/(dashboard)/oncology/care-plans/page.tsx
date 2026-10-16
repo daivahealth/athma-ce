@@ -169,7 +169,10 @@ function ModalitiesSummary({ modalities }: { modalities: OncologyCarePlan['plann
   return (
     <div className="flex flex-wrap gap-1">
       {shown.map((m, i) => (
-        <span key={i} className="text-xs px-1.5 py-0.5 rounded bg-muted capitalize">{m.modality}</span>
+        <span key={i} className="text-xs px-1.5 py-0.5 rounded bg-muted capitalize">
+          {m.modality}
+          {m.protocolCode && <span className="normal-case font-mono ml-1 text-muted-foreground">({m.protocolCode})</span>}
+        </span>
       ))}
       {rest > 0 && <span className="text-xs text-muted-foreground">+{rest} more</span>}
     </div>
