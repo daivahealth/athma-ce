@@ -18,21 +18,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Plus, Trash2 } from 'lucide-react';
-import { useCancerDiagnoses, useCreateOncologyCarePlan, useUpdateOncologyCarePlan } from '../hooks/use-oncology';
-import type { CancerDiagnosis, OncologyCarePlan, TreatmentModality, OncologySubspecialty } from '../types';
+import { useCancerDiagnoses, useCreateOncologyCarePlan, useProtocols, useUpdateOncologyCarePlan } from '../hooks/use-oncology';
+import type { CancerDiagnosis, ChemoProtocol, OncologyCarePlan, OncologySubspecialty } from '../types';
+import {
+  ModalityPlanEditor,
+  deriveOverallSchedule,
+  emptyModalityRow,
+  fromPlannedModalities,
+  toPlannedModalitiesPayload,
+  type ModalityFormRow,
+} from './ModalityPlanEditor';
 
 interface AddCarePlanSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   carePlan?: OncologyCarePlan;
-}
-
-interface ModalityRow {
-  modality: TreatmentModality | '';
-  sequence: number;
-  status: 'planned' | 'in_progress' | 'completed' | 'cancelled';
-  details: string;
 }
 
 const TREATMENT_INTENTS = [
@@ -52,17 +52,6 @@ const SUBSPECIALTIES: { value: OncologySubspecialty; label: string }[] = [
   { value: 'gynec_oncology', label: 'Gynecologic Oncology' },
 ];
 
-const MODALITIES: { value: TreatmentModality; label: string }[] = [
-  { value: 'surgery', label: 'Surgery' },
-  { value: 'chemotherapy', label: 'Chemotherapy' },
-  { value: 'radiation', label: 'Radiation' },
-  { value: 'immunotherapy', label: 'Immunotherapy' },
-  { value: 'hormonal', label: 'Hormonal Therapy' },
-  { value: 'targeted', label: 'Targeted Therapy' },
-  { value: 'palliative', label: 'Palliative Care' },
-  { value: 'surveillance', label: 'Surveillance' },
-];
-
 const PLAN_STATUSES = [
   { value: 'draft', label: 'Draft' },
   { value: 'active', label: 'Active' },
@@ -71,18 +60,6 @@ const PLAN_STATUSES = [
   { value: 'cancelled', label: 'Cancelled' },
 ];
 
-function defaultModalities(plan?: OncologyCarePlan): ModalityRow[] {
-  if (plan?.planned_modalities?.length) {
-    return plan.planned_modalities.map((m) => ({
-      modality: m.modality,
-      sequence: m.sequence,
-      status: m.status,
-      details: m.details ?? '',
-    }));
-  }
-  return [{ modality: '', sequence: 1, status: 'planned', details: '' }];
-}
-
 export function AddCarePlanSheet({ open, onOpenChange, carePlan }: AddCarePlanSheetProps) {
   const isEditMode = !!carePlan;
 
@@ -90,12 +67,10 @@ export function AddCarePlanSheet({ open, onOpenChange, carePlan }: AddCarePlanSh
   const [treatmentIntent, setTreatmentIntent] = useState(carePlan?.treatment_intent ?? '');
   const [subspecialty, setSubspecialty] = useState<string>(carePlan?.oncology_subspecialty ?? '');
   const [status, setStatus] = useState<string>(carePlan?.status ?? 'draft');
-  const [plannedCycles, setPlannedCycles] = useState(carePlan?.planned_cycles?.toString() ?? '');
-  const [cycleDurationDays, setCycleDurationDays] = useState(carePlan?.cycle_duration_days?.toString() ?? '');
   const [startDate, setStartDate] = useState(carePlan?.start_date?.substring(0, 10) ?? '');
   const [endDate, setEndDate] = useState(carePlan?.end_date?.substring(0, 10) ?? '');
   const [notes, setNotes] = useState(carePlan?.notes ?? '');
-  const [modalities, setModalities] = useState<ModalityRow[]>(defaultModalities(carePlan));
+  const [modalities, setModalities] = useState<ModalityFormRow[]>(fromPlannedModalities(carePlan?.planned_modalities));
 
   useEffect(() => {
     if (carePlan) {
@@ -103,62 +78,36 @@ export function AddCarePlanSheet({ open, onOpenChange, carePlan }: AddCarePlanSh
       setTreatmentIntent(carePlan.treatment_intent);
       setSubspecialty(carePlan.oncology_subspecialty ?? '');
       setStatus(carePlan.status);
-      setPlannedCycles(carePlan.planned_cycles?.toString() ?? '');
-      setCycleDurationDays(carePlan.cycle_duration_days?.toString() ?? '');
       setStartDate(carePlan.start_date?.substring(0, 10) ?? '');
       setEndDate(carePlan.end_date?.substring(0, 10) ?? '');
       setNotes(carePlan.notes ?? '');
-      setModalities(defaultModalities(carePlan));
+      setModalities(fromPlannedModalities(carePlan.planned_modalities));
     }
   }, [carePlan]);
 
   const { data: diagnosesData } = useCancerDiagnoses();
   const diagnoses: CancerDiagnosis[] = diagnosesData?.data ?? [];
   const selectedDiagnosis = diagnoses.find((d) => d.id === cancerDiagnosisId);
+  const cancerType = selectedDiagnosis?.cancer_type ?? carePlan?.cancer_type;
+
+  // Same query the ModalityPlanEditor uses — shared react-query cache
+  const { data: protocolsData } = useProtocols(cancerType ? { cancerType } : undefined);
+  const protocols: ChemoProtocol[] = protocolsData?.data ?? [];
 
   const createPlan = useCreateOncologyCarePlan();
   const updatePlan = useUpdateOncologyCarePlan();
   const isPending = createPlan.isPending || updatePlan.isPending;
 
-  const addModality = () =>
-    setModalities((prev) => [
-      ...prev,
-      { modality: '', sequence: prev.length + 1, status: 'planned', details: '' },
-    ]);
-
-  const removeModality = (i: number) =>
-    setModalities((prev) =>
-      prev
-        .filter((_, idx) => idx !== i)
-        .map((m, idx) => ({ ...m, sequence: idx + 1 })),
-    );
-
-  const updateModality = (i: number, field: keyof ModalityRow, value: string | number) => {
-    setModalities((prev) =>
-      prev.map((m, idx) => (idx === i ? { ...m, [field]: value } : m)),
-    );
-  };
-
   const handleSubmit = async () => {
     if (!cancerDiagnosisId || !treatmentIntent) return;
-
-    const filledModalities = modalities
-      .filter((m) => m.modality)
-      .map((m) => ({
-        modality: m.modality,
-        sequence: m.sequence,
-        status: m.status,
-        details: m.details || undefined,
-      }));
 
     const payload = {
       cancerDiagnosisId,
       treatmentIntent,
       oncologySubspecialty: subspecialty || undefined,
       status,
-      plannedModalities: filledModalities,
-      plannedCycles: plannedCycles ? parseInt(plannedCycles, 10) : undefined,
-      cycleDurationDays: cycleDurationDays ? parseInt(cycleDurationDays, 10) : undefined,
+      plannedModalities: toPlannedModalitiesPayload(modalities, protocols),
+      ...deriveOverallSchedule(modalities),
       startDate: startDate || undefined,
       endDate: endDate || undefined,
       notes: notes || undefined,
@@ -180,12 +129,10 @@ export function AddCarePlanSheet({ open, onOpenChange, carePlan }: AddCarePlanSh
     setTreatmentIntent('');
     setSubspecialty('');
     setStatus('draft');
-    setPlannedCycles('');
-    setCycleDurationDays('');
     setStartDate('');
     setEndDate('');
     setNotes('');
-    setModalities([{ modality: '', sequence: 1, status: 'planned', details: '' }]);
+    setModalities([emptyModalityRow(1)]);
   };
 
   const isValid = cancerDiagnosisId && treatmentIntent;
@@ -298,91 +245,17 @@ export function AddCarePlanSheet({ open, onOpenChange, carePlan }: AddCarePlanSh
             </div>
           </div>
 
-          {/* Planned Modalities */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between border-b pb-1">
-              <h3 className="text-sm font-semibold">Planned Modalities</h3>
-              <Button type="button" variant="ghost" size="sm" onClick={addModality}>
-                <Plus className="h-3.5 w-3.5 mr-1" />
-                Add
-              </Button>
-            </div>
+          {/* Planned Modalities — each with its own schedule (and protocol for chemo) */}
+          <ModalityPlanEditor
+            rows={modalities}
+            onChange={setModalities}
+            cancerType={cancerType}
+          />
 
-            {modalities.map((m, i) => (
-              <div key={i} className="flex gap-2 items-start">
-                <div className="flex-1 grid grid-cols-2 gap-2">
-                  <Select
-                    value={m.modality || '__none'}
-                    onValueChange={(v) => updateModality(i, 'modality', v === '__none' ? '' : v)}
-                  >
-                    <SelectTrigger className="h-8 text-xs">
-                      <SelectValue placeholder="Modality" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__none">— Modality —</SelectItem>
-                      {MODALITIES.map((mod) => (
-                        <SelectItem key={mod.value} value={mod.value}>{mod.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={m.status}
-                    onValueChange={(v) => updateModality(i, 'status', v)}
-                  >
-                    <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="planned">Planned</SelectItem>
-                      <SelectItem value="in_progress">In Progress</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="cancelled">Cancelled</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    className="h-8 text-xs col-span-2"
-                    placeholder="Details (optional)"
-                    value={m.details}
-                    onChange={(e) => updateModality(i, 'details', e.target.value)}
-                  />
-                </div>
-                {modalities.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
-                    onClick={() => removeModality(i)}
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Cycle & Dates */}
+          {/* Overall plan dates */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold border-b pb-1">Schedule</h3>
+            <h3 className="text-sm font-semibold border-b pb-1">Overall Schedule</h3>
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label>Planned Cycles</Label>
-                <Input
-                  type="number"
-                  min={1}
-                  placeholder="e.g. 6"
-                  value={plannedCycles}
-                  onChange={(e) => setPlannedCycles(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Cycle Duration (days)</Label>
-                <Input
-                  type="number"
-                  min={1}
-                  placeholder="e.g. 21"
-                  value={cycleDurationDays}
-                  onChange={(e) => setCycleDurationDays(e.target.value)}
-                />
-              </div>
               <div className="space-y-2">
                 <Label>Start Date</Label>
                 <Input

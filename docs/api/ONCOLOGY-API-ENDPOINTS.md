@@ -256,6 +256,13 @@ Plan number is auto-generated: `OCP-YYYYMM-NNNNN` (sequential per tenant-month).
 
 `cancerDiagnosisId` is **required** and validated.
 
+`plannedModalities` is an array of per-modality entries, each with its own schedule:
+`{ modality, sequence, status, details?, startDate?, endDate?, plannedCycles?, cycleDurationDays?, plannedFractions?, protocolId?, protocolCode?, protocolName? }`.
+The `protocol*` fields apply to the `chemotherapy` modality only and snapshot the chemo
+protocol chosen at planning time; the frontend pre-populates this protocol when a chemo
+order is created against the plan. Top-level `plannedCycles`/`cycleDurationDays` are
+derived from the chemotherapy modality (kept for list views / backward compatibility).
+
 ---
 
 ### Update Care Plan
