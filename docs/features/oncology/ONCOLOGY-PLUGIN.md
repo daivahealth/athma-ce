@@ -227,6 +227,12 @@ weight, CrCl → preview → generate), `/oncology/treatment-plans/[id]` (cycle 
 dose level, day rows with day sheet and order actions), `/oncology/day-care` (date worklist:
 per-patient administration sheets with timed sequence, and a pharmacy prep table with drug totals).
 
+**Colour:** statuses (care plan, order, plan, day, radiation) render as tone badges from one
+vocabulary in `frontend/src/plugins/oncology/lib/oncology-tone.ts`; care-plan modalities and
+treatment intents each have their own tone; a protocol phase is coloured by its index (sky,
+violet, emerald, orange, fuchsia — the same order as the builder's phase accents), on both the
+cycle cards and the day-care worklist.
+
 ---
 
 ## Subspecialty Design

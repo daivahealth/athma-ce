@@ -125,3 +125,18 @@ export const TONE_CHART: Record<BadgeTone, { light: string; dark: string }> = {
   rose: { light: 'oklch(58.6% 0.253 17.585)', dark: 'oklch(71.2% 0.194 13.428)' },
   slate: { light: 'oklch(44.6% 0.043 257.281)', dark: 'oklch(70.4% 0.04 256.788)' },
 };
+
+/**
+ * Looks a domain value up in a `<domain>-tone.ts` map, falling back to a
+ * deliberate tone (slate unless the map says otherwise) for anything the map
+ * does not know yet, so a new backend value renders uncoloured rather than
+ * breaking the row.
+ */
+export function toneOf(
+  map: Readonly<Record<string, BadgeTone>>,
+  value: string | null | undefined,
+  fallback: BadgeTone = 'slate',
+): BadgeTone {
+  if (!value) return fallback;
+  return Object.prototype.hasOwnProperty.call(map, value) ? map[value] : fallback;
+}

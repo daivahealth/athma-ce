@@ -24,6 +24,7 @@ Frontend route pattern:
 - workflow actions such as submit, approve, confirm, sign, and cancel remain available from the list screens
 - OT list and selection UIs use the shared `patientDisplay` DTO instead of rendering raw patient UUIDs whenever patient context is available
 - OT request, schedule, and report list pages support patient search by name, MRN, or phone using the same list-page pattern as Encounters
+- request priority, request status, schedule status and report status render as tone badges (`frontend/src/modules/ot/ot-tone.ts`); the schedule statuses run cool → warm → green through the day of surgery, and an `EMERGENCY` priority is a solid red badge
 - `/ot` now redirects directly to `/ot/board`
 - the OT board route at `/ot/board` is a room-first operational board that renders room state, current case, next case, and daily utilization from a single OT board API
 

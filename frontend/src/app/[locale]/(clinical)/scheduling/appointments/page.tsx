@@ -22,7 +22,7 @@ import { PageHeader } from '@/components/ui/page-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import {
   Table,
   TableBody,
@@ -52,15 +52,12 @@ import { useToast } from '@/components/ui/use-toast';
 import { useCurrentFacilityAppointments } from '@/modules/clinical/hooks/use-appointments';
 import { RescheduleAppointmentDialog } from '@/modules/clinical/components/RescheduleAppointmentDialog';
 import type { Appointment } from '@/modules/clinical/types/scheduling';
+import { appointmentStatusTone } from '@/modules/clinical/utils/appointment-tone';
 
-const STATUS_COLORS: Record<string, string> = {
-  scheduled: 'bg-blue-100 text-blue-800',
-  confirmed: 'bg-green-100 text-green-800',
-  checked_in: 'bg-primary/10 text-primary',
-  in_progress: 'bg-yellow-100 text-yellow-800',
-  completed: 'bg-gray-100 text-gray-800',
-  cancelled: 'bg-red-100 text-red-800',
-  no_show: 'bg-orange-100 text-orange-800',
+/** List rows carry the shared patient display DTO and the staff name alongside the appointment. */
+type AppointmentRow = Appointment & {
+  patientDisplay?: { displayName?: string; mrn?: string; gender?: string; age?: number | null } | null;
+  staffDisplayName?: string;
 };
 
 export default function AppointmentsPage() {
@@ -249,16 +246,16 @@ export default function AppointmentsPage() {
                               <User className="h-4 w-4 text-muted-foreground mt-0.5" />
                               <div className="flex flex-col gap-0.5">
                                 <span className="font-medium">
-                                  {(appointment as any).patientDisplay?.displayName ||
+                                  {(appointment as AppointmentRow).patientDisplay?.displayName ||
                                     appointment.patient?.displayName ||
                                     `${appointment.patient?.firstName || ''} ${appointment.patient?.lastName || ''}`.trim() ||
                                     'Unknown patient'}
                                 </span>
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground font-normal">
-                                  <span>MRN: {(appointment as any).patientDisplay?.mrn || appointment.patient?.mrn || '—'}</span>
+                                  <span>MRN: {(appointment as AppointmentRow).patientDisplay?.mrn || appointment.patient?.mrn || '—'}</span>
                                   <span>•</span>
                                   <span>
-                                    {(appointment as any).patientDisplay?.gender || appointment.patient?.gender || '—'} / {(appointment as any).patientDisplay?.age || '—'}y
+                                    {(appointment as AppointmentRow).patientDisplay?.gender || appointment.patient?.gender || '—'} / {(appointment as AppointmentRow).patientDisplay?.age || '—'}y
                                   </span>
                                 </div>
                               </div>
@@ -270,18 +267,15 @@ export default function AppointmentsPage() {
                             </span>
                           </TableCell>
                           <TableCell>
-                            <Badge
-                              variant="secondary"
-                              className={STATUS_COLORS[appointment.status] || ''}
-                            >
+                            <ToneBadge tone={appointmentStatusTone(appointment.status)} withDot className="capitalize">
                               {appointment.status.replace(/_/g, ' ')}
-                            </Badge>
+                            </ToneBadge>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <Stethoscope className="h-4 w-4 text-muted-foreground" />
                               <span>
-                                {(appointment as any).staffDisplayName || appointment.staffId || (
+                                {(appointment as AppointmentRow).staffDisplayName || appointment.staffId || (
                                   <span className="text-muted-foreground">Not assigned</span>
                                 )}
                               </span>

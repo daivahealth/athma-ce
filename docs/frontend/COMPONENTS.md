@@ -139,6 +139,24 @@ Rules:
   `bg-violet-50` etc. in pages — go through a tone.
 - Severity still uses the semantic tokens above; a tone says *which kind*,
   not *how bad*.
+- Look values up with `toneOf(map, value, fallback?)` from `tone-classes.ts`;
+  it returns `slate` for an unknown, empty or inherited key. Each map has a
+  `*.test.ts` beside it asserting every known enum value maps and an unknown
+  one falls back.
+- Reuse the family's conventions so a colour means the same thing across
+  screens: planned/scheduled sky–blue, in progress violet, done emerald,
+  held/paused orange–amber, cancelled rose, rejected/denied/error red.
+
+Tone maps in use:
+
+| Domain | Map | Screens |
+| --- | --- | --- |
+| Appointments | `modules/clinical/utils/appointment-tone.ts` | `/scheduling/appointments` status |
+| Encounters | `modules/clinical/utils/encounter-tone.ts` | `/encounters` status, class, priority (`stat` solid) |
+| Lab collection | `modules/clinical/utils/lab-collection-tone.ts` | `/results/lab/collection` state, fasting |
+| OT | `modules/ot/ot-tone.ts` | OT requests, schedules, reports, board (`EMERGENCY` solid) |
+| Billing | `modules/rcm/utils/billing-tone.ts` | `/invoices` status, `/revenue-cycle/claims` status and payer type |
+| Oncology | `plugins/oncology/lib/oncology-tone.ts` | every oncology `StatusBadge`, care-plan modality and intent, protocol phase |
 
 ## Motion
 

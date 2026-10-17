@@ -11,7 +11,7 @@ import type { DateRange } from 'react-day-picker';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import {
   Select,
   SelectContent,
@@ -32,17 +32,9 @@ import {
 
 import { useEncounters } from '@/modules/clinical/hooks/use-encounters';
 import type { EncounterStatus } from '@/modules/clinical/types/encounter';
+import { encounterClassTone, encounterPriorityTone, encounterStatusTone } from '@/modules/clinical/utils/encounter-tone';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
 import type { StaffMember } from '@/modules/foundation/types/staff';
-
-const STATUS_COLORS: Record<string, string> = {
-  planned: 'bg-info/10 text-info',
-  arrived: 'bg-primary/10 text-primary',
-  triaged: 'bg-warning/10 text-warning',
-  'in-progress': 'bg-success/10 text-success',
-  finished: 'bg-muted text-muted-foreground',
-  cancelled: 'bg-destructive/10 text-destructive',
-};
 
 export default function EncountersPage() {
   const params = useParams() as { locale: string };
@@ -120,11 +112,10 @@ export default function EncountersPage() {
   }, [staffData]);
 
   const getStatusBadge = (status: string) => {
-    const colorClass = STATUS_COLORS[status] || 'bg-muted text-muted-foreground';
     return (
-      <Badge variant="outline" className={colorClass}>
-        {status.replace('-', ' ').toUpperCase()}
-      </Badge>
+      <ToneBadge tone={encounterStatusTone(status)} withDot className="uppercase">
+        {status.replace(/-/g, ' ')}
+      </ToneBadge>
     );
   };
 
@@ -279,9 +270,13 @@ export default function EncountersPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className="capitalize">
+                        <ToneBadge
+                          tone={encounterPriorityTone(encounter.priority)}
+                          strong={encounter.priority === 'stat'}
+                          className="capitalize"
+                        >
                           {encounter.priority}
-                        </Badge>
+                        </ToneBadge>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -293,7 +288,7 @@ export default function EncountersPage() {
                       </TableCell>
                       <TableCell>{getStatusBadge(encounter.status)}</TableCell>
                       <TableCell>
-                        <Badge variant="secondary">{encounter.encounterClass}</Badge>
+                        <ToneBadge tone={encounterClassTone(encounter.encounterClass)}>{encounter.encounterClass}</ToneBadge>
                       </TableCell>
                       <TableCell>
                         <Button

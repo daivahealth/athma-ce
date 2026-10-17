@@ -9,9 +9,11 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageHeader } from '@/components/ui/page-header';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import { useTreatmentDays } from '@/plugins/oncology/hooks/use-oncology';
 import { EmptyState, LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { DaySheet } from '@/plugins/oncology/components/treatment-schedule/DaySheet';
+import { phaseTone } from '@/plugins/oncology/lib/oncology-tone';
 import { addDaysIso, formatDate, formatDose, formatProtocolDose, todayIso } from '@/plugins/oncology/lib/treatment-day';
 
 /**
@@ -81,9 +83,10 @@ export default function DayCarePage() {
                     </CardTitle>
                     <span className="text-sm text-muted-foreground">
                       {d.patientDisplay?.mrn} · {d.protocol_code} · C{d.cycle_number}/{d.total_cycles} D{d.cycle_day}
-                      {d.phase_name ? ` · ${d.phase_name}` : ''} · BSA {d.bsa ?? '—'} m²
+                      {' '}· BSA {d.bsa ?? '—'} m²
                       {d.dose_level ? ` · DL ${d.dose_level}` : ''}
                     </span>
+                    {d.phase_name ? <ToneBadge tone={phaseTone(d.phase_index)}>{d.phase_name}</ToneBadge> : null}
                     <div className="ml-auto flex items-center gap-2">
                       <StatusBadge status={d.status} />
                       {d.chemo_order_id ? (

@@ -766,6 +766,7 @@ export interface WorklistDay extends TreatmentDay {
   plan_status: TreatmentPlanStatus;
   protocol_code: string;
   protocol_name: string;
+  phase_index?: number;
   phase_name?: string;
   dose_level?: number;
   total_cycles: number;

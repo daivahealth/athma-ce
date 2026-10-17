@@ -85,6 +85,9 @@ Current frontend route:
 
 - `/results/lab/collection`
 
+The collection queue shows its state as a tone badge (amber "Ready to Prepare", emerald "Label
+Prepared") and marks a fasting requirement in orange (`frontend/src/modules/clinical/utils/lab-collection-tone.ts`).
+
 ### 3. Lab Internal Operations Workflow
 
 Available now:
