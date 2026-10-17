@@ -110,6 +110,9 @@ model ChemoProtocol {
   doseFormula     String   @default("bsa") @map("dose_formula") @db.VarChar(10)
   labPrerequisites Json    @default("[]") @map("lab_prerequisites")
   hydration        Json    @default("[]")
+  // Phase-based regimen (schema v2) — source of truth when non-empty.
+  // regimen / totalCycles / cycleDurationDays are derived from it on save.
+  phases           Json    @default("[]")
 
   isActive        Boolean  @default(true) @map("is_active")
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -175,6 +178,96 @@ model ChemoOrder {
   @@index([tenantId, cancerDiagnosisId])
   @@index([tenantId, oncologyCarePlanId])
   @@map("chemo_orders")
+  @@schema("plugin_oncology")
+}
+
+// ============================================================
+// Patient treatment schedule (generated from a phased chemo protocol)
+// plan → cycles → days; each day carries its item list (labs, premeds,
+// hydration, chemo with calculated dose, supportive care) as a snapshot.
+// ============================================================
+
+model TreatmentPlan {
+  id                  String    @id @default(uuid()) @db.Uuid
+  tenantId            String    @map("tenant_id") @db.Uuid
+  patientId           String    @map("patient_id") @db.Uuid
+  cancerDiagnosisId   String    @map("cancer_diagnosis_id") @db.Uuid
+  oncologyCarePlanId  String?   @map("oncology_care_plan_id") @db.Uuid
+  protocolId          String    @map("protocol_id") @db.Uuid
+
+  // Protocol as it was when the plan was created (phases, premeds, labs …)
+  protocolSnapshot    Json      @map("protocol_snapshot")
+  startDate           DateTime  @map("start_date") @db.Date
+  heightCm            Decimal?  @map("height_cm") @db.Decimal(5, 1)
+  weightKg            Decimal?  @map("weight_kg") @db.Decimal(5, 1)
+  bsa                 Decimal?  @db.Decimal(5, 2)
+  creatinineClearance Decimal?  @map("creatinine_clearance") @db.Decimal(6, 2)
+
+  status              String    @default("active") @db.VarChar(20) // active | on_hold | completed | cancelled
+  notes               String?   @db.Text
+  createdBy           String?   @map("created_by") @db.Uuid
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  cycles              TreatmentCycle[]
+  days                TreatmentDay[]
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, oncologyCarePlanId])
+  @@index([tenantId, status])
+  @@map("treatment_plans")
+  @@schema("plugin_oncology")
+}
+
+model TreatmentCycle {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  treatmentPlanId  String    @map("treatment_plan_id") @db.Uuid
+
+  cycleNumber      Int       @map("cycle_number")
+  phaseIndex       Int       @map("phase_index")
+  phaseName        String    @map("phase_name") @db.VarChar(100)
+  phaseCycle       Int       @map("phase_cycle")
+  plannedStartDate DateTime  @map("planned_start_date") @db.Date
+  doseLevel        Int       @default(0) @map("dose_level") // 0, -1, -2 …
+  delayDays        Int       @default(0) @map("delay_days")
+  delayReason      String?   @map("delay_reason") @db.Text
+  status           String    @default("planned") @db.VarChar(20) // planned | in_progress | completed | cancelled
+
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  plan             TreatmentPlan @relation(fields: [treatmentPlanId], references: [id], onDelete: Cascade)
+
+  @@unique([treatmentPlanId, cycleNumber])
+  @@index([tenantId, treatmentPlanId])
+  @@map("treatment_cycles")
+  @@schema("plugin_oncology")
+}
+
+model TreatmentDay {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  treatmentPlanId  String    @map("treatment_plan_id") @db.Uuid
+  cycleNumber      Int       @map("cycle_number")
+  cycleDay         Int       @map("cycle_day")
+  scheduledDate    DateTime  @map("scheduled_date") @db.Date
+
+  // planned | ordered | given | held | skipped | cancelled
+  status           String    @default("planned") @db.VarChar(20)
+  items            Json      @default("[]")
+  chemoOrderId     String?   @map("chemo_order_id") @db.Uuid
+  notes            String?   @db.Text
+
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  plan             TreatmentPlan @relation(fields: [treatmentPlanId], references: [id], onDelete: Cascade)
+
+  @@unique([treatmentPlanId, cycleNumber, cycleDay])
+  @@index([tenantId, scheduledDate])
+  @@index([tenantId, chemoOrderId])
+  @@map("treatment_days")
   @@schema("plugin_oncology")
 }
 

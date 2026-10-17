@@ -1,21 +1,13 @@
 'use client';
 
+import { ToneBadge } from '@/components/ui/tone-badge';
+import { oncologyStatusTone } from '@/plugins/oncology/lib/oncology-tone';
+
 export function StatusBadge({ status }: { status: string }) {
-  const colors: Record<string, string> = {
-    pending: 'bg-yellow-100 text-yellow-700',
-    approved: 'bg-blue-100 text-blue-700',
-    in_progress: 'bg-purple-100 text-purple-700',
-    completed: 'bg-green-100 text-green-700',
-    cancelled: 'bg-red-100 text-red-700',
-    held: 'bg-orange-100 text-orange-700',
-    scheduled: 'bg-blue-100 text-blue-700',
-    in_review: 'bg-purple-100 text-purple-700',
-    deferred: 'bg-gray-100 text-gray-600',
-  };
   return (
-    <span className={`text-xs px-2 py-0.5 rounded-full ${colors[status] || 'bg-gray-100 text-gray-600'}`}>
-      {status.replace(/_/g, ' ')}
-    </span>
+    <ToneBadge tone={oncologyStatusTone(status)} withDot className="capitalize">
+      {status.toLowerCase().replace(/_/g, ' ')}
+    </ToneBadge>
   );
 }
 

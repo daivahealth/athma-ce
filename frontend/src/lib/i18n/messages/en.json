@@ -112,6 +112,8 @@
     "carePlans": "Care Plans",
     "chemoProtocols": "Chemo Protocols",
     "chemoOrders": "Chemo Orders",
+    "treatmentSchedules": "Treatment Schedules",
+    "dayCareWorklist": "Day-care Worklist",
     "radiationOncology": "Radiation Therapy",
     "oncologyCatalogs": "Catalogs",
     "cancerTimeline": "Cancer Timeline",

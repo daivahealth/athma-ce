@@ -10,7 +10,7 @@ import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useClaims } from '@/modules/rcm/hooks/use-claims';
 import type { Claim, ClaimStatus } from '@/modules/rcm/types/claims';
+import { claimStatusTone, payerTypeTone } from '@/modules/rcm/utils/billing-tone';
 
 const statusLabels: Record<ClaimStatus, string> = {
   draft: 'Draft',
@@ -76,6 +77,24 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
     },
   },
   {
+    id: 'payer',
+    header: 'Payer',
+    cell: ({ row }) => {
+      const payer = row.original.payer as { payerName?: string; payerType?: string | null } | null | undefined;
+      if (!payer?.payerName) return <span className="text-muted-foreground">—</span>;
+      return (
+        <div className="flex flex-col items-start gap-1">
+          <span className="font-medium">{payer.payerName}</span>
+          {payer.payerType ? (
+            <ToneBadge tone={payerTypeTone(payer.payerType)} className="capitalize">
+              {payer.payerType.replace(/_/g, ' ')}
+            </ToneBadge>
+          ) : null}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: 'serviceDate',
     header: 'Service date',
     cell: ({ getValue }) => {
@@ -96,7 +115,11 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
     header: 'Status',
     cell: ({ getValue }) => {
       const status = getValue<ClaimStatus>();
-      return <Badge variant="secondary">{statusLabels[status]}</Badge>;
+      return (
+        <ToneBadge tone={claimStatusTone(status)} withDot>
+          {statusLabels[status] ?? status}
+        </ToneBadge>
+      );
     },
   },
   {

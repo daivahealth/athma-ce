@@ -684,6 +684,14 @@ Matches remittance lines to claims and updates claim status.
 
 ## Frontend Integration Examples
 
+### Claims and invoices list screens
+
+`/revenue-cycle/claims` lists claims with a **Payer** column (the `payer` the list endpoint already
+includes: name plus a `payerType` tone badge — insurance blue, TPA violet, government teal,
+corporate indigo, self/cash amber, anything else slate) and a status tone badge per claim stage.
+`/invoices` shows invoice status the same way (unpaid orange, partial amber, paid emerald,
+cancelled rose). The maps live in `frontend/src/modules/rcm/utils/billing-tone.ts`.
+
 ### React Query - Claims List
 ```typescript
 import { useQuery } from '@tanstack/react-query';

@@ -280,6 +280,54 @@ export interface RegimenItem {
   diluent?: string;
 }
 
+// ── Phase-based regimen (protocol schema v2) ────────────────────────────────
+// Protocol → phases (sequential blocks of identical cycles) → drug lines.
+// Per-cycle exceptions live on the drug line as sparse overrides, keyed by the
+// cycle number *within the phase* so they survive edits to earlier phases.
+
+/** Predefined dose reduction for a drug line (e.g. DL−1 = 80 mg/m²). */
+export interface ProtocolDoseLevel {
+  level: number; // −1, −2, −3
+  dose: number; // same unit as the drug line
+}
+
+/** Exception to a drug line for specific cycles of its phase. */
+export interface ProtocolDrugOverride {
+  cycles: number[]; // phase-relative cycle numbers (1-based)
+  dose?: number;
+  unit?: string;
+  days?: number[];
+  infusionDurationMin?: number;
+  omit?: boolean;
+  note?: string;
+}
+
+export interface ProtocolPhaseDrug {
+  id: string;
+  drug: string;
+  dose: number;
+  unit: string;
+  route: string;
+  days: number[];
+  /** 'auc' = Calvert (carboplatin); dose is the target AUC. */
+  doseFormula: 'bsa' | 'weight' | 'fixed' | 'auc';
+  infusionDurationMin?: number;
+  diluent?: string;
+  /** Absolute cap per administration in mg (e.g. vincristine 2 mg). */
+  maxDose?: number;
+  doseLevels?: ProtocolDoseLevel[];
+  overrides?: ProtocolDrugOverride[];
+}
+
+export interface ProtocolPhase {
+  id: string;
+  name: string;
+  cycles: number;
+  cycleDurationDays: number;
+  drugs: ProtocolPhaseDrug[];
+  notes?: string;
+}
+
 export interface ChemoProtocol {
   id: string;
   tenant_id: string;
@@ -611,4 +659,116 @@ export interface RadiationCompletionSummary {
   completed_by?: string;
   created_at: string;
   updated_at: string;
+}
+
+// ── Patient treatment schedule ──────────────────────────────────────────────
+// A treatment plan is a dated schedule generated from a phased protocol.
+
+export type TreatmentPlanStatus = 'active' | 'on_hold' | 'completed' | 'cancelled';
+export type TreatmentDayStatus = 'planned' | 'ordered' | 'given' | 'held' | 'skipped' | 'cancelled';
+export type TreatmentItemKind = 'lab' | 'premed' | 'hydration' | 'chemo' | 'supportive';
+
+export interface TreatmentItem {
+  kind: TreatmentItemKind;
+  sequence: number;
+  label: string;
+  detail?: string;
+  timing?: 'before' | 'pre' | 'concurrent' | 'post';
+  drug?: string;
+  protocolDose?: number;
+  protocolUnit?: string;
+  doseFormula?: string;
+  doseLevel?: number;
+  levelDose?: number;
+  calculatedDose?: number | null;
+  calculatedUnit?: string;
+  route?: string;
+  infusionDurationMin?: number;
+  diluent?: string;
+  capped?: boolean;
+  note?: string;
+  warning?: string;
+}
+
+export interface TreatmentCycle {
+  id: string;
+  cycle_number: number;
+  phase_index: number;
+  phase_name: string;
+  phase_cycle: number;
+  planned_start_date: string;
+  dose_level: number;
+  delay_days: number;
+  delay_reason?: string | null;
+  status: string;
+}
+
+export interface TreatmentDay {
+  id: string;
+  treatment_plan_id: string;
+  cycle_number: number;
+  cycle_day: number;
+  scheduled_date: string;
+  status: TreatmentDayStatus;
+  items: TreatmentItem[];
+  chemo_order_id?: string | null;
+  order_status?: string | null;
+  notes?: string | null;
+}
+
+export interface TreatmentPlan {
+  id: string;
+  patient_id: string;
+  cancer_diagnosis_id: string;
+  oncology_care_plan_id?: string | null;
+  protocol_id: string;
+  protocol_snapshot: {
+    id: string; code: string; name: string; phases: ProtocolPhase[];
+    premedications: string[]; supportiveCare: string[]; emetogenicRisk?: string | null;
+  };
+  start_date: string;
+  height_cm?: string | number | null;
+  weight_kg?: string | number | null;
+  bsa?: string | number | null;
+  creatinine_clearance?: string | number | null;
+  status: TreatmentPlanStatus;
+  notes?: string | null;
+  cancer_type?: string;
+  primary_site?: string;
+  patientDisplay?: OncologyPatientDisplay | null;
+  cycles: TreatmentCycle[];
+  days: TreatmentDay[];
+}
+
+export interface TreatmentPlanSummary {
+  id: string;
+  patient_id: string;
+  oncology_care_plan_id?: string | null;
+  protocol_code: string;
+  protocol_name: string;
+  cancer_type?: string;
+  start_date: string;
+  end_date?: string | null;
+  next_date?: string | null;
+  bsa?: string | number | null;
+  status: TreatmentPlanStatus;
+  total_cycles: number;
+  total_days: number;
+  given_days: number;
+  patientDisplay?: OncologyPatientDisplay | null;
+}
+
+/** A treatment day on the day-care worklist (joined with patient and plan). */
+export interface WorklistDay extends TreatmentDay {
+  patient_id: string;
+  bsa?: string | number | null;
+  weight_kg?: string | number | null;
+  plan_status: TreatmentPlanStatus;
+  protocol_code: string;
+  protocol_name: string;
+  phase_index?: number;
+  phase_name?: string;
+  dose_level?: number;
+  total_cycles: number;
+  patientDisplay?: OncologyPatientDisplay | null;
 }

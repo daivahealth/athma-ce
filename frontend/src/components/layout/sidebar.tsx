@@ -295,6 +295,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const t = useTranslations();
   const [openSubmenus, setOpenSubmenus] = React.useState<Record<string, boolean>>({});
+  const [openFlyoutKey, setOpenFlyoutKey] = React.useState<string | null>(null);
   const [displayName, setDisplayName] = React.useState('User');
   const [facilityName, setFacilityName] = React.useState('Facility');
   const [isLoadingProfile, setIsLoadingProfile] = React.useState(false);
@@ -409,13 +410,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
 
     visibleSections.forEach((section) => visitItems(section.items));
     return bestMatch;
-  }, [locale, matchesPath]);
-
-  const indentClass = (depth: number) => {
-    if (depth === 0) return '';
-    if (depth === 1) return 'pl-6';
-    return 'pl-10';
-  };
+  }, [locale, matchesPath, visibleSections]);
 
   const initials = React.useMemo(() => {
     const parts = displayName.trim().split(' ').filter(Boolean);
@@ -438,253 +433,278 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
     [activeHref, locale]
   );
 
-  const renderItems = (items: NavItem[], parentKey: string, depth: number) =>
-    items.map((item) => {
-      const itemKey = `${parentKey}-${item.labelKey}-${item.href ?? 'group'}`;
-      const hasChildren = Boolean(item.children?.length);
-      const isChildActive = hasChildren && itemHasActiveChild(item);
-      const isOpen = Boolean(openSubmenus[itemKey] ?? isChildActive);
-      const Icon = item.icon;
+  const renderSubItems = (items: NavItem[], parentKey: string, onNavigate?: () => void): React.ReactNode =>
+    items.map((child) => {
+      const childKey = `${parentKey}-${child.labelKey}-${child.href ?? 'group'}`;
+      const ChildIcon = child.icon;
 
-      if (hasChildren) {
-        if (collapsed) {
-          return (
-            <Popover key={itemKey}>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  aria-label={t(item.labelKey)}
-                  className={cn(
-                    "flex w-full items-center justify-center gap-3 rounded-md px-2 py-2 text-sm transition-colors",
-                    isChildActive
-                      ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
-                      : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground"
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent align="start" side="right" sideOffset={12} className="w-56 p-2">
-                <p className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground/70">
-                  {t(item.labelKey)}
-                </p>
-                <div className="space-y-1">
-                  {item.children?.map((child) => {
-                    if (!child.href) return null;
-                    const childPath = `/${locale}${child.href}`;
-                    const childActive = activeHref === childPath;
-                    const ChildIcon = child.icon;
-
-                    return (
-                      <Link
-                        key={child.href}
-                        href={childPath}
-                        className={cn(
-                          "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
-                          childActive
-                            ? "bg-primary/10 text-primary font-semibold"
-                            : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground"
-                        )}
-                      >
-                        <ChildIcon className="h-4 w-4" />
-                        <span>{t(child.labelKey)}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </PopoverContent>
-            </Popover>
-          );
-        }
-
+      if (child.children?.length) {
         return (
-          <div key={itemKey} className="space-y-1">
-            <button
-              type="button"
-              onClick={() =>
-                setOpenSubmenus((prev) => ({
-                  ...prev,
-                  [itemKey]: !isOpen,
-                }))
-              }
-              className={cn(
-                "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
-                isChildActive
-                  ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
-                  : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground",
-                collapsed && "justify-center px-2"
-              )}
-              aria-expanded={isOpen}
-              aria-controls={`${itemKey}-submenu`}
-            >
-              <Icon className="h-4 w-4" />
-              {!collapsed && <span className="flex-1 text-left">{t(item.labelKey)}</span>}
-              {!collapsed && (
-                <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")} />
-              )}
-            </button>
-            {isOpen && (
-              <div
-                id={`${itemKey}-submenu`}
-                className={cn("space-y-1", indentClass(depth))}
-              >
-                {renderItems(item.children ?? [], itemKey, depth + 1)}
-              </div>
-            )}
-          </div>
+          <li key={childKey}>
+            <p className={SECTION_LABEL}>{t(child.labelKey)}</p>
+            <ul className="flex flex-col gap-1">{renderSubItems(child.children, childKey, onNavigate)}</ul>
+          </li>
         );
       }
 
-      if (!item.href) return null;
-      const fullPath = `/${locale}${item.href}`;
-      const isActive = activeHref === fullPath;
+      if (!child.href) return null;
+      const childPath = `/${locale}${child.href}`;
+      const childActive = activeHref === childPath;
 
       return (
-        <Link
-          key={itemKey}
-          href={fullPath}
-          className={cn(
-            "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
-            isActive
-              ? "bg-primary/10 text-primary border-l-[3px] border-primary rounded-l-none font-semibold"
-              : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground",
-            collapsed && "justify-center px-2"
-          )}
-        >
-          <Icon className="h-4 w-4" />
-          {!collapsed && <span>{t(item.labelKey)}</span>}
-        </Link>
+        <li key={childKey}>
+          <Link
+            href={childPath}
+            onClick={onNavigate}
+            aria-current={childActive ? 'page' : undefined}
+            className={cn(SUB_ROW, childActive ? `${ROW_ACTIVE} font-normal [&>svg]:text-primary` : ROW_IDLE)}
+          >
+            <ChildIcon aria-hidden />
+            <span className="truncate">{t(child.labelKey)}</span>
+          </Link>
+        </li>
       );
     });
+
+  const renderItem = (item: NavItem, itemKey: string) => {
+    const Icon = item.icon;
+    const label = t(item.labelKey);
+    const hasChildren = Boolean(item.children?.length);
+
+    if (hasChildren) {
+      const isChildActive = itemHasActiveChild(item);
+
+      if (collapsed) {
+        return (
+          <CollapsedFlyout
+            key={itemKey}
+            menuKey={itemKey}
+            title={label}
+            icon={Icon}
+            isActive={isChildActive}
+            openKey={openFlyoutKey}
+            onOpen={setOpenFlyoutKey}
+            onClose={() => setOpenFlyoutKey(null)}
+          >
+            {renderSubItems(item.children ?? [], itemKey, () => setOpenFlyoutKey(null))}
+          </CollapsedFlyout>
+        );
+      }
+
+      const isOpen = Boolean(openSubmenus[itemKey] ?? isChildActive);
+
+      return (
+        <li key={itemKey}>
+          <button
+            type="button"
+            onClick={() =>
+              setOpenSubmenus((prev) => ({
+                ...prev,
+                [itemKey]: !isOpen,
+              }))
+            }
+            className={cn(ROOT_ROW, isChildActive ? ROW_ACTIVE : ROW_IDLE)}
+            aria-expanded={isOpen}
+            aria-controls={`${itemKey}-submenu`}
+          >
+            <Icon aria-hidden />
+            <span className="min-w-0 flex-1 truncate">{label}</span>
+            {isOpen ? (
+              <ChevronDown className="text-muted-foreground" aria-hidden />
+            ) : (
+              <ChevronRight className="text-muted-foreground" aria-hidden />
+            )}
+          </button>
+          {isOpen && (
+            <ul id={`${itemKey}-submenu`} className={SUB_LIST}>
+              {renderSubItems(item.children ?? [], itemKey)}
+            </ul>
+          )}
+        </li>
+      );
+    }
+
+    if (!item.href) return null;
+    const fullPath = `/${locale}${item.href}`;
+    const isActive = activeHref === fullPath;
+
+    return (
+      <li key={itemKey}>
+        <Link
+          href={fullPath}
+          title={collapsed ? label : undefined}
+          aria-label={collapsed ? label : undefined}
+          aria-current={isActive ? 'page' : undefined}
+          className={cn(collapsed ? ICON_ROW : ROOT_ROW, isActive ? ROW_ACTIVE : ROW_IDLE)}
+        >
+          <Icon aria-hidden />
+          {!collapsed && <span className="min-w-0 flex-1 truncate">{label}</span>}
+        </Link>
+      </li>
+    );
+  };
 
   return (
     <div
       className={cn(
-        "relative h-full shrink-0 transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-20" : "w-72"
+        "relative h-full shrink-0 transition-[width] duration-200 ease-in-out",
+        collapsed ? "w-14" : "w-64"
       )}
     >
-      <div
-        className={cn(
-          "absolute inset-y-0 left-0 z-20 flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out border-r border-border/40 shadow-lg",
-          collapsed ? "w-20" : "w-72"
-        )}
-      >
-      {/* Header */}
-      <div
-        className={cn(
-          'relative flex h-16 items-center',
-          collapsed ? 'flex-col justify-center gap-1.5 px-3 py-2' : 'justify-between px-4'
-        )}
-      >
-        <Link
-          href={`/${locale}/dashboard`}
-          className={cn(
-            'flex items-center hover:opacity-80 transition-opacity group',
-            collapsed ? 'justify-center' : 'gap-3'
-          )}
-        >
-          {collapsed ? (
-            <>
-              <Image
-                src="/athma-mark.svg"
-                alt="Athma"
-                width={28}
-                height={28}
-                className="h-7 w-7 transition-all group-hover:scale-105 dark:hidden"
-              />
-              <Image
-                src="/athma-mark-dark.svg"
-                alt="Athma"
-                width={28}
-                height={28}
-                className="hidden h-7 w-7 transition-all group-hover:scale-105 dark:block"
-              />
-            </>
-          ) : (
-            <>
-              <Image
-                src="/athma-logo.svg"
-                alt="Athma"
-                width={145}
-                height={42}
-                className="h-7 w-auto dark:hidden"
-              />
-              <Image
-                src="/athma-logo-dark.svg"
-                alt="Athma"
-                width={145}
-                height={42}
-                className="hidden h-7 w-auto dark:block"
-              />
-            </>
-          )}
-        </Link>
+      <div className="absolute inset-0 flex h-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
+        {/* Header */}
+        <div className={cn('flex h-14 shrink-0 items-center', collapsed ? 'justify-center px-2' : 'px-4')}>
+          <Link
+            href={`/${locale}/dashboard`}
+            className="flex items-center rounded-md outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+          >
+            {collapsed ? (
+              <>
+                <Image src="/athma-mark.svg" alt="Athma" width={24} height={24} className="h-6 w-6 dark:hidden" />
+                <Image src="/athma-mark-dark.svg" alt="Athma" width={24} height={24} className="hidden h-6 w-6 dark:block" />
+              </>
+            ) : (
+              <>
+                <Image src="/athma-logo.svg" alt="Athma" width={145} height={42} className="h-6 w-auto dark:hidden" />
+                <Image src="/athma-logo-dark.svg" alt="Athma" width={145} height={42} className="hidden h-6 w-auto dark:block" />
+              </>
+            )}
+          </Link>
+        </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        {/* Collapse toggle, on the sidebar's right edge so it is in the same place open or closed. */}
+        <button
+          type="button"
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             onToggle();
           }}
-          className={cn(
-            'flex shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground transition-colors',
-            collapsed ? 'h-6 w-6' : 'h-7 w-7'
-          )}
+          className="absolute -right-3 top-4 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-background text-muted-foreground shadow-sm outline-none transition-colors hover:border-primary/25 hover:text-primary focus-visible:ring-2 focus-visible:ring-sidebar-ring"
         >
-          {isCollapsed ? (
-            <ChevronRight className="h-3.5 w-3.5" />
-          ) : (
-            <ChevronLeft className="h-3.5 w-3.5" />
-          )}
-        </Button>
-      </div>
+          {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
+        </button>
 
-      {/* Navigation */}
-      <nav className="flex-1 space-y-6 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
-        {visibleSections.map((section, sectionIndex) => (
-          <div key={`${section.labelKey ?? 'section'}-${sectionIndex}`} className="space-y-6">
-            {!collapsed && section.labelKey && (
-              <p className="px-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">
-                {t(section.labelKey)}
-              </p>
+        {/* Navigation */}
+        <nav
+          aria-label="Main"
+          className={cn('pane-scroll flex-1 overflow-y-auto overflow-x-hidden', collapsed ? 'px-1 py-2' : 'px-2 py-3')}
+        >
+          <ul className={cn('flex min-w-0 flex-col gap-1', collapsed && 'items-center')}>
+            {visibleSections.flatMap((section, sectionIndex) =>
+              section.items.map((item) =>
+                renderItem(item, `${section.labelKey ?? 'section'}-${sectionIndex}-${item.labelKey}-${item.href ?? 'group'}`)
+              )
             )}
-            {renderItems(section.items, section.labelKey ?? 'section', 1)}
-          </div>
-        ))}
-      </nav>
+          </ul>
+        </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-border/40 bg-background/50 backdrop-blur-sm">
-        {!collapsed && (
-          <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/40 px-3 py-3 shadow-sm hover:bg-card/60 transition-colors cursor-pointer group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5 text-sm font-bold text-primary ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
+        {/* Footer */}
+        <div className={cn('shrink-0 border-t border-sidebar-border bg-sidebar-footer', collapsed ? 'px-1 py-2' : 'p-1.5')}>
+          <div
+            className={cn('flex items-center rounded-md', collapsed ? 'justify-center' : 'gap-2 px-2 py-1.5')}
+            title={collapsed ? `${displayName} · ${facilityName}` : undefined}
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
               {initials}
             </div>
-            <div className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                {isLoadingProfile ? 'Loading user...' : displayName}
-              </span>
-              <span className="truncate text-xs text-muted-foreground">
-                {isLoadingProfile ? 'Loading facility...' : facilityName}
-              </span>
-            </div>
+            {!collapsed && (
+              <div className="flex min-w-0 flex-1 flex-col leading-tight">
+                <span className="truncate text-sm font-medium text-sidebar-foreground">
+                  {isLoadingProfile ? 'Loading user...' : displayName}
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {isLoadingProfile ? 'Loading facility...' : facilityName}
+                </span>
+              </div>
+            )}
           </div>
-        )}
-        {collapsed && (
-          <div className="flex justify-center">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5 text-xs font-bold text-primary hover:scale-105 transition-transform cursor-pointer">
-              {initials}
-            </div>
-          </div>
-        )}
-      </div>
-
+        </div>
       </div>
     </div>
+  );
+}
+
+/*
+ * Row styles, after prrapp's sidebar: transparent until hovered, a faint
+ * primary tint with a hairline primary border when active.
+ */
+const ROW_BASE =
+  'flex items-center gap-2 overflow-hidden rounded-md border border-transparent text-left text-sm text-sidebar-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-sidebar-ring [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0';
+const ROOT_ROW = `${ROW_BASE} h-8 w-full px-2`;
+const ICON_ROW = `${ROW_BASE} h-8 w-8 justify-center p-2`;
+const SUB_ROW = `${ROW_BASE} h-7 w-full min-w-0 px-2 [&>svg]:text-sidebar-accent-foreground hover:[&>svg]:text-primary/90`;
+const ROW_IDLE = 'hover:border-primary/15 hover:bg-primary/5 hover:text-primary/90';
+const ROW_ACTIVE = 'border-primary/25 bg-primary/[0.08] font-medium text-primary';
+/** The guide line down the left of an open group's children. */
+const SUB_LIST = 'mx-3.5 mt-1 flex min-w-0 flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5';
+const SECTION_LABEL = 'px-2 pb-1 pt-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground';
+
+const FLYOUT_CLOSE_DELAY_MS = 120;
+
+interface CollapsedFlyoutProps {
+  menuKey: string;
+  title: string;
+  icon: React.ElementType;
+  isActive: boolean;
+  openKey: string | null;
+  onOpen: (key: string) => void;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+/** A group on the icon rail: hovering or clicking its icon opens its pages beside it. */
+function CollapsedFlyout({ menuKey, title, icon: Icon, isActive, openKey, onOpen, onClose, children }: CollapsedFlyoutProps) {
+  const closeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isOpen = openKey === menuKey;
+
+  const clearCloseTimer = React.useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleClose = React.useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(onClose, FLYOUT_CLOSE_DELAY_MS);
+  }, [clearCloseTimer, onClose]);
+
+  const handleOpen = React.useCallback(() => {
+    clearCloseTimer();
+    onOpen(menuKey);
+  }, [clearCloseTimer, menuKey, onOpen]);
+
+  React.useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
+
+  return (
+    <li>
+      <Popover open={isOpen} onOpenChange={(next) => (next ? handleOpen() : onClose())}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            aria-label={title}
+            className={cn(ICON_ROW, isActive || isOpen ? ROW_ACTIVE : ROW_IDLE)}
+            onMouseEnter={handleOpen}
+            onMouseLeave={scheduleClose}
+          >
+            <Icon aria-hidden />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          side="right"
+          align="start"
+          sideOffset={8}
+          className="w-56 border-sidebar-border p-1"
+          onMouseEnter={handleOpen}
+          onMouseLeave={scheduleClose}
+        >
+          <p className={SECTION_LABEL}>{title}</p>
+          <ul className="flex flex-col gap-0.5">{children}</ul>
+        </PopoverContent>
+      </Popover>
+    </li>
   );
 }
 

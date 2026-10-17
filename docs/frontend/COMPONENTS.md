@@ -67,13 +67,31 @@ idiom for new/touched code — it exports `Skeleton`, `TableSkeleton`,
 files). Prefer these over ad-hoc `animate-pulse` divs or the older
 `LoadingSpinner`/`PageLoading` components in `components/ui/loading.tsx`.
 
+## Theme
+
+The palette is ported from prrapp and lives in the `addBase` block of
+`frontend/tailwind.config.ts` (`:root` for light, `.dark` for dark):
+
+- Light: white surfaces, neutral `#E5E5E5` borders, burnt-orange primary
+  `#BB4D00`, `0.5rem` radius.
+- Dark: a navy elevation scale (`#111A2E` page) with a lighter `#FF781A`
+  primary.
+- `sidebar`, `sidebar-foreground`, `sidebar-accent-foreground`,
+  `sidebar-border`, `sidebar-footer` and `sidebar-ring` are the sidebar's own
+  tokens (`bg-sidebar`, `border-sidebar-border`, …). Use them only for the
+  app shell.
+
+Change a colour there, not in components: nothing else should hardcode a hex
+value for a surface (the old `dark:bg-[#0f1115]` shell overrides were removed).
+
 ## Semantic color tokens
 
 The theme defines `success`, `warning`, `info`, and `destructive` tokens
 (`tailwind.config.ts`, alongside `primary`/`secondary`/`muted`) precisely so
-status colors stay theme- and dark-mode-aware. **Do not use raw Tailwind
-palette colors** (`bg-green-500`, `text-amber-600`, `bg-red-100`, etc.) for
-status/severity styling in new or touched code — map them instead:
+status colors stay theme- and dark-mode-aware. For **severity** ("did it
+work", "how risky") **do not use raw Tailwind palette colors**
+(`bg-green-500`, `text-amber-600`, `bg-red-100`, etc.) in new or touched
+code — map them instead:
 
 | Raw color (avoid) | Semantic token (use) | Typical meaning |
 |---|---|---|
@@ -90,6 +108,56 @@ This rule applies to new code and to any page you're already touching for
 another reason — it does not require a standalone repo-wide sweep of
 untouched files.
 
+## Tone palette (categorical colour)
+
+Five severities are too few to tell a long list's **categories** apart — a
+stage of a pathway, a modality, a priority, a payer. For those, colour by
+meaning with the 15-tone palette ported from prrapp's "colourful" screens:
+
+- `ToneBadge` (`frontend/src/components/ui/tone-badge.tsx`) — a soft pill in
+  one of `sky | blue | indigo | violet | purple | fuchsia | teal | cyan |
+  emerald | green | amber | orange | red | rose | slate`; `strong` for the
+  few values that must stand out (e.g. an emergency priority), `withDot` for
+  a leading dot.
+- `tone-classes.ts` (same folder) — the same tones as surfaces:
+  `TONE_SOLID` (a node fill), `TONE_RING`, `TONE_TEXT`, `TONE_WASH` (a card
+  or callout wash), `TONE_BAR` (a connector), and `TONE_CHART` (stroke/fill
+  values for Recharts, light and dark).
+
+```tsx
+<ToneBadge tone={STAGE_TONE[referral.stage]} withDot>{referral.stageLabel}</ToneBadge>
+```
+
+Rules:
+
+- Map a domain value to a tone in **one** place per domain (a
+  `<domain>-tone.ts` beside the module, e.g. `STAGE_TONE`), and give an
+  unknown value a deliberate fallback (usually `slate`) rather than leaving
+  it uncoloured.
+- The tone maps are the one sanctioned home for raw palette classes; every
+  class string is written out in full so Tailwind keeps it. Do not inline
+  `bg-violet-50` etc. in pages — go through a tone.
+- Severity still uses the semantic tokens above; a tone says *which kind*,
+  not *how bad*.
+- Look values up with `toneOf(map, value, fallback?)` from `tone-classes.ts`;
+  it returns `slate` for an unknown, empty or inherited key. Each map has a
+  `*.test.ts` beside it asserting every known enum value maps and an unknown
+  one falls back.
+- Reuse the family's conventions so a colour means the same thing across
+  screens: planned/scheduled sky–blue, in progress violet, done emerald,
+  held/paused orange–amber, cancelled rose, rejected/denied/error red.
+
+Tone maps in use:
+
+| Domain | Map | Screens |
+| --- | --- | --- |
+| Appointments | `modules/clinical/utils/appointment-tone.ts` | `/scheduling/appointments` status |
+| Encounters | `modules/clinical/utils/encounter-tone.ts` | `/encounters` status, class, priority (`stat` solid) |
+| Lab collection | `modules/clinical/utils/lab-collection-tone.ts` | `/results/lab/collection` state, fasting |
+| OT | `modules/ot/ot-tone.ts` | OT requests, schedules, reports, board (`EMERGENCY` solid) |
+| Billing | `modules/rcm/utils/billing-tone.ts` | `/invoices` status, `/revenue-cycle/claims` status and payer type |
+| Oncology | `plugins/oncology/lib/oncology-tone.ts` | every oncology `StatusBadge`, care-plan modality and intent, protocol phase |
+
 ## Motion
 
 - `.stagger` (in `frontend/src/styles/globals.css`) — apply to a grid/list
@@ -104,6 +172,26 @@ All of the above respect `prefers-reduced-motion` automatically. The project
 deliberately has no `framer-motion` dependency — these effects are CSS/
 `tailwindcss-animate` based; keep it that way unless a future requirement
 genuinely needs shared-layout or drag animations.
+
+## App shell sidebar
+
+`frontend/src/components/layout/sidebar.tsx`, styled after prrapp's sidebar:
+
+- A `bg-sidebar` panel (`#FAFAFA` light) with a hairline right border, `w-64`
+  open and a `w-14` icon rail closed; the round toggle sits on its right edge
+  in both states. Collapse state still comes from `SidebarProvider`
+  (`frontend/src/lib/contexts/sidebar-context.tsx`).
+- Rows are compact (`h-8`, sub-rows `h-7`): transparent until hovered, then a
+  faint primary tint; the active page, and the group that contains it, get a
+  `primary/8` tint with a hairline primary border and primary text.
+- An open group lists its pages behind a thin guide line on the left.
+- On the icon rail a group's icon opens a flyout of its pages on hover or
+  click (closing 120 ms after the pointer leaves, so it can cross the gap).
+- The footer (`bg-sidebar-footer`) shows the signed-in user and facility.
+
+Navigation entries, feature flags and plugin sections are unchanged — add a
+module by adding to `navSections` or through a plugin's `navigation`
+(see `docs/development/PLUGIN-DEVELOPMENT.md`), not by editing the markup.
 
 ## Route-level states
 

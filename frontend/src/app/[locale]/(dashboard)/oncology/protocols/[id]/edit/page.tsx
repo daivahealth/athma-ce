@@ -11,9 +11,9 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { useProtocol, useUpdateProtocol, useCancerTypes } from '@/plugins/oncology/hooks/use-oncology';
-import type { RegimenItem, LabPrerequisite, HydrationOrder, OncologyCancerType } from '@/plugins/oncology/types';
-
-interface RegimenRow extends RegimenItem { day: number }
+import type { LabPrerequisite, HydrationOrder, OncologyCancerType, ProtocolPhase } from '@/plugins/oncology/types';
+import { ProtocolRegimenBuilder } from '@/plugins/oncology/components/protocol-builder/ProtocolRegimenBuilder';
+import { cleanPhases, emptyPhase, getProtocolPhases, validatePhases } from '@/plugins/oncology/lib/protocol-phases';
 
 export default function EditProtocolPage() {
   const params = useParams() as { locale: string; id: string };
@@ -29,10 +29,9 @@ export default function EditProtocolPage() {
   const [cancerType, setCancerType] = useState('');
   const [intent, setIntent] = useState('');
   const [emetogenicRisk, setEmetogenicRisk] = useState('');
-  const [totalCycles, setTotalCycles] = useState('');
-  const [cycleDurationDays, setCycleDurationDays] = useState('');
   const [description, setDescription] = useState('');
-  const [regimen, setRegimen] = useState<RegimenRow[]>([{ drug: '', dose: 0, unit: 'mg/m²', route: 'IV', day: 1, doseFormula: 'bsa' }]);
+  const [phases, setPhases] = useState<ProtocolPhase[]>([emptyPhase(0)]);
+  const [showErrors, setShowErrors] = useState(false);
   const [premedications, setPremedications] = useState<string[]>(['']);
   const [supportiveCare, setSupportiveCare] = useState<string[]>(['']);
   const [hydration, setHydration] = useState<HydrationOrder[]>([]);
@@ -45,11 +44,9 @@ export default function EditProtocolPage() {
       setCancerType(protocol.cancer_type ?? '');
       setIntent(protocol.intent ?? '');
       setEmetogenicRisk(protocol.emetogenic_risk ?? '');
-      setTotalCycles(protocol.total_cycles?.toString() ?? '');
-      setCycleDurationDays(protocol.cycle_duration_days?.toString() ?? '');
       setDescription(protocol.description ?? '');
-      const r = protocol.regimen ?? [];
-      setRegimen(r.length > 0 ? r.map((d) => ({ ...d, day: typeof d.day === 'number' ? d.day : Array.isArray(d.day) ? d.day[0] : 1 })) : [{ drug: '', dose: 0, unit: 'mg/m²', route: 'IV', day: 1, doseFormula: 'bsa' }]);
+      const ph = getProtocolPhases(protocol);
+      setPhases(ph.length ? ph : [emptyPhase(0)]);
       setPremedications(protocol.premedications?.length ? protocol.premedications : ['']);
       setSupportiveCare(protocol.supportive_care?.length ? protocol.supportive_care : ['']);
       setHydration(protocol.hydration ?? []);
@@ -57,11 +54,12 @@ export default function EditProtocolPage() {
     }
   }, [protocol]);
 
-  const isValid = code && name && cancerType && intent && totalCycles && cycleDurationDays &&
-    regimen.some((r) => r.drug && r.dose > 0);
+  const phaseErrors = validatePhases(cleanPhases(phases));
+  const isValid = code && name && cancerType && intent;
 
   const handleSubmit = async () => {
     if (!isValid) return;
+    if (phaseErrors.length) { setShowErrors(true); return; }
     await updateProtocol.mutateAsync({
       id: params.id,
       data: {
@@ -70,9 +68,7 @@ export default function EditProtocolPage() {
         cancerType,
         intent,
         emetogenicRisk: emetogenicRisk || undefined,
-        totalCycles: parseInt(totalCycles, 10),
-        cycleDurationDays: parseInt(cycleDurationDays, 10),
-        regimen: regimen.filter((r) => r.drug && r.dose > 0),
+        phases: cleanPhases(phases),
         premedications: premedications.filter(Boolean),
         supportiveCare: supportiveCare.filter(Boolean),
         hydration: hydration.filter((h) => h.fluid),
@@ -170,78 +166,7 @@ export default function EditProtocolPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Regimen *</CardTitle>
-              <Button type="button" variant="ghost" size="sm" onClick={() => setRegimen((p) => [...p, { drug: '', dose: 0, unit: 'mg/m²', route: 'IV', day: 1, doseFormula: 'bsa' }])}>
-                <Plus className="h-4 w-4 mr-1" />Add Drug
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="grid grid-cols-8 gap-2 text-xs font-medium text-muted-foreground px-1">
-              <span className="col-span-2">Drug Name</span><span>Dose</span><span>Unit</span><span>Route</span><span>Day(s)</span><span>Formula</span><span>Infusion (min)</span>
-            </div>
-            {regimen.map((drug, i) => (
-              <div key={i} className="grid grid-cols-8 gap-2 items-center">
-                <Input className="h-8 col-span-2" placeholder="Drug name" value={drug.drug} onChange={(e) => setRegimen((p) => p.map((d, idx) => idx === i ? { ...d, drug: e.target.value } : d))} />
-                <Input className="h-8" type="number" min={0} value={drug.dose || ''} onChange={(e) => setRegimen((p) => p.map((d, idx) => idx === i ? { ...d, dose: parseFloat(e.target.value) || 0 } : d))} />
-                <Select value={drug.unit} onValueChange={(v) => setRegimen((p) => p.map((d, idx) => idx === i ? { ...d, unit: v } : d))}>
-                  <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="mg/m²">mg/m²</SelectItem>
-                    <SelectItem value="mg/kg">mg/kg</SelectItem>
-                    <SelectItem value="mg">mg</SelectItem>
-                    <SelectItem value="AUC">AUC</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={drug.route} onValueChange={(v) => setRegimen((p) => p.map((d, idx) => idx === i ? { ...d, route: v } : d))}>
-                  <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="IV">IV</SelectItem>
-                    <SelectItem value="PO">PO</SelectItem>
-                    <SelectItem value="SC">SC</SelectItem>
-                    <SelectItem value="IM">IM</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input className="h-8" type="number" min={1} value={drug.day || ''} onChange={(e) => setRegimen((p) => p.map((d, idx) => idx === i ? { ...d, day: parseInt(e.target.value, 10) || 1 } : d))} />
-                <Select value={drug.doseFormula} onValueChange={(v) => setRegimen((p) => p.map((d, idx) => idx === i ? { ...d, doseFormula: v as RegimenItem['doseFormula'] } : d))}>
-                  <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bsa">BSA</SelectItem>
-                    <SelectItem value="weight">Weight</SelectItem>
-                    <SelectItem value="fixed">Fixed</SelectItem>
-                  </SelectContent>
-                </Select>
-                <div className="flex gap-1 items-center">
-                  <Input className="h-8" type="number" min={0} placeholder="—" value={drug.infusionDurationMin ?? ''} onChange={(e) => setRegimen((p) => p.map((d, idx) => idx === i ? { ...d, infusionDurationMin: parseInt(e.target.value, 10) || undefined } : d))} />
-                  {regimen.length > 1 && (
-                    <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive flex-shrink-0" onClick={() => setRegimen((p) => p.filter((_, idx) => idx !== i))}>
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader><CardTitle>Cycle Schedule</CardTitle></CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Total Cycles *</Label>
-                <Input type="number" min={1} value={totalCycles} onChange={(e) => setTotalCycles(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Cycle Duration (days) *</Label>
-                <Input type="number" min={1} value={cycleDurationDays} onChange={(e) => setCycleDurationDays(e.target.value)} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <ProtocolRegimenBuilder phases={phases} onChange={setPhases} errors={showErrors ? phaseErrors : []} />
 
         <Card>
           <CardHeader>
