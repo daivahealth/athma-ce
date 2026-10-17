@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -20,7 +19,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { useOtRequests, useTransitionOtRequest } from '@/modules/ot/hooks/use-ot';
 import { OT_REQUEST_STATUSES, type OtRequestStatus } from '@/modules/ot/types';
-import { OtRequestStatusBadge } from '@/modules/ot/components/ot-status-badge';
+import { OtRequestPriorityBadge, OtRequestStatusBadge } from '@/modules/ot/components/ot-status-badge';
 
 export default function OtRequestsPage() {
   const params = useParams() as { locale: string };
@@ -202,7 +201,7 @@ export default function OtRequestsPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{request.priority}</Badge>
+                      <OtRequestPriorityBadge priority={request.priority} />
                     </TableCell>
                     <TableCell>
                       {request.preferredDate

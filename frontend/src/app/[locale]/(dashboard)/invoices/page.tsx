@@ -10,7 +10,7 @@ import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -20,13 +20,7 @@ import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
 import type { Invoice } from '@/modules/rcm/types/invoice';
 import { InvoiceStatus } from '@/modules/rcm/types/invoice';
-
-const statusVariant: Record<InvoiceStatus, 'default' | 'secondary' | 'outline' | 'destructive'> = {
-  [InvoiceStatus.UNPAID]: 'destructive',
-  [InvoiceStatus.PARTIAL]: 'outline',
-  [InvoiceStatus.PAID]: 'default',
-  [InvoiceStatus.CANCELLED]: 'secondary',
-};
+import { invoiceStatusTone } from '@/modules/rcm/utils/billing-tone';
 
 const statusLabel: Record<InvoiceStatus, string> = {
   [InvoiceStatus.UNPAID]: 'Unpaid',
@@ -99,7 +93,11 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
     header: 'Status',
     cell: ({ getValue }) => {
       const status = getValue<InvoiceStatus>();
-      return <Badge variant={statusVariant[status]}>{statusLabel[status]}</Badge>;
+      return (
+        <ToneBadge tone={invoiceStatusTone(status)} withDot>
+          {statusLabel[status] ?? status}
+        </ToneBadge>
+      );
     },
   },
   {

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -11,6 +12,7 @@ import { labLabelPrintService } from '../../services/lab-label-print-service';
 import { useCollectLabSpecimen, useLabWorklist, usePrepareLabSpecimen, usePrintLabSpecimenLabel } from '../../hooks/use-lab-operations';
 import type { LabCollectionWorklistItem, LabSpecimenLabelPayload } from '../../types/lab-operations';
 import type { PatientDisplayDTO } from '../../types/patient';
+import { LAB_COLLECTION_STATE_LABEL, fastingTone, labCollectionStateTone } from '../../utils/lab-collection-tone';
 
 export function LabCollectionWorkspace() {
   const [selectedPatient, setSelectedPatient] = useState<PatientDisplayDTO | null>(null);
@@ -159,17 +161,17 @@ function CollectionTable({
               <div className="font-medium">{item.specimenType}</div>
               <div className="mt-1 flex flex-wrap gap-1">
                 <Badge variant="secondary">{item.collectionMethod}</Badge>
-                <Badge variant="secondary">
+                <ToneBadge tone={fastingTone(item.fastingRequired)}>
                   {item.fastingRequired
                     ? `Fasting${item.fastingDurationHours ? ` ${item.fastingDurationHours}h` : ''}`
                     : 'No fasting'}
-                </Badge>
+                </ToneBadge>
               </div>
             </TableCell>
             <TableCell>
-              <Badge variant={item.workflowState === 'prepared' ? 'secondary' : 'outline'}>
-                {item.workflowState === 'prepared' ? 'Label Prepared' : 'Ready to Prepare'}
-              </Badge>
+              <ToneBadge tone={labCollectionStateTone(item.workflowState)} withDot>
+                {LAB_COLLECTION_STATE_LABEL[item.workflowState]}
+              </ToneBadge>
               {item.preparedBarcode ? (
                 <div className="mt-2 font-mono text-xs text-muted-foreground">{item.preparedBarcode}</div>
               ) : null}

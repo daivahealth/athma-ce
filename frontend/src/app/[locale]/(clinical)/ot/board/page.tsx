@@ -18,6 +18,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { OtScheduleStatusBadge } from '@/modules/ot/components/ot-status-badge';
 import { useOtBoard } from '@/modules/ot/hooks/use-ot';
 import type { OtBoardCase, OtBoardRoom, OtBoardState } from '@/modules/ot/types';
 
@@ -164,9 +165,9 @@ function CaseSection({
           </div>
         </div>
         <PatientBlock item={item} />
-        <Badge variant="outline" className="w-fit">
-          {item.scheduleStatus.replace(/_/g, ' ')}
-        </Badge>
+        <div>
+          <OtScheduleStatusBadge status={item.scheduleStatus} />
+        </div>
       </div>
     </div>
   );

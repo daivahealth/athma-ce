@@ -356,7 +356,7 @@ export class TreatmentScheduleService {
       `SELECT d.*, co.status AS order_status,
               tp.patient_id, tp.bsa, tp.weight_kg, tp.status AS plan_status,
               tp.protocol_snapshot->>'code' AS protocol_code, tp.protocol_snapshot->>'name' AS protocol_name,
-              tc.phase_name, tc.dose_level,
+              tc.phase_index, tc.phase_name, tc.dose_level,
               (SELECT COUNT(*)::int FROM plugin_oncology.treatment_cycles c2 WHERE c2.treatment_plan_id = tp.id) AS total_cycles,
               ${PATIENT_COLUMNS}
        FROM plugin_oncology.treatment_days d

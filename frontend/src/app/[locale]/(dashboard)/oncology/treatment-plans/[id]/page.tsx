@@ -21,6 +21,8 @@ import { useTreatmentPlan, useTreatmentPlanActions } from '@/plugins/oncology/ho
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { DaySheet } from '@/plugins/oncology/components/treatment-schedule/DaySheet';
 import { phaseAccent } from '@/plugins/oncology/components/protocol-builder/phase-colors';
+import { ToneBadge } from '@/components/ui/tone-badge';
+import { phaseTone } from '@/plugins/oncology/lib/oncology-tone';
 import { formatDate, formatDayMonthYear, formatDose, formatShortDate, isWeekend, todayIso } from '@/plugins/oncology/lib/treatment-day';
 import type { TreatmentCycle, TreatmentDay, TreatmentPlan } from '@/plugins/oncology/types';
 
@@ -244,13 +246,14 @@ function CycleCard({
       <CardHeader className="pb-3">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <CardTitle className="text-base">Cycle {cycle.cycle_number}</CardTitle>
+          <ToneBadge tone={phaseTone(cycle.phase_index)}>{cycle.phase_name}</ToneBadge>
           <span className="text-sm text-muted-foreground">
-            {cycle.phase_name} · cycle {cycle.phase_cycle} of {totalInPhase} · starts {formatShortDate(cycle.planned_start_date)}
+            cycle {cycle.phase_cycle} of {totalInPhase} · starts {formatShortDate(cycle.planned_start_date)}
           </span>
           {cycle.delay_days > 0 && (
-            <span className="text-xs rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 px-2 py-0.5" title={cycle.delay_reason ?? undefined}>
+            <ToneBadge tone="amber" title={cycle.delay_reason ?? undefined}>
               delayed +{cycle.delay_days}d{cycle.delay_reason ? ` · ${cycle.delay_reason}` : ''}
-            </span>
+            </ToneBadge>
           )}
           <div className="ml-auto flex items-center gap-2">
             <Label className="text-xs text-muted-foreground" htmlFor={`dl-${cycle.id}`}>Dose level</Label>

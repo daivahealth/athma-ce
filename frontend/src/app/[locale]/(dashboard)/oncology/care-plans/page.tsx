@@ -11,6 +11,8 @@ import { CalendarClock, FileText, Pencil, Plus, Search } from 'lucide-react';
 import { useOncologyCarePlans } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
+import { ToneBadge } from '@/components/ui/tone-badge';
+import { treatmentModalityTone } from '@/plugins/oncology/lib/oncology-tone';
 import { PageHeader } from '@/components/ui/page-header';
 import type { OncologyCarePlan } from '@/plugins/oncology/types';
 
@@ -179,15 +181,18 @@ export default function CarePlansPage() {
 
 function ModalitiesSummary({ modalities }: { modalities: OncologyCarePlan['planned_modalities'] }) {
   if (!modalities?.length) return <span className="text-xs text-muted-foreground">None</span>;
-  const shown = modalities.slice(0, 3);
+  // Plans saved before per-modality schedules store bare modality names.
+  const shown = modalities
+    .slice(0, 3)
+    .map((m) => (typeof m === 'string' ? { modality: m as string, protocolCode: undefined } : m));
   const rest = modalities.length - 3;
   return (
     <div className="flex flex-wrap gap-1">
       {shown.map((m, i) => (
-        <span key={i} className="text-xs px-1.5 py-0.5 rounded bg-muted capitalize">
+        <ToneBadge key={i} tone={treatmentModalityTone(m.modality)} className="capitalize">
           {m.modality}
-          {m.protocolCode && <span className="normal-case font-mono ml-1 text-muted-foreground">({m.protocolCode})</span>}
-        </span>
+          {m.protocolCode && <span className="normal-case font-mono ml-1 opacity-75">({m.protocolCode})</span>}
+        </ToneBadge>
       ))}
       {rest > 0 && <span className="text-xs text-muted-foreground">+{rest} more</span>}
     </div>
