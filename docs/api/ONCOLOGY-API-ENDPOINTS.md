@@ -351,7 +351,7 @@ phase 1's last cycle).
         "maxDose": 2,             // optional cap per administration, mg
         "doseLevels": [{ "level": -1, "dose": 50 }],
         "overrides": [            // optional cycle-specific changes
-          { "cycles": [1], "dose": 8, "days": [1, 8], "omit": false, "note": "loading dose" }
+          { "cycles": [1], "dose": 8, "days": [1, 8], "infusionDurationMin": 90, "omit": false, "note": "loading dose" }
         ]
       }
     ]
@@ -493,6 +493,80 @@ POST /api/v1/plugins/oncology/orders/:id/cancel
 **Permission:** `oncology.chemo_order.write`
 
 Transitions any status → `cancelled`. Body: `{ reason? }`.
+
+---
+
+## Treatment Schedules
+
+Patient schedules generated from a phased protocol. Read endpoints need
+`oncology.chemo_order.read`; write endpoints need `oncology.chemo_order.write`. Shapes and
+behaviour: [ONCOLOGY-PLUGIN — Patient treatment schedule](../features/oncology/ONCOLOGY-PLUGIN.md#patient-treatment-schedule--treatment_plans-treatment_cycles-treatment_days).
+
+### List Treatment Plans
+```
+GET /api/v1/plugins/oncology/treatment-plans?patientId=&carePlanId=&cancerDiagnosisId=&status=
+```
+Summaries (max 200): protocol code/name, `start_date`, `end_date`, `next_date`, `total_cycles`,
+`total_days`, `given_days`, `status`, `patientDisplay`.
+
+### Get Treatment Plan
+```
+GET /api/v1/plugins/oncology/treatment-plans/:id
+```
+Plan with `protocol_snapshot`, measurements, `patientDisplay`, `cycles[]` and `days[]` (each day
+with `items[]`, `chemo_order_id`, `order_status`).
+
+### Create Treatment Plan
+```
+POST /api/v1/plugins/oncology/treatment-plans
+```
+Body: `oncologyCarePlanId` (or `patientId` + `cancerDiagnosisId`), `protocolId`, `startDate`
+(C1D1, `YYYY-MM-DD`), `heightCm` + `weightKg` (or `bsa`), optional `creatinineClearance`
+(required in practice for `auc` drugs — otherwise those items carry a warning and no dose),
+`notes`. Returns the full plan (201).
+
+### Update Treatment Plan
+```
+PUT /api/v1/plugins/oncology/treatment-plans/:id
+```
+`status` (active | on_hold | completed | cancelled), `notes`, and/or `heightCm`, `weightKg`,
+`bsa`, `creatinineClearance` — changed measurements re-dose open (`planned`/`held`) days.
+
+### Delay Cycle
+```
+POST /api/v1/plugins/oncology/treatment-plans/:id/cycles/:cycleNumber/delay
+```
+Body `{ days: 1–90, reason? }`. Moves the cycle and all later cycles. `400` if any of those days
+is already ordered or given.
+
+### Set Cycle Dose Level
+```
+PUT /api/v1/plugins/oncology/treatment-plans/:id/cycles/:cycleNumber/dose-level
+```
+Body `{ doseLevel: 0 | -1 | -2 | -3, applyToLaterCycles?: boolean }`. Re-doses open days.
+
+### List Treatment Days (worklist)
+```
+GET /api/v1/plugins/oncology/treatment-days?date=YYYY-MM-DD
+GET /api/v1/plugins/oncology/treatment-days?from=YYYY-MM-DD&to=YYYY-MM-DD&status=
+```
+Days across patients (range ≤ 62 days; skipped/cancelled excluded unless `status` is given), with
+patient, protocol, phase, dose level and order status. Only active / on-hold plans.
+
+### Update Treatment Day
+```
+PUT /api/v1/plugins/oncology/treatment-days/:id
+```
+`status` (planned | held | skipped | cancelled), `notes`. Refused while the day has an
+ordered/given chemo order — change the order instead.
+
+### Create Order for Day
+```
+POST /api/v1/plugins/oncology/treatment-days/:id/order
+```
+Creates the chemo order from the plan (cycle, day, date, BSA/weight/height/CrCl, dose-level
+`doseAdjustments`) and marks the day `ordered`. Returns `{ order, plan }` (201). Order
+completion / hold / cancel update the day (`given` / `held` / back to `planned`).
 
 ---
 

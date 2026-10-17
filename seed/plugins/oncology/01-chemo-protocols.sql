@@ -562,7 +562,7 @@ UPDATE plugin_oncology.chemo_protocols SET
       {"id":"tch-doc","drug":"Docetaxel","dose":75,"unit":"mg/m²","route":"IV","days":[1],"doseFormula":"bsa","infusionDurationMin":60,"diluent":"NS 250 mL","doseLevels":[{"level":-1,"dose":60}]},
       {"id":"tch-carbo","drug":"Carboplatin","dose":6,"unit":"AUC","route":"IV","days":[1],"doseFormula":"auc","infusionDurationMin":30,"diluent":"D5W 250 mL","doseLevels":[{"level":-1,"dose":5}]},
       {"id":"tch-tras","drug":"Trastuzumab","dose":6,"unit":"mg/kg","route":"IV","days":[1],"doseFormula":"weight","infusionDurationMin":30,
-       "overrides":[{"cycles":[1],"dose":8,"note":"Loading dose — infuse over 90 min"}]}
+       "overrides":[{"cycles":[1],"dose":8,"infusionDurationMin":90,"note":"Loading dose"}]}
     ]},
     {"id":"tch-ph-maint","name":"Trastuzumab maintenance","cycles":11,"cycleDurationDays":21,"drugs":[
       {"id":"tch-tras-m","drug":"Trastuzumab","dose":6,"unit":"mg/kg","route":"IV","days":[1],"doseFormula":"weight","infusionDurationMin":30}

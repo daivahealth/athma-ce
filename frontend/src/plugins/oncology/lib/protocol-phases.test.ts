@@ -16,7 +16,7 @@ const acT: ProtocolPhase[] = [
 const tch: ProtocolPhase[] = [
   {
     id: 'tch', name: 'TCH', cycles: 6, cycleDurationDays: 21,
-    drugs: [drug('tras', 'Trastuzumab', 6, { unit: 'mg/kg', doseFormula: 'weight', overrides: [{ cycles: [1], dose: 8, note: 'loading' }] })],
+    drugs: [drug('tras', 'Trastuzumab', 6, { unit: 'mg/kg', doseFormula: 'weight', infusionDurationMin: 30, overrides: [{ cycles: [1], dose: 8, infusionDurationMin: 90, note: 'loading' }] })],
   },
   { id: 'm', name: 'Maintenance', cycles: 11, cycleDurationDays: 21, drugs: [drug('tras-m', 'Trastuzumab', 6, { unit: 'mg/kg', doseFormula: 'weight' })] },
 ];
@@ -31,8 +31,8 @@ describe('protocol phases', () => {
   });
 
   it('applies cycle overrides only to the cycles listed', () => {
-    expect(resolveCycle(tch, 1)!.drugs[0]).toMatchObject({ dose: 8, overridden: true, note: 'loading' });
-    expect(resolveCycle(tch, 2)!.drugs[0]).toMatchObject({ dose: 6, overridden: false });
+    expect(resolveCycle(tch, 1)!.drugs[0]).toMatchObject({ dose: 8, infusionDurationMin: 90, overridden: true, note: 'loading' });
+    expect(resolveCycle(tch, 2)!.drugs[0]).toMatchObject({ dose: 6, infusionDurationMin: 30, overridden: false });
     expect(resolveCycle(tch, 7)!.phase.name).toBe('Maintenance');
   });
 

@@ -186,7 +186,7 @@ function DrugLine({ drug, phaseCycles, startCycle, canRemove, onChange, onRemove
             {overrides.length > 0 && (
               <div className="grid grid-cols-12 gap-2 text-xs font-medium text-muted-foreground px-1">
                 <span className="col-span-2">Phase cycles</span><span className="col-span-2">Dose ({drug.unit})</span>
-                <span className="col-span-2">Days</span><span>Omit</span><span className="col-span-4">Note</span><span />
+                <span className="col-span-2">Days</span><span>Infusion (min)</span><span>Omit</span><span className="col-span-3">Note</span><span />
               </div>
             )}
             {overrides.map((o, i) => (
@@ -199,10 +199,11 @@ function DrugLine({ drug, phaseCycles, startCycle, canRemove, onChange, onRemove
                 </div>
                 <Input className="h-8 col-span-2" type="number" min={0} disabled={o.omit} value={o.dose ?? ''} placeholder={String(drug.dose || '')} onChange={(e) => setOverride(i, { dose: num(e.target.value) })} aria-label="Override dose" />
                 <NumberListInput className="h-8 col-span-2" value={o.days ?? []} onChange={(days) => setOverride(i, { days })} placeholder={formatNumberList(drug.days)} aria-label="Override days" />
+                <Input className="h-8" type="number" min={0} disabled={o.omit} value={o.infusionDurationMin ?? ''} placeholder={drug.infusionDurationMin ? String(drug.infusionDurationMin) : '—'} onChange={(e) => setOverride(i, { infusionDurationMin: num(e.target.value) })} aria-label="Override infusion minutes" />
                 <div className="flex items-center">
                   <Checkbox checked={!!o.omit} onChange={(e) => setOverride(i, { omit: e.target.checked || undefined })} aria-label="Omit drug in these cycles" />
                 </div>
-                <Input className="h-8 col-span-4" value={o.note ?? ''} placeholder="e.g. loading dose" onChange={(e) => setOverride(i, { note: e.target.value || undefined })} />
+                <Input className="h-8 col-span-3" value={o.note ?? ''} placeholder="e.g. loading dose" onChange={(e) => setOverride(i, { note: e.target.value || undefined })} />
                 <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive" onClick={() => onChange({ overrides: overrides.filter((_, idx) => idx !== i) })} aria-label="Remove change">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>

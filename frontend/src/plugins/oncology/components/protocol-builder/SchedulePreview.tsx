@@ -8,7 +8,11 @@ import type { ProtocolPhase } from '@/plugins/oncology/types';
 import { buildRelativeSchedule, scheduleLengthDays } from '@/plugins/oncology/lib/protocol-phases';
 import { phaseAccent } from './phase-colors';
 
-interface Props { phases: ProtocolPhase[] }
+interface Props {
+  phases: ProtocolPhase[];
+  /** Controlled start date (YYYY-MM-DD); hides the sample-date input. */
+  startDate?: string;
+}
 
 const addDays = (iso: string, n: number) => {
   const [y, m, d] = iso.split('-').map(Number);
@@ -21,9 +25,10 @@ const fmt = new Intl.DateTimeFormat(undefined, { weekday: 'short', day: 'numeric
  * shows calendar dates (preview only — the patient schedule is created from
  * the care plan).
  */
-export function SchedulePreview({ phases }: Props) {
+export function SchedulePreview({ phases, startDate }: Props) {
   const days = useMemo(() => buildRelativeSchedule(phases), [phases]);
-  const [start, setStart] = useState('');
+  const [sampleStart, setStart] = useState('');
+  const start = startDate ?? sampleStart;
   const startId = useId();
   const length = scheduleLengthDays(phases);
 
@@ -34,10 +39,12 @@ export function SchedulePreview({ phases }: Props) {
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-end gap-4">
-        <div className="space-y-1">
-          <Label htmlFor={startId} className="text-xs">Sample start date (optional)</Label>
-          <Input id={startId} type="date" className="h-8 w-44" value={start} onChange={(e) => setStart(e.target.value)} />
-        </div>
+        {startDate === undefined && (
+          <div className="space-y-1">
+            <Label htmlFor={startId} className="text-xs">Sample start date (optional)</Label>
+            <Input id={startId} type="date" className="h-8 w-44" value={sampleStart} onChange={(e) => setStart(e.target.value)} />
+          </div>
+        )}
         <p className="text-xs text-muted-foreground pb-2">
           {days.length} treatment days over {length} days (~{Math.round(length / 7)} weeks)
         </p>

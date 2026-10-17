@@ -110,6 +110,8 @@
     "carePlans": "خطط الرعاية",
     "chemoProtocols": "بروتوكولات العلاج الكيميائي",
     "chemoOrders": "أوامر العلاج الكيميائي",
+    "treatmentSchedules": "جداول العلاج",
+    "dayCareWorklist": "قائمة الرعاية النهارية",
     "pharmacy": "الصيدلية",
     "dispense": "الصرف",
     "pharmacyStock": "إدارة المخزون",

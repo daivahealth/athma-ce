@@ -14,6 +14,7 @@ export interface ProtocolDrugOverride {
   dose?: number;
   unit?: string;
   days?: number[];
+  infusionDurationMin?: number;
   omit?: boolean;
   note?: string;
 }
@@ -113,6 +114,7 @@ export function parsePhases(input: unknown): ProtocolPhase[] {
             dose: optNum(o?.dose),
             unit: o?.unit || undefined,
             days: toNums(o?.days).length ? toNums(o?.days) : undefined,
+            infusionDurationMin: optNum(o?.infusionDurationMin),
             omit: o?.omit === true ? true : undefined,
             note: o?.note ? String(o.note) : undefined,
           }))
@@ -173,18 +175,20 @@ export function regimenForCycle(phases: ProtocolPhase[], cycle: number) {
       const pc = cycle - start + 1;
       return ph.drugs.flatMap((d) => {
         let dose = d.dose; let unit = d.unit; let days = d.days; let omit = false; let note: string | undefined;
+        let infusionDurationMin = d.infusionDurationMin;
         for (const o of d.overrides ?? []) {
           if (!o.cycles.includes(pc)) continue;
           if (o.dose != null) dose = o.dose;
           if (o.unit) unit = o.unit;
           if (o.days?.length) days = o.days;
+          if (o.infusionDurationMin != null) infusionDurationMin = o.infusionDurationMin;
           if (o.omit != null) omit = o.omit;
           if (o.note) note = o.note;
         }
         if (omit) return [];
         return [{
           drug: d.drug, dose, unit, route: d.route, day: days.length === 1 ? days[0] : days,
-          doseFormula: d.doseFormula, infusionDurationMin: d.infusionDurationMin, diluent: d.diluent,
+          doseFormula: d.doseFormula, infusionDurationMin, diluent: d.diluent,
           maxDose: d.maxDose, phase: ph.name, phaseCycle: pc, note,
         }];
       });

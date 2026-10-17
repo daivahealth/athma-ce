@@ -48,7 +48,18 @@ export class OncologyService {
     return age;
   }
 
-  private buildPatientDisplay(row: Record<string, any>): PatientDisplayDto | null {
+  /** Keeps a treatment-schedule day in step with its chemo order (no-op for unscheduled orders). */
+  private async syncTreatmentDay(orderId: string, orderOutcome: 'given' | 'held' | 'cancelled') {
+    // A cancelled order frees the day so it can be ordered again
+    await this.prisma.$executeRawUnsafe(
+      orderOutcome === 'cancelled'
+        ? `UPDATE plugin_oncology.treatment_days SET status = 'planned', chemo_order_id = NULL, updated_at = NOW() WHERE chemo_order_id = $1::uuid`
+        : `UPDATE plugin_oncology.treatment_days SET status = $2, updated_at = NOW() WHERE chemo_order_id = $1::uuid`,
+      ...(orderOutcome === 'cancelled' ? [orderId] : [orderId, orderOutcome]),
+    );
+  }
+
+  buildPatientDisplay(row: Record<string, any>): PatientDisplayDto | null {
     if (!row.patient_mrn) return null;
     return {
       patientId: row.patient_id,
@@ -1565,6 +1576,7 @@ export class OncologyService {
       data.notes ?? null,
     );
     const r = results[0];
+    await this.syncTreatmentDay(r.id, 'given');
     const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
@@ -1593,6 +1605,7 @@ export class OncologyService {
     );
     if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
     const r = results[0];
+    await this.syncTreatmentDay(r.id, 'held');
     const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,
@@ -1621,6 +1634,7 @@ export class OncologyService {
     );
     if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
     const r = results[0];
+    await this.syncTreatmentDay(r.id, 'cancelled');
     const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
       patientId: r.patient_id,

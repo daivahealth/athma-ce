@@ -92,6 +92,7 @@ export function resolveDrugForCycle(line: ProtocolPhaseDrug, phaseCycle: number)
     if (o.dose != null) r.dose = o.dose;
     if (o.unit) r.unit = o.unit;
     if (o.days?.length) r.days = o.days;
+    if (o.infusionDurationMin != null) r.infusionDurationMin = o.infusionDurationMin;
     if (o.omit != null) r.omitted = o.omit;
     if (o.note) r.note = o.note;
   }
@@ -237,7 +238,7 @@ export function cleanPhases(phases: ProtocolPhase[]): ProtocolPhase[] {
       drug: d.drug.trim(),
       days: [...new Set(d.days)].sort((a, b) => a - b),
       doseLevels: d.doseLevels?.filter((l) => l.dose > 0),
-      overrides: d.overrides?.filter((o) => o.cycles.length && (o.omit || o.dose != null || o.days?.length || o.unit || o.note)),
+      overrides: d.overrides?.filter((o) => o.cycles.length && (o.omit || o.dose != null || o.days?.length || o.infusionDurationMin != null || o.unit || o.note)),
     })),
   }));
 }

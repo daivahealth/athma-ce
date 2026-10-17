@@ -124,6 +124,7 @@ export function RegimenMatrix({ phases, onChange }: Props) {
           unit={base.unit}
           baseDose={base.dose}
           baseDays={base.days}
+          baseInfusion={base.infusionDurationMin}
           current={selectedCell.resolved}
           onApply={applyOverride}
           onClose={() => setSel(null)}
@@ -138,23 +139,30 @@ interface CellEditorProps {
   unit: string;
   baseDose: number;
   baseDays: number[];
+  baseInfusion?: number;
   current: MatrixCell['resolved'];
   onApply: (patch: Parameters<typeof setCycleOverride>[2]) => void;
   onClose: () => void;
 }
 
-function CellEditor({ title, unit, baseDose, baseDays, current, onApply, onClose }: CellEditorProps) {
+function CellEditor({ title, unit, baseDose, baseDays, baseInfusion, current, onApply, onClose }: CellEditorProps) {
   const [dose, setDose] = useState(current.dose !== baseDose ? String(current.dose) : '');
   const [days, setDays] = useState<number[]>(current.days !== baseDays ? current.days : []);
+  const [infusion, setInfusion] = useState(
+    current.infusionDurationMin != null && current.infusionDurationMin !== baseInfusion ? String(current.infusionDurationMin) : '',
+  );
   const [omit, setOmit] = useState(current.omitted);
   const [note, setNote] = useState(current.note ?? '');
 
   const save = () => {
     const d = dose === '' ? undefined : parseFloat(dose);
-    const changed = omit || (d != null && d !== baseDose) || days.length > 0 || note;
+    const inf = infusion === '' ? undefined : parseInt(infusion, 10);
+    const infChanged = inf != null && inf !== baseInfusion;
+    const changed = omit || (d != null && d !== baseDose) || days.length > 0 || infChanged || note;
     onApply(changed ? {
       dose: d != null && d !== baseDose ? d : undefined,
       days: days.length ? days : undefined,
+      infusionDurationMin: infChanged ? inf : undefined,
       omit: omit || undefined,
       note: note || undefined,
     } : null);
@@ -175,11 +183,15 @@ function CellEditor({ title, unit, baseDose, baseDays, current, onApply, onClose
           <Label className="text-xs">Days</Label>
           <NumberListInput className="h-8" value={days} onChange={setDays} placeholder={baseDays.join(', ')} />
         </div>
+        <div className="space-y-1 col-span-2">
+          <Label className="text-xs">Infusion (min)</Label>
+          <Input className="h-8" type="number" min={0} disabled={omit} value={infusion} placeholder={baseInfusion ? String(baseInfusion) : '—'} onChange={(e) => setInfusion(e.target.value)} />
+        </div>
         <label className="col-span-2 flex items-center gap-2 h-8 text-xs">
           <Checkbox checked={omit} onChange={(e) => setOmit(e.target.checked)} />
           Omit this cycle
         </label>
-        <div className="space-y-1 col-span-4">
+        <div className="space-y-1 col-span-2">
           <Label className="text-xs">Note</Label>
           <Input className="h-8" value={note} placeholder="e.g. loading dose" onChange={(e) => setNote(e.target.value)} />
         </div>

@@ -26,6 +26,10 @@ const oncologyKeys = {
   orders: () => [...oncologyKeys.all, 'orders'] as const,
   orderList: (params?: Record<string, unknown>) => [...oncologyKeys.orders(), 'list', params] as const,
   orderDetail: (id: string) => [...oncologyKeys.orders(), 'detail', id] as const,
+  treatmentPlans: () => [...oncologyKeys.all, 'treatmentPlans'] as const,
+  treatmentPlanList: (params?: Record<string, unknown>) => [...oncologyKeys.treatmentPlans(), 'list', params] as const,
+  treatmentPlanDetail: (id: string) => [...oncologyKeys.treatmentPlans(), 'detail', id] as const,
+  treatmentDays: (params?: Record<string, unknown>) => [...oncologyKeys.treatmentPlans(), 'days', params] as const,
   catalogs: () => [...oncologyKeys.all, 'catalogs'] as const,
   cancerTypes: () => [...oncologyKeys.catalogs(), 'cancerTypes'] as const,
   cancerTypeList: (params?: Record<string, unknown>) => [...oncologyKeys.cancerTypes(), 'list', params] as const,
@@ -723,4 +727,74 @@ export function useDeleteTimelineEvent(patientId: string) {
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: oncologyKeys.timeline(patientId) }),
   });
+}
+
+// Treatment schedules
+export function useTreatmentPlans(params?: { patientId?: string; carePlanId?: string; cancerDiagnosisId?: string; status?: string }, enabled = true) {
+  return useQuery({
+    queryKey: oncologyKeys.treatmentPlanList(params),
+    queryFn: () => oncologyService.listTreatmentPlans(params),
+    enabled,
+  });
+}
+
+export function useTreatmentPlan(id: string) {
+  return useQuery({
+    queryKey: oncologyKeys.treatmentPlanDetail(id),
+    queryFn: () => oncologyService.getTreatmentPlan(id),
+    enabled: !!id,
+  });
+}
+
+export function useTreatmentDays(params: { date?: string; from?: string; to?: string; status?: string }, enabled = true) {
+  return useQuery({
+    queryKey: oncologyKeys.treatmentDays(params),
+    queryFn: () => oncologyService.listTreatmentDays(params),
+    enabled,
+  });
+}
+
+export function useCreateTreatmentPlan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: oncologyService.createTreatmentPlan,
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: oncologyKeys.treatmentPlans() }); },
+  });
+}
+
+/** Mutations on an existing plan; each returns the refreshed plan. */
+export function useTreatmentPlanActions(planId: string) {
+  const queryClient = useQueryClient();
+  const onSuccess = (plan: Awaited<ReturnType<typeof oncologyService.getTreatmentPlan>>) => {
+    queryClient.setQueryData(oncologyKeys.treatmentPlanDetail(planId), plan);
+    queryClient.invalidateQueries({ queryKey: oncologyKeys.treatmentPlans() });
+  };
+  return {
+    update: useMutation({
+      mutationFn: (body: Parameters<typeof oncologyService.updateTreatmentPlan>[1]) => oncologyService.updateTreatmentPlan(planId, body),
+      onSuccess,
+    }),
+    delayCycle: useMutation({
+      mutationFn: ({ cycleNumber, ...body }: { cycleNumber: number; days: number; reason?: string }) =>
+        oncologyService.delayTreatmentCycle(planId, cycleNumber, body),
+      onSuccess,
+    }),
+    setDoseLevel: useMutation({
+      mutationFn: ({ cycleNumber, ...body }: { cycleNumber: number; doseLevel: number; applyToLaterCycles?: boolean }) =>
+        oncologyService.setTreatmentCycleDoseLevel(planId, cycleNumber, body),
+      onSuccess,
+    }),
+    updateDay: useMutation({
+      mutationFn: ({ dayId, ...body }: { dayId: string; status?: string; notes?: string }) =>
+        oncologyService.updateTreatmentDay(dayId, body),
+      onSuccess,
+    }),
+    createOrder: useMutation({
+      mutationFn: (dayId: string) => oncologyService.createOrderForTreatmentDay(dayId),
+      onSuccess: (res) => {
+        onSuccess(res.plan);
+        queryClient.invalidateQueries({ queryKey: oncologyKeys.orders() });
+      },
+    }),
+  };
 }

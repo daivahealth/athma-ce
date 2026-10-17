@@ -11,6 +11,13 @@ export function StatusBadge({ status }: { status: string }) {
     scheduled: 'bg-blue-100 text-blue-700',
     in_review: 'bg-purple-100 text-purple-700',
     deferred: 'bg-gray-100 text-gray-600',
+    // treatment schedule
+    active: 'bg-green-100 text-green-700',
+    on_hold: 'bg-orange-100 text-orange-700',
+    planned: 'bg-slate-100 text-slate-700',
+    ordered: 'bg-blue-100 text-blue-700',
+    given: 'bg-green-100 text-green-700',
+    skipped: 'bg-gray-100 text-gray-500',
   };
   return (
     <span className={`text-xs px-2 py-0.5 rounded-full ${colors[status] || 'bg-gray-100 text-gray-600'}`}>

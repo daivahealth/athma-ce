@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { AthmaPluginModule, PluginContext } from '@athma/plugin-sdk';
 import { OncologyController } from './oncology.controller';
 import { OncologyService } from './oncology.service';
+import { TreatmentScheduleController } from './treatment-schedule.controller';
+import { TreatmentScheduleService } from './treatment-schedule.service';
 
 @Module({
-  controllers: [OncologyController],
-  providers: [OncologyService],
-  exports: [OncologyService],
+  controllers: [OncologyController, TreatmentScheduleController],
+  providers: [OncologyService, TreatmentScheduleService],
+  exports: [OncologyService, TreatmentScheduleService],
 })
 export class OncologyModule implements AthmaPluginModule {
   async onPluginInit(context: PluginContext): Promise<void> {

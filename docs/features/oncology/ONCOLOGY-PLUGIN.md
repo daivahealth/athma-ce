@@ -16,7 +16,7 @@ The oncology plugin follows the correct clinical sequence. Each step is a prereq
 CancerDiagnosis  →  TumorStaging  →  TumorBoardCase  →  OncologyCarePlan
      (anchor)         (staging)         (MDT review)       (treatment plan)
         ↓
-  Phase 2: Chemotherapy (ChemoProtocol → ChemoOrder)
+  Phase 2: Chemotherapy (ChemoProtocol → TreatmentPlan schedule → ChemoOrder per treatment day)
         ↓
   Phase 3: Radiation Therapy
 ```
@@ -35,6 +35,8 @@ All staging, tumor board, and care plan records link back to a `CancerDiagnosis`
 | Care Plans        | `/oncology/care-plans`        | Treatment plans linked to diagnoses               |
 | Chemo Protocols   | `/oncology/protocols`         | Reusable protocol templates (Phase 2)             |
 | Chemo Orders      | `/oncology/orders`            | Per-patient chemotherapy orders (Phase 2)         |
+| Treatment Schedules | `/oncology/treatment-plans` | Patient schedules generated from a protocol — cycles, dates, doses |
+| Day-care Worklist | `/oncology/day-care`          | All patients due on a date: administration sheets + pharmacy prep |
 
 ---
 
@@ -138,7 +140,7 @@ count, cycle length and drugs. Cycles are numbered continuously across phases. E
 AC-T = `AC` × 4 (q14d) → `Paclitaxel` × 4 (q14d); TCH = `TCH` × 6 (q21d) → `Trastuzumab
 maintenance` × 11.
 
-- **Cycle-specific changes** are sparse overrides on a drug line (dose, days, omit, note), keyed by
+- **Cycle-specific changes** are sparse overrides on a drug line (dose, days, infusion time, omit, note), keyed by
   the cycle number *within the phase*, so changing an earlier phase's cycle count doesn't move them.
   Example: trastuzumab 6 mg/kg with a cycle-1 override of 8 mg/kg (loading).
 - **Dose levels** (DL−1, DL−2) are stored per drug line for later use at order time.
@@ -184,6 +186,46 @@ Per-patient order instance derived from a protocol. Status workflow: `draft → 
 | `administered_at` | TIMESTAMPTZ? | |
 | `adverse_reactions` | JSONB | Array of `{ drug, ctcaeGrade, type, onsetTime, description }` |
 | `administration_details` | JSONB | Per-drug: `[{ drug, startedAt, completedAt, ratePerHour, accessSite }]` |
+
+### Patient treatment schedule — `treatment_plans`, `treatment_cycles`, `treatment_days`
+
+A **treatment plan** is the dated schedule for one patient, generated from a phased protocol
+when treatment starts (`POST /treatment-plans`, usually from a care plan's chemotherapy
+modality). The protocol is snapshotted, so later protocol edits do not change running plans.
+
+| Table | Key columns | Notes |
+|-------|-------------|-------|
+| `treatment_plans` | `patient_id`, `cancer_diagnosis_id`, `oncology_care_plan_id?`, `protocol_id`, `protocol_snapshot`, `start_date`, `height_cm`, `weight_kg`, `bsa`, `creatinine_clearance`, `status` | `status`: active, on_hold, completed, cancelled |
+| `treatment_cycles` | `cycle_number`, `phase_index`, `phase_name`, `phase_cycle`, `planned_start_date`, `dose_level`, `delay_days`, `delay_reason` | One row per cycle; unique `(treatment_plan_id, cycle_number)` |
+| `treatment_days` | `cycle_number`, `cycle_day`, `scheduled_date`, `status`, `items`, `chemo_order_id?` | One row per day that has a drug. `status`: planned, ordered, given, held, skipped, cancelled |
+
+**Day items** (`items` JSONB, a snapshot rebuilt only while the day is open) list everything for
+that day in order: `lab` checks (first treatment day of each cycle, from `lab_prerequisites`),
+`premed` and `hydration` (from the protocol), `chemo` (drug, protocol dose, dose level, calculated
+patient dose, route, infusion, diluent, warnings) and `supportive` care (first day of cycle).
+
+**Dosing:** BSA by Mosteller; `bsa` × m², `weight` × kg, `fixed` as written, `auc` by Calvert
+(AUC × (CrCl + 25), CrCl capped at 125 mL/min — needs CrCl). `maxDose` caps the mg dose. A cycle
+dose level (−1, −2) uses the drug line's predefined `doseLevels`. A drug with no dose levels at
+all is not reduced (e.g. trastuzumab); one that defines other levels but not the requested one
+keeps the full dose and the item carries a warning.
+
+**Behaviour:**
+- **Delay a cycle** moves that cycle and every later one by N days (refused once any of those days
+  is ordered or given). **Dose level** changes and **updated measurements** re-dose open days only
+  (`planned`, `held`).
+- **Create order** on a day creates the `chemo_order` (cycle, day, date, BSA, weight, height, CrCl,
+  dose-level `dose_adjustments`) and marks the day `ordered`. Completing the order marks the day
+  `given`, holding it marks it `held`, cancelling it frees the day (`planned`, link removed).
+- Hold / skip / restore a day directly while it has no order.
+- Premedications and supportive care are still free text on the protocol, so they appear on every
+  treatment day / first day of each cycle rather than against specific drugs or days.
+
+**Screens:** `/oncology/treatment-plans` (list; `?carePlanId=` opens that care plan's current
+schedule or starts one), `/oncology/treatment-plans/new` (care plan, protocol, C1D1 date, height,
+weight, CrCl → preview → generate), `/oncology/treatment-plans/[id]` (cycle cards with delay and
+dose level, day rows with day sheet and order actions), `/oncology/day-care` (date worklist:
+per-patient administration sheets with timed sequence, and a pharmacy prep table with drug totals).
 
 ---
 
@@ -273,6 +315,8 @@ frontend/src/plugins/oncology/
 └── components/
     ├── AddDiagnosisSheet.tsx         # Slide-over form: Add to Registry
     ├── TreatmentIntentBadge.tsx      # Colored badge component
+    ├── protocol-builder/             # Phase builder, regimen matrix, schedule preview
+    ├── treatment-schedule/DaySheet.tsx # Timed day sheet (checks, sequence, supportive care)
     └── shared.tsx                    # LoadingState, EmptyState, StatusBadge
 
 frontend/src/app/[locale]/(dashboard)/oncology/
@@ -295,10 +339,15 @@ frontend/src/app/[locale]/(dashboard)/oncology/
 │   ├── page.tsx                      # Protocol list with deactivate toggle
 │   ├── new/page.tsx                  # Phase-based regimen builder, hydration, lab prerequisites
 │   └── [id]/edit/page.tsx            # Same builder (plugins/oncology/components/protocol-builder/)
-└── orders/                           # Phase 2 — Chemo Orders
-    ├── page.tsx                      # Order list with status filter
-    ├── new/page.tsx                  # BSA calculator, dose calculator, pre-chemo checklist
-    └── [id]/page.tsx                 # Order detail + approval/verify/administer workflow
+├── orders/                           # Phase 2 — Chemo Orders
+│   ├── page.tsx                      # Order list with status filter
+│   ├── new/page.tsx                  # BSA calculator, dose calculator, pre-chemo checklist
+│   └── [id]/page.tsx                 # Order detail + approval/verify/administer workflow
+├── treatment-plans/                  # Patient treatment schedules
+│   ├── page.tsx                      # Schedule list (?carePlanId= redirects)
+│   ├── new/page.tsx                  # Start schedule from a care plan
+│   └── [id]/page.tsx                 # Cycle/day schedule, delay, dose level, day sheet, orders
+└── day-care/page.tsx                 # Date worklist: administration + pharmacy prep
 ```
 
 ---
@@ -314,7 +363,11 @@ plugins/oncology/
     └── src/
         ├── oncology.module.ts        # NestJS module, registers encounter types + charting panels
         ├── oncology.controller.ts    # REST endpoints via @PluginController('oncology')
-        └── oncology.service.ts       # Raw SQL via $queryRawUnsafe() (no cross-schema Prisma joins)
+        ├── oncology.service.ts       # Raw SQL via $queryRawUnsafe() (no cross-schema Prisma joins)
+        ├── protocol-phases.ts        # Phase regimen parse/derive/resolve
+        ├── treatment-schedule.ts     # Pure schedule generation + dosing (BSA, weight, AUC)
+        ├── treatment-schedule.service.ts    # Treatment plans, cycles, days, worklist
+        └── treatment-schedule.controller.ts # /treatment-plans, /treatment-days
 ```
 
 ---

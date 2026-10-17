@@ -4,7 +4,7 @@ import type {
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
   RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan,
   RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
-  CancerTimelineEvent,
+  CancerTimelineEvent, TreatmentPlan, TreatmentPlanSummary, WorklistDay,
 } from '../types';
 
 const BASE_URL = '/plugins/oncology';
@@ -399,5 +399,55 @@ export const oncologyService = {
 
   async deleteTimelineEvent(id: string): Promise<void> {
     await clinicalClient.delete(`${BASE_URL}/timeline/${id}`);
+  },
+  // Treatment schedules (patient plans generated from phased protocols)
+  async listTreatmentPlans(params?: { patientId?: string; carePlanId?: string; cancerDiagnosisId?: string; status?: string }): Promise<{ data: TreatmentPlanSummary[] }> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/treatment-plans`, { params });
+    return data;
+  },
+
+  async getTreatmentPlan(id: string): Promise<TreatmentPlan> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/treatment-plans/${id}`);
+    return data.data;
+  },
+
+  async createTreatmentPlan(body: {
+    oncologyCarePlanId?: string; patientId?: string; cancerDiagnosisId?: string; protocolId: string;
+    startDate: string; heightCm?: number; weightKg?: number; bsa?: number; creatinineClearance?: number; notes?: string;
+  }): Promise<TreatmentPlan> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/treatment-plans`, body);
+    return data.data;
+  },
+
+  async updateTreatmentPlan(id: string, body: {
+    status?: string; notes?: string; heightCm?: number; weightKg?: number; creatinineClearance?: number;
+  }): Promise<TreatmentPlan> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/treatment-plans/${id}`, body);
+    return data.data;
+  },
+
+  async delayTreatmentCycle(id: string, cycleNumber: number, body: { days: number; reason?: string }): Promise<TreatmentPlan> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/treatment-plans/${id}/cycles/${cycleNumber}/delay`, body);
+    return data.data;
+  },
+
+  async setTreatmentCycleDoseLevel(id: string, cycleNumber: number, body: { doseLevel: number; applyToLaterCycles?: boolean }): Promise<TreatmentPlan> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/treatment-plans/${id}/cycles/${cycleNumber}/dose-level`, body);
+    return data.data;
+  },
+
+  async listTreatmentDays(params: { date?: string; from?: string; to?: string; status?: string }): Promise<{ data: WorklistDay[] }> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/treatment-days`, { params });
+    return data;
+  },
+
+  async updateTreatmentDay(id: string, body: { status?: string; notes?: string }): Promise<TreatmentPlan> {
+    const { data } = await clinicalClient.put(`${BASE_URL}/treatment-days/${id}`, body);
+    return data.data;
+  },
+
+  async createOrderForTreatmentDay(id: string): Promise<{ order: ChemoOrder; plan: TreatmentPlan }> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/treatment-days/${id}/order`);
+    return data.data;
   },
 };
