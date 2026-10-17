@@ -67,6 +67,14 @@ export default {
           DEFAULT: 'hsl(var(--error))',
           foreground: 'hsl(var(--error-foreground))',
         },
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          footer: 'hsl(var(--sidebar-footer))',
+          ring: 'hsl(var(--sidebar-ring))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -120,65 +128,81 @@ export default {
     },
   },
   plugins: [require('tailwindcss-animate'), plugin(({ addBase }) => {
+    // The prrapp palette: white surfaces, neutral borders and a burnt-orange
+    // brand (#BB4D00) in light; a navy elevation scale in dark. Categorical
+    // colour comes from the tone palette (components/ui/tone-badge.tsx), not
+    // from more tokens here.
     addBase({
       ':root': {
-        '--background': '30 33% 98%', // Warm off-white
-        '--foreground': '18 20% 12%', // Warm graphite
+        '--background': '0 0% 100%',
+        '--foreground': '222.2 84% 4.9%',
         '--card': '0 0% 100%',
-        '--card-foreground': '18 20% 12%',
+        '--card-foreground': '222.2 84% 4.9%',
         '--popover': '0 0% 100%',
-        '--popover-foreground': '18 20% 12%',
-        '--primary': '20 85% 48%', // Softer burnt orange/terracotta (less eye fatigue)
-        '--primary-foreground': '24 100% 98%',
-        '--secondary': '31 56% 95%', // Warm sand
-        '--secondary-foreground': '18 20% 16%',
-        '--muted': '30 24% 95%',
-        '--muted-foreground': '22 10% 43%',
-        '--accent': '35 100% 96%', // Soft amber tint
-        '--accent-foreground': '14 100% 44%',
+        '--popover-foreground': '222.2 84% 4.9%',
+        '--primary': '24.7 100% 36.7%', // #BB4D00
+        '--primary-foreground': '0 0% 100%',
+        '--secondary': '210 40% 96.1%',
+        '--secondary-foreground': '222.2 47.4% 11.2%',
+        '--muted': '210 40% 96.1%',
+        '--muted-foreground': '215.4 16.3% 46.9%',
+        '--accent': '210 40% 96.1%',
+        '--accent-foreground': '222.2 47.4% 11.2%',
         '--destructive': '0 84.2% 60.2%',
         '--destructive-foreground': '210 40% 98%',
-        '--border': '28 35% 88%',
-        '--input': '28 35% 88%',
-        '--ring': '20 85% 48%',
-        '--radius': '1rem', // More rounded
-        '--success': '142 76% 36%',
-        '--success-foreground': '355 100% 100%',
+        '--border': '0 0% 89.8%', // #E5E5E5
+        '--input': '0 0% 89.8%',
+        '--ring': '24.7 100% 36.7%',
+        '--radius': '0.5rem',
+        '--success': '160 84% 30%',
+        '--success-foreground': '0 0% 100%',
         '--warning': '36 100% 50%',
         '--warning-foreground': '24 100% 98%',
-        '--info': '199 89% 48%',
+        '--info': '221 83% 53%',
         '--info-foreground': '0 0% 100%',
         '--error': '0 84.2% 60.2%',
         '--error-foreground': '0 0% 100%',
+        '--sidebar': '0 0% 98%', // #FAFAFA
+        '--sidebar-foreground': '222.2 84% 4.9%',
+        '--sidebar-accent-foreground': '0 0% 0%',
+        '--sidebar-border': '214 32% 91%',
+        '--sidebar-footer': '0 0% 96.1%', // #F5F5F5
+        '--sidebar-ring': '24.7 100% 36.7%',
       },
       '.dark': {
-        '--background': '230 28% 8%', // Charcoal navy
-        '--foreground': '30 30% 96%',
-        '--card': '228 24% 11%', // Soft charcoal
-        '--card-foreground': '30 30% 96%',
-        '--popover': '228 24% 11%',
-        '--popover-foreground': '30 30% 96%',
-        '--primary': '24 85% 55%', // Softer orange for dark mode
-        '--primary-foreground': '18 25% 10%',
-        '--secondary': '226 18% 18%',
-        '--secondary-foreground': '30 30% 96%',
-        '--muted': '226 18% 18%',
-        '--muted-foreground': '28 12% 68%',
-        '--accent': '226 18% 18%',
-        '--accent-foreground': '30 30% 96%',
-        '--destructive': '0 62.8% 30.6%',
+        '--background': '217 47% 11%', // #111A2E
+        '--foreground': '216 55% 94%',
+        '--card': '219 47% 11%',
+        '--card-foreground': '216 55% 94%',
+        '--popover': '219 47% 11%',
+        '--popover-foreground': '216 55% 94%',
+        '--primary': '24.7 100% 55%', // #FF781A
+        '--primary-foreground': '222.2 84% 4.9%',
+        '--secondary': '216 46% 16%',
+        '--secondary-foreground': '216 55% 94%',
+        '--muted': '217 49% 12%',
+        '--muted-foreground': '217 23% 68%',
+        '--accent': '218 45% 19%',
+        '--accent-foreground': '216 55% 94%',
+        '--destructive': '0 72% 51%',
         '--destructive-foreground': '210 40% 98%',
-        '--border': '226 16% 22%',
-        '--input': '226 16% 22%',
-        '--ring': '24 100% 60%',
-        '--success': '142 70% 45%',
+        '--border': '220 36% 22%',
+        '--input': '220 36% 22%',
+        '--ring': '24.7 100% 55%',
+        '--success': '152 60% 52%',
         '--success-foreground': '144 70% 10%',
         '--warning': '36 100% 56%',
         '--warning-foreground': '222.2 47.4% 11.2%',
-        '--info': '199 89% 48%',
-        '--info-foreground': '0 0% 100%',
+        '--info': '214 95% 68%',
+        '--info-foreground': '222.2 84% 4.9%',
         '--error': '0 84% 60%',
         '--error-foreground': '0 0% 98%',
+        '--sidebar': '220 49% 8%',
+        '--sidebar-foreground': '216 55% 94%',
+        '--sidebar-accent-foreground': '216 55% 94%',
+        '--sidebar-border': '220 36% 22%',
+        '--sidebar-footer': '220 49% 8%',
+        '--sidebar-ring': '24.7 100% 55%',
       }
     });
   })],
