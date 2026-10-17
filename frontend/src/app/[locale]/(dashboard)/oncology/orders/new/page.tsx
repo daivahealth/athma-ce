@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2, User, Dna, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -62,10 +62,40 @@ export default function NewChemoOrderPage() {
     }
   }, [diagnosesLoading, diagnoses.length, cancerDiagnosisId]);
 
-  const { data: carePlansData } = useOncologyCarePlans(
+  const { data: carePlansData, isLoading: carePlansLoading } = useOncologyCarePlans(
     cancerDiagnosisId ? { cancerDiagnosisId } : undefined,
   );
   const carePlans = carePlansData?.data ?? [];
+
+  // Protocol planned on the selected care plan's chemotherapy modality
+  const selectedCarePlan = (carePlans as OncologyCarePlan[]).find((cp) => cp.id === oncologyCarePlanId);
+  const planChemoModality = selectedCarePlan?.planned_modalities?.find(
+    (m) => m.modality === 'chemotherapy' && m.protocolId,
+  );
+
+  // Auto-link the care plan: prefer an active plan with a planned chemo protocol.
+  // Runs once per diagnosis so a user's "No care plan" choice sticks.
+  const autoLinkedForDiagnosis = useRef('');
+  useEffect(() => {
+    if (carePlansLoading || !cancerDiagnosisId || oncologyCarePlanId) return;
+    if (autoLinkedForDiagnosis.current === cancerDiagnosisId) return;
+    autoLinkedForDiagnosis.current = cancerDiagnosisId;
+    const plans = carePlans as OncologyCarePlan[];
+    const hasChemoProtocol = (cp: OncologyCarePlan) =>
+      cp.planned_modalities?.some((m) => m.modality === 'chemotherapy' && m.protocolId);
+    const candidate =
+      plans.find((cp) => cp.status === 'active' && hasChemoProtocol(cp)) ??
+      plans.find(hasChemoProtocol) ??
+      (plans.length === 1 ? plans[0] : undefined);
+    if (candidate) setOncologyCarePlanId(candidate.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [carePlansLoading, cancerDiagnosisId, carePlans.length]);
+
+  // Apply the care plan's planned protocol whenever the linked plan changes
+  useEffect(() => {
+    if (planChemoModality?.protocolId) setProtocolId(planChemoModality.protocolId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planChemoModality?.protocolId]);
 
   const { data: protocolsData } = useProtocols(
     selectedDiagnosis ? { cancerType: selectedDiagnosis.cancer_type } : undefined,
@@ -344,7 +374,7 @@ export default function NewChemoOrderPage() {
             {/* Care Plan (optional) */}
             <Card>
               <CardHeader><CardTitle>Care Plan (Optional)</CardTitle></CardHeader>
-              <CardContent>
+              <CardContent className="space-y-2">
                 <Select value={oncologyCarePlanId || '__none'} onValueChange={(v) => setOncologyCarePlanId(v === '__none' ? '' : v)}>
                   <SelectTrigger><SelectValue placeholder="Link to care plan..." /></SelectTrigger>
                   <SelectContent>
@@ -356,6 +386,20 @@ export default function NewChemoOrderPage() {
                     ))}
                   </SelectContent>
                 </Select>
+                {planChemoModality && (
+                  <div className="rounded-md bg-muted/40 px-3 py-2 text-xs space-y-0.5">
+                    <div className="text-muted-foreground">
+                      Planned protocol:{' '}
+                      <span className="font-medium text-foreground">
+                        {planChemoModality.protocolCode ? `${planChemoModality.protocolCode} — ` : ''}
+                        {planChemoModality.protocolName ?? 'selected on care plan'}
+                      </span>
+                      {planChemoModality.plannedCycles
+                        ? ` · ${planChemoModality.plannedCycles} cycles × ${planChemoModality.cycleDurationDays ?? '?'} days`
+                        : ''}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 

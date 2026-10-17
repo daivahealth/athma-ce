@@ -106,6 +106,15 @@ export interface PlannedModality {
   startDate?: string;
   endDate?: string;
   responsibleSubspecialty?: OncologySubspecialty;
+  // Per-modality schedule (cycles for systemic therapy, fractions for radiation)
+  plannedCycles?: number;
+  cycleDurationDays?: number;
+  plannedFractions?: number;
+  // Chemo protocol selected at planning time (chemotherapy modality only);
+  // pre-populates the protocol when placing chemo orders against this plan
+  protocolId?: string;
+  protocolCode?: string;
+  protocolName?: string;
 }
 
 export interface OncologyCarePlan {
