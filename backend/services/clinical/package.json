@@ -29,7 +29,7 @@
     "@zeal/shared-utils": "file:../../shared/utils",
     "@zeal/validators": "file:../../shared/validators",
     "ajv": "^8.20.0",
-    "axios": "^1.6.0",
+    "axios": "^1.20.0",
     "ioredis": "^5.11.1",
     "mime-types": "^2.1.35",
     "pino": "^10.1.0",
