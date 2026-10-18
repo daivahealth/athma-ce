@@ -193,6 +193,72 @@ Navigation entries, feature flags and plugin sections are unchanged — add a
 module by adding to `navSections` or through a plugin's `navigation`
 (see `docs/development/PLUGIN-DEVELOPMENT.md`), not by editing the markup.
 
+## Help Centre
+
+The in-app user manual, ported from prrapp. End users reach it three ways:
+
+- **`/help`** — the Help Centre: the manual grouped by purpose (each group
+  in its own colour), full-text search (MiniSearch, one entry per heading so
+  a hit lands on the paragraph), and `/help/{slug}` pages with the contents
+  beside them.
+- **The help drawer** — `?` anywhere outside a text field, or **Help** in
+  the sidebar footer, opens the page for the screen the user is on, scrolled
+  to the section that names that screen.
+- Links between pages, and from a page into the app.
+
+### Where things live
+
+| Piece | Path |
+|---|---|
+| The manual (source of truth) | `docs/help/*.md`, one page per module |
+| Bundled copy the app imports | `frontend/src/lib/help/help-docs.generated.ts` (generated, committed) |
+| Bundler | `frontend/scripts/build-help-content.mjs` (`npm run help:build`; also runs as `predev`/`prebuild`) |
+| Parsing, routes, heading ids | `frontend/src/lib/help/help-content-core.ts` |
+| Index, search, colours | `frontend/src/lib/help/help-content.ts`, `help-search.ts`, `help-tones.ts` |
+| Drawer, provider, renderer, contents | `frontend/src/components/help/` |
+| Pages | `frontend/src/app/[locale]/(dashboard)/help/` |
+| Prose styles | `.help-prose` in `frontend/src/styles/globals.css` |
+
+Next.js has no `import.meta.glob`, and the frontend's Docker build cannot see
+`docs/`, so the markdown is copied into the generated module. A build that
+cannot see `docs/help` keeps the committed copy.
+
+### Writing a page
+
+Each file opens with front matter:
+
+```yaml
+---
+title: 'Patient access'
+group: 'Clinical care'
+order: 20
+routes: ['/patients', '/encounters', '/scheduling']
+description: 'One sentence naming the screens it covers.'
+---
+```
+
+- `group` is one of the groups in `HELP_GROUP_ORDER`
+  (`help-content-core.ts`); its colour and icon come from `help-tones.ts`.
+- `routes` are app paths **without** the locale, matched by whole path
+  segment. Each screen's path also goes in a code span in its heading or the
+  paragraph under it, e.g. ``**Appointments** (`/scheduling/appointments`)``;
+  `{id}` stands for any id. The drawer picks the page with the most specific
+  match among both, so a screen under another module's path (an encounter's
+  triage) still opens the page that explains it.
+- Bold every on-screen label exactly as the UI writes it; link other pages as
+  `slug.md#anchor` (GitHub-style heading ids); describe only what the code
+  does, with a short **Not live yet** section for stubs.
+- Paragraphs opening **Go to:**, **Check:** or **If instead:** render as
+  coloured callouts.
+
+After editing, run `npm run help:build`. `src/lib/help/help-content.test.ts`
+fails when the bundle is stale, when a page has an unknown group or no
+description, or when a `slug.md#anchor` link points at a page or heading
+that doesn't exist.
+
+When a change alters what a screen shows or how it behaves, update its help
+page in the same change, as with the rest of `docs/`.
+
 ## Route-level states
 
 Each route group (`(dashboard)`, `(clinical)`) has its own `loading.tsx` and

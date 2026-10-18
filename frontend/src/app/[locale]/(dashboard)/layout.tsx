@@ -10,6 +10,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useAuthGuard } from '@/hooks/use-auth-guard';
 import { useSidebar } from '@/lib/contexts/sidebar-context';
 import { NavigationProgress } from '@/components/layout/navigation-progress';
+import { HelpProvider } from '@/components/help/help-provider';
 import '@/plugins';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
@@ -28,37 +29,39 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/20">
-      {/* Desktop Sidebar */}
-      {/* z-50 keeps the sidebar (incl. its hover-peek overlay) above the sticky topbar (z-40) */}
-      <div className="hidden md:block sticky top-0 h-screen z-50">
-        <Sidebar 
-          locale={locale} 
-          isCollapsed={isCollapsed}
-          onToggle={toggleSidebar}
+    <HelpProvider locale={locale}>
+      <div className="flex min-h-screen w-full bg-muted/20">
+        {/* Desktop Sidebar */}
+        {/* z-50 keeps the sidebar (incl. its hover-peek overlay) above the sticky topbar (z-40) */}
+        <div className="hidden md:block sticky top-0 h-screen z-50">
+          <Sidebar 
+            locale={locale} 
+            isCollapsed={isCollapsed}
+            onToggle={toggleSidebar}
+          />
+        </div>
+        
+        {/* Mobile Sidebar */}
+        <MobileSidebar
+          locale={locale}
+          isOpen={isMobileSidebarOpen}
+          onClose={() => setIsMobileSidebarOpen(false)}
         />
+        
+        <div className="flex flex-1 flex-col bg-background/50">
+          <Topbar 
+            locale={locale} 
+            onSidebarToggle={handleMobileToggle}
+          />
+          <main className="flex-1 space-y-4 p-4 bg-muted/30 dark:bg-transparent theme-transition">
+            <Suspense fallback={null}>
+              <NavigationProgress />
+            </Suspense>
+            {children}
+          </main>
+          <Toaster />
+        </div>
       </div>
-      
-      {/* Mobile Sidebar */}
-      <MobileSidebar
-        locale={locale}
-        isOpen={isMobileSidebarOpen}
-        onClose={() => setIsMobileSidebarOpen(false)}
-      />
-      
-      <div className="flex flex-1 flex-col bg-background/50">
-        <Topbar 
-          locale={locale} 
-          onSidebarToggle={handleMobileToggle}
-        />
-        <main className="flex-1 space-y-4 p-4 bg-muted/30 dark:bg-transparent theme-transition">
-          <Suspense fallback={null}>
-            <NavigationProgress />
-          </Suspense>
-          {children}
-        </main>
-        <Toaster />
-      </div>
-    </div>
+    </HelpProvider>
   );
 }
