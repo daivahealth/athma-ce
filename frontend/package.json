@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/build-help-content.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/build-help-content.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --ext .ts,.tsx src",
@@ -12,7 +14,9 @@
     "format": "prettier --write .",
     "lint:fix": "eslint --fix --ext .ts,.tsx src",
     "prepare": "husky install",
-    "mock": "tsx scripts/mockData.ts"
+    "mock": "tsx scripts/mockData.ts",
+    "help:build": "node scripts/build-help-content.mjs",
+    "help:check": "node scripts/build-help-content.mjs --check"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -55,6 +59,7 @@
     "i18next": "^23.11.5",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.441.0",
+    "minisearch": "^7.2.0",
     "next": "16.4.2",
     "next-auth": "^4.24.15",
     "next-intl": "^4.9.2",
@@ -64,8 +69,10 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.53.0",
     "react-i18next": "^14.1.3",
+    "react-markdown": "^10.1.0",
     "react-querybuilder": "^7.5.0",
     "recharts": "^3.7.0",
+    "remark-gfm": "^4.0.1",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

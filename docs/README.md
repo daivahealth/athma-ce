@@ -12,6 +12,7 @@ Welcome to the athma-ce Healthcare Platform documentation. This folder contains 
 | [development](./development/) | Development guides and best practices |
 | [features](./features/) | Feature documentation and specs |
 | [frontend](./frontend/) | Frontend architecture and component guides |
+| [help](./help/) | The in-app user manual (Help Centre), written for end users — see [COMPONENTS.md](./frontend/COMPONENTS.md#help-centre) |
 | [implementation](./implementation/) | Implementation guides and summaries |
 | [infrastructure](./infrastructure/) | Infrastructure setup and deployment |
 | [multitenancy](./multitenancy/) | Multi-tenant architecture and isolation |
