@@ -36,7 +36,6 @@ Browser calls cross subdomains, so foundation, clinical, prm and ai-gateway read
 - **Backend image:** one image (`Dockerfile.backend`) for all six services; compose picks the entrypoint per service. Compiled entrypoints live at `services/<svc>/dist/services/<svc>/src/main.js`.
 - **Clinical runs through ts-node (`--transpile-only`):** the oncology plugin's module entrypoint is TypeScript and is `require()`d at boot (discovered from `/app/plugins`).
 - **Build order:** turbo does not order builds by `file:` workspace dependencies. The Dockerfile builds contracts/types, then utils, then the other shared packages, then everything else.
-- **Frontend Tailwind pin:** the frontend image pins `tailwindcss@3.4.19`. `package.json` declares `^4` (Dependabot #168), but the app still uses the v3 PostCSS setup, so a clean `npm ci` build fails without the pin.
 - **Frontend contract types:** the frontend imports `backend/contracts/src` by relative path, so the image keeps the repo layout.
 
 ## Monthly cost (approximate, on-demand)
