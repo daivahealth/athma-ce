@@ -68,7 +68,7 @@ list. The new patient's MRN is given by the system.
 
 If the server refuses, the toast shows its reason, or "Failed to register patient".
 
-**Cancel**, or the back arrow, leaves without saving.
+**Cancel**, or **Patients** in the breadcrumb above the title, leaves without saving.
 
 ## The patient record
 
