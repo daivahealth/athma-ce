@@ -21,16 +21,25 @@ Caddy terminates TLS (Let's Encrypt) and routes by hostname, because every backe
 
 | Hostname | Target |
 |---|---|
-| `app.<DEMO_DOMAIN>` | frontend :3000 |
+| `<DEMO_DOMAIN>` and `app.<DEMO_DOMAIN>` | frontend :3000 |
 | `foundation.<DEMO_DOMAIN>` | foundation :3010 |
 | `clinical.<DEMO_DOMAIN>` | clinical :3011 |
 | `rcm.<DEMO_DOMAIN>` | rcm :3012 |
 | `prm.<DEMO_DOMAIN>` | prm :3013 |
 | `ai.<DEMO_DOMAIN>` | ai-gateway :3015 |
 
-The abdm-connector (:3016) is internal only. `DEMO_DOMAIN` defaults to `34-100-225-182.sslip.io`, a wildcard DNS name that needs no DNS setup. To use a `daiva.health` subdomain instead, add a wildcard `A` record (for example `*.demo.daiva.health → 34.100.225.182`) in Netlify DNS, change `DEMO_DOMAIN` in `.env`, and rebuild the frontend, because `NEXT_PUBLIC_*` URLs are baked in at build time.
+The abdm-connector (:3016) is internal only.
 
-Browser calls cross subdomains, so foundation, clinical, prm and ai-gateway read `CORS_ORIGINS` (set to `https://app.<DEMO_DOMAIN>`). RCM reflects the request origin.
+`DEMO_DOMAIN` is `athma-ce-demo.daiva.health`, so the app is at `https://athma-ce-demo.daiva.health`. `daiva.health` DNS is hosted in Netlify, which needs two `A` records:
+
+| Name | Type | Value |
+|---|---|---|
+| `athma-ce-demo` | A | `34.100.225.182` |
+| `*.athma-ce-demo` | A | `34.100.225.182` |
+
+A `<ip-with-dashes>.sslip.io` domain (for example `34-100-225-182.sslip.io`) also works with no DNS setup. However, some corporate networks block `sslip.io`, including the Narayana Health office network. After changing `DEMO_DOMAIN` in `.env`, rebuild the frontend (`sudo docker compose build frontend && sudo docker compose up -d`), because the `NEXT_PUBLIC_*` URLs are baked in at build time.
+
+Browser calls cross subdomains. Foundation, clinical, prm and ai-gateway allow the origins listed in `CORS_ORIGINS`, which is set to `https://<DEMO_DOMAIN>,https://app.<DEMO_DOMAIN>`. RCM reflects the request origin.
 
 ## Build notes
 - **Backend image:** one image (`Dockerfile.backend`) for all six services; compose picks the entrypoint per service. Compiled entrypoints live at `services/<svc>/dist/services/<svc>/src/main.js`.

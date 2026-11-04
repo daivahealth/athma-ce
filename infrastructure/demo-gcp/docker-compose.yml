@@ -27,7 +27,7 @@ x-backend: &backend
     INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     SECRETS_MASTER_KEY: ${SECRETS_MASTER_KEY}
     SECRETS_MASTER_KEY_VERSION: "1"
-    CORS_ORIGINS: https://app.${DEMO_DOMAIN}
+    CORS_ORIGINS: https://${DEMO_DOMAIN},https://app.${DEMO_DOMAIN}
     FOUNDATION_API_URL: http://foundation:3010/api/v1
     FOUNDATION_BASE_URL: http://foundation:3010
     FOUNDATION_SERVICE_URL: http://foundation:3010

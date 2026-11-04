@@ -1,6 +1,7 @@
 # Automatic HTTPS (Let's Encrypt) for each public hostname.
-# DEMO_DOMAIN is e.g. demo.daiva.health or 34-100-1-2.sslip.io.
-app.{$DEMO_DOMAIN} {
+# DEMO_DOMAIN is e.g. athma-ce-demo.daiva.health or 34-100-1-2.sslip.io.
+# The frontend answers on the bare domain and on app.<domain>.
+{$DEMO_DOMAIN}, app.{$DEMO_DOMAIN} {
 	encode gzip
 	reverse_proxy frontend:3000
 }
