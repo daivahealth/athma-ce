@@ -513,6 +513,7 @@ Lab results listing behavior:
 - `/results/lab` is fed from aggregated `patient-results` summaries
 - a lab order now becomes visible there as soon as `Start Processing` creates or reuses the active draft report
 - the list also shows the linked specimen type and specimen number so staff can identify the processed tube directly from the reporting queue
+- each row shows the patient name with MRN and gender / age underneath (same layout as `/charting`); `patient-results` summaries carry an optional `patientDisplay` (`PatientDisplayDto`) alongside `patientName` for this
 
 Result-entry open behavior:
 

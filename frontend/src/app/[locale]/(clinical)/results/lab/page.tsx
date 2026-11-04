@@ -158,7 +158,19 @@ export default function LabResultsListPage() {
                       onClick={() => router.push(`/${locale}/results/lab/${result.orderId}`)}
                     >
                       <TableCell className="font-medium">{result.orderName}</TableCell>
-                      <TableCell>{result.patientName}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="font-medium">{result.patientName}</span>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>MRN: {result.patientDisplay?.mrn || '—'}</span>
+                            <span>•</span>
+                            <span>
+                              {result.patientDisplay?.gender || '—'} /{' '}
+                              {result.patientDisplay?.age ?? '—'}y
+                            </span>
+                          </div>
+                        </div>
+                      </TableCell>
                       <TableCell className="text-muted-foreground">
                         <div>{result.labSummary?.specimenType || '-'}</div>
                         {result.labSummary?.specimenNumber ? (
