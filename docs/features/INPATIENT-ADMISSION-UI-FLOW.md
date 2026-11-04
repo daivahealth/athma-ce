@@ -325,15 +325,15 @@ const response = await clinicalApi.post('/v1/inpatient/admissions', admissionDat
 
 ```typescript
 const validationSchema = z.object({
-  patientId: z.string().uuid('Please select a patient'),
+  patientId: z.guid('Please select a patient'),
   encounterOption: z.enum(['create_new', 'link_existing']),
-  encounterId: z.string().uuid().optional(),
+  encounterId: z.guid().optional(),
   admissionDate: z.date(),
   admissionType: z.enum(['elective', 'emergency', 'maternity', 'day_case', 'transfer']),
   admissionSource: z.enum(['emergency_room', 'outpatient_dept', 'transfer_in', 'direct', 'physician_referral']),
-  attendingPhysicianId: z.string().uuid('Please select attending physician'),
-  initialWardId: z.string().uuid('Please select ward'),
-  initialBedId: z.string().uuid('Please select bed'),
+  attendingPhysicianId: z.guid('Please select attending physician'),
+  initialWardId: z.guid('Please select ward'),
+  initialBedId: z.guid('Please select bed'),
   // ... other fields
 }).refine((data) => {
   // If link_existing is selected, encounterId is required

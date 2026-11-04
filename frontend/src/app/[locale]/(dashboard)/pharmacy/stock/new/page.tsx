@@ -31,10 +31,10 @@ const schema = z.object({
   batchNumber: z.string().min(1, 'Batch number is required'),
   manufacturer: z.string().optional(),
   expiryDate: z.string().min(1, 'Expiry date is required'),
-  quantityReceived: z.coerce.number().positive('Quantity must be positive'),
-  reorderLevel: z.coerce.number().min(0).optional(),
+  quantityReceived: z.coerce.number<number>().positive('Quantity must be positive'),
+  reorderLevel: z.coerce.number<number>().min(0).optional(),
   storageLocation: z.string().optional(),
-  unitCostPrice: z.coerce.number().min(0).optional(),
+  unitCostPrice: z.coerce.number<number>().min(0).optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -62,7 +62,7 @@ export default function NewStockPage() {
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<z.input<typeof schema>, unknown, FormData>({ resolver: zodResolver(schema) });
 
   // Close dropdown when clicking outside
   useEffect(() => {

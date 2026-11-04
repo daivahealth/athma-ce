@@ -54,7 +54,7 @@ export function AddItemDialog({ templateId }: AddItemDialogProps) {
     const [open, setOpen] = useState(false);
     const addItem = useAddChecklistTemplateItem(templateId);
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<z.input<typeof formSchema>, unknown, z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             label: '',

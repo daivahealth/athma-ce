@@ -40,14 +40,14 @@ import type { CreateEncounterInput } from '@/modules/clinical/types/encounter';
 import { EncounterClass, EncounterStatus, EncounterPriority, EncounterSource } from '@/modules/clinical/types/encounter';
 
 const createEncounterSchema = z.object({
-  patientId: z.string().uuid('Please select a patient'),
-  primaryStaffId: z.string().uuid('Please select a staff member'),
+  patientId: z.guid('Please select a patient'),
+  primaryStaffId: z.guid('Please select a staff member'),
   encounterClass: z.string().optional(),
   status: z.string().optional(),
   priority: z.string().optional(),
   encounterSource: z.string().optional(),
   startDate: z.date({
-    required_error: 'Start date is required',
+    error: 'Start date is required',
   }),
   startTime: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
 });

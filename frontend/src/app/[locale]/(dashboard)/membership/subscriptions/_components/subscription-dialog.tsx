@@ -46,7 +46,7 @@ const formSchema = z.object({
     planId: z.string().min(1, 'Membership plan is required'),
     billingCycle: z.nativeEnum(BillingCycle),
     startDate: z.date({
-        required_error: 'Start date is required',
+        error: 'Start date is required',
     }),
     autoRenew: z.boolean().default(true),
 });
@@ -61,7 +61,7 @@ export function SubscriptionDialog({ children }: { children: React.ReactNode }) 
     const { data: plans, isLoading: isLoadingPlans } = useMembershipPlans({ isActive: true });
     const createSubscription = useCreateMembershipSubscription();
 
-    const form = useForm<FormValues>({
+    const form = useForm<z.input<typeof formSchema>, unknown, FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             patientId: '',

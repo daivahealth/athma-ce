@@ -233,6 +233,20 @@ The Prisma middleware automatically:
 
 You don't need to manually add tenant filtering!
 
+### Frontend Form Validation (Zod 4)
+
+Forms use React Hook Form, Zod 4 and `@hookform/resolvers` v5. The backend contracts in `backend/contracts` also use Zod 4.
+
+- **Separate input and output types:** a schema that uses `.default()` or `z.coerce` accepts one type and produces another. Declare both on `useForm`. The submit handler receives the parsed output.
+  ```typescript
+  const form = useForm<z.input<typeof schema>, unknown, z.output<typeof schema>>({
+    resolver: zodResolver(schema),
+  });
+  ```
+- **Numeric inputs:** write `z.coerce.number<number>()`. In Zod 4, plain `z.coerce.number()` has input type `unknown`, which doesn't fit `<Input value>`.
+- **Database IDs:** validate them with `z.guid()`. In Zod 4, `z.string().uuid()` enforces RFC 9562 version and variant bits, which some seeded fixed IDs don't satisfy.
+- **Custom messages:** pass `{ error: '...' }`. Zod 4 no longer supports `required_error` or `invalid_type_error`.
+
 ## 🎓 Learning Path
 
 ### Week 1: Foundation

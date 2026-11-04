@@ -6,7 +6,7 @@ const zod_1 = require("zod");
  * Common validation schemas using Zod
  */
 // Base schemas
-exports.uuidSchema = zod_1.z.string().uuid();
+exports.uuidSchema = zod_1.z.guid(); // v3-compatible: any 8-4-4-4-12 hex id, no RFC version/variant check
 exports.emailSchema = zod_1.z.string().email();
 exports.phoneSchema = zod_1.z.string().regex(/^\+?[1-9]\d{1,14}$/);
 exports.dateSchema = zod_1.z.string().datetime().or(zod_1.z.date());
@@ -58,14 +58,14 @@ exports.queryOptionsSchema = exports.paginationSchema.extend({
 exports.apiErrorSchema = zod_1.z.object({
     code: zod_1.z.string(),
     message: zod_1.z.string(),
-    details: zod_1.z.record(zod_1.z.any()).optional(),
+    details: zod_1.z.record(zod_1.z.string(), zod_1.z.any()).optional(),
     timestamp: exports.dateSchema,
 });
 exports.apiResponseSchema = zod_1.z.object({
     success: zod_1.z.boolean(),
     data: zod_1.z.any().optional(),
     error: exports.apiErrorSchema.optional(),
-    meta: zod_1.z.record(zod_1.z.any()).optional(),
+    meta: zod_1.z.record(zod_1.z.string(), zod_1.z.any()).optional(),
 });
 // Validation error schema
 exports.validationErrorSchema = zod_1.z.object({
@@ -114,7 +114,7 @@ exports.healthCheckSchema = zod_1.z.lazy(() => zod_1.z.object({
     service: zod_1.z.string(),
     status: zod_1.z.enum(['healthy', 'degraded', 'unhealthy']),
     timestamp: exports.dateSchema,
-    details: zod_1.z.record(zod_1.z.unknown()).optional(),
+    details: zod_1.z.record(zod_1.z.string(), zod_1.z.unknown()).optional(),
     dependencies: zod_1.z.array(exports.healthCheckSchema).optional(),
 }));
 // Metric data schema
@@ -122,7 +122,7 @@ exports.metricDataSchema = zod_1.z.object({
     name: zod_1.z.string(),
     value: zod_1.z.number(),
     timestamp: exports.dateSchema,
-    tags: zod_1.z.record(zod_1.z.string()).optional(),
+    tags: zod_1.z.record(zod_1.z.string(), zod_1.z.string()).optional(),
     unit: zod_1.z.string().optional(),
 });
 // Log entry schema
@@ -131,7 +131,7 @@ exports.logEntrySchema = zod_1.z.object({
     message: zod_1.z.string(),
     timestamp: exports.dateSchema,
     service: zod_1.z.string(),
-    context: zod_1.z.record(zod_1.z.any()).optional(),
+    context: zod_1.z.record(zod_1.z.string(), zod_1.z.any()).optional(),
     traceId: zod_1.z.string().optional(),
     spanId: zod_1.z.string().optional(),
 });
@@ -143,7 +143,7 @@ exports.domainEventSchema = zod_1.z.object({
     aggregateType: zod_1.z.string(),
     version: zod_1.z.number().int().positive(),
     data: zod_1.z.any(),
-    metadata: zod_1.z.record(zod_1.z.any()).optional(),
+    metadata: zod_1.z.record(zod_1.z.string(), zod_1.z.any()).optional(),
     timestamp: exports.dateSchema,
 });
 // Configuration schemas

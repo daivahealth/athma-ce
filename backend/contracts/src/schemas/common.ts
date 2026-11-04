@@ -5,7 +5,7 @@ import { z } from 'zod';
  */
 
 // Base schemas
-export const uuidSchema = z.string().uuid();
+export const uuidSchema = z.guid(); // v3-compatible: any 8-4-4-4-12 hex id, no RFC version/variant check
 export const emailSchema = z.string().email();
 export const phoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/);
 export const dateSchema = z.string().datetime().or(z.date());
@@ -69,7 +69,7 @@ export const queryOptionsSchema = paginationSchema.extend({
 export const apiErrorSchema = z.object({
   code: z.string(),
   message: z.string(),
-  details: z.record(z.any()).optional(),
+  details: z.record(z.string(), z.any()).optional(),
   timestamp: dateSchema,
 });
 
@@ -77,7 +77,7 @@ export const apiResponseSchema = z.object({
   success: z.boolean(),
   data: z.any().optional(),
   error: apiErrorSchema.optional(),
-  meta: z.record(z.any()).optional(),
+  meta: z.record(z.string(), z.any()).optional(),
 });
 
 // Validation error schema
@@ -143,7 +143,7 @@ export const healthCheckSchema: z.ZodType<HealthCheck> = z.lazy(() =>
     service: z.string(),
     status: z.enum(['healthy', 'degraded', 'unhealthy']),
     timestamp: dateSchema,
-    details: z.record(z.unknown()).optional(),
+    details: z.record(z.string(), z.unknown()).optional(),
     dependencies: z.array(healthCheckSchema).optional(),
   }),
 );
@@ -153,7 +153,7 @@ export const metricDataSchema = z.object({
   name: z.string(),
   value: z.number(),
   timestamp: dateSchema,
-  tags: z.record(z.string()).optional(),
+  tags: z.record(z.string(), z.string()).optional(),
   unit: z.string().optional(),
 });
 
@@ -163,7 +163,7 @@ export const logEntrySchema = z.object({
   message: z.string(),
   timestamp: dateSchema,
   service: z.string(),
-  context: z.record(z.any()).optional(),
+  context: z.record(z.string(), z.any()).optional(),
   traceId: z.string().optional(),
   spanId: z.string().optional(),
 });
@@ -176,7 +176,7 @@ export const domainEventSchema = z.object({
   aggregateType: z.string(),
   version: z.number().int().positive(),
   data: z.any(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
   timestamp: dateSchema,
 });
 

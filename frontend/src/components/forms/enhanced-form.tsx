@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldValues, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useState } from 'react';
@@ -15,22 +15,22 @@ import { cn } from '@/lib/utils';
 export const createFormSchema = <T extends z.ZodRawShape>(schema: T) => z.object(schema);
 
 // Enhanced form hook with better error handling
-export function useEnhancedForm<T extends z.ZodTypeAny>(
+export function useEnhancedForm<T extends z.ZodType<FieldValues, FieldValues>>(
   schema: T,
   options?: {
-    defaultValues?: Partial<z.infer<T>>;
-    onSubmit: (data: z.infer<T>) => Promise<void> | void;
+    defaultValues?: Partial<z.input<T>>;
+    onSubmit: (data: z.output<T>) => Promise<void> | void;
   }
 ) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const form = useForm<z.infer<T>>({
-    resolver: zodResolver(schema),
+  const form = useForm<z.input<T>, unknown, z.output<T>>({
+    resolver: zodResolver(schema) as unknown as Resolver<z.input<T>, unknown, z.output<T>>,
     defaultValues: options?.defaultValues as any,
   });
 
-  const handleSubmit = async (data: z.infer<T>) => {
+  const handleSubmit = async (data: z.output<T>) => {
     setIsSubmitting(true);
     setSubmitError(null);
     

@@ -27,7 +27,7 @@ const patientSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   dateOfBirth: z.string().min(1, 'Date of birth is required'),
   gender: z.enum(['male', 'female', 'other'], {
-    required_error: 'Gender is required',
+    error: 'Gender is required',
   }),
   phoneNumber: z.string().min(10, 'Valid phone number is required'),
 

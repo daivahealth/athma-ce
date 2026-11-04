@@ -33,14 +33,14 @@ import type { TimeSlot } from '@/modules/clinical/services/availability-service'
 import { getApiErrorMessage } from '@/lib/api/errors';
 
 const bookAppointmentSchema = z.object({
-  patientId: z.string().uuid('Please select a patient'),
+  patientId: z.guid('Please select a patient'),
   appointmentType: z.string().min(1, 'Appointment type is required'),
   appointmentDate: z.date({
-    required_error: 'Appointment date is required',
+    error: 'Appointment date is required',
   }),
   startTime: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
   endTime: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
-  staffId: z.string().uuid().optional(),
+  staffId: z.guid().optional(),
   visitType: z.string().optional(),
   notes: z.string().optional(),
 });

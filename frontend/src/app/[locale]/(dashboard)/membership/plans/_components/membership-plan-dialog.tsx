@@ -49,8 +49,8 @@ const formSchema = z.object({
     code: z.string().min(1, 'Plan code is required'),
     description: z.string().optional(),
     tier: z.string().min(1, 'Tier is required'),
-    monthlyPrice: z.coerce.number().min(0),
-    yearlyPrice: z.coerce.number().min(0),
+    monthlyPrice: z.coerce.number<number>().min(0),
+    yearlyPrice: z.coerce.number<number>().min(0),
     currency: z.string().default('USD'),
     benefits: z.array(benefitSchema).min(1, 'At least one benefit is required'),
 });
@@ -62,7 +62,7 @@ export function MembershipPlanDialog({ children }: { children: React.ReactNode }
     const { toast } = useToast();
     const createPlan = useCreateMembershipPlan();
 
-    const form = useForm<FormValues>({
+    const form = useForm<z.input<typeof formSchema>, unknown, FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',

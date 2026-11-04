@@ -44,12 +44,12 @@ import { useToast } from '@/components/ui/use-toast';
 const formSchema = z.object({
     patientId: z.string().min(1, 'Patient is required'),
     biomarkerId: z.string().min(1, 'Biomarker is required'),
-    value: z.coerce.number().refine((val) => !isNaN(val), {
+    value: z.coerce.number<number>().refine((val) => !isNaN(val), {
         message: 'Value must be a number',
     }),
     unit: z.string().optional(),
     recordedAt: z.date({
-        required_error: 'Date is required',
+        error: 'Date is required',
     }),
     notes: z.string().optional(),
 });
@@ -69,7 +69,7 @@ export function BiomarkerResultDialog({
     const recordResult = useRecordBiomarkerResult();
     const { toast } = useToast();
 
-    const form = useForm<FormValues>({
+    const form = useForm<z.input<typeof formSchema>, unknown, FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             patientId: defaultPatient?.id || '',

@@ -46,11 +46,11 @@ const nutritionSchema = z.object({
     patientId: z.string().min(1, 'Patient is required'),
     planName: z.string().min(1, 'Plan name is required'),
     planType: z.string().min(1, 'Plan type is required'),
-    startDate: z.date({ required_error: 'Start date is required' }),
-    targetCalories: z.coerce.number().optional(),
-    targetProtein: z.coerce.number().optional(),
-    targetCarbs: z.coerce.number().optional(),
-    targetFat: z.coerce.number().optional(),
+    startDate: z.date({ error: 'Start date is required' }),
+    targetCalories: z.coerce.number<number>().optional(),
+    targetProtein: z.coerce.number<number>().optional(),
+    targetCarbs: z.coerce.number<number>().optional(),
+    targetFat: z.coerce.number<number>().optional(),
     notes: z.string().optional(),
 });
 
@@ -58,9 +58,9 @@ const exerciseSchema = z.object({
     patientId: z.string().min(1, 'Patient is required'),
     prescriptionName: z.string().min(1, 'Prescription name is required'),
     goal: z.string().min(1, 'Goal is required'),
-    startDate: z.date({ required_error: 'Start date is required' }),
-    sessionsPerWeek: z.coerce.number().min(1),
-    minutesPerSession: z.coerce.number().min(1),
+    startDate: z.date({ error: 'Start date is required' }),
+    sessionsPerWeek: z.coerce.number<number>().min(1),
+    minutesPerSession: z.coerce.number<number>().min(1),
     notes: z.string().optional(),
 });
 
@@ -73,7 +73,7 @@ export function LifestylePlanDialog({ children }: { children: React.ReactNode })
     const createNutritionPlan = useCreateNutritionPlan();
     const createExercisePrescription = useCreateExercisePrescription();
 
-    const nutritionForm = useForm<z.infer<typeof nutritionSchema>>({
+    const nutritionForm = useForm<z.input<typeof nutritionSchema>, unknown, z.infer<typeof nutritionSchema>>({
         resolver: zodResolver(nutritionSchema),
         defaultValues: {
             patientId: '',
@@ -83,7 +83,7 @@ export function LifestylePlanDialog({ children }: { children: React.ReactNode })
         },
     });
 
-    const exerciseForm = useForm<z.infer<typeof exerciseSchema>>({
+    const exerciseForm = useForm<z.input<typeof exerciseSchema>, unknown, z.infer<typeof exerciseSchema>>({
         resolver: zodResolver(exerciseSchema),
         defaultValues: {
             patientId: '',

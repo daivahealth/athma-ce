@@ -16,8 +16,8 @@ import { TransferType, type TransferPatientInput } from '@/modules/clinical/type
 import { getApiErrorMessage } from '@/lib/api/errors';
 
 const transferSchema = z.object({
-  toWardId: z.string().uuid('Ward ID must be a UUID'),
-  toBedId: z.string().uuid('Bed ID must be a UUID'),
+  toWardId: z.guid('Ward ID must be a UUID'),
+  toBedId: z.guid('Bed ID must be a UUID'),
   transferReason: z.string().min(1, 'Transfer reason is required'),
   transferType: z.nativeEnum(TransferType),
   notes: z.string().optional(),

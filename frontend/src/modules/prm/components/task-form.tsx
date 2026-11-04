@@ -12,7 +12,7 @@ import { PRM_TASK_TYPES } from '@/modules/prm/constants/task-types';
 import type { CreateTaskInput } from '../types/task';
 
 const taskSchema = z.object({
-  patient_id: z.string().uuid('Patient ID must be a UUID'),
+  patient_id: z.guid('Patient ID must be a UUID'),
   task_type: z.string().min(1, 'Task type is required'),
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
@@ -60,7 +60,7 @@ export function TaskForm({ initialValues, submitLabel = 'Save task', onSubmit }:
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<TaskFormValues>({
+  } = useForm<z.input<typeof taskSchema>, unknown, TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues,
   });

@@ -78,7 +78,7 @@ export function TemplateForm({ initialValues, submitLabel = 'Save template', onS
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<TemplateFormValues>({
+  } = useForm<z.input<typeof templateSchema>, unknown, TemplateFormValues>({
     resolver: zodResolver(templateSchema),
     defaultValues,
   });

@@ -519,8 +519,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 
 const transferSchema = z.object({
-  toWardId: z.string().uuid('Invalid ward ID'),
-  toBedId: z.string().uuid('Invalid bed ID'),
+  toWardId: z.guid('Invalid ward ID'),
+  toBedId: z.guid('Invalid bed ID'),
   transferReason: z.string().min(5, 'Reason must be at least 5 characters'),
   transferType: z.nativeEnum(TransferType),
   notes: z.string().optional(),

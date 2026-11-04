@@ -44,7 +44,7 @@ const formSchema = z.object({
     patientId: z.string().min(1, 'Patient is required'),
     templateId: z.string().min(1, 'Program is required'),
     startDate: z.date({
-        required_error: 'Start date is required',
+        error: 'Start date is required',
     }),
     notes: z.string().optional(),
 });
