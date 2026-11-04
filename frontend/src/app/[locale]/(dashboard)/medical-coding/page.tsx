@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
-import { Search, Eye } from 'lucide-react';
+import { Search, Eye, FileCode2 } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { useCodingSessions, usePendingCodingSessions, useCoderProductivity, useCodingSessionSummary } from '@/modules/rcm/hooks/use-medical-coding';
 import type { CodingSession } from '@/modules/rcm/types/medical-coding';
 import { CodingSessionStatus } from '@/modules/rcm/types/medical-coding';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
   [CodingSessionStatus.NEW]: 'secondary',
@@ -119,10 +120,11 @@ export default function MedicalCodingPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Medical coding</h1>
-        <p className="text-muted-foreground">Coder inbox, assignments, and productivity.</p>
-      </div>
+      <PageHeader
+        title="Medical coding"
+        subtitle="Coder inbox, assignments, and productivity."
+        icon={FileCode2}
+      />
 
       <div className="grid gap-4 md:grid-cols-4">
         {statCards.map((card) => (

@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
-import { ArrowLeft, Search, Eye, Plus } from 'lucide-react';
+import { Search, Eye, Plus, NotebookPen } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,9 +14,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useNoteTemplates, useNoteTemplateStats } from '@/modules/foundation/hooks/use-catalogs';
-import type { NoteTemplate } from '@/modules/foundation/types/catalog';
+import type { NoteTemplate, NoteTemplateFilters } from '@/modules/foundation/types/catalog';
 import { TemplateStatus, NoteTemplateType } from '@/modules/foundation/types/catalog';
 import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<TemplateStatus, string> = {
   [TemplateStatus.ACTIVE]: 'Active',
@@ -146,7 +148,7 @@ export default function NoteTemplatesPage() {
   const [templateTypeFilter, setTemplateTypeFilter] = useState<'all' | NoteTemplateType>('all');
 
   const apiFilters = useMemo(() => {
-    const filters: any = {};
+    const filters: NoteTemplateFilters = {};
     if (statusFilter !== 'all') filters.status = statusFilter;
     if (templateTypeFilter !== 'all') filters.templateType = templateTypeFilter;
     return Object.keys(filters).length > 0 ? filters : undefined;
@@ -196,14 +198,19 @@ export default function NoteTemplatesPage() {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => router.push(`/${locale}/catalogs`)}
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to catalogs
-      </Button>
+      <PageHeader
+        title="Note Templates"
+        subtitle="Templates for structured clinical notes"
+        icon={NotebookPen}
+        breadcrumb={<Breadcrumb items={[{ href: `/${locale}/catalogs`, label: 'Catalogs' }, { label: 'Note Templates' }]} />}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/catalogs/note-templates/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New template
+            </Link>
+          </Button>
+        }
+      />
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative flex-1 min-w-[240px] max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -272,14 +279,6 @@ export default function NoteTemplatesPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Note Templates"
-          cta={
-            <Button asChild size="sm">
-              <Link href={`/${locale}/catalogs/note-templates/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New template
-              </Link>
-            </Button>
-          }
           columns={columns}
           data={filteredTemplates}
           isLoading={isLoading}

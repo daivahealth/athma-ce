@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
-import { Search, Eye, Plus } from 'lucide-react';
+import { Search, Eye, Plus, Landmark } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { usePayers, usePayerStats } from '@/modules/rcm/hooks/use-payers';
 import type { Payer } from '@/modules/rcm/types/payer';
 import { PayerStatus } from '@/modules/rcm/types/payer';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<PayerStatus, string> = {
   [PayerStatus.ACTIVE]: 'Active',
@@ -118,6 +119,18 @@ export default function PayersPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Payers"
+        subtitle="Insurers, TPAs and corporate payers"
+        icon={Landmark}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/rcm-setup/payers/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New payer
+            </Link>
+          </Button>
+        }
+      />
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative flex-1 min-w-[240px] max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -160,14 +173,6 @@ export default function PayersPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Payers"
-          cta={
-            <Button size="sm" asChild>
-              <Link href={`/${locale}/rcm-setup/payers/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New payer
-              </Link>
-            </Button>
-          }
           columns={columns}
           data={filtered}
           isLoading={isLoading}

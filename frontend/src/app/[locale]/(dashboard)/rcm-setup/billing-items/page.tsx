@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
-import { Search, Eye, Plus } from 'lucide-react';
+import { Search, Eye, Plus, Tag } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,6 +18,7 @@ import { useBillingItems, useBillingItemStats } from '@/modules/rcm/hooks/use-bi
 import type { BillingItem } from '@/modules/rcm/types/billing-item';
 import { ItemType, ChargeType, BillingCodeType } from '@/modules/rcm/types/billing-item';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusVariant: Record<string, 'default' | 'secondary'> = {
   active: 'default',
@@ -150,6 +151,18 @@ export default function BillingItemsPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Billing items"
+        subtitle="Chargeable services, their codes and prices"
+        icon={Tag}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/rcm-setup/billing-items/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New billing item
+            </Link>
+          </Button>
+        }
+      />
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative flex-1 min-w-[240px] max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -240,14 +253,6 @@ export default function BillingItemsPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Billing items"
-          cta={
-            <Button size="sm" asChild>
-              <Link href={`/${locale}/rcm-setup/billing-items/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New billing item
-              </Link>
-            </Button>
-          }
           columns={columns}
           data={filtered}
           isLoading={isLoading}

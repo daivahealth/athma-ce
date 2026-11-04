@@ -29,6 +29,33 @@ hand-rolled `<h1>` + `<p>` pair.
 - `actions` is right-aligned and can hold arbitrarily complex content (dialogs,
   button groups), not just a single CTA.
 
+### List pages
+
+A list page opens with a `PageHeader` (title, one-line subtitle, icon, and the
+"New …" button as `actions`), then its filter bar, then the table. `/patients`
+is the reference. When the table is a `ResourceTable`, do not pass it `title`
+or `cta` — the page header carries both, so the table card holds only the
+table. A list that sits under a hub page (e.g. the clinical catalogs) puts a
+`Breadcrumb` back to the hub in the header's `breadcrumb` slot instead of a
+"Back to …" button.
+
+```tsx
+<div className="space-y-6">
+  <PageHeader
+    title="Invoices"
+    subtitle="Patient bills and their payment status"
+    icon={FileText}
+    actions={
+      <Button asChild>
+        <Link href={`/${locale}/invoices/new`}><Plus className="mr-2 h-4 w-4" /> New invoice</Link>
+      </Button>
+    }
+  />
+  <Card>{/* search + filters */}</Card>
+  <ResourceTable columns={columns} data={rows} isLoading={isLoading} />
+</div>
+```
+
 ### Form pages
 
 A create/edit page uses the same header as a list page, with a
@@ -91,6 +118,13 @@ muted text or a one-off hand-built empty block.
 `ResourceTable` (`frontend/src/components/tables/resource-table.tsx`) renders
 this automatically for its empty state — pass `emptyIcon`/`emptyDescription`
 to customize it, don't reimplement the empty row yourself.
+
+`ResourceTable` draws no heading of its own unless you pass `title` or `cta`.
+Those two props are only for a table that is one section of a larger page
+(e.g. "Concepts" on a value-set detail page, "Coding sessions" under the
+medical-coding stats); a list page's title and "New …" action belong in its
+`PageHeader` (see [List pages](#list-pages)). There is no default "New" button —
+omitting `cta` renders nothing.
 
 ### Loading
 
