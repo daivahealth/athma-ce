@@ -29,6 +29,39 @@ hand-rolled `<h1>` + `<p>` pair.
 - `actions` is right-aligned and can hold arbitrarily complex content (dialogs,
   button groups), not just a single CTA.
 
+### Form pages
+
+A create/edit page uses the same header as a list page, with a
+`Breadcrumb` (`frontend/src/components/layout/breadcrumb.tsx`) back to its list
+in place of a back-arrow button. The patient registration form
+(`frontend/src/components/clinical/patient-form.tsx`, used by `/patients/new`
+and `/patients/{id}/edit`) is the reference:
+
+```tsx
+<PageHeader
+  title="Register New Patient"
+  subtitle="Enter patient information to create a new record"
+  icon={UserPlus}
+  breadcrumb={<Breadcrumb items={[{ href: `/${locale}/patients`, label: 'Patients' }, { label: 'Register' }]} />}
+/>
+```
+
+- The page root is `space-y-6 page-transition`, full width like the list pages
+  (no centred `max-w-*` column).
+- Each group of fields is a `Card` whose header carries a small
+  `bg-primary/10 text-primary` icon chip, a `text-base` title and a one-line
+  description; the card does not lift on hover (`hover:translate-y-0`).
+- Required fields put a `text-destructive` `*` after the label. A field that
+  fails validation turns its label and border `destructive`, sets
+  `aria-invalid` and points `aria-describedby` at the message under it
+  (`text-sm font-medium text-destructive`, `role="alert"`).
+- A native `<select>` is drawn with the same classes as `SelectTrigger`, and
+  native date and select controls take `dark:[color-scheme:dark]` so the
+  browser's picker follows the app's theme, not the OS's.
+- Actions sit in a footer row under a `border-t`: the "Fields marked * are
+  required" hint on the left, **Cancel** (outline) then the primary submit on
+  the right.
+
 ### `StatCard`
 
 `frontend/src/components/ui/stat-card.tsx`
