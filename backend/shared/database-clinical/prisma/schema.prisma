@@ -2168,7 +2168,7 @@ model VitalSignsTemplate {
   // Context for template applicability
   careSetting     String[] @map("care_setting") // ["OPD", "ER", "IPD", "ICU"]
   ageGroup        String[] @map("age_group") // ["newborn", "infant", "child", "adolescent", "adult", "elderly"]
-  specialties     String[] // ["GEN_MED", "CARDIO", "PEDIATRICS", etc.]
+  specialties     String[] // foundation specialties.code, e.g. ["GEN_MED", "CARDIO", "PED"]
 
   // Template structure (JSON)
   groups          Json     // Array of vital sign groups with items

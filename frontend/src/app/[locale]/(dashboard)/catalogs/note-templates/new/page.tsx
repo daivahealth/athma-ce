@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { useCreateNoteTemplate } from '@/modules/foundation/hooks/use-catalogs';
+import { SpecialtySelect } from '@/modules/foundation/components/specialty-select';
 import { TemplateStatus, NoteTemplateType } from '@/modules/foundation/types/catalog';
 
 const EMPTY_SCHEMA = JSON.stringify({ sections: [] }, null, 2);
@@ -44,7 +45,7 @@ export default function CreateNoteTemplatePage() {
         name: name.trim(),
         description: description.trim() || undefined,
         templateType,
-        specialtyId: specialtyId.trim() || undefined,
+        specialtyId: specialtyId || undefined,
         status,
         schema,
         changeLog: changeLog.trim() || undefined,
@@ -125,11 +126,12 @@ export default function CreateNoteTemplatePage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="specialty-id">Specialty (optional)</Label>
-                <Input
+                <SpecialtySelect
                   id="specialty-id"
+                  valueKey="id"
                   value={specialtyId}
-                  onChange={(event) => setSpecialtyId(event.target.value)}
-                  placeholder="Specialty ID"
+                  onChange={setSpecialtyId}
+                  placeholder="All specialties"
                 />
               </div>
               <div className="space-y-2">

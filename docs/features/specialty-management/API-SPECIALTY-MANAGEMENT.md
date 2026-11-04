@@ -19,8 +19,17 @@
 | `/staff/doctors/specialty/:specialtyCode` | GET | Find doctors by specialty |
 | `/staff/:staffId/specialties` | GET, POST | Get/assign specialties |
 | `/staff/:staffId/specialties/bulk` | POST | Bulk assign specialties |
-| `/staff/:staffId/specialties/primary/:specialtyId` | PUT | Change primary specialty |
-| `/staff/:staffId/specialties/:specialtyId` | DELETE | Remove specialty |
+| `/staff/:staffId/specialties/facility/:facilityId/primary/:specialtyId` | PUT | Change primary specialty at a facility |
+| `/staff/:staffId/specialties/facility/:facilityId/specialty/:specialtyId` | DELETE | Remove specialty at a facility |
+| `/facilities/:id/specialties` | GET | Specialties practised at a facility (primary assignments of active staff) |
+
+Permissions: `specialty.read` for reads, `specialty.manage` for writes. The specialty master itself is read-only over the API.
+
+### Tenant scoping
+
+All `/staff/:staffId/specialties*` endpoints and `/facilities/:id/specialties` require the `x-tenant-id` header (`400` if missing). The staff member — and the facility, where one is given — must belong to that tenant; otherwise the API responds `404` (it does not reveal that the record exists in another tenant). Every read and write on `staff_specialties` is filtered by `tenant_id`.
+
+`/specialties*` endpoints return the global master and are not tenant-filtered (`/specialties/stats` counts only the caller's tenant).
 
 ---
 
@@ -209,8 +218,11 @@ Body:
 
 ### **3. Get Staff Specialties**
 ```http
-GET /staff/{staffId}/specialties?locale=ar
+GET /staff/{staffId}/specialties?facilityId={facilityId}&locale=ar
+x-tenant-id: {tenantId}
 ```
+
+`facilityId` is optional; without it, assignments at all of the tenant's facilities are returned.
 
 **Response**:
 ```json
@@ -238,7 +250,8 @@ GET /staff/{staffId}/specialties?locale=ar
 
 ### **4. Change Primary Specialty**
 ```http
-PUT /staff/{staffId}/specialties/primary/{specialtyId}
+PUT /staff/{staffId}/specialties/facility/{facilityId}/primary/{specialtyId}
+x-tenant-id: {tenantId}
 ```
 
 **Response**:
@@ -254,13 +267,14 @@ PUT /staff/{staffId}/specialties/primary/{specialtyId}
 ```
 
 **Business Rules**:
-- ✅ Specialty must already be assigned to staff
+- ✅ Specialty must already be assigned to staff at that facility (`404` otherwise; the current primary is left unchanged)
 - ✅ Automatically removes primary flag from previous
 - ✅ Atomic operation
 
 ### **5. Remove Specialty from Staff**
 ```http
-DELETE /staff/{staffId}/specialties/{specialtyId}
+DELETE /staff/{staffId}/specialties/facility/{facilityId}/specialty/{specialtyId}
+x-tenant-id: {tenantId}
 ```
 
 **Response**:
@@ -274,6 +288,7 @@ DELETE /staff/{staffId}/specialties/{specialtyId}
 **Business Rules**:
 - ❌ Cannot remove primary specialty (change primary first)
 - ❌ Cannot remove the only specialty (staff must have at least one)
+- `404` when the assignment does not exist
 
 ---
 

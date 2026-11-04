@@ -33,7 +33,7 @@ INSERT INTO vital_signs_templates (
   '{"en": "Standard vital signs for adult outpatient visits", "ar": "العلامات الحيوية القياسية لزيارات العيادات الخارجية للبالغين"}'::jsonb,
   ARRAY['OP']::text[],
   ARRAY['adult']::text[],
-  ARRAY['general_medicine', 'internal_medicine']::text[],
+  ARRAY['GEN_MED']::text[],
   '[
     {
       "groupCode": "basic_vitals",
@@ -155,7 +155,7 @@ INSERT INTO vital_signs_templates (
   '{"en": "Comprehensive vital signs for emergency department", "ar": "العلامات الحيوية الشاملة لقسم الطوارئ"}'::jsonb,
   ARRAY['OP']::text[],
   ARRAY['adult']::text[],
-  ARRAY['emergency_medicine']::text[],
+  ARRAY['EMERG']::text[],
   '[
     {
       "groupCode": "basic_vitals",
@@ -298,7 +298,7 @@ INSERT INTO vital_signs_templates (
   '{"en": "Comprehensive vital signs monitoring for ICU patients", "ar": "مراقبة شاملة للعلامات الحيوية لمرضى العناية المركزة"}'::jsonb,
   ARRAY['IP']::text[],
   ARRAY['adult']::text[],
-  ARRAY['critical_care', 'intensive_care']::text[],
+  ARRAY['CRIT_CARE']::text[],
   '[
     {
       "groupCode": "hemodynamic",
@@ -489,7 +489,7 @@ INSERT INTO vital_signs_templates (
   '{"en": "Standard vital signs for pediatric outpatient visits", "ar": "العلامات الحيوية القياسية لزيارات الأطفال بالعيادات الخارجية"}'::jsonb,
   ARRAY['OP']::text[],
   ARRAY['child', 'adolescent']::text[],
-  ARRAY['pediatrics', 'general_medicine']::text[],
+  ARRAY['PED', 'GEN_MED']::text[],
   '[
     {
       "groupCode": "basic_vitals",
@@ -626,7 +626,7 @@ INSERT INTO vital_signs_templates (
   '{"en": "Comprehensive vital signs for NICU patients", "ar": "مراقبة شاملة للعلامات الحيوية لحديثي الولادة"}'::jsonb,
   ARRAY['IP']::text[],
   ARRAY['newborn']::text[],
-  ARRAY['neonatology', 'pediatrics']::text[],
+  ARRAY['NEONAT', 'PED']::text[],
   '[
     {
       "groupCode": "basic_vitals",
@@ -754,7 +754,7 @@ INSERT INTO vital_signs_templates (
   '{"en": "Enhanced cardiovascular monitoring for cardiology patients", "ar": "مراقبة محسنة للقلب والأوعية الدموية لمرضى القلب"}'::jsonb,
   ARRAY['OP']::text[],
   ARRAY['adult']::text[],
-  ARRAY['cardiology']::text[],
+  ARRAY['CARDIO']::text[],
   '[
     {
       "groupCode": "cardiovascular",
@@ -851,7 +851,7 @@ INSERT INTO vital_signs_templates (
   ]'::jsonb,
   true,
   false,
-  '{"category": "specialty", "version": "1.0", "specialty": "cardiology"}'::jsonb,
+  '{"category": "specialty", "version": "1.0", "specialty": "CARDIO"}'::jsonb,
   NOW(),
   NOW()
 );

@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useVitalSignsTemplate } from '@/modules/clinical/hooks/use-vital-signs-templates';
 import type { VitalGroup, VitalItem } from '@/modules/clinical/types/vital-signs-template';
+import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
 
 const careSettingLabels: Record<string, string> = {
   OPD: 'OPD',
@@ -105,6 +106,7 @@ function GroupSection({ group }: { group: VitalGroup }) {
 
 export default function VitalSignsTemplateDetailPage() {
   const params = useParams();
+  const specialtyLabel = useSpecialtyLabel();
   const router = useRouter();
   const locale = params.locale as string;
   const id = params.id as string;
@@ -189,7 +191,7 @@ export default function VitalSignsTemplateDetailPage() {
           <div>
             <p className="text-sm text-muted-foreground">Specialties</p>
             <p className="font-medium">
-              {template.specialties.length ? template.specialties.join(', ') : 'All'}
+              {template.specialties.length ? template.specialties.map(specialtyLabel).join(', ') : 'All'}
             </p>
           </div>
           <div className="md:col-span-3">

@@ -14,9 +14,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useOtRooms } from '@/modules/ot/hooks/use-ot';
+import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
 
 export default function OtRoomsPage() {
   const params = useParams() as { locale: string };
+  const specialtyLabel = useSpecialtyLabel();
   const router = useRouter();
   const { data: rooms, isLoading, error } = useOtRooms({
     facilityId: undefined,
@@ -108,7 +110,7 @@ export default function OtRoomsPage() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{room.specialty || 'Not set'}</TableCell>
+                    <TableCell>{room.specialty ? specialtyLabel(room.specialty) : 'Not set'}</TableCell>
                     <TableCell>{room.space?.spaceType || 'Not available'}</TableCell>
                     <TableCell>{room.isActive ? 'Active' : 'Inactive'}</TableCell>
                     <TableCell className="max-w-[320px]">

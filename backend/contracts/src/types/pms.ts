@@ -142,7 +142,6 @@ export interface StaffMember {
   email?: string;
   employeeId: string;
   staffType: 'doctor' | 'nurse' | 'technician' | 'admin' | 'support';
-  specialties?: string[];
   licenseNumber?: string;
   licenseExpiry?: Date;
   status: 'active' | 'inactive' | 'terminated';

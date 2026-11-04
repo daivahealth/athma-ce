@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { OtScheduleStatusBadge } from '@/modules/ot/components/ot-status-badge';
 import { useOtBoard } from '@/modules/ot/hooks/use-ot';
 import type { OtBoardCase, OtBoardRoom, OtBoardState } from '@/modules/ot/types';
+import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
 
 const STATE_STYLES: Record<
   OtBoardState,
@@ -174,6 +175,7 @@ function CaseSection({
 }
 
 function RoomCard({ room }: { room: OtBoardRoom }) {
+  const specialtyLabel = useSpecialtyLabel();
   const styles = STATE_STYLES[room.state];
 
   return (
@@ -191,7 +193,7 @@ function RoomCard({ room }: { room: OtBoardRoom }) {
           <div>
             <CardTitle className="text-base leading-tight">{room.room.name}</CardTitle>
             <CardDescription className="text-xs">
-              {[room.room.spaceNumber, room.room.specialty].filter(Boolean).join(' • ') ||
+              {[room.room.spaceNumber, specialtyLabel(room.room.specialty)].filter(Boolean).join(' • ') ||
                 room.room.notes ||
                 'OT room'}
             </CardDescription>

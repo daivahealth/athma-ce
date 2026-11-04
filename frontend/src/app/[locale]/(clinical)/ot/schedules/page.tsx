@@ -20,9 +20,11 @@ import { useToast } from '@/components/ui/use-toast';
 import { useOtSchedules, useTransitionOtSchedule } from '@/modules/ot/hooks/use-ot';
 import { OT_SCHEDULE_STATUSES, type OtScheduleStatus } from '@/modules/ot/types';
 import { OtScheduleStatusBadge } from '@/modules/ot/components/ot-status-badge';
+import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
 
 export default function OtSchedulesPage() {
   const params = useParams() as { locale: string };
+  const specialtyLabel = useSpecialtyLabel();
   const router = useRouter();
   const publishToast = useToast();
   const [searchQuery, setSearchQuery] = useState('');
@@ -206,7 +208,7 @@ export default function OtSchedulesPage() {
                           (schedule.room?.space?.spaceNumber || schedule.room?.specialty
                             ? [
                                 schedule.room?.space?.spaceNumber,
-                                schedule.room?.specialty,
+                                specialtyLabel(schedule.room?.specialty),
                               ]
                                 .filter(Boolean)
                                 .join(' • ')

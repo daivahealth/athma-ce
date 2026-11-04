@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from '@/components/ui/use-toast';
 import { useNoteTemplate, useArchiveNoteTemplate } from '@/modules/foundation/hooks/use-catalogs';
 import { TemplateStatus, NoteTemplateType } from '@/modules/foundation/types/catalog';
+import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
 
 const statusLabels: Record<TemplateStatus, string> = {
   [TemplateStatus.ACTIVE]: 'Active',
@@ -48,6 +49,7 @@ const templateTypeLabels: Record<NoteTemplateType, string> = {
 
 export default function NoteTemplateDetailPage() {
   const params = useParams();
+  const specialtyLabel = useSpecialtyLabel();
   const router = useRouter();
   const locale = params.locale as string;
   const templateId = params.id as string;
@@ -139,7 +141,7 @@ export default function NoteTemplateDetailPage() {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Specialty</p>
-              <p>{template.specialtyId ?? 'All specialties'}</p>
+              <p>{template.specialtyId ? specialtyLabel(template.specialtyId) : 'All specialties'}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Scope</p>

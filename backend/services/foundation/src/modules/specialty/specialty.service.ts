@@ -53,11 +53,29 @@ export class SpecialtyService {
   // Staff Specialty Assignment
   // =====================================================
 
+  /**
+   * Rejects requests that reference a staff member (and optionally a facility)
+   * outside the caller's tenant. Responds 404 so other tenants' IDs are not disclosed.
+   */
+  private async assertTenantOwnership(tenantId: string, staffId: string, facilityId?: string) {
+    if (!tenantId) {
+      throw new BadRequestException('x-tenant-id header is required');
+    }
+    if (!(await this.staffSpecialtyRepo.staffBelongsToTenant(tenantId, staffId))) {
+      throw new NotFoundException(`Staff ${staffId} not found`);
+    }
+    if (facilityId && !(await this.staffSpecialtyRepo.facilityBelongsToTenant(tenantId, facilityId))) {
+      throw new NotFoundException(`Facility ${facilityId} not found`);
+    }
+  }
+
   async assignSpecialtyToStaff(
     tenantId: string,
     staffId: string,
     dto: AssignSpecialtyDto
   ) {
+    await this.assertTenantOwnership(tenantId, staffId, dto.facilityId);
+
     // Verify specialty exists
     const specialty = await this.specialtyRepo.findById(dto.specialtyId);
     if (!specialty) {
@@ -86,57 +104,75 @@ export class SpecialtyService {
     };
   }
 
-  async removeSpecialtyFromStaff(staffId: string, facilityId: string, specialtyId: string) {
-    try {
-      // Check if it's the primary specialty
-      const primary = await this.staffSpecialtyRepo.getPrimarySpecialty(staffId, facilityId);
-      if (primary && primary.specialtyId === specialtyId) {
-        // Get all specialties at this facility
-        const allSpecialties = await this.staffSpecialtyRepo.getStaffSpecialties(staffId, facilityId);
-        
-        if (allSpecialties.length <= 1) {
-          throw new BadRequestException(
-            'Cannot remove the only specialty. Staff must have at least one specialty per facility.'
-          );
-        }
+  async removeSpecialtyFromStaff(
+    tenantId: string,
+    staffId: string,
+    facilityId: string,
+    specialtyId: string
+  ) {
+    await this.assertTenantOwnership(tenantId, staffId, facilityId);
 
+    // Check if it's the primary specialty
+    const primary = await this.staffSpecialtyRepo.getPrimarySpecialty(tenantId, staffId, facilityId);
+    if (primary && primary.specialtyId === specialtyId) {
+      const allSpecialties = await this.staffSpecialtyRepo.getStaffSpecialties(
+        tenantId,
+        staffId,
+        facilityId
+      );
+
+      if (allSpecialties.length <= 1) {
         throw new BadRequestException(
-          'Cannot remove primary specialty. Please set another specialty as primary first.'
+          'Cannot remove the only specialty. Staff must have at least one specialty per facility.'
         );
       }
 
-      await this.staffSpecialtyRepo.removeSpecialty(staffId, facilityId, specialtyId);
+      throw new BadRequestException(
+        'Cannot remove primary specialty. Please set another specialty as primary first.'
+      );
+    }
 
-      return {
-        success: true,
-        message: 'Specialty removed successfully',
-      };
-    } catch (error) {
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
+    const result = await this.staffSpecialtyRepo.removeSpecialty(
+      tenantId,
+      staffId,
+      facilityId,
+      specialtyId
+    );
+    if (result.count === 0) {
       throw new NotFoundException('Staff specialty assignment not found');
     }
+
+    return {
+      success: true,
+      message: 'Specialty removed successfully',
+    };
   }
 
-  async changePrimarySpecialty(staffId: string, facilityId: string, newPrimarySpecialtyId: string) {
-    try {
-      const newPrimary = await this.staffSpecialtyRepo.changePrimarySpecialty(
-        staffId,
-        facilityId,
-        newPrimarySpecialtyId
-      );
+  async changePrimarySpecialty(
+    tenantId: string,
+    staffId: string,
+    facilityId: string,
+    newPrimarySpecialtyId: string
+  ) {
+    await this.assertTenantOwnership(tenantId, staffId, facilityId);
 
-      return {
-        success: true,
-        primarySpecialty: newPrimary,
-        message: 'Primary specialty changed successfully',
-      };
-    } catch (error) {
+    const newPrimary = await this.staffSpecialtyRepo.changePrimarySpecialty(
+      tenantId,
+      staffId,
+      facilityId,
+      newPrimarySpecialtyId
+    );
+    if (!newPrimary) {
       throw new NotFoundException(
         'Specialty not found or not assigned to staff member at this facility'
       );
     }
+
+    return {
+      success: true,
+      primarySpecialty: newPrimary,
+      message: 'Primary specialty changed successfully',
+    };
   }
 
   async bulkAssignSpecialties(
@@ -144,6 +180,8 @@ export class SpecialtyService {
     staffId: string,
     dto: BulkAssignSpecialtiesDto
   ) {
+    await this.assertTenantOwnership(tenantId, staffId, dto.facilityId);
+
     // Verify all specialties exist
     const primary = await this.specialtyRepo.findById(dto.primarySpecialtyId);
     if (!primary || !primary.isActive) {
@@ -188,8 +226,16 @@ export class SpecialtyService {
     };
   }
 
-  async getStaffSpecialties(staffId: string, facilityId?: string, locale?: string) {
+  async getStaffSpecialties(
+    tenantId: string,
+    staffId: string,
+    facilityId?: string,
+    locale?: string
+  ) {
+    await this.assertTenantOwnership(tenantId, staffId);
+
     const staffSpecialties = await this.staffSpecialtyRepo.getStaffSpecialties(
+      tenantId,
       staffId,
       facilityId,
       locale
@@ -274,8 +320,19 @@ export class SpecialtyService {
     }));
   }
 
-  async getFacilitySpecialties(facilityId: string, locale?: string) {
-    const specialties = await this.staffSpecialtyRepo.getFacilitySpecialties(facilityId, locale);
+  async getFacilitySpecialties(tenantId: string, facilityId: string, locale?: string) {
+    if (!tenantId) {
+      throw new BadRequestException('x-tenant-id header is required');
+    }
+    if (!(await this.staffSpecialtyRepo.facilityBelongsToTenant(tenantId, facilityId))) {
+      throw new NotFoundException(`Facility ${facilityId} not found`);
+    }
+
+    const specialties = await this.staffSpecialtyRepo.getFacilitySpecialties(
+      tenantId,
+      facilityId,
+      locale
+    );
 
     return specialties.map((item: any) => ({
       specialty: {

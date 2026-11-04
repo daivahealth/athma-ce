@@ -1,11 +1,11 @@
--- Seed: Specialties (25 total) with translations and sample authority codes
+-- Seed: Specialties (26 total) with translations and sample authority codes
 
 -- Ensure clean state if run standalone
 TRUNCATE TABLE specialty_translations RESTART IDENTITY CASCADE;
 TRUNCATE TABLE specialty_codes_authority RESTART IDENTITY CASCADE;
 TRUNCATE TABLE specialties RESTART IDENTITY CASCADE;
 
--- Insert 25 specialties (IDs are deterministic using UUIDv5 over DNS namespace)
+-- Insert 26 specialties (IDs are deterministic using UUIDv5 over DNS namespace)
 INSERT INTO specialties (id, code, name, description, is_active, sort_order, created_at, updated_at) VALUES
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:GEN_MED'), 'GEN_MED', 'General Medicine', NULL, TRUE, 1, NOW(), NOW()),
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:FAM_MED'), 'FAM_MED', 'Family Medicine', NULL, TRUE, 2, NOW(), NOW()),
@@ -31,7 +31,8 @@ INSERT INTO specialties (id, code, name, description, is_active, sort_order, cre
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:ENT'), 'ENT', 'Otolaryngology (ENT)', NULL, TRUE, 22, NOW(), NOW()),
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:PSYCH'), 'PSYCH', 'Psychiatry', NULL, TRUE, 23, NOW(), NOW()),
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:ANESTH'), 'ANESTH', 'Anesthesiology', NULL, TRUE, 24, NOW(), NOW()),
-  (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:EMERG'), 'EMERG', 'Emergency Medicine', NULL, TRUE, 25, NOW(), NOW());
+  (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:EMERG'), 'EMERG', 'Emergency Medicine', NULL, TRUE, 25, NOW(), NOW()),
+  (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'specialty:CRIT_CARE'), 'CRIT_CARE', 'Critical Care Medicine', NULL, TRUE, 26, NOW(), NOW());
 
 -- Arabic translations (partial sample for key specialties; extend as needed)
 INSERT INTO specialty_translations (id, specialty_id, lang, display_name, description, created_at, updated_at) VALUES
@@ -46,7 +47,8 @@ INSERT INTO specialty_translations (id, specialty_id, lang, display_name, descri
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8','tr:DERM:ar'), (SELECT id FROM specialties WHERE code='DERM'), 'ar', 'الأمراض الجلدية', NULL, NOW(), NOW()),
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8','tr:OPHTHAL:ar'), (SELECT id FROM specialties WHERE code='OPHTHAL'), 'ar', 'طب وجراحة العيون', NULL, NOW(), NOW()),
   (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8','tr:ENT:ar'), (SELECT id FROM specialties WHERE code='ENT'), 'ar', 'الأذن والأنف والحنجرة', NULL, NOW(), NOW()),
-  (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8','tr:PSYCH:ar'), (SELECT id FROM specialties WHERE code='PSYCH'), 'ar', 'الطب النفسي', NULL, NOW(), NOW());
+  (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8','tr:PSYCH:ar'), (SELECT id FROM specialties WHERE code='PSYCH'), 'ar', 'الطب النفسي', NULL, NOW(), NOW()),
+  (uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8','tr:CRIT_CARE:ar'), (SELECT id FROM specialties WHERE code='CRIT_CARE'), 'ar', 'طب العناية المركزة', NULL, NOW(), NOW());
 
 -- Sample authority mappings (DHA) for a subset
 INSERT INTO specialty_codes_authority (id, specialty_id, authority, authority_code, authority_name, is_active, created_at, updated_at) VALUES

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Param, Post, Put, Query, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiSecurity, ApiQuery, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { FacilityService } from './facility.service';
 import { CreateFacilityDto } from './dto/create-facility.dto';
@@ -184,9 +184,10 @@ export class FacilityController {
   @ApiResponse({ status: 404, description: 'Facility not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getFacilitySpecialties(
+    @Headers('x-tenant-id') tenantId: string,
     @Param('id') facilityId: string,
     @Query('locale') locale?: string
   ) {
-    return this.specialtyService.getFacilitySpecialties(facilityId, locale);
+    return this.specialtyService.getFacilitySpecialties(tenantId, facilityId, locale);
   }
 }

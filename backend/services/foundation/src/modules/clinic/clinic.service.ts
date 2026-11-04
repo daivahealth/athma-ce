@@ -39,6 +39,8 @@ export class ClinicService {
       throw new BadRequestException('Cannot create clinic for inactive department');
     }
 
+    await this.assertSpecialtyCode(createClinicDto.specialty);
+
     // Check if code already exists for this department
     if (createClinicDto.code) {
       const codeExists = await this.clinicRepo.checkCodeExists(departmentId, createClinicDto.code);
@@ -97,7 +99,23 @@ export class ClinicService {
       }
     }
 
+    await this.assertSpecialtyCode(updateClinicDto.specialty);
+
     return this.clinicRepo.update(id, updateClinicDto);
+  }
+
+  /** Clinic.specialty holds a specialty master code (e.g. CARDIO); reject unknown or inactive codes. */
+  private async assertSpecialtyCode(code?: string | null) {
+    if (!code) return;
+    const specialty = await this.prisma.specialty.findUnique({
+      where: { code },
+      select: { isActive: true },
+    });
+    if (!specialty || !specialty.isActive) {
+      throw new BadRequestException(
+        `Unknown or inactive specialty code '${code}'. Use a code from GET /specialties.`,
+      );
+    }
   }
 
   async remove(id: string) {
