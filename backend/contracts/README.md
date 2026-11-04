@@ -252,7 +252,7 @@ Runtime validation schemas:
 import { z } from 'zod';
 
 // UUID validation
-export const uuidSchema = z.string().uuid();
+export const uuidSchema = z.guid();
 
 // Pagination
 export const paginationSchema = z.object({

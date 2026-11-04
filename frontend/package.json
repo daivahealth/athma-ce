@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
-    "@hookform/resolvers": "^3.3.4",
+    "@hookform/resolvers": "^5.2.2",
     "@internationalized/date": "^3.6.0",
     "@openmedform/form-core": "^0.4.0",
     "@openmedform/form-schema-types": "^0.4.0",
@@ -77,7 +77,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "tippy.js": "^6.3.7",
-    "zod": "^3.23.8",
+    "zod": "^4.6.7",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

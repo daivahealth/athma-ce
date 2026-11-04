@@ -105,7 +105,7 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
     setValue,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<RuleFormValues>({
+  } = useForm<z.input<typeof ruleSchema>, unknown, RuleFormValues>({
     resolver: zodResolver(ruleSchema),
     defaultValues,
   });

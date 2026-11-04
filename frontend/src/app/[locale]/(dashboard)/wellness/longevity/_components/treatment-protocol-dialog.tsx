@@ -44,7 +44,7 @@ const formSchema = z.object({
     patientId: z.string().min(1, 'Patient is required'),
     protocolId: z.string().min(1, 'Protocol is required'),
     scheduledAt: z.date({
-        required_error: 'Scheduled date is required',
+        error: 'Scheduled date is required',
     }),
     preTreatmentNotes: z.string().optional(),
 });

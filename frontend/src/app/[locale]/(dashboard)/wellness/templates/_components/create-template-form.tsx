@@ -31,10 +31,10 @@ const questionSchema = z.object({
     questionText: z.string().min(1, 'Question text is required'),
     questionType: z.enum(['text', 'number', 'select', 'multiselect', 'scale', 'boolean']),
     optionsString: z.string().optional(), // Helper for comma-separated options input
-    scaleMin: z.coerce.number().optional(),
-    scaleMax: z.coerce.number().optional(),
+    scaleMin: z.coerce.number<number>().optional(),
+    scaleMax: z.coerce.number<number>().optional(),
     required: z.boolean().default(false),
-    weight: z.coerce.number().optional(),
+    weight: z.coerce.number<number>().optional(),
 });
 
 const sectionSchema = z.object({
@@ -49,7 +49,7 @@ const templateFormSchema = z.object({
     description: z.string().optional(),
     category: z.string().min(1, 'Category is required'),
     sections: z.array(sectionSchema),
-    maxScore: z.coerce.number().optional(),
+    maxScore: z.coerce.number<number>().optional(),
 });
 
 type TemplateFormValues = z.infer<typeof templateFormSchema>;
@@ -59,7 +59,7 @@ export function CreateTemplateForm({ locale }: { locale: string }) {
     const { toast } = useToast();
     const createTemplate = useCreateAssessmentTemplate();
 
-    const form = useForm<TemplateFormValues>({
+    const form = useForm<z.input<typeof templateFormSchema>, unknown, TemplateFormValues>({
         resolver: zodResolver(templateFormSchema),
         defaultValues: {
             name: '',

@@ -2,7 +2,7 @@ import { z } from 'zod';
 /**
  * Common validation schemas using Zod
  */
-export declare const uuidSchema: z.ZodString;
+export declare const uuidSchema: z.ZodGUID;
 export declare const emailSchema: z.ZodString;
 export declare const phoneSchema: z.ZodString;
 export declare const dateSchema: z.ZodUnion<[z.ZodString, z.ZodDate]>;
@@ -11,20 +11,13 @@ export declare const paginationSchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodNumber>;
     limit: z.ZodDefault<z.ZodNumber>;
     sortBy: z.ZodOptional<z.ZodString>;
-    sortOrder: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
-}, "strip", z.ZodTypeAny, {
-    page: number;
-    limit: number;
-    sortOrder: "asc" | "desc";
-    sortBy?: string | undefined;
-}, {
-    page?: number | undefined;
-    limit?: number | undefined;
-    sortBy?: string | undefined;
-    sortOrder?: "asc" | "desc" | undefined;
-}>;
+    sortOrder: z.ZodDefault<z.ZodEnum<{
+        asc: "asc";
+        desc: "desc";
+    }>>;
+}, z.core.$strip>;
 export declare const paginatedResultSchema: z.ZodObject<{
-    data: z.ZodArray<z.ZodAny, "many">;
+    data: z.ZodArray<z.ZodAny>;
     pagination: z.ZodObject<{
         page: z.ZodNumber;
         limit: z.ZodNumber;
@@ -32,210 +25,75 @@ export declare const paginatedResultSchema: z.ZodObject<{
         totalPages: z.ZodNumber;
         hasNext: z.ZodBoolean;
         hasPrev: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-        hasNext: boolean;
-        hasPrev: boolean;
-    }, {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-        hasNext: boolean;
-        hasPrev: boolean;
-    }>;
-}, "strip", z.ZodTypeAny, {
-    data: any[];
-    pagination: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-        hasNext: boolean;
-        hasPrev: boolean;
-    };
-}, {
-    data: any[];
-    pagination: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-        hasNext: boolean;
-        hasPrev: boolean;
-    };
-}>;
+    }, z.core.$strip>;
+}, z.core.$strip>;
 export declare const dateRangeSchema: z.ZodObject<{
     from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
     to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-}, "strip", z.ZodTypeAny, {
-    from?: string | Date | undefined;
-    to?: string | Date | undefined;
-}, {
-    from?: string | Date | undefined;
-    to?: string | Date | undefined;
-}>;
+}, z.core.$strip>;
 export declare const textSearchSchema: z.ZodObject<{
     search: z.ZodOptional<z.ZodString>;
-    fields: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-}, "strip", z.ZodTypeAny, {
-    search?: string | undefined;
-    fields?: string[] | undefined;
-}, {
-    search?: string | undefined;
-    fields?: string[] | undefined;
+    fields: z.ZodOptional<z.ZodArray<z.ZodString>>;
+}, z.core.$strip>;
+export declare const entityStatusSchema: z.ZodEnum<{
+    active: "active";
+    inactive: "inactive";
+    deleted: "deleted";
+    suspended: "suspended";
 }>;
-export declare const entityStatusSchema: z.ZodEnum<["active", "inactive", "suspended", "deleted"]>;
 export declare const filterOptionsSchema: z.ZodObject<{
     search: z.ZodOptional<z.ZodString>;
-    status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
+    status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<{
+        active: "active";
+        inactive: "inactive";
+        deleted: "deleted";
+        suspended: "suspended";
+    }>, z.ZodArray<z.ZodEnum<{
+        active: "active";
+        inactive: "inactive";
+        deleted: "deleted";
+        suspended: "suspended";
+    }>>]>>;
     dateRange: z.ZodOptional<z.ZodObject<{
         from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
         to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-    }, "strip", z.ZodTypeAny, {
-        from?: string | Date | undefined;
-        to?: string | Date | undefined;
-    }, {
-        from?: string | Date | undefined;
-        to?: string | Date | undefined;
-    }>>;
-}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
-    search: z.ZodOptional<z.ZodString>;
-    status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
-    dateRange: z.ZodOptional<z.ZodObject<{
-        from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-        to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-    }, "strip", z.ZodTypeAny, {
-        from?: string | Date | undefined;
-        to?: string | Date | undefined;
-    }, {
-        from?: string | Date | undefined;
-        to?: string | Date | undefined;
-    }>>;
-}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
-    search: z.ZodOptional<z.ZodString>;
-    status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
-    dateRange: z.ZodOptional<z.ZodObject<{
-        from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-        to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-    }, "strip", z.ZodTypeAny, {
-        from?: string | Date | undefined;
-        to?: string | Date | undefined;
-    }, {
-        from?: string | Date | undefined;
-        to?: string | Date | undefined;
-    }>>;
-}, z.ZodTypeAny, "passthrough">>;
+    }, z.core.$strip>>;
+}, z.core.$loose>;
 export declare const queryOptionsSchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodNumber>;
     limit: z.ZodDefault<z.ZodNumber>;
     sortBy: z.ZodOptional<z.ZodString>;
-    sortOrder: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
-} & {
+    sortOrder: z.ZodDefault<z.ZodEnum<{
+        asc: "asc";
+        desc: "desc";
+    }>>;
     filters: z.ZodOptional<z.ZodObject<{
         search: z.ZodOptional<z.ZodString>;
-        status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
+        status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<{
+            active: "active";
+            inactive: "inactive";
+            deleted: "deleted";
+            suspended: "suspended";
+        }>, z.ZodArray<z.ZodEnum<{
+            active: "active";
+            inactive: "inactive";
+            deleted: "deleted";
+            suspended: "suspended";
+        }>>]>>;
         dateRange: z.ZodOptional<z.ZodObject<{
             from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
             to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-        }, "strip", z.ZodTypeAny, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }>>;
-    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
-        search: z.ZodOptional<z.ZodString>;
-        status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
-        dateRange: z.ZodOptional<z.ZodObject<{
-            from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-            to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-        }, "strip", z.ZodTypeAny, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }>>;
-    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
-        search: z.ZodOptional<z.ZodString>;
-        status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
-        dateRange: z.ZodOptional<z.ZodObject<{
-            from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-            to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-        }, "strip", z.ZodTypeAny, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }>>;
-    }, z.ZodTypeAny, "passthrough">>>;
-    include: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    select: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-}, "strip", z.ZodTypeAny, {
-    page: number;
-    limit: number;
-    sortOrder: "asc" | "desc";
-    sortBy?: string | undefined;
-    filters?: z.objectOutputType<{
-        search: z.ZodOptional<z.ZodString>;
-        status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
-        dateRange: z.ZodOptional<z.ZodObject<{
-            from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-            to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-        }, "strip", z.ZodTypeAny, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }>>;
-    }, z.ZodTypeAny, "passthrough"> | undefined;
-    include?: string[] | undefined;
-    select?: string[] | undefined;
-}, {
-    page?: number | undefined;
-    limit?: number | undefined;
-    sortBy?: string | undefined;
-    sortOrder?: "asc" | "desc" | undefined;
-    filters?: z.objectInputType<{
-        search: z.ZodOptional<z.ZodString>;
-        status: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, z.ZodArray<z.ZodEnum<["active", "inactive", "suspended", "deleted"]>, "many">]>>;
-        dateRange: z.ZodOptional<z.ZodObject<{
-            from: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-            to: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodDate]>>;
-        }, "strip", z.ZodTypeAny, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }, {
-            from?: string | Date | undefined;
-            to?: string | Date | undefined;
-        }>>;
-    }, z.ZodTypeAny, "passthrough"> | undefined;
-    include?: string[] | undefined;
-    select?: string[] | undefined;
-}>;
+        }, z.core.$strip>>;
+    }, z.core.$loose>>;
+    include: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    select: z.ZodOptional<z.ZodArray<z.ZodString>>;
+}, z.core.$strip>;
 export declare const apiErrorSchema: z.ZodObject<{
     code: z.ZodString;
     message: z.ZodString;
     details: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     timestamp: z.ZodUnion<[z.ZodString, z.ZodDate]>;
-}, "strip", z.ZodTypeAny, {
-    code: string;
-    message: string;
-    timestamp: string | Date;
-    details?: Record<string, any> | undefined;
-}, {
-    code: string;
-    message: string;
-    timestamp: string | Date;
-    details?: Record<string, any> | undefined;
-}>;
+}, z.core.$strip>;
 export declare const apiResponseSchema: z.ZodObject<{
     success: z.ZodBoolean;
     data: z.ZodOptional<z.ZodAny>;
@@ -244,55 +102,15 @@ export declare const apiResponseSchema: z.ZodObject<{
         message: z.ZodString;
         details: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         timestamp: z.ZodUnion<[z.ZodString, z.ZodDate]>;
-    }, "strip", z.ZodTypeAny, {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    }, {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    }>>;
+    }, z.core.$strip>>;
     meta: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-}, "strip", z.ZodTypeAny, {
-    success: boolean;
-    error?: {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    } | undefined;
-    data?: any;
-    meta?: Record<string, any> | undefined;
-}, {
-    success: boolean;
-    error?: {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    } | undefined;
-    data?: any;
-    meta?: Record<string, any> | undefined;
-}>;
+}, z.core.$strip>;
 export declare const validationErrorSchema: z.ZodObject<{
     field: z.ZodString;
     message: z.ZodString;
     code: z.ZodString;
     value: z.ZodOptional<z.ZodAny>;
-}, "strip", z.ZodTypeAny, {
-    code: string;
-    message: string;
-    field: string;
-    value?: any;
-}, {
-    code: string;
-    message: string;
-    field: string;
-    value?: any;
-}>;
+}, z.core.$strip>;
 export declare const validationResultSchema: z.ZodObject<{
     isValid: z.ZodBoolean;
     errors: z.ZodArray<z.ZodObject<{
@@ -300,34 +118,8 @@ export declare const validationResultSchema: z.ZodObject<{
         message: z.ZodString;
         code: z.ZodString;
         value: z.ZodOptional<z.ZodAny>;
-    }, "strip", z.ZodTypeAny, {
-        code: string;
-        message: string;
-        field: string;
-        value?: any;
-    }, {
-        code: string;
-        message: string;
-        field: string;
-        value?: any;
-    }>, "many">;
-}, "strip", z.ZodTypeAny, {
-    isValid: boolean;
-    errors: {
-        code: string;
-        message: string;
-        field: string;
-        value?: any;
-    }[];
-}, {
-    isValid: boolean;
-    errors: {
-        code: string;
-        message: string;
-        field: string;
-        value?: any;
-    }[];
-}>;
+    }, z.core.$strip>>;
+}, z.core.$strip>;
 export declare const bulkOperationErrorSchema: z.ZodObject<{
     index: z.ZodNumber;
     error: z.ZodObject<{
@@ -335,37 +127,11 @@ export declare const bulkOperationErrorSchema: z.ZodObject<{
         message: z.ZodString;
         details: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         timestamp: z.ZodUnion<[z.ZodString, z.ZodDate]>;
-    }, "strip", z.ZodTypeAny, {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    }, {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    }>;
-}, "strip", z.ZodTypeAny, {
-    error: {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    };
-    index: number;
-}, {
-    error: {
-        code: string;
-        message: string;
-        timestamp: string | Date;
-        details?: Record<string, any> | undefined;
-    };
-    index: number;
-}>;
+    }, z.core.$strip>;
+}, z.core.$strip>;
 export declare const bulkOperationResultSchema: z.ZodObject<{
     success: z.ZodBoolean;
-    data: z.ZodOptional<z.ZodArray<z.ZodAny, "many">>;
+    data: z.ZodOptional<z.ZodArray<z.ZodAny>>;
     errors: z.ZodOptional<z.ZodArray<z.ZodObject<{
         index: z.ZodNumber;
         error: z.ZodObject<{
@@ -373,118 +139,28 @@ export declare const bulkOperationResultSchema: z.ZodObject<{
             message: z.ZodString;
             details: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
             timestamp: z.ZodUnion<[z.ZodString, z.ZodDate]>;
-        }, "strip", z.ZodTypeAny, {
-            code: string;
-            message: string;
-            timestamp: string | Date;
-            details?: Record<string, any> | undefined;
-        }, {
-            code: string;
-            message: string;
-            timestamp: string | Date;
-            details?: Record<string, any> | undefined;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        error: {
-            code: string;
-            message: string;
-            timestamp: string | Date;
-            details?: Record<string, any> | undefined;
-        };
-        index: number;
-    }, {
-        error: {
-            code: string;
-            message: string;
-            timestamp: string | Date;
-            details?: Record<string, any> | undefined;
-        };
-        index: number;
-    }>, "many">>;
+        }, z.core.$strip>;
+    }, z.core.$strip>>>;
     summary: z.ZodObject<{
         total: z.ZodNumber;
         success: z.ZodNumber;
         failed: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        failed: number;
-        total: number;
-        success: number;
-    }, {
-        failed: number;
-        total: number;
-        success: number;
-    }>;
-}, "strip", z.ZodTypeAny, {
-    success: boolean;
-    summary: {
-        failed: number;
-        total: number;
-        success: number;
-    };
-    data?: any[] | undefined;
-    errors?: {
-        error: {
-            code: string;
-            message: string;
-            timestamp: string | Date;
-            details?: Record<string, any> | undefined;
-        };
-        index: number;
-    }[] | undefined;
-}, {
-    success: boolean;
-    summary: {
-        failed: number;
-        total: number;
-        success: number;
-    };
-    data?: any[] | undefined;
-    errors?: {
-        error: {
-            code: string;
-            message: string;
-            timestamp: string | Date;
-            details?: Record<string, any> | undefined;
-        };
-        index: number;
-    }[] | undefined;
-}>;
+    }, z.core.$strip>;
+}, z.core.$strip>;
 export declare const cacheOptionsSchema: z.ZodObject<{
     ttl: z.ZodOptional<z.ZodNumber>;
     key: z.ZodOptional<z.ZodString>;
-    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-}, "strip", z.ZodTypeAny, {
-    ttl?: number | undefined;
-    key?: string | undefined;
-    tags?: string[] | undefined;
-}, {
-    ttl?: number | undefined;
-    key?: string | undefined;
-    tags?: string[] | undefined;
-}>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString>>;
+}, z.core.$strip>;
 export declare const retryOptionsSchema: z.ZodObject<{
     maxRetries: z.ZodDefault<z.ZodNumber>;
     retryDelay: z.ZodDefault<z.ZodNumber>;
     backoffMultiplier: z.ZodDefault<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    maxRetries: number;
-    retryDelay: number;
-    backoffMultiplier: number;
-}, {
-    maxRetries?: number | undefined;
-    retryDelay?: number | undefined;
-    backoffMultiplier?: number | undefined;
-}>;
+}, z.core.$strip>;
 export declare const rateLimitSchema: z.ZodObject<{
     windowMs: z.ZodNumber;
     maxRequests: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    windowMs: number;
-    maxRequests: number;
-}, {
-    windowMs: number;
-    maxRequests: number;
-}>;
+}, z.core.$strip>;
 export type HealthCheck = {
     service: string;
     status: 'healthy' | 'degraded' | 'unhealthy';
@@ -499,46 +175,23 @@ export declare const metricDataSchema: z.ZodObject<{
     timestamp: z.ZodUnion<[z.ZodString, z.ZodDate]>;
     tags: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
     unit: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    value: number;
-    timestamp: string | Date;
-    name: string;
-    tags?: Record<string, string> | undefined;
-    unit?: string | undefined;
-}, {
-    value: number;
-    timestamp: string | Date;
-    name: string;
-    tags?: Record<string, string> | undefined;
-    unit?: string | undefined;
-}>;
+}, z.core.$strip>;
 export declare const logEntrySchema: z.ZodObject<{
-    level: z.ZodEnum<["debug", "info", "warn", "error"]>;
+    level: z.ZodEnum<{
+        debug: "debug";
+        info: "info";
+        warn: "warn";
+        error: "error";
+    }>;
     message: z.ZodString;
     timestamp: z.ZodUnion<[z.ZodString, z.ZodDate]>;
     service: z.ZodString;
     context: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     traceId: z.ZodOptional<z.ZodString>;
     spanId: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    message: string;
-    timestamp: string | Date;
-    service: string;
-    level: "debug" | "info" | "warn" | "error";
-    context?: Record<string, any> | undefined;
-    traceId?: string | undefined;
-    spanId?: string | undefined;
-}, {
-    message: string;
-    timestamp: string | Date;
-    service: string;
-    level: "debug" | "info" | "warn" | "error";
-    context?: Record<string, any> | undefined;
-    traceId?: string | undefined;
-    spanId?: string | undefined;
-}>;
+}, z.core.$strip>;
 export declare const domainEventSchema: z.ZodObject<{
-    id: z.ZodString;
+    id: z.ZodGUID;
     type: z.ZodString;
     aggregateId: z.ZodString;
     aggregateType: z.ZodString;
@@ -546,313 +199,106 @@ export declare const domainEventSchema: z.ZodObject<{
     data: z.ZodAny;
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     timestamp: z.ZodUnion<[z.ZodString, z.ZodDate]>;
-}, "strip", z.ZodTypeAny, {
-    type: string;
-    timestamp: string | Date;
-    id: string;
-    aggregateId: string;
-    aggregateType: string;
-    version: number;
-    data?: any;
-    metadata?: Record<string, any> | undefined;
-}, {
-    type: string;
-    timestamp: string | Date;
-    id: string;
-    aggregateId: string;
-    aggregateType: string;
-    version: number;
-    data?: any;
-    metadata?: Record<string, any> | undefined;
-}>;
+}, z.core.$strip>;
 export declare const databaseConfigSchema: z.ZodObject<{
     url: z.ZodString;
     directUrl: z.ZodOptional<z.ZodString>;
     poolSize: z.ZodOptional<z.ZodNumber>;
     timeout: z.ZodOptional<z.ZodNumber>;
     ssl: z.ZodOptional<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    url: string;
-    directUrl?: string | undefined;
-    poolSize?: number | undefined;
-    timeout?: number | undefined;
-    ssl?: boolean | undefined;
-}, {
-    url: string;
-    directUrl?: string | undefined;
-    poolSize?: number | undefined;
-    timeout?: number | undefined;
-    ssl?: boolean | undefined;
-}>;
+}, z.core.$strip>;
 export declare const redisConfigSchema: z.ZodObject<{
     url: z.ZodString;
     password: z.ZodOptional<z.ZodString>;
     db: z.ZodOptional<z.ZodNumber>;
     keyPrefix: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    url: string;
-    password?: string | undefined;
-    db?: number | undefined;
-    keyPrefix?: string | undefined;
-}, {
-    url: string;
-    password?: string | undefined;
-    db?: number | undefined;
-    keyPrefix?: string | undefined;
-}>;
+}, z.core.$strip>;
 export declare const messagingConfigSchema: z.ZodObject<{
-    type: z.ZodEnum<["kafka", "rabbitmq"]>;
-    brokers: z.ZodArray<z.ZodString, "many">;
+    type: z.ZodEnum<{
+        kafka: "kafka";
+        rabbitmq: "rabbitmq";
+    }>;
+    brokers: z.ZodArray<z.ZodString>;
     groupId: z.ZodOptional<z.ZodString>;
-    topics: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-}, "strip", z.ZodTypeAny, {
-    type: "kafka" | "rabbitmq";
-    brokers: string[];
-    groupId?: string | undefined;
-    topics?: string[] | undefined;
-}, {
-    type: "kafka" | "rabbitmq";
-    brokers: string[];
-    groupId?: string | undefined;
-    topics?: string[] | undefined;
-}>;
+    topics: z.ZodOptional<z.ZodArray<z.ZodString>>;
+}, z.core.$strip>;
 export declare const authConfigSchema: z.ZodObject<{
     jwtSecret: z.ZodString;
     jwtExpiry: z.ZodString;
     refreshTokenExpiry: z.ZodString;
     mfaRequired: z.ZodBoolean;
-}, "strip", z.ZodTypeAny, {
-    jwtSecret: string;
-    jwtExpiry: string;
-    refreshTokenExpiry: string;
-    mfaRequired: boolean;
-}, {
-    jwtSecret: string;
-    jwtExpiry: string;
-    refreshTokenExpiry: string;
-    mfaRequired: boolean;
-}>;
+}, z.core.$strip>;
 export declare const monitoringConfigSchema: z.ZodObject<{
     metrics: z.ZodBoolean;
     tracing: z.ZodBoolean;
     logging: z.ZodBoolean;
     healthCheck: z.ZodBoolean;
-}, "strip", z.ZodTypeAny, {
-    metrics: boolean;
-    tracing: boolean;
-    logging: boolean;
-    healthCheck: boolean;
-}, {
-    metrics: boolean;
-    tracing: boolean;
-    logging: boolean;
-    healthCheck: boolean;
-}>;
+}, z.core.$strip>;
 export declare const serviceConfigSchema: z.ZodObject<{
     name: z.ZodString;
     version: z.ZodString;
     port: z.ZodNumber;
-    environment: z.ZodEnum<["development", "staging", "production"]>;
+    environment: z.ZodEnum<{
+        development: "development";
+        staging: "staging";
+        production: "production";
+    }>;
     database: z.ZodObject<{
         url: z.ZodString;
         directUrl: z.ZodOptional<z.ZodString>;
         poolSize: z.ZodOptional<z.ZodNumber>;
         timeout: z.ZodOptional<z.ZodNumber>;
         ssl: z.ZodOptional<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        url: string;
-        directUrl?: string | undefined;
-        poolSize?: number | undefined;
-        timeout?: number | undefined;
-        ssl?: boolean | undefined;
-    }, {
-        url: string;
-        directUrl?: string | undefined;
-        poolSize?: number | undefined;
-        timeout?: number | undefined;
-        ssl?: boolean | undefined;
-    }>;
+    }, z.core.$strip>;
     redis: z.ZodOptional<z.ZodObject<{
         url: z.ZodString;
         password: z.ZodOptional<z.ZodString>;
         db: z.ZodOptional<z.ZodNumber>;
         keyPrefix: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        url: string;
-        password?: string | undefined;
-        db?: number | undefined;
-        keyPrefix?: string | undefined;
-    }, {
-        url: string;
-        password?: string | undefined;
-        db?: number | undefined;
-        keyPrefix?: string | undefined;
-    }>>;
+    }, z.core.$strip>>;
     messaging: z.ZodOptional<z.ZodObject<{
-        type: z.ZodEnum<["kafka", "rabbitmq"]>;
-        brokers: z.ZodArray<z.ZodString, "many">;
+        type: z.ZodEnum<{
+            kafka: "kafka";
+            rabbitmq: "rabbitmq";
+        }>;
+        brokers: z.ZodArray<z.ZodString>;
         groupId: z.ZodOptional<z.ZodString>;
-        topics: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        type: "kafka" | "rabbitmq";
-        brokers: string[];
-        groupId?: string | undefined;
-        topics?: string[] | undefined;
-    }, {
-        type: "kafka" | "rabbitmq";
-        brokers: string[];
-        groupId?: string | undefined;
-        topics?: string[] | undefined;
-    }>>;
+        topics: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    }, z.core.$strip>>;
     auth: z.ZodOptional<z.ZodObject<{
         jwtSecret: z.ZodString;
         jwtExpiry: z.ZodString;
         refreshTokenExpiry: z.ZodString;
         mfaRequired: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        jwtSecret: string;
-        jwtExpiry: string;
-        refreshTokenExpiry: string;
-        mfaRequired: boolean;
-    }, {
-        jwtSecret: string;
-        jwtExpiry: string;
-        refreshTokenExpiry: string;
-        mfaRequired: boolean;
-    }>>;
+    }, z.core.$strip>>;
     monitoring: z.ZodOptional<z.ZodObject<{
         metrics: z.ZodBoolean;
         tracing: z.ZodBoolean;
         logging: z.ZodBoolean;
         healthCheck: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        metrics: boolean;
-        tracing: boolean;
-        logging: boolean;
-        healthCheck: boolean;
-    }, {
-        metrics: boolean;
-        tracing: boolean;
-        logging: boolean;
-        healthCheck: boolean;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    name: string;
-    version: string;
-    port: number;
-    environment: "development" | "staging" | "production";
-    database: {
-        url: string;
-        directUrl?: string | undefined;
-        poolSize?: number | undefined;
-        timeout?: number | undefined;
-        ssl?: boolean | undefined;
-    };
-    redis?: {
-        url: string;
-        password?: string | undefined;
-        db?: number | undefined;
-        keyPrefix?: string | undefined;
-    } | undefined;
-    messaging?: {
-        type: "kafka" | "rabbitmq";
-        brokers: string[];
-        groupId?: string | undefined;
-        topics?: string[] | undefined;
-    } | undefined;
-    auth?: {
-        jwtSecret: string;
-        jwtExpiry: string;
-        refreshTokenExpiry: string;
-        mfaRequired: boolean;
-    } | undefined;
-    monitoring?: {
-        metrics: boolean;
-        tracing: boolean;
-        logging: boolean;
-        healthCheck: boolean;
-    } | undefined;
-}, {
-    name: string;
-    version: string;
-    port: number;
-    environment: "development" | "staging" | "production";
-    database: {
-        url: string;
-        directUrl?: string | undefined;
-        poolSize?: number | undefined;
-        timeout?: number | undefined;
-        ssl?: boolean | undefined;
-    };
-    redis?: {
-        url: string;
-        password?: string | undefined;
-        db?: number | undefined;
-        keyPrefix?: string | undefined;
-    } | undefined;
-    messaging?: {
-        type: "kafka" | "rabbitmq";
-        brokers: string[];
-        groupId?: string | undefined;
-        topics?: string[] | undefined;
-    } | undefined;
-    auth?: {
-        jwtSecret: string;
-        jwtExpiry: string;
-        refreshTokenExpiry: string;
-        mfaRequired: boolean;
-    } | undefined;
-    monitoring?: {
-        metrics: boolean;
-        tracing: boolean;
-        logging: boolean;
-        healthCheck: boolean;
-    } | undefined;
-}>;
+    }, z.core.$strip>>;
+}, z.core.$strip>;
 export declare const idParamSchema: z.ZodObject<{
-    id: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    id: string;
-}, {
-    id: string;
-}>;
+    id: z.ZodGUID;
+}, z.core.$strip>;
 export declare const tenantIdParamSchema: z.ZodObject<{
-    tenantId: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    tenantId: string;
-}, {
-    tenantId: string;
-}>;
+    tenantId: z.ZodGUID;
+}, z.core.$strip>;
 export declare const searchQuerySchema: z.ZodObject<{
     q: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    q: string;
-}, {
-    q: string;
-}>;
+}, z.core.$strip>;
 export declare const sortQuerySchema: z.ZodObject<{
     sort: z.ZodOptional<z.ZodString>;
-    order: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
-}, "strip", z.ZodTypeAny, {
-    order: "asc" | "desc";
-    sort?: string | undefined;
-}, {
-    sort?: string | undefined;
-    order?: "asc" | "desc" | undefined;
-}>;
+    order: z.ZodDefault<z.ZodEnum<{
+        asc: "asc";
+        desc: "desc";
+    }>>;
+}, z.core.$strip>;
 export declare const nameSchema: z.ZodObject<{
     firstName: z.ZodString;
     lastName: z.ZodString;
     middleName: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    firstName: string;
-    lastName: string;
-    middleName?: string | undefined;
-}, {
-    firstName: string;
-    lastName: string;
-    middleName?: string | undefined;
-}>;
+}, z.core.$strip>;
 export declare const addressSchema: z.ZodObject<{
     addressLine1: z.ZodString;
     addressLine2: z.ZodOptional<z.ZodString>;
@@ -860,34 +306,14 @@ export declare const addressSchema: z.ZodObject<{
     stateProvince: z.ZodString;
     postalCode: z.ZodString;
     country: z.ZodDefault<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    addressLine1: string;
-    city: string;
-    stateProvince: string;
-    postalCode: string;
-    country: string;
-    addressLine2?: string | undefined;
-}, {
-    addressLine1: string;
-    city: string;
-    stateProvince: string;
-    postalCode: string;
-    addressLine2?: string | undefined;
-    country?: string | undefined;
-}>;
+}, z.core.$strip>;
 export declare const contactSchema: z.ZodObject<{
     phoneNumber: z.ZodOptional<z.ZodString>;
     email: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    email?: string | undefined;
-    phoneNumber?: string | undefined;
-}, {
-    email?: string | undefined;
-    phoneNumber?: string | undefined;
-}>;
-export declare const createValidationSchema: <T>(schema: z.ZodSchema<T>) => z.ZodType<T, z.ZodTypeDef, T>;
+}, z.core.$strip>;
+export declare const createValidationSchema: <T>(schema: z.ZodSchema<T>) => z.ZodSchema<T, unknown, z.core.$ZodTypeInternals<T, unknown>>;
 export declare const updateValidationSchema: <T>(schema: z.ZodSchema<T>) => any;
-export declare const queryValidationSchema: <T>(schema: z.ZodSchema<T>) => z.ZodOptional<z.ZodType<T, z.ZodTypeDef, T>>;
+export declare const queryValidationSchema: <T>(schema: z.ZodSchema<T>) => z.ZodOptional<z.ZodSchema<T, unknown, z.core.$ZodTypeInternals<T, unknown>>>;
 export type PaginationParams = z.infer<typeof paginationSchema>;
 export type PaginatedResult<T> = z.infer<typeof paginatedResultSchema> & {
     data: T[];

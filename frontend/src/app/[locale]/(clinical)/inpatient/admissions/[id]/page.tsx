@@ -122,7 +122,7 @@ export default function AdmissionDetailPage() {
     return `${wardName} · ${bedNumber}`;
   }, [currentWardName, currentBedNumber, bedQuery.data, wardQuery.data, currentBedId]);
 
-  const { register, control, handleSubmit, reset, formState: { isSubmitting } } = useForm<UpdateFormValues>({
+  const { register, control, handleSubmit, reset, formState: { isSubmitting } } = useForm<z.input<typeof updateSchema>, unknown, UpdateFormValues>({
     resolver: zodResolver(updateSchema),
   });
 

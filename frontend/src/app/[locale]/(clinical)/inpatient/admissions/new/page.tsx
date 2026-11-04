@@ -46,16 +46,16 @@ import { getApiErrorMessage } from '@/lib/api/errors';
 
 const admissionSchema = z
   .object({
-  patientId: z.string().uuid('Patient ID must be a UUID'),
+  patientId: z.guid('Patient ID must be a UUID'),
   encounterId: z.string().optional(),
   encounterMode: z.enum(['new', 'existing']),
   admissionDate: z.string().min(1, 'Admission date is required'),
   admissionType: z.nativeEnum(AdmissionType),
   admissionSource: z.nativeEnum(AdmissionSource),
-  attendingPhysicianId: z.string().uuid('Attending physician ID must be a UUID'),
+  attendingPhysicianId: z.guid('Attending physician ID must be a UUID'),
   primaryNurseId: z.string().optional(),
-  initialWardId: z.string().uuid('Ward ID must be a UUID'),
-  initialBedId: z.string().uuid('Bed ID must be a UUID'),
+  initialWardId: z.guid('Ward ID must be a UUID'),
+  initialBedId: z.guid('Bed ID must be a UUID'),
   clinicalAlerts: z.string().optional(),
   isolationType: z.union([z.literal('none'), z.nativeEnum(IsolationType)]).optional(),
   fallRiskScore: z.preprocess(
@@ -121,7 +121,7 @@ export default function NewAdmissionPage() {
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<AdmissionFormValues>({
+  } = useForm<z.input<typeof admissionSchema>, unknown, AdmissionFormValues>({
     resolver: zodResolver(admissionSchema),
     defaultValues: {
       admissionDate: defaultDateTime(),

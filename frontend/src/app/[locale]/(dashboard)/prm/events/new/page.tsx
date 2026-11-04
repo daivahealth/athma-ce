@@ -22,14 +22,14 @@ import type { EventResponse, IngestEventInput, PatientGender } from '@/modules/p
 import { getApiErrorMessage } from '@/lib/api/errors';
 
 const eventSchema = z.object({
-  patient_id: z.string().uuid('Enter a valid patient UUID'),
+  patient_id: z.guid('Enter a valid patient UUID'),
   source_system: z.string().min(1, 'Source system is required'),
   event_type: z.string().min(1, 'Event type is required'),
   event_subtype: z.string().optional(),
-  severity: z.coerce.number().int().min(0).max(2).default(0),
+  severity: z.coerce.number<number>().int().min(0).max(2).default(0),
   occurred_at: z.string().min(1, 'Occurred at is required'),
   entity_type: z.string().min(1, 'Entity type is required'),
-  entity_id: z.string().uuid('Enter a valid entity UUID'),
+  entity_id: z.guid('Enter a valid entity UUID'),
   payload: z.string().min(2, 'Payload JSON is required'),
   correlation_id: z.string().optional(),
   dedupe_key: z.string().min(1, 'Dedupe key is required'),
@@ -59,7 +59,7 @@ export default function PrmEventNewPage() {
     setError,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<EventFormValues>({
+  } = useForm<z.input<typeof eventSchema>, unknown, EventFormValues>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
       patient_id: '',
