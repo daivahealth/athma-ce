@@ -2,14 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, User } from 'lucide-react';
+import { Activity, Dna, Save, UserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FIELD_CONTROL, FormActions, FormField, FormSection } from '@/components/forms/form-layout';
+import { LoadingState } from '@/plugins/oncology/components/shared';
+import { PatientContextCard, patientFromRecord } from '@/plugins/oncology/components/FormContextCards';
 import {
   useCancerDiagnosis,
   useUpdateCancerDiagnosis,
@@ -198,313 +203,262 @@ export default function EditDiagnosisPage() {
     back();
   };
 
+  const header = (
+    <PageHeader
+      title="Edit Diagnosis"
+      subtitle="Update cancer diagnosis details"
+      icon={UserRound}
+      breadcrumb={
+        <Breadcrumb items={[{ href: `/${params.locale}/oncology/registry`, label: 'Oncology Registry' }, { label: 'Edit' }]} />
+      }
+    />
+  );
+
   if (isLoading) {
-    return <div className="text-muted-foreground p-8">Loading...</div>;
+    return (
+      <div className="space-y-6 page-transition">
+        {header}
+        <LoadingState />
+      </div>
+    );
   }
 
-  const age = diagnosis?.patient_date_of_birth
-    ? Math.floor((Date.now() - new Date(diagnosis.patient_date_of_birth).getTime()) / 31557600000)
-    : null;
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={back}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Edit Diagnosis</h1>
-          <p className="text-muted-foreground text-sm">Update cancer diagnosis details</p>
-        </div>
-      </div>
+    <div className="space-y-6 page-transition">
+      {header}
 
-      {/* Patient context banner */}
-      {diagnosis && (
-        <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
-          <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
-          <div className="relative flex items-center gap-6">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
-              <User className="h-5 w-5" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-bold text-base text-foreground leading-tight truncate">
-                {diagnosis.patient_display_name ||
-                  `${diagnosis.patient_first_name ?? ''} ${diagnosis.patient_last_name ?? ''}`.trim() ||
-                  '—'}
-              </p>
-              <div className="flex flex-wrap gap-2 mt-1.5">
-                {diagnosis.patient_mrn && (
-                  <span className="inline-flex items-center rounded-md bg-blue-100/80 dark:bg-blue-900/40 px-2 py-0.5 text-xs font-mono font-medium text-blue-700 dark:text-blue-300">
-                    {diagnosis.patient_mrn}
-                  </span>
-                )}
-                {age !== null && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
-                    {age} yrs
-                  </span>
-                )}
-                {diagnosis.patient_gender && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
-                    {diagnosis.patient_gender}
-                  </span>
-                )}
-                {diagnosis.patient_phone_number && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
-                    {diagnosis.patient_phone_number}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {diagnosis && <PatientContextCard patient={patientFromRecord(diagnosis)} />}
 
       <div className="space-y-6">
-        <Card>
-          <CardHeader><CardTitle>Cancer Identity</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
+        <FormSection icon={Dna} title="Cancer Identity" description="Cancer type, primary site and histology from the oncology catalogs">
+          <FormField id="cancerType" label="Cancer Type" required>
+            <Select
+              value={selectedCancerTypeId || '__none'}
+              onValueChange={handleCancerTypeChange}
+            >
+              <SelectTrigger id="cancerType">
+                <SelectValue placeholder="Select cancer type..." />
+              </SelectTrigger>
+              <SelectContent className="max-h-72 overflow-y-auto">
+                <SelectItem value="__none">— Select cancer type —</SelectItem>
+                {cancerTypes.map((ct) => (
+                  <SelectItem key={ct.id} value={ct.id}>
+                    {ct.name}
+                    {ct.category && (
+                      <span className="ml-2 text-xs text-muted-foreground">({ct.category})</span>
+                    )}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {cancerType && !selectedCancerTypeId && (
+              <p className="text-xs text-warning">
+                Current value &ldquo;{cancerType}&rdquo; not found in catalog — select a replacement above.
+              </p>
+            )}
+          </FormField>
 
-            {/* Cancer Type */}
-            <div className="space-y-2">
-              <Label>Cancer Type *</Label>
-              <Select
-                value={selectedCancerTypeId || '__none'}
-                onValueChange={handleCancerTypeChange}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select cancer type..." />
-                </SelectTrigger>
-                <SelectContent className="max-h-72 overflow-y-auto">
-                  <SelectItem value="__none">— Select cancer type —</SelectItem>
-                  {cancerTypes.map((ct) => (
-                    <SelectItem key={ct.id} value={ct.id}>
-                      {ct.name}
-                      {ct.category && (
-                        <span className="ml-2 text-xs text-muted-foreground">({ct.category})</span>
-                      )}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {cancerType && !selectedCancerTypeId && (
-                <p className="text-xs text-amber-600">
-                  Current value &ldquo;{cancerType}&rdquo; not found in catalog — select a replacement above.
-                </p>
-              )}
-            </div>
-
-            {/* Primary Site */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>
-                  Primary Site *
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField
+              id="primarySite"
+              label={
+                <>
+                  Primary Site
                   {hasMappings && (
                     <span className="ml-2 text-xs text-muted-foreground font-normal">
                       (filtered for selected cancer type)
                     </span>
                   )}
-                </Label>
-                <Select
-                  value={selectedPrimarySiteId || '__none'}
-                  onValueChange={handlePrimarySiteChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select primary site..." />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-72 overflow-y-auto">
-                    <SelectItem value="__none">— Select primary site —</SelectItem>
-                    {primarySiteOptions.map((o) => (
-                      <SelectItem key={o.id} value={o.id}>
-                        <span className="font-mono text-xs text-muted-foreground mr-2">{o.code}</span>
-                        {o.name}
-                        {o.isDefault && <span className="ml-1 text-xs text-emerald-600">(default)</span>}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {primarySite && !selectedPrimarySiteId && (
-                  <p className="text-xs text-amber-600">
-                    Current value &ldquo;{primarySite}&rdquo; not in catalog — select above.
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label>Site Code (ICD-O-3)</Label>
-                <Input
-                  placeholder="Auto-filled from site selection"
-                  value={primarySiteCode}
-                  onChange={(e) => setPrimarySiteCode(e.target.value)}
-                  className={primarySiteCode ? 'bg-muted/30' : ''}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Laterality</Label>
-                <Select value={laterality || '__none'} onValueChange={(v) => setLaterality(v === '__none' ? '' : v)}>
-                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">— Not applicable —</SelectItem>
-                    <SelectItem value="left">Left</SelectItem>
-                    <SelectItem value="right">Right</SelectItem>
-                    <SelectItem value="bilateral">Bilateral</SelectItem>
-                    <SelectItem value="not_applicable">Not Applicable</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>ICD-10 Code</Label>
-                <Input value={icdCode} onChange={(e) => setIcdCode(e.target.value)} />
-              </div>
-            </div>
-
-            {/* Histology */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Histology / Morphology</Label>
-                <Select
-                  value={selectedHistologyId || '__none'}
-                  onValueChange={handleHistologyChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select histology..." />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-72 overflow-y-auto">
-                    <SelectItem value="__none">— Select histology —</SelectItem>
-                    {histologies.map((h) => (
-                      <SelectItem key={h.id} value={h.id}>
-                        {h.morphology_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {histologyMorphology && !selectedHistologyId && (
-                  <p className="text-xs text-amber-600">
-                    Current value &ldquo;{histologyMorphology}&rdquo; not in catalog — select above.
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label>Morphology Code (ICD-O-3)</Label>
-                <Input
-                  placeholder="Auto-filled from histology selection"
-                  value={morphologyCode}
-                  onChange={(e) => setMorphologyCode(e.target.value)}
-                  className={morphologyCode ? 'bg-muted/30' : ''}
-                />
-              </div>
-            </div>
-
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader><CardTitle>Clinical Assessment</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Diagnosis Date *</Label>
-                <Input type="date" value={diagnosisDate} onChange={(e) => setDiagnosisDate(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Grade</Label>
-                <Select value={grade || '__none'} onValueChange={(v) => setGrade(v === '__none' ? '' : v)}>
-                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">— Not assessed —</SelectItem>
-                    <SelectItem value="G1">G1 - Well differentiated</SelectItem>
-                    <SelectItem value="G2">G2 - Moderately differentiated</SelectItem>
-                    <SelectItem value="G3">G3 - Poorly differentiated</SelectItem>
-                    <SelectItem value="G4">G4 - Undifferentiated</SelectItem>
-                    <SelectItem value="GX">GX - Cannot be assessed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Metastatic Status</Label>
-                <Select value={metastaticStatus} onValueChange={setMetastaticStatus}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="localized">Localized</SelectItem>
-                    <SelectItem value="regional">Regional</SelectItem>
-                    <SelectItem value="distant">Distant (Metastatic)</SelectItem>
-                    <SelectItem value="unknown">Unknown</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>ECOG Performance Status</Label>
-                <Select value={ecogAtDiagnosis || '__none'} onValueChange={(v) => setEcogAtDiagnosis(v === '__none' ? '' : v)}>
-                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">— Not recorded —</SelectItem>
-                    <SelectItem value="0">0 - Fully active</SelectItem>
-                    <SelectItem value="1">1 - Restricted strenuous activity</SelectItem>
-                    <SelectItem value="2">2 - Ambulatory, capable of self-care</SelectItem>
-                    <SelectItem value="3">3 - Limited self-care</SelectItem>
-                    <SelectItem value="4">4 - Completely disabled</SelectItem>
-                    <SelectItem value="5">5 - Dead</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Clinical Status</Label>
-                <Select value={clinicalStatus} onValueChange={setClinicalStatus}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="remission">Remission</SelectItem>
-                    <SelectItem value="recurrence">Recurrence</SelectItem>
-                    <SelectItem value="relapsed">Relapsed</SelectItem>
-                    <SelectItem value="resolved">Resolved</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Verification Status</Label>
-                <Select value={verificationStatus} onValueChange={setVerificationStatus}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="confirmed">Confirmed</SelectItem>
-                    <SelectItem value="provisional">Provisional</SelectItem>
-                    <SelectItem value="differential">Differential</SelectItem>
-                    <SelectItem value="refuted">Refuted</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="isRecurrence"
-                checked={isRecurrence}
-                onChange={(e) => setIsRecurrence(e.target.checked)}
-                className="rounded border-gray-300"
+                </>
+              }
+              required
+            >
+              <Select
+                value={selectedPrimarySiteId || '__none'}
+                onValueChange={handlePrimarySiteChange}
+              >
+                <SelectTrigger id="primarySite">
+                  <SelectValue placeholder="Select primary site..." />
+                </SelectTrigger>
+                <SelectContent className="max-h-72 overflow-y-auto">
+                  <SelectItem value="__none">— Select primary site —</SelectItem>
+                  {primarySiteOptions.map((o) => (
+                    <SelectItem key={o.id} value={o.id}>
+                      <span className="font-mono text-xs text-muted-foreground mr-2">{o.code}</span>
+                      {o.name}
+                      {o.isDefault && <span className="ml-1 text-xs text-success">(default)</span>}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {primarySite && !selectedPrimarySiteId && (
+                <p className="text-xs text-warning">
+                  Current value &ldquo;{primarySite}&rdquo; not in catalog — select above.
+                </p>
+              )}
+            </FormField>
+            <FormField id="primarySiteCode" label="Site Code (ICD-O-3)">
+              <Input
+                id="primarySiteCode"
+                placeholder="Auto-filled from site selection"
+                value={primarySiteCode}
+                onChange={(e) => setPrimarySiteCode(e.target.value)}
+                className={primarySiteCode ? 'bg-muted/30' : ''}
               />
-              <Label htmlFor="isRecurrence">This is a recurrence</Label>
-            </div>
-            <div className="space-y-2">
-              <Label>Notes</Label>
-              <textarea
-                className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </div>
-          </CardContent>
-        </Card>
+            </FormField>
+          </div>
 
-        <div className="flex gap-4">
-          <Button variant="outline" onClick={back} disabled={updateDiagnosis.isPending}>Cancel</Button>
-          <Button onClick={handleSubmit} disabled={!isValid || updateDiagnosis.isPending}>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="laterality" label="Laterality">
+              <Select value={laterality || '__none'} onValueChange={(v) => setLaterality(v === '__none' ? '' : v)}>
+                <SelectTrigger id="laterality"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none">— Not applicable —</SelectItem>
+                  <SelectItem value="left">Left</SelectItem>
+                  <SelectItem value="right">Right</SelectItem>
+                  <SelectItem value="bilateral">Bilateral</SelectItem>
+                  <SelectItem value="not_applicable">Not Applicable</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+            <FormField id="icdCode" label="ICD-10 Code">
+              <Input id="icdCode" value={icdCode} onChange={(e) => setIcdCode(e.target.value)} />
+            </FormField>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="histology" label="Histology / Morphology">
+              <Select
+                value={selectedHistologyId || '__none'}
+                onValueChange={handleHistologyChange}
+              >
+                <SelectTrigger id="histology">
+                  <SelectValue placeholder="Select histology..." />
+                </SelectTrigger>
+                <SelectContent className="max-h-72 overflow-y-auto">
+                  <SelectItem value="__none">— Select histology —</SelectItem>
+                  {histologies.map((h) => (
+                    <SelectItem key={h.id} value={h.id}>
+                      {h.morphology_name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {histologyMorphology && !selectedHistologyId && (
+                <p className="text-xs text-warning">
+                  Current value &ldquo;{histologyMorphology}&rdquo; not in catalog — select above.
+                </p>
+              )}
+            </FormField>
+            <FormField id="morphologyCode" label="Morphology Code (ICD-O-3)">
+              <Input
+                id="morphologyCode"
+                placeholder="Auto-filled from histology selection"
+                value={morphologyCode}
+                onChange={(e) => setMorphologyCode(e.target.value)}
+                className={morphologyCode ? 'bg-muted/30' : ''}
+              />
+            </FormField>
+          </div>
+        </FormSection>
+
+        <FormSection icon={Activity} title="Clinical Assessment" description="Diagnosis date, grade, spread and performance status">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="diagnosisDate" label="Diagnosis Date" required>
+              <Input id="diagnosisDate" type="date" className={FIELD_CONTROL} value={diagnosisDate} onChange={(e) => setDiagnosisDate(e.target.value)} />
+            </FormField>
+            <FormField id="grade" label="Grade">
+              <Select value={grade || '__none'} onValueChange={(v) => setGrade(v === '__none' ? '' : v)}>
+                <SelectTrigger id="grade"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none">— Not assessed —</SelectItem>
+                  <SelectItem value="G1">G1 - Well differentiated</SelectItem>
+                  <SelectItem value="G2">G2 - Moderately differentiated</SelectItem>
+                  <SelectItem value="G3">G3 - Poorly differentiated</SelectItem>
+                  <SelectItem value="G4">G4 - Undifferentiated</SelectItem>
+                  <SelectItem value="GX">GX - Cannot be assessed</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="metastaticStatus" label="Metastatic Status">
+              <Select value={metastaticStatus} onValueChange={setMetastaticStatus}>
+                <SelectTrigger id="metastaticStatus"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="localized">Localized</SelectItem>
+                  <SelectItem value="regional">Regional</SelectItem>
+                  <SelectItem value="distant">Distant (Metastatic)</SelectItem>
+                  <SelectItem value="unknown">Unknown</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+            <FormField id="ecogAtDiagnosis" label="ECOG Performance Status">
+              <Select value={ecogAtDiagnosis || '__none'} onValueChange={(v) => setEcogAtDiagnosis(v === '__none' ? '' : v)}>
+                <SelectTrigger id="ecogAtDiagnosis"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none">— Not recorded —</SelectItem>
+                  <SelectItem value="0">0 - Fully active</SelectItem>
+                  <SelectItem value="1">1 - Restricted strenuous activity</SelectItem>
+                  <SelectItem value="2">2 - Ambulatory, capable of self-care</SelectItem>
+                  <SelectItem value="3">3 - Limited self-care</SelectItem>
+                  <SelectItem value="4">4 - Completely disabled</SelectItem>
+                  <SelectItem value="5">5 - Dead</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="clinicalStatus" label="Clinical Status">
+              <Select value={clinicalStatus} onValueChange={setClinicalStatus}>
+                <SelectTrigger id="clinicalStatus"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="remission">Remission</SelectItem>
+                  <SelectItem value="recurrence">Recurrence</SelectItem>
+                  <SelectItem value="relapsed">Relapsed</SelectItem>
+                  <SelectItem value="resolved">Resolved</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+            <FormField id="verificationStatus" label="Verification Status">
+              <Select value={verificationStatus} onValueChange={setVerificationStatus}>
+                <SelectTrigger id="verificationStatus"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="confirmed">Confirmed</SelectItem>
+                  <SelectItem value="provisional">Provisional</SelectItem>
+                  <SelectItem value="differential">Differential</SelectItem>
+                  <SelectItem value="refuted">Refuted</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isRecurrence"
+              checked={isRecurrence}
+              onChange={(e) => setIsRecurrence(e.target.checked)}
+              className="h-4 w-4 rounded border-input accent-primary"
+            />
+            <Label htmlFor="isRecurrence">This is a recurrence</Label>
+          </div>
+          <FormField id="notes" label="Notes">
+            <Textarea
+              id="notes"
+              className="min-h-[80px]"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </FormField>
+        </FormSection>
+
+        <FormActions onCancel={back} busy={updateDiagnosis.isPending}>
+          <Button onClick={handleSubmit} disabled={!isValid || updateDiagnosis.isPending} className="gap-2">
+            <Save className="h-4 w-4" />
             {updateDiagnosis.isPending ? 'Saving...' : 'Save Changes'}
           </Button>
-        </div>
+        </FormActions>
       </div>
     </div>
   );

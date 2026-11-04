@@ -35,7 +35,8 @@ A create/edit page uses the same header as a list page, with a
 `Breadcrumb` (`frontend/src/components/layout/breadcrumb.tsx`) back to its list
 in place of a back-arrow button. The patient registration form
 (`frontend/src/components/clinical/patient-form.tsx`, used by `/patients/new`
-and `/patients/{id}/edit`) is the reference:
+and `/patients/{id}/edit`) and the oncology create/edit pages under
+`/oncology/*/new` and `/oncology/*/{id}/edit` follow it:
 
 ```tsx
 <PageHeader
@@ -61,6 +62,25 @@ and `/patients/{id}/edit`) is the reference:
 - Actions sit in a footer row under a `border-t`: the "Fields marked * are
   required" hint on the left, **Cancel** (outline) then the primary submit on
   the right.
+
+The pieces live in `frontend/src/components/forms/form-layout.tsx`; use them
+rather than re-creating the classes:
+
+```tsx
+<FormSection icon={Target} title="Staging" description="Staging system, type and TNM categories">
+  <FormField id="stagingSystem" label="System" required error={errors.stagingSystem}>…</FormField>
+</FormSection>
+<FormActions onCancel={back} busy={isPending}>
+  <Button type="submit">Save</Button>
+</FormActions>
+```
+
+`NATIVE_SELECT`, `FIELD_CONTROL` and `invalidProps(id, error)` cover native
+selects, dark-aware date pickers and the error wiring. The oncology forms put
+the patient and cancer diagnosis above the fields with
+`plugins/oncology/components/FormContextCards.tsx` (`PatientPickerCard`,
+`PatientContextCard`, `DiagnosisPickerCard`, `DiagnosisContextCard`), which
+colour chips with theme tokens and the oncology status tone map.
 
 ### `StatCard`
 

@@ -32,20 +32,27 @@ Staging, tumour board cases, care plans and orders always belong to one diagnosi
 
 The **Add** and **Create** forms on these screens start the same way:
 
-1. Under **Select Patient**, search for the patient. Once chosen, they show in a blue banner with their
-   MRN, age, gender and phone. **Change** picks someone else.
-2. If the patient has exactly one active diagnosis it is chosen for you and shows in a rose banner
-   (cancer type, site, laterality, diagnosis date, spread, status, grade, histology). If they have more
-   than one, pick it under **Select Cancer Diagnosis**; **Change** on the banner lets you pick again.
+1. Under **Select Patient**, search for the patient. Once chosen, they show in a **Patient** card with
+   their MRN, age, gender and phone. **Change** picks someone else.
+2. If the patient has exactly one active diagnosis it is chosen for you and shows in a **Cancer
+   Diagnosis** card (cancer type, site, laterality, diagnosis date, spread, status, grade, histology). If
+   they have more than one, pick it under **Select Cancer Diagnosis**; **Change** on the card lets you
+   pick again.
 3. The rest of the form appears only once a diagnosis is chosen.
 
 **If instead:** the card says "No active cancer diagnoses found." Only diagnoses with clinical status
 **Active** are offered. Press **Add one first** to register the diagnosis, or edit the existing one back
 to Active.
 
+The staging, tumour board and care plan edit forms show the same two cards side by side, read-only,
+above the fields; **Edit Diagnosis** shows only the **Patient** card.
+
 The save button stays greyed out until every field marked with `*` is filled. These screens do not show a
 message when the server refuses a save: the form simply stays open. If that happens, check your entries
 and try again, and report it if it persists.
+
+To leave a form without saving, press **Cancel** at the bottom or the list's name in the breadcrumb at
+the top (for example **Tumor Staging** › New).
 
 ### Status colours
 
