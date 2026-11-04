@@ -1,0 +1,173 @@
+# Athma CE single-VM demo stack. See docs/runbooks/demo-environment-gcp.md.
+# Run from this directory: docker compose up -d --build
+name: athma-demo
+
+x-backend: &backend
+  image: athma-demo-backend:latest
+  build:
+    context: ../..
+    dockerfile: infrastructure/demo-gcp/Dockerfile.backend
+  restart: unless-stopped
+  depends_on:
+    postgres: { condition: service_healthy }
+    redis: { condition: service_healthy }
+  environment: &backend-env
+    NODE_ENV: production
+    LOG_LEVEL: info
+    FOUNDATION_DATABASE_URL: postgresql://zeal_user:${POSTGRES_PASSWORD}@postgres:5432/zeal_foundation?schema=public
+    CLINICAL_DATABASE_URL: postgresql://zeal_user:${POSTGRES_PASSWORD}@postgres:5432/zeal_clinical?schema=public
+    RCM_DATABASE_URL: postgresql://zeal_user:${POSTGRES_PASSWORD}@postgres:5432/zeal_rcm?schema=public
+    ANALYTICS_DATABASE_URL: postgresql://zeal_user:${POSTGRES_PASSWORD}@postgres:5432/zeal_analytics?schema=public
+    PRM_DATABASE_URL: postgresql://zeal_user:${POSTGRES_PASSWORD}@postgres:5432/zeal_prm?schema=public
+    ABDM_DATABASE_URL: postgresql://zeal_user:${POSTGRES_PASSWORD}@postgres:5432/zeal_abdm?schema=public
+    REDIS_URL: redis://redis:6379
+    JWT_SECRET: ${JWT_SECRET}
+    JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+    JWT_RESET_SECRET: ${JWT_RESET_SECRET}
+    INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+    SECRETS_MASTER_KEY: ${SECRETS_MASTER_KEY}
+    SECRETS_MASTER_KEY_VERSION: "1"
+    CORS_ORIGINS: https://app.${DEMO_DOMAIN}
+    FOUNDATION_API_URL: http://foundation:3010/api/v1
+    FOUNDATION_BASE_URL: http://foundation:3010
+    FOUNDATION_SERVICE_URL: http://foundation:3010
+    CONFIG_API_URL: http://foundation:3010/configs
+    CLINICAL_API_URL: http://clinical:3011
+    CLINICAL_BASE_URL: http://clinical:3011
+    CLINICAL_SERVICE_URL: http://clinical:3011
+    CLINICAL_CONSENT_SERVICE_URL: http://clinical:3011/api/v1/consent
+    RCM_SERVICE_URL: http://rcm:3012
+    ABDM_CONNECTOR_URL: http://abdm-connector:3016
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: zeal_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    command: ["postgres", "-c", "shared_buffers=256MB", "-c", "max_connections=200"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../../init-scripts:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zeal_user -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  foundation:
+    <<: *backend
+    working_dir: /app/backend/services/foundation
+    command: ["node", "dist/services/foundation/src/main.js"]
+    environment:
+      <<: *backend-env
+      PORT: "3010"
+
+  clinical:
+    <<: *backend
+    working_dir: /app/backend/services/clinical
+    # Runs via ts-node (transpile-only) because the oncology plugin's module
+    # entrypoint is TypeScript and is require()d at boot.
+    command: ["npx", "ts-node", "-r", "tsconfig-paths/register", "--transpile-only", "--project", "tsconfig.build.json", "src/main.ts"]
+    environment:
+      <<: *backend-env
+      PORT: "3011"
+      NODE_PATH: node_modules:../../node_modules
+      STORAGE_BASE_PATH: /data/uploads
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      foundation: { condition: service_started }
+
+  rcm:
+    <<: *backend
+    working_dir: /app/backend/services/rcm
+    command: ["node", "dist/services/rcm/src/main.js"]
+    environment:
+      <<: *backend-env
+      PORT: "3012"
+
+  prm:
+    <<: *backend
+    working_dir: /app/backend/services/prm
+    command: ["node", "dist/services/prm/src/main.js"]
+    environment:
+      <<: *backend-env
+      PORT: "3013"
+      JOB_WORKER_INSTANCE_ID: demo-worker-1
+      # PRM validates these at boot; the demo has no OIDC provider.
+      OIDC_ISSUER: https://auth.invalid
+      OIDC_CLIENT_ID: prm-demo
+      OIDC_CLIENT_SECRET: unused-in-demo
+      OIDC_CALLBACK_URL: https://prm.${DEMO_DOMAIN}/auth/callback
+      OIDC_TENANT_CLAIM: tid
+      OIDC_USER_CLAIM: sub
+
+  ai-gateway:
+    <<: *backend
+    working_dir: /app/backend/services/ai-gateway
+    command: ["node", "dist/services/ai-gateway/src/main.js"]
+    environment:
+      <<: *backend-env
+      PORT: "3015"
+      FOUNDATION_API_URL: http://foundation:3010/api/v1
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+
+  abdm-connector:
+    <<: *backend
+    working_dir: /app/backend/connectors/abdm-connector
+    command: ["node", "dist/main.js"]
+    environment:
+      <<: *backend-env
+      PORT: "3016"
+
+  frontend:
+    image: athma-demo-frontend:latest
+    restart: unless-stopped
+    build:
+      context: ../..
+      dockerfile: infrastructure/demo-gcp/Dockerfile.frontend
+      args:
+        NEXT_PUBLIC_FOUNDATION_BASE_URL: https://foundation.${DEMO_DOMAIN}
+        NEXT_PUBLIC_AUTH_BASE_URL: https://foundation.${DEMO_DOMAIN}
+        NEXT_PUBLIC_CLINICAL_BASE_URL: https://clinical.${DEMO_DOMAIN}
+        NEXT_PUBLIC_RCM_BASE_URL: https://rcm.${DEMO_DOMAIN}
+        NEXT_PUBLIC_RCM_CLAIMS_BASE_URL: https://rcm.${DEMO_DOMAIN}
+        NEXT_PUBLIC_PRM_BASE_URL: https://prm.${DEMO_DOMAIN}
+        NEXT_PUBLIC_AI_GATEWAY_BASE_URL: https://ai.${DEMO_DOMAIN}
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DEMO_DOMAIN: ${DEMO_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+      - caddyconfig:/config
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:
+  caddydata:
+  caddyconfig:
