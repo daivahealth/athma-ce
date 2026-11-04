@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
+import type { PatientDisplayDto } from '@zeal/contracts';
+import {
+  STANDARD_PATIENT_SELECT,
+  type StandardPatientData,
+} from '../../common/constants/patient-select.constant';
 
 export interface PatientResultSummary {
   id: string;
@@ -9,6 +14,7 @@ export interface PatientResultSummary {
   orderNameAr?: string | null;
   patientId: string;
   patientName: string;
+  patientDisplay?: PatientDisplayDto | null;
   encounterId: string;
   reportStatus: string;
   reportedAt: Date | null;
@@ -73,21 +79,47 @@ function collapseResultsByOrder<T extends Omit<PatientResultSummary, 'patientNam
 export class PatientResultsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private async resolvePatientNames(
+  private calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  private buildPatientDisplay(patient: StandardPatientData): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName:
+        patient.displayName || [patient.firstName, patient.lastName].filter(Boolean).join(' '),
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: patient.dateOfBirth.toISOString().slice(0, 10),
+      gender: patient.gender,
+    };
+  }
+
+  /** Resolve patient display info (name, MRN, age, gender) for a set of patients. */
+  private async resolvePatients(
     tenantId: string,
     patientIds: string[],
-  ): Promise<Map<string, string>> {
+  ): Promise<Map<string, PatientDisplayDto>> {
     const unique = [...new Set(patientIds)];
     if (unique.length === 0) return new Map();
 
     const patients = await this.prisma.patient.findMany({
       where: { tenantId, id: { in: unique } },
-      select: { id: true, firstName: true, lastName: true },
+      select: STANDARD_PATIENT_SELECT,
     });
 
-    const map = new Map<string, string>();
+    const map = new Map<string, PatientDisplayDto>();
     for (const p of patients) {
-      map.set(p.id, [p.firstName, p.lastName].filter(Boolean).join(' '));
+      map.set(p.id, this.buildPatientDisplay(p as StandardPatientData));
     }
     return map;
   }
@@ -376,7 +408,7 @@ export class PatientResultsService {
 
     // Resolve patient names for the current page only
     const [nameMap, specimenNumberMap] = await Promise.all([
-      this.resolvePatientNames(
+      this.resolvePatients(
         tenantId,
         paged.map((r) => r.patientId),
       ),
@@ -388,7 +420,8 @@ export class PatientResultsService {
 
     const withNames: PatientResultSummary[] = paged.map((r) => ({
       ...r,
-      patientName: nameMap.get(r.patientId) || 'Unknown',
+      patientName: nameMap.get(r.patientId)?.displayName || 'Unknown',
+      patientDisplay: nameMap.get(r.patientId) ?? null,
       ...(r.reportType === 'lab' && r.labSummary
         ? {
             labSummary: {
@@ -567,7 +600,7 @@ export class PatientResultsService {
     const paged = results.slice(skip, skip + limit);
 
     const [nameMap, specimenNumberMap] = await Promise.all([
-      this.resolvePatientNames(
+      this.resolvePatients(
         tenantId,
         paged.map((r) => r.patientId),
       ),
@@ -579,7 +612,8 @@ export class PatientResultsService {
 
     const withNames: PatientResultSummary[] = paged.map((r) => ({
       ...r,
-      patientName: nameMap.get(r.patientId) || 'Unknown',
+      patientName: nameMap.get(r.patientId)?.displayName || 'Unknown',
+      patientDisplay: nameMap.get(r.patientId) ?? null,
       ...(r.reportType === 'lab' && r.labSummary
         ? {
             labSummary: {
@@ -726,7 +760,7 @@ export class PatientResultsService {
     partial.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
     const [nameMap, specimenNumberMap] = await Promise.all([
-      this.resolvePatientNames(
+      this.resolvePatients(
         tenantId,
         partial.map((r) => r.patientId),
       ),
@@ -738,7 +772,8 @@ export class PatientResultsService {
 
     return partial.map((r) => ({
       ...r,
-      patientName: nameMap.get(r.patientId) || 'Unknown',
+      patientName: nameMap.get(r.patientId)?.displayName || 'Unknown',
+      patientDisplay: nameMap.get(r.patientId) ?? null,
       ...(r.reportType === 'lab' && r.labSummary
         ? {
             labSummary: {
@@ -836,7 +871,7 @@ export class PatientResultsService {
       take: limit,
     });
 
-    const nameMap = await this.resolvePatientNames(
+    const nameMap = await this.resolvePatients(
       tenantId,
       orders.map((o) => o.patientId),
     );
@@ -846,7 +881,7 @@ export class PatientResultsService {
       orderName: o.orderName,
       orderNameAr: o.orderNameAr,
       patientId: o.patientId,
-      patientName: nameMap.get(o.patientId) || 'Unknown',
+      patientName: nameMap.get(o.patientId)?.displayName || 'Unknown',
       encounterId: o.encounterId,
       status: o.status,
       orderedAt: o.orderedAt,

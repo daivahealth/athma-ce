@@ -1,3 +1,4 @@
+import type { PatientDisplay } from './encounter';
 // ========================================
 // ENUMS
 // ========================================
@@ -307,6 +308,7 @@ export interface PatientResult {
   orderNameAr?: string | null;
   patientId: string;
   patientName: string;
+  patientDisplay?: PatientDisplay | null;
   encounterId: string;
   reportStatus: string;
   reportedAt: string | null;
