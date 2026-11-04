@@ -2,13 +2,22 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CalendarDays, ListOrdered, Plus, UserRound } from 'lucide-react';
+import { FIELD_CONTROL, FormActions, FormField, FormSection } from '@/components/forms/form-layout';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { InvoiceStatus, type CreateInvoiceInput } from '../types/invoice';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
+import type { Patient } from '@/modules/clinical/types/patient';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import { PatientSearchSelect } from '@/components/patient-search-select';
@@ -23,6 +32,7 @@ interface InvoiceFormProps {
   onSubmit: (payload: CreateInvoiceInput) => Promise<void> | void;
   isSubmitting?: boolean;
   showCurrencyField?: boolean;
+  onCancel?: () => void;
 }
 
 interface LineDraft {
@@ -35,6 +45,8 @@ interface LineDraft {
   unitPrice: string;
   lineDiscount: string;
 }
+
+type PatientEncounter = NonNullable<ReturnType<typeof usePatientEncounters>['data']>[number];
 
 const createTempId = () => `line-${Math.random().toString(36).slice(2)}-${Date.now()}`;
 
@@ -49,12 +61,17 @@ const createEmptyLine = (): LineDraft => ({
   lineDiscount: '0',
 });
 
-export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }: InvoiceFormProps) {
+export function InvoiceForm({
+  onSubmit,
+  isSubmitting,
+  showCurrencyField = true,
+  onCancel,
+}: InvoiceFormProps) {
   const [patientId, setPatientId] = useState('');
-  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [encounterDateFilter, setEncounterDateFilter] = useState('');
   const [encounterDoctorFilter, setEncounterDoctorFilter] = useState('');
-  const [selectedEncounter, setSelectedEncounter] = useState<any | null>(null);
+  const [selectedEncounter, setSelectedEncounter] = useState<PatientEncounter | null>(null);
   const [encounterId, setEncounterId] = useState('');
   const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().slice(0, 10));
   const [dueDate, setDueDate] = useState('');
@@ -166,8 +183,7 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
               billingItemId: item.id,
               selectedBillingItem: item,
               description: item.billingDescription,
-              unitPrice:
-                item.listPrice != null ? String(Number(item.listPrice)) : line.unitPrice,
+              unitPrice: item.listPrice != null ? String(Number(item.listPrice)) : line.unitPrice,
             }
           : line,
       ),
@@ -192,7 +208,9 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
   };
 
   const handleLineChange = (tempId: string, field: keyof LineDraft, value: string) => {
-    setLines((prev) => prev.map((line) => (line.tempId === tempId ? { ...line, [field]: value } : line)));
+    setLines((prev) =>
+      prev.map((line) => (line.tempId === tempId ? { ...line, [field]: value } : line)),
+    );
   };
 
   const handleRemoveLine = (tempId: string) => {
@@ -278,8 +296,8 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
         computed.balanceDue <= 0
           ? InvoiceStatus.PAID
           : computed.paid > 0
-          ? InvoiceStatus.PARTIAL
-          : InvoiceStatus.UNPAID,
+            ? InvoiceStatus.PARTIAL
+            : InvoiceStatus.UNPAID,
       currency,
       invoiceLines: computed.parsedLines.map((line) => ({
         chargeId: allChargeIds[line.lineNumber],
@@ -299,154 +317,192 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Invoice information</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div className="md:col-span-2">
-            <PatientSearchSelect
-              required
-              selectedPatient={selectedPatient}
-              onSelect={(patient) => {
-                setSelectedPatient(patient);
-                setPatientId(patient.id);
-                setSelectedEncounter(null);
-                setEncounterId('');
-                setEncounterDateFilter('');
-                setEncounterDoctorFilter('');
-                setLines([createEmptyLine()]);
-              }}
-              onClear={() => {
-                setSelectedPatient(null);
-                setPatientId('');
-                setSelectedEncounter(null);
-                setEncounterId('');
-                setEncounterDateFilter('');
-                setEncounterDoctorFilter('');
-                setLines([createEmptyLine()]);
-              }}
-            />
-          </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label>Encounter</Label>
-            {!patientId && (
-              <p className="text-xs text-muted-foreground">Select a patient to view encounters.</p>
-            )}
-            {patientId && !selectedEncounter && (
-              <div className="space-y-3">
-                <div className="grid gap-3 md:grid-cols-2">
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">Date</Label>
-                    <Input
-                      type="date"
-                      value={encounterDateFilter}
-                      onChange={(event) => setEncounterDateFilter(event.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">Doctor name</Label>
-                    <Input
-                      placeholder="Search by doctor"
-                      value={encounterDoctorFilter}
-                      onChange={(event) => setEncounterDoctorFilter(event.target.value)}
-                    />
-                  </div>
+      <FormSection
+        icon={UserRound}
+        title="Patient & encounter"
+        description="Who is billed, and the visit the charges come from"
+      >
+        <div>
+          <PatientSearchSelect
+            required
+            selectedPatient={selectedPatient}
+            onSelect={(patient) => {
+              setSelectedPatient(patient);
+              setPatientId(patient.id);
+              setSelectedEncounter(null);
+              setEncounterId('');
+              setEncounterDateFilter('');
+              setEncounterDoctorFilter('');
+              setLines([createEmptyLine()]);
+            }}
+            onClear={() => {
+              setSelectedPatient(null);
+              setPatientId('');
+              setSelectedEncounter(null);
+              setEncounterId('');
+              setEncounterDateFilter('');
+              setEncounterDoctorFilter('');
+              setLines([createEmptyLine()]);
+            }}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Encounter</Label>
+          {!patientId && (
+            <p className="text-xs text-muted-foreground">Select a patient to view encounters.</p>
+          )}
+          {patientId && !selectedEncounter && (
+            <div className="space-y-3">
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">Date</Label>
+                  <Input
+                    type="date"
+                    className={FIELD_CONTROL}
+                    value={encounterDateFilter}
+                    onChange={(event) => setEncounterDateFilter(event.target.value)}
+                  />
                 </div>
-                {isEncountersLoading && (
-                  <p className="text-xs text-muted-foreground">Loading encounters...</p>
-                )}
-                {!isEncountersLoading && filteredEncounters.length === 0 && (
-                  <p className="text-xs text-muted-foreground">No encounters match your filters.</p>
-                )}
-                {filteredEncounters.length > 0 && (
-                  <div className="max-h-48 overflow-auto rounded-md border p-2">
-                    {filteredEncounters.map((encounter) => (
-                      <button
-                        key={encounter.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedEncounter(encounter);
-                          setEncounterId(encounter.id);
-                        }}
-                        className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
-                      >
-                        <span className="font-medium">
-                          {format(new Date(encounter.startTime), 'PPP p')}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          Dr. {staffLookup[encounter.primaryStaffId] || 'Unknown'} · {encounter.status}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-            {selectedEncounter && (
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
-                <div>
-                  <p className="font-medium">{format(new Date(selectedEncounter.startTime), 'PPP p')}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Dr. {staffLookup[selectedEncounter.primaryStaffId] || 'Unknown'} · {selectedEncounter.status}
-                  </p>
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">Doctor name</Label>
+                  <Input
+                    placeholder="Search by doctor"
+                    value={encounterDoctorFilter}
+                    onChange={(event) => setEncounterDoctorFilter(event.target.value)}
+                  />
                 </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedEncounter(null);
-                    setEncounterId('');
-                    setLines([createEmptyLine()]);
-                  }}
-                >
-                  Change
-                </Button>
               </div>
-            )}
-          </div>
-          {showCurrencyField && (
-            <div className="space-y-2">
-              <Label>Currency</Label>
-              <Input
-                value={currency}
-                onChange={(event) => {
-                  setCurrency(event.target.value);
-                  setCurrencyDirty(true);
-                }}
-                placeholder="AED"
-              />
+              {isEncountersLoading && (
+                <p className="text-xs text-muted-foreground">Loading encounters...</p>
+              )}
+              {!isEncountersLoading && filteredEncounters.length === 0 && (
+                <p className="text-xs text-muted-foreground">No encounters match your filters.</p>
+              )}
+              {filteredEncounters.length > 0 && (
+                <div className="max-h-48 overflow-auto rounded-md border p-2">
+                  {filteredEncounters.map((encounter) => (
+                    <button
+                      key={encounter.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedEncounter(encounter);
+                        setEncounterId(encounter.id);
+                      }}
+                      className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
+                    >
+                      <span className="font-medium">
+                        {format(new Date(encounter.startTime), 'PPP p')}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        Dr. {staffLookup[encounter.primaryStaffId] || 'Unknown'} ·{' '}
+                        {encounter.status}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
-          <div className="space-y-2">
-            <Label>Invoice date</Label>
-            <Input type="date" value={invoiceDate} onChange={(event) => setInvoiceDate(event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Due date</Label>
-            <Input type="date" value={dueDate} onChange={(event) => setDueDate(event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Amount paid</Label>
-            <Input type="number" step="0.01" value={amountPaid} onChange={(event) => setAmountPaid(event.target.value)} />
-          </div>
-        </CardContent>
-      </Card>
+          {selectedEncounter && (
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
+              <div>
+                <p className="font-medium">
+                  {format(new Date(selectedEncounter.startTime), 'PPP p')}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Dr. {staffLookup[selectedEncounter.primaryStaffId] || 'Unknown'} ·{' '}
+                  {selectedEncounter.status}
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSelectedEncounter(null);
+                  setEncounterId('');
+                  setLines([createEmptyLine()]);
+                }}
+              >
+                Change
+              </Button>
+            </div>
+          )}
+        </div>
+      </FormSection>
 
-      <Card>
-        <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <CardTitle>Invoice lines</CardTitle>
-          <Button type="button" variant="outline" onClick={handleAddLine}>
+      <FormSection
+        icon={CalendarDays}
+        title="Invoice details"
+        description="Dates and any amount already collected"
+        contentClassName="grid gap-4 md:grid-cols-3"
+      >
+        {showCurrencyField && (
+          <FormField id="currency" label="Currency">
+            <Input
+              id="currency"
+              value={currency}
+              onChange={(event) => {
+                setCurrency(event.target.value);
+                setCurrencyDirty(true);
+              }}
+              placeholder="AED"
+            />
+          </FormField>
+        )}
+        <FormField id="invoiceDate" label="Invoice date">
+          <Input
+            id="invoiceDate"
+            type="date"
+            className={FIELD_CONTROL}
+            value={invoiceDate}
+            onChange={(event) => setInvoiceDate(event.target.value)}
+          />
+        </FormField>
+        <FormField id="dueDate" label="Due date">
+          <Input
+            id="dueDate"
+            type="date"
+            className={FIELD_CONTROL}
+            value={dueDate}
+            onChange={(event) => setDueDate(event.target.value)}
+          />
+        </FormField>
+        <FormField id="amountPaid" label="Amount paid">
+          <Input
+            id="amountPaid"
+            type="number"
+            step="0.01"
+            value={amountPaid}
+            onChange={(event) => setAmountPaid(event.target.value)}
+          />
+        </FormField>
+      </FormSection>
+
+      <FormSection
+        icon={ListOrdered}
+        title="Invoice lines"
+        description="Charge items billed on this invoice"
+        actions={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={handleAddLine}
+          >
+            <Plus className="h-4 w-4" />
             Add line
           </Button>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="[&>div]:overflow-visible">
+        }
+      >
+        <div className="[&>div]:overflow-visible">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="min-w-[220px]">Charge Item *</TableHead>
+                <TableHead className="min-w-[220px]">
+                  Charge Item<span className="ml-0.5 text-destructive">*</span>
+                </TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Qty</TableHead>
                 <TableHead>Unit price</TableHead>
@@ -473,7 +529,9 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
                     <TableCell>
                       <Input
                         value={line.description}
-                        onChange={(event) => handleLineChange(line.tempId, 'description', event.target.value)}
+                        onChange={(event) =>
+                          handleLineChange(line.tempId, 'description', event.target.value)
+                        }
                         placeholder="Description"
                         className="h-8 text-sm"
                       />
@@ -484,7 +542,9 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
                         step="1"
                         min="0"
                         value={line.quantity}
-                        onChange={(event) => handleLineChange(line.tempId, 'quantity', event.target.value)}
+                        onChange={(event) =>
+                          handleLineChange(line.tempId, 'quantity', event.target.value)
+                        }
                         className="h-8 text-sm"
                       />
                     </TableCell>
@@ -493,7 +553,9 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
                         type="number"
                         step="0.01"
                         value={line.unitPrice}
-                        onChange={(event) => handleLineChange(line.tempId, 'unitPrice', event.target.value)}
+                        onChange={(event) =>
+                          handleLineChange(line.tempId, 'unitPrice', event.target.value)
+                        }
                         className="h-8 text-sm"
                       />
                     </TableCell>
@@ -502,7 +564,9 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
                         type="number"
                         step="0.01"
                         value={line.lineDiscount}
-                        onChange={(event) => handleLineChange(line.tempId, 'lineDiscount', event.target.value)}
+                        onChange={(event) =>
+                          handleLineChange(line.tempId, 'lineDiscount', event.target.value)
+                        }
                         className="h-8 text-sm"
                       />
                     </TableCell>
@@ -510,7 +574,13 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
                       <span className="font-mono text-sm">{total.toFixed(2)}</span>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button type="button" variant="ghost" size="sm" disabled={lines.length === 1} onClick={() => handleRemoveLine(line.tempId)}>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        disabled={lines.length === 1}
+                        onClick={() => handleRemoveLine(line.tempId)}
+                      >
                         Remove
                       </Button>
                     </TableCell>
@@ -519,38 +589,43 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
               })}
             </TableBody>
           </Table>
-          </div>
+        </div>
 
-          <div className="grid gap-2 rounded-md border p-4 text-sm">
-            <div className="flex items-center justify-between">
-              <span>Gross amount</span>
-              <span className="font-mono">{computed.grossAmount.toFixed(2)} {currency}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Total discounts</span>
-              <span className="font-mono">{computed.totalDiscounts.toFixed(2)} {currency}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="font-medium">Net amount</span>
-              <span className="font-mono font-semibold">{computed.netAmount.toFixed(2)} {currency}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Amount paid</span>
-              <span className="font-mono">{computed.paid.toFixed(2)} {currency}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="font-medium">Balance due</span>
-              <span className="font-mono font-semibold">{computed.balanceDue.toFixed(2)} {currency}</span>
-            </div>
+        <div className="grid gap-2 rounded-md border border-border bg-muted/30 p-4 text-sm">
+          <div className="flex items-center justify-between">
+            <span>Gross amount</span>
+            <span className="font-mono">
+              {computed.grossAmount.toFixed(2)} {currency}
+            </span>
           </div>
-        </CardContent>
-      </Card>
+          <div className="flex items-center justify-between">
+            <span>Total discounts</span>
+            <span className="font-mono">
+              {computed.totalDiscounts.toFixed(2)} {currency}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="font-medium">Net amount</span>
+            <span className="font-mono font-semibold">
+              {computed.netAmount.toFixed(2)} {currency}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span>Amount paid</span>
+            <span className="font-mono">
+              {computed.paid.toFixed(2)} {currency}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="font-medium">Balance due</span>
+            <span className="font-mono font-semibold">
+              {computed.balanceDue.toFixed(2)} {currency}
+            </span>
+          </div>
+        </div>
+      </FormSection>
 
-      <div className="flex justify-end gap-3">
-        <Button type="submit" disabled={submitting}>
-          {submitting ? 'Saving…' : 'Create invoice'}
-        </Button>
-      </div>
+      <FormActions submitLabel="Create invoice" isSubmitting={submitting} onCancel={onCancel} />
     </form>
   );
 }

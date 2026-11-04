@@ -3,9 +3,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
+import { Coins, Tag } from 'lucide-react';
+import { FormActions, FormField, FormSection } from '@/components/forms/form-layout';
 import type { BillingItem } from '../types/billing-item';
 import {
   ItemType,
@@ -120,128 +127,136 @@ export function BillingItemForm({
   const codeTypeOptions = Object.values(BillingCodeType);
 
   return (
-    <form className="space-y-5" onSubmit={handleSubmit}>
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label>Item type *</Label>
-          <Select value={form.itemType} onValueChange={(value) => handleChange('itemType', value)}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {itemTypeOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {startCase(option)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <form className="space-y-6" onSubmit={handleSubmit}>
+      <FormSection
+        icon={Tag}
+        title="Billing code"
+        description="What is billed and under which code system"
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField id="itemType" label="Item type" required>
+            <Select
+              value={form.itemType}
+              onValueChange={(value) => handleChange('itemType', value)}
+            >
+              <SelectTrigger id="itemType">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {itemTypeOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {startCase(option)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+          <FormField id="chargeType" label="Charge type" required>
+            <Select
+              value={form.chargeType}
+              onValueChange={(value) => handleChange('chargeType', value)}
+            >
+              <SelectTrigger id="chargeType">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {chargeTypeOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {startCase(option)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+          <FormField id="billingCode" label="Billing code" required>
+            <Input
+              id="billingCode"
+              value={form.billingCode}
+              onChange={(event) => handleChange('billingCode', event.target.value)}
+              placeholder="e.g., CPT 99203"
+              required
+            />
+          </FormField>
+          <FormField id="billingCodeType" label="Code system" required>
+            <Select
+              value={form.billingCodeType}
+              onValueChange={(value) => handleChange('billingCodeType', value)}
+            >
+              <SelectTrigger id="billingCodeType">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {codeTypeOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {startCase(option)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
         </div>
-        <div className="space-y-2">
-          <Label>Charge type *</Label>
-          <Select value={form.chargeType} onValueChange={(value) => handleChange('chargeType', value)}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {chargeTypeOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {startCase(option)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label>Billing code *</Label>
+        <FormField id="billingDescription" label="Description" required>
           <Input
-            value={form.billingCode}
-            onChange={(event) => handleChange('billingCode', event.target.value)}
-            placeholder="e.g., CPT 99203"
+            id="billingDescription"
+            value={form.billingDescription}
+            onChange={(event) => handleChange('billingDescription', event.target.value)}
+            placeholder="Consultation 30 minutes"
             required
           />
-        </div>
-        <div className="space-y-2">
-          <Label>Code system *</Label>
-          <Select
-            value={form.billingCodeType}
-            onValueChange={(value) => handleChange('billingCodeType', value)}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {codeTypeOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {startCase(option)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+        </FormField>
+      </FormSection>
 
-      <div className="space-y-2">
-        <Label>Description *</Label>
-        <Input
-          value={form.billingDescription}
-          onChange={(event) => handleChange('billingDescription', event.target.value)}
-          placeholder="Consultation 30 minutes"
-          required
-        />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label>Default unit</Label>
-          <Input
-            value={form.defaultUnit}
-            onChange={(event) => handleChange('defaultUnit', event.target.value)}
-            placeholder="each"
+      <FormSection
+        icon={Coins}
+        title="Pricing & status"
+        description="Default unit, list price and availability"
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          <FormField id="defaultUnit" label="Default unit">
+            <Input
+              id="defaultUnit"
+              value={form.defaultUnit}
+              onChange={(event) => handleChange('defaultUnit', event.target.value)}
+              placeholder="each"
+            />
+          </FormField>
+          <FormField id="listPrice" label={`List price (${currency})`}>
+            <Input
+              id="listPrice"
+              type="number"
+              step="0.01"
+              value={form.listPrice}
+              onChange={(event) => handleChange('listPrice', event.target.value)}
+              placeholder="150.00"
+            />
+          </FormField>
+          <FormField id="clinicalRefId" label="Clinical reference ID">
+            <Input
+              id="clinicalRefId"
+              value={form.clinicalRefId}
+              onChange={(event) => handleChange('clinicalRefId', event.target.value)}
+              placeholder="Catalog item ID (optional)"
+            />
+          </FormField>
+        </div>
+        <div className="flex items-center justify-between gap-4 rounded-md border border-border px-4 py-3">
+          <div>
+            <Label htmlFor="isActive" className="font-medium">
+              Is active?
+            </Label>
+            <p className="text-sm text-muted-foreground">
+              Inactive codes are hidden from ordering workflows.
+            </p>
+          </div>
+          <Switch
+            id="isActive"
+            checked={form.isActive}
+            onCheckedChange={(checked) => handleChange('isActive', checked)}
           />
         </div>
-        <div className="space-y-2">
-          <Label>List price ({currency})</Label>
-          <Input
-            type="number"
-            step="0.01"
-            value={form.listPrice}
-            onChange={(event) => handleChange('listPrice', event.target.value)}
-            placeholder="150.00"
-          />
-        </div>
-      </div>
+      </FormSection>
 
-      <div className="space-y-2">
-        <Label>Clinical reference ID</Label>
-        <Input
-          value={form.clinicalRefId}
-          onChange={(event) => handleChange('clinicalRefId', event.target.value)}
-          placeholder="Catalog item ID (optional)"
-        />
-      </div>
-
-      <div className="flex items-center justify-between rounded-md border px-4 py-3">
-        <div>
-          <p className="font-medium">Is active?</p>
-          <p className="text-sm text-muted-foreground">Inactive codes are hidden from ordering workflows.</p>
-        </div>
-        <Switch checked={form.isActive} onCheckedChange={(checked) => handleChange('isActive', checked)} />
-      </div>
-
-      <div className="flex justify-end gap-3">
-        {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
-            Cancel
-          </Button>
-        )}
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : submitLabel}
-        </Button>
-      </div>
+      <FormActions submitLabel={submitLabel} isSubmitting={isSubmitting} onCancel={onCancel} />
     </form>
   );
 }

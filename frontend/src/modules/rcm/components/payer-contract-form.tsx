@@ -1,12 +1,18 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileSignature, Percent } from 'lucide-react';
+import { FIELD_CONTROL, FormActions, FormSection } from '@/components/forms/form-layout';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { PayerContract } from '../types/payer-contract';
 import {
   AuthorityCode,
@@ -26,31 +32,45 @@ interface PayerContractFormProps {
   onCancel?: () => void;
 }
 
-const toLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+const toLabel = (value: string) =>
+  value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
-export function PayerContractForm({ initialValues, submitLabel = 'Save contract', isSubmitting, onSubmit, onCancel }: PayerContractFormProps) {
-  const hydratedState = useMemo(() => ({
-    payerId: initialValues?.payerId ?? '',
-    contractName: initialValues?.contractName ?? '',
-    contractNumber: initialValues?.contractNumber ?? '',
-    authorityCode: initialValues?.authorityCode ?? AuthorityCode.DHA,
-    baseFeeScheduleId: initialValues?.baseFeeScheduleId ?? '',
-    planCode: initialValues?.planCode ?? '',
-    networkType: initialValues?.networkType ?? '',
-    lineOfBusiness: initialValues?.lineOfBusiness ?? '',
-    contractType: initialValues?.contractType ?? ContractType.FEE_FOR_SERVICE,
-    reimbursementMethod: initialValues?.reimbursementMethod ?? ReimbursementMethod.PERCENTAGE_OF_TARIFF,
-    effectiveFrom: initialValues?.effectiveFrom ? initialValues.effectiveFrom.slice(0, 10) : '',
-    effectiveTo: initialValues?.effectiveTo ? initialValues.effectiveTo.slice(0, 10) : '',
-    status: initialValues?.status ?? ContractStatus.ACTIVE,
-    defaultMultiplier: initialValues?.defaultMultiplier != null ? String(initialValues.defaultMultiplier) : '',
-    defaultDiscountPct: initialValues?.defaultDiscountPct != null ? String(initialValues.defaultDiscountPct) : '',
-    defaultMaxAllowedAmount: initialValues?.defaultMaxAllowedAmount != null
-      ? String(initialValues.defaultMaxAllowedAmount)
-      : '',
-    terms: initialValues?.terms ? JSON.stringify(initialValues.terms, null, 2) : '',
-    metadata: initialValues?.metadata ? JSON.stringify(initialValues.metadata, null, 2) : '',
-  }), [initialValues]);
+export function PayerContractForm({
+  initialValues,
+  submitLabel = 'Save contract',
+  isSubmitting,
+  onSubmit,
+  onCancel,
+}: PayerContractFormProps) {
+  const hydratedState = useMemo(
+    () => ({
+      payerId: initialValues?.payerId ?? '',
+      contractName: initialValues?.contractName ?? '',
+      contractNumber: initialValues?.contractNumber ?? '',
+      authorityCode: initialValues?.authorityCode ?? AuthorityCode.DHA,
+      baseFeeScheduleId: initialValues?.baseFeeScheduleId ?? '',
+      planCode: initialValues?.planCode ?? '',
+      networkType: initialValues?.networkType ?? '',
+      lineOfBusiness: initialValues?.lineOfBusiness ?? '',
+      contractType: initialValues?.contractType ?? ContractType.FEE_FOR_SERVICE,
+      reimbursementMethod:
+        initialValues?.reimbursementMethod ?? ReimbursementMethod.PERCENTAGE_OF_TARIFF,
+      effectiveFrom: initialValues?.effectiveFrom ? initialValues.effectiveFrom.slice(0, 10) : '',
+      effectiveTo: initialValues?.effectiveTo ? initialValues.effectiveTo.slice(0, 10) : '',
+      status: initialValues?.status ?? ContractStatus.ACTIVE,
+      defaultMultiplier:
+        initialValues?.defaultMultiplier != null ? String(initialValues.defaultMultiplier) : '',
+      defaultDiscountPct:
+        initialValues?.defaultDiscountPct != null ? String(initialValues.defaultDiscountPct) : '',
+      defaultMaxAllowedAmount:
+        initialValues?.defaultMaxAllowedAmount != null
+          ? String(initialValues.defaultMaxAllowedAmount)
+          : '',
+      terms: initialValues?.terms ? JSON.stringify(initialValues.terms, null, 2) : '',
+      metadata: initialValues?.metadata ? JSON.stringify(initialValues.metadata, null, 2) : '',
+    }),
+    [initialValues],
+  );
 
   const [form, setForm] = useState(hydratedState);
   useEffect(() => setForm(hydratedState), [hydratedState]);
@@ -107,7 +127,8 @@ export function PayerContractForm({ initialValues, submitLabel = 'Save contract'
     if (form.effectiveTo) payload.effectiveTo = new Date(form.effectiveTo).toISOString();
     if (form.defaultMultiplier) payload.defaultMultiplier = Number(form.defaultMultiplier);
     if (form.defaultDiscountPct) payload.defaultDiscountPct = Number(form.defaultDiscountPct);
-    if (form.defaultMaxAllowedAmount) payload.defaultMaxAllowedAmount = Number(form.defaultMaxAllowedAmount);
+    if (form.defaultMaxAllowedAmount)
+      payload.defaultMaxAllowedAmount = Number(form.defaultMaxAllowedAmount);
     if (form.terms.trim()) payload.terms = parseJson(form.terms);
     if (form.metadata.trim()) payload.metadata = parseJson(form.metadata);
 
@@ -116,159 +137,238 @@ export function PayerContractForm({ initialValues, submitLabel = 'Save contract'
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Contract details</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label>Payer *</Label>
-            <Select value={form.payerId} onValueChange={(value) => handleChange('payerId', value)} disabled={isLoadingPayers} required>
-              <SelectTrigger>
-                <SelectValue placeholder={isLoadingPayers ? 'Loading payers...' : 'Select a payer'} />
-              </SelectTrigger>
-              <SelectContent>
-                {payers.map((payer) => (
-                  <SelectItem key={payer.id} value={payer.id}>
-                    {payer.payerName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Contract name *</Label>
-            <Input value={form.contractName} onChange={(event) => handleChange('contractName', event.target.value)} required />
-          </div>
-          <div className="space-y-2">
-            <Label>Contract number</Label>
-            <Input value={form.contractNumber} onChange={(event) => handleChange('contractNumber', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Authority</Label>
-            <Select value={form.authorityCode} onValueChange={(value) => handleChange('authorityCode', value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(AuthorityCode).map((code) => (
-                  <SelectItem key={code} value={code}>
-                    {code}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Base fee schedule ID</Label>
-            <Input value={form.baseFeeScheduleId} onChange={(event) => handleChange('baseFeeScheduleId', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Plan code</Label>
-            <Input value={form.planCode} onChange={(event) => handleChange('planCode', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Network type</Label>
-            <Input value={form.networkType} onChange={(event) => handleChange('networkType', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Line of business</Label>
-            <Input value={form.lineOfBusiness} onChange={(event) => handleChange('lineOfBusiness', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Contract type</Label>
-            <Select value={form.contractType} onValueChange={(value) => handleChange('contractType', value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(ContractType).map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {toLabel(type)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Reimbursement method</Label>
-            <Select value={form.reimbursementMethod} onValueChange={(value) => handleChange('reimbursementMethod', value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(ReimbursementMethod).map((method) => (
-                  <SelectItem key={method} value={method}>
-                    {toLabel(method)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Effective from *</Label>
-            <Input type="date" value={form.effectiveFrom} onChange={(event) => handleChange('effectiveFrom', event.target.value)} required />
-          </div>
-          <div className="space-y-2">
-            <Label>Effective to</Label>
-            <Input type="date" value={form.effectiveTo} onChange={(event) => handleChange('effectiveTo', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Status</Label>
-            <Select value={form.status} onValueChange={(value) => handleChange('status', value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(ContractStatus).map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {toLabel(status)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
+      <FormSection
+        icon={FileSignature}
+        title="Contract details"
+        description="Payer, plan and the period the contract covers"
+        contentClassName="grid gap-4 md:grid-cols-2"
+      >
+        <div className="space-y-2">
+          <Label htmlFor="payerId">
+            Payer<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Select
+            value={form.payerId}
+            onValueChange={(value) => handleChange('payerId', value)}
+            disabled={isLoadingPayers}
+            required
+          >
+            <SelectTrigger id="payerId">
+              <SelectValue placeholder={isLoadingPayers ? 'Loading payers...' : 'Select a payer'} />
+            </SelectTrigger>
+            <SelectContent>
+              {payers.map((payer) => (
+                <SelectItem key={payer.id} value={payer.id}>
+                  {payer.payerName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="contractName">
+            Contract name<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Input
+            id="contractName"
+            value={form.contractName}
+            onChange={(event) => handleChange('contractName', event.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="contractNumber">Contract number</Label>
+          <Input
+            id="contractNumber"
+            value={form.contractNumber}
+            onChange={(event) => handleChange('contractNumber', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="authorityCode">Authority</Label>
+          <Select
+            value={form.authorityCode}
+            onValueChange={(value) => handleChange('authorityCode', value)}
+          >
+            <SelectTrigger id="authorityCode">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(AuthorityCode).map((code) => (
+                <SelectItem key={code} value={code}>
+                  {code}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="baseFeeScheduleId">Base fee schedule ID</Label>
+          <Input
+            id="baseFeeScheduleId"
+            value={form.baseFeeScheduleId}
+            onChange={(event) => handleChange('baseFeeScheduleId', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="planCode">Plan code</Label>
+          <Input
+            id="planCode"
+            value={form.planCode}
+            onChange={(event) => handleChange('planCode', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="networkType">Network type</Label>
+          <Input
+            id="networkType"
+            value={form.networkType}
+            onChange={(event) => handleChange('networkType', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="lineOfBusiness">Line of business</Label>
+          <Input
+            id="lineOfBusiness"
+            value={form.lineOfBusiness}
+            onChange={(event) => handleChange('lineOfBusiness', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="contractType">Contract type</Label>
+          <Select
+            value={form.contractType}
+            onValueChange={(value) => handleChange('contractType', value)}
+          >
+            <SelectTrigger id="contractType">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(ContractType).map((type) => (
+                <SelectItem key={type} value={type}>
+                  {toLabel(type)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="reimbursementMethod">Reimbursement method</Label>
+          <Select
+            value={form.reimbursementMethod}
+            onValueChange={(value) => handleChange('reimbursementMethod', value)}
+          >
+            <SelectTrigger id="reimbursementMethod">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(ReimbursementMethod).map((method) => (
+                <SelectItem key={method} value={method}>
+                  {toLabel(method)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="effectiveFrom">
+            Effective from<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Input
+            id="effectiveFrom"
+            type="date"
+            className={FIELD_CONTROL}
+            value={form.effectiveFrom}
+            onChange={(event) => handleChange('effectiveFrom', event.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="effectiveTo">Effective to</Label>
+          <Input
+            id="effectiveTo"
+            type="date"
+            className={FIELD_CONTROL}
+            value={form.effectiveTo}
+            onChange={(event) => handleChange('effectiveTo', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">Status</Label>
+          <Select value={form.status} onValueChange={(value) => handleChange('status', value)}>
+            <SelectTrigger id="status">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(ContractStatus).map((status) => (
+                <SelectItem key={status} value={status}>
+                  {toLabel(status)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </FormSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Defaults & notes</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-3">
-          <div className="space-y-2">
-            <Label>Multiplier</Label>
-            <Input type="number" step="0.01" value={form.defaultMultiplier} onChange={(event) => handleChange('defaultMultiplier', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Discount %</Label>
-            <Input type="number" step="0.1" value={form.defaultDiscountPct} onChange={(event) => handleChange('defaultDiscountPct', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Max allowed</Label>
-            <Input type="number" step="0.01" value={form.defaultMaxAllowedAmount} onChange={(event) => handleChange('defaultMaxAllowedAmount', event.target.value)} />
-          </div>
-          <div className="space-y-2 md:col-span-3">
-            <Label>Terms (JSON)</Label>
-            <Textarea className="font-mono" rows={4} value={form.terms} onChange={(event) => handleChange('terms', event.target.value)} />
-          </div>
-          <div className="space-y-2 md:col-span-3">
-            <Label>Metadata (JSON)</Label>
-            <Textarea className="font-mono" rows={4} value={form.metadata} onChange={(event) => handleChange('metadata', event.target.value)} />
-          </div>
-        </CardContent>
-      </Card>
+      <FormSection
+        icon={Percent}
+        title="Defaults & notes"
+        description="Default pricing adjustments and contract terms"
+        contentClassName="grid gap-4 md:grid-cols-3"
+      >
+        <div className="space-y-2">
+          <Label htmlFor="defaultMultiplier">Multiplier</Label>
+          <Input
+            id="defaultMultiplier"
+            type="number"
+            step="0.01"
+            value={form.defaultMultiplier}
+            onChange={(event) => handleChange('defaultMultiplier', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="defaultDiscountPct">Discount %</Label>
+          <Input
+            id="defaultDiscountPct"
+            type="number"
+            step="0.1"
+            value={form.defaultDiscountPct}
+            onChange={(event) => handleChange('defaultDiscountPct', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="defaultMaxAllowedAmount">Max allowed</Label>
+          <Input
+            id="defaultMaxAllowedAmount"
+            type="number"
+            step="0.01"
+            value={form.defaultMaxAllowedAmount}
+            onChange={(event) => handleChange('defaultMaxAllowedAmount', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2 md:col-span-3">
+          <Label htmlFor="terms">Terms (JSON)</Label>
+          <Textarea
+            id="terms"
+            className="font-mono"
+            rows={4}
+            value={form.terms}
+            onChange={(event) => handleChange('terms', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2 md:col-span-3">
+          <Label htmlFor="metadata">Metadata (JSON)</Label>
+          <Textarea
+            id="metadata"
+            className="font-mono"
+            rows={4}
+            value={form.metadata}
+            onChange={(event) => handleChange('metadata', event.target.value)}
+          />
+        </div>
+      </FormSection>
 
-      <div className="flex justify-end gap-3">
-        {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
-            Cancel
-          </Button>
-        )}
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : submitLabel}
-        </Button>
-      </div>
+      <FormActions submitLabel={submitLabel} isSubmitting={isSubmitting} onCancel={onCancel} />
     </form>
   );
 }

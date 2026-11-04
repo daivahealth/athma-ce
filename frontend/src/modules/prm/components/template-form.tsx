@@ -2,14 +2,24 @@ import { useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
+import { BadgeCheck, FileText, MessageSquareText } from 'lucide-react';
+import { FormActions, FormField, FormSection, invalidProps } from '@/components/forms/form-layout';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
 import { PRM_TEMPLATE_CATEGORIES } from '@/modules/prm/constants/template-categories';
-import type { CreateTemplateInput, TemplateChannel, TemplateApprovalStatus } from '../types/template';
+import type {
+  CreateTemplateInput,
+  TemplateChannel,
+  TemplateApprovalStatus,
+} from '../types/template';
 
 const templateSchema = z.object({
   code: z.string().min(1, 'Code is required'),
@@ -24,7 +34,7 @@ const templateSchema = z.object({
   approval_status: z.enum(['draft', 'pending', 'approved', 'rejected']).optional(),
   version: z.preprocess(
     (value) => (value === '' || value == null ? undefined : Number(value)),
-    z.number().int().min(1).optional()
+    z.number().int().min(1).optional(),
   ),
   is_active: z.enum(['true', 'false']).optional(),
 });
@@ -46,9 +56,15 @@ interface TemplateFormProps {
   initialValues?: Partial<CreateTemplateInput>;
   submitLabel?: string;
   onSubmit: (payload: CreateTemplateInput) => Promise<void> | void;
+  onCancel?: () => void;
 }
 
-export function TemplateForm({ initialValues, submitLabel = 'Save template', onSubmit }: TemplateFormProps) {
+export function TemplateForm({
+  initialValues,
+  submitLabel = 'Save template',
+  onSubmit,
+  onCancel,
+}: TemplateFormProps) {
   const defaultValues = useMemo<TemplateFormValues>(
     () => ({
       code: initialValues?.code ?? '',
@@ -63,13 +79,9 @@ export function TemplateForm({ initialValues, submitLabel = 'Save template', onS
       approval_status: (initialValues?.approval_status ?? 'draft') as TemplateApprovalStatus,
       version: initialValues?.version ?? undefined,
       is_active:
-        initialValues?.is_active == null
-          ? 'true'
-          : initialValues.is_active
-            ? 'true'
-            : 'false',
+        initialValues?.is_active == null ? 'true' : initialValues.is_active ? 'true' : 'false',
     }),
-    [initialValues]
+    [initialValues],
   );
 
   const {
@@ -88,7 +100,10 @@ export function TemplateForm({ initialValues, submitLabel = 'Save template', onS
     try {
       variablesSchema = JSON.parse(values.variables_schema);
     } catch {
-      setError('variables_schema', { type: 'manual', message: 'Variables schema must be valid JSON' });
+      setError('variables_schema', {
+        type: 'manual',
+        message: 'Variables schema must be valid JSON',
+      });
       return;
     }
 
@@ -112,132 +127,160 @@ export function TemplateForm({ initialValues, submitLabel = 'Save template', onS
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmitForm)}>
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="code">Code *</Label>
-          <Input id="code" {...register('code')} />
-          {errors.code && <p className="text-sm text-destructive">{errors.code.message}</p>}
+      <FormSection
+        icon={FileText}
+        title="Template"
+        description="How the template is identified and where it is sent"
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField id="code" label="Code" required error={errors.code?.message}>
+            <Input
+              id="code"
+              {...register('code')}
+              {...invalidProps('code', errors.code?.message)}
+            />
+          </FormField>
+          <FormField id="name" label="Name" required error={errors.name?.message}>
+            <Input
+              id="name"
+              {...register('name')}
+              {...invalidProps('name', errors.name?.message)}
+            />
+          </FormField>
+          <FormField id="category" label="Category" required error={errors.category?.message}>
+            <Controller
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger
+                    id="category"
+                    {...invalidProps('category', errors.category?.message)}
+                  >
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PRM_TEMPLATE_CATEGORIES.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
+          <FormField id="channel" label="Channel" required>
+            <Controller
+              control={control}
+              name="channel"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger id="channel">
+                    <SelectValue placeholder="Select channel" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PRM_CHANNELS.map((channelOption) => (
+                      <SelectItem key={channelOption} value={channelOption}>
+                        {channelOption
+                          .replace(/_/g, ' ')
+                          .replace(/\b\w/g, (char) => char.toUpperCase())}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
+          <FormField id="language" label="Language">
+            <Input id="language" {...register('language')} />
+          </FormField>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="name">Name *</Label>
-          <Input id="name" {...register('name')} />
-          {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="category">Category *</Label>
-          <Controller
-            control={control}
-            name="category"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PRM_TEMPLATE_CATEGORIES.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.category && <p className="text-sm text-destructive">{errors.category.message}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label>Channel *</Label>
-          <Controller
-            control={control}
-            name="channel"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select channel" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PRM_CHANNELS.map((channelOption) => (
-                    <SelectItem key={channelOption} value={channelOption}>
-                      {channelOption.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="language">Language</Label>
-          <Input id="language" {...register('language')} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="subject">Subject</Label>
-          <Input id="subject" {...register('subject')} />
-        </div>
-        <div className="space-y-2">
-          <Label>Approval Status</Label>
-          <Controller
-            control={control}
-            name="approval_status"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="version">Version</Label>
-          <Input id="version" type="number" {...register('version')} />
-        </div>
-        <div className="space-y-2">
-          <Label>Active</Label>
-          <Controller
-            control={control}
-            name="is_active"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="true">Active</SelectItem>
-                  <SelectItem value="false">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="description">Description</Label>
+        <FormField id="description" label="Description">
           <Textarea id="description" rows={3} {...register('description')} />
+        </FormField>
+      </FormSection>
+
+      <FormSection
+        icon={MessageSquareText}
+        title="Message content"
+        description="Subject, body and the variables the body can use"
+      >
+        <FormField id="subject" label="Subject">
+          <Input id="subject" {...register('subject')} />
+        </FormField>
+        <FormField id="body" label="Body" required error={errors.body?.message}>
+          <Textarea
+            id="body"
+            rows={6}
+            {...register('body')}
+            {...invalidProps('body', errors.body?.message)}
+          />
+        </FormField>
+        <FormField
+          id="variables_schema"
+          label="Variables Schema (JSON)"
+          required
+          error={errors.variables_schema?.message}
+        >
+          <Textarea
+            id="variables_schema"
+            rows={6}
+            {...register('variables_schema')}
+            {...invalidProps('variables_schema', errors.variables_schema?.message)}
+          />
+        </FormField>
+      </FormSection>
+
+      <FormSection
+        icon={BadgeCheck}
+        title="Publishing"
+        description="Approval state, version and availability"
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          <FormField id="approval_status" label="Approval Status">
+            <Controller
+              control={control}
+              name="approval_status"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger id="approval_status">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="draft">Draft</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="approved">Approved</SelectItem>
+                    <SelectItem value="rejected">Rejected</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
+          <FormField id="version" label="Version">
+            <Input id="version" type="number" {...register('version')} />
+          </FormField>
+          <FormField id="is_active" label="Active">
+            <Controller
+              control={control}
+              name="is_active"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger id="is_active">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Active</SelectItem>
+                    <SelectItem value="false">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
         </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="body">Body *</Label>
-          <Textarea id="body" rows={6} {...register('body')} />
-          {errors.body && <p className="text-sm text-destructive">{errors.body.message}</p>}
-        </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="variables_schema">Variables Schema (JSON) *</Label>
-          <Textarea id="variables_schema" rows={6} {...register('variables_schema')} />
-          {errors.variables_schema && (
-            <p className="text-sm text-destructive">{errors.variables_schema.message}</p>
-          )}
-        </div>
-      </div>
-      <div className="flex justify-end">
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : submitLabel}
-        </Button>
-      </div>
+      </FormSection>
+
+      <FormActions submitLabel={submitLabel} isSubmitting={isSubmitting} onCancel={onCancel} />
     </form>
   );
 }

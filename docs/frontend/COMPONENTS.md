@@ -62,6 +62,24 @@ and `/patients/{id}/edit`) is the reference:
   required" hint on the left, **Cancel** (outline) then the primary submit on
   the right.
 
+The pieces live in `frontend/src/components/forms/form-layout.tsx`, so a form
+page composes them rather than restyling `Card`/`Label` by hand:
+
+| Export | Use |
+| --- | --- |
+| `FormSection` | Section card with icon chip, title, description; `actions` for header buttons (e.g. "Add line"), `contentClassName` to make the body a grid. |
+| `FormField` | Label (with `required` star), control, `error` message with `role="alert"`, optional muted `hint`. |
+| `FormActions` | Footer row: required-fields hint, outline **Cancel** (when `onCancel` is given), primary submit with a save icon. |
+| `invalidProps(id, error, className?)` | Spread onto a control to set `aria-invalid`, `aria-describedby` and the destructive border. |
+| `NATIVE_SELECT`, `FIELD_CONTROL` | Classes for a native `<select>` and for native date/time inputs (`dark:[color-scheme:dark]`). |
+
+Besides patient registration, the RCM forms (invoice, receipt, billing item,
+charge posting rule, fee schedule, payer contract) and the PRM rule, task and
+template forms use this layout on both their `/new` and `/{id}` pages. On a
+detail page, the read-only summary, related tables and danger zone are
+`FormSection`s too, and the record's status badge or **Delete** goes in the
+`PageHeader` `actions`.
+
 ### `StatCard`
 
 `frontend/src/components/ui/stat-card.tsx`

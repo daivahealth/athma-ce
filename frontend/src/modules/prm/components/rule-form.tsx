@@ -2,11 +2,23 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
+import { Gauge, Send, Workflow, Zap } from 'lucide-react';
+import {
+  FIELD_CONTROL,
+  FormActions,
+  FormField,
+  FormSection,
+  invalidProps,
+} from '@/components/forms/form-layout';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { PRM_EVENT_SUBTYPES, PRM_EVENT_TYPES } from '@/modules/prm/constants/event-types';
 import { PRM_RULE_CATEGORIES } from '@/modules/prm/constants/rule-categories';
 import { useTemplates } from '@/modules/prm/hooks/use-templates';
@@ -23,25 +35,25 @@ const ruleSchema = z.object({
   schedule_mode: z.enum(['IMMEDIATE', 'DELAYED']),
   delay_seconds: z.preprocess(
     (value) => (value === '' || value == null ? undefined : Number(value)),
-    z.number().int().min(0).optional()
+    z.number().int().min(0).optional(),
   ),
   action_type: z.enum(['SEND_MESSAGE', 'CREATE_TASK']),
   action_payload: z.string().min(2, 'Action payload JSON is required'),
   priority: z.preprocess(
     (value) => (value === '' || value == null ? undefined : Number(value)),
-    z.number().int().min(0).optional()
+    z.number().int().min(0).optional(),
   ),
   cooldown_seconds: z.preprocess(
     (value) => (value === '' || value == null ? undefined : Number(value)),
-    z.number().int().min(0).optional()
+    z.number().int().min(0).optional(),
   ),
   idempotency_window: z.preprocess(
     (value) => (value === '' || value == null ? undefined : Number(value)),
-    z.number().int().min(0).optional()
+    z.number().int().min(0).optional(),
   ),
   max_executions_per_day: z.preprocess(
     (value) => (value === '' || value == null ? undefined : Number(value)),
-    z.number().int().min(0).optional()
+    z.number().int().min(0).optional(),
   ),
   effective_from: z.string().optional(),
   effective_to: z.string().optional(),
@@ -65,9 +77,15 @@ interface RuleFormProps {
   initialValues?: Partial<CreateRuleInput>;
   submitLabel?: string;
   onSubmit: (payload: CreateRuleInput) => Promise<void> | void;
+  onCancel?: () => void;
 }
 
-export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }: RuleFormProps) {
+export function RuleForm({
+  initialValues,
+  submitLabel = 'Save rule',
+  onSubmit,
+  onCancel,
+}: RuleFormProps) {
   const defaultValues = useMemo<RuleFormValues>(
     () => ({
       code: initialValues?.code ?? '',
@@ -88,13 +106,9 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
       effective_from: initialValues?.effective_from ?? '',
       effective_to: initialValues?.effective_to ?? '',
       is_active:
-        initialValues?.is_active == null
-          ? 'true'
-          : initialValues.is_active
-            ? 'true'
-            : 'false',
+        initialValues?.is_active == null ? 'true' : initialValues.is_active ? 'true' : 'false',
     }),
-    [initialValues]
+    [initialValues],
   );
 
   const {
@@ -115,7 +129,7 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
   const { data: templates = [] } = useTemplates({ isActive: true });
 
   const templateOptions = useMemo(() => {
-    return (templates as any[])
+    return templates
       .map((template) => ({
         code: String(template.code ?? ''),
         name: String(template.name ?? template.code ?? ''),
@@ -184,131 +198,177 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmitForm)}>
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="code">Code *</Label>
-          <Input id="code" {...register('code')} />
-          {errors.code && <p className="text-sm text-destructive">{errors.code.message}</p>}
+      <FormSection
+        icon={Workflow}
+        title="Rule"
+        description="How the rule is identified and grouped"
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          <FormField id="code" label="Code" required error={errors.code?.message}>
+            <Input
+              id="code"
+              {...register('code')}
+              {...invalidProps('code', errors.code?.message)}
+            />
+          </FormField>
+          <FormField id="name" label="Name" required error={errors.name?.message}>
+            <Input
+              id="name"
+              {...register('name')}
+              {...invalidProps('name', errors.name?.message)}
+            />
+          </FormField>
+          <FormField id="category" label="Category" required error={errors.category?.message}>
+            <Controller
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger
+                    id="category"
+                    {...invalidProps('category', errors.category?.message)}
+                  >
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PRM_RULE_CATEGORIES.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="name">Name *</Label>
-          <Input id="name" {...register('name')} />
-          {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+        <FormField id="description" label="Description">
+          <Textarea id="description" rows={3} {...register('description')} />
+        </FormField>
+      </FormSection>
+
+      <FormSection
+        icon={Zap}
+        title="Trigger"
+        description="The event that fires the rule and the condition it must meet"
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField
+            id="trigger_event_type"
+            label="Trigger Event Type"
+            required
+            error={errors.trigger_event_type?.message}
+          >
+            <Controller
+              control={control}
+              name="trigger_event_type"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger
+                    id="trigger_event_type"
+                    {...invalidProps('trigger_event_type', errors.trigger_event_type?.message)}
+                  >
+                    <SelectValue placeholder="Select event type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PRM_EVENT_TYPES.map((eventType) => (
+                      <SelectItem key={eventType} value={eventType}>
+                        {eventType}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
+          <FormField id="trigger_event_subtype" label="Trigger Event Subtype">
+            <Controller
+              control={control}
+              name="trigger_event_subtype"
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  disabled={!watchedEventType}
+                >
+                  <SelectTrigger id="trigger_event_subtype">
+                    <SelectValue placeholder="Select event subtype" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(PRM_EVENT_SUBTYPES[watchedEventType] || []).map((subtype) => (
+                      <SelectItem key={subtype} value={subtype}>
+                        {subtype}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="category">Category *</Label>
-          <Controller
-            control={control}
-            name="category"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PRM_RULE_CATEGORIES.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
+        <FormField
+          id="condition_expr"
+          label="Condition Expression (JSON)"
+          required
+          error={errors.condition_expr?.message}
+        >
+          <Textarea
+            id="condition_expr"
+            rows={6}
+            {...register('condition_expr')}
+            {...invalidProps('condition_expr', errors.condition_expr?.message)}
           />
-          {errors.category && <p className="text-sm text-destructive">{errors.category.message}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label>Trigger Event Type *</Label>
-          <Controller
-            control={control}
-            name="trigger_event_type"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select event type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PRM_EVENT_TYPES.map((eventType) => (
-                    <SelectItem key={eventType} value={eventType}>
-                      {eventType}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.trigger_event_type && (
-            <p className="text-sm text-destructive">{errors.trigger_event_type.message}</p>
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label>Trigger Event Subtype</Label>
-          <Controller
-            control={control}
-            name="trigger_event_subtype"
-            render={({ field }) => (
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-                disabled={!watchedEventType}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select event subtype" />
-                </SelectTrigger>
-                <SelectContent>
-                  {(PRM_EVENT_SUBTYPES[watchedEventType] || []).map((subtype) => (
-                    <SelectItem key={subtype} value={subtype}>
-                      {subtype}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Schedule Mode *</Label>
-          <Controller
-            control={control}
-            name="schedule_mode"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select schedule mode" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="IMMEDIATE">Immediate</SelectItem>
-                  <SelectItem value="DELAYED">Delayed</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="delay_seconds">Delay (seconds)</Label>
-          <Input id="delay_seconds" type="number" {...register('delay_seconds')} />
-        </div>
-        <div className="space-y-2">
-          <Label>Action Type *</Label>
-          <Controller
-            control={control}
-            name="action_type"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select action type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="SEND_MESSAGE">Send Message</SelectItem>
-                  <SelectItem value="CREATE_TASK">Create Task</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
+        </FormField>
+      </FormSection>
+
+      <FormSection icon={Send} title="Action" description="What the rule does, and when">
+        <div className="grid gap-4 md:grid-cols-3">
+          <FormField id="schedule_mode" label="Schedule Mode" required>
+            <Controller
+              control={control}
+              name="schedule_mode"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger id="schedule_mode">
+                    <SelectValue placeholder="Select schedule mode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="IMMEDIATE">Immediate</SelectItem>
+                    <SelectItem value="DELAYED">Delayed</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
+          <FormField id="delay_seconds" label="Delay (seconds)">
+            <Input id="delay_seconds" type="number" {...register('delay_seconds')} />
+          </FormField>
+          <FormField id="action_type" label="Action Type" required>
+            <Controller
+              control={control}
+              name="action_type"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger id="action_type">
+                    <SelectValue placeholder="Select action type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SEND_MESSAGE">Send Message</SelectItem>
+                    <SelectItem value="CREATE_TASK">Create Task</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
         </div>
         {watchedActionType === 'SEND_MESSAGE' && (
-          <div className="space-y-2 md:col-span-2">
-            <Label>Template</Label>
+          <FormField
+            id="template_code"
+            label="Template"
+            hint={
+              selectedTemplate ? `Channel: ${selectedTemplate.channel || 'unknown'}` : undefined
+            }
+          >
             <Select
               value={selectedTemplateCode}
               onValueChange={(value) => {
@@ -326,7 +386,7 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
                 }
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger id="template_code">
                 <SelectValue placeholder="Select template" />
               </SelectTrigger>
               <SelectContent>
@@ -337,88 +397,94 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
                 ))}
               </SelectContent>
             </Select>
-            {selectedTemplate && (
-              <p className="text-xs text-muted-foreground">
-                Channel: {selectedTemplate.channel || 'unknown'}
-              </p>
-            )}
-          </div>
+          </FormField>
         )}
-        <div className="space-y-2">
-          <Label htmlFor="priority">Priority</Label>
-          <Input id="priority" type="number" {...register('priority')} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="cooldown_seconds">Cooldown (seconds)</Label>
-          <Input id="cooldown_seconds" type="number" {...register('cooldown_seconds')} />
-          <p className="text-xs text-muted-foreground">
-            Minimum time between executing this rule again for the same patient. If an event
-            triggers the rule again during the cooldown, the rule is skipped to avoid spamming.
-          </p>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="idempotency_window">Idempotency Window (seconds)</Label>
-          <Input id="idempotency_window" type="number" {...register('idempotency_window')} />
-          <p className="text-xs text-muted-foreground">
-            A deduplication window for the rule to prevent repeated execution of essentially the
-            same event (e.g., retries or duplicate events). If a matching event arrives within
-            this window, it won’t trigger the rule again.
-          </p>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="max_executions_per_day">Max Executions Per Day</Label>
-          <Input id="max_executions_per_day" type="number" {...register('max_executions_per_day')} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="effective_from">Effective From</Label>
-          <Input id="effective_from" type="datetime-local" {...register('effective_from')} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="effective_to">Effective To</Label>
-          <Input id="effective_to" type="datetime-local" {...register('effective_to')} />
-        </div>
-        <div className="space-y-2">
-          <Label>Active</Label>
-          <Controller
-            control={control}
-            name="is_active"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="true">Active</SelectItem>
-                  <SelectItem value="false">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
+        <FormField
+          id="action_payload"
+          label="Action Payload (JSON)"
+          required
+          error={errors.action_payload?.message}
+        >
+          <Textarea
+            id="action_payload"
+            rows={6}
+            {...register('action_payload')}
+            {...invalidProps('action_payload', errors.action_payload?.message)}
           />
+        </FormField>
+      </FormSection>
+
+      <FormSection
+        icon={Gauge}
+        title="Limits & validity"
+        description="Throttling, priority and the period the rule is live"
+      >
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <FormField id="priority" label="Priority">
+            <Input id="priority" type="number" {...register('priority')} />
+          </FormField>
+          <FormField id="cooldown_seconds" label="Cooldown (seconds)" hint={COOLDOWN_HINT}>
+            <Input id="cooldown_seconds" type="number" {...register('cooldown_seconds')} />
+          </FormField>
+          <FormField
+            id="idempotency_window"
+            label="Idempotency Window (seconds)"
+            hint={IDEMPOTENCY_HINT}
+          >
+            <Input id="idempotency_window" type="number" {...register('idempotency_window')} />
+          </FormField>
+          <FormField id="max_executions_per_day" label="Max Executions Per Day">
+            <Input
+              id="max_executions_per_day"
+              type="number"
+              {...register('max_executions_per_day')}
+            />
+          </FormField>
         </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="description">Description</Label>
-          <Textarea id="description" rows={3} {...register('description')} />
+        <div className="grid gap-4 md:grid-cols-3">
+          <FormField id="effective_from" label="Effective From">
+            <Input
+              id="effective_from"
+              type="datetime-local"
+              className={FIELD_CONTROL}
+              {...register('effective_from')}
+            />
+          </FormField>
+          <FormField id="effective_to" label="Effective To">
+            <Input
+              id="effective_to"
+              type="datetime-local"
+              className={FIELD_CONTROL}
+              {...register('effective_to')}
+            />
+          </FormField>
+          <FormField id="is_active" label="Active">
+            <Controller
+              control={control}
+              name="is_active"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger id="is_active">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Active</SelectItem>
+                    <SelectItem value="false">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
         </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="condition_expr">Condition Expression (JSON) *</Label>
-          <Textarea id="condition_expr" rows={6} {...register('condition_expr')} />
-          {errors.condition_expr && (
-            <p className="text-sm text-destructive">{errors.condition_expr.message}</p>
-          )}
-        </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="action_payload">Action Payload (JSON) *</Label>
-          <Textarea id="action_payload" rows={6} {...register('action_payload')} />
-          {errors.action_payload && (
-            <p className="text-sm text-destructive">{errors.action_payload.message}</p>
-          )}
-        </div>
-      </div>
-      <div className="flex justify-end">
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : submitLabel}
-        </Button>
-      </div>
+      </FormSection>
+
+      <FormActions submitLabel={submitLabel} isSubmitting={isSubmitting} onCancel={onCancel} />
     </form>
   );
 }
+
+const COOLDOWN_HINT =
+  'Minimum time between executing this rule again for the same patient. If an event triggers the rule again during the cooldown, the rule is skipped to avoid spamming.';
+
+const IDEMPOTENCY_HINT =
+  'A deduplication window for the rule to prevent repeated execution of essentially the same event (e.g., retries or duplicate events). If a matching event arrives within this window, it won’t trigger the rule again.';

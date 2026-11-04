@@ -1,10 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { AlertTriangle, Braces, Info, Puzzle, Trash2 } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FormSection } from '@/components/forms/form-layout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -18,7 +19,8 @@ import {
 } from '@/modules/rcm/hooks/use-charge-posting-rules';
 import type { CreateChargePostingRuleInput } from '@/modules/rcm/types/charge-posting-rule';
 
-const startCase = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+const startCase = (value: string) =>
+  value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
 export default function ChargePostingRuleDetailPage() {
   const params = useParams();
@@ -69,93 +71,98 @@ export default function ChargePostingRuleDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/${locale}/rcm-setup/charge-posting-rules`}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to rules
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold">{rule.ruleName}</h1>
-        <Badge variant={rule.isActive ? 'default' : 'secondary'} className="ml-auto">
-          {rule.isActive ? 'Active' : 'Inactive'}
-        </Badge>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Rule summary</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div>
-            <p className="text-sm text-muted-foreground">Event type</p>
-            <p className="font-medium">{startCase(rule.eventType)}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Event source</p>
-            <p className="font-medium">{startCase(rule.eventSource)}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Billing item type</p>
-            <p className="font-medium">{startCase(rule.billingItemType)}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Priority</p>
-            <p className="font-medium">{rule.priority}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Created</p>
-            <p>{new Date(rule.createdAt).toLocaleString()}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Updated</p>
-            <p>{new Date(rule.updatedAt).toLocaleString()}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Edit rule</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChargePostingRuleForm
-            initialValues={rule}
-            submitLabel="Update rule"
-            isSubmitting={updateRule.isPending}
-            onSubmit={handleUpdate}
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title={rule.ruleName}
+        subtitle={`${startCase(rule.eventType)} · ${startCase(rule.eventSource)}`}
+        icon={Puzzle}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${locale}/rcm-setup`, label: 'RCM Setup' },
+              { href: `/${locale}/rcm-setup/charge-posting-rules`, label: 'Charge posting rules' },
+              { label: rule.ruleName },
+            ]}
           />
-        </CardContent>
-      </Card>
+        }
+        actions={
+          <Badge variant={rule.isActive ? 'default' : 'secondary'}>
+            {rule.isActive ? 'Active' : 'Inactive'}
+          </Badge>
+        }
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Raw configuration</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div>
-            <p className="text-sm font-medium">Conditions</p>
-            <pre className="mt-2 rounded bg-muted/40 p-3 text-xs font-mono whitespace-pre-wrap break-words">
-              {JSON.stringify(rule.conditions ?? {}, null, 2)}
-            </pre>
-          </div>
-          <div>
-            <p className="text-sm font-medium">Configuration</p>
-            <pre className="mt-2 rounded bg-muted/40 p-3 text-xs font-mono whitespace-pre-wrap break-words">
-              {JSON.stringify(rule.configuration ?? {}, null, 2)}
-            </pre>
-          </div>
-        </CardContent>
-      </Card>
+      <FormSection
+        icon={Info}
+        title="Rule summary"
+        description="What triggers this rule and when it last changed"
+        contentClassName="grid gap-4 md:grid-cols-3"
+      >
+        <div>
+          <p className="text-sm text-muted-foreground">Event type</p>
+          <p className="font-medium">{startCase(rule.eventType)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Event source</p>
+          <p className="font-medium">{startCase(rule.eventSource)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Billing item type</p>
+          <p className="font-medium">{startCase(rule.billingItemType)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Priority</p>
+          <p className="font-medium">{rule.priority}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Created</p>
+          <p>{new Date(rule.createdAt).toLocaleString()}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Updated</p>
+          <p>{new Date(rule.updatedAt).toLocaleString()}</p>
+        </div>
+      </FormSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Actions</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <ChargePostingRuleForm
+        initialValues={rule}
+        submitLabel="Update rule"
+        isSubmitting={updateRule.isPending}
+        onSubmit={handleUpdate}
+        onCancel={() => router.push(`/${locale}/rcm-setup/charge-posting-rules`)}
+      />
+
+      <FormSection
+        icon={Braces}
+        title="Raw configuration"
+        description="Stored conditions and configuration JSON"
+        contentClassName="grid gap-4 md:grid-cols-2"
+      >
+        <div>
+          <p className="text-sm font-medium">Conditions</p>
+          <pre className="mt-2 rounded-md bg-muted/40 p-3 text-xs font-mono whitespace-pre-wrap break-words">
+            {JSON.stringify(rule.conditions ?? {}, null, 2)}
+          </pre>
+        </div>
+        <div>
+          <p className="text-sm font-medium">Configuration</p>
+          <pre className="mt-2 rounded-md bg-muted/40 p-3 text-xs font-mono whitespace-pre-wrap break-words">
+            {JSON.stringify(rule.configuration ?? {}, null, 2)}
+          </pre>
+        </div>
+      </FormSection>
+
+      <FormSection
+        icon={AlertTriangle}
+        title="Actions"
+        description="Activate, deactivate or delete this rule"
+      >
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-medium">{rule.isActive ? 'Deactivate rule' : 'Activate rule'}</p>
-            <p className="text-sm text-muted-foreground">Toggle rule availability for new events.</p>
+            <p className="text-sm text-muted-foreground">
+              Toggle rule availability for new events.
+            </p>
           </div>
           <Button
             variant="outline"
@@ -164,8 +171,8 @@ export default function ChargePostingRuleDetailPage() {
           >
             {rule.isActive ? 'Deactivate' : 'Activate'}
           </Button>
-        </CardContent>
-        <CardContent className="flex flex-col gap-3 border-t pt-4 md:flex-row md:items-center md:justify-between">
+        </div>
+        <div className="flex flex-col gap-3 border-t border-border pt-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-medium text-destructive">Delete rule</p>
             <p className="text-sm text-muted-foreground">Remove this rule permanently.</p>
@@ -174,8 +181,8 @@ export default function ChargePostingRuleDetailPage() {
             <Trash2 className="mr-2 h-4 w-4" />
             {deleteRule.isPending ? 'Deleting…' : 'Delete'}
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </FormSection>
     </div>
   );
 }

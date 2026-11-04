@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ReceiptText } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useToast } from '@/components/ui/use-toast';
 import { BillingItemForm } from '@/modules/rcm/components/billing-item-form';
 import { useCreateBillingItem } from '@/modules/rcm/hooks/use-billing-items';
@@ -25,26 +24,28 @@ export default function NewBillingItemPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <Button variant="ghost" size="sm" asChild>
-        <Link href={`/${locale}/rcm-setup/billing-items`}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to billing items
-        </Link>
-      </Button>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>New billing item</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BillingItemForm
-            submitLabel="Create billing item"
-            isSubmitting={createMutation.isPending}
-            onSubmit={handleSubmit}
-            onCancel={() => router.push(`/${locale}/rcm-setup/billing-items`)}
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="New billing item"
+        subtitle="Add a billable code to the charge master"
+        icon={ReceiptText}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${locale}/rcm-setup`, label: 'RCM Setup' },
+              { href: `/${locale}/rcm-setup/billing-items`, label: 'Billing items' },
+              { label: 'New' },
+            ]}
           />
-        </CardContent>
-      </Card>
+        }
+      />
+
+      <BillingItemForm
+        submitLabel="Create billing item"
+        isSubmitting={createMutation.isPending}
+        onSubmit={handleSubmit}
+        onCancel={() => router.push(`/${locale}/rcm-setup/billing-items`)}
+      />
     </div>
   );
 }
