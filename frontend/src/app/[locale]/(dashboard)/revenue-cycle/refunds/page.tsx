@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, endOfDay, startOfDay, subDays } from 'date-fns';
-import { Search, Eye, Plus, Calendar, User } from 'lucide-react';
+import { Search, Eye, Plus, Calendar, User, Undo2 } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -26,6 +26,7 @@ import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useRefunds } from '@/modules/rcm/hooks/use-refunds';
 import type { Refund } from '@/modules/rcm/types/refund';
 import { RefundStatus, RefundMethod } from '@/modules/rcm/types/refund';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<string, string> = {
   [RefundStatus.PENDING]: 'Pending',
@@ -214,6 +215,18 @@ export default function RefundsPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Refunds"
+        subtitle="Money returned to patients and payers"
+        icon={Undo2}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/revenue-cycle/refunds/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New refund
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -308,14 +321,6 @@ export default function RefundsPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Refunds"
-          cta={
-            <Button size="sm" asChild>
-              <Link href={`/${locale}/revenue-cycle/refunds/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New refund
-              </Link>
-            </Button>
-          }
           columns={columns}
           data={filtered}
           isLoading={isLoading}

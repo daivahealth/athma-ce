@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Plus, AlertTriangle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Eye, Plus, AlertTriangle, Clock, ChevronLeft, ChevronRight, Boxes } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +16,7 @@ import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { usePharmacyStockPaged } from '@/modules/pharmacy/hooks/use-pharmacy-stock';
 import type { PharmacyStock } from '@/modules/pharmacy/types/stock';
 import { PharmacyStockStatus } from '@/modules/pharmacy/types/stock';
+import { PageHeader } from '@/components/ui/page-header';
 
 const PAGE_SIZE = 20;
 
@@ -184,7 +185,19 @@ export default function PharmacyStockPage() {
   const to   = Math.min(page * PAGE_SIZE, total);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      <PageHeader
+        title="Pharmacy Stock"
+        subtitle="Drug batches on hand, with expiry and stock status"
+        icon={Boxes}
+        actions={
+          <Button onClick={() => router.push(`/${locale}/pharmacy/stock/new`)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Receive Stock
+          </Button>
+        }
+      />
+
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -206,10 +219,6 @@ export default function PharmacyStockPage() {
             </SelectContent>
           </Select>
         </div>
-        <Button onClick={() => router.push(`/${locale}/pharmacy/stock/new`)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Receive Stock
-        </Button>
       </div>
 
       {/* Table */}

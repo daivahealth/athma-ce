@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, endOfDay, startOfDay, subDays } from 'date-fns';
-import { Calendar, Eye, Plus, Search, User } from 'lucide-react';
+import { Calendar, Eye, Plus, Search, User, FileCheck } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -19,6 +19,7 @@ import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useClaims } from '@/modules/rcm/hooks/use-claims';
 import type { Claim, ClaimStatus } from '@/modules/rcm/types/claims';
 import { claimStatusTone, payerTypeTone } from '@/modules/rcm/utils/billing-tone';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<ClaimStatus, string> = {
   draft: 'Draft',
@@ -215,6 +216,18 @@ export default function ClaimsPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Claims"
+        subtitle="Insurance claims and their adjudication status"
+        icon={FileCheck}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/revenue-cycle/claims/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New claim
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -281,11 +294,6 @@ export default function ClaimsPage() {
                 </PopoverContent>
               </Popover>
             )}
-            <Button asChild className="ml-auto">
-              <Link href={`/${locale}/revenue-cycle/claims/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New claim
-              </Link>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -296,8 +304,6 @@ export default function ClaimsPage() {
         isLoading={isLoading}
         error={error}
         emptyMessage="No claims found."
-        title="Claims"
-        cta={null}
       />
     </div>
   );

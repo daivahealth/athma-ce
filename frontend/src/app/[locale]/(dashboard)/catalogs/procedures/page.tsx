@@ -9,7 +9,9 @@ import type { Procedure } from '@/modules/foundation/types/catalog';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Search, Eye } from 'lucide-react';
+import { Search, Eye, Scissors } from 'lucide-react';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { PageHeader } from '@/components/ui/page-header';
 
 const createColumns = (router: ReturnType<typeof useRouter>, locale: string): ColumnDef<Procedure>[] => [
   {
@@ -116,14 +118,12 @@ export default function ProceduresPage() {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => router.push(`/${locale}/catalogs`)}
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to catalogs
-      </Button>
+      <PageHeader
+        title="Procedures"
+        subtitle="Clinical procedures that can be ordered and billed"
+        icon={Scissors}
+        breadcrumb={<Breadcrumb items={[{ href: `/${locale}/catalogs`, label: 'Catalogs' }, { label: 'Procedures' }]} />}
+      />
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -147,7 +147,6 @@ export default function ProceduresPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Procedures"
           columns={columns}
           data={procedures ?? []}
         />

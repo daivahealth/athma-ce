@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Plus, Sparkles, Eye } from 'lucide-react';
+import { Plus, Sparkles, Eye, Link2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { useCatalogMappings } from '@/modules/rcm/hooks/use-catalog-mappings';
 import type { CatalogMapping, CatalogMappingFilters, CatalogType } from '@/modules/rcm/types/catalog-mapping';
+import { PageHeader } from '@/components/ui/page-header';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -132,26 +133,27 @@ export default function CatalogMappingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold">Catalog Mappings</h1>
-          <p className="text-muted-foreground">Link clinical catalog items to billing items for automatic charge posting.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" asChild>
-            <Link href={`/${locale}/rcm-setup/catalog-mappings/suggestions`}>
-              <Sparkles className="h-4 w-4 mr-2 text-amber-500" />
-              Suggested
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/${locale}/rcm-setup/catalog-mappings/new`}>
-              <Plus className="h-4 w-4 mr-2" />
-              New Mapping
-            </Link>
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Catalog Mappings"
+        subtitle="Link clinical catalog items to billing items for automatic charge posting."
+        icon={Link2}
+        actions={
+          <>
+            <Button variant="outline" asChild>
+              <Link href={`/${locale}/rcm-setup/catalog-mappings/suggestions`}>
+                <Sparkles className="h-4 w-4 mr-2 text-amber-500" />
+                Suggested
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href={`/${locale}/rcm-setup/catalog-mappings/new`}>
+                <Plus className="h-4 w-4 mr-2" />
+                New Mapping
+              </Link>
+            </Button>
+          </>
+        }
+      />
 
       {/* Summary cards */}
       <div className="grid gap-4 md:grid-cols-3">
@@ -251,12 +253,10 @@ export default function CatalogMappingsPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Catalog Mappings"
           columns={columns}
           data={mappings ?? []}
           isLoading={isLoading}
           emptyState="No mappings found. Adjust the filters or create a new mapping."
-          cta={<div />}
         />
       )}
     </div>

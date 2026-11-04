@@ -2,12 +2,11 @@
 
 import { useMemo, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowLeft, Eye, Search } from 'lucide-react';
+import { Eye, Search, ListTree } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { ResourceTable } from '@/components/tables/resource-table';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -19,6 +18,8 @@ import {
 } from '@/components/ui/select';
 import { useValueSets, useValueSetCategories } from '@/modules/clinical/hooks/use-valuesets';
 import type { ValueSet } from '@/modules/clinical/types/valueset';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { PageHeader } from '@/components/ui/page-header';
 
 const createColumns = (locale: string): ColumnDef<ValueSet>[] => [
   {
@@ -96,12 +97,12 @@ export default function ValueSetsPage() {
 
   return (
     <div className="space-y-6">
-      <Button asChild variant="ghost" size="sm">
-        <Link href={`/${locale}/catalogs`}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to catalogs
-        </Link>
-      </Button>
+      <PageHeader
+        title="Value Sets"
+        subtitle="Coded option lists used across clinical forms"
+        icon={ListTree}
+        breadcrumb={<Breadcrumb items={[{ href: `/${locale}/catalogs`, label: 'Catalogs' }, { label: 'Value Sets' }]} />}
+      />
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -143,12 +144,10 @@ export default function ValueSetsPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Value Sets"
           columns={columns}
           data={valueSets ?? []}
           isLoading={isLoading}
           emptyState="No value sets match your filters."
-          cta={<div />}
         />
       )}
     </div>
