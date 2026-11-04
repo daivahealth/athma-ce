@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Plus, Search, User } from 'lucide-react';
+import { Eye, Plus, Search, User, BadgeCheck } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEligibilityRequests } from '@/modules/rcm/hooks/use-eligibility';
 import type { EligibilityRequest, EligibilityStatus } from '@/modules/rcm/types/eligibility';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<EligibilityStatus, string> = {
   accepted: 'Accepted',
@@ -110,6 +111,18 @@ export default function EligibilityPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Eligibility requests"
+        subtitle="Insurance coverage checks for patients"
+        icon={BadgeCheck}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/revenue-cycle/eligibility/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New request
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -122,11 +135,6 @@ export default function EligibilityPage() {
                 className="pl-9"
               />
             </div>
-            <Button asChild className="ml-auto">
-              <Link href={`/${locale}/revenue-cycle/eligibility/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New request
-              </Link>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -137,7 +145,6 @@ export default function EligibilityPage() {
         isLoading={isLoading}
         error={error}
         emptyMessage="No eligibility requests found."
-        title="Eligibility requests"
       />
     </div>
   );

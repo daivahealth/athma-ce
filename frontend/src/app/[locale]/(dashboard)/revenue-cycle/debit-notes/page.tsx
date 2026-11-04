@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Plus, Search } from 'lucide-react';
+import { Eye, Plus, Search, FilePlus } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useDebitNotes } from '@/modules/rcm/hooks/use-debit-notes';
 import type { DebitNote, DebitNoteStatus } from '@/modules/rcm/types/debit-note';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<DebitNoteStatus, string> = {
   draft: 'Draft',
@@ -101,6 +102,18 @@ export default function DebitNotesPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Debit notes"
+        subtitle="Additional charges raised against patient invoices"
+        icon={FilePlus}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/revenue-cycle/debit-notes/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New debit note
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -113,11 +126,6 @@ export default function DebitNotesPage() {
                 className="pl-9"
               />
             </div>
-            <Button asChild className="ml-auto">
-              <Link href={`/${locale}/revenue-cycle/debit-notes/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New debit note
-              </Link>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -128,8 +136,6 @@ export default function DebitNotesPage() {
         isLoading={isLoading}
         error={error}
         emptyMessage="No debit notes found."
-        title="Debit notes"
-        cta={null}
       />
     </div>
   );

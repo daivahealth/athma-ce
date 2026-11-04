@@ -145,8 +145,8 @@ export class OncologyController {
 
   @Post('care-plans/:id/approve')
   @Permissions('oncology.care_plan.approve')
-  async approveCarePlan(@Param('id') id: string, @Body() body: Record<string, unknown>) {
-    return { success: true, data: await this.oncologyService.approveCarePlan(id, body.approvedBy as string) };
+  async approveCarePlan(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.approveCarePlan(id) };
   }
 
   @Post('care-plans/:id/revise')
@@ -325,6 +325,12 @@ export class OncologyController {
     return { success: true, data: await this.oncologyService.updateChemoOrder(id, body) };
   }
 
+  @Post('orders/:id/submit')
+  @Permissions('oncology.chemo_order.write')
+  async submitChemoOrder(@Param('id') id: string) {
+    return { success: true, data: await this.oncologyService.submitChemoOrder(id) };
+  }
+
   @Post('orders/:id/approve')
   @Permissions('oncology.chemo_order.approve')
   async approveChemoOrder(@Param('id') id: string) {
@@ -365,6 +371,12 @@ export class OncologyController {
   @Permissions('oncology.chemo_order.write')
   async cancelChemoOrder(@Param('id') id: string, @Body() body: { reason?: string }) {
     return { success: true, data: await this.oncologyService.cancelChemoOrder(id, body.reason ?? '') };
+  }
+
+  @Post('orders/:id/resume')
+  @Permissions('oncology.chemo_order.write')
+  async resumeChemoOrder(@Param('id') id: string, @Body() body: { reason?: string }) {
+    return { success: true, data: await this.oncologyService.resumeChemoOrder(id, body.reason ?? '') };
   }
 
   // ============================================

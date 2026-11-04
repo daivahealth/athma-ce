@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, endOfDay, startOfDay, subDays } from 'date-fns';
-import { Search, Eye, Plus, Calendar, User } from 'lucide-react';
+import { Search, Eye, Plus, Calendar, User, ReceiptText } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -20,6 +20,7 @@ import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useReceipts } from '@/modules/rcm/hooks/use-receipts';
 import type { Receipt } from '@/modules/rcm/types/receipt';
 import { PaymentMethod } from '@/modules/rcm/types/receipt';
+import { PageHeader } from '@/components/ui/page-header';
 
 const paymentLabels: Record<string, string> = {
   [PaymentMethod.CASH]: 'Cash',
@@ -176,6 +177,18 @@ export default function ReceiptsPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Receipts"
+        subtitle="Payments received from patients and payers"
+        icon={ReceiptText}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/receipts/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New receipt
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -251,14 +264,6 @@ export default function ReceiptsPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Receipts"
-          cta={
-            <Button size="sm" asChild>
-              <Link href={`/${locale}/receipts/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New receipt
-              </Link>
-            </Button>
-          }
           columns={columns}
           data={filtered}
           isLoading={isLoading}

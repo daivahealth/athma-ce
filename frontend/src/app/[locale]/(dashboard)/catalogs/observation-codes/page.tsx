@@ -2,13 +2,11 @@
 
 import { useMemo, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowLeft, Search } from 'lucide-react';
-import Link from 'next/link';
+import { Search, Microscope } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -19,6 +17,8 @@ import {
 } from '@/components/ui/select';
 import { useObservationCodes } from '@/modules/foundation/hooks/use-catalogs';
 import type { ObservationCode } from '@/modules/foundation/types/catalog';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { PageHeader } from '@/components/ui/page-header';
 
 const createColumns = (): ColumnDef<ObservationCode>[] => [
   {
@@ -121,19 +121,12 @@ export default function ObservationCodesPage() {
 
   return (
     <div className="space-y-6">
-      <Button asChild variant="ghost" size="sm">
-        <Link href={`/${locale}/catalogs`}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to catalogs
-        </Link>
-      </Button>
-
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Observation Codes</h1>
-        <p className="text-muted-foreground">
-          Browse canonical observation definitions used for lab analytes, vitals, imaging findings, and structured result entry.
-        </p>
-      </div>
+      <PageHeader
+        title="Observation Codes"
+        subtitle="Browse canonical observation definitions used for lab analytes, vitals, imaging findings, and structured result entry."
+        icon={Microscope}
+        breadcrumb={<Breadcrumb items={[{ href: `/${locale}/catalogs`, label: 'Catalogs' }, { label: 'Observation Codes' }]} />}
+      />
 
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="relative flex-1">
@@ -161,13 +154,11 @@ export default function ObservationCodesPage() {
       </div>
 
       <ResourceTable
-        title="Observation Catalog"
         columns={columns}
         data={filteredData}
         isLoading={isLoading}
         error={error as Error | null}
         emptyState="No observation codes match your filters."
-        cta={<div />}
       />
     </div>
   );

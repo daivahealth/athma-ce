@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Plus, Search } from 'lucide-react';
+import { Eye, Plus, Search, Banknote } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useRemittances } from '@/modules/rcm/hooks/use-remittance';
 import type { Remittance, RemittanceStatus } from '@/modules/rcm/types/remittance';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<RemittanceStatus, string> = {
   received: 'Received',
@@ -86,6 +87,18 @@ export default function RemittancePage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Remittances"
+        subtitle="Payer remittance advices and payment posting"
+        icon={Banknote}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/revenue-cycle/remittance/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New remittance
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -98,11 +111,6 @@ export default function RemittancePage() {
                 className="pl-9"
               />
             </div>
-            <Button asChild className="ml-auto">
-              <Link href={`/${locale}/revenue-cycle/remittance/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New remittance
-              </Link>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -113,7 +121,6 @@ export default function RemittancePage() {
         isLoading={isLoading}
         error={error}
         emptyMessage="No remittances found."
-        title="Remittances"
       />
     </div>
   );

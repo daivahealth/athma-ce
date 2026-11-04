@@ -15,7 +15,12 @@ import {
   useChemoOrder, useApproveChemoOrder, useVerifyChemoOrder,
   useStartAdministration, useCompleteAdministration,
   useHoldChemoOrder, useCancelChemoOrder, useUpdateAdministrationProgress,
+  useSubmitChemoOrder, useResumeChemoOrder, useUpdateChemoOrder,
 } from '@/plugins/oncology/hooks/use-oncology';
+import { useStaffList } from '@/modules/foundation/hooks/use-staff';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { getSession } from '@/lib/api/client';
+import { getApiErrorMessage } from '@/lib/api/errors';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import type {
   AdverseReaction, AdministrationDetail, DrugPreparationDetail, NurseVerificationChecklist,
@@ -94,6 +99,21 @@ export default function ChemoOrderDetailPage() {
   const progress = useUpdateAdministrationProgress();
   const hold = useHoldChemoOrder();
   const cancel = useCancelChemoOrder();
+  const submit = useSubmitChemoOrder();
+  const resume = useResumeChemoOrder();
+  const updateOrder = useUpdateChemoOrder();
+  // The persisted store's `user` can be empty after a full page load; fall back to the
+  // stored access token (same source the API client uses).
+  const storeUserId = useAuthStore((s) => s.session.user?.userId ?? null);
+  const currentUserId = storeUserId || getSession().user?.userId || null;
+  const { data: staffList } = useStaffList();
+  // Second verifier must be a real user (server stores a user id and checks independence).
+  const verifierOptions = (staffList ?? []).filter(
+    (m) => m.user?.id && m.user.id !== currentUserId && m.user.status === 'active' && m.status !== 'inactive',
+  );
+
+  // Editable pre-chemo checklist while the order is draft/pending (server requires it before approval)
+  const [checklistDraft, setChecklistDraft] = useState<Record<string, unknown> | null>(null);
 
   // Hold / Cancel
   const [holdReason, setHoldReason] = useState('');
@@ -133,20 +153,35 @@ export default function ChemoOrderDetailPage() {
   if (!order) return <div className="p-8 text-muted-foreground">Order not found.</div>;
 
   const status = order.status;
-  const isMutating = approve.isPending || verify.isPending || start.isPending || complete.isPending || progress.isPending || hold.isPending || cancel.isPending;
+  const mutations = [approve, verify, start, complete, progress, hold, cancel, submit, resume, updateOrder];
+  const isMutating = mutations.some((m) => m.isPending);
+  const failed = mutations.find((m) => m.isError);
+  const actionError = failed ? getApiErrorMessage(failed.error, 'The action could not be completed') : null;
 
   const regimenDrugs = (order.protocol_regimen ?? []).map((d) => d.drug);
   const checklist = (order.pre_chemo_checklist ?? {}) as Record<string, unknown>;
 
+  // `required` items must all be confirmed before the server will approve the order.
   const checklistItems = [
-    { key: 'consentDocumented', label: 'Informed consent documented' },
-    { key: 'allergiesReviewed', label: 'Allergies reviewed' },
-    { key: 'labsReviewed', label: 'Labs reviewed' },
-    { key: 'labsWithinRange', label: 'Labs within acceptable range' },
-    { key: 'bsaVerified', label: 'BSA / weight verified' },
-    { key: 'doseVerified', label: 'Doses verified' },
-    { key: 'premedicationsOrdered', label: 'Pre-medications ordered' },
+    { key: 'consentDocumented', label: 'Informed consent documented', required: true },
+    { key: 'allergiesReviewed', label: 'Allergies reviewed', required: true },
+    { key: 'labsReviewed', label: 'Labs reviewed', required: true },
+    { key: 'labsWithinRange', label: 'Labs within acceptable range', required: true },
+    { key: 'bsaVerified', label: 'BSA / weight verified', required: true },
+    { key: 'doseVerified', label: 'Doses verified', required: true },
+    { key: 'premedicationsOrdered', label: 'Pre-medications ordered', required: false },
   ];
+  const missingChecks = checklistItems.filter((i) => i.required && checklist[i.key] !== true);
+  const isOwnOrder = !!currentUserId && order.ordering_provider === currentUserId;
+  const isOwnApproval = !!currentUserId && order.approved_by === currentUserId;
+  const canEditChecklist = status === 'draft' || status === 'pending';
+  const saveChecklist = () => {
+    if (!checklistDraft) return;
+    updateOrder.mutate(
+      { id: params.id, data: { preChemoChecklist: checklistDraft } as Parameters<typeof updateOrder.mutate>[0]['data'] },
+      { onSuccess: () => setChecklistDraft(null) },
+    );
+  };
 
   const initDrugPrep = () => {
     setDrugPrep(regimenDrugs.map((d) => ({
@@ -313,6 +348,31 @@ export default function ChemoOrderDetailPage() {
         </div>
       </div>
 
+      {actionError && (
+        <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 flex-shrink-0" />{actionError}
+        </div>
+      )}
+
+      {/* ── DRAFT: Submit for approval ── */}
+      {status === 'draft' && (
+        <Card className="border-slate-200">
+          <CardContent className="pt-4 space-y-3">
+            <p className="text-sm text-muted-foreground">This order is a draft. Submit it to send it for pharmacist / physician approval.</p>
+            <div className="flex gap-2 flex-wrap">
+              <Button onClick={() => submit.mutate(params.id)} disabled={isMutating}>
+                <ChevronRight className="h-4 w-4 mr-2" />Submit for Approval
+              </Button>
+              {!showCancelForm && (
+                <Button variant="outline" className="text-destructive hover:text-destructive" onClick={() => setShowCancelForm(true)} disabled={isMutating}>
+                  <XCircle className="h-4 w-4 mr-2" />Cancel
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* ── PENDING: Approve ── */}
       {status === 'pending' && (
         <Card className="border-blue-200 bg-blue-50/20">
@@ -325,8 +385,18 @@ export default function ChemoOrderDetailPage() {
             <p className="text-sm text-muted-foreground">
               Review the order summary, protocol regimen, dose calculations, and pre-chemo checklist below before approving.
             </p>
+            {isOwnOrder && (
+              <p className="text-xs text-amber-600 flex items-center gap-1">
+                <AlertTriangle className="h-3.5 w-3.5" />You placed this order. A second clinician must approve it.
+              </p>
+            )}
+            {missingChecks.length > 0 && (
+              <p className="text-xs text-amber-600 flex items-center gap-1">
+                <AlertTriangle className="h-3.5 w-3.5" />Pre-chemo checklist incomplete: {missingChecks.map((i) => i.label.toLowerCase()).join(', ')}.
+              </p>
+            )}
             <div className="flex gap-2 flex-wrap">
-              <Button onClick={() => approve.mutate(params.id)} disabled={isMutating}>
+              <Button onClick={() => approve.mutate(params.id)} disabled={isMutating || isOwnOrder || missingChecks.length > 0}>
                 <CheckCircle className="h-4 w-4 mr-2" />Approve Order
               </Button>
               {!showHoldForm && !showCancelForm && (
@@ -369,6 +439,12 @@ export default function ChemoOrderDetailPage() {
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {status === 'approved' && isOwnApproval && (
+        <p className="text-xs text-amber-600 flex items-center gap-1">
+          <AlertTriangle className="h-3.5 w-3.5" />You approved this order. Bedside verification must be done by someone else.
+        </p>
       )}
 
       {status === 'approved' && showVerifyForm && (
@@ -450,11 +526,22 @@ export default function ChemoOrderDetailPage() {
             {/* Second Nurse */}
             <div>
               <h3 className="font-semibold text-sm mb-2 flex items-center gap-2">
-                <Stethoscope className="h-4 w-4 text-blue-600" />Step 3 — Second Nurse / Independent Check (Optional)
+                <Stethoscope className="h-4 w-4 text-blue-600" />Step 3 — Second Nurse / Independent Check
               </h3>
-              <div className="flex items-center gap-3">
-                <Input className="w-60" placeholder="Second nurse name / ID" value={secondVerifiedBy} onChange={(e) => setSecondVerifiedBy(e.target.value)} />
-                <span className="text-xs text-muted-foreground">Required if dual-sign is enabled for this protocol</span>
+              <div className="flex items-center gap-3 flex-wrap">
+                <Select value={secondVerifiedBy} onValueChange={setSecondVerifiedBy}>
+                  <SelectTrigger className="w-72"><SelectValue placeholder="Select independent second verifier" /></SelectTrigger>
+                  <SelectContent>
+                    {verifierOptions.map((m) => (
+                      <SelectItem key={m.user!.id} value={m.user!.id}>
+                        {m.displayName}{m.staffType ? ` · ${m.staffType}` : ''}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span className="text-xs text-muted-foreground">
+                  Required when dual sign-off is on (the default). Must be someone other than you, the approver and the ordering provider.
+                </span>
               </div>
             </div>
 
@@ -763,8 +850,9 @@ export default function ChemoOrderDetailPage() {
         <Card className="border-amber-200 bg-amber-50/30">
           <CardContent className="pt-4 space-y-3">
             <p className="text-sm font-medium text-amber-700">Order is on hold.</p>
+            <p className="text-xs text-muted-foreground">Resuming returns the order to pending; it must be approved and verified again.</p>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => hold.mutate({ id: params.id, reason: 'Re-activated' })} disabled={isMutating}>Re-activate</Button>
+              <Button variant="outline" onClick={() => resume.mutate({ id: params.id, reason: 'Resumed' })} disabled={isMutating}>Resume</Button>
               <Button variant="outline" className="text-destructive hover:text-destructive" onClick={() => cancel.mutate({ id: params.id })} disabled={isMutating}>Cancel Order</Button>
             </div>
           </CardContent>
@@ -863,16 +951,42 @@ export default function ChemoOrderDetailPage() {
 
         {/* Pre-Chemo Checklist */}
         <Card>
-          <CardHeader><CardTitle>Pre-Chemo Safety Checklist</CardTitle></CardHeader>
+          <CardHeader>
+            <div className="flex items-center justify-between gap-2">
+              <CardTitle>Pre-Chemo Safety Checklist</CardTitle>
+              {canEditChecklist && !checklistDraft && (
+                <Button size="sm" variant="outline" onClick={() => setChecklistDraft({ ...checklist })} disabled={isMutating}>Edit</Button>
+              )}
+            </div>
+          </CardHeader>
           <CardContent className="space-y-2 text-sm">
-            {checklistItems.map(({ key, label }) => (
-              <div key={key} className="flex items-center gap-2">
-                {checklist[key]
-                  ? <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                  : <XCircle className="h-4 w-4 text-muted-foreground/40 flex-shrink-0" />}
-                <span className={checklist[key] ? '' : 'text-muted-foreground'}>{label}</span>
-              </div>
-            ))}
+            {checklistDraft
+              ? (
+                <>
+                  {checklistItems.map(({ key, label, required }) => (
+                    <div key={key} className="flex items-center gap-2">
+                      <Checkbox
+                        id={`pcc-${key}`}
+                        checked={checklistDraft[key] === true}
+                        onChange={(e) => setChecklistDraft((p) => ({ ...(p ?? {}), [key]: e.target.checked }))}
+                      />
+                      <label htmlFor={`pcc-${key}`} className="cursor-pointer">{label}{required ? '' : ' (if applicable)'}</label>
+                    </div>
+                  ))}
+                  <div className="flex gap-2 pt-2">
+                    <Button size="sm" onClick={saveChecklist} disabled={isMutating}>Save Checklist</Button>
+                    <Button size="sm" variant="outline" onClick={() => setChecklistDraft(null)}>Cancel</Button>
+                  </div>
+                </>
+              )
+              : checklistItems.map(({ key, label }) => (
+                <div key={key} className="flex items-center gap-2">
+                  {checklist[key]
+                    ? <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    : <XCircle className="h-4 w-4 text-muted-foreground/40 flex-shrink-0" />}
+                  <span className={checklist[key] ? '' : 'text-muted-foreground'}>{label}</span>
+                </div>
+              ))}
             {(!!checklist.consentDate || !!checklist.allergiesSummary || !!checklist.labsDate) && (
               <div className="pt-2 border-t text-xs text-muted-foreground space-y-1">
                 {!!checklist.consentDate && <div>Consent date: {String(checklist.consentDate)}</div>}

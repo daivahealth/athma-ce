@@ -186,6 +186,17 @@ export class StaffRepository {
     status: true,
     createdAt: true,
     updatedAt: true,
+    // Linked login (users.staff_id), if any. Lets clients that record sign-offs by
+    // user id (e.g. oncology dual verification) pick a staff member who can sign in.
+    user: {
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        status: true,
+      },
+    },
     staffSpecialties: {
       select: {
         facilityId: true,
