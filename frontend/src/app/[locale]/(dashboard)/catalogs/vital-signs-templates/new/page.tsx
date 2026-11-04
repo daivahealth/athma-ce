@@ -18,6 +18,7 @@ import {
   useVitalCareSettings,
 } from '@/modules/clinical/hooks/use-vital-signs-templates';
 import type { CareSetting, AgeGroup } from '@/modules/clinical/types/vital-signs-template';
+import { SpecialtyMultiSelect } from '@/modules/foundation/components/specialty-select';
 
 type ItemForm = {
   id: string;
@@ -76,7 +77,7 @@ export default function NewVitalSignsTemplatePage() {
   const [descriptionAr, setDescriptionAr] = useState('');
   const [selectedCareSettings, setSelectedCareSettings] = useState<CareSetting[]>([]);
   const [selectedAgeGroups, setSelectedAgeGroups] = useState<AgeGroup[]>([]);
-  const [specialties, setSpecialties] = useState('');
+  const [specialties, setSpecialties] = useState<string[]>([]);
   const [isActive, setIsActive] = useState(true);
   const [isDefault, setIsDefault] = useState(false);
   const [groups, setGroups] = useState<GroupForm[]>([
@@ -197,10 +198,7 @@ export default function NewVitalSignsTemplatePage() {
             : undefined,
         careSetting: selectedCareSettings,
         ageGroup: selectedAgeGroups,
-        specialties: specialties
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean),
+        specialties,
         groups: groups.map((group, groupIndex) => ({
           id: group.id,
           label: {
@@ -299,13 +297,12 @@ export default function NewVitalSignsTemplatePage() {
             <Label>Description (AR)</Label>
             <Textarea value={descriptionAr} onChange={(e) => setDescriptionAr(e.target.value)} />
           </div>
-          <div className="space-y-2">
-            <Label>Specialties (comma separated)</Label>
-            <Input
-              placeholder="GEN_MED, CARDIO"
-              value={specialties}
-              onChange={(e) => setSpecialties(e.target.value)}
-            />
+          <div className="space-y-2 md:col-span-2">
+            <Label>Specialties</Label>
+            <p className="text-xs text-muted-foreground">
+              Leave empty to apply to all specialties.
+            </p>
+            <SpecialtyMultiSelect value={specialties} onChange={setSpecialties} />
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">

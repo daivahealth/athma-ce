@@ -101,11 +101,34 @@ ADD COLUMN specialty_id UUID REFERENCES specialties(id) ON DELETE SET NULL;
 
 **Purpose**: Optional specialty label for departments (for UX/reporting)
 
+`wards.specialty_id` follows the same pattern (optional FK; falls back to the department's specialty when null).
+
+---
+
+## 🔑 **Specialty Codes Across Services (canonical rule)**
+
+`specialties.code` (e.g. `CARDIO`, `GEN_MED`, `PED`) is the **stable cross-service key**. The master lives only in the foundation DB, so:
+
+- **Foundation tables** reference the master by FK: `departments.specialty_id`, `wards.specialty_id`, `staff_specialties.specialty_id`.
+- **Foundation tables without an FK** store the master **code**: `clinics.specialty`, `plugins.specialty_code`. Clinic create/update rejects unknown or inactive codes (`400`).
+- **Other services' databases** (clinical, plugins) cannot hold an FK into foundation and must store the master **code** — never a display name or free text:
+
+| Column | Holds | Enforced by |
+|---|---|---|
+| `vital_signs_templates.specialties` (clinical) | `text[]` of codes; empty = all specialties | UI picker; migration `013` normalised legacy values |
+| `ot_room_configs.specialty` (clinical) | code | UI picker; migration `013` mapped known names |
+| `clinical_document_embeddings.specialty_code` (clinical) | code | written by AI gateway |
+| `note_templates.specialty_id` (clinical) | foundation specialty **id** (legacy exception) | UI picker |
+
+The UI must use the shared picker `SpecialtySelect` / `SpecialtyMultiSelect` (`frontend/src/modules/foundation/components/specialty-select.tsx`) and display stored values through `useSpecialtyLabel()` (`frontend/src/modules/foundation/hooks/use-specialties.ts`), which resolves a code or id to the localized name. Values not in the master are shown as-is and flagged in the picker so an admin can re-pick them.
+
+The specialty master is **global** (no `tenant_id`) and has no write API; add or change specialties through `seed/foundation/02-specialties.sql` plus a foundation migration for existing deployments (see `20261104000000_specialty_master_cleanup`, which added `CRIT_CARE`).
+
 ---
 
 ## 📋 **Seeded Data**
 
-### **25 Specialties**
+### **26 Specialties**
 | Code | English Name | Arabic Name | Category |
 |------|-------------|-------------|----------|
 | GEN_MED | General Medicine | طب عام | Primary Care |
@@ -133,9 +156,12 @@ ADD COLUMN specialty_id UUID REFERENCES specialties(id) ON DELETE SET NULL;
 | PSYCH | Psychiatry | الطب النفسي | Other |
 | ANESTH | Anesthesiology | التخدير وإدارة الألم | Other |
 | EMERG | Emergency Medicine | الطوارئ والإصابات | Other |
+| CRIT_CARE | Critical Care Medicine | طب العناية المركزة | Other |
 
-### **10 DHA Authority Mappings**
-Sample mappings for Dubai Health Authority codes included.
+Arabic names are listed for reference; the seed currently ships Arabic translations for 13 of them (GEN_MED, FAM_MED, GEN_SURG, ORTHO, CARDIO, PED, OBGYN, RAD, DERM, OPHTHAL, ENT, PSYCH, CRIT_CARE). Without a translation the API falls back to the English name.
+
+### **DHA Authority Mappings**
+Sample Dubai Health Authority mappings are seeded for CARDIO, ORTHO and PED.
 
 ---
 
@@ -333,67 +359,11 @@ async function changePrimarySpecialty(
 
 ---
 
-## 🔄 **Migration from JSON**
+## 🔄 **Legacy `staff.specialties` JSON column (removed)**
 
-If you have existing `staff.specialties` JSON column:
+The legacy `staff.specialties` JSONB column was dropped by foundation migration `20261104000000_specialty_master_cleanup`. It had no facility context, so it could not be backfilled into `staff_specialties` automatically: any non-empty values found at migration time are copied to `staff_specialties_legacy_json` (staff_id, tenant_id, specialties, archived_at) for manual mapping, then the column is dropped. Seeds only ever wrote `[]`.
 
-### **Step 1: Extract Distinct Values**
-```sql
-SELECT DISTINCT jsonb_array_elements_text(specialties::jsonb) as specialty
-FROM staff
-WHERE specialties IS NOT NULL AND specialties::text != '[]';
-```
-
-### **Step 2: Map to Specialty Codes**
-```sql
--- Manual mapping required (JSON values → specialty codes)
--- Example:
--- 'cardiology' → 'CARDIO'
--- 'internal_medicine' → 'GEN_MED'
--- 'pediatrics' → 'PED'
-```
-
-### **Step 3: Migrate to staff_specialties**
-```sql
-INSERT INTO staff_specialties (tenant_id, staff_id, specialty_id, primary_flag)
-SELECT 
-  s.tenant_id,
-  s.id as staff_id,
-  sp.id as specialty_id,
-  -- First specialty in array is primary
-  (spec_index = 0) as primary_flag
-FROM staff s
-CROSS JOIN LATERAL (
-  SELECT 
-    jsonb_array_elements_text(s.specialties::jsonb) as spec_value,
-    ROW_NUMBER() OVER () - 1 as spec_index
-) specs
-JOIN specialties sp ON sp.code = CASE 
-  WHEN specs.spec_value = 'cardiology' THEN 'CARDIO'
-  WHEN specs.spec_value = 'internal_medicine' THEN 'GEN_MED'
-  WHEN specs.spec_value = 'pediatrics' THEN 'PED'
-  -- Add more mappings
-END
-WHERE s.specialties IS NOT NULL 
-  AND s.specialties::text != '[]';
-```
-
-### **Step 4: Verify**
-```sql
--- Check all staff have specialties migrated
-SELECT 
-  COUNT(*) as staff_with_json,
-  COUNT(DISTINCT ss.staff_id) as staff_with_relations
-FROM staff s
-LEFT JOIN staff_specialties ss ON ss.staff_id = s.id
-WHERE s.specialties IS NOT NULL 
-  AND s.specialties::text != '[]';
-```
-
-### **Step 5: Drop Old Column (after verification)**
-```sql
-ALTER TABLE staff DROP COLUMN IF EXISTS specialties;
-```
+To map archived values, look up the code with `GET /specialties` and assign with `POST /staff/:staffId/specialties` (facility required).
 
 ---
 
@@ -477,9 +447,9 @@ CREATE INDEX idx_specialty_translations ON specialty_translations(specialty_id, 
 
 ```
 ✅ Database Tables Created: 4 (specialties, staff_specialties, specialty_translations, specialty_codes_authority)
-✅ Specialties Seeded: 25
-✅ Arabic Translations: 25
-✅ DHA Authority Mappings: 10
+✅ Specialties Seeded: 26
+✅ Arabic Translations: 13 (English fallback for the rest)
+✅ DHA Authority Mappings: 3 (sample)
 ✅ Prisma Schema Updated
 ✅ Prisma Client Generated
 ✅ Migration Applied Successfully
@@ -490,7 +460,8 @@ CREATE INDEX idx_specialty_translations ON specialty_translations(specialty_id, 
 
 ## 📚 **Documentation**
 
-- **Migration File**: `migrations/add_specialties_master_table.sql`
+- **Migration Files**: `backend/shared/database-foundation/migrations/add_specialties_master_table.sql` (original), `backend/shared/database-foundation/prisma/migrations/20261104000000_specialty_master_cleanup/` (drops `staff.specialties`, adds `CRIT_CARE`), `backend/shared/database-clinical/migrations/013_normalize_specialty_codes.sql` (normalises clinical references to codes)
+- **API**: [API-SPECIALTY-MANAGEMENT.md](API-SPECIALTY-MANAGEMENT.md)
 - **Prisma Schema**: Updated with 4 new models
 - **This Guide**: Complete usage documentation
 

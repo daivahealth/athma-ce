@@ -203,7 +203,9 @@ export class StaffController {
         staffType: 'physician',
         licenseNumber: 'DHA-12345',
         email: 'ahmed.hassan@hospital.ae',
-        specialties: ['cardiology']
+        staffSpecialties: [
+          { facilityId: '323e4567-e89b-12d3-a456-426614174000', primaryFlag: true, specialty: { code: 'CARDIO', name: 'Cardiology' } }
+        ]
       }
     }
   })

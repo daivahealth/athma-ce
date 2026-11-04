@@ -138,32 +138,35 @@ export class StaffSpecialtyController {
   @Get(':staffId/specialties')
   @Permissions(SPECIALTY_READ)
   async getStaffSpecialties(
+    @Headers('x-tenant-id') tenantId: string,
     @Param('staffId') staffId: string,
     @Query('facilityId') facilityId?: string,
     @Query('locale') locale?: string
   ) {
-    return this.specialtyService.getStaffSpecialties(staffId, facilityId, locale);
+    return this.specialtyService.getStaffSpecialties(tenantId, staffId, facilityId, locale);
   }
 
   @Put(':staffId/specialties/facility/:facilityId/primary/:specialtyId')
   @Permissions(SPECIALTY_MANAGE)
   @HttpCode(HttpStatus.OK)
   async changePrimarySpecialty(
+    @Headers('x-tenant-id') tenantId: string,
     @Param('staffId') staffId: string,
     @Param('facilityId') facilityId: string,
     @Param('specialtyId') specialtyId: string
   ) {
-    return this.specialtyService.changePrimarySpecialty(staffId, facilityId, specialtyId);
+    return this.specialtyService.changePrimarySpecialty(tenantId, staffId, facilityId, specialtyId);
   }
 
   @Delete(':staffId/specialties/facility/:facilityId/specialty/:specialtyId')
   @Permissions(SPECIALTY_MANAGE)
   @HttpCode(HttpStatus.OK)
   async removeSpecialtyFromStaff(
+    @Headers('x-tenant-id') tenantId: string,
     @Param('staffId') staffId: string,
     @Param('facilityId') facilityId: string,
     @Param('specialtyId') specialtyId: string
   ) {
-    return this.specialtyService.removeSpecialtyFromStaff(staffId, facilityId, specialtyId);
+    return this.specialtyService.removeSpecialtyFromStaff(tenantId, staffId, facilityId, specialtyId);
   }
 }
