@@ -43,9 +43,91 @@ export interface DashboardMetrics {
   appointmentCompletionRate: number;
   utilizationRate: number;
 
+  // Worklists, history and projections (absent in caches written before they existed)
+  worklists?: DashboardWorklists;
+  trends?: DashboardTrends;
+  forecast?: DashboardForecast;
+  arAging?: DashboardArAging;
+
   // Metadata
   cachedAt: string;
   currency: string;
+}
+
+/** What is waiting on someone right now: each figure is the read its own page makes. */
+export interface DashboardWorklists {
+  encountersInProgress: number;
+  ordersOpen: number;
+  labOrdersOpen: number;
+  imagingOrdersOpen: number;
+  urgentOrdersOpen: number;
+  labReportsAwaitingSignOff: number;
+  inpatientsCurrent: number;
+  dischargesDue: number;
+  appointmentsNext7Days: number;
+}
+
+/** Daily history, oldest first, ending today (today is a partial day). */
+export interface DashboardTrends {
+  days: string[];
+  encounters: number[];
+  newPatients: number[];
+  revenue: number[];
+}
+
+export interface DashboardForecastPoint {
+  date: string;
+  value: number;
+  /** ≈80% band. */
+  low: number;
+  high: number;
+}
+
+export interface DashboardForecastSeries {
+  method: 'seasonal-holt';
+  /** Starts today; fitted on history through yesterday. */
+  points: DashboardForecastPoint[];
+  /** Smoothed trend, per week, in the series' unit. */
+  trendPerWeek: number;
+  /** Last four weeks against the four before, in percent; null without a base. */
+  changeVsPriorPct: number | null;
+  /** Days with activity in the last four weeks that the fit rests on. */
+  activeDays: number;
+}
+
+export interface DashboardRunRateProjection {
+  actualToDate: number;
+  projected: number;
+  low: number;
+  high: number;
+  periodEnd: string;
+  comparison: number;
+  changeVsComparisonPct: number | null;
+}
+
+/** A series is null when its last four weeks are too sparse to forecast. */
+export interface DashboardForecast {
+  generatedFor: string;
+  horizonDays: number;
+  encounters: DashboardForecastSeries | null;
+  newPatients: DashboardForecastSeries | null;
+  revenue: DashboardForecastSeries | null;
+  revenueMonthEnd: DashboardRunRateProjection | null;
+  newPatientsMonthEnd: DashboardRunRateProjection | null;
+}
+
+export interface DashboardArAgingBucket {
+  key: 'current' | 'd31_60' | 'd61_90' | 'd90_plus';
+  label: string;
+  count: number;
+  amount: number;
+}
+
+/** Open receivables by days past due. */
+export interface DashboardArAging {
+  buckets: DashboardArAgingBucket[];
+  /** Share of open balance paid on invoices raised in the last 90 days, in percent. */
+  collectionRate90d: number | null;
 }
 
 /**
