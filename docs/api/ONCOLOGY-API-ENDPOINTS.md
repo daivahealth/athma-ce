@@ -279,7 +279,8 @@ POST /api/v1/plugins/oncology/care-plans/:id/approve
 ```
 **Permission:** `oncology.care_plan.approve`
 
-Sets `status = 'active'`, records `approved_by` (from JWT) and `approved_at`.
+No body. Sets `status = 'active'`, records `approved_by` (the signed-in user from the JWT — any
+`approvedBy` in the body is ignored) and `approved_at`. Only `draft` plans can be approved.
 
 ---
 
@@ -391,6 +392,24 @@ Soft-delete: sets `is_active = false`. Existing orders retain the protocol refer
 
 ## Chemo Orders (Phase 2)
 
+Status flow and safety rules (enforced server-side in `chemo-order-rules.ts`; violations return **400**
+with the rule in `message`):
+
+```
+draft → pending → approved → verified → in_progress → completed
+pending | approved | verified | in_progress → held → (resume) pending
+draft | pending | approved | verified | held → cancelled
+```
+
+- **Separation of duties:** the approver must differ from the ordering provider; the verifier must
+  differ from the approver. Every sign-off is attributed to the signed-in user, never to a body field.
+- **Dual sign-off** (`oncology.chemo.require_dual_sign`, default `true`, resolved per tenant from
+  foundation config; fails closed to `true` if foundation is unreachable): verification needs an
+  independent `secondVerifiedBy` and administration can only start from `verified`. When `false`,
+  the second verifier is optional and administration may start from `approved`.
+- Every transition re-checks the status in its `UPDATE … WHERE status = …`; a concurrent change
+  returns 400 "Order status changed; reload and try again".
+
 ### List Orders
 ```
 GET /api/v1/plugins/oncology/orders?patientId=&status=&date=&cancerDiagnosisId=&page=1&limit=20
@@ -420,7 +439,21 @@ POST /api/v1/plugins/oncology/orders
 ```
 **Permission:** `oncology.chemo_order.write`
 
-Required: `protocolId`, `patientId`, `cycleNumber`, `dayNumber`, `scheduledDate`. Default status: `pending`.
+Required: `protocolId` (must be an active protocol), `patientId` or `cancerDiagnosisId`, `cycleNumber`,
+`dayNumber` (positive integers), `scheduledDate`.
+
+`status` may be omitted (→ `pending`) or `draft`; any other value is rejected. `ordering_provider` is
+always the signed-in user — an `orderingProvider` in the body is ignored.
+
+---
+
+### Submit Draft Order
+```
+POST /api/v1/plugins/oncology/orders/:id/submit
+```
+**Permission:** `oncology.chemo_order.write`
+
+Transitions: `draft → pending`.
 
 ---
 
@@ -430,7 +463,8 @@ PUT /api/v1/plugins/oncology/orders/:id
 ```
 **Permission:** `oncology.chemo_order.write`
 
-Only allowed when `status = pending | draft`.
+Only allowed when `status = pending | draft`. Use this to complete `preChemoChecklist` on orders created
+from a treatment schedule day (they start with an empty checklist).
 
 ---
 
@@ -442,6 +476,11 @@ POST /api/v1/plugins/oncology/orders/:id/approve
 
 Transitions: `pending → approved`. Records `approved_by` (from JWT) and `approved_at`.
 
+Rejected when:
+- the signed-in user is the order's `ordering_provider` (no self-approval);
+- `pre_chemo_checklist` does not have `true` for all of `consentDocumented`, `allergiesReviewed`,
+  `labsReviewed`, `labsWithinRange`, `bsaVerified`, `doseVerified` (`premedicationsOrdered` is optional).
+
 ---
 
 ### Verify Order
@@ -451,6 +490,11 @@ POST /api/v1/plugins/oncology/orders/:id/verify
 **Permission:** `oncology.chemo_order.verify`
 
 Transitions: `approved → verified`. Body: `{ secondVerifiedBy?, nurseVerificationChecklist?, drugPreparationDetails? }`.
+`verified_by` is the signed-in user.
+
+- The verifier cannot be the approver.
+- `secondVerifiedBy` must be a **user id** (UUID) different from the verifier. Under dual sign-off it is
+  required and must also differ from the approver and the ordering provider.
 
 ---
 
@@ -460,7 +504,9 @@ POST /api/v1/plugins/oncology/orders/:id/start
 ```
 **Permission:** `oncology.chemo_order.administer`
 
-Transitions: `verified → in_progress`. Records `administered_at = NOW()`.
+Transitions: `verified → in_progress` (dual sign-off on, and a `second_verified_by` must be recorded) or
+`approved | verified → in_progress` (dual sign-off off). Records `administered_by` (from JWT) and
+`administered_at = NOW()`.
 
 ---
 
@@ -482,7 +528,20 @@ POST /api/v1/plugins/oncology/orders/:id/hold
 ```
 **Permission:** `oncology.chemo_order.write`
 
-Transitions any status → `held`. Body: `{ reason? }`.
+Transitions `pending | approved | verified | in_progress → held`. Body: `{ reason? }`. A linked treatment
+day becomes `held`.
+
+---
+
+### Resume Order
+```
+POST /api/v1/plugins/oncology/orders/:id/resume
+```
+**Permission:** `oncology.chemo_order.write`
+
+Transitions `held → pending`. Body: `{ reason? }`. Clears `approved_*`, `verified_*`,
+`second_verified_by` and `administered_*`, so the order must be approved and verified again. A linked
+treatment day goes back to `ordered`. Logs a `chemo_resumed` timeline event.
 
 ---
 
@@ -492,7 +551,8 @@ POST /api/v1/plugins/oncology/orders/:id/cancel
 ```
 **Permission:** `oncology.chemo_order.write`
 
-Transitions any status → `cancelled`. Body: `{ reason? }`.
+Transitions `draft | pending | approved | verified | held → cancelled`. Body: `{ reason? }`. An
+`in_progress` order must be held first; `completed` and `cancelled` orders cannot be cancelled.
 
 ---
 
@@ -591,3 +651,7 @@ completion / hold / cancel update the day (`given` / `held` / back to `planned`)
 - All database queries use `$queryRawUnsafe()` with the `plugin_oncology` schema prefix. There are no cross-schema Prisma relations to the core clinical schema.
 - Tenant context is resolved from `AsyncLocalStorage` via `RequestContext.getStore()` — never passed explicitly in service method calls.
 - `diagnosedBy` / `createdBy` fields are resolved from `RequestContext.getUserId()` — the frontend never sends these fields.
+- All approver / signer fields are resolved from the JWT user the same way: chemo `ordering_provider`,
+  `approved_by`, `verified_by`, `administered_by`; care plan `approved_by`; radiation prescription and
+  radiation plan `approved_by`. `POST /radiation/prescriptions/:id/approve` records `approved_by` /
+  `approved_at` and leaves the original `prescribed_by` / `prescribed_at` unchanged.
