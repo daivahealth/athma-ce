@@ -1,0 +1,29 @@
+# Automatic HTTPS (Let's Encrypt) for each public hostname.
+# DEMO_DOMAIN is e.g. demo.daiva.health or 34-100-1-2.sslip.io.
+app.{$DEMO_DOMAIN} {
+	encode gzip
+	reverse_proxy frontend:3000
+}
+
+foundation.{$DEMO_DOMAIN} {
+	reverse_proxy foundation:3010
+}
+
+clinical.{$DEMO_DOMAIN} {
+	request_body {
+		max_size 50MB
+	}
+	reverse_proxy clinical:3011
+}
+
+rcm.{$DEMO_DOMAIN} {
+	reverse_proxy rcm:3012
+}
+
+prm.{$DEMO_DOMAIN} {
+	reverse_proxy prm:3013
+}
+
+ai.{$DEMO_DOMAIN} {
+	reverse_proxy ai-gateway:3015
+}

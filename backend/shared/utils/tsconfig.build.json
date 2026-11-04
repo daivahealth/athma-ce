@@ -4,6 +4,13 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "./dist",
+    "rootDir": "./src",
+    // Resolve contracts from its built declarations, not its source, so tsc
+    // keeps dist/ flat (dist/index.js) as package.json "main" expects.
+    "baseUrl": ".",
+    "paths": {
+      "@zeal/contracts": ["../../contracts/dist"]
+    },
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

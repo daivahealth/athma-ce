@@ -1,0 +1,17 @@
+# Build context for infrastructure/demo-gcp images (context = repo root).
+.git
+.github
+.claude
+**/.claude
+docs
+seed
+**/node_modules
+**/dist
+**/.next
+**/.turbo
+**/coverage
+**/uploads
+**/.env
+**/.env.*
+!**/.env.example
+infrastructure/demo-gcp/.env
