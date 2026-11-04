@@ -8,10 +8,6 @@ WORKDIR /app/frontend
 
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
-# package.json declares tailwindcss ^4 (Dependabot #168) but the app still uses
-# the v3 PostCSS/config setup. Pin the v3 version the app is developed against
-# until the v4 migration is done.
-RUN npm install --no-save --no-audit --no-fund tailwindcss@3.4.19
 
 COPY backend/contracts/src /app/backend/contracts/src
 COPY frontend/ ./
