@@ -90,6 +90,24 @@ sudo ./db-snapshot.sh restore /opt/athma/dbdump
 sudo docker compose up -d
 ```
 
+### Refresh the dashboard's demo activity
+The HealthAI+ dashboard's worklists and forecast read 90 days of activity that
+`seed/clinical/27-demo-activity.sql` and `seed/rcm/09-demo-invoices.sql`
+generate relative to the day they run. The history goes stale as days pass, so
+re-run both (same day) shortly before a demo. They only replace their own rows
+(MRN `MRN-DEMO-*`, encounter `DEMO-ENC-*`, admission `DEMO-ADM-*`, invoice
+`DEMO-INV-*`), so they are safe on a database that has had real demo use:
+
+```bash
+# VM; the DB container name and user come from the compose .env
+cd /opt/athma
+sudo docker exec -i <postgres-container> psql -v ON_ERROR_STOP=1 -U <db-user> -d zeal_clinical < seed/clinical/27-demo-activity.sql
+sudo docker exec -i <postgres-container> psql -v ON_ERROR_STOP=1 -U <db-user> -d zeal_rcm < seed/rcm/09-demo-invoices.sql
+```
+
+Then press **Refresh** on the dashboard (or wait up to 30 minutes) so the
+cached metrics are rebuilt.
+
 Tenant secrets (`tenant_secrets`) are encrypted with the source machine's `SECRETS_MASTER_KEY` and will not decrypt on the demo VM. Re-enter any ABDM/NHCX credentials through the settings UI, or keep the providers on mock.
 
 ## Triage
