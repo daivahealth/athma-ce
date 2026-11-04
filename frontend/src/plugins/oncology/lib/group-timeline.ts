@@ -48,6 +48,7 @@ const CHEMO_STAGE_RANK: Record<string, number> = {
   chemo_started: 2,
   chemo_held: 3,
   chemo_cancelled: 3,
+  chemo_resumed: 3,
   chemo_completed: 4,
 };
 

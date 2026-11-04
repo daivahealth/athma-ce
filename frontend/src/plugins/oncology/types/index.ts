@@ -515,6 +515,8 @@ export interface RadiationPrescription {
   prescription_notes?: string;
   prescribed_by?: string;
   prescribed_at?: string;
+  approved_by?: string;
+  approved_at?: string;
   status: RadiationStatus;
   created_at: string;
   updated_at: string;
@@ -619,7 +621,7 @@ export type TimelineEventType =
   | 'diagnosis' | 'staging' | 'tumor_board' | 'tumor_board_decision'
   | 'care_plan_created' | 'care_plan_approved'
   | 'chemo_ordered' | 'chemo_approved' | 'chemo_started' | 'chemo_completed'
-  | 'chemo_held' | 'chemo_cancelled'
+  | 'chemo_held' | 'chemo_cancelled' | 'chemo_resumed'
   | 'radiation_prescribed' | 'radiation_started' | 'radiation_completed' | 'simulation'
   | 'response_assessment' | 'follow_up' | 'custom';
 

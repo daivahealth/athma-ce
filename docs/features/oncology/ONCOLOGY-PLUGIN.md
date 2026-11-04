@@ -157,7 +157,7 @@ maintenance` × 11.
 
 ### `chemo_orders`
 
-Per-patient order instance derived from a protocol. Status workflow: `draft → pending → approved → verified → in_progress → completed | held | cancelled`.
+Per-patient order instance derived from a protocol. Status workflow and the safety rules on each transition are described in [Phase 2 Chemo Workflow](#phase-2-chemo-workflow-ascoons-safety-standards).
 
 | Column | Type | Notes |
 |--------|------|-------|
@@ -176,12 +176,12 @@ Per-patient order instance derived from a protocol. Status workflow: `draft → 
 | `renal_adjustment_grade` | VARCHAR(10)? | normal, mild, moderate, severe |
 | `dose_adjustments` | JSONB | Manual per-drug adjustments with reason |
 | `pre_chemo_checklist` | JSONB | Consent, allergy review, lab review checkboxes + dates |
-| `ordering_provider` | UUID? | Physician who ordered |
+| `ordering_provider` | UUID | Signed-in user who created the order (never client-supplied) |
 | `approved_by` | UUID? | Pharmacist / second-physician sign-off |
 | `approved_at` | TIMESTAMPTZ? | |
 | `verified_by` | UUID? | First nurse verification |
 | `verified_at` | TIMESTAMPTZ? | |
-| `second_verified_by` | UUID? | Second nurse (ASCO/ONS dual-check) |
+| `second_verified_by` | UUID? | Independent second verifier (user id); required under dual sign-off |
 | `administered_by` | UUID? | Nurse who administered |
 | `administered_at` | TIMESTAMPTZ? | |
 | `adverse_reactions` | JSONB | Array of `{ drug, ctcaeGrade, type, onsetTime, description }` |
@@ -432,19 +432,56 @@ The Phase 2 chemotherapy module implements ASCO/ONS Chemotherapy Administration 
 | Dose calculation (BSA/weight) | Auto-calculated in orders/new; stored in `dose_adjustments` |
 | Organ function dose adjustment | `hepatic_adjustment_grade`, `renal_adjustment_grade`; manual adjustment rows |
 | Lab prerequisites before cycle | `lab_prerequisites` on protocol; checklist review on order |
-| Informed consent documented | Pre-chemo checklist checkbox + consent date in `pre_chemo_checklist` JSON |
-| Allergy check | Manual review captured in `pre_chemo_checklist` |
-| Pharmacist/second-physician sign-off | `approveChemoOrder` → `approved_by`, `approved_at` |
-| Nurse bedside verification (dual-check) | `verifyChemoOrder` → `verified_by`, optional `second_verified_by` |
+| Informed consent documented | Pre-chemo checklist checkbox + consent date in `pre_chemo_checklist` JSON; **required before approval** |
+| Allergy check | Manual review captured in `pre_chemo_checklist`; **required before approval** (not yet linked to the patient allergy list) |
+| Pharmacist/second-physician sign-off | `approveChemoOrder` → `approved_by`, `approved_at`; approver must differ from the ordering provider |
+| Nurse bedside verification (dual-check) | `verifyChemoOrder` → `verified_by` (must differ from approver), `second_verified_by` (independent user; required under dual sign-off) |
 | Administration time documentation | `administration_details` JSON per drug |
 | Adverse event capture (CTCAE) | `adverse_reactions` JSON with CTCAE grade 1–5 |
-| Feature flag for dual-sign | `oncology.chemo.requireDualSign` in `athma-plugin.json` |
+| Dual sign-off switch | `oncology.chemo.require_dual_sign` config key (declared in `athma-plugin.json`, default `true`) |
 
 **Order status workflow:**
 ```
 draft → pending → approved → verified → in_progress → completed
-                                                   ↘ held
-                                                   ↘ cancelled
+pending | approved | verified | in_progress → held → (resume) pending
+draft | pending | approved | verified | held → cancelled
+```
+
+**Server-side enforcement.** The rules live in `backend/src/chemo-order-rules.ts` (pure functions, unit-tested
+with `npm test` in `plugins/oncology`) and are applied by `OncologyService` before every write. Each
+`UPDATE` also re-checks the expected status in its `WHERE` clause so concurrent transitions cannot both win.
+
+- New orders can only be created as `pending` (default) or `draft`; `ordering_provider` is always the
+  signed-in user. The protocol must be active.
+- Approval requires a different user from the ordering provider and a complete pre-chemo checklist:
+  `consentDocumented`, `allergiesReviewed`, `labsReviewed`, `labsWithinRange`, `bsaVerified`, `doseVerified`
+  (`premedicationsOrdered` is optional). Orders created from a treatment day start with an empty
+  checklist, which is completed on the order screen before approval.
+- Verification cannot be done by the approver. `second_verified_by` must be a user id different from the
+  verifier; under dual sign-off it is required and must also differ from the approver and orderer.
+- With dual sign-off on, administration starts only from `verified` with a second verifier recorded; with
+  it off, `approved` orders may also start.
+- `held` orders are resumed to `pending` with all sign-offs cleared, so they are approved and verified again.
+- Completed and cancelled orders cannot be held or cancelled; an `in_progress` order must be held before
+  it can be cancelled.
+
+**Dual sign-off resolution.** `OncologySettingsService` reads `oncology.chemo.require_dual_sign` from
+foundation's public `GET /api/v1/configs/resolve` (tenant-level, cached 60 s per tenant) using `fetch`,
+because the plugin cannot resolve `@zeal/config-client` at runtime. Any failure, missing key or
+non-`false` value means dual sign-off is required (fail closed).
+
+Care plan approval (`approved_by`) and radiation prescription approval (`approved_by` / `approved_at`,
+leaving `prescribed_by` intact) are likewise attributed to the signed-in user only.
+
+**Schema impact.** `radiation_prescriptions` gained nullable `approved_by` and `approved_at` columns.
+Existing databases need a schema push (additive, no data loss; the push is scoped to the
+`plugin_oncology` schema) before approving radiation prescriptions. `db:push` needs
+`CLINICAL_DATABASE_URL`, which is not set in the plugin directory; locally, take it from the clinical
+service's env file:
+
+```bash
+cd plugins/oncology
+CLINICAL_DATABASE_URL="$(grep -E '^CLINICAL_DATABASE_URL=' ../../backend/services/clinical/.env.local | cut -d= -f2-)" npm run db:push
 ```
 
 ## Phase Roadmap
@@ -453,4 +490,4 @@ draft → pending → approved → verified → in_progress → completed
 |-------|-------|--------|
 | Phase 1 | Registry, Diagnosis, Staging, Tumor Board, Care Plan | Complete |
 | Phase 2 | Chemotherapy — ChemoProtocol → consent → lab check → ChemoOrder → administration | Complete |
-| Phase 3 | Radiation Therapy planning and delivery tracking | Planned |
+| Phase 3 | Radiation Therapy — prescription, simulation, planning, fractions, on-treatment review, completion | Implemented (see [API](../../api/ONCOLOGY-API-ENDPOINTS.md); endpoint reference for radiation still to be written) |
