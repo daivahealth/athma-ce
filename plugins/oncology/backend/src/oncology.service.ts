@@ -530,6 +530,29 @@ export class OncologyService {
     );
   }
 
+  /**
+   * Every FINAL/AMENDED result of the patient's oncology tumour-marker tests
+   * (lab catalog category 'Oncology'), oldest first — for trend charts.
+   * Read-only display; not used for safety gating.
+   */
+  async getLabHistory(patientId: string) {
+    const tenantId = this.getTenantId();
+
+    return this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT lri.test_code, lri.test_name, lri.value_numeric, lri.unit,
+              lri.ref_range_low, lri.ref_range_high, lri.abnormal_flag,
+              COALESCE(lr.collection_date, lr.reported_at) AS observed_at
+       FROM lab_result_items lri
+       JOIN lab_reports lr ON lr.id = lri.lab_report_id
+       WHERE lr.patient_id = $1::uuid AND lr.tenant_id = $2::uuid
+         AND lr.report_status IN ('FINAL', 'AMENDED')
+         AND lri.value_numeric IS NOT NULL
+         AND lri.test_code IN (SELECT loinc_code FROM lab_test_master WHERE test_category = 'Oncology')
+       ORDER BY lri.test_code, observed_at`,
+      patientId, tenantId,
+    );
+  }
+
   // ============================================
   // Tumor Staging
   // ============================================
@@ -2172,6 +2195,9 @@ export class OncologyService {
     const countQuery = `SELECT COUNT(*) as count FROM plugin_oncology.radiation_prescriptions rp ${where}`;
     const dataQuery = `
       SELECT rp.*,
+        (SELECT COUNT(*)::int FROM plugin_oncology.radiation_fractions f
+           JOIN plugin_oncology.radiation_treatment_plans tp ON tp.id = f.treatment_plan_id
+          WHERE tp.prescription_id = rp.id AND f.status = 'DELIVERED') as delivered_fractions,
         p.mrn as patient_mrn, p.first_name as patient_first_name,
         p.last_name as patient_last_name, p.display_name as patient_display_name,
         p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,
