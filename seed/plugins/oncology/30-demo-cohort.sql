@@ -828,10 +828,10 @@ BEGIN
         treatment_intent, recommended_pathway, treatment_plan, follow_up_actions, status, created_at, updated_at
       ) VALUES (
         tb_id, TEN, p.id, dx_id, tb_date, doc,
-        jsonb_build_array(jsonb_build_object('staffId', SURG, 'role', 'Surgical Oncology', 'specialty', 'Surgical Oncology'),
-                          jsonb_build_object('staffId', MED, 'role', 'Medical Oncology', 'specialty', 'Medical Oncology'),
-                          jsonb_build_object('staffId', RAD, 'role', 'Radiation Oncology', 'specialty', 'Radiation Oncology'),
-                          jsonb_build_object('staffId', PHYS, 'role', 'Radiology & Pathology', 'specialty', 'Radiology')),
+        jsonb_build_array(jsonb_build_object('staffId', SURG, 'role', 'Surgeon', 'specialty', 'Surgical Oncology'),
+                          jsonb_build_object('staffId', MED, 'role', 'Medical Oncologist', 'specialty', 'Medical Oncology'),
+                          jsonb_build_object('staffId', RAD, 'role', 'Radiation Oncologist', 'specialty', 'Radiation Oncology'),
+                          jsonb_build_object('staffId', PHYS, 'role', 'Radiologist', 'specialty', 'Radiology')),
         v_age || '-year-old ' || CASE WHEN sex = 'F' THEN 'woman' ELSE 'man' END || ' with ' || lower(t.symptom) || '. Biopsy report awaited.',
         NULL, '[]'::jsonb, '{}'::jsonb,
         jsonb_build_array('Collect histopathology report', 'Complete staging: ' || t.imaging), 'scheduled', NOW(), NOW());
@@ -1263,10 +1263,10 @@ BEGIN
       treatment_plan, decision, review_outcome, follow_up_actions, status, created_at, updated_at
     ) VALUES (
       tb_id, TEN, p.id, dx_id, stg_id, tb_date, doc,
-      jsonb_build_array(jsonb_build_object('staffId', SURG, 'role', 'Surgical Oncology', 'specialty', 'Surgical Oncology'),
-                        jsonb_build_object('staffId', MED, 'role', 'Medical Oncology', 'specialty', 'Medical Oncology'),
-                        jsonb_build_object('staffId', RAD, 'role', 'Radiation Oncology', 'specialty', 'Radiation Oncology'),
-                        jsonb_build_object('staffId', PHYS, 'role', 'Radiology & Pathology', 'specialty', 'Radiology')),
+      jsonb_build_array(jsonb_build_object('staffId', SURG, 'role', 'Surgeon', 'specialty', 'Surgical Oncology'),
+                        jsonb_build_object('staffId', MED, 'role', 'Medical Oncologist', 'specialty', 'Medical Oncology'),
+                        jsonb_build_object('staffId', RAD, 'role', 'Radiation Oncologist', 'specialty', 'Radiation Oncology'),
+                        jsonb_build_object('staffId', PHYS, 'role', 'Radiologist', 'specialty', 'Radiology')),
       v_age || '-year-old ' || CASE WHEN sex = 'F' THEN 'woman' ELSE 'man' END || ' presenting with ' || lower(t.symptom) || '. '
         || COALESCE(t.risk || '. ', '') || 'ECOG ' || ecog || '.',
       t.imaging || ': ' || CASE WHEN s.t IS NOT NULL THEN 'c' || s.t || ' c' || s.n || ' c' || s.m || ', ' ELSE '' END || 'stage ' || s.grp
