@@ -308,6 +308,55 @@ If oncology API calls return **403 Forbidden**:
 
 See also: [Troubleshooting Plugin Activation](../../troubleshooting/README.md)
 
+### Demo cohort
+
+`seed/plugins/oncology/10-14-*.sql` hand-build five reference patients.
+`seed/plugins/oncology/30-demo-cohort.sql` is an **opt-in** seed (not in
+`run-seeds.sh`). It gives every other patient of the demo tenant a
+deterministic cancer journey, usually the 900 `MRN-DEMO-*` patients from
+`clinical/27-demo-activity.sql`. Run it after that file, on the same day.
+
+- **Case mix**: 29 templates weighted toward the case mix of an Indian
+  tertiary cancer centre, by sex and age band. Examples: oral cavity and
+  laryngeal HNSCC, breast (HR+, HER2+ and triple negative), cervix,
+  oesophagus, stomach, colorectal and rectum, gallbladder, liver, pancreas,
+  NSCLC and SCLC, ovary, endometrium, thyroid, prostate, bladder, DLBCL,
+  Hodgkin, myeloma, ALL, AML, CML, GBM and testis. Each template carries
+  coded site, morphology, ICD-10, SNOMED, grade, biomarker profiles, a
+  tumour marker and a stage-specific pathway (for example surgery then
+  chemoradiation, neoadjuvant chemotherapy then surgery, definitive CRT,
+  palliative chemotherapy, or a TKI for EGFR/ALK-positive lung).
+- **Records per patient**: a diagnosis, clinical staging (plus pathological
+  staging after surgery), a Wednesday tumour-board case, and a care plan with
+  modalities and milestones. Systemic therapy gets a treatment plan with
+  cycles and days. Doses are computed as in `treatment-schedule.ts`,
+  including dose levels and delays. It also writes chemo orders,
+  radiotherapy (prescription → simulation → plan → fractions → weekly reviews
+  → completion summary), and timeline events. Surgery is booked in the OT
+  module (request, schedule and signed report). Tumour markers are written as
+  FINAL lab reports with the oncology lab catalogue's LOINC codes, so the
+  registry's "Recent Oncology Labs" panel shows them, and mirrored into
+  `clinical_observations`. The patient's existing encounters also get
+  oncology chief complaints and ICD-10 diagnoses.
+- **Stored formats** follow the app: TNM categories without the letter
+  (`4a`, `2b`, `0`, because the UI adds T/N/M), and clock times in Asia/Kolkata.
+  Radiotherapy and chemo schedules are only written once they would exist in
+  practice: a radiotherapy prescription about 2 weeks before the first
+  fraction, a schedule a few days before cycle 1. Later ones appear only as
+  planned modalities in the care plan.
+- **Relative to today**: patients registered in the last ~12 days are still
+  in work-up (provisional diagnosis, tumour board scheduled). Today has a
+  day-care list of pending, approved and verified orders, with the next few
+  days partly ordered, and patients mid-radiotherapy. Older patients are in
+  surveillance, remission, palliative care or progression.
+- **Extra protocols**: the seed adds five protocols if they are missing:
+  `CisRT-Weekly`, `CROSS`, `Metronomic-HN` (oral metronomic methotrexate +
+  celecoxib), `AML-7+3` and `Stupp-TMZ`.
+- **Re-running** is safe. Ids derive from `onco-demo:<key>`, and a re-run
+  first deletes the earlier run's rows and rows of patients that no longer
+  exist. Patients with a hand-built diagnosis are not touched.
+
+
 ---
 
 ## Frontend Structure

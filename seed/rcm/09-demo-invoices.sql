@@ -31,12 +31,13 @@ SELECT
   k,
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-patient-' || k) AS id,
   'MRN-DEMO-' || lpad(k::text, 4, '0') AS mrn,
-  (ARRAY['Aarav','Diya','Vihaan','Ananya','Arjun','Isha','Kabir','Meera','Rohan','Saanvi',
-         'Omar','Fatima','Yusuf','Layla','Hamdan','Noura','Rahul','Priya','Nikhil','Kavya',
-         'Aditya','Sneha','Farhan','Zara','Karthik','Lakshmi','Vivek','Pooja','Imran','Aisha'])
-    [1 + (k * 7) % 30] || ' ' ||
+  -- First names follow the gender below (even k = female).
+  CASE WHEN k % 2 = 0
+    THEN (ARRAY['Diya','Ananya','Isha','Meera','Saanvi','Fatima','Swati','Priya','Kavya','Sneha','Zara','Lakshmi','Pooja','Aisha','Sunita'])[1 + (k * 7) % 15]
+    ELSE (ARRAY['Aarav','Vihaan','Arjun','Kabir','Rohan','Omar','Yusuf','Sanjay','Rahul','Nikhil','Aditya','Farhan','Karthik','Vivek','Imran'])[1 + (k * 7) % 15]
+  END || ' ' ||
   (ARRAY['Sharma','Iyer','Nair','Reddy','Khan','Menon','Patel','Gupta','Rao','Pillai',
-         'Al Hashimi','Kapoor','Das','Joshi','Kumar','Shetty','Bose','Varma','Hegde','Qureshi'])
+         'Deshpande','Kapoor','Das','Joshi','Kumar','Shetty','Bose','Varma','Hegde','Qureshi'])
     [1 + (k * 11) % 20] AS display_name,
   (CURRENT_DATE - (394 * (1 - sqrt(k / 900.0)))::int)
     + make_interval(hours => 8 + (k % 9), mins => (k * 13) % 60) AS registered_at
