@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Search, Eye, Plus } from 'lucide-react';
+import { Search, Eye, Plus, Handshake } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { usePayerContracts } from '@/modules/rcm/hooks/use-payer-contracts';
 import type { PayerContract } from '@/modules/rcm/types/payer-contract';
 import { ContractStatus, ContractType, AuthorityCode } from '@/modules/rcm/types/payer-contract';
+import { PageHeader } from '@/components/ui/page-header';
 
 const toLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
@@ -100,6 +101,18 @@ export default function PayerContractsPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Payer contracts"
+        subtitle="Negotiated terms and rates with each payer"
+        icon={Handshake}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/rcm-setup/payer-contracts/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New contract
+            </Link>
+          </Button>
+        }
+      />
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative flex-1 min-w-[240px] max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -157,14 +170,6 @@ export default function PayerContractsPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Payer contracts"
-          cta={
-            <Button size="sm" asChild>
-              <Link href={`/${locale}/rcm-setup/payer-contracts/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New contract
-              </Link>
-            </Button>
-          }
           columns={columns}
           data={filtered}
           isLoading={isLoading}

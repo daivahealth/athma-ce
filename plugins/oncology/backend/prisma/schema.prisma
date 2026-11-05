@@ -426,6 +426,8 @@ model RadiationPrescription {
   prescriptionNotes  String?   @map("prescription_notes") @db.Text
   prescribedBy       String?   @map("prescribed_by") @db.Uuid
   prescribedAt       DateTime? @map("prescribed_at") @db.Timestamptz(6)
+  approvedBy         String?   @map("approved_by") @db.Uuid
+  approvedAt         DateTime? @map("approved_at") @db.Timestamptz(6)
   status             String    @default("DRAFT") @db.VarChar(50)
   createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)

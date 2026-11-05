@@ -26,13 +26,14 @@ export interface StaffMember {
   licenseNumber?: string | null;
   licenseExpiry?: string | null;
   status: string;
+  /** Linked login (users.staff_id); null when the staff member has no account. */
   user?: {
     id: string;
     email: string;
     firstName?: string;
     lastName?: string;
     status: string;
-  };
+  } | null;
   createdAt: string;
   updatedAt: string;
 }

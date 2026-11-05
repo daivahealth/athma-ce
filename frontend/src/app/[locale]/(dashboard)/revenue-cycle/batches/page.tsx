@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Plus, Search } from 'lucide-react';
+import { Eye, Plus, Search, Layers } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useBatches } from '@/modules/rcm/hooks/use-batches';
 import type { Batch, BatchStatus } from '@/modules/rcm/types/batches';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabels: Record<BatchStatus, string> = {
   open: 'Open',
@@ -83,6 +84,18 @@ export default function BatchesPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Claim batches"
+        subtitle="Claims grouped for submission to payers"
+        icon={Layers}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/revenue-cycle/batches/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New batch
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -95,11 +108,6 @@ export default function BatchesPage() {
                 className="pl-9"
               />
             </div>
-            <Button asChild className="ml-auto">
-              <Link href={`/${locale}/revenue-cycle/batches/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New batch
-              </Link>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -110,7 +118,6 @@ export default function BatchesPage() {
         isLoading={isLoading}
         error={error}
         emptyMessage="No batches found."
-        title="Batches"
       />
     </div>
   );

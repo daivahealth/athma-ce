@@ -33,6 +33,7 @@ import { usePharmacyDispensings } from '@/modules/pharmacy/hooks/use-pharmacy-di
 import type { PharmacyQueueItem, PrescriptionDrugItem } from '@/modules/pharmacy/types/queue';
 import type { PharmacyDispensing } from '@/modules/pharmacy/types/dispensing';
 import { DispensingStatus, DispensingChannel } from '@/modules/pharmacy/types/dispensing';
+import { PageHeader } from '@/components/ui/page-header';
 
 /* ─── Status / channel display helpers ──────────────────────────────── */
 const STATUS_VARIANTS: Record<string, 'default' | 'secondary' | 'outline' | 'destructive'> = {
@@ -327,7 +328,12 @@ export default function DispensePage() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      <PageHeader
+        title="Pharmacy Queue"
+        subtitle="Prescriptions waiting to be dispensed, and dispensing history"
+        icon={Pill}
+      />
       <Tabs defaultValue="queue">
         <TabsList>
           <TabsTrigger value="queue">Queue</TabsTrigger>

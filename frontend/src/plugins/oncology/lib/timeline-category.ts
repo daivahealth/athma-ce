@@ -203,6 +203,7 @@ export const EVENT_TYPE_LABELS: Record<TimelineEventType, string> = {
   chemo_completed: 'Chemo Completed',
   chemo_held: 'Chemo Held',
   chemo_cancelled: 'Chemo Cancelled',
+  chemo_resumed: 'Chemo Resumed',
   radiation_prescribed: 'Radiation Prescribed',
   radiation_started: 'Radiation Started',
   radiation_completed: 'Radiation Completed',
