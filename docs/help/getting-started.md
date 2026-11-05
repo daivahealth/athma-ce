@@ -172,8 +172,9 @@ settings are loading, the sidebar briefly shows every group and then drops the o
 
 ### Collapsing to the icon rail
 
-The small round arrow on the sidebar's right edge (**Collapse sidebar**) shrinks it to a narrow rail
-of icons, giving the screen more room. The same arrow (**Expand sidebar**) brings it back. It stays
+The panel icon at the far left of the top bar (**Toggle sidebar**) shrinks the sidebar to a narrow
+rail of icons, giving the screen more room; press it again to bring it back. Clicking the sidebar's
+right edge does the same. On a phone or narrow window the same icon opens the menu instead. It stays
 the way you leave it as you move between screens, until you reload the page, when it opens full
 width again.
 

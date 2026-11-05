@@ -211,8 +211,11 @@ genuinely needs shared-layout or drag animations.
 `frontend/src/components/layout/sidebar.tsx`, styled after prrapp's sidebar:
 
 - A `bg-sidebar` panel (`#FAFAFA` light) with a hairline right border, `w-64`
-  open and a `w-14` icon rail closed; the round toggle sits on its right edge
-  in both states. Collapse state still comes from `SidebarProvider`
+  open and a `w-14` icon rail closed. As in prrapp, the toggle is a ghost
+  `PanelLeft` icon button (`SidebarTrigger`, exported from `sidebar.tsx`) at
+  the start of the topbar, followed by a hairline divider; below `md` it opens
+  the mobile drawer instead. An invisible rail on the sidebar's right border
+  shows a hairline on hover and also toggles it. Collapse state still comes from `SidebarProvider`
   (`frontend/src/lib/contexts/sidebar-context.tsx`).
 - Rows are compact (`h-8`, sub-rows `h-7`): transparent until hovered, then a
   faint primary tint; the active page, and the group that contains it, get a
