@@ -25,6 +25,7 @@ import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared'
 import type {
   AdverseReaction, AdministrationDetail, DrugPreparationDetail, NurseVerificationChecklist,
 } from '@/plugins/oncology/types';
+import { formatDayMonthYear } from '@/plugins/oncology/lib/treatment-day';
 
 const CTCAE_TYPES = [
   'Infusion reaction', 'Nausea', 'Vomiting', 'Hypotension', 'Hypersensitivity',
@@ -249,7 +250,7 @@ export default function ChemoOrderDetailPage() {
         <div className="flex-1">
           <h1 className="text-2xl font-bold">Chemo Order</h1>
           <p className="text-muted-foreground text-sm font-mono">
-            {order.protocol_code} · C{order.cycle_number} D{order.day_number} · {order.scheduled_date}
+            {order.protocol_code} · C{order.cycle_number} D{order.day_number} · {order.scheduled_date ? formatDayMonthYear(order.scheduled_date) : '—'}
           </p>
         </div>
         <StatusBadge status={status} />
@@ -907,7 +908,7 @@ export default function ChemoOrderDetailPage() {
               <div className="text-muted-foreground">Cycle / Day</div>
               <div>C{order.cycle_number} / D{order.day_number}</div>
               <div className="text-muted-foreground">Scheduled</div>
-              <div>{order.scheduled_date}</div>
+              <div>{order.scheduled_date ? formatDayMonthYear(order.scheduled_date) : '—'}</div>
               <div className="text-muted-foreground">BSA</div>
               <div>{order.bsa ? `${order.bsa} m²` : '—'} {order.weight ? `· ${order.weight} kg` : ''} {order.height ? `· ${order.height} cm` : ''}</div>
               <div className="text-muted-foreground">Creatinine Cl.</div>

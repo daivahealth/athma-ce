@@ -267,12 +267,12 @@ INSERT INTO plugin_oncology.chemo_orders (
 ('a0000004-0000-4000-8000-000000000002','11111111-1111-1111-1111-111111111111','7bc65ec5-ef2f-5a36-b575-7978ce5e59c0','e0000001-0000-4000-8000-000000000007',uuid_from_text('chemo-protocol-folfox'),'6d2df89a-3f81-5338-b197-373d347031db',
  2,1,'2021-05-24','2021-05-24 09:30:00+00',1.92,77.5,175.0,
  'd0000001-0000-4000-8000-000000000001','a0000003-0000-4000-8000-000000000001','{}','{"consentSigned":true,"labsReviewed":true}',
- 'completed','6d2df89a-3f81-5338-b197-373d347031db','[{"term":"Peripheral neuropathy","grade":1}]','{"route":"IV","infusionCenter":"Day Oncology Unit"}',
+ 'completed','6d2df89a-3f81-5338-b197-373d347031db','[{"drug":"Oxaliplatin","ctcaeGrade":1,"type":"Peripheral neuropathy","onsetTime":"2021-05-24T09:30:00Z","description":"CTCAE grade 1 peripheral neuropathy; managed with supportive care."}]','{"route":"IV","infusionCenter":"Day Oncology Unit"}',
  '{}','{}','Cycle 2 of 12; grade 1 neuropathy noted.',NOW(),NOW()),
 ('a0000004-0000-4000-8000-000000000003','11111111-1111-1111-1111-111111111111','7bc65ec5-ef2f-5a36-b575-7978ce5e59c0','e0000001-0000-4000-8000-000000000008',uuid_from_text('chemo-protocol-folfox'),'6d2df89a-3f81-5338-b197-373d347031db',
  3,1,'2021-06-07','2021-06-07 09:30:00+00',1.91,77.0,175.0,
  'd0000001-0000-4000-8000-000000000001','a0000003-0000-4000-8000-000000000001','{}','{"consentSigned":true,"labsReviewed":true}',
- 'completed','6d2df89a-3f81-5338-b197-373d347031db','[{"term":"Neutropenia","grade":2}]','{"route":"IV","infusionCenter":"Day Oncology Unit"}',
+ 'completed','6d2df89a-3f81-5338-b197-373d347031db','[{"drug":"Fluorouracil","ctcaeGrade":2,"type":"Neutropenia","onsetTime":"2021-06-07T09:30:00Z","description":"CTCAE grade 2 neutropenia; managed with supportive care."}]','{"route":"IV","infusionCenter":"Day Oncology Unit"}',
  '{}','{}','Cycle 3 of 12; grade 2 neutropenia, dose maintained.',NOW(),NOW());
 
 -- Chemo orders -- FOLFOX cycles 4-12 (real rows, generated; not just timeline decoration)

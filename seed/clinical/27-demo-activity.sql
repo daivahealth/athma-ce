@@ -40,12 +40,13 @@ SELECT
   k,
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-patient-' || k) AS id,
   'MRN-DEMO-' || lpad(k::text, 4, '0') AS mrn,
-  (ARRAY['Aarav','Diya','Vihaan','Ananya','Arjun','Isha','Kabir','Meera','Rohan','Saanvi',
-         'Omar','Fatima','Yusuf','Layla','Hamdan','Noura','Rahul','Priya','Nikhil','Kavya',
-         'Aditya','Sneha','Farhan','Zara','Karthik','Lakshmi','Vivek','Pooja','Imran','Aisha'])
-    [1 + (k * 7) % 30] AS first_name,
+  -- First names follow the gender below (even k = female).
+  CASE WHEN k % 2 = 0
+    THEN (ARRAY['Diya','Ananya','Isha','Meera','Saanvi','Fatima','Swati','Priya','Kavya','Sneha','Zara','Lakshmi','Pooja','Aisha','Sunita'])[1 + (k * 7) % 15]
+    ELSE (ARRAY['Aarav','Vihaan','Arjun','Kabir','Rohan','Omar','Yusuf','Sanjay','Rahul','Nikhil','Aditya','Farhan','Karthik','Vivek','Imran'])[1 + (k * 7) % 15]
+  END AS first_name,
   (ARRAY['Sharma','Iyer','Nair','Reddy','Khan','Menon','Patel','Gupta','Rao','Pillai',
-         'Al Hashimi','Kapoor','Das','Joshi','Kumar','Shetty','Bose','Varma','Hegde','Qureshi'])
+         'Deshpande','Kapoor','Das','Joshi','Kumar','Shetty','Bose','Varma','Hegde','Qureshi'])
     [1 + (k * 11) % 20] AS last_name,
   CASE WHEN k % 2 = 0 THEN 'female' ELSE 'male' END AS gender,
   (CURRENT_DATE - ((18 + (pg_temp.h('dob' || k) * 62)::int) * 365 + (k * 37) % 365))::date AS dob,
@@ -67,12 +68,12 @@ FROM demo_patient;
 CREATE INDEX ON demo_patient_rank (rn);
 
 INSERT INTO patients (
-  id, mrn, tenant_id, first_name, last_name, date_of_birth, gender,
+  id, mrn, tenant_id, first_name, last_name, display_name, date_of_birth, gender,
   phone_number, nationality, preferred_language, country, city,
   created_by, created_at_facility, registration_source, status, created_at, updated_at
 )
 SELECT
-  id, mrn, '11111111-1111-1111-1111-111111111111'::uuid, first_name, last_name, dob, gender,
+  id, mrn, '11111111-1111-1111-1111-111111111111'::uuid, first_name, last_name, first_name || ' ' || last_name, dob, gender,
   '+9198' || lpad(((k * 7919) % 100000000)::text, 8, '0'), 'IN', 'en', 'IN', 'Bengaluru',
   'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'::uuid, '087e0bd6-8d65-5133-94bd-7b4cd6ff3665'::uuid,
   'walk_in', 'active', registered_at, registered_at
