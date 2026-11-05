@@ -78,6 +78,8 @@ export class TreatmentScheduleService {
               (SELECT MIN(d.scheduled_date) FROM plugin_oncology.treatment_days d WHERE d.treatment_plan_id = tp.id AND d.status IN ('planned','ordered','held')) AS next_date,
               (SELECT COUNT(*)::int FROM plugin_oncology.treatment_days d WHERE d.treatment_plan_id = tp.id) AS total_days,
               (SELECT COUNT(*)::int FROM plugin_oncology.treatment_days d WHERE d.treatment_plan_id = tp.id AND d.status = 'given') AS given_days,
+              (SELECT COUNT(*)::int FROM plugin_oncology.treatment_cycles c WHERE c.treatment_plan_id = tp.id AND c.status = 'completed') AS completed_cycles,
+              (SELECT MIN(c.cycle_number) FROM plugin_oncology.treatment_cycles c WHERE c.treatment_plan_id = tp.id AND c.status IN ('in_progress','planned')) AS current_cycle,
               ${PATIENT_COLUMNS}
        FROM plugin_oncology.treatment_plans tp
        LEFT JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = tp.cancer_diagnosis_id

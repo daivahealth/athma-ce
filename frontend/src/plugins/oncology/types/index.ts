@@ -153,7 +153,7 @@ export interface TumorBoardCase {
 }
 
 export interface TumorBoardAttendee {
-  staffId: string;
+  staffId?: string;
   role: string;
   specialty: string;
 }
@@ -757,6 +757,9 @@ export interface TreatmentPlanSummary {
   total_cycles: number;
   total_days: number;
   given_days: number;
+  completed_cycles: number;
+  /** First cycle not yet completed; null once every cycle is done. */
+  current_cycle: number | null;
   patientDisplay?: OncologyPatientDisplay | null;
 }
 

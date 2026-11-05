@@ -101,7 +101,7 @@ GET /api/v1/plugins/oncology/registry
 ```
 **Permission:** `oncology.registry.read`
 
-Aggregated view: one row per cancer diagnosis, enriched with latest staging and active care plan status.
+Aggregated view: one row per cancer diagnosis, enriched with latest staging and care plan status. `care_plan_status` is the newest open plan (draft, active, on hold), else the newest other non-cancelled plan (for example `completed`), else null.
 
 **Query params:**
 | Param | Type | Description |
@@ -220,6 +220,8 @@ POST /api/v1/plugins/oncology/tumor-board
 
 `cancerDiagnosisId` is **required**.
 
+`attendees` is an array of `{ staffId?, role, specialty }`. `staffId` (a foundation staff id) records who attended. Older cases may have role and specialty only.
+
 ---
 
 ### Update Case
@@ -239,6 +241,8 @@ GET /api/v1/plugins/oncology/care-plans
 **Permission:** `oncology.care_plan.read`
 
 **Query params:** `patientId`, `status`, `treatmentIntent`, `page`, `limit`
+
+Each plan carries `cancer_type`, `primary_site` and `patientDisplay`.
 
 ---
 
@@ -571,6 +575,7 @@ behaviour: [ONCOLOGY-PLUGIN — Patient treatment schedule](../features/oncology
 GET /api/v1/plugins/oncology/treatment-plans?patientId=&carePlanId=&cancerDiagnosisId=&status=
 ```
 Summaries (max 200): protocol code/name, `start_date`, `end_date`, `next_date`, `total_cycles`,
+`completed_cycles`, `current_cycle` (first cycle not yet completed, null when all are done),
 `total_days`, `given_days`, `status`, `patientDisplay`.
 
 ### Get Treatment Plan
