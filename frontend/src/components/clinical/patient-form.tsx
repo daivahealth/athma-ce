@@ -1,13 +1,11 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
@@ -16,10 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Fingerprint, IdCard, Phone, Save, Siren, UserCog, UserPlus, type LucideIcon } from 'lucide-react';
+import { Fingerprint, IdCard, Phone, Save, Siren, UserCog, UserPlus } from 'lucide-react';
 import { PageHeader } from '@/components/ui/page-header';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
-import { cn } from '@/lib/utils';
+import {
+  FIELD_CONTROL,
+  FormActions,
+  FormField as Field,
+  FormSection,
+  NATIVE_SELECT,
+  invalidProps,
+} from '@/components/forms/form-layout';
 import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
 import { useCountries, useNationalities, useNameTitles } from '@/modules/clinical/hooks/use-valuesets';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
@@ -378,104 +383,13 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <div className="flex flex-col-reverse gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
-            Fields marked <span className="text-destructive">*</span> are required.
-          </p>
-          <div className="flex flex-col-reverse gap-2 sm:flex-row">
-            <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting} className="gap-2">
-              <Save className="h-4 w-4" />
-              {isSubmitting ? 'Saving...' : mode === 'create' ? 'Save Patient' : 'Save Changes'}
-            </Button>
-          </div>
-        </div>
+        <FormActions onCancel={onCancel} busy={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="gap-2">
+            <Save className="h-4 w-4" />
+            {isSubmitting ? 'Saving...' : mode === 'create' ? 'Save Patient' : 'Save Changes'}
+          </Button>
+        </FormActions>
       </form>
-    </div>
-  );
-}
-
-/**
- * Shared control sizing. `dark:[color-scheme:dark]` makes the browser draw the
- * native date picker and option list dark when the app (not the OS) is dark.
- */
-const FIELD_CONTROL = 'dark:[color-scheme:dark]';
-
-/** Native <select> drawn like `SelectTrigger`/`Input` from `components/ui`. */
-const NATIVE_SELECT = cn(
-  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-all',
-  'hover:border-ring/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-  'disabled:cursor-not-allowed disabled:opacity-50',
-  FIELD_CONTROL,
-);
-
-/** aria + destructive styling for a control whose field failed validation. */
-function invalidProps(id: string, error: string | undefined, className?: string) {
-  return {
-    'aria-invalid': error ? true : undefined,
-    'aria-describedby': error ? `${id}-error` : undefined,
-    className: cn(className, error && 'border-destructive focus-visible:ring-destructive hover:border-destructive'),
-  };
-}
-
-function FormSection({
-  icon: Icon,
-  title,
-  description,
-  children,
-}: {
-  icon: LucideIcon;
-  title: string;
-  description?: string;
-  children: ReactNode;
-}) {
-  return (
-    <Card className="hover:translate-y-0">
-      <CardHeader className="flex-row items-start gap-3 space-y-0 pb-4">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-          <Icon className="h-4 w-4" aria-hidden />
-        </span>
-        <div className="space-y-1">
-          <CardTitle className="text-base">{title}</CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">{children}</CardContent>
-    </Card>
-  );
-}
-
-function Field({
-  id,
-  label,
-  required,
-  error,
-  children,
-}: {
-  id: string;
-  label: string;
-  required?: boolean;
-  error?: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={id} className={cn(error && 'text-destructive')}>
-        {label}
-        {required && (
-          <span className="ml-0.5 text-destructive">
-            *
-          </span>
-        )}
-      </Label>
-      {children}
-      {error && (
-        <p id={`${id}-error`} role="alert" className="text-sm font-medium text-destructive">
-          {error}
-        </p>
-      )}
     </div>
   );
 }
