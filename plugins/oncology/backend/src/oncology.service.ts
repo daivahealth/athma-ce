@@ -470,9 +470,15 @@ export class OncologyService {
   async getPatientCancerSummary(patientId: string) {
     const tenantId = this.getTenantId();
 
-    const [diagnoses, stagings, tumorBoardCases, carePlans] = await Promise.all([
+    const [diagnosisRows, stagings, tumorBoardCases, carePlans] = await Promise.all([
       this.prisma.$queryRawUnsafe<any[]>(
-        `SELECT * FROM plugin_oncology.cancer_diagnoses WHERE tenant_id = $1::uuid AND patient_id = $2::uuid ORDER BY diagnosis_date DESC`,
+        `SELECT cd.*,
+           p.mrn as patient_mrn, p.first_name as patient_first_name,
+           p.last_name as patient_last_name, p.display_name as patient_display_name,
+           p.gender as patient_gender, p.date_of_birth as patient_date_of_birth
+         FROM plugin_oncology.cancer_diagnoses cd
+         LEFT JOIN public.patients p ON p.id = cd.patient_id
+         WHERE cd.tenant_id = $1::uuid AND cd.patient_id = $2::uuid ORDER BY cd.diagnosis_date DESC`,
         tenantId, patientId,
       ),
       this.prisma.$queryRawUnsafe<any[]>(
@@ -488,6 +494,14 @@ export class OncologyService {
         tenantId, patientId,
       ),
     ]);
+
+    // Same patient shape as the diagnosis list (patientDisplay, no flat patient_* columns).
+    const diagnoses = diagnosisRows.map((row) => {
+      const patientDisplay = this.buildPatientDisplay(row);
+      const { patient_mrn, patient_first_name, patient_last_name, patient_display_name,
+        patient_gender, patient_date_of_birth, ...rest } = row;
+      return { ...rest, patientDisplay };
+    });
 
     return { diagnoses, stagings, tumorBoardCases, carePlans };
   }

@@ -148,6 +148,10 @@ Returns the full oncology history for a patient:
 }
 ```
 
+Each diagnosis carries `patientDisplay` (MRN, name, display name, age,
+gender), the same shape as `GET /diagnoses`. The cancer timeline page uses it
+for its header.
+
 ---
 
 ## Tumor Staging
