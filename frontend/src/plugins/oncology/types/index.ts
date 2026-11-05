@@ -777,6 +777,10 @@ export interface WorklistDay extends TreatmentDay {
   phase_name?: string;
   dose_level?: number;
   total_cycles: number;
+  /** From the chemo order's pre-chemo checklist; null when there is no order. */
+  labs_reviewed?: boolean | null;
+  labs_within_range?: boolean | null;
+  order_administered_at?: string | null;
   patientDisplay?: OncologyPatientDisplay | null;
 }
 

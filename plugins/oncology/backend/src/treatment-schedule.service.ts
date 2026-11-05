@@ -356,6 +356,9 @@ export class TreatmentScheduleService {
     if (filters.status) { params.push(filters.status); statusSql = `AND d.status = $${params.length}`; }
     const rows = await this.prisma.$queryRawUnsafe<any[]>(
       `SELECT d.*, co.status AS order_status,
+              (co.pre_chemo_checklist->>'labsReviewed')::boolean AS labs_reviewed,
+              (co.pre_chemo_checklist->>'labsWithinRange')::boolean AS labs_within_range,
+              co.administered_at AS order_administered_at,
               tp.patient_id, tp.bsa, tp.weight_kg, tp.status AS plan_status,
               tp.protocol_snapshot->>'code' AS protocol_code, tp.protocol_snapshot->>'name' AS protocol_name,
               tc.phase_index, tc.phase_name, tc.dose_level,
