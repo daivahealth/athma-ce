@@ -27,7 +27,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
-import { MobileMenuButton } from './sidebar';
+import { SidebarTrigger } from './sidebar';
 import { PatientSearch } from './patient-search';
 import { NotificationCenter } from './notification-center';
 import { useEffect, useState } from 'react';
@@ -148,8 +148,9 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
 
   return (
     <header className="flex h-14 items-center bg-background/95 backdrop-blur-md px-6 border-b border-border sticky top-0 z-40 transition-all">
-      {/* Mobile Menu Button */}
-      <MobileMenuButton onToggle={onSidebarToggle} />
+      {/* Sidebar toggle (prrapp style): collapses the desktop sidebar, opens the drawer on mobile */}
+      <SidebarTrigger onMobileToggle={onSidebarToggle} className="-ml-2" />
+      <div className="mx-3 h-4 w-px shrink-0 bg-sidebar-border" aria-hidden="true" />
 
       <div className="flex flex-1 items-center justify-between gap-4">
         {/* Spacer for left side balance */}
