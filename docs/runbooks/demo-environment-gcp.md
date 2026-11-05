@@ -144,7 +144,7 @@ sudo docker compose up -d
 ```
 
 ### Refresh the dashboard's demo activity
-The HealthAI+ dashboard's worklists and forecast read 90 days of activity that
+The HealthAI+ dashboard's worklists, forecast and Week/Month views read 13 months of activity that
 `seed/clinical/27-demo-activity.sql` and `seed/rcm/09-demo-invoices.sql`
 generate relative to the day they run. The history goes stale as days pass, so
 re-run both (same day) shortly before a demo. They only replace their own rows

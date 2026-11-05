@@ -1,5 +1,5 @@
 -- =============================================================================
--- Demo activity: 90 days of billing for the HealthAI+ dashboard
+-- Demo activity: 13 months of billing for the HealthAI+ dashboard
 -- =============================================================================
 -- Companion to clinical/27-demo-activity.sql: one invoice per outpatient
 -- visit that took place, and one per inpatient stay at discharge, with a
@@ -38,13 +38,18 @@ SELECT
   (ARRAY['Sharma','Iyer','Nair','Reddy','Khan','Menon','Patel','Gupta','Rao','Pillai',
          'Al Hashimi','Kapoor','Das','Joshi','Kumar','Shetty','Bose','Varma','Hegde','Qureshi'])
     [1 + (k * 11) % 20] AS display_name,
-  (CURRENT_DATE - (89 * (1 - sqrt(k / 240.0)))::int)
+  (CURRENT_DATE - (394 * (1 - sqrt(k / 900.0)))::int)
     + make_interval(hours => 8 + (k % 9), mins => (k * 13) % 60) AS registered_at
-FROM generate_series(1, 240) AS k;
+FROM generate_series(1, 900) AS k;
 
 UPDATE demo_patient
 SET registered_at = registered_at + INTERVAL '1 day'
 WHERE EXTRACT(DOW FROM registered_at) = 0 AND registered_at + INTERVAL '1 day' <= NOW();
+
+CREATE TEMP TABLE demo_patient_rank ON COMMIT DROP AS
+SELECT row_number() OVER (ORDER BY registered_at, k) AS rn, k, registered_at::date AS registered_on
+FROM demo_patient;
+CREATE INDEX ON demo_patient_rank (rn);
 
 -- --- Same visits ------------------------------------------------------------
 CREATE TEMP TABLE demo_day ON COMMIT DROP AS
@@ -54,10 +59,12 @@ SELECT
     CASE EXTRACT(DOW FROM d)
       WHEN 0 THEN 2 WHEN 1 THEN 30 WHEN 2 THEN 26 WHEN 3 THEN 25
       WHEN 4 THEN 27 WHEN 5 THEN 23 ELSE 11 END
-    * (0.85 + 0.15 * (1 - (CURRENT_DATE - d::date) / 90.0))
+    * (0.82 + 0.18 * (1 - (CURRENT_DATE - d::date) / 395.0))
+    * (1 + 0.08 * cos(2 * pi() * (EXTRACT(DOY FROM d) - 220) / 365.0))
     * (0.85 + 0.3 * pg_temp.h('day' || d::date))
-  ))::int AS visits
-FROM generate_series(CURRENT_DATE - 89, CURRENT_DATE, INTERVAL '1 day') AS d;
+  ))::int AS visits,
+  (SELECT COUNT(*) FROM demo_patient_rank r WHERE r.registered_on <= d::date) AS registered
+FROM generate_series(CURRENT_DATE - 394, CURRENT_DATE, INTERVAL '1 day') AS d;
 
 CREATE TEMP TABLE demo_visit ON COMMIT DROP AS
 SELECT
@@ -65,11 +72,12 @@ SELECT
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-encounter-' || v.day || '-' || v.slot) AS encounter_id,
   v.day + make_interval(hours => 9 + (v.slot * 20) / 60, mins => (v.slot * 20) % 60) AS starts_at,
   pg_temp.h('outcome' || v.day || v.slot) AS roll,
-  (SELECT p.k FROM demo_patient p
-    WHERE p.registered_at::date <= v.day
-    ORDER BY md5(p.k || '-' || v.day || '-' || v.slot) LIMIT 1) AS patient_k
+  (SELECT r.k FROM demo_patient_rank r
+    WHERE r.rn = 1 + floor(pg_temp.h('pick' || v.day || '-' || v.slot) * v.registered)) AS patient_k
 FROM (
-  SELECT d.day, s AS slot FROM demo_day d, generate_series(0, 40) AS s WHERE s < d.visits
+  SELECT d.day, d.registered, s AS slot
+  FROM demo_day d, generate_series(0, 40) AS s
+  WHERE s < d.visits AND d.registered > 0
 ) v;
 DELETE FROM demo_visit WHERE patient_k IS NULL OR starts_at > NOW() OR roll > 0.90;
 
@@ -91,31 +99,19 @@ INSERT INTO demo_invoice
 SELECT
   'DEMO-INV-IP-' || lpad(a.n::text, 3, '0'),
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-adm-enc-' || a.n),
-  (SELECT p.k FROM demo_patient p ORDER BY md5('adm' || p.k || '-' || a.n) LIMIT 1),
+  (SELECT r.k FROM demo_patient_rank r
+    WHERE r.rn = 1 + floor(pg_temp.h('adm' || a.n) * (SELECT COUNT(*) FROM demo_patient_rank))),
   (a.admitted_at + make_interval(days => a.stay_days))::date,
   round((18000 * a.stay_days * (0.8 + 0.6 * pg_temp.h('ipamt' || a.n)))::numeric, -2),
   pg_temp.h('ippayer' || a.n) < 0.7,
   pg_temp.h('ippaid' || a.n)
 FROM (
   SELECT n,
-         (CURRENT_DATE - (89 - (n * 89) / 170))::date + make_interval(hours => 10 + n % 10) AS admitted_at,
+         (CURRENT_DATE - (394 - (n * 394) / 760))::date + make_interval(hours => 10 + n % 10) AS admitted_at,
          2 + (pg_temp.h('los' || n) * 6)::int AS stay_days
-  FROM generate_series(1, 170) AS n
+  FROM generate_series(1, 760) AS n
 ) a
 WHERE a.admitted_at + make_interval(days => a.stay_days) <= NOW();
-
--- An older tail (95–175 days back) of insured inpatient bills, so receivables
--- reach the 90+ bucket. It sits outside the dashboard's 90-day trend window.
-INSERT INTO demo_invoice
-SELECT
-  'DEMO-INV-AR-' || lpad(n::text, 3, '0'),
-  NULL,
-  1 + (n * 37) % 120,
-  CURRENT_DATE - (95 + n * 2),
-  round((30000 + 120000 * pg_temp.h('aramt' || n))::numeric, -2),
-  true,
-  pg_temp.h('arpaid' || n)
-FROM generate_series(1, 40) AS n;
 
 -- Payment: self-pay outpatient almost always paid; insured claims settle
 -- more the older they are, leaving a tail past 90 days.
@@ -137,8 +133,10 @@ JOIN demo_patient p ON p.k = i.patient_k
 CROSS JOIN LATERAL (
   SELECT CASE
     WHEN NOT i.insured THEN CASE WHEN i.pay_roll < 0.95 THEN i.amount ELSE 0 END
+    WHEN CURRENT_DATE - i.invoice_date > 180 THEN
+      CASE WHEN i.pay_roll < 0.98 THEN i.amount WHEN i.pay_roll < 0.99 THEN round(i.amount * 0.6, -2) ELSE 0 END
     WHEN CURRENT_DATE - i.invoice_date > 75 THEN
-      CASE WHEN i.pay_roll < 0.70 THEN i.amount WHEN i.pay_roll < 0.85 THEN round(i.amount * 0.6, -2) ELSE 0 END
+      CASE WHEN i.pay_roll < 0.92 THEN i.amount WHEN i.pay_roll < 0.96 THEN round(i.amount * 0.6, -2) ELSE 0 END
     WHEN CURRENT_DATE - i.invoice_date > 40 THEN
       CASE WHEN i.pay_roll < 0.50 THEN i.amount WHEN i.pay_roll < 0.70 THEN round(i.amount * 0.6, -2) ELSE 0 END
     ELSE CASE WHEN i.pay_roll < 0.15 THEN i.amount ELSE 0 END

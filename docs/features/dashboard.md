@@ -7,9 +7,15 @@ The HealthAI+ Dashboard provides real-time operational metrics for healthcare fa
 ## Dashboard Components
 
 The page (`frontend/src/app/[locale]/(dashboard)/dashboard/page.tsx`) follows
-prrapp's dashboard board: a **Today** header, then worklist tiles grouped by
-area, then the forecast. Components live in
+prrapp's dashboard: **Today**, **Week** and **Month** tabs. Today shows
+worklist tiles grouped by area, then the forecast; Week and Month show trends
+for a chosen period. Components live in
 `frontend/src/modules/reporting/components/dashboard/`.
+
+The view and period are in the URL: `?view=week&period=2026-11-02` (the
+week's Monday) or `?view=month&period=2026-11`; no `view` means Today.
+Switching view drops the period. The page reads search params inside a
+`<Suspense>` boundary, as Next 16 requires for `useSearchParams`.
 
 ### Today header
 
@@ -31,6 +37,29 @@ and links to the page that works it.
 A tile shows `—` when the cache predates the field (see *Backwards
 compatibility*).
 
+### Week and Month (`dashboard-trends-view.tsx`)
+
+Period maths live in `frontend/src/modules/reporting/lib/dashboard-periods.ts`
+(tested beside it). Weeks run Monday–Sunday; dates are handled in UTC.
+
+- **Period picker**: previous/next, bounded by the start of the history and
+  the current period.
+- **Headline tiles**: Encounters, Appointments, No-show rate, New patients,
+  Admissions, Billed. Each shows the period's figure, a sparkline of the last
+  8 periods, and the change against the period before (percentage points for
+  the no-show rate), green or red only where up or down is plainly better.
+- **A period in progress** is counted through yesterday and compared
+  like-for-like with the same number of days of the previous period. Tiles
+  with a forecast (encounters, new patients, billing) add "On course for ~N":
+  counted so far plus the forecast for the rest of the period.
+- **Charts** (series switchable between encounters, appointments, billing and
+  new patients): day by day against the same weekday/date of the previous
+  period; totals for the last 12 weeks/months with the forecast remainder of
+  the current period shaded; and ward flow (admissions vs discharges per day).
+- All figures come from `trends` in the cached metrics; there is no separate
+  endpoint. A cache written before these series existed shows a "press
+  Refresh" note instead.
+
 ### AI forecast & insights (`dashboard-forecast.tsx`)
 
 - **Projection cards**: billing by month end, encounters over the next 7
@@ -50,7 +79,7 @@ compatibility*).
 ### Forecast model
 
 `backend/services/ai-gateway/src/modules/report-builder/services/dashboard-forecast.ts`
-fits each daily series on history through yesterday (today is partial):
+fits each daily series on the last 90 full days, through yesterday (today is partial):
 
 1. A day-of-week index from the last 8 weeks (a quiet Sunday stays quiet).
 2. Holt double exponential smoothing on the deseasonalised series for level
@@ -139,7 +168,7 @@ The dashboard aggregates data from two primary databases:
 | `worklists.inpatientsCurrent` | clinical `inpatient_admissions` | `ADMITTED`, `ACTIVE`, `ON_LEAVE`, `DISCHARGE_PLANNING` |
 | `worklists.dischargesDue` | clinical `inpatient_admissions` | current, and `DISCHARGE_PLANNING` or `expected_discharge_date` ≤ today |
 | `worklists.appointmentsNext7Days` | clinical `appointments` | from now to 7 days ahead, not cancelled/no-show |
-| `trends` | clinical `encounters` (`COALESCE(start_time, created_at)`), `patients.created_at`; rcm `invoices.invoice_date` | 91 daily values ending today |
+| `trends` | clinical `encounters` (`COALESCE(start_time, created_at)`), `patients.created_at`, `appointments.start_time` (`appointments` excludes cancelled; `noShows` is `no_show`), `inpatient_admissions.admission_date` / `actual_discharge_date`; rcm `invoices.invoice_date` (net amount, excluding cancelled) | 400 daily values ending today (12 full months plus the current one) |
 | `forecast` | computed from `trends` | see *Forecast model* |
 | `arAging` | rcm `invoices` | `unpaid`/`partial` with `balance_due > 0`, bucketed by days past `due_date` (no due date counts as current); collection rate = paid ÷ billed for invoices raised in the last 90 days |
 
@@ -288,10 +317,11 @@ The `useDashboardMetrics` hook returns:
 ## Demo data
 
 Local and demo databases have little day-to-day activity, so the forecast would
-show "not enough history". `seed/clinical/27-demo-activity.sql` and
-`seed/rcm/09-demo-invoices.sql` (both in `seed/run-seeds.sh`) generate 90 days
-for tenant `11111111-…` at Zeal Main Hospital: ~240 patients, ~1,900
-appointments with a weekly rhythm and slight growth, today's clinic part-way
+show "not enough history" and the Week/Month views would be empty. `seed/clinical/27-demo-activity.sql` and
+`seed/rcm/09-demo-invoices.sql` (both in `seed/run-seeds.sh`) generate 395 days
+for tenant `11111111-…` at Zeal Main Hospital: ~900 patients, ~7,500
+appointments with a weekly rhythm, a monsoon-season bump (peaking early
+August) and ~20% growth over the year, today's clinic part-way
 through, next week's bookings, open lab/imaging orders and reports awaiting
 sign-off, ~2 admissions a day with a few discharges due, and invoices with a
 payment mix that ages receivables into every bucket. They are deterministic,

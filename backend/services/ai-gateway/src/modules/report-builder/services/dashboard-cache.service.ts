@@ -24,8 +24,10 @@ import {
 } from '../types/dashboard-cache.types';
 import { addDays, densify, forecastDaily, lastDayOfMonth, projectMonthEnd } from './dashboard-forecast';
 
-/** Days of daily history kept for the charts and the forecast fit. */
-const HISTORY_DAYS = 91;
+/** Days of daily history: 12 full months plus the current one, for the Week and Month views. */
+const HISTORY_DAYS = 400;
+/** Full days the forecast is fitted on. */
+const FIT_DAYS = 90;
 /** Minimum days projected forward; extended to reach the end of the month. */
 const FORECAST_HORIZON_DAYS = 14;
 
@@ -508,7 +510,9 @@ export class DashboardCacheService {
   }
 
   /**
-   * Daily history for the trend charts and the forecast, ending today.
+   * Daily history for the Week and Month views and the forecast, ending today.
+   * Each series is one GROUP BY day over its own table, scoped to the tenant
+   * and the window; days with nothing are filled with 0.
    */
   private async fetchHistory(tenantId: string): Promise<{ today: string; trends: DashboardTrends }> {
     const days = HISTORY_DAYS;
@@ -518,58 +522,76 @@ export class DashboardCacheService {
     );
     const today = todayRow.today;
 
-    const [encounters, newPatients, revenue] = await Promise.all([
-      this.clinicalPrisma.$queryRawUnsafe<Row[]>(
-        `
-        SELECT TO_CHAR(DATE(COALESCE(start_time, created_at)), 'YYYY-MM-DD') AS day, COUNT(*) AS value
-        FROM encounters
-        WHERE tenant_id = $1::uuid
-          AND COALESCE(start_time, created_at) >= CURRENT_DATE - ($2::int - 1)
-          AND COALESCE(start_time, created_at) < CURRENT_DATE + 1
-        GROUP BY 1
-        `,
-        tenantId,
-        days,
-      ),
-      this.clinicalPrisma.$queryRawUnsafe<Row[]>(
-        `
-        SELECT TO_CHAR(DATE(created_at), 'YYYY-MM-DD') AS day, COUNT(*) AS value
-        FROM patients
-        WHERE tenant_id = $1::uuid
-          AND created_at >= CURRENT_DATE - ($2::int - 1)
-          AND created_at < CURRENT_DATE + 1
-        GROUP BY 1
-        `,
-        tenantId,
-        days,
-      ),
-      this.rcmPrisma.$queryRawUnsafe<Row[]>(
-        `
-        SELECT TO_CHAR(invoice_date, 'YYYY-MM-DD') AS day, COALESCE(SUM(net_amount), 0) AS value
-        FROM invoices
-        WHERE tenant_id = $1::uuid
-          AND status != 'cancelled'
-          AND invoice_date >= CURRENT_DATE - ($2::int - 1)
-          AND invoice_date <= CURRENT_DATE
-        GROUP BY 1
-        `,
-        tenantId,
-        days,
-      ),
-    ]);
-
-    const rows = (result: Row[]) =>
-      result.map((row) => ({ day: String(row.day), value: Number(row.value) }));
-    const encounterSeries = densify(rows(encounters), today, days);
-    return {
-      today,
-      trends: {
-        days: encounterSeries.days,
-        encounters: encounterSeries.values,
-        newPatients: densify(rows(newPatients), today, days).values,
-        revenue: densify(rows(revenue), today, days).values,
+    // `$2` is the window length; `{at}` the timestamp the row is counted on.
+    const windowed = (at: string) =>
+      `${at} >= CURRENT_DATE - ($2::int - 1) AND ${at} < CURRENT_DATE + 1`;
+    const series: { key: Exclude<keyof DashboardTrends, 'days'>; db: 'clinical' | 'rcm'; sql: string }[] = [
+      {
+        key: 'encounters',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(COALESCE(start_time, created_at)), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM encounters WHERE tenant_id = $1::uuid AND ${windowed('COALESCE(start_time, created_at)')}
+              GROUP BY 1`,
       },
-    };
+      {
+        key: 'newPatients',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(created_at), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM patients WHERE tenant_id = $1::uuid AND ${windowed('created_at')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'appointments',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(start_time), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM appointments WHERE tenant_id = $1::uuid AND status <> 'cancelled' AND ${windowed('start_time')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'noShows',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(start_time), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM appointments WHERE tenant_id = $1::uuid AND status = 'no_show' AND ${windowed('start_time')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'admissions',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(admission_date), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM inpatient_admissions
+              WHERE tenant_id = $1::uuid AND admission_status::text <> 'CANCELLED' AND ${windowed('admission_date')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'discharges',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(actual_discharge_date), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM inpatient_admissions WHERE tenant_id = $1::uuid AND ${windowed('actual_discharge_date')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'revenue',
+        db: 'rcm',
+        sql: `SELECT TO_CHAR(invoice_date, 'YYYY-MM-DD') AS day, COALESCE(SUM(net_amount), 0) AS value
+              FROM invoices
+              WHERE tenant_id = $1::uuid AND status != 'cancelled'
+                AND invoice_date >= CURRENT_DATE - ($2::int - 1) AND invoice_date <= CURRENT_DATE
+              GROUP BY 1`,
+      },
+    ];
+
+    const results = await Promise.all(
+      series.map(({ db, sql }) =>
+        (db === 'rcm' ? this.rcmPrisma : this.clinicalPrisma).$queryRawUnsafe<Row[]>(sql, tenantId, days),
+      ),
+    );
+
+    const trends = { days: densify([], today, days).days } as DashboardTrends;
+    series.forEach(({ key }, i) => {
+      const rows = results[i].map((row) => ({ day: String(row.day), value: Number(row.value) }));
+      trends[key] = densify(rows, today, days).values;
+    });
+    return { today, trends };
   }
 
   /**
@@ -583,14 +605,17 @@ export class DashboardCacheService {
     newPatientsMTD: number,
   ): DashboardForecast {
     const { today, trends } = history;
-    const fitDays = trends.days.slice(0, -1);
+    // Fit on the last FIT_DAYS full days: recent enough to follow the current
+    // rhythm, long enough for the weekly pattern.
+    const fit = <T,>(values: T[]): T[] => values.slice(-FIT_DAYS - 1, -1);
+    const fitDays = fit(trends.days);
     const daysToMonthEnd =
       (Date.parse(`${lastDayOfMonth(today)}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86_400_000;
     const horizon = Math.max(FORECAST_HORIZON_DAYS, daysToMonthEnd + 1);
 
-    const encounters = forecastDaily(fitDays, trends.encounters.slice(0, -1), horizon);
-    const newPatients = forecastDaily(fitDays, trends.newPatients.slice(0, -1), horizon);
-    const revenue = forecastDaily(fitDays, trends.revenue.slice(0, -1), horizon, 2);
+    const encounters = forecastDaily(fitDays, fit(trends.encounters), horizon);
+    const newPatients = forecastDaily(fitDays, fit(trends.newPatients), horizon);
+    const revenue = forecastDaily(fitDays, fit(trends.revenue), horizon, 2);
 
     // Last month's new patients, from the history, for the comparison.
     const lastMonthStart = `${addDays(`${today.slice(0, 7)}-01`, -1).slice(0, 7)}-01`;
