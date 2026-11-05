@@ -2,7 +2,7 @@ import { clinicalClient } from '@/lib/api/client';
 import type {
   CancerDiagnosis, TumorStaging, ChemoProtocol, ChemoOrder, TumorBoardCase, OncologyCarePlan,
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
-  RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan,
+  RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan, OncologyLabPoint,
   RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
   CancerTimelineEvent, TreatmentPlan, TreatmentPlanSummary, WorklistDay,
 } from '../types';
@@ -44,6 +44,11 @@ export const oncologyService = {
 
   async getRelevantLabs(patientId: string) {
     const { data } = await clinicalClient.get(`${BASE_URL}/registry/${patientId}/labs`);
+    return data.data;
+  },
+
+  async getLabHistory(patientId: string): Promise<OncologyLabPoint[]> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/registry/${patientId}/labs/history`);
     return data.data;
   },
 

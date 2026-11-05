@@ -1,42 +1,118 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import type { ReactNode } from 'react';
+import { useMemo } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { History } from 'lucide-react';
+import { CalendarRange, ClipboardList, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePatientCancerSummary, usePatientOncologyLabs } from '@/plugins/oncology/hooks/use-oncology';
+import { cn } from '@/lib/utils';
+import {
+  usePatientCancerSummary, usePatientOncologyLabHistory, useRadiationPrescriptions, useTreatmentPlans,
+} from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, EmptyState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
-import { Badge } from '@/components/ui/badge';
 import { useOtRequests } from '@/modules/ot/hooks/use-ot';
 import { OtRequestStatusBadge, OtReportStatusBadge } from '@/modules/ot/components/ot-status-badge';
 import { formatDayMonthYear } from '@/plugins/oncology/lib/treatment-day';
-import type { OncologyPatientDisplay } from '@/plugins/oncology/types';
+import { DiseaseOverview } from '@/plugins/oncology/components/cockpit/DiseaseOverview';
+import { TreatmentJourney } from '@/plugins/oncology/components/cockpit/TreatmentJourney';
+import { MarkerTrends, type TreatmentPeriod } from '@/plugins/oncology/components/cockpit/MarkerTrends';
+import { NextUp, buildNextUp } from '@/plugins/oncology/components/cockpit/NextUp';
+import { dayMs } from '@/plugins/oncology/components/cockpit/cockpit-utils';
+import type {
+  CancerDiagnosis, OncologyCarePlan, OncologyPatientDisplay, RadiationPrescription, TreatmentPlanSummary,
+  TumorBoardCase, TumorStaging,
+} from '@/plugins/oncology/types';
 
+function Section({ title, description, actions, children, className }: {
+  title: string; description?: string; actions?: ReactNode; children: ReactNode; className?: string;
+}) {
+  return (
+    <section className={cn('rounded-xl border border-border/60 bg-card p-5', className)} aria-label={title}>
+      <div className="mb-4 flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-sm font-semibold">{title}</h2>
+          {description && <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>}
+        </div>
+        {actions}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+const OPEN_PLAN = ['active', 'on_hold', 'draft'];
+
+/**
+ * Patient cancer cockpit: disease overview, the treatment journey on one
+ * time axis, tumour-marker trends, what is next, and the detailed history.
+ */
 export default function PatientCancerProfilePage() {
   const params = useParams();
-  const router = useRouter();
   const locale = useLocale();
   const patientId = params.patientId as string;
   const { data, isLoading } = usePatientCancerSummary(patientId);
-  const { data: labs = [] } = usePatientOncologyLabs(patientId);
+  const { data: labHistory = [] } = usePatientOncologyLabHistory(patientId);
   const { data: otRequests = [] } = useOtRequests({ patientId });
+  const { data: planData } = useTreatmentPlans({ patientId }, !!patientId);
+  const { data: rxData } = useRadiationPrescriptions({ patientId });
+
+  const treatmentPlans: TreatmentPlanSummary[] = useMemo(() => planData?.data ?? [], [planData]);
+  const radiation: RadiationPrescription[] = useMemo(() => rxData?.data ?? [], [rxData]);
+
+  const { diagnoses, stagings, tumorBoardCases, carePlans } = useMemo(() => ({
+    diagnoses: (data?.diagnoses ?? []) as (CancerDiagnosis & { patientDisplay?: OncologyPatientDisplay })[],
+    stagings: (data?.stagings ?? []) as TumorStaging[],
+    tumorBoardCases: (data?.tumorBoardCases ?? []) as TumorBoardCase[],
+    carePlans: (data?.carePlans ?? []) as OncologyCarePlan[],
+  }), [data]);
+
+  const primary = diagnoses.find((d) => d.clinical_status === 'active') ?? diagnoses[0];
+  const others = diagnoses.filter((d) => d !== primary);
+  const patient = diagnoses[0]?.patientDisplay;
+  const forPrimary = <T extends { cancer_diagnosis_id?: string }>(rows: T[]) =>
+    primary ? rows.filter((r) => !r.cancer_diagnosis_id || r.cancer_diagnosis_id === primary.id) : rows;
+  const latestStaging = forPrimary(stagings)[0]; // newest first
+  const plansForPrimary = forPrimary(carePlans);
+  const carePlan = plansForPrimary.find((cp) => OPEN_PLAN.includes(cp.status)) ?? plansForPrimary[0];
+
+  const surgeries = useMemo(() => otRequests.map((r) => ({
+    id: r.id, date: r.preferredDate, label: r.procedureName, status: r.status,
+  })), [otRequests]);
+  const boards = useMemo(() => tumorBoardCases.map((b) => ({
+    id: b.id, date: b.meeting_date, status: b.status, decision: b.decision ?? b.mdt_recommendation,
+  })), [tumorBoardCases]);
+
+  const periods: TreatmentPeriod[] = useMemo(() => {
+    const out: TreatmentPeriod[] = [];
+    for (const tp of treatmentPlans) {
+      const s = dayMs(tp.start_date); const e = dayMs(tp.end_date);
+      if (s != null && e != null && tp.status !== 'cancelled') out.push({ start: s, end: e, kind: 'chemotherapy' });
+    }
+    for (const rx of radiation) {
+      const s = dayMs(rx.planned_start_date); const e = dayMs(rx.planned_end_date);
+      if (s != null && e != null && rx.status !== 'CANCELLED') out.push({ start: s, end: e, kind: 'radiation' });
+    }
+    return out;
+  }, [treatmentPlans, radiation]);
+
+  const nextUp = useMemo(() => buildNextUp({ locale, treatmentPlans, radiation, surgeries, boards, carePlan }),
+    [locale, treatmentPlans, radiation, surgeries, boards, carePlan]);
 
   if (isLoading) return <LoadingState />;
-  if (!data) return <EmptyState message="Patient not found in oncology registry" />;
+  if (!data || !primary) return <EmptyState message="Patient not found in oncology registry" />;
 
-  const { diagnoses = [], stagings = [], tumorBoardCases = [], carePlans = [] } = data;
-  const patient = (diagnoses[0] as { patientDisplay?: OncologyPatientDisplay } | undefined)?.patientDisplay;
-  const latestStaging = stagings[0] as Record<string, unknown> | undefined; // newest first
-  const currentPlan = (carePlans as Record<string, unknown>[]).find((cp) => ['active', 'on_hold', 'draft'].includes(cp.status as string))
-    ?? (carePlans[0] as Record<string, unknown> | undefined);
+  const activePlan = treatmentPlans.find((tp) => ['active', 'on_hold'].includes(tp.status));
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-start justify-between">
+    <div className="space-y-6">
+      {/* Patient header */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Patient cancer profile</p>
-          <h1 className="text-2xl font-bold mt-0.5">{patient?.displayName ?? 'Patient'}</h1>
+          <h1 className="mt-0.5 text-2xl font-bold">{patient?.displayName ?? 'Patient'}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
             {patient?.mrn && <span className="rounded-md bg-primary/10 px-2 py-0.5 font-mono text-primary">{patient.mrn}</span>}
             {patient && (
@@ -44,266 +120,131 @@ export default function PatientCancerProfilePage() {
                 {[patient.age != null ? `${patient.age} yrs` : null, patient.gender].filter(Boolean).join(' · ')}
               </span>
             )}
-            {latestStaging?.stage_group != null && (
-              <span className="rounded-md bg-muted px-2 py-0.5">
-                Stage <span className="font-semibold">{String(latestStaging.stage_group)}</span>
-                {latestStaging.staging_system != null && <span className="text-muted-foreground"> · {String(latestStaging.staging_system)}</span>}
-              </span>
+            <span className="rounded-md bg-muted px-2 py-0.5">{primary.cancer_type}</span>
+            {latestStaging?.stage_group && (
+              <span className="rounded-md bg-muted px-2 py-0.5">Stage <span className="font-semibold">{latestStaging.stage_group}</span></span>
             )}
-            {currentPlan?.treatment_intent != null && <TreatmentIntentBadge intent={String(currentPlan.treatment_intent)} />}
-            {currentPlan?.status != null && (
-              <span className="inline-flex items-center gap-1 text-muted-foreground">
-                Care plan <StatusBadge status={String(currentPlan.status)} />
-              </span>
-            )}
+            {carePlan?.treatment_intent && <TreatmentIntentBadge intent={carePlan.treatment_intent} />}
           </div>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push(`/${locale}/oncology/timeline/${patientId}`)}
-          className="flex items-center gap-2"
-        >
-          <History className="h-4 w-4" />
-          View Timeline
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          {activePlan && (
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/${locale}/oncology/treatment-plans/${activePlan.id}`}><CalendarRange className="mr-2 h-4 w-4" />Treatment schedule</Link>
+            </Button>
+          )}
+          {carePlan && (
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/${locale}/oncology/care-plans/${carePlan.id}/edit`}><ClipboardList className="mr-2 h-4 w-4" />Care plan</Link>
+            </Button>
+          )}
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/${locale}/oncology/timeline/${patientId}`}><History className="mr-2 h-4 w-4" />Timeline</Link>
+          </Button>
+        </div>
       </div>
 
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Cancer Diagnoses</h2>
-        {diagnoses.length === 0 ? (
-          <EmptyState message="No cancer diagnoses found" />
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2">
-            {diagnoses.map((d: Record<string, unknown>) => (
-              <div key={d.id as string} className="border rounded-lg p-4">
-                <div className="flex justify-between items-start">
-                  <h3 className="font-medium">{d.cancer_type as string}</h3>
-                  <StatusBadge status={d.clinical_status as string} />
-                </div>
-                <p className="text-sm text-muted-foreground mt-1">{d.primary_site as string}</p>
-                <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                  {Boolean(d.grade) && <span className="px-2 py-0.5 rounded bg-muted">Grade: {String(d.grade)}</span>}
-                  {Boolean(d.laterality) && <span className="px-2 py-0.5 rounded bg-muted capitalize">{String(d.laterality)}</span>}
-                  <span className="px-2 py-0.5 rounded bg-muted capitalize">{d.metastatic_status as string}</span>
-                  {Boolean(d.is_recurrence) && <span className="px-2 py-0.5 rounded bg-red-100 text-red-700">Recurrence</span>}
-                </div>
-                <div className="mt-2 text-xs text-muted-foreground">
-                  Diagnosed: {formatDayMonthYear(String(d.diagnosis_date))}
-                  {d.ecog_at_diagnosis != null && ` | ECOG: ${String(d.ecog_at_diagnosis)}`}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      {others.length > 0 && (
+        <p className="text-xs text-muted-foreground">
+          Also on file: {others.map((d) => `${d.cancer_type} (${d.clinical_status})`).join(', ')}
+        </p>
+      )}
 
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Recent Oncology Labs</h2>
-        {labs.length === 0 ? (
-          <EmptyState message="No oncology lab results on file" />
-        ) : (
-          <div className="border rounded-lg overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="text-left p-3 font-medium">Test</th>
-                  <th className="text-left p-3 font-medium">Result</th>
-                  <th className="text-left p-3 font-medium">Reference Range</th>
-                  <th className="text-left p-3 font-medium">Flag</th>
-                  <th className="text-left p-3 font-medium">Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {labs.map((l: Record<string, unknown>) => {
-                  const value = l.value_numeric ?? l.value_string ?? l.value_code;
-                  const refRangeLow = l.ref_range_low as string | null;
-                  const refRangeHigh = l.ref_range_high as string | null;
-                  const refRange =
-                    refRangeLow != null && refRangeHigh != null
-                      ? `${refRangeLow} - ${refRangeHigh}`
-                      : (l.ref_range_text as string) || '-';
-                  return (
-                    <tr key={l.test_code as string} className="hover:bg-muted/30">
-                      <td className="p-3">{l.test_name as string}</td>
-                      <td className="p-3">
-                        {String(value)}
-                        {Boolean(l.unit) && <span className="text-muted-foreground"> {String(l.unit)}</span>}
-                      </td>
-                      <td className="p-3 text-muted-foreground">{refRange}</td>
-                      <td className="p-3">
-                        {l.critical_flag ? (
-                          <Badge variant="destructive">Critical</Badge>
-                        ) : l.abnormal_flag ? (
-                          <Badge variant="secondary" className="bg-warning/15 text-warning">Abnormal</Badge>
-                        ) : (
-                          <Badge variant="secondary" className="bg-success/15 text-success">Normal</Badge>
-                        )}
-                      </td>
-                      <td className="p-3 text-muted-foreground">
-                        {new Date(l.reported_at as string).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+      <DiseaseOverview diagnosis={primary} staging={latestStaging} carePlan={carePlan} locale={locale} />
 
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Surgical History (OT)</h2>
-        {otRequests.length === 0 ? (
-          <EmptyState message="No OT requests on file" />
-        ) : (
-          <div className="border rounded-lg overflow-hidden">
+      <Section title="Treatment journey" description="Every modality on one time axis — filled to the share delivered. Hover for details.">
+        <TreatmentJourney
+          diagnosisDate={primary.diagnosis_date}
+          modalities={carePlan?.planned_modalities ?? []}
+          treatmentPlans={treatmentPlans}
+          radiation={radiation}
+          surgeries={surgeries}
+          boards={boards}
+        />
+      </Section>
+
+      <div className="grid items-start gap-6 lg:grid-cols-3">
+        <Section title="Tumour markers" description="Trend against the upper limit of normal, with treatment periods shaded" className="lg:col-span-2">
+          <MarkerTrends points={labHistory} periods={periods} />
+        </Section>
+        <Section title="Next up" description="Upcoming treatment, meetings and milestones">
+          <NextUp items={nextUp} followUp={carePlan?.follow_up_schedule?.[0]?.type} />
+        </Section>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-2">
+        <Section title="Staging history">
+          {stagings.length === 0 ? <EmptyState message="No staging records found" /> : (
             <table className="w-full text-sm">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="text-left p-3 font-medium">Procedure</th>
-                  <th className="text-left p-3 font-medium">Priority</th>
-                  <th className="text-left p-3 font-medium">Status</th>
-                  <th className="text-left p-3 font-medium">Date</th>
-                  <th className="text-left p-3 font-medium">Report</th>
-                </tr>
-              </thead>
+              <thead><tr className="text-left text-xs text-muted-foreground">
+                <th className="pb-2 font-medium">Date</th><th className="pb-2 font-medium">Type</th>
+                <th className="pb-2 font-medium">Stage</th><th className="pb-2 font-medium">TNM</th><th className="pb-2 font-medium">System</th>
+              </tr></thead>
               <tbody className="divide-y">
-                {otRequests.map((r) => (
-                  <tr key={r.id} className="hover:bg-muted/30">
-                    <td className="p-3">{r.procedureName}</td>
-                    <td className="p-3 capitalize text-muted-foreground">{r.priority.toLowerCase()}</td>
-                    <td className="p-3"><OtRequestStatusBadge status={r.status} /></td>
-                    <td className="p-3 text-muted-foreground">
-                      {r.preferredDate ? formatDayMonthYear(String(r.preferredDate)) : '-'}
+                {stagings.map((s) => (
+                  <tr key={s.id}>
+                    <td className="py-2 whitespace-nowrap">{formatDayMonthYear(String(s.staging_date))}</td>
+                    <td className="py-2 capitalize">{(s.staging_type || 'clinical').replace(/_/g, ' ')}</td>
+                    <td className="py-2 font-semibold">{s.stage_group || '—'}</td>
+                    <td className="py-2 font-mono text-xs">
+                      {s.t_category || s.n_category || s.m_category ? `T${s.t_category ?? '?'} N${s.n_category ?? '?'} M${s.m_category ?? '?'}` : '—'}
                     </td>
-                    <td className="p-3">
-                      {r.reports?.length ? (
-                        <OtReportStatusBadge status={r.reports[0].reportStatus} />
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </td>
+                    <td className="py-2 text-muted-foreground">{s.staging_system}{s.staging_edition ? ` ${s.staging_edition}` : ''}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
-      </section>
+          )}
+        </Section>
 
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Staging History</h2>
-        {stagings.length === 0 ? (
-          <EmptyState message="No staging records found" />
-        ) : (
-          <div className="border rounded-lg overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="text-left p-3 font-medium">System</th>
-                  <th className="text-left p-3 font-medium">Type</th>
-                  <th className="text-left p-3 font-medium">Stage</th>
-                  <th className="text-left p-3 font-medium">TNM</th>
-                  <th className="text-left p-3 font-medium">Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {stagings.map((s: Record<string, unknown>) => (
-                  <tr key={s.id as string} className="hover:bg-muted/30">
-                    <td className="p-3">
-                      {s.staging_system as string}
-                      {Boolean(s.staging_edition) && <span className="text-muted-foreground"> ({String(s.staging_edition)})</span>}
-                    </td>
-                    <td className="p-3 capitalize">{(s.staging_type as string || 'clinical').replace(/_/g, ' ')}</td>
-                    <td className="p-3">
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs">
-                        {(s.stage_group as string) || '-'}
-                      </span>
-                    </td>
-                    <td className="p-3 text-muted-foreground">
-                      T{(s.t_category as string) || '?'} N{(s.n_category as string) || '?'} M{(s.m_category as string) || '?'}
-                    </td>
-                    <td className="p-3 text-muted-foreground">
-                      {formatDayMonthYear(String(s.staging_date))}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Tumor Board Decisions</h2>
-        {tumorBoardCases.length === 0 ? (
-          <EmptyState message="No tumor board cases found" />
-        ) : (
-          <div className="border rounded-lg overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="text-left p-3 font-medium">Meeting Date</th>
-                  <th className="text-left p-3 font-medium">Treatment Intent</th>
-                  <th className="text-left p-3 font-medium">MDT Recommendation</th>
-                  <th className="text-left p-3 font-medium">Outcome</th>
-                  <th className="text-left p-3 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {tumorBoardCases.map((c: Record<string, unknown>) => (
-                  <tr key={c.id as string} className="hover:bg-muted/30">
-                    <td className="p-3">{formatDayMonthYear(String(c.meeting_date))}</td>
-                    <td className="p-3">
-                      {c.treatment_intent ? <TreatmentIntentBadge intent={c.treatment_intent as string} /> : '-'}
-                    </td>
-                    <td className="p-3 text-muted-foreground max-w-xs truncate">
-                      {(c.mdt_recommendation as string) || '-'}
-                    </td>
-                    <td className="p-3 capitalize">{((c.review_outcome as string) || '-').replace(/_/g, ' ')}</td>
-                    <td className="p-3"><StatusBadge status={c.status as string} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Care Plans</h2>
-        {carePlans.length === 0 ? (
-          <EmptyState message="No care plans found" />
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2">
-            {carePlans.map((cp: Record<string, unknown>) => (
-              <div key={cp.id as string} className="border rounded-lg p-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-medium">{cp.plan_number as string}</h3>
-                    <p className="text-xs text-muted-foreground">Version {String(cp.version)}</p>
+        <Section title="Tumour board decisions">
+          {tumorBoardCases.length === 0 ? <EmptyState message="No tumor board cases found" /> : (
+            <ul className="divide-y">
+              {tumorBoardCases.map((c) => (
+                <li key={c.id} className="py-2.5 first:pt-0 last:pb-0">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className="font-medium">{formatDayMonthYear(String(c.meeting_date))}</span>
+                    {c.treatment_intent && <TreatmentIntentBadge intent={c.treatment_intent} />}
+                    <span className="ml-auto"><StatusBadge status={c.status} /></span>
                   </div>
-                  <StatusBadge status={cp.status as string} />
-                </div>
-                <div className="mt-2 flex gap-2">
-                  <TreatmentIntentBadge intent={cp.treatment_intent as string} />
-                  {Boolean(cp.oncology_subspecialty) && (
-                    <span className="text-xs px-2 py-0.5 rounded bg-muted capitalize">
-                      {String(cp.oncology_subspecialty).replace(/_/g, ' ')}
-                    </span>
-                  )}
-                </div>
-                {Boolean(cp.approved_at) && (
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Approved: {new Date(cp.approved_at as string).toLocaleDateString()}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+                  <p className="mt-1 text-sm text-muted-foreground">{c.mdt_recommendation || 'Awaiting discussion'}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Section>
+
+        <Section title="Surgical history">
+          {otRequests.length === 0 ? <EmptyState message="No OT requests on file" /> : (
+            <ul className="divide-y">
+              {otRequests.map((r) => (
+                <li key={r.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 first:pt-0 last:pb-0 text-sm">
+                  <span className="min-w-0 flex-1 font-medium">{r.procedureName}</span>
+                  <span className="text-muted-foreground">{r.preferredDate ? formatDayMonthYear(String(r.preferredDate)) : '—'}</span>
+                  <OtRequestStatusBadge status={r.status} />
+                  {r.reports?.length ? <OtReportStatusBadge status={r.reports[0].reportStatus} /> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Section>
+
+        <Section title="Care plans">
+          {carePlans.length === 0 ? <EmptyState message="No care plans found" /> : (
+            <ul className="divide-y">
+              {carePlans.map((cp) => (
+                <li key={cp.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 first:pt-0 last:pb-0 text-sm">
+                  <Link href={`/${locale}/oncology/care-plans/${cp.id}/edit`} className="font-mono text-xs text-primary hover:underline">{cp.plan_number}</Link>
+                  <span className="text-xs text-muted-foreground">v{cp.version}</span>
+                  <TreatmentIntentBadge intent={cp.treatment_intent} />
+                  {cp.oncology_subspecialty && <span className="text-xs capitalize text-muted-foreground">{cp.oncology_subspecialty.replace(/_/g, ' ')}</span>}
+                  <span className="ml-auto"><StatusBadge status={cp.status} /></span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Section>
+      </div>
     </div>
   );
 }

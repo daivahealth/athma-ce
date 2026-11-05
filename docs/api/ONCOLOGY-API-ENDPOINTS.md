@@ -154,6 +154,21 @@ for its header.
 
 ---
 
+### Get Tumour-Marker History
+```
+GET /api/v1/plugins/oncology/registry/:patientId/labs/history
+```
+**Permission:** `oncology.registry.read`
+
+Every FINAL or AMENDED numeric result for the patient's oncology tests (lab
+catalogue category `Oncology`), oldest first within each test. Rows:
+`test_code`, `test_name`, `value_numeric`, `unit`, `ref_range_low`,
+`ref_range_high`, `abnormal_flag`, `observed_at` (collection date, else
+reported time). The patient cockpit's tumour-marker trends use it.
+`GET /registry/:patientId/labs` still returns only the latest result per test.
+
+---
+
 ## Tumor Staging
 
 ### List Stagings
