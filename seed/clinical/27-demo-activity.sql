@@ -1,10 +1,11 @@
 -- =============================================================================
--- Demo activity: 90 days of clinic and ward history for the HealthAI+ dashboard
+-- Demo activity: 13 months of clinic and ward history for the HealthAI+ dashboard
 -- =============================================================================
--- Gives the dashboard's worklists and forecast (docs/features/dashboard.md)
--- something realistic to read: a weekly rhythm (busy weekdays, a quiet
--- Saturday, near-closed Sunday), a gentle upward trend, today's clinic in
--- progress, next week's bookings, open orders and a ward with inpatients.
+-- Gives the dashboard's Today worklists, forecast and Week/Month views
+-- (docs/features/dashboard.md) something realistic to read: a weekly rhythm
+-- (busy weekdays, a quiet Saturday, near-closed Sunday), a monsoon-season
+-- bump, a gentle upward trend over the year, today's clinic in progress,
+-- next week's bookings, open orders and a ward with inpatients.
 --
 -- Everything is dated relative to CURRENT_DATE, so re-run it (with
 -- rcm/09-demo-invoices.sql) before a demo to bring the history up to today.
@@ -32,7 +33,7 @@ DELETE FROM inpatient_admissions WHERE admission_number LIKE 'DEMO-ADM-%';
 DELETE FROM patients WHERE mrn LIKE 'MRN-DEMO-%';
 
 -- ---------------------------------------------------------------------------
--- Patients: 240, registered over the last 90 days (more on weekdays, rising).
+-- Patients: 900, registered over the last 395 days, more of them recently.
 -- ---------------------------------------------------------------------------
 CREATE TEMP TABLE demo_patient ON COMMIT DROP AS
 SELECT
@@ -48,15 +49,22 @@ SELECT
     [1 + (k * 11) % 20] AS last_name,
   CASE WHEN k % 2 = 0 THEN 'female' ELSE 'male' END AS gender,
   (CURRENT_DATE - ((18 + (pg_temp.h('dob' || k) * 62)::int) * 365 + (k * 37) % 365))::date AS dob,
-  -- Registration spread over 90 days, denser toward today.
-  (CURRENT_DATE - (89 * (1 - sqrt(k / 240.0)))::int)
+  -- Registration spread over 395 days, denser toward today.
+  (CURRENT_DATE - (394 * (1 - sqrt(k / 900.0)))::int)
     + make_interval(hours => 8 + (k % 9), mins => (k * 13) % 60) AS registered_at
-FROM generate_series(1, 240) AS k;
+FROM generate_series(1, 900) AS k;
 
 -- Keep registrations off Sundays: move them to Monday.
 UPDATE demo_patient
 SET registered_at = registered_at + INTERVAL '1 day'
 WHERE EXTRACT(DOW FROM registered_at) = 0 AND registered_at + INTERVAL '1 day' <= NOW();
+
+-- Rank by registration so a visit can pick any patient registered by its day
+-- with one hash instead of scanning them all.
+CREATE TEMP TABLE demo_patient_rank ON COMMIT DROP AS
+SELECT row_number() OVER (ORDER BY registered_at, k) AS rn, k, id, registered_at::date AS registered_on
+FROM demo_patient;
+CREATE INDEX ON demo_patient_rank (rn);
 
 INSERT INTO patients (
   id, mrn, tenant_id, first_name, last_name, date_of_birth, gender,
@@ -71,7 +79,8 @@ SELECT
 FROM demo_patient;
 
 -- ---------------------------------------------------------------------------
--- Outpatient days: how many visits each day, with a weekly shape and trend.
+-- Outpatient days: how many visits each day, with a weekly shape, a
+-- monsoon-season bump (peaks early August) and a trend.
 -- ---------------------------------------------------------------------------
 CREATE TEMP TABLE demo_day ON COMMIT DROP AS
 SELECT
@@ -81,10 +90,12 @@ SELECT
     CASE EXTRACT(DOW FROM d)
       WHEN 0 THEN 2 WHEN 1 THEN 30 WHEN 2 THEN 26 WHEN 3 THEN 25
       WHEN 4 THEN 27 WHEN 5 THEN 23 ELSE 11 END
-    * (0.85 + 0.15 * (1 - (CURRENT_DATE - d::date) / 90.0))      -- ~15% growth over the window
+    * (0.82 + 0.18 * (1 - (CURRENT_DATE - d::date) / 395.0))     -- ~20% growth over the year
+    * (1 + 0.08 * cos(2 * pi() * (EXTRACT(DOY FROM d) - 220) / 365.0)) -- seasonal
     * (0.85 + 0.3 * pg_temp.h('day' || d::date))                  -- day-to-day noise
-  ))::int AS visits
-FROM generate_series(CURRENT_DATE - 89, CURRENT_DATE + 14, INTERVAL '1 day') AS d;
+  ))::int AS visits,
+  (SELECT COUNT(*) FROM demo_patient_rank r WHERE r.registered_on <= d::date) AS registered
+FROM generate_series(CURRENT_DATE - 394, CURRENT_DATE + 14, INTERVAL '1 day') AS d;
 
 -- Physicians seen in clinic (foundation staff, Zeal Main Hospital).
 CREATE TEMP TABLE demo_staff ON COMMIT DROP AS
@@ -103,14 +114,13 @@ SELECT
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-encounter-' || v.day || '-' || v.slot) AS encounter_id,
   v.day + make_interval(hours => 9 + (v.slot * 20) / 60, mins => (v.slot * 20) % 60) AS starts_at,
   pg_temp.h('outcome' || v.day || v.slot) AS roll,
-  (SELECT p.id FROM demo_patient p
-    WHERE p.registered_at::date <= v.day
-    ORDER BY md5(p.k || '-' || v.day || '-' || v.slot) LIMIT 1) AS patient_id,
+  (SELECT r.id FROM demo_patient_rank r
+    WHERE r.rn = 1 + floor(pg_temp.h('pick' || v.day || '-' || v.slot) * v.registered)) AS patient_id,
   (v.slot % 4) AS staff_i
 FROM (
-  SELECT d.day, d.age, s AS slot
+  SELECT d.day, d.age, d.registered, s AS slot
   FROM demo_day d, generate_series(0, 40) AS s
-  WHERE s < d.visits
+  WHERE s < d.visits AND d.registered > 0
 ) v;
 DELETE FROM demo_visit WHERE patient_id IS NULL;
 
@@ -213,18 +223,19 @@ WHERE c.order_type = 'lab'
   AND (c.status = 'in_progress' OR (c.status = 'completed' AND c.ordered_at > NOW() - INTERVAL '14 days'));
 
 -- ---------------------------------------------------------------------------
--- Ward: ~2 admissions a day over 90 days, 4-day median stay. Recent ones are
+-- Ward: ~2 admissions a day over 395 days, 4-day median stay. Recent ones are
 -- still in; a few are past their expected discharge or being planned out.
 -- ---------------------------------------------------------------------------
 CREATE TEMP TABLE demo_admission ON COMMIT DROP AS
 SELECT
   n,
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-adm-enc-' || n) AS encounter_id,
-  (SELECT p.id FROM demo_patient p ORDER BY md5('adm' || p.k || '-' || n) LIMIT 1) AS patient_id,
-  (CURRENT_DATE - (89 - (n * 89) / 170))::date + make_interval(hours => 10 + n % 10) AS admitted_at,
+  (SELECT r.id FROM demo_patient_rank r
+    WHERE r.rn = 1 + floor(pg_temp.h('adm' || n) * (SELECT COUNT(*) FROM demo_patient_rank))) AS patient_id,
+  (CURRENT_DATE - (394 - (n * 394) / 760))::date + make_interval(hours => 10 + n % 10) AS admitted_at,
   2 + (pg_temp.h('los' || n) * 6)::int AS stay_days,
   (n % 4) AS staff_i
-FROM generate_series(1, 170) AS n;
+FROM generate_series(1, 760) AS n;
 
 INSERT INTO encounters (
   id, encounter_number, tenant_id, patient_id, facility_id, primary_staff_id,

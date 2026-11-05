@@ -67,11 +67,16 @@ export interface DashboardWorklists {
   appointmentsNext7Days: number;
 }
 
-/** Daily history, oldest first, ending today (today is a partial day). */
+/** Daily history (400 days), oldest first, ending today (today is a partial day). */
 export interface DashboardTrends {
   days: string[];
   encounters: number[];
   newPatients: number[];
+  /** Appointments by start date, excluding cancelled. */
+  appointments: number[];
+  noShows: number[];
+  admissions: number[];
+  discharges: number[];
   revenue: number[];
 }
 
