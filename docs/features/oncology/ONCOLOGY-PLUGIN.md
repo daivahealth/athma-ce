@@ -38,6 +38,25 @@ All staging, tumor board, and care plan records link back to a `CancerDiagnosis`
 | Treatment Schedules | `/oncology/treatment-plans` | Patient schedules generated from a protocol — cycles, dates, doses |
 | Day-care Worklist | `/oncology/day-care`          | All patients due on a date: administration sheets + pharmacy prep |
 
+### Patient cancer cockpit
+
+`/oncology/registry/:patientId` (opened by clicking a registry row) is the patient's oncology overview:
+
+- **Header:** name, MRN, age and sex, cancer type, stage and treatment intent. Links go to the active treatment schedule, the care plan and the timeline.
+- **Disease overview:**
+  - *Diagnosis:* site, histology, grade, ICD and morphology codes, and biomarkers.
+  - *Stage:* stage group with an I–IV meter, TNM boxes and the staging basis.
+  - *Status:* clinical and metastatic status, ECOG, intent, and the care plan's steps with their progress.
+- **Treatment journey:** one lane per modality on a shared time axis.
+  - Surgery comes from OT bookings, chemotherapy from treatment schedules (filled by cycles completed), and radiotherapy from prescriptions (filled by fractions delivered, from the list endpoint's `delivered_fractions`).
+  - Endocrine and targeted therapy come from the care plan and run open-ended.
+  - Diagnosis and tumour-board markers sit on the axis, with a today line. Hovering or focusing a bar shows its details.
+- **Tumour markers:** one chart per marker from `GET /registry/:patientId/labs/history`. Different units are never put on one axis. Each chart shows the upper limit of normal dashed and chemotherapy/radiotherapy periods shaded, with the latest value, a normal/above flag, change from peak and a value table.
+- **Next up:** upcoming chemo days, radiotherapy fractions or start, surgery, tumour boards and care-plan milestones, soonest first.
+- **History:** staging, tumour-board decisions, surgical history and care plans.
+
+The primary diagnosis is the active one, else the first. Staging and care plans are taken from that diagnosis.
+
 ---
 
 ## Data Model
@@ -372,12 +391,14 @@ frontend/src/plugins/oncology/
     ├── TreatmentIntentBadge.tsx      # Colored badge component
     ├── protocol-builder/             # Phase builder, regimen matrix, schedule preview
     ├── treatment-schedule/DaySheet.tsx # Timed day sheet (checks, sequence, supportive care)
-    └── shared.tsx                    # LoadingState, EmptyState, StatusBadge
+    ├── cockpit/                      # Patient cockpit: DiseaseOverview, TreatmentJourney, MarkerTrends, NextUp
+    ├── StaffSelect.tsx               # Staff picker (tumour-board attendees)
+    └── shared.tsx                    # LoadingState, EmptyState, StatusBadge, PatientCell
 
 frontend/src/app/[locale]/(dashboard)/oncology/
 ├── registry/
 │   ├── page.tsx                      # Registry list with AddDiagnosisSheet
-│   └── [patientId]/page.tsx          # Full patient cancer profile
+│   └── [patientId]/page.tsx          # Patient cancer cockpit (see below)
 ├── staging/
 │   ├── page.tsx                      # Tumor staging list
 │   ├── new/page.tsx

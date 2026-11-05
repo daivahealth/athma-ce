@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/select';
 import { CalendarClock, FileText, Pencil, Plus, Search } from 'lucide-react';
 import { useOncologyCarePlans } from '@/plugins/oncology/hooks/use-oncology';
-import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
+import { LoadingState, PatientCell, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
 import { ToneBadge } from '@/components/ui/tone-badge';
 import { treatmentModalityTone } from '@/plugins/oncology/lib/oncology-tone';
@@ -36,6 +36,8 @@ export default function CarePlansPage() {
     const q = searchQuery.toLowerCase();
     return (
       p.plan_number?.toLowerCase().includes(q) ||
+      p.patientDisplay?.displayName?.toLowerCase().includes(q) ||
+      p.patientDisplay?.mrn?.toLowerCase().includes(q) ||
       p.cancer_type?.toLowerCase().includes(q) ||
       p.primary_site?.toLowerCase().includes(q) ||
       p.notes?.toLowerCase().includes(q)
@@ -60,7 +62,7 @@ export default function CarePlansPage() {
         <div className="relative flex-1 min-w-[220px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by plan number, cancer type..."
+            placeholder="Search by patient, MRN, plan number, cancer type..."
             className="pl-9"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -111,6 +113,7 @@ export default function CarePlansPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted/50">
               <tr>
+                <th className="text-left p-3 font-medium">Patient</th>
                 <th className="text-left p-3 font-medium">Plan #</th>
                 <th className="text-left p-3 font-medium">Cancer Type</th>
                 <th className="text-left p-3 font-medium">Treatment Intent</th>
@@ -125,7 +128,8 @@ export default function CarePlansPage() {
             <tbody className="divide-y">
               {plans.map((plan) => (
                 <tr key={plan.id} className="hover:bg-muted/30 transition-colors">
-                  <td className="p-3 font-medium font-mono text-xs">{plan.plan_number}</td>
+                  <td className="p-3"><PatientCell patientDisplay={plan.patientDisplay} /></td>
+                  <td className="p-3 font-medium font-mono text-xs whitespace-nowrap">{plan.plan_number}</td>
                   <td className="p-3">
                     <div className="font-medium">{plan.cancer_type || '—'}</div>
                     {plan.primary_site && <div className="text-xs text-muted-foreground">{plan.primary_site}</div>}

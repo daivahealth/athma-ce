@@ -101,7 +101,7 @@ GET /api/v1/plugins/oncology/registry
 ```
 **Permission:** `oncology.registry.read`
 
-Aggregated view: one row per cancer diagnosis, enriched with latest staging and active care plan status.
+Aggregated view: one row per cancer diagnosis, enriched with latest staging and care plan status. `care_plan_status` is the newest open plan (draft, active, on hold), else the newest other non-cancelled plan (for example `completed`), else null.
 
 **Query params:**
 | Param | Type | Description |
@@ -151,6 +151,21 @@ Returns the full oncology history for a patient:
 Each diagnosis carries `patientDisplay` (MRN, name, display name, age,
 gender), the same shape as `GET /diagnoses`. The cancer timeline page uses it
 for its header.
+
+---
+
+### Get Tumour-Marker History
+```
+GET /api/v1/plugins/oncology/registry/:patientId/labs/history
+```
+**Permission:** `oncology.registry.read`
+
+Every FINAL or AMENDED numeric result for the patient's oncology tests (lab
+catalogue category `Oncology`), oldest first within each test. Rows:
+`test_code`, `test_name`, `value_numeric`, `unit`, `ref_range_low`,
+`ref_range_high`, `abnormal_flag`, `observed_at` (collection date, else
+reported time). The patient cockpit's tumour-marker trends use it.
+`GET /registry/:patientId/labs` still returns only the latest result per test.
 
 ---
 
@@ -220,6 +235,8 @@ POST /api/v1/plugins/oncology/tumor-board
 
 `cancerDiagnosisId` is **required**.
 
+`attendees` is an array of `{ staffId?, role, specialty }`. `staffId` (a foundation staff id) records who attended. Older cases may have role and specialty only.
+
 ---
 
 ### Update Case
@@ -239,6 +256,8 @@ GET /api/v1/plugins/oncology/care-plans
 **Permission:** `oncology.care_plan.read`
 
 **Query params:** `patientId`, `status`, `treatmentIntent`, `page`, `limit`
+
+Each plan carries `cancer_type`, `primary_site` and `patientDisplay`.
 
 ---
 
@@ -571,6 +590,7 @@ behaviour: [ONCOLOGY-PLUGIN — Patient treatment schedule](../features/oncology
 GET /api/v1/plugins/oncology/treatment-plans?patientId=&carePlanId=&cancerDiagnosisId=&status=
 ```
 Summaries (max 200): protocol code/name, `start_date`, `end_date`, `next_date`, `total_cycles`,
+`completed_cycles`, `current_cycle` (first cycle not yet completed, null when all are done),
 `total_days`, `given_days`, `status`, `patientDisplay`.
 
 ### Get Treatment Plan

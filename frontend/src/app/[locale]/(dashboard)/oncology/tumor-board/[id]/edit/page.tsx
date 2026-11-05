@@ -15,6 +15,7 @@ import { FIELD_CONTROL, FormActions, FormField, FormSection } from '@/components
 import { DiagnosisContextCard, PatientContextCard, patientFromRecord } from '@/plugins/oncology/components/FormContextCards';
 import { LoadingState } from '@/plugins/oncology/components/shared';
 import { useTumorBoardCase, useUpdateTumorBoardCase } from '@/plugins/oncology/hooks/use-oncology';
+import { StaffSelect } from '@/plugins/oncology/components/StaffSelect';
 
 
 const SPECIALTIES = [
@@ -29,7 +30,7 @@ const ROLES = [
   'Palliative Care Physician', 'Nurse Navigator', 'Other',
 ];
 
-interface AttendeeRow { role: string; specialty: string }
+interface AttendeeRow { staffId?: string; role: string; specialty: string }
 
 export default function EditTumorBoardPage() {
   const params = useParams() as { locale: string; id: string };
@@ -63,7 +64,7 @@ export default function EditTumorBoardPage() {
       setMdtRecommendation(boardCase.mdt_recommendation ?? '');
       const existing = boardCase.attendees ?? [];
       setAttendees(existing.length > 0
-        ? existing.map((a) => ({ role: a.role, specialty: a.specialty }))
+        ? existing.map((a) => ({ staffId: a.staffId ?? '', role: a.role ?? '', specialty: a.specialty ?? '' }))
         : [{ role: '', specialty: '' }]);
     }
   }, [boardCase]);
@@ -77,7 +78,9 @@ export default function EditTumorBoardPage() {
 
   const handleSubmit = async () => {
     if (!isValid) return;
-    const filledAttendees = attendees.filter((a) => a.role || a.specialty);
+    const filledAttendees = attendees
+      .filter((a) => a.staffId || a.role || a.specialty)
+      .map((a) => ({ ...(a.staffId ? { staffId: a.staffId } : {}), role: a.role, specialty: a.specialty }));
     await updateCase.mutateAsync({
       id: params.id,
       data: {
@@ -164,7 +167,7 @@ export default function EditTumorBoardPage() {
         <FormSection
           icon={UsersRound}
           title="Attendees"
-          description="Who sits on the board for this case, by role and specialty"
+          description="Who sits on the board for this case: person, role and specialty"
           contentClassName="space-y-3"
           actions={
             <Button type="button" variant="ghost" size="sm" onClick={addAttendee}>
@@ -174,7 +177,8 @@ export default function EditTumorBoardPage() {
         >
           {attendees.map((attendee, i) => (
             <div key={i} className="flex gap-2 items-center">
-              <div className="flex-1 grid grid-cols-2 gap-2">
+              <div className="flex-1 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <StaffSelect value={attendee.staffId} onChange={(v) => updateAttendee(i, 'staffId', v)} ariaLabel={`Attendee ${i + 1}`} />
                 <Select value={attendee.role || '__none'} onValueChange={(v) => updateAttendee(i, 'role', v === '__none' ? '' : v)}>
                   <SelectTrigger className="h-9" aria-label={`Attendee ${i + 1} role`}><SelectValue placeholder="Role" /></SelectTrigger>
                   <SelectContent>

@@ -98,7 +98,7 @@ export default function TreatmentPlansPage() {
                 >
                   <td className="p-3">
                     <div className="font-medium">{p.patientDisplay?.displayName ?? '—'}</div>
-                    <div className="text-xs text-muted-foreground">{p.patientDisplay?.mrn}</div>
+                    <div className="text-xs text-muted-foreground font-mono">{p.patientDisplay?.mrn}</div>
                   </td>
                   <td className="p-3"><span className="font-mono text-xs font-semibold">{p.protocol_code}</span> <span className="text-muted-foreground text-xs">{p.total_cycles} cycles</span></td>
                   <td className="p-3 text-xs text-muted-foreground">{p.cancer_type}</td>
@@ -107,9 +107,11 @@ export default function TreatmentPlansPage() {
                   <td className="p-3 text-xs">
                     <div className="flex items-center gap-2">
                       <div className="h-1.5 w-20 rounded-full bg-muted overflow-hidden" aria-hidden>
-                        <div className="h-full bg-primary" style={{ width: `${p.total_days ? (p.given_days / p.total_days) * 100 : 0}%` }} />
+                        <div className="h-full bg-primary" style={{ width: `${p.total_cycles ? (p.completed_cycles / p.total_cycles) * 100 : 0}%` }} />
                       </div>
-                      {p.given_days}/{p.total_days}
+                      <span className="whitespace-nowrap" title={`${p.given_days} of ${p.total_days} treatment days given`}>
+                        {p.current_cycle ? `C${p.current_cycle} of ${p.total_cycles}` : `${p.completed_cycles}/${p.total_cycles} done`}
+                      </span>
                     </div>
                   </td>
                   <td className="p-3"><StatusBadge status={p.status} /></td>
