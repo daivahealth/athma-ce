@@ -1,15 +1,23 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Banknote, Plus, Split, UserRound } from 'lucide-react';
+import { FIELD_CONTROL, FormActions, FormSection } from '@/components/forms/form-layout';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 import type { Receipt } from '../types/receipt';
 import { PaymentMethod, type CreateReceiptInput } from '../types/receipt';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
+import type { Patient } from '@/modules/clinical/types/patient';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import { useReceiptStats } from '../hooks/use-receipts';
 import { formatDocumentNumber } from '../utils/format-document-number';
@@ -29,7 +37,8 @@ interface AllocationDraft {
   allocatedAmount: string;
 }
 
-const startLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+const startLabel = (value: string) =>
+  value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 const createTempId = () => `alloc-${Math.random().toString(36).slice(2)}-${Date.now()}`;
 
 const defaultState = {
@@ -64,11 +73,10 @@ export function ReceiptForm({
         initialValues.paidAmount != null
           ? String(initialValues.paidAmount)
           : initialValues.amount != null
-          ? String(initialValues.amount)
-          : '',
+            ? String(initialValues.amount)
+            : '',
       paidCurrency: initialValues.paidCurrency ?? initialValues.currency ?? 'AED',
-      fxRateToBase:
-        initialValues.fxRateToBase != null ? String(initialValues.fxRateToBase) : '1',
+      fxRateToBase: initialValues.fxRateToBase != null ? String(initialValues.fxRateToBase) : '1',
       paymentMethod: initialValues.paymentMethod ?? PaymentMethod.CASH,
       txnReference: initialValues.txnReference ?? '',
       notes: initialValues.notes ?? '',
@@ -86,7 +94,7 @@ export function ReceiptForm({
 
   const [form, setForm] = useState(hydratedState);
   const [allocations, setAllocations] = useState<AllocationDraft[]>(hydratedAllocations);
-  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [baseCurrency, setBaseCurrency] = useState('AED');
   const [paidCurrencyDirty, setPaidCurrencyDirty] = useState(false);
 
@@ -133,7 +141,11 @@ export function ReceiptForm({
   };
 
   const handleAllocationChange = (tempId: string, field: keyof AllocationDraft, value: string) => {
-    setAllocations((prev) => prev.map((allocation) => (allocation.tempId === tempId ? { ...allocation, [field]: value } : allocation)));
+    setAllocations((prev) =>
+      prev.map((allocation) =>
+        allocation.tempId === tempId ? { ...allocation, [field]: value } : allocation,
+      ),
+    );
   };
 
   const handleAddAllocation = () => {
@@ -141,7 +153,9 @@ export function ReceiptForm({
   };
 
   const handleRemoveAllocation = (tempId: string) => {
-    setAllocations((prev) => (prev.length === 1 ? prev : prev.filter((allocation) => allocation.tempId !== tempId)));
+    setAllocations((prev) =>
+      prev.length === 1 ? prev : prev.filter((allocation) => allocation.tempId !== tempId),
+    );
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -153,9 +167,7 @@ export function ReceiptForm({
     const paidCurrency = form.paidCurrency.trim().toUpperCase();
     const paidAmount = Number(form.paidAmount) || 0;
     const fxRate =
-      paidCurrency && paidCurrency === baseCurrency
-        ? 1
-        : Number(form.fxRateToBase) || 0;
+      paidCurrency && paidCurrency === baseCurrency ? 1 : Number(form.fxRateToBase) || 0;
 
     if (!paidCurrency || paidAmount <= 0 || fxRate <= 0) {
       return;
@@ -210,155 +222,210 @@ export function ReceiptForm({
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Receipt details</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div className="md:col-span-2">
-            <PatientSearchSelect
-              required
-              selectedPatient={selectedPatient}
-              onSelect={(patient) => {
-                setSelectedPatient(patient);
-                handleChange('patientId', patient.id);
-              }}
-              onClear={() => {
-                setSelectedPatient(null);
-                handleChange('patientId', '');
-              }}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Invoice ID</Label>
-            <Input value={form.invoiceId} onChange={(event) => handleChange('invoiceId', event.target.value)} placeholder="Invoice UUID" />
-          </div>
-          <div className="space-y-2">
-            <Label>Receipt date</Label>
-            <Input type="date" value={form.receiptDate} onChange={(event) => handleChange('receiptDate', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Paid amount *</Label>
-            <Input
-              type="number"
-              step="0.01"
-              value={form.paidAmount}
-              onChange={(event) => handleChange('paidAmount', event.target.value)}
-              placeholder="0.00"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Paid currency *</Label>
-            <Input
-              value={form.paidCurrency}
-              onChange={(event) => {
-                setPaidCurrencyDirty(true);
-                handleChange('paidCurrency', event.target.value);
-              }}
-              placeholder={baseCurrency}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>FX rate to {baseCurrency}</Label>
-            <Input
-              type="number"
-              step="0.0001"
-              min="0"
-              value={form.paidCurrency.trim().toUpperCase() === baseCurrency ? '1' : form.fxRateToBase}
-              onChange={(event) => handleChange('fxRateToBase', event.target.value)}
-              disabled={form.paidCurrency.trim().toUpperCase() === baseCurrency}
-              placeholder="1.0000"
-            />
-          </div>
-          {showCurrencyField && (
-            <div className="space-y-2">
-              <Label>Base amount ({baseCurrency})</Label>
-              <Input
-                value={(() => {
-                  const paidAmount = Number(form.paidAmount) || 0;
-                  const fxRate =
-                    form.paidCurrency.trim().toUpperCase() === baseCurrency
-                      ? 1
-                      : Number(form.fxRateToBase) || 0;
-                  if (!paidAmount || !fxRate) return '';
-                  return (paidAmount * fxRate).toFixed(2);
-                })()}
-                readOnly
-              />
-            </div>
-          )}
-          <div className="space-y-2">
-            <Label>Payment method *</Label>
-            <Select value={form.paymentMethod} onValueChange={(value) => handleChange('paymentMethod', value as PaymentMethod)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(PaymentMethod).map((method) => (
-                  <SelectItem key={method} value={method}>
-                    {startLabel(method)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Transaction reference</Label>
-            <Input value={form.txnReference} onChange={(event) => handleChange('txnReference', event.target.value)} placeholder="POS TXN ID" />
-          </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label>Notes</Label>
-            <Input value={form.notes} onChange={(event) => handleChange('notes', event.target.value)} placeholder="Optional notes" />
-          </div>
-        </CardContent>
-      </Card>
+      <FormSection icon={UserRound} title="Patient" description="Who the payment is received from">
+        <div>
+          <PatientSearchSelect
+            required
+            selectedPatient={selectedPatient}
+            onSelect={(patient) => {
+              setSelectedPatient(patient);
+              handleChange('patientId', patient.id);
+            }}
+            onClear={() => {
+              setSelectedPatient(null);
+              handleChange('patientId', '');
+            }}
+          />
+        </div>
+      </FormSection>
 
-      <Card>
-        <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <CardTitle>Allocations (optional)</CardTitle>
-          <Button type="button" variant="outline" onClick={handleAddAllocation}>
+      <FormSection
+        icon={Banknote}
+        title="Payment"
+        description="Amount, currency and how it was paid"
+        contentClassName="grid gap-4 md:grid-cols-2"
+      >
+        <div className="space-y-2">
+          <Label htmlFor="receiptInvoiceId">Invoice ID</Label>
+          <Input
+            id="receiptInvoiceId"
+            value={form.invoiceId}
+            onChange={(event) => handleChange('invoiceId', event.target.value)}
+            placeholder="Invoice UUID"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="receiptDate">Receipt date</Label>
+          <Input
+            id="receiptDate"
+            type="date"
+            className={FIELD_CONTROL}
+            value={form.receiptDate}
+            onChange={(event) => handleChange('receiptDate', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="paidAmount">
+            Paid amount<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Input
+            id="paidAmount"
+            type="number"
+            step="0.01"
+            value={form.paidAmount}
+            onChange={(event) => handleChange('paidAmount', event.target.value)}
+            placeholder="0.00"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="paidCurrency">
+            Paid currency<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Input
+            id="paidCurrency"
+            value={form.paidCurrency}
+            onChange={(event) => {
+              setPaidCurrencyDirty(true);
+              handleChange('paidCurrency', event.target.value);
+            }}
+            placeholder={baseCurrency}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="fxRateToBase">FX rate to {baseCurrency}</Label>
+          <Input
+            id="fxRateToBase"
+            type="number"
+            step="0.0001"
+            min="0"
+            value={
+              form.paidCurrency.trim().toUpperCase() === baseCurrency ? '1' : form.fxRateToBase
+            }
+            onChange={(event) => handleChange('fxRateToBase', event.target.value)}
+            disabled={form.paidCurrency.trim().toUpperCase() === baseCurrency}
+            placeholder="1.0000"
+          />
+        </div>
+        {showCurrencyField && (
+          <div className="space-y-2">
+            <Label htmlFor="baseAmount">Base amount ({baseCurrency})</Label>
+            <Input
+              id="baseAmount"
+              value={(() => {
+                const paidAmount = Number(form.paidAmount) || 0;
+                const fxRate =
+                  form.paidCurrency.trim().toUpperCase() === baseCurrency
+                    ? 1
+                    : Number(form.fxRateToBase) || 0;
+                if (!paidAmount || !fxRate) return '';
+                return (paidAmount * fxRate).toFixed(2);
+              })()}
+              readOnly
+            />
+          </div>
+        )}
+        <div className="space-y-2">
+          <Label htmlFor="paymentMethod">
+            Payment method<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Select
+            value={form.paymentMethod}
+            onValueChange={(value) => handleChange('paymentMethod', value as PaymentMethod)}
+          >
+            <SelectTrigger id="paymentMethod">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(PaymentMethod).map((method) => (
+                <SelectItem key={method} value={method}>
+                  {startLabel(method)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="txnReference">Transaction reference</Label>
+          <Input
+            id="txnReference"
+            value={form.txnReference}
+            onChange={(event) => handleChange('txnReference', event.target.value)}
+            placeholder="POS TXN ID"
+          />
+        </div>
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="receiptNotes">Notes</Label>
+          <Input
+            id="receiptNotes"
+            value={form.notes}
+            onChange={(event) => handleChange('notes', event.target.value)}
+            placeholder="Optional notes"
+          />
+        </div>
+      </FormSection>
+
+      <FormSection
+        icon={Split}
+        title="Allocations"
+        description="Optional: apply this receipt to one or more invoices"
+        actions={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={handleAddAllocation}
+          >
+            <Plus className="h-4 w-4" />
             Add allocation
           </Button>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {allocations.map((allocation) => (
-            <div key={allocation.tempId} className="grid gap-3 rounded-md border p-3 md:grid-cols-[1fr_160px_auto]">
-              <div className="space-y-2">
-                <Label>Invoice ID</Label>
-                <Input value={allocation.invoiceId} onChange={(event) => handleAllocationChange(allocation.tempId, 'invoiceId', event.target.value)} placeholder="Invoice UUID" />
-              </div>
-              <div className="space-y-2">
-                <Label>Amount</Label>
-                <Input
-                  type="number"
-                  step="0.01"
-                  value={allocation.allocatedAmount}
-                  onChange={(event) => handleAllocationChange(allocation.tempId, 'allocatedAmount', event.target.value)}
-                  placeholder="0.00"
-                />
-              </div>
-              <div className="flex items-end justify-end">
-                <Button type="button" variant="ghost" disabled={allocations.length === 1} onClick={() => handleRemoveAllocation(allocation.tempId)}>
-                  Remove
-                </Button>
-              </div>
+        }
+        contentClassName="space-y-3"
+      >
+        {allocations.map((allocation) => (
+          <div
+            key={allocation.tempId}
+            className="grid gap-3 rounded-md border border-border p-3 md:grid-cols-[1fr_160px_auto]"
+          >
+            <div className="space-y-2">
+              <Label>Invoice ID</Label>
+              <Input
+                value={allocation.invoiceId}
+                onChange={(event) =>
+                  handleAllocationChange(allocation.tempId, 'invoiceId', event.target.value)
+                }
+                placeholder="Invoice UUID"
+              />
             </div>
-          ))}
-        </CardContent>
-      </Card>
+            <div className="space-y-2">
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                step="0.01"
+                value={allocation.allocatedAmount}
+                onChange={(event) =>
+                  handleAllocationChange(allocation.tempId, 'allocatedAmount', event.target.value)
+                }
+                placeholder="0.00"
+              />
+            </div>
+            <div className="flex items-end justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={allocations.length === 1}
+                onClick={() => handleRemoveAllocation(allocation.tempId)}
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+        ))}
+      </FormSection>
 
-      <div className="flex justify-end gap-3">
-        {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
-            Cancel
-          </Button>
-        )}
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : submitLabel}
-        </Button>
-      </div>
+      <FormActions submitLabel={submitLabel} busy={isSubmitting} onCancel={onCancel} />
     </form>
   );
 }

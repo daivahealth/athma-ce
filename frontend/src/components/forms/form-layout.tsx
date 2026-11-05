@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { LucideIcon } from 'lucide-react';
+import { Save, type LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -49,11 +49,12 @@ export function FormSection({
   /** Right-aligned header controls, e.g. an "Add" button for a repeating list. */
   actions?: ReactNode;
   children: ReactNode;
+  /** Replaces the default `space-y-4` body layout, e.g. with a grid. */
   contentClassName?: string;
 }) {
   return (
     <Card className="hover:translate-y-0">
-      <CardHeader className="flex-row items-start gap-3 space-y-0 pb-4">
+      <CardHeader className="flex-row flex-wrap items-start gap-3 space-y-0 pb-4">
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
           <Icon className="h-4 w-4" aria-hidden />
         </span>
@@ -63,7 +64,7 @@ export function FormSection({
         </div>
         {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
       </CardHeader>
-      <CardContent className={cn('space-y-4', contentClassName)}>{children}</CardContent>
+      <CardContent className={contentClassName ?? 'space-y-4'}>{children}</CardContent>
     </Card>
   );
 }
@@ -107,18 +108,23 @@ export function FormField({
 
 /**
  * Footer row under a `border-t`: the required-fields hint on the left,
- * Cancel (outline) then the submit control(s) passed as children on the right.
+ * Cancel (outline, when `onCancel` is given) then the submit on the right.
+ * Pass the submit control(s) as children, or just a `submitLabel` for the
+ * default primary button with a save icon.
  */
 export function FormActions({
   onCancel,
   busy,
+  submitLabel,
   showRequiredHint = true,
   children,
 }: {
-  onCancel: () => void;
+  onCancel?: () => void;
   busy?: boolean;
+  /** Label of the default submit button; ignored when children are given. */
+  submitLabel?: string;
   showRequiredHint?: boolean;
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   return (
     <div className="flex flex-col-reverse gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -130,10 +136,18 @@ export function FormActions({
         <span />
       )}
       <div className="flex flex-col-reverse gap-2 sm:flex-row">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={busy}>
-          Cancel
-        </Button>
-        {children}
+        {onCancel && (
+          <Button type="button" variant="outline" onClick={onCancel} disabled={busy}>
+            Cancel
+          </Button>
+        )}
+        {children ??
+          (submitLabel && (
+            <Button type="submit" disabled={busy} className="gap-2">
+              <Save className="h-4 w-4" />
+              {busy ? 'Saving...' : submitLabel}
+            </Button>
+          ))}
       </div>
     </div>
   );

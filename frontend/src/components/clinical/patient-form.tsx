@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -14,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Fingerprint, IdCard, Phone, Save, Siren, UserCog, UserPlus } from 'lucide-react';
+import { Fingerprint, IdCard, Phone, Siren, UserCog, UserPlus } from 'lucide-react';
 import { PageHeader } from '@/components/ui/page-header';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
 import {
@@ -26,7 +25,11 @@ import {
   invalidProps,
 } from '@/components/forms/form-layout';
 import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
-import { useCountries, useNationalities, useNameTitles } from '@/modules/clinical/hooks/use-valuesets';
+import {
+  useCountries,
+  useNationalities,
+  useNameTitles,
+} from '@/modules/clinical/hooks/use-valuesets';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
 const patientSchema = z.object({
@@ -151,7 +154,8 @@ export function PatientForm({
       payload.title = titleConcept?.display || titleCode;
     }
 
-    const optionalString = (value?: string) => (value && value.trim().length > 0 ? value.trim() : undefined);
+    const optionalString = (value?: string) =>
+      value && value.trim().length > 0 ? value.trim() : undefined;
 
     const optionalFields: Array<[keyof CreatePatientDto, string | undefined]> = [
       ['middleName', optionalString(data.middleName)],
@@ -159,7 +163,12 @@ export function PatientForm({
       ['nationalId', optionalString(data.nationalId)],
       ['nationalIdType', optionalString(data.nationalIdType)],
       ['passportNumber', optionalString(data.passportNumber)],
-      ['preferredLanguage', optionalString((data as PatientFormData & { preferredLanguage?: string }).preferredLanguage)],
+      [
+        'preferredLanguage',
+        optionalString(
+          (data as PatientFormData & { preferredLanguage?: string }).preferredLanguage,
+        ),
+      ],
       ['alternateContactNumber', optionalString(data.alternateContactNumber)],
       ['email', optionalString(data.email)],
       ['address', optionalString(data.address)],
@@ -245,7 +254,11 @@ export function PatientForm({
             </Field>
 
             <Field id="middleName" label="Middle Name">
-              <Input id="middleName" autoComplete="additional-name" {...form.register('middleName')} />
+              <Input
+                id="middleName"
+                autoComplete="additional-name"
+                {...form.register('middleName')}
+              />
             </Field>
 
             <Field id="lastName" label="Last Name" required error={errors.lastName?.message}>
@@ -259,7 +272,12 @@ export function PatientForm({
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field id="dateOfBirth" label="Date of Birth" required error={errors.dateOfBirth?.message}>
+            <Field
+              id="dateOfBirth"
+              label="Date of Birth"
+              required
+              error={errors.dateOfBirth?.message}
+            >
               <Input
                 id="dateOfBirth"
                 type="date"
@@ -282,9 +300,18 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <FormSection icon={Phone} title="Contact Information" description="How to reach the patient">
+        <FormSection
+          icon={Phone}
+          title="Contact Information"
+          description="How to reach the patient"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field id="phoneNumber" label="Phone Number" required error={errors.phoneNumber?.message}>
+            <Field
+              id="phoneNumber"
+              label="Phone Number"
+              required
+              error={errors.phoneNumber?.message}
+            >
               <Input
                 id="phoneNumber"
                 type="tel"
@@ -295,7 +322,11 @@ export function PatientForm({
             </Field>
 
             <Field id="alternateContactNumber" label="Alternate Contact">
-              <Input id="alternateContactNumber" type="tel" {...form.register('alternateContactNumber')} />
+              <Input
+                id="alternateContactNumber"
+                type="tel"
+                {...form.register('alternateContactNumber')}
+              />
             </Field>
 
             <Field id="email" label="Email" error={errors.email?.message}>
@@ -310,7 +341,12 @@ export function PatientForm({
           </div>
 
           <Field id="address" label="Address">
-            <Textarea id="address" autoComplete="street-address" {...form.register('address')} rows={2} />
+            <Textarea
+              id="address"
+              autoComplete="street-address"
+              {...form.register('address')}
+              rows={2}
+            />
           </Field>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -323,8 +359,15 @@ export function PatientForm({
             </Field>
 
             <Field id="country" label="Country">
-              <select id="country" {...form.register('country')} disabled={isLoadingCountries} className={NATIVE_SELECT}>
-                <option value="">{isLoadingCountries ? 'Loading countries...' : 'Select country'}</option>
+              <select
+                id="country"
+                {...form.register('country')}
+                disabled={isLoadingCountries}
+                className={NATIVE_SELECT}
+              >
+                <option value="">
+                  {isLoadingCountries ? 'Loading countries...' : 'Select country'}
+                </option>
                 {countriesData?.concepts.map((country) => (
                   <option key={country.code} value={country.code}>
                     {country.display}
@@ -339,7 +382,11 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <FormSection icon={Fingerprint} title="Identity Information" description="Nationality and identity documents">
+        <FormSection
+          icon={Fingerprint}
+          title="Identity Information"
+          description="Nationality and identity documents"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Field id="nationality" label="Nationality">
               <select
@@ -348,7 +395,9 @@ export function PatientForm({
                 disabled={isLoadingNationalities}
                 className={NATIVE_SELECT}
               >
-                <option value="">{isLoadingNationalities ? 'Loading nationalities...' : 'Select nationality'}</option>
+                <option value="">
+                  {isLoadingNationalities ? 'Loading nationalities...' : 'Select nationality'}
+                </option>
                 {nationalitiesData?.concepts.map((nationality) => (
                   <option key={nationality.code} value={nationality.code}>
                     {nationality.display}
@@ -367,14 +416,22 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <FormSection icon={Siren} title="Emergency Contact" description="Who to call on the patient's behalf">
+        <FormSection
+          icon={Siren}
+          title="Emergency Contact"
+          description="Who to call on the patient's behalf"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Field id="emergencyContactName" label="Name">
               <Input id="emergencyContactName" {...form.register('emergencyContactName')} />
             </Field>
 
             <Field id="emergencyContactNumber" label="Contact Number">
-              <Input id="emergencyContactNumber" type="tel" {...form.register('emergencyContactNumber')} />
+              <Input
+                id="emergencyContactNumber"
+                type="tel"
+                {...form.register('emergencyContactNumber')}
+              />
             </Field>
 
             <Field id="emergencyContactRelation" label="Relation">
@@ -383,12 +440,11 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <FormActions onCancel={onCancel} busy={isSubmitting}>
-          <Button type="submit" disabled={isSubmitting} className="gap-2">
-            <Save className="h-4 w-4" />
-            {isSubmitting ? 'Saving...' : mode === 'create' ? 'Save Patient' : 'Save Changes'}
-          </Button>
-        </FormActions>
+        <FormActions
+          submitLabel={mode === 'create' ? 'Save Patient' : 'Save Changes'}
+          busy={isSubmitting}
+          onCancel={onCancel}
+        />
       </form>
     </div>
   );

@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { Puzzle } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useToast } from '@/components/ui/use-toast';
 import { ChargePostingRuleForm } from '@/modules/rcm/components/charge-posting-rule-form';
 import { useCreateChargePostingRule } from '@/modules/rcm/hooks/use-charge-posting-rules';
@@ -25,21 +24,27 @@ export default function NewChargePostingRulePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <Button variant="ghost" size="sm" asChild>
-        <Link href={`/${locale}/rcm-setup/charge-posting-rules`}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to rules
-        </Link>
-      </Button>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="New charge posting rule"
+        subtitle="Turn a clinical event into a charge automatically"
+        icon={Puzzle}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${locale}/rcm-setup`, label: 'RCM Setup' },
+              { href: `/${locale}/rcm-setup/charge-posting-rules`, label: 'Charge posting rules' },
+              { label: 'New' },
+            ]}
+          />
+        }
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>New charge posting rule</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChargePostingRuleForm onSubmit={handleSubmit} isSubmitting={createRule.isPending} />
-        </CardContent>
-      </Card>
+      <ChargePostingRuleForm
+        onSubmit={handleSubmit}
+        isSubmitting={createRule.isPending}
+        onCancel={() => router.push(`/${locale}/rcm-setup/charge-posting-rules`)}
+      />
     </div>
   );
 }

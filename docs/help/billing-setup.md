@@ -22,6 +22,9 @@ are described in [Billing](billing.md) and [Revenue cycle and claims](revenue-cy
 
 Prices show in your organisation's **finance.currency** (AED when none is set).
 
+On every create and edit screen below, the breadcrumb above the title (**RCM Setup** › the list) takes
+you back, and **Cancel** beside the save button returns to the list without saving.
+
 ## Payers
 
 **Payers** (`/rcm-setup/payers`) lists every payer: **Payer** (name and electronic ID), **Type**,
@@ -82,8 +85,8 @@ catalog items** (on by default) also lists the shared global items alongside you
 6. Press **Create billing item**. "Billing item created".
 
 Open an item (`/rcm-setup/billing-items/{id}`) to see **Scope & metadata** (whether it is
-**Tenant-specific** or a **Global catalog item**, its code and list price), edit it under **Edit
-billing item** with **Update billing item**, and manage its **Mapped Catalog Items** (see
+**Tenant-specific** or a **Global catalog item**, its code and list price), edit it in the form below
+and press **Update billing item**, and manage its **Mapped Catalog Items** (see
 [Catalog mappings](#catalog-mappings)).
 
 Under **Danger zone**:
@@ -157,7 +160,8 @@ organisations, so the server also refuses one created from within your organisat
 
 ### Prices in a schedule
 
-Open a schedule (`/rcm-setup/fee-schedules/{id}`). Edit its details under **Edit schedule**.
+Open a schedule (`/rcm-setup/fee-schedules/{id}`). Edit its details in the form under **Schedule
+metadata** and press **Save schedule**.
 
 - **Items** lists each price: **Code** (with service group), **Type**, **Amount** and **Priority**.
   **Edit** opens it below; **Delete** removes it (confirm "Delete this fee schedule item?").
@@ -193,7 +197,8 @@ Nothing is saved without a payer, contract name and start date.
 
 ### Adjustments and price checks
 
-Open a contract (`/rcm-setup/payer-contracts/{id}`): **Contract summary**, then **Edit contract**.
+Open a contract (`/rcm-setup/payer-contracts/{id}`): **Contract summary**, then the contract form;
+press **Save contract** to keep changes.
 
 - **Adjustments** vary the price for part of the contract. Each row shows its **Scope** (a service
   group, or "All services", marked **Adjustment** or **Exclusion**), **Multiplier**, **Discount %**,

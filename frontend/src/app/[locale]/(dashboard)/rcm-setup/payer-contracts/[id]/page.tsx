@@ -1,16 +1,24 @@
 'use client';
 
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { ArrowLeft } from 'lucide-react';
+import { Calculator, Handshake, Info, SlidersHorizontal } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FormSection } from '@/components/forms/form-layout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { useToast } from '@/components/ui/use-toast';
 import { PayerContractForm } from '@/modules/rcm/components/payer-contract-form';
 import { PayerContractAdjustmentForm } from '@/modules/rcm/components/payer-contract-adjustment-form';
@@ -31,10 +39,12 @@ import type {
 import { ContractStatus } from '@/modules/rcm/types/payer-contract';
 import { useState } from 'react';
 
-const toLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+const toLabel = (value: string) =>
+  value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
 export default function PayerContractDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const locale = params.locale as string;
   const contractId = params.id as string;
   const toast = useToast();
@@ -61,7 +71,10 @@ export default function PayerContractDetailPage() {
     toast({ title: 'Adjustment added' });
   };
 
-  const handleUpdateAdjustment = async (id: string, payload: CreatePayerContractAdjustmentInput) => {
+  const handleUpdateAdjustment = async (
+    id: string,
+    payload: CreatePayerContractAdjustmentInput,
+  ) => {
     await updateAdjustment.mutateAsync({ id, payload });
     toast({ title: 'Adjustment updated' });
     setSelectedAdjustmentId(null);
@@ -87,7 +100,9 @@ export default function PayerContractDetailPage() {
     };
     const result = await calculatePrice.mutateAsync(payload);
     if (result.finalAmount != null) {
-      setPriceResult(`Final: ${result.finalAmount.toFixed(2)} (base ${result.baseAmount?.toFixed(2) ?? 'n/a'})`);
+      setPriceResult(
+        `Final: ${result.finalAmount.toFixed(2)} (base ${result.baseAmount?.toFixed(2) ?? 'n/a'})`,
+      );
     } else {
       setPriceResult(result.message ?? 'No price calculated');
     }
@@ -108,161 +123,189 @@ export default function PayerContractDetailPage() {
   const selectedAdjustment = adjustments?.find((adj) => adj.id === selectedAdjustmentId);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/${locale}/rcm-setup/payer-contracts`}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to contracts
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold">{contract.contractName}</h1>
-        <Badge className="ml-auto" variant={contract.status === ContractStatus.ACTIVE ? 'default' : 'secondary'}>
-          {toLabel(contract.status)}
-        </Badge>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title={contract.contractName}
+        subtitle={`${toLabel(contract.contractType)} · ${toLabel(contract.reimbursementMethod)}`}
+        icon={Handshake}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${locale}/rcm-setup`, label: 'RCM Setup' },
+              { href: `/${locale}/rcm-setup/payer-contracts`, label: 'Payer contracts' },
+              { label: contract.contractName },
+            ]}
+          />
+        }
+        actions={
+          <Badge variant={contract.status === ContractStatus.ACTIVE ? 'default' : 'secondary'}>
+            {toLabel(contract.status)}
+          </Badge>
+        }
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Contract summary</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div>
-            <p className="text-sm text-muted-foreground">Contract type</p>
-            <p className="font-medium">{toLabel(contract.contractType)}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Reimbursement</p>
-            <p className="font-medium">{toLabel(contract.reimbursementMethod)}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Effective</p>
-            <p>
-              {format(new Date(contract.effectiveFrom), 'PPP')} →{' '}
-              {contract.effectiveTo ? format(new Date(contract.effectiveTo), 'PPP') : 'Open'}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Payer</p>
-            <p className="font-mono text-xs" title={contract.payerId}>
-              {contract.payerId}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <FormSection
+        icon={Info}
+        title="Contract summary"
+        description="Type, reimbursement and validity"
+        contentClassName="grid gap-4 md:grid-cols-4"
+      >
+        <div>
+          <p className="text-sm text-muted-foreground">Contract type</p>
+          <p className="font-medium">{toLabel(contract.contractType)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Reimbursement</p>
+          <p className="font-medium">{toLabel(contract.reimbursementMethod)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Effective</p>
+          <p>
+            {format(new Date(contract.effectiveFrom), 'PPP')} →{' '}
+            {contract.effectiveTo ? format(new Date(contract.effectiveTo), 'PPP') : 'Open'}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Payer</p>
+          <p className="font-mono text-xs" title={contract.payerId}>
+            {contract.payerId}
+          </p>
+        </div>
+      </FormSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Edit contract</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <PayerContractForm initialValues={contract} onSubmit={handleUpdate} isSubmitting={updateContract.isPending} />
-        </CardContent>
-      </Card>
+      <PayerContractForm
+        initialValues={contract}
+        onSubmit={handleUpdate}
+        isSubmitting={updateContract.isPending}
+        onCancel={() => router.push(`/${locale}/rcm-setup/payer-contracts`)}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Adjustments</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {isAdjustmentsLoading ? (
-            <div className="h-32 animate-pulse rounded bg-muted" />
-          ) : adjustments && adjustments.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Scope</TableHead>
-                  <TableHead>Multiplier</TableHead>
-                  <TableHead>Discount %</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Effective</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+      <FormSection
+        icon={SlidersHorizontal}
+        title="Adjustments"
+        description="Service-group multipliers, discounts and exclusions"
+      >
+        {isAdjustmentsLoading ? (
+          <div className="h-32 animate-pulse rounded bg-muted" />
+        ) : adjustments && adjustments.length > 0 ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Scope</TableHead>
+                <TableHead>Multiplier</TableHead>
+                <TableHead>Discount %</TableHead>
+                <TableHead>Priority</TableHead>
+                <TableHead>Effective</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {adjustments.map((adjustment) => (
+                <TableRow key={adjustment.id}>
+                  <TableCell>
+                    <div className="font-medium">{adjustment.serviceGroup || 'All services'}</div>
+                    <p className="text-xs text-muted-foreground">
+                      {adjustment.isExclusion ? 'Exclusion' : 'Adjustment'}
+                    </p>
+                  </TableCell>
+                  <TableCell>{adjustment.multiplier ?? '—'}</TableCell>
+                  <TableCell>{adjustment.discountPct ?? '—'}</TableCell>
+                  <TableCell>{adjustment.priority}</TableCell>
+                  <TableCell>
+                    {adjustment.effectiveFrom
+                      ? format(new Date(adjustment.effectiveFrom), 'PP')
+                      : '—'}{' '}
+                    →{adjustment.effectiveTo ? format(new Date(adjustment.effectiveTo), 'PP') : '—'}
+                  </TableCell>
+                  <TableCell className="text-right space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedAdjustmentId(adjustment.id)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteAdjustment(adjustment.id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {adjustments.map((adjustment) => (
-                  <TableRow key={adjustment.id}>
-                    <TableCell>
-                      <div className="font-medium">{adjustment.serviceGroup || 'All services'}</div>
-                      <p className="text-xs text-muted-foreground">{adjustment.isExclusion ? 'Exclusion' : 'Adjustment'}</p>
-                    </TableCell>
-                    <TableCell>{adjustment.multiplier ?? '—'}</TableCell>
-                    <TableCell>{adjustment.discountPct ?? '—'}</TableCell>
-                    <TableCell>{adjustment.priority}</TableCell>
-                    <TableCell>
-                      {adjustment.effectiveFrom ? format(new Date(adjustment.effectiveFrom), 'PP') : '—'} →
-                      {adjustment.effectiveTo ? format(new Date(adjustment.effectiveTo), 'PP') : '—'}
-                    </TableCell>
-                    <TableCell className="text-right space-x-2">
-                      <Button variant="outline" size="sm" onClick={() => setSelectedAdjustmentId(adjustment.id)}>
-                        Edit
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDeleteAdjustment(adjustment.id)}>
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <p className="text-sm text-muted-foreground">No adjustments defined.</p>
-          )}
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <p className="text-sm text-muted-foreground">No adjustments defined.</p>
+        )}
 
-          <div className="rounded-md border p-4">
-            <h3 className="font-medium">Add adjustment</h3>
+        <div className="space-y-4 rounded-md border border-border p-4">
+          <h3 className="font-medium">Add adjustment</h3>
+          <PayerContractAdjustmentForm
+            contractId={contract.id}
+            onSubmit={handleCreateAdjustment}
+            isSubmitting={createAdjustment.isPending}
+          />
+        </div>
+
+        {selectedAdjustment && (
+          <div className="space-y-4 rounded-md border border-border p-4">
+            <h3 className="font-medium">Edit adjustment</h3>
             <PayerContractAdjustmentForm
               contractId={contract.id}
-              onSubmit={handleCreateAdjustment}
-              isSubmitting={createAdjustment.isPending}
+              initialValues={selectedAdjustment}
+              submitLabel="Update adjustment"
+              isSubmitting={updateAdjustment.isPending}
+              onSubmit={(payload) => handleUpdateAdjustment(selectedAdjustment.id, payload)}
+              onCancel={() => setSelectedAdjustmentId(null)}
             />
           </div>
+        )}
+      </FormSection>
 
-          {selectedAdjustment && (
-            <div className="rounded-md border p-4">
-              <h3 className="font-medium">Edit adjustment</h3>
-              <PayerContractAdjustmentForm
-                contractId={contract.id}
-                initialValues={selectedAdjustment}
-                submitLabel="Update adjustment"
-                isSubmitting={updateAdjustment.isPending}
-                onSubmit={(payload) => handleUpdateAdjustment(selectedAdjustment.id, payload)}
-                onCancel={() => setSelectedAdjustmentId(null)}
-              />
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Calculate contract price</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-3 md:grid-cols-3">
-            <div className="space-y-2">
-              <Label>Code</Label>
-              <Input value={priceInput.code} onChange={(event) => setPriceInput((prev) => ({ ...prev, code: event.target.value }))} placeholder="Billing code" />
-            </div>
-            <div className="space-y-2">
-              <Label>Code type</Label>
-              <Input value={priceInput.codeType} onChange={(event) => setPriceInput((prev) => ({ ...prev, codeType: event.target.value }))} placeholder="CPT" />
-            </div>
-            <div className="space-y-2">
-              <Label>Quantity</Label>
-              <Input
-                type="number"
-                min="1"
-                value={priceInput.quantity}
-                onChange={(event) => setPriceInput((prev) => ({ ...prev, quantity: event.target.value }))}
-              />
-            </div>
+      <FormSection
+        icon={Calculator}
+        title="Calculate contract price"
+        description="Check the price this contract resolves for a code"
+      >
+        <div className="grid gap-3 md:grid-cols-3">
+          <div className="space-y-2">
+            <Label>Code</Label>
+            <Input
+              value={priceInput.code}
+              onChange={(event) => setPriceInput((prev) => ({ ...prev, code: event.target.value }))}
+              placeholder="Billing code"
+            />
           </div>
-          <Button onClick={handleCalculatePrice} disabled={calculatePrice.isPending}>
-            {calculatePrice.isPending ? 'Calculating…' : 'Calculate price'}
-          </Button>
-          {priceResult && <p className="text-sm text-muted-foreground">{priceResult}</p>}
-        </CardContent>
-      </Card>
+          <div className="space-y-2">
+            <Label>Code type</Label>
+            <Input
+              value={priceInput.codeType}
+              onChange={(event) =>
+                setPriceInput((prev) => ({ ...prev, codeType: event.target.value }))
+              }
+              placeholder="CPT"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Quantity</Label>
+            <Input
+              type="number"
+              min="1"
+              value={priceInput.quantity}
+              onChange={(event) =>
+                setPriceInput((prev) => ({ ...prev, quantity: event.target.value }))
+              }
+            />
+          </div>
+        </div>
+        <Button onClick={handleCalculatePrice} disabled={calculatePrice.isPending}>
+          {calculatePrice.isPending ? 'Calculating…' : 'Calculate price'}
+        </Button>
+        {priceResult && <p className="text-sm text-muted-foreground">{priceResult}</p>}
+      </FormSection>
     </div>
   );
 }

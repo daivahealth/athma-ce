@@ -90,24 +90,34 @@ and `/patients/{id}/edit`) and the oncology create/edit pages under
   required" hint on the left, **Cancel** (outline) then the primary submit on
   the right.
 
-The pieces live in `frontend/src/components/forms/form-layout.tsx`; use them
-rather than re-creating the classes:
+The pieces live in `frontend/src/components/forms/form-layout.tsx`, so a form
+page composes them rather than restyling `Card`/`Label` by hand:
+
+| Export | Use |
+| --- | --- |
+| `FormSection` | Section card with icon chip, title, description; `actions` for header buttons (e.g. "Add line"), `contentClassName` to replace the default `space-y-4` body (e.g. with a grid). |
+| `FormField` | Label (with `required` star), control, `error` message with `role="alert"`, optional muted `hint`. |
+| `FormActions` | Footer row: required-fields hint, outline **Cancel** (when `onCancel` is given), then the submit. Pass `submitLabel` for the default primary button with a save icon, or pass your own submit control(s) as children. `busy` disables the buttons. |
+| `invalidProps(id, error, className?)` | Spread onto a control to set `aria-invalid`, `aria-describedby` and the destructive border. |
+| `NATIVE_SELECT`, `FIELD_CONTROL` | Classes for a native `<select>` and for native date/time inputs (`dark:[color-scheme:dark]`). |
 
 ```tsx
 <FormSection icon={Target} title="Staging" description="Staging system, type and TNM categories">
   <FormField id="stagingSystem" label="System" required error={errors.stagingSystem}>…</FormField>
 </FormSection>
-<FormActions onCancel={back} busy={isPending}>
-  <Button type="submit">Save</Button>
-</FormActions>
+<FormActions onCancel={back} busy={isPending} submitLabel="Save" />
 ```
 
-`NATIVE_SELECT`, `FIELD_CONTROL` and `invalidProps(id, error)` cover native
-selects, dark-aware date pickers and the error wiring. The oncology forms put
-the patient and cancer diagnosis above the fields with
-`plugins/oncology/components/FormContextCards.tsx` (`PatientPickerCard`,
-`PatientContextCard`, `DiagnosisPickerCard`, `DiagnosisContextCard`), which
-colour chips with theme tokens and the oncology status tone map.
+Besides patient registration, the RCM forms (invoice, receipt, billing item,
+charge posting rule, fee schedule, payer contract), the PRM rule, task and
+template forms, and the oncology create/edit forms use this layout. On an RCM
+or PRM detail page, the read-only summary, related tables and danger zone are
+`FormSection`s too, and the record's status badge or **Delete** goes in the
+`PageHeader` `actions`. The oncology forms put the patient and cancer diagnosis
+above the fields with `plugins/oncology/components/FormContextCards.tsx`
+(`PatientPickerCard`, `PatientContextCard`, `DiagnosisPickerCard`,
+`DiagnosisContextCard`), which colour chips with theme tokens and the oncology
+status tone map.
 
 ### `StatCard`
 

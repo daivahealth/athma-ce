@@ -17,7 +17,9 @@ you straight to **Events**.
 
 The setup screens (**Rules**, **Templates**, **Preferences**, **Provider callbacks** and **Webhook tester**)
 are not in that section. You reach them from **PE Setup**, under **Administration** in the sidebar, which is
-always shown. Their **Back** buttons return you to **PE Setup**.
+always shown. **Preferences**, **Provider callbacks** and **Webhook tester** have **Back** buttons that return
+you to **PE Setup**; the rule and template screens have a breadcrumb above the title (**PE Setup** › **Rules**
+or **Templates**) instead.
 
 ## Finding a patient
 
@@ -109,7 +111,7 @@ plain text. Press **View** to open it. If nothing matches you see "No tasks foun
 4. Optionally choose **Priority**: **Low**, **Medium**, **High** or **Urgent**.
 5. Optionally fill **Assigned User ID**, **Assigned Role**, **Due At**, **Related Entity Type** and
    **Related Entity ID**.
-6. Press **Create Task**.
+6. Press **Create Task**, or **Cancel** to go back to the tasks list without saving.
 
 **Check:** a toast says **Task created** ("Task is ready in PRM.") and you return to the tasks list.
 
@@ -189,7 +191,7 @@ see "No rules found."
      within that many seconds.
 7. Set **Active** (it starts at **Active**) and, optionally, a **Description**.
 8. Type the rule's conditions in **Condition Expression (JSON)**.
-9. Press **Create Rule**.
+9. Press **Create Rule**, or **Cancel** to go back to the rules list without saving.
 
 **Check:** a toast says **Rule created** and you return to the rules list.
 
@@ -202,10 +204,11 @@ see "No rules found."
 
 ### Changing or deleting a rule
 
-**Rule Details** (`/prm/rules/{ruleId}`) shows the same form filled in. Change it and press **Update Rule**; a
-toast says **Rule updated**. To switch a rule off without deleting it, set **Active** to **Inactive**.
+A rule's page (`/prm/rules/{ruleId}`) is headed with the rule's name (**Rule Details** while it loads) and
+shows the same form filled in. Change it and press **Update Rule**; a toast says **Rule updated**. **Cancel**
+goes back to **PE Setup** without saving. To switch a rule off without deleting it, set **Active** to **Inactive**.
 
-**Delete** asks "Delete this rule? This action cannot be undone." and, on confirming, says **Rule deleted**
+**Delete**, at the top right, asks "Delete this rule? This action cannot be undone." and, on confirming, says **Rule deleted**
 and returns you to the list. A **Raw Payload** card shows the stored rule as JSON.
 
 ## Templates
@@ -227,7 +230,7 @@ matches you see "No templates found."
 6. Optionally type a **Version** number, set **Active** and add a **Description**.
 7. Type the message text in **Body**.
 8. Describe the template's placeholders in **Variables Schema (JSON)**.
-9. Press **Create Template**.
+9. Press **Create Template**, or **Cancel** to go back to the templates list without saving.
 
 **Check:** a toast says **Template created** ("Template is ready to use.") and you return to the list.
 
@@ -239,8 +242,9 @@ matches you see "No templates found."
 
 ### Changing or deleting a template
 
-**Template Details** (`/prm/templates/{templateId}`) shows the form filled in. Press **Update Template** to
-save (**Template updated**). **Delete** asks "Delete this template? This action cannot be undone." and then
+A template's page (`/prm/templates/{templateId}`) is headed with the template's name (**Template Details**
+while it loads) and shows the form filled in. Press **Update Template** to save (**Template updated**), or
+**Cancel** to go back to **PE Setup**. **Delete**, at the top right, asks "Delete this template? This action cannot be undone." and then
 says **Template deleted**. A **Raw Payload** card shows the stored template as JSON.
 
 ## Preferences
@@ -290,8 +294,8 @@ server's reason.
   than their name.
 - **Assigned User ID** (on tasks) and **Status** (on messages) are free-text boxes; there is no user or status
   picker.
-- **Task Details** has no **Back** button. **Rule Details** and **Template Details** go **Back** to **PE
-  Setup**, not to their list.
+- **Task Details** has no **Back** button. On a rule's or template's page, **Cancel** goes to **PE Setup**,
+  not to the list; use the breadcrumb for the list.
 - The **Patient ID required** toast on **Preferences** tells you to "Enter a patient UUID", but the screen
   uses the patient search; choose a patient there.
 - After creating a rule the toast says "The rule is now active in PRM." even if you saved it as

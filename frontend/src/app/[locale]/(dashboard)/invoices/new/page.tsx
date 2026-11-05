@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { FilePlus2 } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useToast } from '@/components/ui/use-toast';
 import { InvoiceForm } from '@/modules/rcm/components/invoice-form';
 import { useCreateInvoice } from '@/modules/rcm/hooks/use-invoices';
@@ -32,27 +31,25 @@ export default function NewInvoicePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex flex-wrap items-center gap-2">
-            <Button variant="ghost" size="icon" asChild>
-              <Link href={`/${locale}/invoices`} aria-label="Back to invoices">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-            Create invoice
-            <Badge variant="secondary">{currencyLabel}</Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <InvoiceForm
-            onSubmit={handleSubmit}
-            isSubmitting={createInvoice.isPending}
-            showCurrencyField={false}
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Create invoice"
+        subtitle={`Bill a patient for an encounter's charges · amounts in ${currencyLabel}`}
+        icon={FilePlus2}
+        breadcrumb={
+          <Breadcrumb
+            items={[{ href: `/${locale}/invoices`, label: 'Invoices' }, { label: 'New' }]}
           />
-        </CardContent>
-      </Card>
+        }
+        actions={<Badge variant="secondary">{currencyLabel}</Badge>}
+      />
+
+      <InvoiceForm
+        onSubmit={handleSubmit}
+        isSubmitting={createInvoice.isPending}
+        showCurrencyField={false}
+        onCancel={() => router.push(`/${locale}/invoices`)}
+      />
     </div>
   );
 }
