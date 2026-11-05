@@ -625,7 +625,7 @@ export function InvoiceForm({
         </div>
       </FormSection>
 
-      <FormActions submitLabel="Create invoice" isSubmitting={submitting} onCancel={onCancel} />
+      <FormActions submitLabel="Create invoice" busy={submitting} onCancel={onCancel} />
     </form>
   );
 }

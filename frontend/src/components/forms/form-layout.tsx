@@ -6,9 +6,9 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 /**
- * Building blocks for create/edit pages that follow the "Form pages"
- * convention in docs/frontend/COMPONENTS.md (reference: the patient
- * registration form).
+ * Building blocks of a create/edit page, as described under "Form pages" in
+ * `docs/frontend/COMPONENTS.md`: section cards, labelled fields with a
+ * required marker and an inline error, and the footer action row.
  */
 
 /**
@@ -34,23 +34,23 @@ export function invalidProps(id: string, error: string | undefined, className?: 
   };
 }
 
-/** A titled group of fields: icon chip, title, one-line description. */
+/** A group of fields: a card with an icon chip, a title and a one-line description. */
 export function FormSection({
   icon: Icon,
   title,
   description,
   actions,
-  contentClassName,
   children,
+  contentClassName,
 }: {
   icon: LucideIcon;
   title: string;
   description?: string;
-  /** Right-aligned header controls, e.g. an "Add line" button. */
+  /** Right-aligned header controls, e.g. an "Add" button for a repeating list. */
   actions?: ReactNode;
+  children: ReactNode;
   /** Replaces the default `space-y-4` body layout, e.g. with a grid. */
   contentClassName?: string;
-  children: ReactNode;
 }) {
   return (
     <Card className="hover:translate-y-0">
@@ -69,7 +69,7 @@ export function FormSection({
   );
 }
 
-/** Label + control + inline validation message. */
+/** A label, its control, and the validation message under it. */
 export function FormField({
   id,
   label,
@@ -80,10 +80,10 @@ export function FormField({
   children,
 }: {
   id?: string;
-  label: string;
+  label: ReactNode;
   required?: boolean;
   error?: string;
-  /** Muted helper text under the control. */
+  /** Muted helper text under the control (hidden while an error shows). */
   hint?: ReactNode;
   className?: string;
   children: ReactNode;
@@ -95,30 +95,36 @@ export function FormField({
         {required && <span className="ml-0.5 text-destructive">*</span>}
       </Label>
       {children}
-      {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
-      {error && (
+      {error ? (
         <p id={id ? `${id}-error` : undefined} role="alert" className="text-sm font-medium text-destructive">
           {error}
         </p>
+      ) : (
+        hint && <p className="text-xs text-muted-foreground">{hint}</p>
       )}
     </div>
   );
 }
 
 /**
- * Footer action row: the required-fields hint on the left, Cancel (outline)
- * and the primary submit on the right.
+ * Footer row under a `border-t`: the required-fields hint on the left,
+ * Cancel (outline, when `onCancel` is given) then the submit on the right.
+ * Pass the submit control(s) as children, or just a `submitLabel` for the
+ * default primary button with a save icon.
  */
 export function FormActions({
-  submitLabel,
-  isSubmitting,
   onCancel,
+  busy,
+  submitLabel,
   showRequiredHint = true,
+  children,
 }: {
-  submitLabel: string;
-  isSubmitting?: boolean;
   onCancel?: () => void;
+  busy?: boolean;
+  /** Label of the default submit button; ignored when children are given. */
+  submitLabel?: string;
   showRequiredHint?: boolean;
+  children?: ReactNode;
 }) {
   return (
     <div className="flex flex-col-reverse gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -131,14 +137,17 @@ export function FormActions({
       )}
       <div className="flex flex-col-reverse gap-2 sm:flex-row">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
+          <Button type="button" variant="outline" onClick={onCancel} disabled={busy}>
             Cancel
           </Button>
         )}
-        <Button type="submit" disabled={isSubmitting} className="gap-2">
-          <Save className="h-4 w-4" />
-          {isSubmitting ? 'Saving...' : submitLabel}
-        </Button>
+        {children ??
+          (submitLabel && (
+            <Button type="submit" disabled={busy} className="gap-2">
+              <Save className="h-4 w-4" />
+              {busy ? 'Saving...' : submitLabel}
+            </Button>
+          ))}
       </div>
     </div>
   );

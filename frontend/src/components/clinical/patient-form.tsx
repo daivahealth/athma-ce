@@ -442,7 +442,7 @@ export function PatientForm({
 
         <FormActions
           submitLabel={mode === 'create' ? 'Save Patient' : 'Save Changes'}
-          isSubmitting={isSubmitting}
+          busy={isSubmitting}
           onCancel={onCancel}
         />
       </form>

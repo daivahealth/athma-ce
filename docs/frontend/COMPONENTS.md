@@ -62,7 +62,8 @@ A create/edit page uses the same header as a list page, with a
 `Breadcrumb` (`frontend/src/components/layout/breadcrumb.tsx`) back to its list
 in place of a back-arrow button. The patient registration form
 (`frontend/src/components/clinical/patient-form.tsx`, used by `/patients/new`
-and `/patients/{id}/edit`) is the reference:
+and `/patients/{id}/edit`) and the oncology create/edit pages under
+`/oncology/*/new` and `/oncology/*/{id}/edit` follow it:
 
 ```tsx
 <PageHeader
@@ -94,18 +95,29 @@ page composes them rather than restyling `Card`/`Label` by hand:
 
 | Export | Use |
 | --- | --- |
-| `FormSection` | Section card with icon chip, title, description; `actions` for header buttons (e.g. "Add line"), `contentClassName` to make the body a grid. |
+| `FormSection` | Section card with icon chip, title, description; `actions` for header buttons (e.g. "Add line"), `contentClassName` to replace the default `space-y-4` body (e.g. with a grid). |
 | `FormField` | Label (with `required` star), control, `error` message with `role="alert"`, optional muted `hint`. |
-| `FormActions` | Footer row: required-fields hint, outline **Cancel** (when `onCancel` is given), primary submit with a save icon. |
+| `FormActions` | Footer row: required-fields hint, outline **Cancel** (when `onCancel` is given), then the submit. Pass `submitLabel` for the default primary button with a save icon, or pass your own submit control(s) as children. `busy` disables the buttons. |
 | `invalidProps(id, error, className?)` | Spread onto a control to set `aria-invalid`, `aria-describedby` and the destructive border. |
 | `NATIVE_SELECT`, `FIELD_CONTROL` | Classes for a native `<select>` and for native date/time inputs (`dark:[color-scheme:dark]`). |
 
+```tsx
+<FormSection icon={Target} title="Staging" description="Staging system, type and TNM categories">
+  <FormField id="stagingSystem" label="System" required error={errors.stagingSystem}>…</FormField>
+</FormSection>
+<FormActions onCancel={back} busy={isPending} submitLabel="Save" />
+```
+
 Besides patient registration, the RCM forms (invoice, receipt, billing item,
-charge posting rule, fee schedule, payer contract) and the PRM rule, task and
-template forms use this layout on both their `/new` and `/{id}` pages. On a
-detail page, the read-only summary, related tables and danger zone are
+charge posting rule, fee schedule, payer contract), the PRM rule, task and
+template forms, and the oncology create/edit forms use this layout. On an RCM
+or PRM detail page, the read-only summary, related tables and danger zone are
 `FormSection`s too, and the record's status badge or **Delete** goes in the
-`PageHeader` `actions`.
+`PageHeader` `actions`. The oncology forms put the patient and cancer diagnosis
+above the fields with `plugins/oncology/components/FormContextCards.tsx`
+(`PatientPickerCard`, `PatientContextCard`, `DiagnosisPickerCard`,
+`DiagnosisContextCard`), which colour chips with theme tokens and the oncology
+status tone map.
 
 ### `StatCard`
 

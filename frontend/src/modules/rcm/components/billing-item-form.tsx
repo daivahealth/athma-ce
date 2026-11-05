@@ -256,7 +256,7 @@ export function BillingItemForm({
         </div>
       </FormSection>
 
-      <FormActions submitLabel={submitLabel} isSubmitting={isSubmitting} onCancel={onCancel} />
+      <FormActions submitLabel={submitLabel} busy={isSubmitting} onCancel={onCancel} />
     </form>
   );
 }
