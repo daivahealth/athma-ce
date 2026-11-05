@@ -637,7 +637,8 @@ GET /api/v1/plugins/oncology/treatment-days?from=YYYY-MM-DD&to=YYYY-MM-DD&status
 Days across patients (range ≤ 62 days; skipped/cancelled excluded unless `status` is given), with
 patient, protocol, phase (`phase_index`, `phase_name`), dose level and order status. Only
 active / on-hold plans. `phase_index` lets the worklist colour a phase the same way as the plan's
-cycle cards.
+cycle cards. When the day has an order, rows also carry `labs_reviewed` and `labs_within_range`
+(from the order's pre-chemo checklist) and `order_administered_at`. The day-care board uses them.
 
 ### Update Treatment Day
 ```

@@ -776,11 +776,17 @@ export function useTreatmentPlan(id: string) {
   });
 }
 
-export function useTreatmentDays(params: { date?: string; from?: string; to?: string; status?: string }, enabled = true) {
+export function useTreatmentDays(
+  params: { date?: string; from?: string; to?: string; status?: string },
+  enabled = true,
+  /** Poll interval in ms (e.g. a day-care board on a wall screen); off by default. */
+  refetchInterval: number | false = false,
+) {
   return useQuery({
     queryKey: oncologyKeys.treatmentDays(params),
     queryFn: () => oncologyService.listTreatmentDays(params),
     enabled,
+    refetchInterval,
   });
 }
 
