@@ -9,10 +9,10 @@ import {
 } from '@/components/ui/select';
 import { Pencil, Plus, Search, Users } from 'lucide-react';
 import { useTumorBoardCases } from '@/plugins/oncology/hooks/use-oncology';
-import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
+import { LoadingState, StatusBadge, PatientCell } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
 import { PageHeader } from '@/components/ui/page-header';
-import type { TumorBoardCase, OncologyPatientDisplay } from '@/plugins/oncology/types';
+import type { TumorBoardCase } from '@/plugins/oncology/types';
 
 export default function TumorBoardPage() {
   const params = useParams() as { locale: string };
@@ -157,22 +157,6 @@ export default function TumorBoardPage() {
   );
 }
 
-function PatientCell({ patientDisplay }: { patientDisplay?: OncologyPatientDisplay }) {
-  if (!patientDisplay) return <span className="text-muted-foreground text-xs">—</span>;
-  const genderAge = [
-    patientDisplay.gender ? patientDisplay.gender.charAt(0).toUpperCase() + patientDisplay.gender.slice(1) : null,
-    patientDisplay.age != null ? `${patientDisplay.age}y` : null,
-  ].filter(Boolean).join(' · ');
-  return (
-    <div>
-      <div className="font-medium">{patientDisplay.displayName}</div>
-      <div className="flex items-center gap-2 mt-0.5">
-        {patientDisplay.mrn && <span className="text-xs text-muted-foreground">MRN: {patientDisplay.mrn}</span>}
-        {genderAge && <span className="text-xs text-muted-foreground">{genderAge}</span>}
-      </div>
-    </div>
-  );
-}
 
 function AttendeesSummary({ attendees }: { attendees: TumorBoardCase['attendees'] }) {
   if (!attendees || attendees.length === 0) return <span className="text-xs text-muted-foreground">—</span>;

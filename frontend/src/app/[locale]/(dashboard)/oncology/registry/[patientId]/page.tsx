@@ -10,6 +10,8 @@ import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentInt
 import { Badge } from '@/components/ui/badge';
 import { useOtRequests } from '@/modules/ot/hooks/use-ot';
 import { OtRequestStatusBadge, OtReportStatusBadge } from '@/modules/ot/components/ot-status-badge';
+import { formatDayMonthYear } from '@/plugins/oncology/lib/treatment-day';
+import type { OncologyPatientDisplay } from '@/plugins/oncology/types';
 
 export default function PatientCancerProfilePage() {
   const params = useParams();
@@ -24,15 +26,37 @@ export default function PatientCancerProfilePage() {
   if (!data) return <EmptyState message="Patient not found in oncology registry" />;
 
   const { diagnoses = [], stagings = [], tumorBoardCases = [], carePlans = [] } = data;
+  const patient = (diagnoses[0] as { patientDisplay?: OncologyPatientDisplay } | undefined)?.patientDisplay;
+  const latestStaging = stagings[0] as Record<string, unknown> | undefined; // newest first
+  const currentPlan = (carePlans as Record<string, unknown>[]).find((cp) => ['active', 'on_hold', 'draft'].includes(cp.status as string))
+    ?? (carePlans[0] as Record<string, unknown> | undefined);
 
   return (
     <div className="space-y-8">
       <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Patient Cancer Profile</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Complete oncology history for this patient
-          </p>
+        <div className="min-w-0">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Patient cancer profile</p>
+          <h1 className="text-2xl font-bold mt-0.5">{patient?.displayName ?? 'Patient'}</h1>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+            {patient?.mrn && <span className="rounded-md bg-primary/10 px-2 py-0.5 font-mono text-primary">{patient.mrn}</span>}
+            {patient && (
+              <span className="rounded-md bg-muted px-2 py-0.5 capitalize">
+                {[patient.age != null ? `${patient.age} yrs` : null, patient.gender].filter(Boolean).join(' · ')}
+              </span>
+            )}
+            {latestStaging?.stage_group != null && (
+              <span className="rounded-md bg-muted px-2 py-0.5">
+                Stage <span className="font-semibold">{String(latestStaging.stage_group)}</span>
+                {latestStaging.staging_system != null && <span className="text-muted-foreground"> · {String(latestStaging.staging_system)}</span>}
+              </span>
+            )}
+            {currentPlan?.treatment_intent != null && <TreatmentIntentBadge intent={String(currentPlan.treatment_intent)} />}
+            {currentPlan?.status != null && (
+              <span className="inline-flex items-center gap-1 text-muted-foreground">
+                Care plan <StatusBadge status={String(currentPlan.status)} />
+              </span>
+            )}
+          </div>
         </div>
         <Button
           variant="outline"
@@ -65,7 +89,7 @@ export default function PatientCancerProfilePage() {
                   {Boolean(d.is_recurrence) && <span className="px-2 py-0.5 rounded bg-red-100 text-red-700">Recurrence</span>}
                 </div>
                 <div className="mt-2 text-xs text-muted-foreground">
-                  Diagnosed: {new Date(d.diagnosis_date as string).toLocaleDateString()}
+                  Diagnosed: {formatDayMonthYear(String(d.diagnosis_date))}
                   {d.ecog_at_diagnosis != null && ` | ECOG: ${String(d.ecog_at_diagnosis)}`}
                 </div>
               </div>
@@ -140,7 +164,7 @@ export default function PatientCancerProfilePage() {
                   <th className="text-left p-3 font-medium">Procedure</th>
                   <th className="text-left p-3 font-medium">Priority</th>
                   <th className="text-left p-3 font-medium">Status</th>
-                  <th className="text-left p-3 font-medium">Preferred Date</th>
+                  <th className="text-left p-3 font-medium">Date</th>
                   <th className="text-left p-3 font-medium">Report</th>
                 </tr>
               </thead>
@@ -151,7 +175,7 @@ export default function PatientCancerProfilePage() {
                     <td className="p-3 capitalize text-muted-foreground">{r.priority.toLowerCase()}</td>
                     <td className="p-3"><OtRequestStatusBadge status={r.status} /></td>
                     <td className="p-3 text-muted-foreground">
-                      {r.preferredDate ? new Date(r.preferredDate).toLocaleDateString() : '-'}
+                      {r.preferredDate ? formatDayMonthYear(String(r.preferredDate)) : '-'}
                     </td>
                     <td className="p-3">
                       {r.reports?.length ? (
@@ -201,7 +225,7 @@ export default function PatientCancerProfilePage() {
                       T{(s.t_category as string) || '?'} N{(s.n_category as string) || '?'} M{(s.m_category as string) || '?'}
                     </td>
                     <td className="p-3 text-muted-foreground">
-                      {new Date(s.staging_date as string).toLocaleDateString()}
+                      {formatDayMonthYear(String(s.staging_date))}
                     </td>
                   </tr>
                 ))}
@@ -230,7 +254,7 @@ export default function PatientCancerProfilePage() {
               <tbody className="divide-y">
                 {tumorBoardCases.map((c: Record<string, unknown>) => (
                   <tr key={c.id as string} className="hover:bg-muted/30">
-                    <td className="p-3">{new Date(c.meeting_date as string).toLocaleDateString()}</td>
+                    <td className="p-3">{formatDayMonthYear(String(c.meeting_date))}</td>
                     <td className="p-3">
                       {c.treatment_intent ? <TreatmentIntentBadge intent={c.treatment_intent as string} /> : '-'}
                     </td>

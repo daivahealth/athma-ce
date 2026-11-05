@@ -9,9 +9,9 @@ import {
 } from '@/components/ui/select';
 import { Pencil, Plus, Search, Target } from 'lucide-react';
 import { useStagings } from '@/plugins/oncology/hooks/use-oncology';
-import { LoadingState } from '@/plugins/oncology/components/shared';
+import { LoadingState, PatientCell } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
-import type { TumorStaging, OncologyPatientDisplay } from '@/plugins/oncology/types';
+import type { TumorStaging } from '@/plugins/oncology/types';
 
 const STAGING_TYPE_LABELS: Record<string, string> = {
   clinical: 'Clinical', pathological: 'Pathological',
@@ -170,22 +170,6 @@ export default function TumorStagingPage() {
   );
 }
 
-function PatientCell({ patientDisplay }: { patientDisplay?: OncologyPatientDisplay }) {
-  if (!patientDisplay) return <span className="text-muted-foreground text-xs">—</span>;
-  const genderAge = [
-    patientDisplay.gender ? patientDisplay.gender.charAt(0).toUpperCase() + patientDisplay.gender.slice(1) : null,
-    patientDisplay.age != null ? `${patientDisplay.age}y` : null,
-  ].filter(Boolean).join(' · ');
-  return (
-    <div>
-      <div className="font-medium">{patientDisplay.displayName}</div>
-      <div className="flex items-center gap-2 mt-0.5">
-        {patientDisplay.mrn && <span className="text-xs text-muted-foreground">MRN: {patientDisplay.mrn}</span>}
-        {genderAge && <span className="text-xs text-muted-foreground">{genderAge}</span>}
-      </div>
-    </div>
-  );
-}
 
 function StagingTypeBadge({ type }: { type: string }) {
   const colors: Record<string, string> = {

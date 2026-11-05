@@ -9,9 +9,10 @@ import {
 } from '@/components/ui/select';
 import { Pencil, Plus, Search, UserRound } from 'lucide-react';
 import { useOncologyRegistry } from '@/plugins/oncology/hooks/use-oncology';
-import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
+import { LoadingState, StatusBadge, PatientCell } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
-import type { CancerDiagnosis, OncologyPatientDisplay } from '@/plugins/oncology/types';
+import type { CancerDiagnosis } from '@/plugins/oncology/types';
+import { formatDayMonthYear } from '@/plugins/oncology/lib/treatment-day';
 
 export default function OncologyRegistryPage() {
   const params = useParams() as { locale: string };
@@ -99,7 +100,11 @@ export default function OncologyRegistryPage() {
             </thead>
             <tbody className="divide-y">
               {entries.map((entry) => (
-                <tr key={entry.id} className="hover:bg-muted/30 transition-colors">
+                <tr
+                  key={entry.id}
+                  className="hover:bg-muted/30 transition-colors cursor-pointer"
+                  onClick={() => router.push(`/${params.locale}/oncology/registry/${entry.patient_id}`)}
+                >
                   <td className="p-3">
                     <PatientCell patientDisplay={entry.patientDisplay} />
                   </td>
@@ -121,13 +126,13 @@ export default function OncologyRegistryPage() {
                     <StatusBadge status={entry.clinical_status} />
                   </td>
                   <td className="p-3 text-muted-foreground whitespace-nowrap">
-                    {new Date(entry.diagnosis_date).toLocaleDateString()}
+                    {entry.diagnosis_date ? formatDayMonthYear(String(entry.diagnosis_date)) : '—'}
                   </td>
                   <td className="p-3">
                     {entry.care_plan_status ? (
                       <StatusBadge status={entry.care_plan_status} />
                     ) : (
-                      <span className="text-xs text-muted-foreground">None</span>
+                      <span className="text-xs text-muted-foreground">—</span>
                     )}
                   </td>
                   <td className="p-3">
@@ -135,7 +140,8 @@ export default function OncologyRegistryPage() {
                       variant="ghost"
                       size="sm"
                       className="h-7 w-7 p-0"
-                      onClick={() => router.push(`/${params.locale}/oncology/registry/diagnosis/${entry.id}/edit`)}
+                      aria-label="Edit diagnosis"
+                      onClick={(e) => { e.stopPropagation(); router.push(`/${params.locale}/oncology/registry/diagnosis/${entry.id}/edit`); }}
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </Button>
@@ -153,22 +159,6 @@ export default function OncologyRegistryPage() {
   );
 }
 
-function PatientCell({ patientDisplay }: { patientDisplay?: OncologyPatientDisplay }) {
-  if (!patientDisplay) return <span className="text-muted-foreground text-xs">—</span>;
-  const genderAge = [
-    patientDisplay.gender ? patientDisplay.gender.charAt(0).toUpperCase() + patientDisplay.gender.slice(1) : null,
-    patientDisplay.age != null ? `${patientDisplay.age}y` : null,
-  ].filter(Boolean).join(' · ');
-  return (
-    <div>
-      <div className="font-medium">{patientDisplay.displayName}</div>
-      <div className="flex items-center gap-2 mt-0.5">
-        {patientDisplay.mrn && <span className="text-xs text-muted-foreground">MRN: {patientDisplay.mrn}</span>}
-        {genderAge && <span className="text-xs text-muted-foreground">{genderAge}</span>}
-      </div>
-    </div>
-  );
-}
 
 function MetastaticBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
