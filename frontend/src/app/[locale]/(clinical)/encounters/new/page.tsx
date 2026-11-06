@@ -87,6 +87,21 @@ function NewEncounterPageContent() {
     },
   });
 
+  // Default the start to now, rounded up to the next half hour (11:13 → 11:30, 23:50 → 00:00 next
+  // day). Set after mount, not in defaultValues, so the server render doesn't bake in its own clock
+  // and time zone. An appointment pre-fill below overrides this.
+  useEffect(() => {
+    if (appointmentId) return;
+    const start = new Date();
+    start.setSeconds(0, 0);
+    const minutes = start.getMinutes();
+    if (minutes % 30 !== 0) {
+      start.setMinutes(minutes < 30 ? 30 : 60);
+    }
+    setValue('startDate', start);
+    setValue('startTime', format(start, 'HH:mm'));
+  }, [appointmentId, setValue]);
+
   // Pre-fill form when appointment data is loaded
   const appointmentStaffId = useMemo(() => {
     if (!appointmentData) return '';
