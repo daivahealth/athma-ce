@@ -5,6 +5,7 @@ import { Suspense, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Topbar } from '@/components/layout/topbar';
+import { EnvironmentBanner } from '@/components/layout/environment-banner';
 import { MobileSidebar } from '@/components/layout/mobile-sidebar';
 import { Toaster } from '@/components/ui/toaster';
 import { useAuthGuard } from '@/hooks/use-auth-guard';
@@ -51,6 +52,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {/* min-w-0: a flex child defaults to min-width:auto, so wide page content would
             otherwise stretch this column (and the topbar) past a phone viewport */}
         <div className="flex min-w-0 flex-1 flex-col bg-background/50">
+          <EnvironmentBanner locale={locale} />
           <Topbar 
             locale={locale} 
             onSidebarToggle={handleMobileToggle}

@@ -26,10 +26,13 @@ import {
   Check,
   Plus,
   CircleHelp,
+  FileText,
+  Lock,
 } from 'lucide-react';
 import { useHelp } from '@/components/help/help-provider';
 import { ThemeToggle } from './theme-toggle';
 import { SidebarTrigger } from './sidebar';
+import { EnvironmentBadge } from './environment-banner';
 import { PatientSearch } from './patient-search';
 import { NotificationCenter } from './notification-center';
 import { useEffect, useState } from 'react';
@@ -154,6 +157,8 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
       {/* Sidebar toggle (prrapp style): collapses the desktop sidebar, opens the drawer on mobile */}
       <SidebarTrigger onMobileToggle={onSidebarToggle} className="-ml-2" />
       <div className="mx-2 md:mx-3 h-4 w-px shrink-0 bg-sidebar-border" aria-hidden="true" />
+      {/* Deployment mode (DEV / DEMO / STAGING); hidden in production */}
+      <EnvironmentBadge className="mr-2 md:mr-3" />
 
       {/* min-w-0 lets the search shrink on phones instead of pushing the header past the viewport */}
       <div className="flex min-w-0 flex-1 items-center justify-between gap-2 md:gap-4">
@@ -321,6 +326,18 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
                 <Link href={`/${locale}/profile`} className="flex items-center gap-2 cursor-pointer">
                   <User className="h-4 w-4" />
                   {t('nav.profile')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/terms`} className="flex items-center gap-2 cursor-pointer">
+                  <FileText className="h-4 w-4" />
+                  Terms &amp; Conditions
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/privacy`} className="flex items-center gap-2 cursor-pointer">
+                  <Lock className="h-4 w-4" />
+                  Privacy Policy
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

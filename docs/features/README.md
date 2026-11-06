@@ -56,6 +56,8 @@ This folder contains feature-specific documentation organized by domain and modu
   - Facility-specialty relationships
   - Specialty APIs
 
+- **[DEPLOYMENT-MODE.md](./DEPLOYMENT-MODE.md)** - Deployment mode (dev/demo/staging/production), environment banner and demo disclaimer, Terms & Privacy pages
+
 ### 📅 Scheduling Features
 
 - **[scheduling/](./scheduling/)** - Appointment and resource scheduling
