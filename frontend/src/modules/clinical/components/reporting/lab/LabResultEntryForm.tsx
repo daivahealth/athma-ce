@@ -265,8 +265,8 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
               key={row.key}
               className={cn(
                 'grid grid-cols-12 gap-2 items-center py-1',
-                isCritical && 'bg-red-50 rounded px-1',
-                isAbnormal && !isCritical && 'bg-amber-50 rounded px-1',
+                isCritical && 'bg-red-50 dark:bg-red-950/40 rounded px-1',
+                isAbnormal && !isCritical && 'bg-amber-50 dark:bg-amber-950/40 rounded px-1',
               )}
             >
               <div className={cn('col-span-2', row.indentLevel > 0 && 'pl-6')}>
@@ -302,8 +302,8 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
                   placeholder="Result"
                   className={cn(
                     'h-8 text-sm',
-                    isCritical && 'border-red-500 text-red-700 font-bold',
-                    isAbnormal && !isCritical && 'border-amber-500 text-amber-700 font-semibold',
+                    isCritical && 'border-red-500 text-red-700 font-bold dark:text-red-400',
+                    isAbnormal && !isCritical && 'border-amber-500 text-amber-700 font-semibold dark:text-amber-400',
                   )}
                 />
               </div>
@@ -352,11 +352,11 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
                 <span
                   className={cn(
                     'text-xs px-1.5 py-0.5 rounded',
-                    item.interpretation === 'normal' && 'bg-green-100 text-green-700',
-                    item.interpretation === 'high' && 'bg-amber-100 text-amber-700',
-                    item.interpretation === 'low' && 'bg-amber-100 text-amber-700',
-                    item.interpretation === 'critical_high' && 'bg-red-100 text-red-700',
-                    item.interpretation === 'critical_low' && 'bg-red-100 text-red-700',
+                    item.interpretation === 'normal' && 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
+                    item.interpretation === 'high' && 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
+                    item.interpretation === 'low' && 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
+                    item.interpretation === 'critical_high' && 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300',
+                    item.interpretation === 'critical_low' && 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300',
                   )}
                 >
                   {item.interpretation || '-'}
@@ -377,7 +377,7 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
                     variant="ghost"
                     size="sm"
                     onClick={() => removeItem(index)}
-                    className="h-8 w-8 p-0 text-red-500"
+                    className="h-8 w-8 p-0 text-red-500 dark:text-red-400"
                   >
                     x
                   </Button>

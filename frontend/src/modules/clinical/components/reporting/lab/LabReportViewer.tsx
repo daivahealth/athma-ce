@@ -82,8 +82,8 @@ export function LabReportViewer({ report, order, templateMap }: LabReportViewerP
                         key={row.key}
                         className={cn(
                           'border-t',
-                          item.criticalFlag && 'bg-red-50',
-                          item.abnormalFlag && !item.criticalFlag && 'bg-amber-50',
+                          item.criticalFlag && 'bg-red-50 dark:bg-red-950/40',
+                          item.abnormalFlag && !item.criticalFlag && 'bg-amber-50 dark:bg-amber-950/40',
                         )}
                       >
                         <td className={cn('px-3 py-2 font-medium', row.indentLevel > 0 && 'pl-10')}>
@@ -93,8 +93,8 @@ export function LabReportViewer({ report, order, templateMap }: LabReportViewerP
                         <td
                           className={cn(
                             'px-3 py-2 text-right font-mono',
-                            item.criticalFlag && 'text-red-700 font-bold',
-                            item.abnormalFlag && !item.criticalFlag && 'text-amber-700 font-semibold',
+                            item.criticalFlag && 'text-red-700 font-bold dark:text-red-400',
+                            item.abnormalFlag && !item.criticalFlag && 'text-amber-700 font-semibold dark:text-amber-400',
                           )}
                         >
                           {item.valueNumeric != null
@@ -108,12 +108,12 @@ export function LabReportViewer({ report, order, templateMap }: LabReportViewerP
                             <span
                               className={cn(
                                 'text-xs px-2 py-0.5 rounded-full',
-                                item.interpretation === 'normal' && 'bg-green-100 text-green-700',
+                                item.interpretation === 'normal' && 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
                                 (item.interpretation === 'high' || item.interpretation === 'low') &&
-                                  'bg-amber-100 text-amber-700',
+                                  'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
                                 (item.interpretation === 'critical_high' ||
                                   item.interpretation === 'critical_low') &&
-                                  'bg-red-100 text-red-700',
+                                  'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300',
                               )}
                             >
                               {item.interpretation.replace('_', ' ')}

@@ -64,35 +64,35 @@ export function LabReportContextCard({
       key: 'ordered',
       label: 'Ordered',
       value: orderedAt,
-      accent: 'bg-sky-500/15 text-sky-700 border-sky-200',
+      accent: 'bg-sky-500/15 text-sky-700 border-sky-200 dark:text-sky-300 dark:border-sky-800',
       icon: Clock3,
     },
     {
       key: 'collected',
       label: 'Collected',
       value: primarySpecimen?.collectedAt,
-      accent: 'bg-amber-500/15 text-amber-700 border-amber-200',
+      accent: 'bg-amber-500/15 text-amber-700 border-amber-200 dark:text-amber-300 dark:border-amber-800',
       icon: FlaskConical,
     },
     {
       key: 'received',
       label: 'Received',
       value: primaryAccession?.receivedAt,
-      accent: 'bg-violet-500/15 text-violet-700 border-violet-200',
+      accent: 'bg-violet-500/15 text-violet-700 border-violet-200 dark:text-violet-300 dark:border-violet-800',
       icon: ScanLine,
     },
     {
       key: 'processing',
       label: 'Processing',
       value: inferredProcessingAt,
-      accent: 'bg-emerald-500/15 text-emerald-700 border-emerald-200',
+      accent: 'bg-emerald-500/15 text-emerald-700 border-emerald-200 dark:text-emerald-300 dark:border-emerald-800',
       icon: TimerReset,
     },
     {
       key: 'reported',
       label: 'Reported',
       value: reportedAt,
-      accent: 'bg-rose-500/15 text-rose-700 border-rose-200',
+      accent: 'bg-rose-500/15 text-rose-700 border-rose-200 dark:text-rose-300 dark:border-rose-800',
       icon: Clock3,
     },
   ];
@@ -111,7 +111,7 @@ export function LabReportContextCard({
         <CardTitle>Order & Specimen Summary</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="rounded-xl border border-border/60 bg-gradient-to-r from-orange-50/70 via-white to-emerald-50/70 p-4">
+        <div className="rounded-xl border border-border/60 bg-gradient-to-r from-orange-50/70 via-card to-emerald-50/70 dark:from-orange-950/30 dark:to-emerald-950/30 p-4">
           <div className="grid gap-3 xl:grid-cols-[minmax(0,60%)_minmax(0,40%)] xl:items-start">
             <div className="min-w-0 flex-1">
               <div className="text-xs uppercase tracking-wide text-muted-foreground">Order</div>
@@ -150,7 +150,7 @@ export function LabReportContextCard({
               </div>
             </div>
 
-            <div className="rounded-xl border border-emerald-200/70 bg-white/90 p-3">
+            <div className="rounded-xl border border-emerald-200/70 bg-card/90 dark:border-emerald-800/60 p-3">
               <div className="mb-2 flex items-center justify-between gap-3">
                 <div>
                   <div className="text-xs uppercase tracking-wide text-muted-foreground">Turnaround Time</div>
@@ -171,7 +171,7 @@ export function LabReportContextCard({
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+        <div className="rounded-xl border border-border bg-muted/40 p-4">
           <button
             type="button"
             onClick={() => setTimelineExpanded((current) => !current)}
@@ -194,7 +194,7 @@ export function LabReportContextCard({
                     key={entry.key}
                     className={cn(
                       'rounded-lg border px-3 py-2',
-                      entry.value ? entry.accent : 'border-dashed border-slate-200 bg-white text-slate-500',
+                      entry.value ? entry.accent : 'border-dashed border-border bg-card text-muted-foreground',
                     )}
                   >
                     <div className="flex items-center gap-2">
@@ -215,7 +215,7 @@ export function LabReportContextCard({
                   variant="outline"
                   className={cn(
                     'capitalize',
-                    entry.value ? entry.accent : 'border-dashed text-slate-400',
+                    entry.value ? entry.accent : 'border-dashed text-muted-foreground',
                   )}
                 >
                   {entry.label}: {entry.value ? formatDateTime(entry.value) : 'Pending'}
@@ -377,23 +377,23 @@ function TatStatusBadge({ status }: { status: 'missing' | 'on-track' | 'watch' |
   const config: Record<typeof status, { label: string; className: string }> = {
     missing: {
       label: 'TAT not configured',
-      className: 'border-slate-200 bg-slate-100 text-slate-700',
+      className: 'border-border bg-muted text-muted-foreground',
     },
     'on-track': {
       label: 'Within TAT',
-      className: 'border-emerald-200 bg-emerald-100 text-emerald-700',
+      className: 'border-emerald-200 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300',
     },
     watch: {
       label: 'Approaching TAT',
-      className: 'border-amber-200 bg-amber-100 text-amber-700',
+      className: 'border-amber-200 bg-amber-100 text-amber-700 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-300',
     },
     met: {
       label: 'TAT met',
-      className: 'border-emerald-200 bg-emerald-100 text-emerald-700',
+      className: 'border-emerald-200 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300',
     },
     breached: {
       label: 'TAT breached',
-      className: 'border-red-200 bg-red-100 text-red-700',
+      className: 'border-red-200 bg-red-100 text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-300',
     },
   };
 
@@ -403,13 +403,13 @@ function TatStatusBadge({ status }: { status: 'missing' | 'on-track' | 'watch' |
 function getPriorityBadgeClass(priority?: string | null) {
   switch ((priority ?? '').toLowerCase()) {
     case 'routine':
-      return 'border-emerald-200 bg-emerald-100 text-emerald-700';
+      return 'border-emerald-200 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300';
     case 'stat':
     case 'urgent':
     case 'critical':
-      return 'border-red-200 bg-red-100 text-red-700';
+      return 'border-red-200 bg-red-100 text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-300';
     default:
-      return 'border-amber-200 bg-amber-100 text-amber-700';
+      return 'border-amber-200 bg-amber-100 text-amber-700 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-300';
   }
 }
 
@@ -425,7 +425,7 @@ function SummaryCell({
   compact?: boolean;
 }) {
   return (
-    <div className={cn('space-y-1', compact && 'rounded-lg border border-white/70 bg-white/80 p-3')}>
+    <div className={cn('space-y-1', compact && 'rounded-lg border border-border/60 bg-card/80 p-3')}>
       <div className="text-xs uppercase tracking-wide text-muted-foreground">{label}</div>
       <div className={cn('font-medium break-words capitalize', compact && 'text-sm')}>{value}</div>
       {subValue ? (
