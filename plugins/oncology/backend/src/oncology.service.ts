@@ -2,6 +2,20 @@ import { Injectable, Logger, NotFoundException, BadRequestException } from '@nes
 import { PrismaService } from '@zeal/database-clinical';
 import { RequestContext } from '@zeal/shared-utils';
 import { deriveLegacyColumns, normalizeProtocolRow, parsePhases, regimenForCycle } from './protocol-phases';
+import {
+  ChemoOrderRuleError,
+  ChemoOrderSnapshot,
+  assertCanApprove,
+  assertCanCancel,
+  assertCanEdit,
+  assertCanHold,
+  assertCanResume,
+  assertCanStart,
+  assertCanSubmit,
+  assertCanVerify,
+  resolveInitialStatus,
+} from './chemo-order-rules';
+import { OncologySettingsService } from './oncology-settings';
 
 // Matches PatientDisplayDto from @zeal/contracts — defined locally because the plugin
 // directory is outside backend/node_modules and cannot resolve @zeal/contracts at runtime.
@@ -26,7 +40,10 @@ interface PatientDisplayDto {
 export class OncologyService {
   private readonly logger = new Logger(OncologyService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly settings: OncologySettingsService,
+  ) {}
 
   private getTenantId(): string {
     const store = RequestContext.getStore();
@@ -39,6 +56,27 @@ export class OncologyService {
     return id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) ? id : null;
   }
 
+  /** Runs a chemo-order rule guard, surfacing rule violations as 400s. */
+  private rule<T>(fn: () => T): T {
+    try {
+      return fn();
+    } catch (err) {
+      if (err instanceof ChemoOrderRuleError) throw new BadRequestException(err.message);
+      throw err;
+    }
+  }
+
+  /** Loads the columns the chemo-order rule guards need. */
+  private async getOrderSnapshot(id: string, tenantId: string): Promise<ChemoOrderSnapshot & { id: string }> {
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, status, ordering_provider, approved_by, verified_by, second_verified_by, pre_chemo_checklist
+       FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      id, tenantId,
+    );
+    if (!rows.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    return rows[0];
+  }
+
   private calculateAge(dateOfBirth: Date | string): number {
     const today = new Date();
     const birth = new Date(dateOfBirth);
@@ -49,7 +87,7 @@ export class OncologyService {
   }
 
   /** Keeps a treatment-schedule day in step with its chemo order (no-op for unscheduled orders). */
-  private async syncTreatmentDay(orderId: string, orderOutcome: 'given' | 'held' | 'cancelled') {
+  private async syncTreatmentDay(orderId: string, orderOutcome: 'ordered' | 'given' | 'held' | 'cancelled') {
     // A cancelled order frees the day so it can be ordered again
     await this.prisma.$executeRawUnsafe(
       orderOutcome === 'cancelled'
@@ -370,8 +408,8 @@ export class OncologyService {
         ) as latest_staging_system,
         (SELECT cp.status FROM plugin_oncology.oncology_care_plans cp
          WHERE cp.cancer_diagnosis_id = cd.id AND cp.tenant_id = cd.tenant_id
-         AND cp.status IN ('draft', 'active', 'on_hold')
-         ORDER BY cp.created_at DESC LIMIT 1
+         AND cp.status <> 'cancelled'
+         ORDER BY (cp.status IN ('draft', 'active', 'on_hold')) DESC, cp.created_at DESC LIMIT 1
         ) as care_plan_status
       FROM plugin_oncology.cancer_diagnoses cd
       LEFT JOIN public.patients p ON p.id = cd.patient_id
@@ -432,9 +470,15 @@ export class OncologyService {
   async getPatientCancerSummary(patientId: string) {
     const tenantId = this.getTenantId();
 
-    const [diagnoses, stagings, tumorBoardCases, carePlans] = await Promise.all([
+    const [diagnosisRows, stagings, tumorBoardCases, carePlans] = await Promise.all([
       this.prisma.$queryRawUnsafe<any[]>(
-        `SELECT * FROM plugin_oncology.cancer_diagnoses WHERE tenant_id = $1::uuid AND patient_id = $2::uuid ORDER BY diagnosis_date DESC`,
+        `SELECT cd.*,
+           p.mrn as patient_mrn, p.first_name as patient_first_name,
+           p.last_name as patient_last_name, p.display_name as patient_display_name,
+           p.gender as patient_gender, p.date_of_birth as patient_date_of_birth
+         FROM plugin_oncology.cancer_diagnoses cd
+         LEFT JOIN public.patients p ON p.id = cd.patient_id
+         WHERE cd.tenant_id = $1::uuid AND cd.patient_id = $2::uuid ORDER BY cd.diagnosis_date DESC`,
         tenantId, patientId,
       ),
       this.prisma.$queryRawUnsafe<any[]>(
@@ -450,6 +494,14 @@ export class OncologyService {
         tenantId, patientId,
       ),
     ]);
+
+    // Same patient shape as the diagnosis list (patientDisplay, no flat patient_* columns).
+    const diagnoses = diagnosisRows.map((row) => {
+      const patientDisplay = this.buildPatientDisplay(row);
+      const { patient_mrn, patient_first_name, patient_last_name, patient_display_name,
+        patient_gender, patient_date_of_birth, ...rest } = row;
+      return { ...rest, patientDisplay };
+    });
 
     return { diagnoses, stagings, tumorBoardCases, carePlans };
   }
@@ -474,6 +526,29 @@ export class OncologyService {
          AND lr.report_status IN ('FINAL', 'AMENDED')
          AND lri.test_code IN (SELECT loinc_code FROM lab_test_master WHERE test_category = 'Oncology')
        ORDER BY lri.test_code, lr.reported_at DESC`,
+      patientId, tenantId,
+    );
+  }
+
+  /**
+   * Every FINAL/AMENDED result of the patient's oncology tumour-marker tests
+   * (lab catalog category 'Oncology'), oldest first — for trend charts.
+   * Read-only display; not used for safety gating.
+   */
+  async getLabHistory(patientId: string) {
+    const tenantId = this.getTenantId();
+
+    return this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT lri.test_code, lri.test_name, lri.value_numeric, lri.unit,
+              lri.ref_range_low, lri.ref_range_high, lri.abnormal_flag,
+              COALESCE(lr.collection_date, lr.reported_at) AS observed_at
+       FROM lab_result_items lri
+       JOIN lab_reports lr ON lr.id = lri.lab_report_id
+       WHERE lr.patient_id = $1::uuid AND lr.tenant_id = $2::uuid
+         AND lr.report_status IN ('FINAL', 'AMENDED')
+         AND lri.value_numeric IS NOT NULL
+         AND lri.test_code IN (SELECT loinc_code FROM lab_test_master WHERE test_category = 'Oncology')
+       ORDER BY lri.test_code, observed_at`,
       patientId, tenantId,
     );
   }
@@ -690,9 +765,13 @@ export class OncologyService {
   ) {
     const tenantId = this.getTenantId();
     let query = `
-      SELECT cp.*, cd.cancer_type, cd.primary_site
+      SELECT cp.*, cd.cancer_type, cd.primary_site,
+             p.mrn AS patient_mrn, p.display_name AS patient_display_name,
+             p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+             p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender
       FROM plugin_oncology.oncology_care_plans cp
       JOIN plugin_oncology.cancer_diagnoses cd ON cp.cancer_diagnosis_id = cd.id
+      LEFT JOIN public.patients p ON p.id = cp.patient_id
       WHERE cp.tenant_id = $1::uuid`;
     const params: unknown[] = [tenantId];
     let paramIdx = 2;
@@ -717,7 +796,13 @@ export class OncologyService {
     query += ` ORDER BY cp.created_at DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
     params.push(limit, (page - 1) * limit);
 
-    const data = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    const data = rows.map((row) => {
+      const patientDisplay = this.buildPatientDisplay(row);
+      const clean = { ...row };
+      for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_') && k !== 'patient_id')) delete clean[k];
+      return { ...clean, patientDisplay };
+    });
     return { data };
   }
 
@@ -860,12 +945,15 @@ export class OncologyService {
     return results[0];
   }
 
-  async approveCarePlan(id: string, approvedBy: string) {
+  async approveCarePlan(id: string) {
     const tenantId = this.getTenantId();
+    // The approver is always the signed-in user; it is never taken from the request body.
+    const approvedBy = this.getCurrentUserId();
+    if (!approvedBy) throw new BadRequestException('A signed-in user is required to approve a care plan');
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.oncology_care_plans SET
         status = 'active',
-        approved_by = $3,
+        approved_by = $3::uuid,
         approved_at = NOW(),
         updated_at = NOW()
       WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'draft'
@@ -1343,6 +1431,25 @@ export class OncologyService {
     }
     if (!patientId) throw new BadRequestException('patientId or cancerDiagnosisId is required');
 
+    // The ordering provider is always the signed-in user (never client-supplied), so the
+    // approve step can enforce that a different clinician signs off.
+    const orderingProvider = this.getCurrentUserId();
+    if (!orderingProvider) throw new BadRequestException('A signed-in user is required to create a chemo order');
+    const initialStatus = this.rule(() => resolveInitialStatus(data.status));
+
+    if (!data.protocolId) throw new BadRequestException('protocolId is required');
+    const cycleNumber = Number(data.cycleNumber);
+    const dayNumber = Number(data.dayNumber);
+    if (!Number.isInteger(cycleNumber) || cycleNumber < 1) throw new BadRequestException('cycleNumber must be a positive integer');
+    if (!Number.isInteger(dayNumber) || dayNumber < 1) throw new BadRequestException('dayNumber must be a positive integer');
+    if (!data.scheduledDate) throw new BadRequestException('scheduledDate is required');
+    const protocol = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT is_active FROM plugin_oncology.chemo_protocols WHERE id = $1::uuid AND tenant_id = $2::uuid`,
+      data.protocolId, tenantId,
+    );
+    if (!protocol.length) throw new BadRequestException(`Chemo protocol '${String(data.protocolId)}' not found`);
+    if (!protocol[0].is_active) throw new BadRequestException('Chemo protocol is inactive; choose an active protocol');
+
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `INSERT INTO plugin_oncology.chemo_orders (
         id, tenant_id, patient_id, encounter_id, protocol_id, ordering_provider,
@@ -1365,11 +1472,11 @@ export class OncologyService {
       patientId,
       data.encounterId ?? null,
       data.protocolId,
-      (data.orderingProvider as string) || this.getCurrentUserId(),
+      orderingProvider,
       data.cancerDiagnosisId ?? null,
       data.oncologyCarePlanId ?? null,
-      data.cycleNumber,
-      data.dayNumber,
+      cycleNumber,
+      dayNumber,
       data.scheduledDate,
       data.bsa ?? null,
       data.weight ?? null,
@@ -1379,7 +1486,7 @@ export class OncologyService {
       data.renalAdjustmentGrade ?? null,
       JSON.stringify(data.doseAdjustments ?? []),
       JSON.stringify(data.preChemoChecklist ?? {}),
-      data.status ?? 'pending',
+      initialStatus,
       data.notes ?? null,
     );
     const r = results[0];
@@ -1400,14 +1507,8 @@ export class OncologyService {
 
   async updateChemoOrder(id: string, data: Record<string, unknown>) {
     const tenantId = this.getTenantId();
-    const existing = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
-      id, tenantId,
-    );
-    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
-    if (!['pending', 'draft'].includes(existing[0].status)) {
-      throw new BadRequestException('Only pending orders can be edited');
-    }
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    this.rule(() => assertCanEdit(existing));
 
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.chemo_orders SET
@@ -1424,7 +1525,7 @@ export class OncologyService {
         pre_chemo_checklist     = COALESCE($13::jsonb, pre_chemo_checklist),
         notes                   = COALESCE($14, notes),
         updated_at              = NOW()
-      WHERE id = $1::uuid AND tenant_id = $2::uuid
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status IN ('draft','pending')
       RETURNING *`,
       id, tenantId,
       data.scheduledDate ?? null,
@@ -1440,24 +1541,36 @@ export class OncologyService {
       data.preChemoChecklist ? JSON.stringify(data.preChemoChecklist) : null,
       data.notes ?? null,
     );
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
+    return results[0];
+  }
+
+  /** draft → pending: hands a draft order over for approval. */
+  async submitChemoOrder(id: string) {
+    const tenantId = this.getTenantId();
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    this.rule(() => assertCanSubmit(existing));
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET status = 'pending', updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'draft' RETURNING *`,
+      id, tenantId,
+    );
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
     return results[0];
   }
 
   async approveChemoOrder(id: string) {
     const tenantId = this.getTenantId();
-    const existing = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
-      id, tenantId,
-    );
-    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
-    if (existing[0].status !== 'pending') throw new BadRequestException('Only pending orders can be approved');
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    const approver = this.rule(() => assertCanApprove(existing, this.getCurrentUserId()));
 
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.chemo_orders SET
         status = 'approved', approved_by = $3::uuid, approved_at = NOW(), updated_at = NOW()
-      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
-      id, tenantId, this.getCurrentUserId(),
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'pending' RETURNING *`,
+      id, tenantId, approver,
     );
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
     const r = results[0];
     const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
@@ -1476,12 +1589,11 @@ export class OncologyService {
 
   async verifyChemoOrder(id: string, secondVerifiedBy?: string, nurseVerificationChecklist?: Record<string, unknown>, drugPreparationDetails?: unknown[]) {
     const tenantId = this.getTenantId();
-    const existing = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
-      id, tenantId,
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    const requireDualSign = await this.settings.requireDualSign(tenantId);
+    const { verifier, secondVerifier } = this.rule(() =>
+      assertCanVerify(existing, this.getCurrentUserId(), secondVerifiedBy, requireDualSign),
     );
-    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
-    if (existing[0].status !== 'approved') throw new BadRequestException('Only approved orders can be verified');
 
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.chemo_orders SET
@@ -1490,11 +1602,12 @@ export class OncologyService {
         nurse_verification_checklist = $5::jsonb,
         drug_preparation_details = $6::jsonb,
         updated_at = NOW()
-      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
-      id, tenantId, this.getCurrentUserId(), secondVerifiedBy ?? null,
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'approved' RETURNING *`,
+      id, tenantId, verifier, secondVerifier,
       JSON.stringify(nurseVerificationChecklist ?? {}),
       JSON.stringify(drugPreparationDetails ?? []),
     );
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
     return results[0];
   }
 
@@ -1522,21 +1635,17 @@ export class OncologyService {
 
   async startAdministration(id: string) {
     const tenantId = this.getTenantId();
-    const existing = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT id, status FROM plugin_oncology.chemo_orders WHERE id = $1::uuid AND tenant_id = $2::uuid`,
-      id, tenantId,
-    );
-    if (!existing.length) throw new NotFoundException(`Chemo order '${id}' not found`);
-    if (!['verified', 'approved'].includes(existing[0].status)) {
-      throw new BadRequestException('Order must be verified or approved before starting administration');
-    }
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    const requireDualSign = await this.settings.requireDualSign(tenantId);
+    const administrator = this.rule(() => assertCanStart(existing, this.getCurrentUserId(), requireDualSign));
 
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.chemo_orders SET
         status = 'in_progress', administered_at = NOW(), administered_by = $3::uuid, updated_at = NOW()
-      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
-      id, tenantId, this.getCurrentUserId(),
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = $4 RETURNING *`,
+      id, tenantId, administrator, existing.status,
     );
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
     const r = results[0];
     const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
     await this.logTimelineEvent({
@@ -1594,16 +1703,19 @@ export class OncologyService {
 
   async holdChemoOrder(id: string, reason: string) {
     const tenantId = this.getTenantId();
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    this.rule(() => assertCanHold(existing));
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.chemo_orders SET
         status = 'held',
         notes = CONCAT(COALESCE(notes, ''), $3),
         updated_at = NOW()
-      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = $4 RETURNING *`,
       id, tenantId,
       reason ? `\n[HELD] ${reason}` : '\n[HELD]',
+      existing.status,
     );
-    if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
     const r = results[0];
     await this.syncTreatmentDay(r.id, 'held');
     const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
@@ -1623,16 +1735,19 @@ export class OncologyService {
 
   async cancelChemoOrder(id: string, reason: string) {
     const tenantId = this.getTenantId();
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    this.rule(() => assertCanCancel(existing));
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.chemo_orders SET
         status = 'cancelled',
         notes = CONCAT(COALESCE(notes, ''), $3),
         updated_at = NOW()
-      WHERE id = $1::uuid AND tenant_id = $2::uuid RETURNING *`,
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = $4 RETURNING *`,
       id, tenantId,
       reason ? `\n[CANCELLED] ${reason}` : '\n[CANCELLED]',
+      existing.status,
     );
-    if (!results.length) throw new NotFoundException(`Chemo order '${id}' not found`);
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
     const r = results[0];
     await this.syncTreatmentDay(r.id, 'cancelled');
     const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
@@ -1646,6 +1761,44 @@ export class OncologyService {
       sourceId: r.id,
       metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason, protocolTotalCycles },
       severity: 'warning',
+    });
+    return r;
+  }
+
+  /**
+   * held → pending. Earlier approval and verification are cleared because whatever caused
+   * the hold (labs, patient condition) means the order must be signed off again.
+   */
+  async resumeChemoOrder(id: string, reason: string) {
+    const tenantId = this.getTenantId();
+    const existing = await this.getOrderSnapshot(id, tenantId);
+    this.rule(() => assertCanResume(existing));
+    const results = await this.prisma.$queryRawUnsafe<any[]>(
+      `UPDATE plugin_oncology.chemo_orders SET
+        status = 'pending',
+        approved_by = NULL, approved_at = NULL,
+        verified_by = NULL, verified_at = NULL, second_verified_by = NULL,
+        administered_by = NULL, administered_at = NULL,
+        notes = CONCAT(COALESCE(notes, ''), $3),
+        updated_at = NOW()
+      WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'held' RETURNING *`,
+      id, tenantId,
+      reason ? `\n[RESUMED] ${reason}` : '\n[RESUMED]',
+    );
+    if (!results.length) throw new BadRequestException('Order status changed; reload and try again');
+    const r = results[0];
+    await this.syncTreatmentDay(r.id, 'ordered');
+    const protocolTotalCycles = await this.getProtocolTotalCycles(tenantId, r.protocol_id);
+    await this.logTimelineEvent({
+      patientId: r.patient_id,
+      cancerDiagnosisId: r.cancer_diagnosis_id ?? null,
+      eventType: 'chemo_resumed',
+      eventDate: r.updated_at,
+      title: `Chemo Resumed: ${r.protocol_name ?? r.protocol_code ?? 'Protocol'} C${r.cycle_number}D${r.day_number}`,
+      sourceEntity: 'chemo_order',
+      sourceId: r.id,
+      metadata: { protocol: r.protocol_name ?? r.protocol_code, cycleNumber: r.cycle_number, dayNumber: r.day_number, reason, protocolTotalCycles },
+      severity: 'info',
     });
     return r;
   }
@@ -2042,6 +2195,9 @@ export class OncologyService {
     const countQuery = `SELECT COUNT(*) as count FROM plugin_oncology.radiation_prescriptions rp ${where}`;
     const dataQuery = `
       SELECT rp.*,
+        (SELECT COUNT(*)::int FROM plugin_oncology.radiation_fractions f
+           JOIN plugin_oncology.radiation_treatment_plans tp ON tp.id = f.treatment_plan_id
+          WHERE tp.prescription_id = rp.id AND f.status = 'DELIVERED') as delivered_fractions,
         p.mrn as patient_mrn, p.first_name as patient_first_name,
         p.last_name as patient_last_name, p.display_name as patient_display_name,
         p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,
@@ -2199,11 +2355,12 @@ export class OncologyService {
 
   async approveRadiationPrescription(id: string) {
     const tenantId = this.getTenantId();
+    // Approval is recorded separately so the original prescriber (prescribed_by) is preserved.
     const userId = this.getCurrentUserId();
+    if (!userId) throw new BadRequestException('A signed-in user is required to approve a prescription');
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `UPDATE plugin_oncology.radiation_prescriptions SET
-        status = 'APPROVED', prescribed_by = COALESCE($3::uuid, prescribed_by),
-        prescribed_at = NOW(), updated_at = NOW()
+        status = 'APPROVED', approved_by = $3::uuid, approved_at = NOW(), updated_at = NOW()
       WHERE id = $1::uuid AND tenant_id = $2::uuid AND status = 'DRAFT' RETURNING *`,
       id, tenantId, userId,
     );

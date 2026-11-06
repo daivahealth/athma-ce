@@ -1,12 +1,18 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CalendarRange } from 'lucide-react';
+import { FIELD_CONTROL, FormActions, FormSection } from '@/components/forms/form-layout';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { FeeSchedule } from '../types/fee-schedule';
 import {
   AuthorityCode,
@@ -23,18 +29,27 @@ interface FeeScheduleFormProps {
   onCancel?: () => void;
 }
 
-export function FeeScheduleForm({ initialValues, submitLabel = 'Save schedule', isSubmitting, onSubmit, onCancel }: FeeScheduleFormProps) {
-  const hydratedState = useMemo(() => ({
-    scheduleName: initialValues?.scheduleName ?? '',
-    scheduleType: initialValues?.scheduleType ?? FeeScheduleType.TENANT,
-    authorityCode: initialValues?.authorityCode ?? AuthorityCode.DHA,
-    version: initialValues?.version ?? '',
-    effectiveFrom: initialValues?.effectiveFrom ? initialValues.effectiveFrom.slice(0, 10) : '',
-    effectiveTo: initialValues?.effectiveTo ? initialValues.effectiveTo.slice(0, 10) : '',
-    status: initialValues?.status ?? FeeScheduleStatus.ACTIVE,
-    baseFeeScheduleId: initialValues?.baseFeeScheduleId ?? '',
-    metadata: initialValues?.metadata ? JSON.stringify(initialValues.metadata, null, 2) : '',
-  }), [initialValues]);
+export function FeeScheduleForm({
+  initialValues,
+  submitLabel = 'Save schedule',
+  isSubmitting,
+  onSubmit,
+  onCancel,
+}: FeeScheduleFormProps) {
+  const hydratedState = useMemo(
+    () => ({
+      scheduleName: initialValues?.scheduleName ?? '',
+      scheduleType: initialValues?.scheduleType ?? FeeScheduleType.TENANT,
+      authorityCode: initialValues?.authorityCode ?? AuthorityCode.DHA,
+      version: initialValues?.version ?? '',
+      effectiveFrom: initialValues?.effectiveFrom ? initialValues.effectiveFrom.slice(0, 10) : '',
+      effectiveTo: initialValues?.effectiveTo ? initialValues.effectiveTo.slice(0, 10) : '',
+      status: initialValues?.status ?? FeeScheduleStatus.ACTIVE,
+      baseFeeScheduleId: initialValues?.baseFeeScheduleId ?? '',
+      metadata: initialValues?.metadata ? JSON.stringify(initialValues.metadata, null, 2) : '',
+    }),
+    [initialValues],
+  );
 
   const [form, setForm] = useState(hydratedState);
   useEffect(() => setForm(hydratedState), [hydratedState]);
@@ -75,101 +90,131 @@ export function FeeScheduleForm({ initialValues, submitLabel = 'Save schedule', 
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Schedule details</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
+      <FormSection
+        icon={CalendarRange}
+        title="Schedule details"
+        description="Name, scope and the period the prices apply"
+        contentClassName="grid gap-4 md:grid-cols-2"
+      >
+        <div className="space-y-2">
+          <Label htmlFor="scheduleName">
+            Name<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Input
+            id="scheduleName"
+            value={form.scheduleName}
+            onChange={(event) => handleChange('scheduleName', event.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="scheduleType">Type</Label>
+          <Select
+            value={form.scheduleType}
+            onValueChange={(value) => handleChange('scheduleType', value)}
+          >
+            <SelectTrigger id="scheduleType">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(FeeScheduleType).map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        {form.scheduleType === FeeScheduleType.AUTHORITY && (
           <div className="space-y-2">
-            <Label>Name *</Label>
-            <Input value={form.scheduleName} onChange={(event) => handleChange('scheduleName', event.target.value)} required />
-          </div>
-          <div className="space-y-2">
-            <Label>Type</Label>
-            <Select value={form.scheduleType} onValueChange={(value) => handleChange('scheduleType', value)}>
-              <SelectTrigger>
+            <Label htmlFor="authorityCode">Authority</Label>
+            <Select
+              value={form.authorityCode}
+              onValueChange={(value) => handleChange('authorityCode', value)}
+            >
+              <SelectTrigger id="authorityCode">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(FeeScheduleType).map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                {Object.values(AuthorityCode).map((code) => (
+                  <SelectItem key={code} value={code}>
+                    {code}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-          {form.scheduleType === FeeScheduleType.AUTHORITY && (
-            <div className="space-y-2">
-              <Label>Authority</Label>
-              <Select value={form.authorityCode} onValueChange={(value) => handleChange('authorityCode', value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(AuthorityCode).map((code) => (
-                    <SelectItem key={code} value={code}>
-                      {code}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          <div className="space-y-2">
-            <Label>Version</Label>
-            <Input value={form.version} onChange={(event) => handleChange('version', event.target.value)} placeholder="v1.0" />
-          </div>
-          <div className="space-y-2">
-            <Label>Effective from *</Label>
-            <Input type="date" value={form.effectiveFrom} onChange={(event) => handleChange('effectiveFrom', event.target.value)} required />
-          </div>
-          <div className="space-y-2">
-            <Label>Effective to</Label>
-            <Input type="date" value={form.effectiveTo} onChange={(event) => handleChange('effectiveTo', event.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label>Status</Label>
-            <Select value={form.status} onValueChange={(value) => handleChange('status', value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(FeeScheduleStatus).map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label>Base schedule ID</Label>
-            <Input value={form.baseFeeScheduleId} onChange={(event) => handleChange('baseFeeScheduleId', event.target.value)} placeholder="Derived from..." />
-          </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label>Metadata (JSON)</Label>
-            <Textarea
-              className="font-mono"
-              rows={4}
-              value={form.metadata}
-              onChange={(event) => handleChange('metadata', event.target.value)}
-              placeholder='{"payer":"ABC"}'
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-end gap-3">
-        {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
-            Cancel
-          </Button>
         )}
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : submitLabel}
-        </Button>
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="version">Version</Label>
+          <Input
+            id="version"
+            value={form.version}
+            onChange={(event) => handleChange('version', event.target.value)}
+            placeholder="v1.0"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="effectiveFrom">
+            Effective from<span className="ml-0.5 text-destructive">*</span>
+          </Label>
+          <Input
+            id="effectiveFrom"
+            type="date"
+            className={FIELD_CONTROL}
+            value={form.effectiveFrom}
+            onChange={(event) => handleChange('effectiveFrom', event.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="effectiveTo">Effective to</Label>
+          <Input
+            id="effectiveTo"
+            type="date"
+            className={FIELD_CONTROL}
+            value={form.effectiveTo}
+            onChange={(event) => handleChange('effectiveTo', event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">Status</Label>
+          <Select value={form.status} onValueChange={(value) => handleChange('status', value)}>
+            <SelectTrigger id="status">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(FeeScheduleStatus).map((status) => (
+                <SelectItem key={status} value={status}>
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="baseFeeScheduleId">Base schedule ID</Label>
+          <Input
+            id="baseFeeScheduleId"
+            value={form.baseFeeScheduleId}
+            onChange={(event) => handleChange('baseFeeScheduleId', event.target.value)}
+            placeholder="Derived from..."
+          />
+        </div>
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="metadata">Metadata (JSON)</Label>
+          <Textarea
+            id="metadata"
+            className="font-mono"
+            rows={4}
+            value={form.metadata}
+            onChange={(event) => handleChange('metadata', event.target.value)}
+            placeholder='{"payer":"ABC"}'
+          />
+        </div>
+      </FormSection>
+
+      <FormActions submitLabel={submitLabel} busy={isSubmitting} onCancel={onCancel} />
     </form>
   );
 }

@@ -23,6 +23,8 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { getSession } from '@/lib/api/client';
 import { getErrorMessage } from '@/lib/api/errors';
+import { PageHeader } from '@/components/ui/page-header';
+import { ShieldCheck } from 'lucide-react';
 
 const columns: ColumnDef<Role>[] = [
   { accessorKey: 'code', header: 'Code' },
@@ -102,6 +104,16 @@ export default function RolesPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Roles"
+        subtitle="Built-in and custom roles and the permissions they grant"
+        icon={ShieldCheck}
+        actions={
+          <Button onClick={() => setOpen(true)}>
+            New Role
+          </Button>
+        }
+      />
       {isLoading ? (
         <div className="rounded-md border p-6 text-sm text-muted-foreground">Loading roles…</div>
       ) : error ? (
@@ -110,12 +122,6 @@ export default function RolesPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Roles"
-          cta={(
-            <Button size="sm" onClick={() => setOpen(true)}>
-              New Role
-            </Button>
-          )}
           columns={columns}
           data={roles ?? []}
           onRowClick={handleRowClick}

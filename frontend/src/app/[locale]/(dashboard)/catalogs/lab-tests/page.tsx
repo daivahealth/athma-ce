@@ -9,7 +9,9 @@ import type { LabTest } from '@/modules/foundation/types/catalog';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Search, Eye } from 'lucide-react';
+import { Search, Eye, FlaskConical } from 'lucide-react';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { PageHeader } from '@/components/ui/page-header';
 
 const REPORT_STYLE_LABELS: Record<string, string> = {
   structured: 'Structured',
@@ -154,14 +156,12 @@ export default function LabTestsPage() {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => router.push(`/${locale}/catalogs`)}
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to catalogs
-      </Button>
+      <PageHeader
+        title="Lab Tests"
+        subtitle="Laboratory tests that can be ordered, with codes and turnaround"
+        icon={FlaskConical}
+        breadcrumb={<Breadcrumb items={[{ href: `/${locale}/catalogs`, label: 'Catalogs' }, { label: 'Lab Tests' }]} />}
+      />
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -185,7 +185,6 @@ export default function LabTestsPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Lab Tests"
           columns={columns}
           data={labTests ?? []}
         />

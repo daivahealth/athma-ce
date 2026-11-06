@@ -1,17 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { ArrowLeft, Trash2, User } from 'lucide-react';
+import { AlertTriangle, HandCoins, Split, Trash2, User } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FormSection } from '@/components/forms/form-layout';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { useToast } from '@/components/ui/use-toast';
 import { ReceiptForm } from '@/modules/rcm/components/receipt-form';
 import {
@@ -51,13 +60,16 @@ export default function ReceiptDetailPage() {
   const allocateMutation = useAllocateReceipt();
   const deleteMutation = useDeleteReceipt();
 
-  const [allocationRows, setAllocationRows] = useState<AllocationDraft[]>([createEmptyAllocation()]);
+  const [allocationRows, setAllocationRows] = useState<AllocationDraft[]>([
+    createEmptyAllocation(),
+  ]);
 
   useEffect(() => {
     setAllocationRows([createEmptyAllocation()]);
   }, [receiptId]);
 
-  const formatMoney = (value: number, currency: string) => `${Number(value).toFixed(2)} ${currency}`;
+  const formatMoney = (value: number, currency: string) =>
+    `${Number(value).toFixed(2)} ${currency}`;
 
   const handleUpdate = async (payload: CreateReceiptInput) => {
     await updateMutation.mutateAsync({ id: receiptId, payload });
@@ -69,11 +81,15 @@ export default function ReceiptDetailPage() {
   };
 
   const handleAllocationChange = (tempId: string, field: keyof AllocationDraft, value: string) => {
-    setAllocationRows((prev) => prev.map((row) => (row.tempId === tempId ? { ...row, [field]: value } : row)));
+    setAllocationRows((prev) =>
+      prev.map((row) => (row.tempId === tempId ? { ...row, [field]: value } : row)),
+    );
   };
 
   const handleRemoveAllocationRow = (tempId: string) => {
-    setAllocationRows((prev) => (prev.length === 1 ? prev : prev.filter((row) => row.tempId !== tempId)));
+    setAllocationRows((prev) =>
+      prev.length === 1 ? prev : prev.filter((row) => row.tempId !== tempId),
+    );
   };
 
   const handleAllocate = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -116,32 +132,30 @@ export default function ReceiptDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href={`/${locale}/receipts`} aria-label="Back to receipts">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
-        <div>
-          <p className="text-sm text-muted-foreground">Receipt #{receipt.receiptNumber}</p>
-          <h1 className="text-3xl font-bold">{formatMoney(receipt.amount, receipt.currency)}</h1>
-          {receipt.paidCurrency &&
-            receipt.paidAmount != null &&
-            receipt.paidCurrency !== receipt.currency && (
-              <p className="text-sm text-muted-foreground">
-                Paid {formatMoney(receipt.paidAmount, receipt.paidCurrency)} · FX{' '}
-                {Number(receipt.fxRateToBase ?? 1).toFixed(4)}
-              </p>
-            )}
-        </div>
-        <Badge variant="secondary" className="ml-auto">
-          {paymentLabels[receipt.paymentMethod]}
-        </Badge>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title={formatMoney(receipt.amount, receipt.currency)}
+        subtitle={
+          receipt.paidCurrency &&
+          receipt.paidAmount != null &&
+          receipt.paidCurrency !== receipt.currency
+            ? `Receipt #${receipt.receiptNumber} · Paid ${formatMoney(receipt.paidAmount, receipt.paidCurrency)} · FX ${Number(receipt.fxRateToBase ?? 1).toFixed(4)}`
+            : `Receipt #${receipt.receiptNumber}`
+        }
+        icon={HandCoins}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${locale}/receipts`, label: 'Receipts' },
+              { label: `#${receipt.receiptNumber}` },
+            ]}
+          />
+        }
+        actions={<Badge variant="secondary">{paymentLabels[receipt.paymentMethod]}</Badge>}
+      />
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+        <Card className="hover:translate-y-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Patient</CardTitle>
           </CardHeader>
@@ -150,11 +164,16 @@ export default function ReceiptDetailPage() {
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4 text-muted-foreground" />
                 <div className="flex flex-col gap-0.5">
-                  <p className="font-medium">{receipt.patientDisplay.displayName || 'Unknown patient'}</p>
+                  <p className="font-medium">
+                    {receipt.patientDisplay.displayName || 'Unknown patient'}
+                  </p>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <span>MRN: {receipt.patientDisplay.mrn || '—'}</span>
                     <span>&bull;</span>
-                    <span>{receipt.patientDisplay.gender || '—'} / {receipt.patientDisplay.age != null ? `${receipt.patientDisplay.age}y` : '—'}</span>
+                    <span>
+                      {receipt.patientDisplay.gender || '—'} /{' '}
+                      {receipt.patientDisplay.age != null ? `${receipt.patientDisplay.age}y` : '—'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -165,7 +184,7 @@ export default function ReceiptDetailPage() {
             )}
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:translate-y-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Receipt date</CardTitle>
           </CardHeader>
@@ -173,7 +192,7 @@ export default function ReceiptDetailPage() {
             <p>{format(new Date(receipt.receiptDate), 'PPP')}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:translate-y-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Reference</CardTitle>
           </CardHeader>
@@ -183,103 +202,113 @@ export default function ReceiptDetailPage() {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Edit receipt</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ReceiptForm
-            initialValues={receipt}
-            submitLabel="Update receipt"
-            isSubmitting={updateMutation.isPending}
-            onSubmit={handleUpdate}
-          />
-        </CardContent>
-      </Card>
+      <ReceiptForm
+        initialValues={receipt}
+        submitLabel="Update receipt"
+        isSubmitting={updateMutation.isPending}
+        onSubmit={handleUpdate}
+        onCancel={() => router.push(`/${locale}/receipts`)}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Allocations</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {receipt.allocations?.length ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Invoice</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Allocated at</TableHead>
+      <FormSection
+        icon={Split}
+        title="Allocations"
+        description="Invoices this receipt has been applied to"
+      >
+        {receipt.allocations?.length ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Invoice</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Allocated at</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {receipt.allocations.map((allocation) => (
+                <TableRow key={allocation.id}>
+                  <TableCell className="font-mono text-xs" title={allocation.invoiceId}>
+                    {allocation.invoiceId}
+                  </TableCell>
+                  <TableCell>{formatMoney(allocation.allocatedAmount, receipt.currency)}</TableCell>
+                  <TableCell>
+                    {allocation.createdAt ? format(new Date(allocation.createdAt), 'PPP p') : '—'}
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {receipt.allocations.map((allocation) => (
-                  <TableRow key={allocation.id}>
-                    <TableCell className="font-mono text-xs" title={allocation.invoiceId}>
-                      {allocation.invoiceId}
-                    </TableCell>
-                    <TableCell>{formatMoney(allocation.allocatedAmount, receipt.currency)}</TableCell>
-                    <TableCell>{allocation.createdAt ? format(new Date(allocation.createdAt), 'PPP p') : '—'}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <p className="text-sm text-muted-foreground">No allocations recorded.</p>
-          )}
-
-          <form className="space-y-3" onSubmit={handleAllocate}>
-            <div className="grid gap-3 md:grid-cols-3">
-              {allocationRows.map((row) => (
-                <div key={row.tempId} className="grid gap-3 rounded-md border p-3 md:grid-cols-[1fr_120px_auto]">
-                  <div className="space-y-2">
-                    <Label>Invoice ID</Label>
-                    <Input value={row.invoiceId} onChange={(event) => handleAllocationChange(row.tempId, 'invoiceId', event.target.value)} placeholder="Invoice UUID" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Amount</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={row.allocatedAmount}
-                      onChange={(event) => handleAllocationChange(row.tempId, 'allocatedAmount', event.target.value)}
-                      placeholder="0.00"
-                    />
-                  </div>
-                  <div className="flex items-end justify-end">
-                    <Button type="button" variant="ghost" disabled={allocationRows.length === 1} onClick={() => handleRemoveAllocationRow(row.tempId)}>
-                      Remove
-                    </Button>
-                  </div>
-                </div>
               ))}
-            </div>
-            <div className="flex items-center gap-3">
-              <Button type="button" variant="outline" onClick={handleAddAllocationRow}>
-                Add another invoice
-              </Button>
-              <Button type="submit" disabled={allocateMutation.isPending}>
-                {allocateMutation.isPending ? 'Allocating…' : 'Allocate'}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </TableBody>
+          </Table>
+        ) : (
+          <p className="text-sm text-muted-foreground">No allocations recorded.</p>
+        )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Danger zone</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <form className="space-y-3" onSubmit={handleAllocate}>
+          <div className="grid gap-3 md:grid-cols-3">
+            {allocationRows.map((row) => (
+              <div
+                key={row.tempId}
+                className="grid gap-3 rounded-md border border-border p-3 md:grid-cols-[1fr_120px_auto]"
+              >
+                <div className="space-y-2">
+                  <Label>Invoice ID</Label>
+                  <Input
+                    value={row.invoiceId}
+                    onChange={(event) =>
+                      handleAllocationChange(row.tempId, 'invoiceId', event.target.value)
+                    }
+                    placeholder="Invoice UUID"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Amount</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={row.allocatedAmount}
+                    onChange={(event) =>
+                      handleAllocationChange(row.tempId, 'allocatedAmount', event.target.value)
+                    }
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="flex items-end justify-end">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    disabled={allocationRows.length === 1}
+                    onClick={() => handleRemoveAllocationRow(row.tempId)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center gap-3">
+            <Button type="button" variant="outline" onClick={handleAddAllocationRow}>
+              Add another invoice
+            </Button>
+            <Button type="submit" disabled={allocateMutation.isPending}>
+              {allocateMutation.isPending ? 'Allocating…' : 'Allocate'}
+            </Button>
+          </div>
+        </form>
+      </FormSection>
+
+      <FormSection icon={AlertTriangle} title="Danger zone" description="Irreversible actions">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-medium text-destructive">Delete receipt</p>
-            <p className="text-sm text-muted-foreground">Deletes this receipt permanently. Allocations will be removed.</p>
+            <p className="text-sm text-muted-foreground">
+              Deletes this receipt permanently. Allocations will be removed.
+            </p>
           </div>
           <Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
             <Trash2 className="mr-2 h-4 w-4" />
             {deleteMutation.isPending ? 'Deleting…' : 'Delete receipt'}
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </FormSection>
     </div>
   );
 }

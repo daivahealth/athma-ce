@@ -32,20 +32,27 @@ Staging, tumour board cases, care plans and orders always belong to one diagnosi
 
 The **Add** and **Create** forms on these screens start the same way:
 
-1. Under **Select Patient**, search for the patient. Once chosen, they show in a blue banner with their
-   MRN, age, gender and phone. **Change** picks someone else.
-2. If the patient has exactly one active diagnosis it is chosen for you and shows in a rose banner
-   (cancer type, site, laterality, diagnosis date, spread, status, grade, histology). If they have more
-   than one, pick it under **Select Cancer Diagnosis**; **Change** on the banner lets you pick again.
+1. Under **Select Patient**, search for the patient. Once chosen, they show in a **Patient** card with
+   their MRN, age, gender and phone. **Change** picks someone else.
+2. If the patient has exactly one active diagnosis it is chosen for you and shows in a **Cancer
+   Diagnosis** card (cancer type, site, laterality, diagnosis date, spread, status, grade, histology). If
+   they have more than one, pick it under **Select Cancer Diagnosis**; **Change** on the card lets you
+   pick again.
 3. The rest of the form appears only once a diagnosis is chosen.
 
 **If instead:** the card says "No active cancer diagnoses found." Only diagnoses with clinical status
 **Active** are offered. Press **Add one first** to register the diagnosis, or edit the existing one back
 to Active.
 
+The staging, tumour board and care plan edit forms show the same two cards side by side, read-only,
+above the fields; **Edit Diagnosis** shows only the **Patient** card.
+
 The save button stays greyed out until every field marked with `*` is filled. These screens do not show a
 message when the server refuses a save: the form simply stays open. If that happens, check your entries
 and try again, and report it if it persists.
+
+To leave a form without saving, press **Cancel** at the bottom or the list's name in the breadcrumb at
+the top (for example **Tumor Staging** › New).
 
 ### Status colours
 
@@ -126,7 +133,8 @@ status here when a patient goes into remission or relapses.
 ### Patient Cancer Profile
 
 **Patient Cancer Profile** (`/oncology/registry/{patientId}`) is the whole oncology history of one
-patient on one page:
+patient on one page, read-only. It is the place to get up to speed on a patient before a clinic, a tumour
+board or a day-care visit. Nothing on it can be edited; each section says where its records are changed.
 
 **Go to:** the back arrow on the patient's [Cancer Timeline](#cancer-timeline), or a **Diagnosis** event
 on it. The registry rows do not link here: their pencil opens the diagnosis for editing.
@@ -607,23 +615,38 @@ with its time).
 
 The action card changes with the status:
 
-1. **Pending**: **Pharmacist / Physician Approval**. Review the order, then press **Approve Order**.
-2. **Approved**: press **Start Drug Prep & Verification**, then:
+1. **Draft**: press **Submit for Approval** to make the order **pending**.
+2. **Pending**: **Pharmacist / Physician Approval**. Review the order, then press **Approve Order**.
+   **Approve Order** stays disabled until:
+   - someone other than the ordering clinician is signed in ("You placed this order. A second clinician
+     must approve it."); and
+   - the **Pre-Chemo Safety Checklist** has consent, allergies, labs reviewed, labs in range, weight/BSA
+     and doses ticked ("Pre-chemo checklist incomplete: …"). Use **Edit** on the checklist card, tick the
+     items and press **Save Checklist**. Orders created from a treatment schedule day start with an empty
+     checklist, so this step is always needed for them. **Pre-medications ordered** is optional.
+3. **Approved**: the person who approved the order cannot verify it ("You approved this order. Bedside
+   verification must be done by someone else."). Press **Start Drug Prep & Verification**, then:
    - **Step 1 — Pharmacist Drug Preparation**: for each drug, **Prepared by**, **Prepared at**, **Lot
      number**, **Expiry date**, **Diluent** and **Final volume (mL)**;
    - **Step 2 — Nurse Bedside Verification (5 Rights)**: tick all nine checks (identity, drug, dose,
      route, time, expiry, allergy, IV line, patient educated). Until then the screen says "All checklist
      items must be confirmed before verifying.";
-   - **Step 3 — Second Nurse / Independent Check (Optional)**;
+   - **Step 3 — Second Nurse / Independent Check**: choose the second verifier from the staff list. Only
+     staff who have a user account appear (you are left out); if nobody is listed, ask an administrator
+     to link a user to that staff member. With
+     dual sign-off on (the default, set by the **oncology.chemo.require_dual_sign** configuration) this is
+     required, and it must be someone other than you, the approver and the ordering clinician;
    - press **Complete Verification**. **Back** leaves without saving.
-3. **Verified**: **Ready for Administration**. Press **Start Administration**.
-4. **In progress**: **Administration In Progress**, with the start time. For each drug, **Mark Started
+4. **Verified**: **Ready for Administration**. Press **Start Administration**. With dual sign-off on, an
+   order can only be started once it is verified by two people. With it off, an approved order can be
+   started without verification.
+5. **In progress**: **Administration In Progress**, with the start time. For each drug, **Mark Started
    Now** and **Mark Completed Now** stamp the time (or type it), with **Rate (mL/hr)** and **IV Access
    Site**. Each drug is tagged **Pending**, **Infusing** (blue) or **Completed** (green). Under **Adverse
    Reactions**, **Report Reaction** adds the drug, CTCAE grade (1 Mild to 5 Fatal), type and
    description; the worst grade shows as a tag (yellow for 1–2, orange for 3, red for 4–5). Press **Save
    Progress** (or **Save Reactions**) as you go.
-5. When the infusion is finished, press **Complete Cycle**, check the times and reactions in **Complete
+6. When the infusion is finished, press **Complete Cycle**, check the times and reactions in **Complete
    Cycle — Final Record**, add **Completion Notes** and press **Mark Cycle Complete**.
 
 **Check:** the card reads **Cycle 2 Completed**, with the administration time and a reactions summary.
@@ -635,7 +658,13 @@ Preparation Record**, **Administration Timeline** and **Adverse Reactions (CTCAE
 While an order is pending, approved or verified, the action card has **Hold** and **Cancel**. Each asks
 for a reason ("Reason for hold", "Reason for cancellation"); confirm with **Confirm Hold** or **Confirm
 Cancel**. The reason is added to the order's notes. Holding marks the treatment day **held**; cancelling
-frees the day so a new order can be made. A held order shows "Order is on hold." with **Cancel Order**.
+frees the day so a new order can be made. A held order shows "Order is on hold." with **Resume** and
+**Cancel Order**. **Resume** sends the order back to **pending** and clears its approval and
+verification, so it has to be approved and verified again; the treatment day goes back to **ordered**.
+An order that is being given cannot be cancelled: hold it first. Completed and cancelled orders cannot be
+held or cancelled.
+
+If an action is refused, the reason shows in red above the action card.
 
 ## Day-care Worklist
 
@@ -726,6 +755,8 @@ forms without deleting it, and **Activate** brings it back.
 **Cancer Timeline** (`/oncology/timeline`) first asks you to "Select a patient to view their complete
 cancer journey": search the registered patients by name or MRN and press **View Timeline**.
 
+### A patient's timeline
+
 The patient's timeline (`/oncology/timeline/{patientId}`) runs down the page as dated events
 along a date rail, each coloured by category: **Diagnosis**, **Staging**, **Tumor Board**, **Care Plan**,
 **Chemotherapy**, **Radiation**, **Surgery**, **Response**, **Follow-up** and **Note**. The legend at the
@@ -748,14 +779,6 @@ The back arrow goes to the [Patient Cancer Profile](#patient-cancer-profile).
 
 ## Not live yet
 
-### A patient's timeline
-
-- **Re-activate** on a held chemo order does not release it: it records another hold, and the order stays
-  **held**. To carry on, cancel the order and create a new one (from the treatment schedule, a cancelled
-  order frees the day for **Create order**).
-- **Step 3 — Second Nurse / Independent Check** takes free text, but the server stores it as a user ID.
-  Typing a name makes **Complete Verification** fail, with no message. Leave it blank until this is
-  fixed. The dual sign-off setting it mentions is not enforced.
 - Care plans cannot be approved or revised from the screens. The **Revised** status can be filtered but
   not set, and the profile's "Approved" date only appears for plans approved some other way.
 - A deactivated chemo protocol cannot be reactivated from the screens.

@@ -3,14 +3,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { CalendarRange, FlaskConical, Save, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FIELD_CONTROL, FormActions, FormField, FormSection } from '@/components/forms/form-layout';
 import {
   useCreateTreatmentPlan, useOncologyCarePlan, useOncologyCarePlans, useProtocol, useProtocols, useTreatmentPlans,
 } from '@/plugins/oncology/hooks/use-oncology';
@@ -77,113 +78,97 @@ export default function NewTreatmentPlanPage() {
   const errorText = (create.error as { response?: { data?: { message?: string } } } | null)?.response?.data?.message;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={() => router.push(`/${params.locale}/oncology/treatment-plans`)} aria-label="Back to treatment schedules">
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Start Treatment Schedule</h1>
-          <p className="text-muted-foreground text-sm">Generate the dated cycle-by-cycle schedule for a patient from their chemo protocol</p>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Start Treatment Schedule"
+        subtitle="Generate the dated cycle-by-cycle schedule for a patient from their chemo protocol"
+        icon={CalendarRange}
+        breadcrumb={
+          <Breadcrumb items={[{ href: `/${params.locale}/oncology/treatment-plans`, label: 'Treatment Schedules' }, { label: 'New' }]} />
+        }
+      />
+
+      <FormSection icon={FlaskConical} title="Patient & Protocol" description="The active care plan to schedule and the chemo protocol to follow">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField id="tp-care-plan" label="Care plan" required>
+            <Select value={carePlanId || '__none'} onValueChange={(v) => setCarePlanId(v === '__none' ? '' : v)}>
+              <SelectTrigger id="tp-care-plan"><SelectValue placeholder="Select care plan..." /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none">— Select care plan —</SelectItem>
+                {carePlans.map((cp) => (
+                  <SelectItem key={cp.id} value={cp.id}>
+                    {cp.plan_number} · {cp.cancer_type}{chemoModality(cp)?.protocolCode ? ` · ${chemoModality(cp)!.protocolCode}` : ''}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {carePlan?.patientDisplay && (
+              <p className="text-sm text-muted-foreground">
+                {carePlan.patientDisplay.displayName}{carePlan.patientDisplay.mrn ? ` · ${carePlan.patientDisplay.mrn}` : ''}
+              </p>
+            )}
+          </FormField>
+          <FormField id="tp-protocol" label="Protocol" required>
+            <Select value={protocolId || '__none'} onValueChange={(v) => setProtocolId(v === '__none' ? '' : v)} disabled={!carePlanId}>
+              <SelectTrigger id="tp-protocol"><SelectValue placeholder="Select protocol..." /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none">— Select protocol —</SelectItem>
+                {protocols.map((p) => <SelectItem key={p.id} value={p.id}>{p.code} — {p.name}</SelectItem>)}
+                {protocol && !protocols.some((p) => p.id === protocol.id) && (
+                  <SelectItem value={protocol.id}>{protocol.code} — {protocol.name}</SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+            {phases.length > 0 && (
+              <p className="text-sm text-muted-foreground">
+                {phases.map((ph) => `${ph.name} ${ph.cycles}×${ph.cycleDurationDays}d`).join(' → ')} · {totalCycles(phases)} cycles
+              </p>
+            )}
+          </FormField>
         </div>
-      </div>
+        {existingActive.length > 0 && (
+          <p className="rounded-md border border-warning/30 bg-warning/10 px-3 py-2 text-sm text-warning">
+            This care plan already has an active schedule —{' '}
+            <Link className="underline" href={`/${params.locale}/oncology/treatment-plans/${existingActive[0].id}`}>open it</Link>
+            {' '}instead of starting another.
+          </p>
+        )}
+      </FormSection>
 
-      <Card>
-        <CardHeader><CardTitle>Patient &amp; Protocol</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="tp-care-plan">Care plan *</Label>
-              <Select value={carePlanId || '__none'} onValueChange={(v) => setCarePlanId(v === '__none' ? '' : v)}>
-                <SelectTrigger id="tp-care-plan"><SelectValue placeholder="Select care plan..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__none">— Select care plan —</SelectItem>
-                  {carePlans.map((cp) => (
-                    <SelectItem key={cp.id} value={cp.id}>
-                      {cp.plan_number} · {cp.cancer_type}{chemoModality(cp)?.protocolCode ? ` · ${chemoModality(cp)!.protocolCode}` : ''}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {carePlan?.patientDisplay && (
-                <p className="text-sm text-muted-foreground">
-                  {carePlan.patientDisplay.displayName}{carePlan.patientDisplay.mrn ? ` · ${carePlan.patientDisplay.mrn}` : ''}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tp-protocol">Protocol *</Label>
-              <Select value={protocolId || '__none'} onValueChange={(v) => setProtocolId(v === '__none' ? '' : v)} disabled={!carePlanId}>
-                <SelectTrigger id="tp-protocol"><SelectValue placeholder="Select protocol..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__none">— Select protocol —</SelectItem>
-                  {protocols.map((p) => <SelectItem key={p.id} value={p.id}>{p.code} — {p.name}</SelectItem>)}
-                  {protocol && !protocols.some((p) => p.id === protocol.id) && (
-                    <SelectItem value={protocol.id}>{protocol.code} — {protocol.name}</SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-              {phases.length > 0 && (
-                <p className="text-sm text-muted-foreground">
-                  {phases.map((ph) => `${ph.name} ${ph.cycles}×${ph.cycleDurationDays}d`).join(' → ')} · {totalCycles(phases)} cycles
-                </p>
-              )}
-            </div>
+      <FormSection icon={Scale} title="Start Date & Dosing Basis" description="Cycle 1 day 1 and the measurements doses are calculated from">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-end">
+          <FormField id="tp-start" label="C1 D1 date" required>
+            <Input id="tp-start" type="date" className={FIELD_CONTROL} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          </FormField>
+          <FormField id="tp-height" label="Height (cm)" required>
+            <Input id="tp-height" type="number" min={0} step="0.1" value={height} onChange={(e) => setHeight(e.target.value)} />
+          </FormField>
+          <FormField id="tp-weight" label="Weight (kg)" required>
+            <Input id="tp-weight" type="number" min={0} step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} />
+          </FormField>
+          <FormField id="tp-crcl" label="CrCl (mL/min)" required={needsCrcl}>
+            <Input id="tp-crcl" type="number" min={0} step="0.1" value={crcl} onChange={(e) => setCrcl(e.target.value)} placeholder={needsCrcl ? 'Needed for AUC dosing' : 'Optional'} />
+          </FormField>
+          <div className="text-sm pb-2">
+            <span className="text-muted-foreground">BSA (Mosteller): </span>
+            <span className="font-semibold">{bsa ? `${bsa} m²` : '—'}</span>
           </div>
-          {existingActive.length > 0 && (
-            <p className="text-sm text-amber-700 dark:text-amber-400">
-              This care plan already has an active schedule —{' '}
-              <Link className="underline" href={`/${params.locale}/oncology/treatment-plans/${existingActive[0].id}`}>open it</Link>
-              {' '}instead of starting another.
-            </p>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader><CardTitle>Start Date &amp; Dosing Basis</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-end">
-            <div className="space-y-2">
-              <Label htmlFor="tp-start">C1 D1 date *</Label>
-              <Input id="tp-start" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tp-height">Height (cm) *</Label>
-              <Input id="tp-height" type="number" min={0} step="0.1" value={height} onChange={(e) => setHeight(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tp-weight">Weight (kg) *</Label>
-              <Input id="tp-weight" type="number" min={0} step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tp-crcl">CrCl (mL/min){needsCrcl ? ' *' : ''}</Label>
-              <Input id="tp-crcl" type="number" min={0} step="0.1" value={crcl} onChange={(e) => setCrcl(e.target.value)} placeholder={needsCrcl ? 'Needed for AUC dosing' : 'Optional'} />
-            </div>
-            <div className="text-sm pb-2">
-              <span className="text-muted-foreground">BSA (Mosteller): </span>
-              <span className="font-semibold">{bsa ? `${bsa} m²` : '—'}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </FormSection>
 
       {phases.length > 0 && (
-        <Card>
-          <CardHeader><CardTitle>Schedule Preview</CardTitle></CardHeader>
-          <CardContent>
-            <SchedulePreview phases={phases} startDate={startDate} />
-          </CardContent>
-        </Card>
+        <FormSection icon={CalendarRange} title="Schedule Preview" description="The dated cycles this schedule will generate">
+          <SchedulePreview phases={phases} startDate={startDate} />
+        </FormSection>
       )}
 
-      {errorText && <p role="alert" className="text-sm text-destructive">{errorText}</p>}
-      <div className="flex gap-4">
-        <Button variant="outline" onClick={() => router.back()} disabled={create.isPending}>Cancel</Button>
-        <Button onClick={submit} disabled={!valid || create.isPending}>
+      {errorText && <p role="alert" className="text-sm font-medium text-destructive">{errorText}</p>}
+      <FormActions onCancel={() => router.back()} busy={create.isPending}>
+        <Button onClick={submit} disabled={!valid || create.isPending} className="gap-2">
+          <Save className="h-4 w-4" />
           {create.isPending ? 'Generating…' : 'Generate schedule'}
         </Button>
-      </div>
+      </FormActions>
     </div>
   );
 }

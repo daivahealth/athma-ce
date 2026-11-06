@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Activity, ArrowLeft, Eye, Search } from 'lucide-react';
+import { Activity, Eye, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -23,6 +23,8 @@ import {
   useVitalAgeGroups,
 } from '@/modules/clinical/hooks/use-vital-signs-templates';
 import type { VitalSignsTemplate } from '@/modules/clinical/types/vital-signs-template';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { PageHeader } from '@/components/ui/page-header';
 
 const careSettingLabels: Record<string, string> = {
   OPD: 'OPD',
@@ -150,12 +152,19 @@ export default function VitalSignsTemplatesPage() {
 
   return (
     <div className="space-y-6">
-      <Button asChild variant="ghost" size="sm">
-        <Link href={`/${locale}/catalogs`}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to catalogs
-        </Link>
-      </Button>
+      <PageHeader
+        title="Vital Signs Templates"
+        subtitle="Vital sign sets captured per care setting"
+        icon={Activity}
+        breadcrumb={<Breadcrumb items={[{ href: `/${locale}/catalogs`, label: 'Catalogs' }, { label: 'Vital Signs Templates' }]} />}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/catalogs/vital-signs-templates/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New vital signs template
+            </Link>
+          </Button>
+        }
+      />
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -220,19 +229,10 @@ export default function VitalSignsTemplatesPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Vital Signs Templates"
           columns={columns}
           data={templates ?? []}
           isLoading={isLoading}
           emptyState="No templates match your filters."
-          cta={
-            <Link href={`/${locale}/catalogs/vital-signs-templates/new`}>
-              <button type="button" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">
-                <Activity className="h-4 w-4" />
-                New vital signs template
-              </button>
-            </Link>
-          }
         />
       )}
     </div>

@@ -90,6 +90,7 @@ Filters:
 Response behavior:
 - `search` matches patient first name, last name, display name, MRN, or phone number
 - each OT request includes `patientDisplay`, matching the standard Clinical `PatientDisplayDto`
+- each OT request includes `reports` with its latest OT report only (all reports come from `GET /ot/requests/:id`)
 
 ### `GET /ot/requests/:id`
 
@@ -286,11 +287,13 @@ Payload:
 ```json
 {
   "spaceId": "uuid",
-  "specialty": "cardiac",
+  "specialty": "CARDIO_SURG",
   "isActive": true,
   "notes": "Laminar flow room"
 }
 ```
+
+`specialty` is a foundation specialty master code (`GET /specialties` → `code`), optional. The clinical service does not validate it against foundation; the OT room form only offers master codes. See [specialty codes across services](../features/specialty-management/SPECIALTIES-MASTER-TABLE.md).
 
 ### `PATCH /ot/rooms/config/:spaceId`
 

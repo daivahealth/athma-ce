@@ -1,11 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { AlertTriangle, Info, Link2, ReceiptText, Trash2 } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FormSection } from '@/components/forms/form-layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
@@ -65,7 +66,9 @@ export default function BillingItemDetailPage() {
   if (error || !billingItem) {
     return (
       <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-        {error ? `Unable to load billing item: ${(error as Error).message}` : 'Billing item not found.'}
+        {error
+          ? `Unable to load billing item: ${(error as Error).message}`
+          : 'Billing item not found.'}
       </div>
     );
   }
@@ -73,101 +76,111 @@ export default function BillingItemDetailPage() {
   const scopeLabel = billingItem.tenantId ? 'Tenant-specific' : 'Global catalog item';
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/${locale}/rcm-setup/billing-items`}>
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold">{billingItem.billingDescription}</h1>
-        <Badge variant={billingItem.isActive ? 'default' : 'secondary'} className="ml-auto">
-          {billingItem.isActive ? 'Active' : 'Inactive'}
-        </Badge>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Scope & metadata</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div>
-            <p className="text-sm text-muted-foreground">Scope</p>
-            <p className="font-medium">{scopeLabel}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Billing code</p>
-            <p className="font-mono text-sm">{billingItem.billingCode}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">List price ({currency})</p>
-            <p className="font-medium">
-              {billingItem.listPrice != null
-                ? Number(billingItem.listPrice).toFixed(2)
-                : '—'}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Created</p>
-            <p>{format(new Date(billingItem.createdAt), 'PPP p')}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Updated</p>
-            <p>{format(new Date(billingItem.updatedAt), 'PPP p')}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Edit billing item</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BillingItemForm
-            initialValues={billingItem}
-            submitLabel="Update billing item"
-            isSubmitting={updateMutation.isPending}
-            onSubmit={handleUpdate}
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title={billingItem.billingDescription}
+        subtitle={`${billingItem.billingCode} · ${scopeLabel}`}
+        icon={ReceiptText}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${locale}/rcm-setup`, label: 'RCM Setup' },
+              { href: `/${locale}/rcm-setup/billing-items`, label: 'Billing items' },
+              { label: billingItem.billingCode },
+            ]}
           />
-        </CardContent>
-      </Card>
+        }
+        actions={
+          <Badge variant={billingItem.isActive ? 'default' : 'secondary'}>
+            {billingItem.isActive ? 'Active' : 'Inactive'}
+          </Badge>
+        }
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Mapped Catalog Items</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CatalogBillingMappingsPanel
-            billingItemId={itemId}
-            billingItem={billingItem}
-          />
-        </CardContent>
-      </Card>
+      <FormSection
+        icon={Info}
+        title="Scope & metadata"
+        description="Where this item applies and when it last changed"
+        contentClassName="grid gap-4 md:grid-cols-3"
+      >
+        <div>
+          <p className="text-sm text-muted-foreground">Scope</p>
+          <p className="font-medium">{scopeLabel}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Billing code</p>
+          <p className="font-mono text-sm">{billingItem.billingCode}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">List price ({currency})</p>
+          <p className="font-medium">
+            {billingItem.listPrice != null ? Number(billingItem.listPrice).toFixed(2) : '—'}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Created</p>
+          <p>{format(new Date(billingItem.createdAt), 'PPP p')}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Updated</p>
+          <p>{format(new Date(billingItem.updatedAt), 'PPP p')}</p>
+        </div>
+      </FormSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Danger zone</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <BillingItemForm
+        initialValues={billingItem}
+        submitLabel="Update billing item"
+        isSubmitting={updateMutation.isPending}
+        onSubmit={handleUpdate}
+        onCancel={() => router.push(`/${locale}/rcm-setup/billing-items`)}
+      />
+
+      <FormSection
+        icon={Link2}
+        title="Mapped Catalog Items"
+        description="Clinical catalog entries that post this charge"
+      >
+        <CatalogBillingMappingsPanel billingItemId={itemId} billingItem={billingItem} />
+      </FormSection>
+
+      <FormSection
+        icon={AlertTriangle}
+        title="Danger zone"
+        description="Deactivate or permanently remove this item"
+      >
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-medium">Deactivate billing item</p>
-            <p className="text-sm text-muted-foreground">Deactivated codes stay in history but are hidden from ordering.</p>
+            <p className="text-sm text-muted-foreground">
+              Deactivated codes stay in history but are hidden from ordering.
+            </p>
           </div>
-          <Button variant="outline" className="text-destructive" onClick={handleArchive} disabled={archiveMutation.isPending}>
+          <Button
+            variant="outline"
+            className="text-destructive"
+            onClick={handleArchive}
+            disabled={archiveMutation.isPending}
+          >
             {archiveMutation.isPending ? 'Deactivating...' : 'Deactivate'}
           </Button>
-        </CardContent>
-        <CardContent className="flex flex-col gap-3 border-t pt-4 md:flex-row md:items-center md:justify-between">
+        </div>
+        <div className="flex flex-col gap-3 border-t border-border pt-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-medium text-destructive">Hard delete</p>
-            <p className="text-sm text-muted-foreground">Permanently remove this billing item and all history.</p>
+            <p className="text-sm text-muted-foreground">
+              Permanently remove this billing item and all history.
+            </p>
           </div>
-          <Button variant="destructive" onClick={handleHardDelete} disabled={hardDeleteMutation.isPending}>
+          <Button
+            variant="destructive"
+            onClick={handleHardDelete}
+            disabled={hardDeleteMutation.isPending}
+          >
             <Trash2 className="mr-2 h-4 w-4" />
             {hardDeleteMutation.isPending ? 'Deleting...' : 'Delete permanently'}
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </FormSection>
     </div>
   );
 }

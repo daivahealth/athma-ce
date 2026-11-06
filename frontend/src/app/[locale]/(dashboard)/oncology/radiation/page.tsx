@@ -12,6 +12,7 @@ import {
 import { useRadiationPrescriptions } from '@/plugins/oncology/hooks/use-oncology';
 import { PageHeader } from '@/components/ui/page-header';
 import type { RadiationPrescription } from '@/plugins/oncology/types';
+import { PatientCell } from '@/plugins/oncology/components/shared';
 
 const STATUS_COLORS: Record<string, string> = {
   DRAFT: 'bg-muted text-muted-foreground',
@@ -105,12 +106,7 @@ export default function RadiationListPage() {
                   onClick={() => router.push(`/${params.locale}/oncology/radiation/${rx.id}`)}
                 >
                   <td className="px-4 py-3">
-                    <div className="font-medium">{rx.patientDisplay?.displayName ?? '—'}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {rx.patientDisplay?.mrn && `MRN: ${rx.patientDisplay.mrn}`}
-                      {rx.patientDisplay?.age != null && ` · ${rx.patientDisplay.age}y`}
-                      {rx.patientDisplay?.gender && ` · ${rx.patientDisplay.gender}`}
-                    </div>
+                    <PatientCell patientDisplay={rx.patientDisplay} />
                   </td>
                   <td className="px-4 py-3 font-mono text-xs">{rx.prescription_number ?? '—'}</td>
                   <td className="px-4 py-3 capitalize">{rx.treatment_intent ?? '—'}</td>

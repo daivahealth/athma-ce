@@ -17,6 +17,7 @@
     "patients": "Patients",
     "encounters": "Encounters",
     "charting": "Clinical Charting",
+    "cpoe": "Order Entry (CPOE)",
     "triage": "Triage",
     "ot": "Operating Theatre",
     "otDashboard": "OT Dashboard",

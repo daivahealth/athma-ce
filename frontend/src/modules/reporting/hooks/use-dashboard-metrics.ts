@@ -52,9 +52,83 @@ export interface DashboardMetrics {
   appointmentCompletionRate: number;
   utilizationRate: number;
 
+  // Worklists, history and projections. Optional: a cache written by an
+  // older ai-gateway has none of them until it expires.
+  worklists?: DashboardWorklists;
+  trends?: DashboardTrends;
+  forecast?: DashboardForecast;
+  arAging?: DashboardArAging;
+
   // Metadata
   cachedAt: string;
   currency: string;
+}
+
+/** Mirrors `DashboardWorklists` in ai-gateway's dashboard-cache.types.ts. */
+export interface DashboardWorklists {
+  encountersInProgress: number;
+  ordersOpen: number;
+  labOrdersOpen: number;
+  imagingOrdersOpen: number;
+  urgentOrdersOpen: number;
+  labReportsAwaitingSignOff: number;
+  inpatientsCurrent: number;
+  dischargesDue: number;
+  appointmentsNext7Days: number;
+}
+
+/** Daily history (400 days), oldest first, ending today (a partial day). */
+export interface DashboardTrends {
+  days: string[];
+  encounters: number[];
+  newPatients: number[];
+  /** Appointments by start date, excluding cancelled. Absent in caches written before the Week/Month views. */
+  appointments?: number[];
+  noShows?: number[];
+  admissions?: number[];
+  discharges?: number[];
+  revenue: number[];
+}
+
+export interface DashboardForecastPoint {
+  date: string;
+  value: number;
+  low: number;
+  high: number;
+}
+
+export interface DashboardForecastSeries {
+  method: 'seasonal-holt';
+  points: DashboardForecastPoint[];
+  trendPerWeek: number;
+  changeVsPriorPct: number | null;
+  activeDays: number;
+}
+
+export interface DashboardRunRateProjection {
+  actualToDate: number;
+  projected: number;
+  low: number;
+  high: number;
+  periodEnd: string;
+  comparison: number;
+  changeVsComparisonPct: number | null;
+}
+
+/** A series is null when its last four weeks are too sparse to forecast. */
+export interface DashboardForecast {
+  generatedFor: string;
+  horizonDays: number;
+  encounters: DashboardForecastSeries | null;
+  newPatients: DashboardForecastSeries | null;
+  revenue: DashboardForecastSeries | null;
+  revenueMonthEnd: DashboardRunRateProjection | null;
+  newPatientsMonthEnd: DashboardRunRateProjection | null;
+}
+
+export interface DashboardArAging {
+  buckets: { key: 'current' | 'd31_60' | 'd61_90' | 'd90_plus'; label: string; count: number; amount: number }[];
+  collectionRate90d: number | null;
 }
 
 interface DashboardMetricsResponse {

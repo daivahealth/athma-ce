@@ -79,6 +79,11 @@ export class OtRequestsService {
           take: 1,
           orderBy: { scheduledStartTime: 'desc' },
         },
+        // Latest report only, so lists can show whether the operation note is signed.
+        reports: {
+          take: 1,
+          orderBy: { createdAt: 'desc' },
+        },
       },
       orderBy: [{ requestedAt: 'desc' }],
     });

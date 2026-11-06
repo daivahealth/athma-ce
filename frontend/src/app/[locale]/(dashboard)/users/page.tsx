@@ -8,6 +8,8 @@ import { getSession } from '@/lib/api/client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useUsers } from '@/modules/foundation/hooks/use-user';
+import { PageHeader } from '@/components/ui/page-header';
+import { UserCog } from 'lucide-react';
 
 interface UserRow {
   id: string;
@@ -72,13 +74,17 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <ResourceTable
+      <PageHeader
         title="Users"
-        cta={(
-          <Button asChild size="sm">
+        subtitle="User accounts, their roles and sign-in status"
+        icon={UserCog}
+        actions={
+          <Button asChild>
             <Link href={`/${params.locale}/users/new`}>New User</Link>
           </Button>
-        )}
+        }
+      />
+      <ResourceTable
         columns={columns}
         data={userRows}
         isLoading={isLoading}

@@ -78,6 +78,8 @@ export class TreatmentScheduleService {
               (SELECT MIN(d.scheduled_date) FROM plugin_oncology.treatment_days d WHERE d.treatment_plan_id = tp.id AND d.status IN ('planned','ordered','held')) AS next_date,
               (SELECT COUNT(*)::int FROM plugin_oncology.treatment_days d WHERE d.treatment_plan_id = tp.id) AS total_days,
               (SELECT COUNT(*)::int FROM plugin_oncology.treatment_days d WHERE d.treatment_plan_id = tp.id AND d.status = 'given') AS given_days,
+              (SELECT COUNT(*)::int FROM plugin_oncology.treatment_cycles c WHERE c.treatment_plan_id = tp.id AND c.status = 'completed') AS completed_cycles,
+              (SELECT MIN(c.cycle_number) FROM plugin_oncology.treatment_cycles c WHERE c.treatment_plan_id = tp.id AND c.status IN ('in_progress','planned')) AS current_cycle,
               ${PATIENT_COLUMNS}
        FROM plugin_oncology.treatment_plans tp
        LEFT JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = tp.cancer_diagnosis_id
@@ -354,6 +356,9 @@ export class TreatmentScheduleService {
     if (filters.status) { params.push(filters.status); statusSql = `AND d.status = $${params.length}`; }
     const rows = await this.prisma.$queryRawUnsafe<any[]>(
       `SELECT d.*, co.status AS order_status,
+              (co.pre_chemo_checklist->>'labsReviewed')::boolean AS labs_reviewed,
+              (co.pre_chemo_checklist->>'labsWithinRange')::boolean AS labs_within_range,
+              co.administered_at AS order_administered_at,
               tp.patient_id, tp.bsa, tp.weight_kg, tp.status AS plan_status,
               tp.protocol_snapshot->>'code' AS protocol_code, tp.protocol_snapshot->>'name' AS protocol_name,
               tc.phase_index, tc.phase_name, tc.dose_level,

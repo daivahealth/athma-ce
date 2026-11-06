@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { HandCoins } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useToast } from '@/components/ui/use-toast';
 import { ReceiptForm } from '@/modules/rcm/components/receipt-form';
 import { useCreateReceipt } from '@/modules/rcm/hooks/use-receipts';
@@ -32,27 +31,25 @@ export default function NewReceiptPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex flex-wrap items-center gap-2">
-            <Button variant="ghost" size="icon" asChild>
-              <Link href={`/${locale}/receipts`} aria-label="Back to receipts">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-            Create receipt
-            <Badge variant="secondary">{currencyLabel}</Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ReceiptForm
-            onSubmit={handleSubmit}
-            isSubmitting={createReceipt.isPending}
-            showCurrencyField={false}
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Create receipt"
+        subtitle={`Record a payment received from a patient · base currency ${currencyLabel}`}
+        icon={HandCoins}
+        breadcrumb={
+          <Breadcrumb
+            items={[{ href: `/${locale}/receipts`, label: 'Receipts' }, { label: 'New' }]}
           />
-        </CardContent>
-      </Card>
+        }
+        actions={<Badge variant="secondary">{currencyLabel}</Badge>}
+      />
+
+      <ReceiptForm
+        onSubmit={handleSubmit}
+        isSubmitting={createReceipt.isPending}
+        showCurrencyField={false}
+        onCancel={() => router.push(`/${locale}/receipts`)}
+      />
     </div>
   );
 }

@@ -1,7 +1,9 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ListTodo } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useToast } from '@/components/ui/use-toast';
 import { TaskForm } from '@/modules/prm/components/task-form';
 import { useCreateTask } from '@/modules/prm/hooks/use-tasks';
@@ -26,13 +28,23 @@ export default function NewTaskPage() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Task</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <TaskForm submitLabel="Create Task" onSubmit={handleSubmit} />
-      </CardContent>
-    </Card>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Create Task"
+        subtitle="Assign a follow-up action for a patient"
+        icon={ListTodo}
+        breadcrumb={
+          <Breadcrumb
+            items={[{ href: `/${params.locale}/prm/tasks`, label: 'Tasks' }, { label: 'New' }]}
+          />
+        }
+      />
+
+      <TaskForm
+        submitLabel="Create Task"
+        onSubmit={handleSubmit}
+        onCancel={() => router.push(`/${params.locale}/prm/tasks`)}
+      />
+    </div>
   );
 }

@@ -29,13 +29,41 @@ hand-rolled `<h1>` + `<p>` pair.
 - `actions` is right-aligned and can hold arbitrarily complex content (dialogs,
   button groups), not just a single CTA.
 
+### List pages
+
+A list page opens with a `PageHeader` (title, one-line subtitle, icon, and the
+"New …" button as `actions`), then its filter bar, then the table. `/patients`
+is the reference. When the table is a `ResourceTable`, do not pass it `title`
+or `cta` — the page header carries both, so the table card holds only the
+table. A list that sits under a hub page (e.g. the clinical catalogs) puts a
+`Breadcrumb` back to the hub in the header's `breadcrumb` slot instead of a
+"Back to …" button.
+
+```tsx
+<div className="space-y-6">
+  <PageHeader
+    title="Invoices"
+    subtitle="Patient bills and their payment status"
+    icon={FileText}
+    actions={
+      <Button asChild>
+        <Link href={`/${locale}/invoices/new`}><Plus className="mr-2 h-4 w-4" /> New invoice</Link>
+      </Button>
+    }
+  />
+  <Card>{/* search + filters */}</Card>
+  <ResourceTable columns={columns} data={rows} isLoading={isLoading} />
+</div>
+```
+
 ### Form pages
 
 A create/edit page uses the same header as a list page, with a
 `Breadcrumb` (`frontend/src/components/layout/breadcrumb.tsx`) back to its list
 in place of a back-arrow button. The patient registration form
 (`frontend/src/components/clinical/patient-form.tsx`, used by `/patients/new`
-and `/patients/{id}/edit`) is the reference:
+and `/patients/{id}/edit`) and the oncology create/edit pages under
+`/oncology/*/new` and `/oncology/*/{id}/edit` follow it:
 
 ```tsx
 <PageHeader
@@ -61,6 +89,35 @@ and `/patients/{id}/edit`) is the reference:
 - Actions sit in a footer row under a `border-t`: the "Fields marked * are
   required" hint on the left, **Cancel** (outline) then the primary submit on
   the right.
+
+The pieces live in `frontend/src/components/forms/form-layout.tsx`, so a form
+page composes them rather than restyling `Card`/`Label` by hand:
+
+| Export | Use |
+| --- | --- |
+| `FormSection` | Section card with icon chip, title, description; `actions` for header buttons (e.g. "Add line"), `contentClassName` to replace the default `space-y-4` body (e.g. with a grid). |
+| `FormField` | Label (with `required` star), control, `error` message with `role="alert"`, optional muted `hint`. |
+| `FormActions` | Footer row: required-fields hint, outline **Cancel** (when `onCancel` is given), then the submit. Pass `submitLabel` for the default primary button with a save icon, or pass your own submit control(s) as children. `busy` disables the buttons. |
+| `invalidProps(id, error, className?)` | Spread onto a control to set `aria-invalid`, `aria-describedby` and the destructive border. |
+| `NATIVE_SELECT`, `FIELD_CONTROL` | Classes for a native `<select>` and for native date/time inputs (`dark:[color-scheme:dark]`). |
+
+```tsx
+<FormSection icon={Target} title="Staging" description="Staging system, type and TNM categories">
+  <FormField id="stagingSystem" label="System" required error={errors.stagingSystem}>…</FormField>
+</FormSection>
+<FormActions onCancel={back} busy={isPending} submitLabel="Save" />
+```
+
+Besides patient registration, the RCM forms (invoice, receipt, billing item,
+charge posting rule, fee schedule, payer contract), the PRM rule, task and
+template forms, and the oncology create/edit forms use this layout. On an RCM
+or PRM detail page, the read-only summary, related tables and danger zone are
+`FormSection`s too, and the record's status badge or **Delete** goes in the
+`PageHeader` `actions`. The oncology forms put the patient and cancer diagnosis
+above the fields with `plugins/oncology/components/FormContextCards.tsx`
+(`PatientPickerCard`, `PatientContextCard`, `DiagnosisPickerCard`,
+`DiagnosisContextCard`), which colour chips with theme tokens and the oncology
+status tone map.
 
 ### `StatCard`
 
@@ -91,6 +148,13 @@ muted text or a one-off hand-built empty block.
 `ResourceTable` (`frontend/src/components/tables/resource-table.tsx`) renders
 this automatically for its empty state — pass `emptyIcon`/`emptyDescription`
 to customize it, don't reimplement the empty row yourself.
+
+`ResourceTable` draws no heading of its own unless you pass `title` or `cta`.
+Those two props are only for a table that is one section of a larger page
+(e.g. "Concepts" on a value-set detail page, "Coding sessions" under the
+medical-coding stats); a list page's title and "New …" action belong in its
+`PageHeader` (see [List pages](#list-pages)). There is no default "New" button —
+omitting `cta` renders nothing.
 
 ### Loading
 

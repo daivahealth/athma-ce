@@ -18,7 +18,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Filter, Search, X, Plus } from 'lucide-react';
+import { Filter, Search, X, Plus, Stethoscope } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
 
 interface StaffRow {
   id: string;
@@ -189,6 +190,18 @@ export default function StaffPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Clinical Staff"
+        subtitle="Doctors, nurses and other clinical staff across your facilities"
+        icon={Stethoscope}
+        actions={
+          <Button onClick={handleNewStaff}>
+            <Plus className="mr-2 h-4 w-4" />
+            New Staff
+          </Button>
+        }
+      />
+
       {/* Search and Filters Bar */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="relative w-full sm:w-96">
@@ -224,19 +237,10 @@ export default function StaffPage() {
               Clear All
             </Button>
           )}
-          <Button
-            size="sm"
-            className="h-8"
-            onClick={handleNewStaff}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            New Staff
-          </Button>
         </div>
       </div>
 
       <ResourceTable
-        title="Clinical Staff"
         columns={columns}
         data={tableData}
         isLoading={isLoading}

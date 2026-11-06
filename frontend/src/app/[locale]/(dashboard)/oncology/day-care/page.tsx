@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { ChevronLeft, ChevronRight, ClipboardList, Printer } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ClipboardList, Maximize2, Minimize2, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,8 @@ import { EmptyState, LoadingState, StatusBadge } from '@/plugins/oncology/compon
 import { DaySheet } from '@/plugins/oncology/components/treatment-schedule/DaySheet';
 import { phaseTone } from '@/plugins/oncology/lib/oncology-tone';
 import { addDaysIso, formatDate, formatDose, formatProtocolDose, todayIso } from '@/plugins/oncology/lib/treatment-day';
+import { BoardSummary, ChairTimeline, OralDispensing, StatusLanes } from '@/plugins/oncology/components/day-care/DayCareBoard';
+import { cn } from '@/lib/utils';
 
 /**
  * Day-care / pharmacy worklist: every scheduled treatment day on a date,
@@ -23,7 +25,34 @@ import { addDaysIso, formatDate, formatDose, formatProtocolDose, todayIso } from
 export default function DayCarePage() {
   const params = useParams() as { locale: string };
   const [date, setDate] = useState(todayIso());
-  const { data, isLoading } = useTreatmentDays({ date }, /^\d{4}-\d{2}-\d{2}$/.test(date));
+  // Big-screen mode: the board full screen on a unit wall display, refreshed every minute.
+  const boardRef = useRef<HTMLDivElement>(null);
+  const [wall, setWall] = useState(false);
+  const [clockNow, setClockNow] = useState(() => new Date());
+  useEffect(() => {
+    const onChange = () => { if (!document.fullscreenElement) setWall(false); };
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+  useEffect(() => {
+    if (!wall) return;
+    const t = setInterval(() => setClockNow(new Date()), 30_000);
+    // Esc closes the wall view even where the browser did not grant full screen.
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setWall(false); };
+    window.addEventListener('keydown', onKey);
+    return () => { clearInterval(t); window.removeEventListener('keydown', onKey); };
+  }, [wall]);
+  const toggleWall = async () => {
+    if (wall) {
+      if (document.fullscreenElement) await document.exitFullscreen().catch(() => undefined);
+      setWall(false);
+    } else {
+      setDate(todayIso());
+      setWall(true);
+      await boardRef.current?.requestFullscreen?.().catch(() => undefined);
+    }
+  };
+  const { data, isLoading } = useTreatmentDays({ date }, /^\d{4}-\d{2}-\d{2}$/.test(date), wall ? 60_000 : false);
   const days = useMemo(() => data?.data ?? [], [data]);
 
   const prep = useMemo(() => days.flatMap((d) =>
@@ -48,9 +77,14 @@ export default function DayCarePage() {
         subtitle="Chemotherapy to prepare and administer, by date"
         icon={ClipboardList}
         actions={
-          <Button variant="outline" onClick={() => window.print()}>
-            <Printer className="h-4 w-4 mr-2" />Print
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={toggleWall}>
+              <Maximize2 className="h-4 w-4 mr-2" />Big screen
+            </Button>
+            <Button variant="outline" onClick={() => window.print()}>
+              <Printer className="h-4 w-4 mr-2" />Print
+            </Button>
+          </div>
         }
       />
 
@@ -67,11 +101,51 @@ export default function DayCarePage() {
       {isLoading ? <LoadingState /> : days.length === 0 ? (
         <EmptyState message="No chemotherapy scheduled on this date." />
       ) : (
-        <Tabs defaultValue="administration">
+        <Tabs defaultValue="board">
           <TabsList>
+            <TabsTrigger value="board">Board</TabsTrigger>
             <TabsTrigger value="administration">Administration</TabsTrigger>
             <TabsTrigger value="pharmacy">Pharmacy prep</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="board" className="pt-4">
+            <div
+              ref={boardRef}
+              className={cn('space-y-5', wall && 'fixed inset-0 z-50 overflow-auto bg-background p-6')}
+            >
+              {wall && (
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-3xl font-bold tracking-tight">Day-care unit</h2>
+                    <p className="text-lg text-muted-foreground">{formatDate(date)}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-4xl font-semibold tabular-nums">
+                      {clockNow.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <Button variant="outline" onClick={toggleWall} aria-label="Exit big screen">
+                      <Minimize2 className="h-4 w-4 mr-2" />Exit
+                    </Button>
+                  </div>
+                </div>
+              )}
+              <BoardSummary days={days} large={wall} />
+              <section className="space-y-2" aria-label="Patients by stage">
+                <h2 className={cn('font-semibold', wall ? 'text-lg' : 'text-sm')}>Where everyone is</h2>
+                <div className="overflow-x-auto pb-1">
+                  <StatusLanes days={days} locale={params.locale} large={wall} />
+                </div>
+              </section>
+              <section className="space-y-2" aria-label="Oral dispensing">
+                <h2 className={cn('font-semibold', wall ? 'text-lg' : 'text-sm')}>Oral dispensing</h2>
+                <OralDispensing days={days} locale={params.locale} large={wall} />
+              </section>
+              <section className="space-y-2 rounded-xl border border-border/60 bg-card p-4" aria-label="Chair plan">
+                <h2 className={cn('font-semibold', wall ? 'text-lg' : 'text-sm')}>Chair plan</h2>
+                <ChairTimeline days={days} locale={params.locale} showNow={date === todayIso()} large={wall} />
+              </section>
+            </div>
+          </TabsContent>
 
           <TabsContent value="administration" className="pt-4 space-y-4">
             {days.map((d) => (

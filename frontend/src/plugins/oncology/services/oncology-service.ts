@@ -2,7 +2,7 @@ import { clinicalClient } from '@/lib/api/client';
 import type {
   CancerDiagnosis, TumorStaging, ChemoProtocol, ChemoOrder, TumorBoardCase, OncologyCarePlan,
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
-  RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan,
+  RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan, OncologyLabPoint,
   RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
   CancerTimelineEvent, TreatmentPlan, TreatmentPlanSummary, WorklistDay,
 } from '../types';
@@ -44,6 +44,11 @@ export const oncologyService = {
 
   async getRelevantLabs(patientId: string) {
     const { data } = await clinicalClient.get(`${BASE_URL}/registry/${patientId}/labs`);
+    return data.data;
+  },
+
+  async getLabHistory(patientId: string): Promise<OncologyLabPoint[]> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/registry/${patientId}/labs/history`);
     return data.data;
   },
 
@@ -110,8 +115,9 @@ export const oncologyService = {
     return data.data;
   },
 
-  async approveCarePlan(id: string, approvedBy: string): Promise<OncologyCarePlan> {
-    const { data } = await clinicalClient.post(`${BASE_URL}/care-plans/${id}/approve`, { approvedBy });
+  // The approver is the signed-in user, resolved server-side.
+  async approveCarePlan(id: string): Promise<OncologyCarePlan> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/care-plans/${id}/approve`);
     return data.data;
   },
 
@@ -167,6 +173,11 @@ export const oncologyService = {
     return data.data;
   },
 
+  async submitChemoOrder(id: string): Promise<ChemoOrder> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/orders/${id}/submit`);
+    return data.data;
+  },
+
   async approveChemoOrder(id: string): Promise<ChemoOrder> {
     const { data } = await clinicalClient.post(`${BASE_URL}/orders/${id}/approve`);
     return data.data;
@@ -199,6 +210,12 @@ export const oncologyService = {
 
   async cancelChemoOrder(id: string, reason?: string): Promise<ChemoOrder> {
     const { data } = await clinicalClient.post(`${BASE_URL}/orders/${id}/cancel`, { reason });
+    return data.data;
+  },
+
+  /** held → pending; the order must be approved and verified again. */
+  async resumeChemoOrder(id: string, reason?: string): Promise<ChemoOrder> {
+    const { data } = await clinicalClient.post(`${BASE_URL}/orders/${id}/resume`, { reason });
     return data.data;
   },
 

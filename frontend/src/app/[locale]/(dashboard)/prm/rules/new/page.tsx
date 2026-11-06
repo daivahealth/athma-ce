@@ -1,10 +1,9 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { ClipboardList } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useToast } from '@/components/ui/use-toast';
 import { RuleForm } from '@/modules/prm/components/rule-form';
 import { useCreateRule } from '@/modules/prm/hooks/use-rules';
@@ -20,7 +19,11 @@ export default function NewRulePage() {
   const handleSubmit = async (payload: CreateRuleInput) => {
     try {
       await createRule.mutateAsync(payload);
-      toast({ title: 'Rule created', description: 'The rule is now active in PRM.', variant: 'success' });
+      toast({
+        title: 'Rule created',
+        description: 'The rule is now active in PRM.',
+        variant: 'success',
+      });
       router.push(`/${params.locale}/prm/rules`);
     } catch (error) {
       const message = getApiErrorMessage(error, 'Failed to create rule.');
@@ -29,23 +32,27 @@ export default function NewRulePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/${params.locale}/prm/rules`}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Link>
-        </Button>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Rule</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RuleForm submitLabel="Create Rule" onSubmit={handleSubmit} />
-        </CardContent>
-      </Card>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Create Rule"
+        subtitle="Automate a message or task when a patient event happens"
+        icon={ClipboardList}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${params.locale}/pe-setup`, label: 'PE Setup' },
+              { href: `/${params.locale}/prm/rules`, label: 'Rules' },
+              { label: 'New' },
+            ]}
+          />
+        }
+      />
+
+      <RuleForm
+        submitLabel="Create Rule"
+        onSubmit={handleSubmit}
+        onCancel={() => router.push(`/${params.locale}/prm/rules`)}
+      />
     </div>
   );
 }

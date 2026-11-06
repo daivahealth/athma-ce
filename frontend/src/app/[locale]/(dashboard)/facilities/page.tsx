@@ -8,6 +8,8 @@ import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facil
 import { getSession } from '@/lib/api/client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
+import { Building2 } from 'lucide-react';
 
 interface FacilityRow {
   id: string;
@@ -65,13 +67,17 @@ export default function FacilitiesPage() {
 
   return (
     <div className="space-y-6">
-      <ResourceTable
+      <PageHeader
         title="Facilities"
-        cta={(
-          <Button asChild size="sm">
+        subtitle="Hospitals, clinics and other care sites in this tenant"
+        icon={Building2}
+        actions={
+          <Button asChild>
             <Link href={`/${params.locale}/facilities/new`}>Create Facility</Link>
           </Button>
-        )}
+        }
+      />
+      <ResourceTable
         columns={columns}
         data={facilityRows}
         isLoading={isLoading}

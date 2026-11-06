@@ -6,7 +6,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "db:push": "prisma db push --schema backend/prisma/schema.prisma",
-    "db:generate": "prisma generate --schema backend/prisma/schema.prisma"
+    "db:generate": "prisma generate --schema backend/prisma/schema.prisma",
+    "test": "../../backend/node_modules/.bin/tsx --test backend/src/*.test.ts"
   },
   "devDependencies": {
     "prisma": "~6.19.0"

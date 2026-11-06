@@ -38,6 +38,25 @@ All staging, tumor board, and care plan records link back to a `CancerDiagnosis`
 | Treatment Schedules | `/oncology/treatment-plans` | Patient schedules generated from a protocol — cycles, dates, doses |
 | Day-care Worklist | `/oncology/day-care`          | All patients due on a date: administration sheets + pharmacy prep |
 
+### Patient cancer cockpit
+
+`/oncology/registry/:patientId` (opened by clicking a registry row) is the patient's oncology overview:
+
+- **Header:** name, MRN, age and sex, cancer type, stage and treatment intent. Links go to the active treatment schedule, the care plan and the timeline.
+- **Disease overview:**
+  - *Diagnosis:* site, histology, grade, ICD and morphology codes, and biomarkers.
+  - *Stage:* stage group with an I–IV meter, TNM boxes and the staging basis.
+  - *Status:* clinical and metastatic status, ECOG, intent, and the care plan's steps with their progress.
+- **Treatment journey:** one lane per modality on a shared time axis.
+  - Surgery comes from OT bookings, chemotherapy from treatment schedules (filled by cycles completed), and radiotherapy from prescriptions (filled by fractions delivered, from the list endpoint's `delivered_fractions`).
+  - Endocrine and targeted therapy come from the care plan and run open-ended.
+  - Diagnosis and tumour-board markers sit on the axis, with a today line. Hovering or focusing a bar shows its details.
+- **Tumour markers:** one chart per marker from `GET /registry/:patientId/labs/history`. Different units are never put on one axis. Each chart shows the upper limit of normal dashed and chemotherapy/radiotherapy periods shaded, with the latest value, a normal/above flag, change from peak and a value table.
+- **Next up:** upcoming chemo days, radiotherapy fractions or start, surgery, tumour boards and care-plan milestones, soonest first.
+- **History:** staging, tumour-board decisions, surgical history and care plans.
+
+The primary diagnosis is the active one, else the first. Staging and care plans are taken from that diagnosis.
+
 ---
 
 ## Data Model
@@ -157,7 +176,7 @@ maintenance` × 11.
 
 ### `chemo_orders`
 
-Per-patient order instance derived from a protocol. Status workflow: `draft → pending → approved → verified → in_progress → completed | held | cancelled`.
+Per-patient order instance derived from a protocol. Status workflow and the safety rules on each transition are described in [Phase 2 Chemo Workflow](#phase-2-chemo-workflow-ascoons-safety-standards).
 
 | Column | Type | Notes |
 |--------|------|-------|
@@ -176,12 +195,12 @@ Per-patient order instance derived from a protocol. Status workflow: `draft → 
 | `renal_adjustment_grade` | VARCHAR(10)? | normal, mild, moderate, severe |
 | `dose_adjustments` | JSONB | Manual per-drug adjustments with reason |
 | `pre_chemo_checklist` | JSONB | Consent, allergy review, lab review checkboxes + dates |
-| `ordering_provider` | UUID? | Physician who ordered |
+| `ordering_provider` | UUID | Signed-in user who created the order (never client-supplied) |
 | `approved_by` | UUID? | Pharmacist / second-physician sign-off |
 | `approved_at` | TIMESTAMPTZ? | |
 | `verified_by` | UUID? | First nurse verification |
 | `verified_at` | TIMESTAMPTZ? | |
-| `second_verified_by` | UUID? | Second nurse (ASCO/ONS dual-check) |
+| `second_verified_by` | UUID? | Independent second verifier (user id); required under dual sign-off |
 | `administered_by` | UUID? | Nurse who administered |
 | `administered_at` | TIMESTAMPTZ? | |
 | `adverse_reactions` | JSONB | Array of `{ drug, ctcaeGrade, type, onsetTime, description }` |
@@ -225,7 +244,19 @@ keeps the full dose and the item carries a warning.
 schedule or starts one), `/oncology/treatment-plans/new` (care plan, protocol, C1D1 date, height,
 weight, CrCl → preview → generate), `/oncology/treatment-plans/[id]` (cycle cards with delay and
 dose level, day rows with day sheet and order actions), `/oncology/day-care` (date worklist:
-per-patient administration sheets with timed sequence, and a pharmacy prep table with drug totals).
+a board, per-patient administration sheets with timed sequence, and a pharmacy prep table with
+drug totals).
+
+**Day-care board** (the worklist's first tab):
+
+- **Summary:** patients today, done, infusing now, still to treat, labs to clear, and oral dispenses.
+- **Where everyone is:** one lane per stage, worked out from the treatment day and its chemo order: to order (no order) → awaiting approval (pending/draft) → pharmacy check (approved) → ready to give (verified) → infusing (in progress) → done (given/completed), plus held. Each card shows the protocol and cycle/day, dose level, chair time or "Oral — dispense", and a lab gate from the order's pre-chemo checklist (labs OK / pending / out of range). Cards link to the order, or to the schedule when there is no order.
+- **Chair plan:** a planned chair-by-time grid (units open 08:00, first chairs 08:30, close 18:00, 15-minute turnover). Chair time is infusion durations + hydration hours + 30 minutes for pre-meds + 15 minutes to settle.
+  - Patients who are done or infusing are placed first, then the rest by stage, longest first, each in the first chair to free up.
+  - The chair count starts at enough for ~85% use and can be changed.
+  - Overruns past 18:00 are flagged, and a now line shows on today.
+  - It is a planning aid: chairs are not stored.
+- **Big screen:** shows the board full screen for a nurses'-station display, with larger type and a clock, refreshing every minute (`useTreatmentDays(…, refetchInterval)`). Where the browser refuses full screen, it fills the window instead. Esc or Exit closes it.
 
 **Colour:** statuses (care plan, order, plan, day, radiation) render as tone badges from one
 vocabulary in `frontend/src/plugins/oncology/lib/oncology-tone.ts`; care-plan modalities and
@@ -308,6 +339,56 @@ If oncology API calls return **403 Forbidden**:
 
 See also: [Troubleshooting Plugin Activation](../../troubleshooting/README.md)
 
+### Demo cohort
+
+`seed/plugins/oncology/10-14-*.sql` hand-build five reference patients.
+`seed/plugins/oncology/30-demo-cohort.sql` is an **opt-in** seed (not in
+`run-seeds.sh`). It gives every other patient of the demo tenant a
+deterministic cancer journey, usually the 900 `MRN-DEMO-*` patients from
+`clinical/27-demo-activity.sql`. Run it after that file, on the same day.
+
+- **Case mix**: 29 templates weighted toward the case mix of an Indian
+  tertiary cancer centre, by sex and age band. Examples: oral cavity and
+  laryngeal HNSCC, breast (HR+, HER2+ and triple negative), cervix,
+  oesophagus, stomach, colorectal and rectum, gallbladder, liver, pancreas,
+  NSCLC and SCLC, ovary, endometrium, thyroid, prostate, bladder, DLBCL,
+  Hodgkin, myeloma, ALL, AML, CML, GBM and testis. Each template carries
+  coded site, morphology, ICD-10, SNOMED, grade, biomarker profiles, a
+  tumour marker and a stage-specific pathway (for example surgery then
+  chemoradiation, neoadjuvant chemotherapy then surgery, definitive CRT,
+  palliative chemotherapy, or a TKI for EGFR/ALK-positive lung).
+- **Records per patient**: a diagnosis, clinical staging (plus pathological
+  staging after surgery), a Wednesday tumour-board case, and a care plan with
+  modalities and milestones. Systemic therapy gets a treatment plan with
+  cycles and days. Doses are computed as in `treatment-schedule.ts`,
+  including dose levels and delays. It also writes chemo orders,
+  radiotherapy (prescription → simulation → plan → fractions → weekly reviews
+  → completion summary), and timeline events. Surgery is booked in the OT
+  module (request, schedule and signed report). Tumour markers are written as
+  FINAL lab reports with the oncology lab catalogue's LOINC codes, so the
+  registry's "Recent Oncology Labs" panel shows them, and mirrored into
+  `clinical_observations`. The patient's existing encounters also get
+  oncology chief complaints and ICD-10 diagnoses.
+- **Stored formats** follow the app: TNM categories without the letter
+  (`4a`, `2b`, `0`, because the UI adds T/N/M), and clock times in Asia/Kolkata.
+  Radiotherapy and chemo schedules are only written once they would exist in
+  practice: a radiotherapy prescription about 2 weeks before the first
+  fraction, a schedule a few days before cycle 1. Later ones appear only as
+  planned modalities in the care plan.
+- **Relative to today**: patients registered in the last ~12 days are still
+  in work-up (provisional diagnosis, tumour board scheduled). Today's day-care
+  list is a mid-morning mix: some given, some infusing, the rest pending,
+  approved or verified, and a few with labs out of range. The next few days
+  are partly ordered, and some patients are mid-radiotherapy. Older patients are in
+  surveillance, remission, palliative care or progression.
+- **Extra protocols**: the seed adds five protocols if they are missing:
+  `CisRT-Weekly`, `CROSS`, `Metronomic-HN` (oral metronomic methotrexate +
+  celecoxib), `AML-7+3` and `Stupp-TMZ`.
+- **Re-running** is safe. Ids derive from `onco-demo:<key>`, and a re-run
+  first deletes the earlier run's rows and rows of patients that no longer
+  exist. Patients with a hand-built diagnosis are not touched.
+
+
 ---
 
 ## Frontend Structure
@@ -323,12 +404,14 @@ frontend/src/plugins/oncology/
     ├── TreatmentIntentBadge.tsx      # Colored badge component
     ├── protocol-builder/             # Phase builder, regimen matrix, schedule preview
     ├── treatment-schedule/DaySheet.tsx # Timed day sheet (checks, sequence, supportive care)
-    └── shared.tsx                    # LoadingState, EmptyState, StatusBadge
+    ├── cockpit/                      # Patient cockpit: DiseaseOverview, TreatmentJourney, MarkerTrends, NextUp
+    ├── StaffSelect.tsx               # Staff picker (tumour-board attendees)
+    └── shared.tsx                    # LoadingState, EmptyState, StatusBadge, PatientCell
 
 frontend/src/app/[locale]/(dashboard)/oncology/
 ├── registry/
 │   ├── page.tsx                      # Registry list with AddDiagnosisSheet
-│   └── [patientId]/page.tsx          # Full patient cancer profile
+│   └── [patientId]/page.tsx          # Patient cancer cockpit (see below)
 ├── staging/
 │   ├── page.tsx                      # Tumor staging list
 │   ├── new/page.tsx
@@ -353,7 +436,7 @@ frontend/src/app/[locale]/(dashboard)/oncology/
 │   ├── page.tsx                      # Schedule list (?carePlanId= redirects)
 │   ├── new/page.tsx                  # Start schedule from a care plan
 │   └── [id]/page.tsx                 # Cycle/day schedule, delay, dose level, day sheet, orders
-└── day-care/page.tsx                 # Date worklist: administration + pharmacy prep
+└── day-care/page.tsx                 # Date worklist: board (plugins/oncology/components/day-care/), administration, pharmacy prep
 ```
 
 ---
@@ -432,19 +515,56 @@ The Phase 2 chemotherapy module implements ASCO/ONS Chemotherapy Administration 
 | Dose calculation (BSA/weight) | Auto-calculated in orders/new; stored in `dose_adjustments` |
 | Organ function dose adjustment | `hepatic_adjustment_grade`, `renal_adjustment_grade`; manual adjustment rows |
 | Lab prerequisites before cycle | `lab_prerequisites` on protocol; checklist review on order |
-| Informed consent documented | Pre-chemo checklist checkbox + consent date in `pre_chemo_checklist` JSON |
-| Allergy check | Manual review captured in `pre_chemo_checklist` |
-| Pharmacist/second-physician sign-off | `approveChemoOrder` → `approved_by`, `approved_at` |
-| Nurse bedside verification (dual-check) | `verifyChemoOrder` → `verified_by`, optional `second_verified_by` |
+| Informed consent documented | Pre-chemo checklist checkbox + consent date in `pre_chemo_checklist` JSON; **required before approval** |
+| Allergy check | Manual review captured in `pre_chemo_checklist`; **required before approval** (not yet linked to the patient allergy list) |
+| Pharmacist/second-physician sign-off | `approveChemoOrder` → `approved_by`, `approved_at`; approver must differ from the ordering provider |
+| Nurse bedside verification (dual-check) | `verifyChemoOrder` → `verified_by` (must differ from approver), `second_verified_by` (independent user; required under dual sign-off) |
 | Administration time documentation | `administration_details` JSON per drug |
 | Adverse event capture (CTCAE) | `adverse_reactions` JSON with CTCAE grade 1–5 |
-| Feature flag for dual-sign | `oncology.chemo.requireDualSign` in `athma-plugin.json` |
+| Dual sign-off switch | `oncology.chemo.require_dual_sign` config key (declared in `athma-plugin.json`, default `true`) |
 
 **Order status workflow:**
 ```
 draft → pending → approved → verified → in_progress → completed
-                                                   ↘ held
-                                                   ↘ cancelled
+pending | approved | verified | in_progress → held → (resume) pending
+draft | pending | approved | verified | held → cancelled
+```
+
+**Server-side enforcement.** The rules live in `backend/src/chemo-order-rules.ts` (pure functions, unit-tested
+with `npm test` in `plugins/oncology`) and are applied by `OncologyService` before every write. Each
+`UPDATE` also re-checks the expected status in its `WHERE` clause so concurrent transitions cannot both win.
+
+- New orders can only be created as `pending` (default) or `draft`; `ordering_provider` is always the
+  signed-in user. The protocol must be active.
+- Approval requires a different user from the ordering provider and a complete pre-chemo checklist:
+  `consentDocumented`, `allergiesReviewed`, `labsReviewed`, `labsWithinRange`, `bsaVerified`, `doseVerified`
+  (`premedicationsOrdered` is optional). Orders created from a treatment day start with an empty
+  checklist, which is completed on the order screen before approval.
+- Verification cannot be done by the approver. `second_verified_by` must be a user id different from the
+  verifier; under dual sign-off it is required and must also differ from the approver and orderer.
+- With dual sign-off on, administration starts only from `verified` with a second verifier recorded; with
+  it off, `approved` orders may also start.
+- `held` orders are resumed to `pending` with all sign-offs cleared, so they are approved and verified again.
+- Completed and cancelled orders cannot be held or cancelled; an `in_progress` order must be held before
+  it can be cancelled.
+
+**Dual sign-off resolution.** `OncologySettingsService` reads `oncology.chemo.require_dual_sign` from
+foundation's public `GET /api/v1/configs/resolve` (tenant-level, cached 60 s per tenant) using `fetch`,
+because the plugin cannot resolve `@zeal/config-client` at runtime. Any failure, missing key or
+non-`false` value means dual sign-off is required (fail closed).
+
+Care plan approval (`approved_by`) and radiation prescription approval (`approved_by` / `approved_at`,
+leaving `prescribed_by` intact) are likewise attributed to the signed-in user only.
+
+**Schema impact.** `radiation_prescriptions` gained nullable `approved_by` and `approved_at` columns.
+Existing databases need a schema push (additive, no data loss; the push is scoped to the
+`plugin_oncology` schema) before approving radiation prescriptions. `db:push` needs
+`CLINICAL_DATABASE_URL`, which is not set in the plugin directory; locally, take it from the clinical
+service's env file:
+
+```bash
+cd plugins/oncology
+CLINICAL_DATABASE_URL="$(grep -E '^CLINICAL_DATABASE_URL=' ../../backend/services/clinical/.env.local | cut -d= -f2-)" npm run db:push
 ```
 
 ## Phase Roadmap
@@ -453,4 +573,4 @@ draft → pending → approved → verified → in_progress → completed
 |-------|-------|--------|
 | Phase 1 | Registry, Diagnosis, Staging, Tumor Board, Care Plan | Complete |
 | Phase 2 | Chemotherapy — ChemoProtocol → consent → lab check → ChemoOrder → administration | Complete |
-| Phase 3 | Radiation Therapy planning and delivery tracking | Planned |
+| Phase 3 | Radiation Therapy — prescription, simulation, planning, fractions, on-treatment review, completion | Implemented (see [API](../../api/ONCOLOGY-API-ENDPOINTS.md); endpoint reference for radiation still to be written) |
