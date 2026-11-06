@@ -23,6 +23,7 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
+  ClipboardPlus,
   ChevronDown,
   Menu,
   CalendarClock,
@@ -104,6 +105,7 @@ const navSections: NavSection[] = [
         labelKey: 'nav.clinical',
         children: [
           { href: '/charting', icon: ClipboardList, labelKey: 'nav.charting' },
+          { href: '/cpoe', icon: ClipboardPlus, labelKey: 'nav.cpoe' },
           { href: '/triage', icon: Activity, labelKey: 'nav.triage' },
         ],
       },

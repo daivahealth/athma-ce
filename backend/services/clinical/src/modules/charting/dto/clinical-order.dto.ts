@@ -52,6 +52,15 @@ export enum CodeSystem {
   LOCAL = 'LOCAL',
 }
 
+// How the order reached the system (CPOE on-behalf entry)
+export enum OrderEntryMode {
+  DIRECT = 'direct',
+  VERBAL = 'verbal',
+  TELEPHONE = 'telephone',
+  WRITTEN = 'written',
+  PROTOCOL = 'protocol',
+}
+
 export enum PackageOrderStatus {
   ORDERED = 'ordered',
   IN_PROGRESS = 'in_progress',
@@ -344,6 +353,15 @@ export class CreateClinicalOrderDto {
   @ApiProperty({ description: 'Staff ID who ordered' })
   @IsUUID("loose" as any)
   orderedBy!: string;
+
+  @ApiPropertyOptional({
+    description:
+      'How the order was received. Use verbal/telephone/written when a nurse or front-desk user enters it on behalf of the ordering physician. Defaults to direct.',
+    enum: OrderEntryMode,
+  })
+  @IsOptional()
+  @IsEnum(OrderEntryMode)
+  orderMode?: OrderEntryMode;
 }
 
 // DTO for updating a clinical order
@@ -405,6 +423,15 @@ export class CreatePackageOrderDto {
   @ApiProperty({ description: 'Staff ID who ordered the package' })
   @IsUUID("loose" as any)
   orderedBy!: string;
+
+  @ApiPropertyOptional({
+    description:
+      'How the order was received. Use verbal/telephone/written when a nurse or front-desk user enters it on behalf of the ordering physician. Defaults to direct.',
+    enum: OrderEntryMode,
+  })
+  @IsOptional()
+  @IsEnum(OrderEntryMode)
+  orderMode?: OrderEntryMode;
 }
 
 // DTO for adding order results
@@ -495,6 +522,12 @@ export class ClinicalOrderResponseDto {
   @ApiProperty()
   orderedAt!: Date;
 
+  @ApiPropertyOptional({ description: 'User ID who entered the order (differs from orderedBy for on-behalf entry)' })
+  enteredBy?: string;
+
+  @ApiPropertyOptional({ enum: OrderEntryMode })
+  orderMode?: string;
+
   @ApiPropertyOptional()
   performedBy?: string;
 
@@ -545,6 +578,12 @@ export class PackageOrderResponseDto {
   @ApiProperty()
   orderedAt!: Date;
 
+  @ApiPropertyOptional({ description: 'User ID who entered the order (differs from orderedBy for on-behalf entry)' })
+  enteredBy?: string;
+
+  @ApiPropertyOptional({ enum: OrderEntryMode })
+  orderMode?: string;
+
   @ApiPropertyOptional()
   packageCode?: string;
 
@@ -593,6 +632,12 @@ export class ChartPackageOrderResponseDto {
 
   @ApiProperty()
   orderedAt!: Date;
+
+  @ApiPropertyOptional({ description: 'User ID who entered the order (differs from orderedBy for on-behalf entry)' })
+  enteredBy?: string;
+
+  @ApiPropertyOptional({ enum: OrderEntryMode })
+  orderMode?: string;
 
   @ApiProperty()
   childOrderCount!: number;

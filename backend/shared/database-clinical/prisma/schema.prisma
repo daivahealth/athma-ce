@@ -832,6 +832,9 @@ model ClinicalOrder {
   // Authorship
   orderedBy         String    @map("ordered_by") @db.Uuid
   orderedAt         DateTime  @default(now()) @map("ordered_at") @db.Timestamptz(6)
+  // CPOE on-behalf entry: user who keyed the order (may differ from orderedBy) and how it was received
+  enteredBy         String?   @map("entered_by") @db.Uuid
+  orderMode         String?   @map("order_mode") @db.VarChar(20) // direct, verbal, telephone, written, protocol
   performedBy       String?   @map("performed_by") @db.Uuid
   performedAt       DateTime? @map("performed_at") @db.Timestamptz(6)
 
@@ -1871,6 +1874,8 @@ model PackageOrder {
   notes         String?         @db.Text
   orderedBy     String          @map("ordered_by") @db.Uuid
   orderedAt     DateTime        @default(now()) @map("ordered_at") @db.Timestamptz(6)
+  enteredBy     String?         @map("entered_by") @db.Uuid
+  orderMode     String?         @map("order_mode") @db.VarChar(20)
   createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
 
