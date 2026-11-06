@@ -2,8 +2,8 @@
 title: 'Charting and triage'
 group: 'Clinical care'
 order: 30
-routes: ['/charting', '/triage']
-description: 'Triaging an arrival on the Triage Queue and Triage Assessment, then charting the encounter in Smart Charting: notes, diagnoses, orders, prescriptions, AI coding suggestions and structured forms.'
+routes: ['/charting', '/cpoe', '/triage']
+description: 'Triaging an arrival on the Triage Queue and Triage Assessment, charting the encounter in Smart Charting (notes, diagnoses, orders, prescriptions, AI coding suggestions and structured forms), and placing orders on behalf of a physician in Order Entry (CPOE).'
 ---
 
 Both screens sit under **Clinical** in the sidebar: **Clinical Charting** and **Triage**. They work on
@@ -152,6 +152,51 @@ The differences:
     chart (see [Insert an AI draft](#insert-an-ai-draft)).
   - **Open charting** opens the charting workspace. **It is greyed out for a FINISHED encounter**, so a
     closed encounter cannot be charted from here.
+
+## Order Entry (CPOE)
+
+**Order Entry (CPOE)** (`/cpoe`) is for placing lab, imaging, procedure and package orders without opening
+the charting workspace. It is meant for nurses and front-desk staff who enter an order on a physician's
+behalf, for example a verbal or telephone order, or a written order brought to the desk.
+
+**Go to:** **Clinical** > **Order Entry (CPOE)** in the sidebar.
+
+The list works like **Clinical Charting**: the same search, status and date filters. Each row has
+**Place orders**, which is greyed out for a **FINISHED** or **CANCELLED** encounter.
+
+### Place an order on behalf of a physician
+
+1. Press **Place orders** on the encounter. The patient's name, MRN, gender / age and the encounter number
+   show at the top right.
+2. Check the **Ordering physician**. It starts as the encounter's physician (marked **Encounter
+   physician**). Press **Change** and search by name to pick a different physician.
+3. Choose **Order received as**: **Verbal order**, **Telephone order**, **Written order**, **Standing
+   protocol**, or **Direct (I am the ordering physician)**. There is no default; you must choose.
+4. For a verbal or telephone order, tick **I read the order back to _physician_ and they confirmed it.**
+5. Set the **Priority** (**Routine**, **Urgent** or **STAT**) and, if you have one, a **Clinical
+   indication**. Both apply to every order you place until you change them.
+6. Under **Add orders**, choose **Lab**, **Imaging**, **Procedure** or **Package** and search the
+   catalogue. Click a match to place it.
+
+The search stays hidden until steps 2 to 4 are done; the box tells you what is missing.
+
+**Check:** the toast says **Order placed** ("_name_ for _physician_.") or **Package ordered**, and the
+order appears under **Orders on this encounter** with its priority, a **Verbal · on behalf** (or
+Telephone, Written, Protocol) tag, the ordering physician and the time.
+
+The order is recorded under the ordering physician, and your own login is recorded as the person who
+entered it. Orders placed here also show in the Smart Charting **Orders** block, and orders placed from
+charting show in this list.
+
+To take an order off, press **Remove** (single orders without a result) or **Cancel** (packages). Orders
+that have a result show a **Results** link instead.
+
+**If instead**:
+
+- "This encounter is closed." means the encounter is finished or cancelled; orders cannot be added.
+- An item already on the encounter is greyed out in the search, or the toast reads **Already ordered** or
+  **Package already ordered**.
+- **Unable to place order** or **Unable to order package** gives the server's reason.
 
 ## The charting workspace
 
@@ -399,5 +444,7 @@ are gone. The back arrow returns you to the charting workspace.
 - **Order priority and prescription details.** Smart Charting places every order as **Routine** and
   every prescription with the catalogue's default dose, route and frequency. There is no way to change
   these on this screen.
-- **Author.** Notes, diagnoses, orders and prescriptions are recorded under the encounter's primary
-  clinician, not under the person signed in.
+- **Author.** In Smart Charting, notes, diagnoses, orders and prescriptions are recorded under the
+  encounter's primary clinician. To record a different ordering physician, use **Order Entry (CPOE)**.
+- **Co-signing on-behalf orders.** Verbal and telephone orders placed in Order Entry are not yet sent to
+  the physician to sign. The read-back tick is a prompt only and is not saved.

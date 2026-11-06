@@ -42,6 +42,15 @@ export enum OrderPriority {
   STAT = 'stat',
 }
 
+/** How an order reached the system — non-direct modes mark on-behalf (CPOE) entry. */
+export enum OrderEntryMode {
+  DIRECT = 'direct',
+  VERBAL = 'verbal',
+  TELEPHONE = 'telephone',
+  WRITTEN = 'written',
+  PROTOCOL = 'protocol',
+}
+
 export enum OrderStatus {
   ORDERED = 'ordered',
   IN_PROGRESS = 'in_progress',
@@ -200,6 +209,8 @@ export interface ClinicalOrder {
   status: OrderStatus;
   orderedBy: string;
   orderedAt: Date | string;
+  enteredBy?: string;
+  orderMode?: OrderEntryMode | string;
   scheduledFor?: Date | string;
   performedBy?: string;
   performedAt?: Date | string;
@@ -281,6 +292,7 @@ export interface CreateClinicalOrderInput {
   orderNameAr?: string;
   priority: OrderPriority;
   orderedBy: string;
+  orderMode?: OrderEntryMode;
   specialInstructions?: string;
   clinicalIndication?: string;
   packageOrderId?: string;
@@ -312,6 +324,7 @@ export interface CreatePackageOrderInput {
   specialInstructions?: string;
   notes?: string;
   orderedBy: string;
+  orderMode?: OrderEntryMode;
 }
 
 export interface PackageOrder {
@@ -345,6 +358,8 @@ export interface ChartPackageOrder {
   status: PackageOrderStatus;
   orderedBy: string;
   orderedAt: Date | string;
+  enteredBy?: string;
+  orderMode?: OrderEntryMode | string;
   childOrderCount: number;
   childTypeSummary: ChildTypeSummary;
   clinicalOrders: ClinicalOrder[];

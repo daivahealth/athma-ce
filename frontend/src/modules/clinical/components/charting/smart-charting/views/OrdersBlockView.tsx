@@ -18,8 +18,11 @@ import {
   useDeleteClinicalOrder,
 } from '@/modules/clinical/hooks/use-charting';
 import { useEncounter } from '@/modules/clinical/hooks/use-encounters';
-import { OrderType, OrderPriority } from '@/modules/clinical/types/charting';
-import type { ChartPackageOrder, ClinicalOrder, CodeSystem } from '@/modules/clinical/types/charting';
+import type { ChartPackageOrder, ClinicalOrder } from '@/modules/clinical/types/charting';
+import {
+  buildClinicalOrderPayload,
+  buildPackageOrderPayload,
+} from '@/modules/clinical/utils/build-order-payload';
 import { useToast } from '@/components/ui/use-toast';
 import { useSmartChartingContext } from '../SmartChartingEditor';
 import { BLOCK_COLORS } from '../types';
@@ -104,13 +107,13 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
       }
 
       try {
-        const packageOrder = await createPackageOrder({
-          packageId: selection.id,
-          encounterId,
-          patientId,
-          priority: OrderPriority.ROUTINE,
-          orderedBy: encounter.primaryStaffId,
-        });
+        const packageOrder = await createPackageOrder(
+          buildPackageOrderPayload(selection, {
+            encounterId,
+            patientId,
+            orderedBy: encounter.primaryStaffId,
+          }),
+        );
 
         toast({
           title: 'Package added',
@@ -136,80 +139,11 @@ export function OrdersBlockView({ deleteNode }: NodeViewProps) {
     }
 
     try {
-      const payload = {
+      const payload = buildClinicalOrderPayload(selection, {
         encounterId,
         patientId,
-        orderType:
-          selection.type === 'lab'
-            ? OrderType.LAB
-            : selection.type === 'imaging'
-            ? OrderType.IMAGING
-            : OrderType.PROCEDURE,
-        orderCode: selection.code,
-        codeSystem: selection.codeSystem as CodeSystem | string,
-        orderName: selection.label,
-        priority: OrderPriority.ROUTINE,
         orderedBy: encounter.primaryStaffId,
-        ...(selection.type === 'lab'
-          ? {
-              labTests: [
-                {
-                  labTestMasterId: selection.id,
-                  testCode: selection.code,
-                  codeSystem: selection.codeSystem as CodeSystem | string,
-                  testName: selection.label,
-                  loincCode: selection.codeSystem === 'LOINC' ? selection.code : undefined,
-                  cptCode: selection.codeSystem === 'CPT' ? selection.code : undefined,
-                  quantity: 1,
-                  sortOrder: 0,
-                },
-              ],
-            }
-          : selection.type === 'imaging'
-          ? {
-                  imagingDetails: [
-                    {
-                      imagingStudyMasterId: selection.id,
-                      studyCode: selection.code,
-                      codeSystem: selection.codeSystem as CodeSystem | string,
-                      studyName: selection.label,
-                      cptCode: selection.imagingMeta?.cptCode ?? undefined,
-                      modality: selection.imagingMeta?.modality,
-                      bodyPart: selection.imagingMeta?.bodyPart,
-                      contrastRequired: selection.imagingMeta?.contrastRequired,
-                      contrastType: selection.imagingMeta?.contrastType ?? undefined,
-                      preparationInstructions:
-                        selection.imagingMeta?.preparationInstructions ?? undefined,
-                      quantity: 1,
-                      sortOrder: 0,
-                    },
-              ],
-            }
-          : selection.type === 'procedure'
-          ? {
-                  procedureDetails: [
-                    {
-                      procedureMasterId: selection.id,
-                      procedureCode: selection.code,
-                      codeSystem: selection.codeSystem as CodeSystem | string,
-                      procedureName: selection.label,
-                      cptCode: selection.procedureMeta?.cptCode ?? undefined,
-                      icd10PcsCode: selection.procedureMeta?.icd10PcsCode ?? undefined,
-                      procedureCategory: selection.procedureMeta?.procedureCategory ?? undefined,
-                      bodySystem: selection.procedureMeta?.bodySystem ?? undefined,
-                      anesthesiaType: selection.procedureMeta?.anesthesiaType ?? undefined,
-                      facilityRequired: selection.procedureMeta?.facilityRequired ?? undefined,
-                      estimatedDurationMinutes: selection.procedureMeta?.estimatedDurationMinutes ?? undefined,
-                      preparationInstructions:
-                        selection.procedureMeta?.preparationInstructions ?? undefined,
-                      consentRequired: selection.procedureMeta?.consentRequired,
-                      quantity: 1,
-                      sortOrder: 0,
-                },
-              ],
-            }
-          : {}),
-      };
+      });
 
       await createOrder(payload);
       toast({

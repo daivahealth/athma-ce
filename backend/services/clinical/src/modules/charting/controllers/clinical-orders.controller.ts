@@ -10,6 +10,7 @@ import {
     Query,
     Headers,
     UseGuards,
+    Req,
   } from '@nestjs/common';
   import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
   import { ClinicalOrdersService } from '../services/clinical-orders.service';
@@ -31,6 +32,14 @@ import {
     CLINICAL_ORDER_CANCEL,
   } from '@zeal/contracts';
 
+  type AuthedRequest = { user?: { userId?: string }; headers: Record<string, string | string[] | undefined> };
+
+  /** Entered-by comes from the verified JWT (set by JwtAuthGuard), falling back to x-user-id. */
+  const resolveEnteredBy = (req: AuthedRequest): string | undefined => {
+    const header = req.headers['x-user-id'];
+    return req.user?.userId ?? (Array.isArray(header) ? header[0] : header);
+  };
+
   @ApiTags('Clinical Orders')
   @ApiBearerAuth()
   @Controller('clinical-orders')
@@ -45,8 +54,9 @@ import {
     async create(
       @Headers('x-tenant-id') tenantId: string,
       @Body() dto: CreateClinicalOrderDto,
+      @Req() req: AuthedRequest,
     ) {
-      return this.clinicalOrdersService.create(tenantId, dto);
+      return this.clinicalOrdersService.create(tenantId, dto, resolveEnteredBy(req));
     }
 
     @Post('package-orders')
@@ -56,8 +66,9 @@ import {
     async createPackageOrder(
       @Headers('x-tenant-id') tenantId: string,
       @Body() dto: CreatePackageOrderDto,
+      @Req() req: AuthedRequest,
     ) {
-      return this.clinicalOrdersService.createPackageOrder(tenantId, dto);
+      return this.clinicalOrdersService.createPackageOrder(tenantId, dto, resolveEnteredBy(req));
     }
 
     @Get('package-orders/:id')
