@@ -6,21 +6,37 @@ routes: ['/rcm-setup']
 description: 'RCM Setup: payers, billing items (the charge master), charge posting rules, fee schedules, payer contracts, and catalog mappings that turn clinical orders into charges.'
 ---
 
-**RCM Setup** (`/rcm-setup`, under **Administration** in the sidebar) is where the billing team sets
-up what everything costs and who pays. It opens on six tiles:
-
-- **Payers**: insurers, government schemes and other payers.
-- **Billing items**: the charge master, every billable code and its list price.
-- **Charge posting rules**: how clinical events become charges automatically.
-- **Fee schedules**: base rates and payer price lists.
-- **Payer contracts**: what each payer has agreed to pay.
-- **Catalog mappings**: which billing item each clinical catalog item charges.
-
-Set them up in roughly this order: billing items first, then catalog mappings so orders produce
-charges, then payers, fee schedules and contracts for insured patients. The screens that use them
-are described in [Billing](billing.md) and [Revenue cycle and claims](revenue-cycle.md).
+**RCM Setup** is where the billing team sets up what everything costs and who pays: payers, the
+charge master, the rules that post charges, price lists, payer contracts and catalog mappings. The
+screens that use these settings are described in [Billing](billing.md) and
+[Revenue cycle and claims](revenue-cycle.md).
 
 Prices show in your organisation's **finance.currency** (AED when none is set).
+
+## The RCM Setup page
+
+**RCM Setup** (`/rcm-setup`) is a menu page with a tile for each setup screen. It has no figures or
+lists of its own.
+
+**Go to:** **Administration** > **RCM Setup** in the sidebar.
+
+The page is headed **RCM Setup**. Under it are six tiles, two to a row on a wide screen. Click
+anywhere on a tile to open that screen:
+
+| Tile | What it holds | Section |
+| --- | --- | --- |
+| **Payers** | Insurers, government schemes and other payers. | [Payers](#payers) |
+| **Billing items** | The charge master: every billable code and its list price. | [Billing items](#billing-items) |
+| **Charge posting rules** | How clinical events become charges automatically. | [Charge posting rules](#charge-posting-rules) |
+| **Fee schedules** | Base rates and payer price lists. | [Fee schedules](#fee-schedules) |
+| **Payer contracts** | What each payer has agreed to pay. | [Payer contracts](#payer-contracts) |
+| **Catalog mappings** | Which billing item each clinical catalog item charges. | [Catalog mappings](#catalog-mappings) |
+
+Set them up in roughly this order: billing items first, then catalog mappings so orders produce
+charges, then payers, fee schedules and contracts for insured patients.
+
+The line under the heading mentions clearinghouses and billing preferences, but neither has a
+screen here yet.
 
 ## Payers
 
@@ -207,16 +223,44 @@ Open a contract (`/rcm-setup/payer-contracts/{id}`): **Contract summary**, then 
 
 ## Catalog mappings
 
-A catalog mapping links a clinical catalog item (a medication, lab test, imaging study, procedure,
-package or administrative service, set up under [Administration](administration.md)) to the
-billing item it charges. When the item is ordered or dispensed, the mapping decides which billing
-item is charged and how many. Without a mapping, an order produces no automatic charge.
+**Catalog Mappings** (`/rcm-setup/catalog-mappings`) lists the links between clinical catalog items
+and the billing items they charge. A catalog mapping links a clinical catalog item (a medication,
+lab test, imaging study, procedure, package or administrative service, set up under
+[Administration](administration.md)) to a billing item. When the item is ordered or dispensed, the
+mapping decides which billing item is charged and how many. Without a mapping, an order produces no
+automatic charge.
 
-**Catalog Mappings** (`/rcm-setup/catalog-mappings`) lists the mappings: **Catalog item** (type and
-ID), **Billing item** (description and code), **Flags**, **Qty**, **Status** and **Effective**
-dates. Tiles count **Total mappings**, **Primary mappings** and **Require approval**. Filter by
-**Catalog type**, **Status**, **Primary** (**Primary only** or **Secondary only**) or a **Billing
-item ID**.
+**Go to:** **Administration** > **RCM Setup**, then the **Catalog mappings** tile.
+
+At the top right, **Suggested** opens [Suggested mappings](#suggested-mappings) and **New Mapping**
+opens [Adding a mapping](#adding-a-mapping).
+
+Three tiles count the mappings the filters currently show: **Total mappings**, **Primary mappings**
+and **Require approval**. They change as you change the filters, so they are not totals for the
+whole organisation unless every filter is at **All**.
+
+**Filters**:
+
+- **Catalog type**: **All types**, or one of **Medication**, **Lab test**, **Imaging study**,
+  **Procedure**, **Package** or **Administrative service**.
+- **Status**: **All**, **Active** or **Inactive**. It starts at **Active**, so deactivated mappings
+  are hidden until you change it.
+- **Primary**: **All**, **Primary only** or **Secondary only**.
+- **Billing item ID**: paste a billing item's internal ID (**Filter by billing item UUID**) to see
+  everything mapped to it. It does not search by code or name.
+
+The table, headed **Catalog Mappings**, has these columns:
+
+| Column | What it shows |
+| --- | --- |
+| **Catalog item** | The catalog type, with the catalog item's internal ID under it. The item's name is not shown here; open the mapping to see it. |
+| **Billing item** | The billing item's description and code (its internal ID if the item cannot be found). |
+| **Flags** | **Primary**, **Auto** and **Needs approval** badges, as they apply. |
+| **Qty** | How many of the billing item one order charges (1 when not set). |
+| **Status** | **Active** in green, or **Inactive** in grey. |
+| **Effective** | The start date (a dash when there is none) and, under it, **Ends:** with the expiry date when there is one. |
+
+Press **View** at the end of a row to open [A mapping's record](#a-mappings-record).
 
 | Flag | Meaning |
 | --- | --- |
@@ -226,6 +270,10 @@ item ID**.
 
 One catalog item can map to several billing items, for example a scan with a reading fee and a
 facility fee.
+
+With nothing to show, the table says "No mappings found. Adjust the filters or create a new
+mapping." If the list cannot load, a red box says "Failed to load catalog mappings" with the
+server's reason.
 
 ### Adding a mapping
 

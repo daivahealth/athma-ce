@@ -25,7 +25,9 @@ import {
   Puzzle,
   Check,
   Plus,
+  CircleHelp,
 } from 'lucide-react';
+import { useHelp } from '@/components/help/help-provider';
 import { ThemeToggle } from './theme-toggle';
 import { SidebarTrigger } from './sidebar';
 import { PatientSearch } from './patient-search';
@@ -50,6 +52,7 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   const t = useTranslations();
   const toast = useToast();
   const router = useRouter();
+  const { openHelp } = useHelp();
   const [session, setSession] = useState(getSession());
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [switching, setSwitching] = useState(false);
@@ -147,36 +150,54 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   };
 
   return (
-    <header className="flex h-14 items-center bg-background/95 backdrop-blur-md px-6 border-b border-border sticky top-0 z-40 transition-all">
+    <header className="flex h-14 min-w-0 items-center bg-background/95 backdrop-blur-md px-3 md:px-6 border-b border-border sticky top-0 z-40 transition-all">
       {/* Sidebar toggle (prrapp style): collapses the desktop sidebar, opens the drawer on mobile */}
       <SidebarTrigger onMobileToggle={onSidebarToggle} className="-ml-2" />
-      <div className="mx-3 h-4 w-px shrink-0 bg-sidebar-border" aria-hidden="true" />
+      <div className="mx-2 md:mx-3 h-4 w-px shrink-0 bg-sidebar-border" aria-hidden="true" />
 
-      <div className="flex flex-1 items-center justify-between gap-4">
+      {/* min-w-0 lets the search shrink on phones instead of pushing the header past the viewport */}
+      <div className="flex min-w-0 flex-1 items-center justify-between gap-2 md:gap-4">
         {/* Spacer for left side balance */}
         <div className="hidden lg:flex flex-1" />
 
         {/* Center Search Area */}
-        <div className="flex flex-1 lg:flex-none w-full lg:w-auto items-center justify-center gap-2">
-          <div className="w-full lg:w-[450px]">
+        <div className="flex min-w-0 flex-1 lg:flex-none w-full lg:w-auto items-center justify-center gap-2">
+          <div className="min-w-0 w-full lg:w-[450px]">
             <PatientSearch locale={locale} />
           </div>
-          <Button asChild className="whitespace-nowrap bg-gradient-to-b from-primary/90 to-primary shadow-sm border border-primary/20 hover:shadow-md transition-all">
-            <Link href={`/${locale}/patients/new`}>
-              <Plus className="mr-2 h-4 w-4" />
-              New Patient
+          <Button asChild className="shrink-0 whitespace-nowrap px-2.5 sm:px-4 bg-gradient-to-b from-primary/90 to-primary shadow-sm border border-primary/20 hover:shadow-md transition-all">
+            <Link href={`/${locale}/patients/new`} aria-label="New Patient">
+              <Plus className="h-4 w-4 sm:mr-2" />
+              {/* Icon-only below sm so the search keeps usable width on phones */}
+              <span className="hidden sm:inline">New Patient</span>
             </Link>
           </Button>
         </div>
 
-        <div className="flex flex-1 items-center justify-end gap-2">
-          {/* Theme Toggle */}
-          <ThemeToggle />
+        <div className="flex shrink-0 lg:flex-1 items-center justify-end gap-1 sm:gap-2">
+          {/* Theme toggle and page help are hidden below sm to fit a 375px phone;
+              the sidebar's Help Centre stays reachable from the mobile drawer */}
+          <div className="hidden sm:flex items-center gap-2">
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
+            {/* Help for the screen on hand, in a side panel; the sidebar's Help Centre has the whole manual */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={openHelp}
+              title="Help for this page (?)"
+              aria-label="Help for this page"
+              aria-keyshortcuts="?"
+            >
+              <CircleHelp className="h-5 w-5" />
+            </Button>
+          </div>
 
           {/* Notifications */}
           <NotificationCenter />
 
-          <Separator orientation="vertical" className="h-6" />
+          <Separator orientation="vertical" className="hidden sm:block h-6" />
 
           {/* Settings Menu */}
           <DropdownMenu>

@@ -12,8 +12,7 @@ from a **template**, or create a **task** for staff. This page covers the day-to
 behind them.
 
 The **Patient Engagement** section of the sidebar is shown when your organisation has patient engagement
-switched on. It lists three screens: **Events**, **Tasks** and **Messages**. Opening `/prm` on its own takes
-you straight to **Events**.
+switched on. It lists three screens: **Events**, **Tasks** and **Messages**.
 
 The setup screens (**Rules**, **Templates**, **Preferences**, **Provider callbacks** and **Webhook tester**)
 are not in that section. You reach them from **PE Setup**, under **Administration** in the sidebar, which is
@@ -32,7 +31,8 @@ While it looks, the box says "Searching patients...". If nothing matches it says
 ## Events
 
 **PRM Events** (`/prm/events`) lists the events the engagement service has received, across all patients,
-25 to a page.
+25 to a page. Opening `/prm` on its own brings you here, as there is no separate Patient Engagement home
+page.
 
 **Filters**:
 

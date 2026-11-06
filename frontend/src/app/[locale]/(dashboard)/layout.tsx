@@ -48,7 +48,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           onClose={() => setIsMobileSidebarOpen(false)}
         />
         
-        <div className="flex flex-1 flex-col bg-background/50">
+        {/* min-w-0: a flex child defaults to min-width:auto, so wide page content would
+            otherwise stretch this column (and the topbar) past a phone viewport */}
+        <div className="flex min-w-0 flex-1 flex-col bg-background/50">
           <Topbar 
             locale={locale} 
             onSidebarToggle={handleMobileToggle}

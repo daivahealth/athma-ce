@@ -23,8 +23,9 @@ function isTypingTarget(target: EventTarget | null): boolean {
 
 /**
  * Contextual help for the app shell: `?` from anywhere that is not a text
- * field, or the sidebar's Help item, opens the manual page for the screen the
- * user is on. Capture phase so a focused menu item cannot swallow the key.
+ * field, or the topbar's help button, opens the manual page for the screen the
+ * user is on, in a side panel. (The sidebar's Help Centre link is the whole
+ * manual.) Capture phase so a focused menu item cannot swallow the key.
  */
 export function HelpProvider({ locale, children }: { locale: string; children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);

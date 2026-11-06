@@ -96,7 +96,7 @@ export function PatientSearch({ locale }: PatientSearchProps) {
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search patients by name, MRN, phone"
-            className="pl-9 pr-12 bg-card/50 border-border/50 focus-visible:bg-background transition-all shadow-sm hover:shadow-md"
+            className="pl-9 pr-3 sm:pr-12 bg-card/50 border-border/50 focus-visible:bg-background transition-all shadow-sm hover:shadow-md"
           />
           <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden h-5 select-none items-center gap-1 rounded border bg-muted/80 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 sm:flex">
             <span className="text-xs">⌘</span>K

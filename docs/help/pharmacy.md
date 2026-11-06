@@ -15,9 +15,6 @@ The **Pharmacy** section of the sidebar has three entries:
 - **Stock Management** (`/pharmacy/stock`): every stock batch on the shelves.
 - **Alerts** (`/pharmacy/alerts`): batches running low or about to expire.
 
-Opening `/pharmacy` on its own takes you straight to **Dispense**. So does the old dispensing list
-address, `/pharmacy/dispensings`, which now lives in the **History** tab.
-
 The usual day runs like this: a clinician prescribes, the prescription appears in the queue, you
 process it, verify it, pick a stock batch for each drug and dispense. Stock comes down as you
 dispense, and the charge is posted to the patient's bill.
@@ -26,7 +23,8 @@ dispense, and the charge is posted to the patient's bill.
 
 **Dispense** (`/pharmacy/queue`) opens on the **Queue** tab. It lists active prescriptions, one card
 per prescription with all its drug lines. A prescription leaves the queue once it is dispensed, so
-the queue is only the work still to do.
+the queue is only the work still to do. Opening `/pharmacy` on its own brings you here, as there is
+no separate Pharmacy home page.
 
 Above the cards:
 
@@ -58,7 +56,7 @@ Each card shows:
 2. Press **Process**. The system opens a dispensing record for the prescription: outpatient
    prescriptions go to the **Outpatient** counter channel, inpatient ones to the **Inpatient Ward**
    channel.
-3. The dispensing record opens (`/pharmacy/dispensings/{id}`). Carry on from
+3. The dispensing record opens. Carry on from
    [The dispensing record](#the-dispensing-record).
 
 **Check:** the card now says **queued** and its button says **View**. Pressing **View** takes you
@@ -72,8 +70,17 @@ The queue says **No prescriptions in queue** when there is nothing to do.
 
 ## Dispensing history
 
-The **History** tab on **Dispense** lists every dispensing record. Filter it with the
-**All statuses** list. The columns:
+The **History** tab on **Dispense** lists every dispensing record, whatever its source, open
+or finished. The old dispensing list address, `/pharmacy/dispensings`, still works for
+bookmarks: it opens **Dispense** on the **Queue** tab, so press **History** to get here.
+
+**Go to:** **Pharmacy** > **Dispense**, then the **History** tab.
+
+**All statuses** narrows the list to one status: **queued**, **verified**, **dispensed**,
+**partially_dispensed**, **cancelled** or **returned**. There is no search box on this tab; to find
+one patient's prescription still waiting, use the search on the **Queue** tab.
+
+The columns:
 
 - **Dispensing #**;
 - **Patient**, with the **MRN** under the name;
@@ -82,7 +89,16 @@ The **History** tab on **Dispense** lists every dispensing record. Filter it wit
 - **Status**;
 - **Date**: when the record was opened.
 
-Press the eye button at the end of a row to open the record.
+The **Status** badge is outlined for **queued** and **returned**, grey for **verified** and
+**partially_dispensed**, solid for **dispensed** and red for **cancelled**. A record whose patient
+has no MRN on file shows the name only.
+
+Press the eye button at the end of a row to open the record
+([The dispensing record](#the-dispensing-record)). With nothing to show, the table says "No records
+found."
+
+The **New** button at the top right of the table does nothing yet. To start a dispensing without a
+prescription, use **Direct Dispense** on the **Queue** tab.
 
 ## Direct dispense
 
