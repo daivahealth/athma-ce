@@ -4,7 +4,9 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { ToneBadge } from '@/components/ui/tone-badge';
+import { patientInitials } from '@/modules/clinical/components/lab-operations/lab-ui';
+import { ResultStatusBadge } from './ResultStatusBadge';
 import { Separator } from '@/components/ui/separator';
 import { useEncounter } from '@/modules/clinical/hooks/use-encounters';
 import { useTriageByEncounter } from '@/modules/clinical/hooks/use-triage';
@@ -121,97 +123,77 @@ export function ReportPatientHeader({
   const patientMrn = patientDisplay?.mrn ?? patient?.mrn ?? '-';
 
   return (
-    <Card className="border border-transparent bg-gradient-to-r from-primary/15 via-primary/5 to-secondary/20 dark:from-primary/30 dark:via-primary/15 dark:to-secondary/35 shadow-md">
-      <CardContent className="pt-5 pb-4">
-        {/* Top row: back link + report type + order name + status */}
-        <div className="flex items-center gap-3 mb-4">
+    <Card className="overflow-hidden border-border/60 bg-gradient-to-br from-primary/10 via-card to-card shadow-sm dark:from-primary/20">
+      <CardContent className="p-5">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <Link
             href={`/${locale}${config.backPath}`}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground print:hidden"
+            aria-label={`Back to ${config.label.replace(' Report', '')} results`}
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
-          <Icon className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold">{config.label}</h2>
+          <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <Icon className="h-4 w-4" />
+          </span>
+          <h2 className="font-display text-lg font-semibold tracking-tight">{config.label}</h2>
           {orderName && (
             <>
               <Separator orientation="vertical" className="h-5" />
-              <span className="text-sm text-muted-foreground font-medium">{orderName}</span>
+              <span className="text-sm font-medium text-muted-foreground">{orderName}</span>
             </>
           )}
-          {reportStatus && (
-            <Badge
-              variant="outline"
-              className={
-                reportStatus === 'FINAL'
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800'
-                  : reportStatus === 'DRAFT'
-                    ? 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700'
-                    : reportStatus === 'PRELIMINARY'
-                      ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800'
-                      : reportStatus === 'AMENDED'
-                        ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
-                        : 'capitalize'
-              }
-            >
-              {reportStatus}
-            </Badge>
-          )}
+          {reportStatus && <ResultStatusBadge status={reportStatus} />}
           {encounter?.encounterNumber && (
-            <span className="text-xs text-muted-foreground ml-auto">
-              Encounter #{encounter.encounterNumber}
+            <span className="ml-auto rounded-md border border-border/60 bg-background/60 px-2 py-0.5 text-xs text-muted-foreground">
+              Encounter <span className="font-mono text-foreground/80">{encounter.encounterNumber}</span>
             </span>
           )}
         </div>
 
-        {/* Patient info row */}
-        <div className="flex flex-col gap-4 text-sm lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex flex-wrap gap-6">
-            <div>
-              <div className="text-muted-foreground text-xs uppercase tracking-wide">Patient</div>
-              <div className="font-medium">{patientName}</div>
-            </div>
-            <Separator orientation="vertical" className="hidden md:block h-10" />
-            <div>
-              <div className="text-muted-foreground text-xs uppercase tracking-wide">Age</div>
-              <div className="font-medium">{patientAge}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground text-xs uppercase tracking-wide">Gender</div>
-              <div className="font-medium">{patientGender}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground text-xs uppercase tracking-wide">MRN</div>
-              <div className="font-mono">{patientMrn}</div>
+        <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-4">
+            <span
+              className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-base font-semibold text-primary-foreground shadow-sm"
+              aria-hidden="true"
+            >
+              {patientInitials(patientName)}
+            </span>
+            <div className="min-w-0">
+              <div className="truncate text-xl font-semibold leading-tight text-foreground">{patientName}</div>
+              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                <span>{patientAge}</span>
+                <span aria-hidden="true">·</span>
+                <span>{patientGender}</span>
+                <span aria-hidden="true">·</span>
+                <span className="font-mono text-foreground/80">{patientMrn}</span>
+              </div>
             </div>
           </div>
 
-          {triage && (
-            <div className="flex flex-col gap-3 text-sm lg:flex-row lg:items-start lg:text-right lg:max-w-xl lg:justify-end">
+          {triage && (triageVitalsSummary.length > 0 || triageAllergiesSummary.length > 0) && (
+            <div className="flex flex-col gap-2 lg:items-end">
               {triageVitalsSummary.length > 0 && (
-                <div>
-                  <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Triage Vitals
-                  </div>
-                  <div className="font-medium text-xs">
-                    {triageVitalsSummary.join(' \u00b7 ')}
-                  </div>
+                <div className="flex flex-wrap gap-1.5 lg:justify-end" aria-label="Triage vitals">
+                  {triageVitalsSummary.map((vital) => (
+                    <span
+                      key={vital}
+                      className="rounded-md border border-border/60 bg-background/70 px-2 py-0.5 text-xs font-medium text-foreground"
+                    >
+                      {vital}
+                    </span>
+                  ))}
                 </div>
               )}
               {triageAllergiesSummary.length > 0 && (
-                <>
-                  {triageVitalsSummary.length > 0 && (
-                    <Separator orientation="vertical" className="hidden lg:block h-10" />
-                  )}
-                  <div>
-                    <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      Allergies
-                    </div>
-                    <div className="text-xs text-red-600 dark:text-red-400 font-medium">
-                      {triageAllergiesSummary.join(', ')}
-                    </div>
-                  </div>
-                </>
+                <div className="flex flex-wrap items-center gap-1.5 lg:justify-end">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Allergies</span>
+                  {triageAllergiesSummary.map((allergy) => (
+                    <ToneBadge key={allergy} tone="red">
+                      {allergy}
+                    </ToneBadge>
+                  ))}
+                </div>
               )}
             </div>
           )}

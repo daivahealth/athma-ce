@@ -1,6 +1,8 @@
 'use client';
 
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import { ReportStatus } from '../../types/reporting';
 
 const WORKFLOW_STEPS = [
@@ -23,56 +25,59 @@ interface ResultStatusWorkflowProps {
   className?: string;
 }
 
+/** Draft → Preliminary → Final as a compact stepper: done steps are filled, the current one is ringed. */
 export function ResultStatusWorkflow({ currentStatus, className }: ResultStatusWorkflowProps) {
   const currentIndex = STATUS_ORDER[currentStatus] ?? -1;
 
   if (currentStatus === ReportStatus.CANCELLED) {
     return (
-      <div className={cn('flex items-center gap-2 text-sm text-red-600', className)}>
+      <ToneBadge tone="red" withDot className={className}>
         Cancelled
-      </div>
+      </ToneBadge>
     );
   }
 
   return (
-    <div className={cn('flex items-center gap-1', className)}>
+    <ol className={cn('flex items-center', className)} aria-label="Report workflow">
       {WORKFLOW_STEPS.map((step, index) => {
-        const isCompleted = index < currentIndex;
-        const isCurrent = index === currentIndex;
+        const isCompleted = index < currentIndex || (index === currentIndex && index === WORKFLOW_STEPS.length - 1);
+        const isCurrent = index === currentIndex && !isCompleted;
 
         return (
-          <div key={step.key} className="flex items-center">
+          <li key={step.key} className="flex items-center" aria-current={isCurrent ? 'step' : undefined}>
             {index > 0 && (
-              <div
+              <span
                 className={cn(
-                  'h-0.5 w-6 mx-1',
-                  isCompleted || isCurrent ? 'bg-green-500' : 'bg-gray-200',
+                  'mx-2 h-px w-8',
+                  index <= currentIndex ? 'bg-emerald-400' : 'border-t border-dashed border-border bg-transparent',
                 )}
               />
             )}
-            <div className="flex items-center gap-1.5">
-              <div
+            <span className="flex items-center gap-1.5">
+              <span
                 className={cn(
-                  'h-3 w-3 rounded-full border-2',
-                  isCompleted && 'bg-green-500 border-green-500',
-                  isCurrent && 'bg-white border-green-500',
-                  !isCompleted && !isCurrent && 'bg-white border-gray-300',
+                  'flex size-4 items-center justify-center rounded-full border transition-colors',
+                  isCompleted && 'border-emerald-500 bg-emerald-500 text-white',
+                  isCurrent && 'border-emerald-500 bg-background ring-4 ring-emerald-200 dark:ring-emerald-900/60',
+                  !isCompleted && !isCurrent && 'border-border bg-background',
                 )}
-              />
+              >
+                {isCompleted ? <Check className="size-2.5" strokeWidth={3} /> : null}
+              </span>
               <span
                 className={cn(
                   'text-xs',
-                  isCurrent && 'font-semibold text-green-700',
-                  isCompleted && 'text-green-600',
-                  !isCompleted && !isCurrent && 'text-gray-400',
+                  isCurrent && 'font-semibold text-emerald-700 dark:text-emerald-300',
+                  isCompleted && 'text-foreground',
+                  !isCompleted && !isCurrent && 'text-muted-foreground',
                 )}
               >
                 {step.label}
               </span>
-            </div>
-          </div>
+            </span>
+          </li>
         );
       })}
-    </div>
+    </ol>
   );
 }

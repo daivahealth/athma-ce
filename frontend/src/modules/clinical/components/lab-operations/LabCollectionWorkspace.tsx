@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { Printer, TestTube, TestTubes } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ToneBadge } from '@/components/ui/tone-badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { PageHeader } from '@/components/ui/page-header';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 import { useToast } from '@/components/ui/use-toast';
@@ -13,6 +16,7 @@ import { useCollectLabSpecimen, useLabWorklist, usePrepareLabSpecimen, usePrintL
 import type { LabCollectionWorklistItem, LabSpecimenLabelPayload } from '../../types/lab-operations';
 import type { PatientDisplayDTO } from '../../types/patient';
 import { LAB_COLLECTION_STATE_LABEL, fastingTone, labCollectionStateTone } from '../../utils/lab-collection-tone';
+import { LabDateTime, LabPatientCell, SpecimenCode, WorklistSkeleton } from './lab-ui';
 
 export function LabCollectionWorkspace() {
   const [selectedPatient, setSelectedPatient] = useState<PatientDisplayDTO | null>(null);
@@ -34,38 +38,41 @@ export function LabCollectionWorkspace() {
     });
   };
 
+  const items = (collection.data as LabCollectionWorklistItem[] | undefined) ?? [];
+  const readyCount = items.filter((item) => item.workflowState === 'ready').length;
+  const preparedCount = items.length - readyCount;
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold">Lab Collection</h1>
-          <p className="text-muted-foreground mt-1">
-            Specimen collection queue for nurses and phlebotomists before handoff to the lab.
-          </p>
-        </div>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="Lab Collection"
+        subtitle="Prepare labels and draw specimens before they go to the lab"
+        icon={TestTubes}
+      />
 
-      <Card className="p-4">
-        <div className="grid gap-3 md:max-w-xl">
-          <div className="space-y-1">
-            <div className="text-sm font-medium">Patient Filter</div>
-            <div className="text-xs text-muted-foreground">
-              Filter the collection queue to a single patient by name, MRN, or mobile.
-            </div>
+      <Card className="overflow-hidden">
+        <div className="flex flex-col gap-3 border-b border-border/60 p-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="w-full lg:max-w-md">
+            <PatientSearchSelect
+              value={selectedPatient}
+              onSelect={(patient) => setSelectedPatient(patient as PatientDisplayDTO)}
+              onClear={() => setSelectedPatient(null)}
+              placeholder="Filter by patient name, MRN or mobile"
+            />
           </div>
-          <PatientSearchSelect
-            value={selectedPatient}
-            onSelect={(patient) => setSelectedPatient(patient as PatientDisplayDTO)}
-            onClear={() => setSelectedPatient(null)}
-            placeholder="Search patient by name, MRN, or mobile"
-          />
+          {!collection.isLoading && items.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <ToneBadge tone="amber" withDot>
+                {readyCount} to prepare
+              </ToneBadge>
+              <ToneBadge tone="emerald" withDot>
+                {preparedCount} labelled, awaiting draw
+              </ToneBadge>
+            </div>
+          ) : null}
         </div>
-      </Card>
-
-      <Card>
-        <CardContent className="pt-6">
-          <CollectionTable
-            items={(collection.data as LabCollectionWorklistItem[] | undefined) ?? []}
+        <CollectionTable
+            items={items}
             isLoading={collection.isLoading}
             onPrepare={async (item) => {
               const prepared = await prepareMutation.mutateAsync({
@@ -87,15 +94,9 @@ export function LabCollectionWorkspace() {
               });
             }}
           />
-        </CardContent>
       </Card>
     </div>
   );
-}
-
-function formatPatientGender(gender?: string | null) {
-  if (!gender) return '—';
-  return gender[0].toUpperCase() + gender.slice(1);
 }
 
 function CollectionTable({
@@ -111,56 +112,57 @@ function CollectionTable({
   onPrint: (item: LabCollectionWorklistItem) => void | Promise<void>;
   onCollect: (item: LabCollectionWorklistItem) => void;
 }) {
-  if (isLoading) return <div className="text-sm text-muted-foreground">Loading collection worklist...</div>;
-  if (items.length === 0) return <EmptyState message="No pending lab tests require specimen collection." />;
+  if (isLoading) return <WorklistSkeleton />;
+  if (items.length === 0) {
+    return (
+      <EmptyState
+        icon={TestTube}
+        title="Nothing to collect"
+        description="Lab tests that need a specimen drawn will queue here as they are ordered."
+      />
+    );
+  }
 
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead>Patient</TableHead>
-          <TableHead>Specimen Group</TableHead>
-          <TableHead>Collection Profile</TableHead>
-          <TableHead>Status</TableHead>
+        <TableRow className="bg-muted/30 hover:bg-muted/30">
+          <TableHead className="pl-4">Patient</TableHead>
           <TableHead>Tests</TableHead>
+          <TableHead>Specimen</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead>Ordered</TableHead>
-          <TableHead className="text-right">Action</TableHead>
+          <TableHead className="pr-4 text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {items.map((item) => (
           <TableRow key={item.preparedSpecimenId ?? `${item.orderId}:${item.specimenType}:${item.pendingLabOrderTestIds.join(',')}`}>
-            <TableCell>
-              <div className="font-medium">
-                {item.patientDisplay?.displayName || 'Unknown patient'}
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground">
-                {item.patientDisplay?.age != null ? `${item.patientDisplay.age} yrs` : '—'} ·{' '}
-                {formatPatientGender(item.patientDisplay?.gender)}
-              </div>
-              <div className="mt-1 font-mono text-xs text-muted-foreground">
-                MRN {item.patientDisplay?.mrn || '—'}
-              </div>
+            <TableCell className="pl-4 align-top">
+              <LabPatientCell
+                name={item.patientDisplay?.displayName}
+                mrn={item.patientDisplay?.mrn}
+                age={item.patientDisplay?.age}
+                gender={item.patientDisplay?.gender}
+              />
             </TableCell>
-            <TableCell>
-              <div className="font-medium">
-                {item.testCount} tests across {item.orderCount} {item.orderCount === 1 ? 'order' : 'orders'}
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground">
-                Collect as one specimen requirement for this encounter
-              </div>
-              <div className="mt-1 flex flex-wrap gap-1">
-                {item.sourceOrders.map((order) => (
-                  <Badge key={order.id} variant="outline">
-                    {order.orderName}
+            <TableCell className="align-top">
+              <div className="flex max-w-xs flex-wrap gap-1">
+                {item.tests.map((test) => (
+                  <Badge key={test.id} variant="outline" className="font-normal">
+                    {test.testName}
                   </Badge>
                 ))}
               </div>
+              <div className="mt-1.5 text-xs text-muted-foreground">
+                {item.testCount} {item.testCount === 1 ? 'test' : 'tests'} · {item.orderCount}{' '}
+                {item.orderCount === 1 ? 'order' : 'orders'}, one draw
+              </div>
             </TableCell>
-            <TableCell>
-              <div className="font-medium">{item.specimenType}</div>
+            <TableCell className="align-top">
+              <div className="font-medium capitalize text-foreground">{item.specimenType}</div>
               <div className="mt-1 flex flex-wrap gap-1">
-                <Badge variant="secondary">{item.collectionMethod}</Badge>
+                <Badge variant="secondary" className="font-normal">{item.collectionMethod}</Badge>
                 <ToneBadge tone={fastingTone(item.fastingRequired)}>
                   {item.fastingRequired
                     ? `Fasting${item.fastingDurationHours ? ` ${item.fastingDurationHours}h` : ''}`
@@ -168,29 +170,25 @@ function CollectionTable({
                 </ToneBadge>
               </div>
             </TableCell>
-            <TableCell>
+            <TableCell className="align-top">
               <ToneBadge tone={labCollectionStateTone(item.workflowState)} withDot>
                 {LAB_COLLECTION_STATE_LABEL[item.workflowState]}
               </ToneBadge>
               {item.preparedBarcode ? (
-                <div className="mt-2 font-mono text-xs text-muted-foreground">{item.preparedBarcode}</div>
+                <div className="mt-2">
+                  <SpecimenCode value={item.preparedBarcode} />
+                </div>
               ) : null}
             </TableCell>
-            <TableCell>
-              <div className="flex flex-wrap gap-1">
-                {item.tests.map((test) => (
-                  <Badge key={test.id} variant="outline">
-                    {test.testName}
-                  </Badge>
-                ))}
-              </div>
+            <TableCell className="align-top">
+              <LabDateTime value={item.orderedAt} />
             </TableCell>
-            <TableCell>{formatDateTime(item.orderedAt)}</TableCell>
-            <TableCell className="text-right">
+            <TableCell className="pr-4 text-right align-top">
               <div className="flex justify-end gap-2">
                 {item.workflowState === 'prepared' ? (
                   <>
-                    <Button size="sm" variant="outline" onClick={() => onPrint(item)}>
+                    <Button size="sm" variant="outline" className="gap-1.5" onClick={() => onPrint(item)}>
+                      <Printer className="h-3.5 w-3.5" />
                       Print Label
                     </Button>
                     <Button size="sm" onClick={() => onCollect(item)}>
@@ -198,7 +196,8 @@ function CollectionTable({
                     </Button>
                   </>
                 ) : (
-                  <Button size="sm" onClick={() => onPrepare(item)}>
+                  <Button size="sm" className="gap-1.5" onClick={() => onPrepare(item)}>
+                    <Printer className="h-3.5 w-3.5" />
                     Prepare Label
                   </Button>
                 )}
@@ -209,23 +208,4 @@ function CollectionTable({
       </TableBody>
     </Table>
   );
-}
-
-function EmptyState({ message }: { message: string }) {
-  return (
-    <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-      {message}
-    </div>
-  );
-}
-
-function formatDateTime(value?: string | null) {
-  if (!value) return '—';
-  return new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(value));
 }
