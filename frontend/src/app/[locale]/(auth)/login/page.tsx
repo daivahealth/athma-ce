@@ -16,6 +16,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useToast } from '@/components/ui/use-toast';
 import { getApiErrorMessage } from '@/lib/api/errors';
+import { EnvironmentBadge } from '@/components/layout/environment-banner';
+import { LegalLinks } from '@/components/legal/legal-shell';
+import { DEPLOYMENT_MODE, getDeploymentModeInfo } from '@/lib/config/deployment';
+import { AlertTriangle } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -104,8 +108,20 @@ function LoginPageContent() {
               />
             </>
           </div>
+          <div className="flex justify-center">
+            <EnvironmentBadge />
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
+          {DEPLOYMENT_MODE !== 'production' && (
+            <div
+              role="note"
+              className="flex gap-2 rounded-lg border border-warning/40 bg-warning/10 p-3 text-left text-xs leading-snug text-foreground"
+            >
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warning" aria-hidden="true" />
+              <p>{getDeploymentModeInfo().notice}</p>
+            </div>
+          )}
           <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-2 text-left">
               <Label htmlFor="email" className="text-muted-foreground">Email</Label>
@@ -154,6 +170,7 @@ function LoginPageContent() {
               🔍 Debug Session Info
             </Link>
           </div>
+          <LegalLinks locale={params.locale} className="border-t border-border/40 pt-4" />
         </CardContent>
       </Card>
     </div>
