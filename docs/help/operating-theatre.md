@@ -7,8 +7,7 @@ description: 'Running theatres day to day: the OT Board, OT Requests, OT Schedul
 ---
 
 The **Operating Theatre** section of the sidebar holds five screens: **OT Board**, **OT Requests**,
-**OT Schedules**, **OT Reports** and **OT Rooms**. Opening `/ot` on its own takes you straight to the
-board.
+**OT Schedules**, **OT Reports** and **OT Rooms**.
 
 A case moves through them in this order:
 
@@ -27,7 +26,8 @@ instead of rows, your role may not have access to that part of the module; ask y
 ## OT Board
 
 **OT Board** (`/ot/board`) is the live picture of every theatre for one day. It is headed **Live
-theatre operations**.
+theatre operations**. Opening `/ot` on its own brings you here, as there is no separate Operating
+Theatre home page.
 
 **Go to:** **Operating Theatre** > **OT Board**.
 

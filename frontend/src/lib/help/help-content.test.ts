@@ -74,6 +74,17 @@ describe('matching a screen to its page', () => {
     expect(findHelpForPath(docs, '/encounters').primary?.slug).toBe('access');
     expect(findHelpForPath(docs, '/nowhere').primary).toBeNull();
   });
+
+  it('prefers a literal segment to a placeholder of the same length', () => {
+    const docs = buildHelpDocs({
+      'plans.md': page(
+        "title: 'Plans'\norder: 1\nroutes: ['/plans']",
+        '## The plan (`/plans/{id}`)\n\n## Start a plan (`/plans/new`)'
+      ),
+    });
+    expect(findHelpForPath(docs, '/plans/new').heading?.text).toBe('Start a plan (/plans/new)');
+    expect(findHelpForPath(docs, '/plans/abc').heading?.text).toBe('The plan (/plans/{id})');
+  });
 });
 
 describe('the manual in docs/help', () => {

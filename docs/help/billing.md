@@ -283,13 +283,33 @@ offset the original. Without a reason: "Please provide a reason for reversal."
 
 ## Credit Notes and Debit Notes
 
-A **credit note** lowers what a patient owes (for example, a service not given). A **debit note**
-raises it (an extra charge after the invoice). The two screens work the same way.
-
 **Credit Notes** (`/revenue-cycle/credit-notes`) and **Debit Notes** (`/revenue-cycle/debit-notes`)
-list the notes with **Credit note #** / **Debit note #**, **Patient**, **Amount** and **Status**
-(**Draft**, **Posted**, **Voided**). Search with **Search credit notes...** or **Search debit
-notes...**. Use **View** to open one.
+list every note of that kind for your organisation, across all facilities, with the latest note
+date first. A **credit note** lowers what a patient owes
+(for example, a service not given). A **debit note** raises it (an extra charge after the invoice).
+The two screens work the same way.
+
+**Go to:** **Billing** > **Credit Notes** or **Billing** > **Debit Notes** in the sidebar.
+
+Across the top, a search box and the **New credit note** or **New debit note** button, which opens
+[Raising a note](#raising-a-note). Under them, a table headed **Credit notes** or **Debit notes**
+with these columns:
+
+| Column | What it shows |
+| --- | --- |
+| **Credit note #** / **Debit note #** | The note's number. |
+| **Patient** | The patient's name, with the **MRN** under it. If the name cannot be looked up, the first eight characters of the patient's internal ID instead. |
+| **Amount** | The note's total, to two decimal places, followed by its currency. |
+| **Status** | **Draft**, **Posted** or **Voided**. On the list all three are the same grey badge; the colours appear only on the note itself. |
+| **Actions** | **View**, which opens the note (see [Posting and voiding](#posting-and-voiding)). |
+
+**Search credit notes...** or **Search debit notes...** narrows the table as you type. It matches
+the note number, the patient's name or MRN. There is no status or date filter, and no paging: the
+whole list loads at once.
+
+With nothing to show, or nothing matching the search, the table says "No credit notes found." or
+"No debit notes found." If the list cannot load, it says **Unable to load records** with the
+server's reason.
 
 ### Raising a note
 

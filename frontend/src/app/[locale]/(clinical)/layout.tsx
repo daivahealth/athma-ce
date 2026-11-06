@@ -52,12 +52,14 @@ export default function ClinicalLayout({ children }: { children: ReactNode }) {
           onClose={() => setIsMobileSidebarOpen(false)}
         />
 
-        <div className="flex flex-1 flex-col bg-background/50">
+        {/* min-w-0: a flex child defaults to min-width:auto, so wide page content would
+            otherwise stretch this column (and the topbar) past a phone viewport */}
+        <div className="flex min-w-0 flex-1 flex-col bg-background/50">
           <Topbar
             locale={locale}
             onSidebarToggle={handleMobileToggle}
           />
-          <main className="flex-1 space-y-6 px-6 pb-6 pt-2 bg-muted/30 dark:bg-transparent theme-transition">
+          <main className="flex-1 space-y-6 px-4 pb-6 pt-2 md:px-6 bg-muted/30 dark:bg-transparent theme-transition">
             <Suspense fallback={null}>
               <NavigationProgress />
             </Suspense>

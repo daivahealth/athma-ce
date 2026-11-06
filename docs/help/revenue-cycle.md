@@ -16,8 +16,6 @@ The **Revenue Cycle** section of the sidebar is the insurance side of billing:
 - **PreAuth** (`/revenue-cycle/preauth`): asking an insurer to approve a service in advance.
 - **Remittance** (`/revenue-cycle/remittance`): the insurer's payment advice, matched back to claims.
 
-Opening `/revenue-cycle` on its own shows a **Revenue Cycle** page with a tile for each of these.
-
 Refunds, credit notes and debit notes have addresses under `/revenue-cycle` too, but they sit in
 the **Billing** section of the sidebar and are described in [Billing](billing.md).
 
@@ -27,6 +25,28 @@ submit, and finally record the **Remittance** and **Reconcile** it.
 
 Insurers are set up under [Payers](billing-setup.md#payers). Several screens here ask for a
 **Payer ID**: this is the payer's internal ID, which you copy from the payer record, not its name.
+
+## The Revenue Cycle page
+
+**Revenue Cycle** (`/revenue-cycle`) is a menu page with a tile for each insurance screen. It has no
+figures or lists of its own. The sidebar does not link to it: you reach it by opening
+`/revenue-cycle` directly, and the sidebar's **Revenue Cycle** entries go straight to each screen.
+
+The page is headed **Revenue Cycle**, with the line "Manage claims processing, eligibility checks,
+prior auth, and remittance workflows." Under it are five tiles, two to a row on a wide screen:
+
+| Tile | What it says | Opens |
+| --- | --- | --- |
+| **Claims** | Draft, validate, submit, and track insurance claims. | [Claims](#claims) |
+| **Batches** | Group claims into batches and manage submissions. | [Batches](#batches) |
+| **Eligibility** | Verify coverage and benefits for patients. | [Eligibility](#eligibility) |
+| **PreAuth** | Manage prior authorization requests and approvals. | [PreAuth](#preauth) |
+| **Remittance** | Upload and reconcile ERA/EOB remittances. | [Remittance](#remittance) |
+
+Click anywhere on a tile to open that screen. The tiles show no counts, so to see what is waiting
+you open the list itself.
+
+Refunds, credit notes and debit notes are not on this page; see [Billing](billing.md).
 
 ## Eligibility
 

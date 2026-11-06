@@ -44,9 +44,9 @@ export default function HelpIndexPage() {
                 Getting started
               </Link>
               : signing in, finding your way round the sidebar, and switching facility. The rest explains each module: what its screens show,
-              what to press, and what to do when a screen says no. Press{' '}
-              <kbd className="rounded border border-border bg-background px-1 py-0.5 font-mono text-[10px]">?</kbd> on any screen for the page
-              that explains it.
+              what to press, and what to do when a screen says no. On any screen, the question mark in the top bar (or the{' '}
+              <kbd className="rounded border border-border bg-background px-1 py-0.5 font-mono text-[10px]">?</kbd> key) opens the help for
+              that screen in a side panel.
             </p>
           </div>
           <label className="relative block max-w-xl">

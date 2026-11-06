@@ -243,6 +243,15 @@ export function routeMatches(route: string, path: string): boolean {
   return path === route || path.startsWith(route.endsWith('/') ? route : `${route}/`);
 }
 
+/**
+ * How specific a route is: longer wins, and a placeholder loses to a literal
+ * segment of the same length, so `/oncology/treatment-plans/new` beats
+ * `/oncology/treatment-plans/{id}` on the new-schedule screen.
+ */
+export function routeSpecificity(route: string): number {
+  return route.length - (route.match(/\*/g)?.length ?? 0) * 0.5;
+}
+
 export interface HelpForPath {
   primary: HelpDoc | null;
   /** The heading within `primary` that explains this exact screen, if any. */
@@ -252,13 +261,14 @@ export interface HelpForPath {
 
 /** The most specific heading in one doc that claims this screen. */
 export function findHeadingForPath(doc: HelpDoc, path: string): HelpHeading | null {
-  let best: { heading: HelpHeading; length: number } | null = null;
+  let best: { heading: HelpHeading; score: number } | null = null;
   for (const heading of doc.headings) {
     for (const route of heading.routes) {
       if (!routeMatches(route, path)) continue;
+      const score = routeSpecificity(route);
       // A heading only refines the match; it never beats the page's own routes.
-      if (doc.routes.some((docRoute) => docRoute.length > route.length && routeMatches(docRoute, path))) continue;
-      if (!best || route.length > best.length) best = { heading, length: route.length };
+      if (doc.routes.some((docRoute) => routeSpecificity(docRoute) > score && routeMatches(docRoute, path))) continue;
+      if (!best || score > best.score) best = { heading, score };
     }
   }
   return best?.heading ?? null;
@@ -277,7 +287,7 @@ export function findHelpForPath(docs: HelpDoc[], path: string): HelpForPath {
   for (const doc of docs) {
     let best = -1;
     for (const route of [...doc.routes, ...doc.headings.flatMap((heading) => heading.routes)]) {
-      if (routeMatches(route, path)) best = Math.max(best, route.length);
+      if (routeMatches(route, path)) best = Math.max(best, routeSpecificity(route));
     }
     if (best >= 0) matches.push({ doc, length: best });
   }
