@@ -305,5 +305,3 @@ If a screen has no page of its own, the panel lists the whole manual instead. Th
 - **The ⌘K shortcut** shown in the patient search box does nothing yet.
 - **Returning to where you were.** After signing in you always land on the dashboard, not the screen
   you were sent from.
-- **Debug Session Info**, the link at the foot of the sign-in page, is a technical page for support
-  staff showing the contents of your session. You do not need it for day-to-day work.

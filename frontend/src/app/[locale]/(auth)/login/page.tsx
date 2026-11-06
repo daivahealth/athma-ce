@@ -162,14 +162,6 @@ function LoginPageContent() {
               I have a reset token
             </Link>
           </div>
-          <div className="text-center">
-            <Link
-              href={`/${params.locale}/debug`}
-              className="text-xs text-muted-foreground hover:text-primary underline"
-            >
-              🔍 Debug Session Info
-            </Link>
-          </div>
           <LegalLinks locale={params.locale} className="border-t border-border/40 pt-4" />
         </CardContent>
       </Card>
