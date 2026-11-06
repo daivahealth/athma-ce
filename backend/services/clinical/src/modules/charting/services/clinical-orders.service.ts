@@ -52,11 +52,19 @@ export class ClinicalOrdersService {
     resultedAt: true,
     orderedBy: true,
     orderedAt: true,
+    enteredBy: true,
+    orderMode: true,
     performedBy: true,
     performedAt: true,
     createdAt: true,
     updatedAt: true,
   };
+
+  /** UserId decorator falls back to 'system'; only persist real UUIDs. */
+  private normalizeEnteredBy(enteredBy?: string): string | null {
+    if (!enteredBy) return null;
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(enteredBy) ? enteredBy : null;
+  }
 
   private normalizePackageCatalogType(value: string | null | undefined) {
     return value?.trim().toUpperCase() ?? '';
@@ -67,9 +75,9 @@ export class ClinicalOrdersService {
     private readonly observationWriter: ObservationWriterService,
   ) {}
 
-  async create(tenantId: string, dto: CreateClinicalOrderDto) {
+  async create(tenantId: string, dto: CreateClinicalOrderDto, enteredBy?: string) {
     return this.prisma.$transaction(async (tx) => {
-      const { labTests, imagingDetails, procedureDetails, ...orderData } = dto;
+      const { labTests, imagingDetails, procedureDetails, orderMode, ...orderData } = dto;
 
       if (labTests?.length && dto.orderType !== OrderType.LAB) {
         throw new BadRequestException('Lab test detail rows are only valid for lab clinical orders');
@@ -86,6 +94,8 @@ export class ClinicalOrdersService {
           tenantId,
           ...orderData,
           priority: dto.priority || 'routine',
+          enteredBy: this.normalizeEnteredBy(enteredBy),
+          orderMode: orderMode ?? 'direct',
         },
       });
 
@@ -241,6 +251,8 @@ export class ClinicalOrdersService {
           status: this.derivePackageStatus(packageOrder.status, packageOrder.clinicalOrders),
           orderedBy: packageOrder.orderedBy,
           orderedAt: packageOrder.orderedAt,
+          enteredBy: packageOrder.enteredBy ?? undefined,
+          orderMode: packageOrder.orderMode ?? undefined,
           childOrderCount: packageOrder.clinicalOrders.length,
           childTypeSummary,
           clinicalOrders: packageOrder.clinicalOrders,
@@ -390,7 +402,12 @@ export class ClinicalOrdersService {
     return { message: 'Clinical order deleted successfully' };
   }
 
-  async createPackageOrder(tenantId: string, dto: CreatePackageOrderDto) {
+  async createPackageOrder(tenantId: string, dto: CreatePackageOrderDto, enteredBy?: string) {
+    const entryAudit = {
+      enteredBy: this.normalizeEnteredBy(enteredBy),
+      orderMode: dto.orderMode ?? 'direct',
+    };
+
     const pkg = await this.prisma.package.findFirst({
       where: {
         id: dto.packageId,
@@ -427,6 +444,7 @@ export class ClinicalOrdersService {
           patientId: dto.patientId,
           notes: dto.notes ?? null,
           orderedBy: dto.orderedBy,
+          ...entryAudit,
           status: 'ordered',
         },
       });
@@ -461,6 +479,7 @@ export class ClinicalOrdersService {
               clinicalIndication: dto.clinicalIndication ?? null,
               specialInstructions: dto.specialInstructions ?? null,
               orderedBy: dto.orderedBy,
+              ...entryAudit,
             },
           });
 
@@ -515,6 +534,7 @@ export class ClinicalOrdersService {
               clinicalIndication: dto.clinicalIndication ?? null,
               specialInstructions: dto.specialInstructions ?? null,
               orderedBy: dto.orderedBy,
+              ...entryAudit,
             },
           });
 
@@ -568,6 +588,7 @@ export class ClinicalOrdersService {
             clinicalIndication: dto.clinicalIndication ?? null,
             specialInstructions: dto.specialInstructions ?? null,
             orderedBy: dto.orderedBy,
+            ...entryAudit,
           },
         });
 
@@ -690,6 +711,8 @@ export class ClinicalOrdersService {
       notes: string | null;
       orderedBy: string;
       orderedAt: Date;
+      enteredBy?: string | null;
+      orderMode?: string | null;
       createdAt: Date;
       updatedAt: Date;
       package?: { code: string; name: string } | null;
@@ -708,6 +731,8 @@ export class ClinicalOrdersService {
       notes: packageOrder.notes ?? undefined,
       orderedBy: packageOrder.orderedBy,
       orderedAt: packageOrder.orderedAt,
+      enteredBy: packageOrder.enteredBy ?? undefined,
+      orderMode: packageOrder.orderMode ?? undefined,
       clinicalOrders: packageOrder.clinicalOrders,
       createdAt: packageOrder.createdAt,
       updatedAt: packageOrder.updatedAt,

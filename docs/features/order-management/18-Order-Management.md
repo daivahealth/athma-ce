@@ -94,6 +94,7 @@ Recommended shared fields in `clinical_orders`:
 - `special_instructions`
 - `ordered_by`
 - `ordered_at`
+- `entered_by` and `order_mode` (see [Order Authorship and On-Behalf Entry](#order-authorship-and-on-behalf-entry-cpoe))
 - coarse result summary fields such as `result_status` and `resulted_at`
 - nullable `package_order_id` for package-derived orders
 
@@ -425,6 +426,31 @@ Recommended chart-facing API behavior:
     - child executable orders nested under the package summary
 
 This avoids changing the backend write model while keeping the doctor-facing chart concise.
+
+## Order Authorship and On-Behalf Entry (CPOE)
+
+Nurses and front-desk executives sometimes place orders for a physician (verbal, telephone or transcribed written orders). The order must stay accountable to the physician while recording who actually keyed it.
+
+`clinical_orders` and `package_orders` carry two nullable authorship fields alongside `ordered_by`:
+
+| Field | Set by | Meaning |
+| --- | --- | --- |
+| `ordered_by` | Client (`orderedBy`, staff ID) | The ordering physician — the accountable prescriber. |
+| `entered_by` | Server, from the verified JWT `userId` (falls back to `x-user-id`) | The user who entered the order. Never accepted from the request body. |
+| `order_mode` | Client (`orderMode`), defaults to `direct` | How the order was received: `direct`, `verbal`, `telephone`, `written`, `protocol`. |
+
+Package-expanded child `clinical_orders` inherit `entered_by` and `order_mode` from the package order.
+
+Entry points:
+
+- Smart Charting Orders block (`/encounters/{id}/charting`): `ordered_by` = encounter primary staff, `order_mode` = `direct`.
+- Standalone CPOE page (`/cpoe`, `/cpoe/{encounterId}`): the user picks the ordering physician (defaults to the encounter's primary staff), the order mode, priority and clinical indication. Verbal and telephone modes require a read-back confirmation in the UI before ordering is enabled; the confirmation itself is not persisted.
+
+Both entry points build payloads with `frontend/src/modules/clinical/utils/build-order-payload.ts`.
+
+Not yet implemented: physician co-signature / authentication of verbal and telephone orders, and a work queue of unsigned on-behalf orders.
+
+Schema impact: additive nullable columns `entered_by uuid` and `order_mode varchar(20)` on `clinical_orders` and `package_orders`. Existing rows read as `null` (treat as `direct`, entered-by unknown). Apply with `prisma db push` for the clinical schema or an equivalent `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`.
 
 ## Example Runtime Flows
 
