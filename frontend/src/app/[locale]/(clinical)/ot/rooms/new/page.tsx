@@ -6,7 +6,6 @@ import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,6 +15,7 @@ import { getSession } from '@/lib/api/client';
 import { useFacilitySpaces } from '@/modules/foundation/hooks/use-facility-spaces';
 import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
 import { useUpsertOtRoomConfig } from '@/modules/ot/hooks/use-ot';
+import { SpecialtySelect } from '@/modules/foundation/components/specialty-select';
 
 export default function NewOtRoomPage() {
   const params = useParams() as { locale: string };
@@ -112,7 +112,7 @@ export default function NewOtRoomPage() {
 
           <div className="space-y-2">
             <Label>Specialty</Label>
-            <Input value={specialty} onChange={(e) => setSpecialty(e.target.value)} placeholder="Cardiac, ortho, neuro" />
+            <SpecialtySelect value={specialty} onChange={setSpecialty} placeholder="Any specialty" />
           </div>
 
           <div className="space-y-2">

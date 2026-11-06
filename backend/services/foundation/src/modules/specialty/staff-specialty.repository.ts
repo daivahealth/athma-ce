@@ -5,6 +5,18 @@ import { PrismaService } from '@zeal/database-foundation';
 export class StaffSpecialtyRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  /** True when the staff member belongs to the tenant. */
+  async staffBelongsToTenant(tenantId: string, staffId: string): Promise<boolean> {
+    const count = await this.prisma.staff.count({ where: { id: staffId, tenantId } });
+    return count > 0;
+  }
+
+  /** True when the facility belongs to the tenant. */
+  async facilityBelongsToTenant(tenantId: string, facilityId: string): Promise<boolean> {
+    const count = await this.prisma.facility.count({ where: { id: facilityId, tenantId } });
+    return count > 0;
+  }
+
   async assignSpecialty(data: {
     tenantId: string;
     staffId: string;
@@ -16,6 +28,7 @@ export class StaffSpecialtyRepository {
     if (data.primaryFlag) {
       await this.prisma.staffSpecialty.updateMany({
         where: {
+          tenantId: data.tenantId,
           staffId: data.staffId,
           facilityId: data.facilityId,
         },
@@ -54,20 +67,24 @@ export class StaffSpecialtyRepository {
     });
   }
 
-  async removeSpecialty(staffId: string, facilityId: string, specialtyId: string) {
-    return this.prisma.staffSpecialty.delete({
-      where: {
-        staffId_specialtyId_facilityId: {
-          staffId,
-          specialtyId,
-          facilityId,
-        },
-      },
+  async removeSpecialty(
+    tenantId: string,
+    staffId: string,
+    facilityId: string,
+    specialtyId: string
+  ) {
+    return this.prisma.staffSpecialty.deleteMany({
+      where: { tenantId, staffId, facilityId, specialtyId },
     });
   }
 
-  async getStaffSpecialties(staffId: string, facilityId?: string, locale?: string) {
-    const where: any = { staffId };
+  async getStaffSpecialties(
+    tenantId: string,
+    staffId: string,
+    facilityId?: string,
+    locale?: string
+  ) {
+    const where: any = { tenantId, staffId };
     if (facilityId) {
       where.facilityId = facilityId;
     }
@@ -97,9 +114,10 @@ export class StaffSpecialtyRepository {
     });
   }
 
-  async getPrimarySpecialty(staffId: string, facilityId: string) {
+  async getPrimarySpecialty(tenantId: string, staffId: string, facilityId: string) {
     return this.prisma.staffSpecialty.findFirst({
       where: {
+        tenantId,
         staffId,
         facilityId,
         primaryFlag: true,
@@ -210,7 +228,8 @@ export class StaffSpecialtyRepository {
     return this.prisma.$transaction(async (tx) => {
       // Remove all existing specialties FOR THIS FACILITY
       await tx.staffSpecialty.deleteMany({
-        where: { 
+        where: {
+          tenantId,
           staffId,
           facilityId,
         },
@@ -277,11 +296,26 @@ export class StaffSpecialtyRepository {
     });
   }
 
-  async changePrimarySpecialty(staffId: string, facilityId: string, newPrimarySpecialtyId: string) {
+  async changePrimarySpecialty(
+    tenantId: string,
+    staffId: string,
+    facilityId: string,
+    newPrimarySpecialtyId: string
+  ) {
     return this.prisma.$transaction(async (tx) => {
+      // The new primary must already be assigned to this staff member, in this tenant
+      const target = await tx.staffSpecialty.findFirst({
+        where: { tenantId, staffId, facilityId, specialtyId: newPrimarySpecialtyId },
+        select: { id: true },
+      });
+      if (!target) {
+        return null;
+      }
+
       // Remove primary flag from all AT THIS FACILITY
       await tx.staffSpecialty.updateMany({
-        where: { 
+        where: {
+          tenantId,
           staffId,
           facilityId,
         },
@@ -290,13 +324,7 @@ export class StaffSpecialtyRepository {
 
       // Set new primary
       const newPrimary = await tx.staffSpecialty.update({
-        where: {
-          staffId_specialtyId_facilityId: {
-            staffId,
-            specialtyId: newPrimarySpecialtyId,
-            facilityId,
-          },
-        },
+        where: { id: target.id },
         data: { primaryFlag: true },
         include: {
           specialty: {
@@ -353,11 +381,12 @@ export class StaffSpecialtyRepository {
     return enriched;
   }
 
-  async getFacilitySpecialties(facilityId: string, locale?: string) {
+  async getFacilitySpecialties(tenantId: string, facilityId: string, locale?: string) {
     // Get distinct specialties at this facility with staff counts
     const specialties = await this.prisma.staffSpecialty.groupBy({
       by: ['specialtyId'],
       where: {
+        tenantId,
         facilityId,
         primaryFlag: true,
         staff: {
@@ -387,6 +416,7 @@ export class StaffSpecialtyRepository {
         // Get staff list
         const staff = await this.prisma.staffSpecialty.findMany({
           where: {
+            tenantId,
             facilityId,
             specialtyId: spec.specialtyId,
             primaryFlag: true,

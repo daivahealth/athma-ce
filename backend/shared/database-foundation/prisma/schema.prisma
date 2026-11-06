@@ -266,7 +266,6 @@ model Staff {
   email            String?
   employeeId       String            @map("employee_id")
   staffType        String            @map("staff_type")
-  specialties      Json              @default("[]")
   licenseNumber    String?           @map("license_number")
   licenseExpiry    DateTime?         @map("license_expiry") @db.Date
   /// National practitioner-registry id (HPR, SDS, ...) — generic, provider decided by the registry.practitioner capability binding.

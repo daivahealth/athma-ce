@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { useNoteTemplates, useNoteTemplateStats } from '@/modules/foundation/hooks/use-catalogs';
 import type { NoteTemplate } from '@/modules/foundation/types/catalog';
 import { TemplateStatus, NoteTemplateType } from '@/modules/foundation/types/catalog';
+import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
 
 const statusLabels: Record<TemplateStatus, string> = {
   [TemplateStatus.ACTIVE]: 'Active',
@@ -51,7 +52,8 @@ const templateTypeLabels: Record<NoteTemplateType, string> = {
 
 const createColumns = (
   router: ReturnType<typeof useRouter>,
-  locale: string
+  locale: string,
+  specialtyLabel: (codeOrId?: string | null) => string
 ): ColumnDef<NoteTemplate>[] => [
   {
     accessorKey: 'name',
@@ -82,7 +84,7 @@ const createColumns = (
     header: 'Specialty',
     cell: ({ getValue }) => {
       const value = getValue<string | null>();
-      return value ? <span className="font-mono text-xs">{value}</span> : 'All specialties';
+      return value ? <span className="text-sm">{specialtyLabel(value)}</span> : 'All specialties';
     },
   },
   {
@@ -167,7 +169,11 @@ export default function NoteTemplatesPage() {
     });
   }, [sanitizedTemplates, search]);
 
-  const columns = useMemo(() => createColumns(router, locale), [router, locale]);
+  const specialtyLabel = useSpecialtyLabel();
+  const columns = useMemo(
+    () => createColumns(router, locale, specialtyLabel),
+    [router, locale, specialtyLabel]
+  );
 
   const statusCardData = [
     {
