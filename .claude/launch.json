@@ -11,6 +11,36 @@
       "cwd": "frontend",
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "ai-gateway",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "cwd": "backend/services/ai-gateway",
+      "port": 3015
+    },
+    {
+      "name": "foundation",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "cwd": "backend/services/foundation",
+      "port": 3010
+    },
+    {
+      "name": "clinical",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "cwd": "backend/services/clinical",
+      "port": 3011
     }
   ]
 }
