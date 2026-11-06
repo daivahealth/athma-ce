@@ -74,6 +74,7 @@ CLINICAL_FILES=(
   "clinical/21-lab-test-result-templates.sql" # CBC analyte seed and lab test mapping
   "clinical/25-ot-room-configs.sql"  # OT room configuration data
   "clinical/26-lab-test-tat-backfill.sql" # Idempotent turnaround-time defaults for seeded lab tests
+  "clinical/27-demo-activity.sql"    # 90 days of visits, orders and admissions dated to today (dashboard demo; re-run before demos)
   "plugins/oncology/00-catalogs.sql" # Oncology catalog master data (cancer types, primary sites, histologies, mappings)
   "plugins/oncology/01-chemo-protocols.sql" # Chemotherapy protocol library (29 protocols across 12 cancer types)
   "plugins/oncology/02-lab-test-catalog.sql" # Idempotent oncology-focused lab test master rows
@@ -88,6 +89,7 @@ RCM_FILES=(
   "rcm/01-claims.sql"
   "rcm/07-catalog-mappings.sql"  # Billing items and clinical catalog mappings
   "rcm/08-pharmacy-stock.sql"    # Pharmacy stock batches (15 medications + OTC items)
+  "rcm/09-demo-invoices.sql"     # Invoices for clinical/27-demo-activity.sql (run the same day)
   "plugins/oncology/20-rcm-claims.sql" # Claims/preauth/denials/invoices for the 5 oncology demo patients
 )
 

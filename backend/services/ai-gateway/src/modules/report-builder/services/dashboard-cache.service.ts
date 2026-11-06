@@ -16,7 +16,27 @@ import {
   DASHBOARD_CACHE_CONFIG,
   CacheResult,
   MetricDefinition,
+  DashboardArAging,
+  DashboardArAgingBucket,
+  DashboardForecast,
+  DashboardTrends,
+  DashboardWorklists,
 } from '../types/dashboard-cache.types';
+import { addDays, densify, forecastDaily, lastDayOfMonth, projectMonthEnd } from './dashboard-forecast';
+
+/** Days of daily history: 12 full months plus the current one, for the Week and Month views. */
+const HISTORY_DAYS = 400;
+/** Full days the forecast is fitted on. */
+const FIT_DAYS = 90;
+/** Minimum days projected forward; extended to reach the end of the month. */
+const FORECAST_HORIZON_DAYS = 14;
+
+const AR_BUCKETS: Pick<DashboardArAgingBucket, 'key' | 'label'>[] = [
+  { key: 'current', label: '0–30 days' },
+  { key: 'd31_60', label: '31–60 days' },
+  { key: 'd61_90', label: '61–90 days' },
+  { key: 'd90_plus', label: '90+ days' },
+];
 
 /**
  * Predefined metric queries for dashboard
@@ -399,6 +419,29 @@ export class DashboardCacheService {
     // Placeholder for average encounter duration (requires more complex query)
     metrics.avgEncounterDuration = 0;
 
+    // Worklists, history and projections. Each part fails on its own: a
+    // missing table on one tenant must not blank the whole dashboard.
+    const [worklists, history, arAging] = await Promise.all([
+      this.fetchWorklists(tenantId).catch((error) => {
+        logger.error({ error, tenantId }, 'Failed to fetch dashboard worklists');
+        return undefined;
+      }),
+      this.fetchHistory(tenantId).catch((error) => {
+        logger.error({ error, tenantId }, 'Failed to fetch dashboard history');
+        return undefined;
+      }),
+      this.fetchArAging(tenantId).catch((error) => {
+        logger.error({ error, tenantId }, 'Failed to fetch AR aging');
+        return undefined;
+      }),
+    ]);
+    metrics.worklists = worklists;
+    metrics.arAging = arAging;
+    if (history) {
+      metrics.trends = history.trends;
+      metrics.forecast = this.buildForecast(history, revenueMTD, revenueLastMonth, newPatients);
+    }
+
     // Add metadata
     metrics.cachedAt = new Date().toISOString();
     metrics.currency = currency;
@@ -419,6 +462,232 @@ export class DashboardCacheService {
   }
 
   /**
+   * Counts that are waiting on someone: each mirrors the list its page shows.
+   */
+  private async fetchWorklists(tenantId: string): Promise<DashboardWorklists> {
+    const [clinical] = await this.clinicalPrisma.$queryRawUnsafe<Record<string, bigint | number>[]>(
+      `
+      SELECT
+        (SELECT COUNT(*) FROM encounters
+          WHERE tenant_id = $1::uuid AND status IN ('in-progress', 'arrived', 'triaged')
+            AND encounter_class IS DISTINCT FROM 'IMP') AS "encountersInProgress",
+        (SELECT COUNT(*) FROM clinical_orders
+          WHERE tenant_id = $1::uuid AND status IN ('ordered', 'in_progress')) AS "ordersOpen",
+        (SELECT COUNT(*) FROM clinical_orders
+          WHERE tenant_id = $1::uuid AND status IN ('ordered', 'in_progress') AND order_type = 'lab') AS "labOrdersOpen",
+        (SELECT COUNT(*) FROM clinical_orders
+          WHERE tenant_id = $1::uuid AND status IN ('ordered', 'in_progress') AND order_type = 'imaging') AS "imagingOrdersOpen",
+        (SELECT COUNT(*) FROM clinical_orders
+          WHERE tenant_id = $1::uuid AND status IN ('ordered', 'in_progress')
+            AND LOWER(priority) IN ('stat', 'urgent', 'asap', 'emergency')) AS "urgentOrdersOpen",
+        (SELECT COUNT(*) FROM lab_reports
+          WHERE tenant_id = $1::uuid AND report_status IN ('DRAFT', 'PRELIMINARY')) AS "labReportsAwaitingSignOff",
+        (SELECT COUNT(*) FROM inpatient_admissions
+          WHERE tenant_id = $1::uuid
+            AND admission_status::text IN ('ADMITTED', 'ACTIVE', 'ON_LEAVE', 'DISCHARGE_PLANNING')) AS "inpatientsCurrent",
+        (SELECT COUNT(*) FROM inpatient_admissions
+          WHERE tenant_id = $1::uuid
+            AND admission_status::text IN ('ADMITTED', 'ACTIVE', 'ON_LEAVE', 'DISCHARGE_PLANNING')
+            AND (admission_status::text = 'DISCHARGE_PLANNING' OR expected_discharge_date <= CURRENT_DATE)) AS "dischargesDue",
+        (SELECT COUNT(*) FROM appointments
+          WHERE tenant_id = $1::uuid AND start_time >= NOW() AND start_time < CURRENT_DATE + INTERVAL '8 days'
+            AND status NOT IN ('cancelled', 'no_show')) AS "appointmentsNext7Days"
+      `,
+      tenantId,
+    );
+    const toNumber = (value: bigint | number | undefined) => Number(value ?? 0);
+    return {
+      encountersInProgress: toNumber(clinical?.encountersInProgress),
+      ordersOpen: toNumber(clinical?.ordersOpen),
+      labOrdersOpen: toNumber(clinical?.labOrdersOpen),
+      imagingOrdersOpen: toNumber(clinical?.imagingOrdersOpen),
+      urgentOrdersOpen: toNumber(clinical?.urgentOrdersOpen),
+      labReportsAwaitingSignOff: toNumber(clinical?.labReportsAwaitingSignOff),
+      inpatientsCurrent: toNumber(clinical?.inpatientsCurrent),
+      dischargesDue: toNumber(clinical?.dischargesDue),
+      appointmentsNext7Days: toNumber(clinical?.appointmentsNext7Days),
+    };
+  }
+
+  /**
+   * Daily history for the Week and Month views and the forecast, ending today.
+   * Each series is one GROUP BY day over its own table, scoped to the tenant
+   * and the window; days with nothing are filled with 0.
+   */
+  private async fetchHistory(tenantId: string): Promise<{ today: string; trends: DashboardTrends }> {
+    const days = HISTORY_DAYS;
+    type Row = { day: Date | string; value: number | bigint | string };
+    const [todayRow] = await this.clinicalPrisma.$queryRawUnsafe<{ today: string }[]>(
+      `SELECT TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD') AS today`,
+    );
+    const today = todayRow.today;
+
+    // `$2` is the window length; `{at}` the timestamp the row is counted on.
+    const windowed = (at: string) =>
+      `${at} >= CURRENT_DATE - ($2::int - 1) AND ${at} < CURRENT_DATE + 1`;
+    const series: { key: Exclude<keyof DashboardTrends, 'days'>; db: 'clinical' | 'rcm'; sql: string }[] = [
+      {
+        key: 'encounters',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(COALESCE(start_time, created_at)), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM encounters WHERE tenant_id = $1::uuid AND ${windowed('COALESCE(start_time, created_at)')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'newPatients',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(created_at), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM patients WHERE tenant_id = $1::uuid AND ${windowed('created_at')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'appointments',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(start_time), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM appointments WHERE tenant_id = $1::uuid AND status <> 'cancelled' AND ${windowed('start_time')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'noShows',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(start_time), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM appointments WHERE tenant_id = $1::uuid AND status = 'no_show' AND ${windowed('start_time')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'admissions',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(admission_date), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM inpatient_admissions
+              WHERE tenant_id = $1::uuid AND admission_status::text <> 'CANCELLED' AND ${windowed('admission_date')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'discharges',
+        db: 'clinical',
+        sql: `SELECT TO_CHAR(DATE(actual_discharge_date), 'YYYY-MM-DD') AS day, COUNT(*) AS value
+              FROM inpatient_admissions WHERE tenant_id = $1::uuid AND ${windowed('actual_discharge_date')}
+              GROUP BY 1`,
+      },
+      {
+        key: 'revenue',
+        db: 'rcm',
+        sql: `SELECT TO_CHAR(invoice_date, 'YYYY-MM-DD') AS day, COALESCE(SUM(net_amount), 0) AS value
+              FROM invoices
+              WHERE tenant_id = $1::uuid AND status != 'cancelled'
+                AND invoice_date >= CURRENT_DATE - ($2::int - 1) AND invoice_date <= CURRENT_DATE
+              GROUP BY 1`,
+      },
+    ];
+
+    const results = await Promise.all(
+      series.map(({ db, sql }) =>
+        (db === 'rcm' ? this.rcmPrisma : this.clinicalPrisma).$queryRawUnsafe<Row[]>(sql, tenantId, days),
+      ),
+    );
+
+    const trends = { days: densify([], today, days).days } as DashboardTrends;
+    series.forEach(({ key }, i) => {
+      const rows = results[i].map((row) => ({ day: String(row.day), value: Number(row.value) }));
+      trends[key] = densify(rows, today, days).values;
+    });
+    return { today, trends };
+  }
+
+  /**
+   * Fits each series on history through yesterday (today is still filling
+   * up) and projects from today to at least the end of the month.
+   */
+  private buildForecast(
+    history: { today: string; trends: DashboardTrends },
+    revenueMTD: number,
+    revenueLastMonth: number,
+    newPatientsMTD: number,
+  ): DashboardForecast {
+    const { today, trends } = history;
+    // Fit on the last FIT_DAYS full days: recent enough to follow the current
+    // rhythm, long enough for the weekly pattern.
+    const fit = <T,>(values: T[]): T[] => values.slice(-FIT_DAYS - 1, -1);
+    const fitDays = fit(trends.days);
+    const daysToMonthEnd =
+      (Date.parse(`${lastDayOfMonth(today)}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86_400_000;
+    const horizon = Math.max(FORECAST_HORIZON_DAYS, daysToMonthEnd + 1);
+
+    const encounters = forecastDaily(fitDays, fit(trends.encounters), horizon);
+    const newPatients = forecastDaily(fitDays, fit(trends.newPatients), horizon);
+    const revenue = forecastDaily(fitDays, fit(trends.revenue), horizon, 2);
+
+    // Last month's new patients, from the history, for the comparison.
+    const lastMonthStart = `${addDays(`${today.slice(0, 7)}-01`, -1).slice(0, 7)}-01`;
+    const newPatientsLastMonth = trends.days.reduce(
+      (sum, day, i) => (day >= lastMonthStart && day < `${today.slice(0, 7)}-01` ? sum + trends.newPatients[i] : sum),
+      0,
+    );
+
+    return {
+      generatedFor: today,
+      horizonDays: horizon,
+      encounters,
+      newPatients,
+      revenue,
+      revenueMonthEnd: projectMonthEnd(today, revenueMTD, revenue, revenueLastMonth),
+      newPatientsMonthEnd: projectMonthEnd(today, newPatientsMTD, newPatients, newPatientsLastMonth),
+    };
+  }
+
+  /**
+   * Open receivables by days past due, and how much of the last 90 days'
+   * billing has been collected.
+   */
+  private async fetchArAging(tenantId: string): Promise<DashboardArAging> {
+    type Row = { bucket: string; count: bigint | number; amount: string | number };
+    const [buckets, collection] = await Promise.all([
+      this.rcmPrisma.$queryRawUnsafe<Row[]>(
+        `
+        SELECT
+          CASE
+            WHEN due_date IS NULL OR due_date >= CURRENT_DATE - 30 THEN 'current'
+            WHEN due_date >= CURRENT_DATE - 60 THEN 'd31_60'
+            WHEN due_date >= CURRENT_DATE - 90 THEN 'd61_90'
+            ELSE 'd90_plus'
+          END AS bucket,
+          COUNT(*) AS count,
+          COALESCE(SUM(balance_due), 0) AS amount
+        FROM invoices
+        WHERE tenant_id = $1::uuid
+          AND status IN ('unpaid', 'partial')
+          AND balance_due > 0
+        GROUP BY 1
+        `,
+        tenantId,
+      ),
+      this.rcmPrisma.$queryRawUnsafe<{ billed: string | number; paid: string | number }[]>(
+        `
+        SELECT COALESCE(SUM(net_amount), 0) AS billed, COALESCE(SUM(amount_paid), 0) AS paid
+        FROM invoices
+        WHERE tenant_id = $1::uuid
+          AND status != 'cancelled'
+          AND invoice_date >= CURRENT_DATE - 90
+        `,
+        tenantId,
+      ),
+    ]);
+
+    const byKey = new Map(buckets.map((row) => [row.bucket, row]));
+    const billed = Number(collection[0]?.billed ?? 0);
+    const paid = Number(collection[0]?.paid ?? 0);
+    return {
+      buckets: AR_BUCKETS.map(({ key, label }) => ({
+        key,
+        label,
+        count: Number(byKey.get(key)?.count ?? 0),
+        amount: Number(byKey.get(key)?.amount ?? 0),
+      })),
+      collectionRate90d: billed > 0 ? Math.round((paid / billed) * 1000) / 10 : null,
+    };
+  }
+
+  /**
    * Execute a single metric query
    */
   private async executeMetricQuery(
@@ -433,14 +702,10 @@ export class DashboardCacheService {
     );
 
     if (result && result.length > 0 && result[0].value !== null) {
-      const value = result[0].value;
-      if (typeof value === 'bigint') {
-        return Number(value);
-      }
-      if (typeof value === 'string') {
-        return parseFloat(value);
-      }
-      return value;
+      // COUNT comes back as bigint and SUM(numeric) as a Prisma Decimal; both
+      // must be plain numbers, or arithmetic on them concatenates strings.
+      const value = Number(result[0].value);
+      return Number.isFinite(value) ? value : definition.defaultValue;
     }
 
     return definition.defaultValue;
