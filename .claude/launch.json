@@ -31,6 +31,16 @@
       ],
       "cwd": "backend/services/foundation",
       "port": 3010
+    },
+    {
+      "name": "clinical",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "cwd": "backend/services/clinical",
+      "port": 3011
     }
   ]
 }
