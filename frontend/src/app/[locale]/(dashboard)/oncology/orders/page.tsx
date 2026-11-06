@@ -12,6 +12,7 @@ import { useChemoOrders } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
 import type { ChemoOrder } from '@/plugins/oncology/types';
+import { formatDayMonthYear } from '@/plugins/oncology/lib/treatment-day';
 
 export default function ChemoOrdersPage() {
   const params = useParams() as { locale: string };
@@ -120,7 +121,7 @@ export default function ChemoOrdersPage() {
                   <td className="p-3 text-xs text-muted-foreground">
                     C{order.cycle_number} D{order.day_number}
                   </td>
-                  <td className="p-3 text-xs text-muted-foreground">{order.scheduled_date}</td>
+                  <td className="p-3 text-xs text-muted-foreground">{order.scheduled_date ? formatDayMonthYear(order.scheduled_date) : '—'}</td>
                   <td className="p-3 text-xs text-muted-foreground">
                     {order.bsa ? `${order.bsa} m²` : '—'}
                   </td>

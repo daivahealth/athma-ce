@@ -126,20 +126,80 @@ status here when a patient goes into remission or relapses.
 ### Patient Cancer Profile
 
 **Patient Cancer Profile** (`/oncology/registry/{patientId}`) is the whole oncology history of one
-patient on one page:
+patient on one page, read-only. It is the place to get up to speed on a patient before a clinic, a tumour
+board or a day-care visit. Nothing on it can be edited; each section says where its records are changed.
 
-- **Cancer Diagnoses**: a card per diagnosis with status, site, grade, laterality, spread, a red
-  **Recurrence** tag where it applies, the diagnosis date and ECOG.
-- **Recent Oncology Labs**: test, result, reference range and a flag: **Critical** red, **Abnormal**
-  amber, **Normal** green.
-- **Surgical History (OT)**: the patient's theatre requests with priority, status, preferred date and
-  report status.
-- **Staging History**, **Tumor Board Decisions** and **Care Plans** (plan number, version, intent,
-  subspecialty and approval date).
+**Go to:** the back arrow on the patient's [Cancer Timeline](#cancer-timeline), or a **Diagnosis** event
+on it. The registry rows do not link here: their pencil opens the diagnosis for editing.
 
-**View Timeline** opens the patient's [Cancer Timeline](#cancer-timeline). The registry rows do not link
-here; you reach the profile from the back arrow on the cancer timeline, or from a **Diagnosis** event on
-it.
+The page is headed "Complete oncology history for this patient". It does not repeat the patient's name;
+check it from the timeline or the registry before you act on what you read. The sections run top to
+bottom in this order, and each says so plainly when it has nothing to show.
+
+#### Cancer Diagnoses
+
+A card for every diagnosis registered for the patient, active or not:
+
+- the **cancer type** as the card title, with the **clinical status** badge (active, remission,
+  recurrence, relapsed or resolved) on the right;
+- the **primary site** underneath;
+- grey tags for **Grade**, **laterality** and **spread** (localized, regional, distant or unknown), and a
+  red **Recurrence** tag when the diagnosis was entered as a recurrence;
+- **Diagnosed:** the diagnosis date, and the **ECOG** score at diagnosis when one was recorded.
+
+To change any of it, use the pencil on the diagnosis's row in the [Oncology Registry](#oncology-registry)
+([Edit a diagnosis](#edit-a-diagnosis)).
+
+**If instead:** the page says "Patient not found in oncology registry", the link points at someone with
+no oncology record. Register the diagnosis first ([Add a diagnosis](#add-a-diagnosis)).
+
+#### Recent Oncology Labs
+
+The latest **final** or **amended** result of each lab test that the lab catalogue files under the
+**Oncology** category (tumour markers, for example), one row per test:
+
+| Column | What it shows |
+| --- | --- |
+| **Test** | The test name. |
+| **Result** | The value with its unit. |
+| **Reference Range** | Low to high, or the range text when the test has no numbers. |
+| **Flag** | **Critical** red, **Abnormal** amber, otherwise **Normal** green. |
+| **Date** | When the result was reported. |
+
+Earlier results of the same test, and preliminary results, are not listed; open the patient's
+**Results** for the full history. A test only appears here once its catalogue entry is in the Oncology
+category, so ask whoever maintains the lab catalogue if a marker you expect is missing.
+
+#### Surgical History (OT)
+
+Every operating theatre request for the patient, not only cancer surgery: **Procedure**, **Priority**,
+**Status**, **Preferred Date** and **Report**, the status of the latest operation report, or `-` when
+none has been written. Requests and reports are worked in the Operating Theatre screens.
+
+#### Staging History
+
+Every staging recorded against any of the patient's diagnoses: **System** (with edition), **Type**
+(clinical, pathological, restaging or recurrence), **Stage** group, **TNM** (`T2 N1 M0`, with `?` for a
+category not recorded) and **Date**. Superseded and entered-in-error records are listed too; their status
+is on [Tumor Staging](#tumor-staging), where they are changed.
+
+#### Tumor Board Decisions
+
+The patient's MDT cases: **Meeting Date**, **Treatment Intent**, the **MDT Recommendation** (cut short
+to one line), the review **Outcome** and the case **Status**. Open the case from
+[Tumor Board](#tumor-board) to read the whole recommendation or record a decision.
+
+#### Care Plans
+
+A card per care plan with its **plan number**, **Version**, status, treatment intent and oncology
+subspecialty, and the **Approved** date when the plan has one. Plans are opened and edited from
+[Care Plans](#care-plans); the treatment days themselves are on the plan's
+[treatment schedule](#treatment-schedules).
+
+#### View Timeline
+
+**View Timeline**, top right, opens the same patient's [Cancer Timeline](#a-patients-timeline): the
+same history as dated events, with manual notes and a printable summary.
 
 ## Tumor Staging
 
@@ -169,8 +229,27 @@ Search by patient, MRN, cancer type, site, stage or system, and filter by stagin
 **System** and **Staging Date** are required.
 
 When a patient is restaged, add a new record with type **Restaging** and set the old one to
-**Superseded** from its pencil (**Edit Tumor Staging**, `/oncology/staging/{id}/edit`, saved with **Save
-Changes**). Use **Entered in Error** for a record made against the wrong patient or diagnosis.
+**Superseded** ([Edit a staging](#edit-a-staging)).
+
+### Edit a staging
+
+The pencil on a staging row opens **Edit Tumor Staging** (`/oncology/staging/{id}/edit`), headed with
+the cancer type and site.
+
+1. Check the two banners: the patient (blue: name, MRN, age, gender, phone) and the cancer diagnosis
+   (rose: cancer type, site and code, laterality and the rest). Neither can be changed here; a staging
+   made against the wrong patient or diagnosis is marked **Entered in Error** and added again.
+2. Change the **System**, **Edition**, **Staging Type**, **Stage Group**, **T**, **N** or **M** as
+   needed. The examples in the boxes (`e.g. IIA`, `e.g. T2`) show the expected form.
+3. Under **Date & Status**, correct the **Staging Date** or change the **Status**:
+   - **Active**: the staging in use.
+   - **Superseded**: replaced by a later staging, usually a **Restaging**. It stays in the history.
+   - **Entered in Error**: should never have been recorded. It stays visible, in red.
+4. Press **Save Changes**, or **Cancel** to leave without saving.
+
+**Check:** you are back on the staging list with the new values and status.
+
+**System** and **Staging Date** must stay filled; **Save Changes** is greyed out until they are.
 
 The latest staging also shows on the patient's encounter, in the **Oncology Staging** panel of the chart.
 
@@ -359,10 +438,9 @@ Search by patient, MRN, protocol or cancer type. **Day-care worklist** jumps to 
 
 ### Start a schedule from a care plan
 
-The usual way in is the calendar button on a care plan. It opens the plan's schedule if one is active or
-on hold, and otherwise opens the start form with the care plan filled in.
-
-**Go to:** **Start schedule** (`/oncology/treatment-plans/new`).
+**Start schedule** (`/oncology/treatment-plans/new`) turns an active care plan's chemotherapy into dated
+treatment days. The usual way in is the calendar button on a care plan: it opens the plan's schedule if
+one is active or on hold, and otherwise opens this form with the care plan filled in.
 
 1. Under **Patient & Protocol**, choose the **Care plan**. Only active care plans are offered. The
    patient shows underneath.
@@ -530,23 +608,38 @@ with its time).
 
 The action card changes with the status:
 
-1. **Pending**: **Pharmacist / Physician Approval**. Review the order, then press **Approve Order**.
-2. **Approved**: press **Start Drug Prep & Verification**, then:
+1. **Draft**: press **Submit for Approval** to make the order **pending**.
+2. **Pending**: **Pharmacist / Physician Approval**. Review the order, then press **Approve Order**.
+   **Approve Order** stays disabled until:
+   - someone other than the ordering clinician is signed in ("You placed this order. A second clinician
+     must approve it."); and
+   - the **Pre-Chemo Safety Checklist** has consent, allergies, labs reviewed, labs in range, weight/BSA
+     and doses ticked ("Pre-chemo checklist incomplete: …"). Use **Edit** on the checklist card, tick the
+     items and press **Save Checklist**. Orders created from a treatment schedule day start with an empty
+     checklist, so this step is always needed for them. **Pre-medications ordered** is optional.
+3. **Approved**: the person who approved the order cannot verify it ("You approved this order. Bedside
+   verification must be done by someone else."). Press **Start Drug Prep & Verification**, then:
    - **Step 1 — Pharmacist Drug Preparation**: for each drug, **Prepared by**, **Prepared at**, **Lot
      number**, **Expiry date**, **Diluent** and **Final volume (mL)**;
    - **Step 2 — Nurse Bedside Verification (5 Rights)**: tick all nine checks (identity, drug, dose,
      route, time, expiry, allergy, IV line, patient educated). Until then the screen says "All checklist
      items must be confirmed before verifying.";
-   - **Step 3 — Second Nurse / Independent Check (Optional)**;
+   - **Step 3 — Second Nurse / Independent Check**: choose the second verifier from the staff list. Only
+     staff who have a user account appear (you are left out); if nobody is listed, ask an administrator
+     to link a user to that staff member. With
+     dual sign-off on (the default, set by the **oncology.chemo.require_dual_sign** configuration) this is
+     required, and it must be someone other than you, the approver and the ordering clinician;
    - press **Complete Verification**. **Back** leaves without saving.
-3. **Verified**: **Ready for Administration**. Press **Start Administration**.
-4. **In progress**: **Administration In Progress**, with the start time. For each drug, **Mark Started
+4. **Verified**: **Ready for Administration**. Press **Start Administration**. With dual sign-off on, an
+   order can only be started once it is verified by two people. With it off, an approved order can be
+   started without verification.
+5. **In progress**: **Administration In Progress**, with the start time. For each drug, **Mark Started
    Now** and **Mark Completed Now** stamp the time (or type it), with **Rate (mL/hr)** and **IV Access
    Site**. Each drug is tagged **Pending**, **Infusing** (blue) or **Completed** (green). Under **Adverse
    Reactions**, **Report Reaction** adds the drug, CTCAE grade (1 Mild to 5 Fatal), type and
    description; the worst grade shows as a tag (yellow for 1–2, orange for 3, red for 4–5). Press **Save
    Progress** (or **Save Reactions**) as you go.
-5. When the infusion is finished, press **Complete Cycle**, check the times and reactions in **Complete
+6. When the infusion is finished, press **Complete Cycle**, check the times and reactions in **Complete
    Cycle — Final Record**, add **Completion Notes** and press **Mark Cycle Complete**.
 
 **Check:** the card reads **Cycle 2 Completed**, with the administration time and a reactions summary.
@@ -558,7 +651,13 @@ Preparation Record**, **Administration Timeline** and **Adverse Reactions (CTCAE
 While an order is pending, approved or verified, the action card has **Hold** and **Cancel**. Each asks
 for a reason ("Reason for hold", "Reason for cancellation"); confirm with **Confirm Hold** or **Confirm
 Cancel**. The reason is added to the order's notes. Holding marks the treatment day **held**; cancelling
-frees the day so a new order can be made. A held order shows "Order is on hold." with **Cancel Order**.
+frees the day so a new order can be made. A held order shows "Order is on hold." with **Resume** and
+**Cancel Order**. **Resume** sends the order back to **pending** and clears its approval and
+verification, so it has to be approved and verified again; the treatment day goes back to **ordered**.
+An order that is being given cannot be cancelled: hold it first. Completed and cancelled orders cannot be
+held or cancelled.
+
+If an action is refused, the reason shows in red above the action card.
 
 ## Day-care Worklist
 
@@ -649,6 +748,8 @@ forms without deleting it, and **Activate** brings it back.
 **Cancer Timeline** (`/oncology/timeline`) first asks you to "Select a patient to view their complete
 cancer journey": search the registered patients by name or MRN and press **View Timeline**.
 
+### A patient's timeline
+
 The patient's timeline (`/oncology/timeline/{patientId}`) runs down the page as dated events
 along a date rail, each coloured by category: **Diagnosis**, **Staging**, **Tumor Board**, **Care Plan**,
 **Chemotherapy**, **Radiation**, **Surgery**, **Response**, **Follow-up** and **Note**. The legend at the
@@ -671,12 +772,6 @@ The back arrow goes to the [Patient Cancer Profile](#patient-cancer-profile).
 
 ## Not live yet
 
-- **Re-activate** on a held chemo order does not release it: it records another hold, and the order stays
-  **held**. To carry on, cancel the order and create a new one (from the treatment schedule, a cancelled
-  order frees the day for **Create order**).
-- **Step 3 — Second Nurse / Independent Check** takes free text, but the server stores it as a user ID.
-  Typing a name makes **Complete Verification** fail, with no message. Leave it blank until this is
-  fixed. The dual sign-off setting it mentions is not enforced.
 - Care plans cannot be approved or revised from the screens. The **Revised** status can be filtered but
   not set, and the profile's "Approved" date only appears for plans approved some other way.
 - A deactivated chemo protocol cannot be reactivated from the screens.

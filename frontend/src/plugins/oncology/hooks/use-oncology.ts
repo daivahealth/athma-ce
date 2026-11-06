@@ -219,8 +219,7 @@ export function useUpdateOncologyCarePlan() {
 export function useApproveOncologyCarePlan() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, approvedBy }: { id: string; approvedBy: string }) =>
-      oncologyService.approveCarePlan(id, approvedBy),
+    mutationFn: (id: string) => oncologyService.approveCarePlan(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: oncologyKeys.carePlans() });
     },
@@ -304,6 +303,17 @@ export function useUpdateChemoOrder() {
   });
 }
 
+export function useSubmitChemoOrder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => oncologyService.submitChemoOrder(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: oncologyKeys.orders() });
+      queryClient.invalidateQueries({ queryKey: oncologyKeys.orderDetail(id) });
+    },
+  });
+}
+
 export function useApproveChemoOrder() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -376,6 +386,17 @@ export function useCancelChemoOrder() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason?: string }) => oncologyService.cancelChemoOrder(id, reason),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: oncologyKeys.orders() });
+      queryClient.invalidateQueries({ queryKey: oncologyKeys.orderDetail(id) });
+    },
+  });
+}
+
+export function useResumeChemoOrder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason?: string }) => oncologyService.resumeChemoOrder(id, reason),
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: oncologyKeys.orders() });
       queryClient.invalidateQueries({ queryKey: oncologyKeys.orderDetail(id) });

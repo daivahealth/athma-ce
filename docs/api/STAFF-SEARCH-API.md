@@ -128,6 +128,13 @@ GET /staff/search?limit=20&offset=40
       "status": "active",
       "createdAt": "2025-01-01T08:00:00Z",
       "updatedAt": "2025-01-15T10:30:00Z",
+      "user": {
+        "id": "523e4567-e89b-12d3-a456-426614174000",
+        "email": "ahmed.hassan@hospital.ae",
+        "firstName": "Ahmed",
+        "lastName": "Hassan",
+        "status": "active"
+      },
       "staffSpecialties": [
         {
           "facilityId": "423e4567-e89b-12d3-a456-426614174000",
@@ -176,6 +183,11 @@ GET /staff/search?limit=20&offset=40
 - `languages` - Array of language codes (ISO 639-1)
 - `status` - Current status (active, inactive)
 - `staffSpecialties` - Array of specialty assignments with facility context
+- `user` - The staff member's linked login (`users.staff_id`), or `null` when the staff member has no
+  account: `{ id, email, firstName, lastName, status }`. Returned by every staff endpoint that returns
+  staff objects (`GET /staff`, `GET /staff/search`, `GET /staff/:id`, create/update responses). Use
+  `user.id` wherever a sign-off is recorded by user id — for example the oncology chemo order second
+  verifier picker lists only staff with an active linked login.
 
 **Metadata Object:**
 - `total` - Total number of matching staff members
