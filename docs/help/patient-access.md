@@ -262,7 +262,9 @@ page, **Previous** and **Next** appear with "Showing _n_ of _m_ encounters".
    **Change** lets you pick someone else.
 3. Choose the **Encounter Class** (**Ambulatory**, **Emergency**, **Virtual**, **Inpatient**, **Home
    Health**) and **Priority** (**Routine**, **Urgent**, **ASAP**, **STAT**, **Elective**).
-4. Set the **Start Date** and **Start Time**.
+4. Check the **Start Date** and **Start Time**. They start at today and the next half hour (at
+   11:13 the time shows 11:30), or at the appointment's start when you came from an appointment.
+   Change them if the encounter starts at another time.
 5. Press **Create Encounter**.
 
 A new encounter starts as **Planned**.
