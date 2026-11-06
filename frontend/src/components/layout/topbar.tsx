@@ -25,7 +25,9 @@ import {
   Puzzle,
   Check,
   Plus,
+  CircleHelp,
 } from 'lucide-react';
+import { useHelp } from '@/components/help/help-provider';
 import { ThemeToggle } from './theme-toggle';
 import { SidebarTrigger } from './sidebar';
 import { PatientSearch } from './patient-search';
@@ -50,6 +52,7 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   const t = useTranslations();
   const toast = useToast();
   const router = useRouter();
+  const { openHelp } = useHelp();
   const [session, setSession] = useState(getSession());
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [switching, setSwitching] = useState(false);
@@ -172,6 +175,18 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
         <div className="flex flex-1 items-center justify-end gap-2">
           {/* Theme Toggle */}
           <ThemeToggle />
+
+          {/* Help for the screen on hand, in a side panel; the sidebar's Help Centre has the whole manual */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={openHelp}
+            title="Help for this page (?)"
+            aria-label="Help for this page"
+            aria-keyshortcuts="?"
+          >
+            <CircleHelp className="h-5 w-5" />
+          </Button>
 
           {/* Notifications */}
           <NotificationCenter />

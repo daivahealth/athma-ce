@@ -14,7 +14,6 @@ import { userService } from '@/modules/foundation/services/user-service';
 import { useNavFeatureFlags } from '@/modules/foundation/hooks/use-nav-feature-flags';
 import { usePluginNavSections } from '@/lib/plugins/use-plugin-nav';
 import { pluginIconMap } from '@/lib/plugins/icon-map';
-import { useHelp } from '@/components/help/help-provider';
 import { useSidebar } from '@/lib/contexts/sidebar-context';
 // Register frontend plugins (oncology, …) wherever the sidebar renders, so their
 // nav sections appear across every route group — not only under (dashboard).
@@ -305,7 +304,8 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const claims = decodeAccessToken(session.accessToken);
   const { flags: navFlags, isLoading: isLoadingNavFlags } = useNavFeatureFlags();
   const { sections: pluginSections } = usePluginNavSections();
-  const { openHelp } = useHelp();
+  const helpCatalogPath = `/${locale}/help`;
+  const isHelpActive = pathname === helpCatalogPath || pathname.startsWith(`${helpCatalogPath}/`);
 
   // Collapse state is controlled entirely by explicit clicks on the toggle
   // button (no hover-to-expand) so it doesn't fight the user's intent.
@@ -609,22 +609,17 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
 
         {/* Footer */}
         <div className={cn('flex shrink-0 flex-col gap-1 border-t border-sidebar-border bg-sidebar-footer', collapsed ? 'items-center px-1 py-2' : 'p-1.5')}>
-          <button
-            type="button"
-            onClick={openHelp}
-            title={collapsed ? 'Help (?)' : undefined}
-            aria-label={collapsed ? 'Help' : undefined}
-            aria-keyshortcuts="?"
-            className={cn(collapsed ? ICON_ROW : ROOT_ROW, ROW_IDLE, 'h-7')}
+          {/* The whole manual. Help for the screen on hand is the topbar's help button (or `?`). */}
+          <Link
+            href={helpCatalogPath}
+            title={collapsed ? 'Help Centre' : undefined}
+            aria-label={collapsed ? 'Help Centre' : undefined}
+            aria-current={isHelpActive ? 'page' : undefined}
+            className={cn(collapsed ? ICON_ROW : ROOT_ROW, isHelpActive ? ROW_ACTIVE : ROW_IDLE, 'h-7')}
           >
             <BookOpenText aria-hidden />
-            {!collapsed && (
-              <>
-                <span className="min-w-0 flex-1 truncate">Help</span>
-                <kbd className="rounded border border-sidebar-border bg-background px-1 font-mono text-[10px] text-muted-foreground">?</kbd>
-              </>
-            )}
-          </button>
+            {!collapsed && <span className="min-w-0 flex-1 truncate">Help Centre</span>}
+          </Link>
           <div
             className={cn('flex items-center rounded-md', collapsed ? 'justify-center' : 'gap-2 px-2 py-1.5')}
             title={collapsed ? `${displayName} · ${facilityName}` : undefined}

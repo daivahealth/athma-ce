@@ -233,13 +233,15 @@ module by adding to `navSections` or through a plugin's `navigation`
 
 The in-app user manual, ported from prrapp. End users reach it three ways:
 
-- **`/help`** — the Help Centre: the manual grouped by purpose (each group
+- **`/help`** — the Help Centre, the whole catalogue, linked from **Help
+  Centre** in the sidebar footer: the manual grouped by purpose (each group
   in its own colour), full-text search (MiniSearch, one entry per heading so
   a hit lands on the paragraph), and `/help/{slug}` pages with the contents
   beside them.
-- **The help drawer** — `?` anywhere outside a text field, or **Help** in
-  the sidebar footer, opens the page for the screen the user is on, scrolled
-  to the section that names that screen.
+- **The help drawer** — the question-mark button in the topbar (**Help for
+  this page**, `useHelp().openHelp`), or `?` anywhere outside a text field,
+  opens the page for the screen the user is on in a right-hand sheet,
+  scrolled to the section that names that screen.
 - Links between pages, and from a page into the app.
 
 ### Where things live
@@ -278,8 +280,10 @@ description: 'One sentence naming the screens it covers.'
 - `routes` are app paths **without** the locale, matched by whole path
   segment. Each screen's path also goes in a code span in its heading or the
   paragraph under it, e.g. ``**Appointments** (`/scheduling/appointments`)``;
-  `{id}` stands for any id. The drawer picks the page with the most specific
-  match among both, so a screen under another module's path (an encounter's
+  `{id}` stands for any id. Only the heading line and its **first**
+  paragraph are read for routes, so put the code span there. The drawer
+  picks the page with the most specific match among both (longer wins, and a
+  literal segment such as `/new` beats an `{id}` of the same length), so a screen under another module's path (an encounter's
   triage) still opens the page that explains it.
 - Bold every on-screen label exactly as the UI writes it; link other pages as
   `slug.md#anchor` (GitHub-style heading ids); describe only what the code
