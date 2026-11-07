@@ -77,7 +77,7 @@ signed out here.
 ## The Health AI+ dashboard
 
 **Health AI+** (`/dashboard`) is the first entry in the sidebar and where you land after signing
-in. It is a snapshot of today's activity and this month's money for your facility, drawn from the
+in. Opening the app's bare web address, with no page after it, also brings you here. It is a snapshot of today's activity and this month's money for your facility, drawn from the
 Report Builder.
 
 **Go to:** **Health AI+** in the sidebar, or the Athma logo at the top of the sidebar.
@@ -172,8 +172,9 @@ settings are loading, the sidebar briefly shows every group and then drops the o
 
 ### Collapsing to the icon rail
 
-The small round arrow on the sidebar's right edge (**Collapse sidebar**) shrinks it to a narrow rail
-of icons, giving the screen more room. The same arrow (**Expand sidebar**) brings it back. It stays
+The panel icon at the far left of the top bar (**Toggle sidebar**) shrinks the sidebar to a narrow
+rail of icons, giving the screen more room; press it again to bring it back. Clicking the sidebar's
+right edge does the same. On a phone or narrow window the same icon opens the menu instead. It stays
 the way you leave it as you move between screens, until you reload the page, when it opens full
 width again.
 
@@ -197,6 +198,8 @@ The bar across the top of every screen holds, from the middle to the right:
 
 - **Patient search** and **New Patient**.
 - The theme toggle (sun or moon).
+- **Help for this page** (the question mark), which opens the help for the screen you are on in a
+  panel on the right. See [Help for the screen you are on](#help-for-the-screen-you-are-on).
 - **Notifications** (the bell).
 - The settings menu (the cog), with the administration screens.
 - Your user menu (the person icon), with the facility switcher, **Profile** and **Sign out**.
@@ -274,7 +277,8 @@ The manual you are reading has two ways in.
 
 ### The Help Centre
 
-**Help Centre** (`/help`) lists every page of the manual by group: **Getting started**, **Clinical
+**Help Centre** (`/help`) is the whole manual. Open it from **Help Centre** at the bottom of the
+sidebar, above your name. It lists every page of the manual by group: **Getting started**, **Clinical
 care**, **Diagnostics and pharmacy**, **Billing and revenue**, **Engagement and wellness**,
 **Insights**, **Administration** and **Reference**. Type in the search box to find the page or
 heading that mentions what you are looking for, then open it. Links inside a page jump to the
@@ -282,12 +286,15 @@ related page, often straight to the right heading.
 
 ### Help for the screen you are on
 
-Press the `?` key on any screen (not while typing in a box), or press **Help** at the bottom of the
-sidebar. A drawer opens beside the screen with the manual's page for that screen, scrolled to the
-section that explains it. Where another page also covers the screen, it is offered as related
-reading. Close the drawer to carry on where you were; nothing on the screen is lost.
+Press the question mark in the topbar (**Help for this page**), or the `?` key on any screen (not
+while typing in a box). A panel slides in from the right with the manual's page for that screen,
+scrolled to the section that explains it: on a patient's cancer profile, for example, it opens at
+**Patient Cancer Profile**. **Open in the Help Centre**, at the foot of the panel, opens the same
+section full width. Where another page also covers the screen, it is offered as related
+reading. Close the panel (the cross, Escape, or a click outside it) to carry on where you were; nothing on the
+screen is lost.
 
-If a screen has no page of its own, the drawer offers the Help Centre instead. The
+If a screen has no page of its own, the panel lists the whole manual instead. The
 [Glossary](glossary.md) explains the terms used across the app.
 
 ## Not live yet

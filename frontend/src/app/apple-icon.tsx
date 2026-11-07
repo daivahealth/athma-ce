@@ -8,6 +8,9 @@ export const size = {
 
 export const contentType = 'image/png';
 
+// iOS applies its own rounded mask, so the tile stays square and opaque.
+const STROKE = 4;
+
 // Image generation
 export default function AppleIcon() {
   return new ImageResponse(
@@ -20,13 +23,12 @@ export default function AppleIcon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: '20%',
         }}
       >
         <svg
-          width="124"
-          height="124"
-          viewBox="0 0 197 197"
+          width="140"
+          height="140"
+          viewBox="4 3 190 190"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -60,6 +62,9 @@ export default function AppleIcon() {
           <path
             d="M148.124 81.5962V180.345C148.124 186.262 143.327 191.058 137.411 191.058V166.419C126.916 183.21 110.736 191.058 93.2452 191.058C63.0724 191.058 38.3652 168.382 38.3652 135.455C38.3652 102.528 63.0724 80.2871 93.2452 80.2871C110.736 80.2871 128.447 88.3542 137.411 105.145V92.3077C137.411 86.3912 142.207 81.5947 148.124 81.5947V81.5962ZM49.0782 135.457C49.0782 162.494 68.7565 180.593 93.2437 180.593C153.371 180.593 153.371 90.5371 93.2437 90.5371C68.755 90.5371 49.0782 108.417 49.0782 135.455V135.457Z"
             fill="#18181B"
+            stroke="#18181B"
+            strokeWidth={STROKE}
+            strokeLinejoin="round"
           />
         </svg>
       </div>

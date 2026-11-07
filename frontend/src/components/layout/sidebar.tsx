@@ -14,18 +14,17 @@ import { userService } from '@/modules/foundation/services/user-service';
 import { useNavFeatureFlags } from '@/modules/foundation/hooks/use-nav-feature-flags';
 import { usePluginNavSections } from '@/lib/plugins/use-plugin-nav';
 import { pluginIconMap } from '@/lib/plugins/icon-map';
-import { useHelp } from '@/components/help/help-provider';
+import { useSidebar } from '@/lib/contexts/sidebar-context';
 // Register frontend plugins (oncology, …) wherever the sidebar renders, so their
 // nav sections appear across every route group — not only under (dashboard).
 import '@/plugins';
 import {
   LayoutDashboard,
   Users,
-  ChevronLeft,
   ChevronRight,
   ClipboardPlus,
   ChevronDown,
-  Menu,
+  PanelLeft,
   CalendarClock,
   Calendar,
   FileCheck,
@@ -307,7 +306,8 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const claims = decodeAccessToken(session.accessToken);
   const { flags: navFlags, isLoading: isLoadingNavFlags } = useNavFeatureFlags();
   const { sections: pluginSections } = usePluginNavSections();
-  const { openHelp } = useHelp();
+  const helpCatalogPath = `/${locale}/help`;
+  const isHelpActive = pathname === helpCatalogPath || pathname.startsWith(`${helpCatalogPath}/`);
 
   // Collapse state is controlled entirely by explicit clicks on the toggle
   // button (no hover-to-expand) so it doesn't fight the user's intent.
@@ -577,19 +577,23 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
           </Link>
         </div>
 
-        {/* Collapse toggle, on the sidebar's right edge so it is in the same place open or closed. */}
+        {/* Edge rail, after prrapp's SidebarRail: an invisible strip on the right border that shows a
+            hairline on hover and toggles the sidebar on click. The main toggle is SidebarTrigger in the topbar. */}
         <button
           type="button"
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          tabIndex={-1}
+          aria-label="Toggle Sidebar"
+          title="Toggle Sidebar"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             onToggle();
           }}
-          className="absolute -right-3 top-4 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-background text-muted-foreground shadow-sm outline-none transition-colors hover:border-primary/25 hover:text-primary focus-visible:ring-2 focus-visible:ring-sidebar-ring"
-        >
-          {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
-        </button>
+          className={cn(
+            'absolute inset-y-0 -right-2 z-20 flex w-4 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border',
+            collapsed ? 'cursor-e-resize' : 'cursor-w-resize'
+          )}
+        />
 
         {/* Navigation */}
         <nav
@@ -607,22 +611,17 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
 
         {/* Footer */}
         <div className={cn('flex shrink-0 flex-col gap-1 border-t border-sidebar-border bg-sidebar-footer', collapsed ? 'items-center px-1 py-2' : 'p-1.5')}>
-          <button
-            type="button"
-            onClick={openHelp}
-            title={collapsed ? 'Help (?)' : undefined}
-            aria-label={collapsed ? 'Help' : undefined}
-            aria-keyshortcuts="?"
-            className={cn(collapsed ? ICON_ROW : ROOT_ROW, ROW_IDLE, 'h-7')}
+          {/* The whole manual. Help for the screen on hand is the topbar's help button (or `?`). */}
+          <Link
+            href={helpCatalogPath}
+            title={collapsed ? 'Help Centre' : undefined}
+            aria-label={collapsed ? 'Help Centre' : undefined}
+            aria-current={isHelpActive ? 'page' : undefined}
+            className={cn(collapsed ? ICON_ROW : ROOT_ROW, isHelpActive ? ROW_ACTIVE : ROW_IDLE, 'h-7')}
           >
             <BookOpenText aria-hidden />
-            {!collapsed && (
-              <>
-                <span className="min-w-0 flex-1 truncate">Help</span>
-                <kbd className="rounded border border-sidebar-border bg-background px-1 font-mono text-[10px] text-muted-foreground">?</kbd>
-              </>
-            )}
-          </button>
+            {!collapsed && <span className="min-w-0 flex-1 truncate">Help Centre</span>}
+          </Link>
           <div
             className={cn('flex items-center rounded-md', collapsed ? 'justify-center' : 'gap-2 px-2 py-1.5')}
             title={collapsed ? `${displayName} · ${facilityName}` : undefined}
@@ -729,16 +728,26 @@ function CollapsedFlyout({ menuKey, title, icon: Icon, isActive, openKey, onOpen
   );
 }
 
-// Mobile Menu Button
-export function MobileMenuButton({ onToggle }: { onToggle: () => void }) {
+/**
+ * Sidebar toggle for the topbar, after prrapp's SidebarTrigger: a ghost icon button with the
+ * PanelLeft glyph. On desktop it collapses/expands the sidebar to the icon rail; below `md`,
+ * where the desktop sidebar is hidden, it opens the mobile drawer instead.
+ */
+export function SidebarTrigger({ onMobileToggle, className }: { onMobileToggle: () => void; className?: string }) {
+  const { toggleSidebar } = useSidebar();
   return (
     <Button
+      type="button"
       variant="ghost"
-      size="icon"
-      onClick={onToggle}
-      className="md:hidden"
+      aria-label="Toggle sidebar navigation"
+      title="Toggle sidebar"
+      onClick={() => {
+        if (window.matchMedia('(min-width: 768px)').matches) toggleSidebar();
+        else onMobileToggle();
+      }}
+      className={cn('h-8 w-8 p-0 text-foreground hover:bg-muted active:bg-muted active:scale-100 [&_svg]:size-4', className)}
     >
-      <Menu className="h-5 w-5" />
+      <PanelLeft aria-hidden />
     </Button>
   );
 }

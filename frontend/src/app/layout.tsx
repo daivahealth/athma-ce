@@ -22,7 +22,12 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: '/icon',
+    // The sized PNG is the legacy/Safari fallback; browsers that support SVG favicons
+    // prefer the scalable one, which also switches the "a" to light on dark tab bars.
+    icon: [
+      { url: '/icon', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
+    ],
     apple: '/apple-icon',
   },
   manifest: '/manifest.json',

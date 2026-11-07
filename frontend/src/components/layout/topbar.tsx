@@ -25,9 +25,11 @@ import {
   Puzzle,
   Check,
   Plus,
+  CircleHelp,
 } from 'lucide-react';
+import { useHelp } from '@/components/help/help-provider';
 import { ThemeToggle } from './theme-toggle';
-import { MobileMenuButton } from './sidebar';
+import { SidebarTrigger } from './sidebar';
 import { PatientSearch } from './patient-search';
 import { NotificationCenter } from './notification-center';
 import { useEffect, useState } from 'react';
@@ -50,6 +52,7 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   const t = useTranslations();
   const toast = useToast();
   const router = useRouter();
+  const { openHelp } = useHelp();
   const [session, setSession] = useState(getSession());
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [switching, setSwitching] = useState(false);
@@ -148,8 +151,9 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
 
   return (
     <header className="flex h-14 items-center bg-background/95 backdrop-blur-md px-6 border-b border-border sticky top-0 z-40 transition-all">
-      {/* Mobile Menu Button */}
-      <MobileMenuButton onToggle={onSidebarToggle} />
+      {/* Sidebar toggle (prrapp style): collapses the desktop sidebar, opens the drawer on mobile */}
+      <SidebarTrigger onMobileToggle={onSidebarToggle} className="-ml-2" />
+      <div className="mx-3 h-4 w-px shrink-0 bg-sidebar-border" aria-hidden="true" />
 
       <div className="flex flex-1 items-center justify-between gap-4">
         {/* Spacer for left side balance */}
@@ -171,6 +175,18 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
         <div className="flex flex-1 items-center justify-end gap-2">
           {/* Theme Toggle */}
           <ThemeToggle />
+
+          {/* Help for the screen on hand, in a side panel; the sidebar's Help Centre has the whole manual */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={openHelp}
+            title="Help for this page (?)"
+            aria-label="Help for this page"
+            aria-keyshortcuts="?"
+          >
+            <CircleHelp className="h-5 w-5" />
+          </Button>
 
           {/* Notifications */}
           <NotificationCenter />
