@@ -37,6 +37,7 @@ charges, then payers, fee schedules and contracts for insured patients.
 
 The line under the heading mentions clearinghouses and billing preferences, but neither has a
 screen here yet.
+
 On every create and edit screen below, the breadcrumb above the title (**RCM Setup** › the list) takes
 you back, and **Cancel** beside the save button returns to the list without saving.
 
