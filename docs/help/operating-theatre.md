@@ -25,8 +25,9 @@ instead of rows, your role may not have access to that part of the module; ask y
 
 ## OT Board
 
-**OT Board** (`/ot/board`) is the live picture of every theatre for one day. It is headed **Live
-theatre operations**. Opening `/ot` on its own brings you here, as there is no separate Operating
+**OT Board** (`/ot/board`) is the live picture of every theatre for one day. It is laid out like the
+**Dashboard**: under the heading **OT Board** is the board's date and either how many rooms are blocked
+or "no rooms blocked". Opening `/ot` on its own brings you here, as there is no separate Operating
 Theatre home page.
 
 **Go to:** **Operating Theatre** > **OT Board**.
@@ -35,18 +36,20 @@ Theatre home page.
 
 - **Board date** picks the day. It opens on today.
 - **Refresh** reloads the board. It does not update by itself, so press **Refresh** to see the latest
-  state. The bar under the tiles says when the data was fetched, for example "Last updated 2 minutes
-  ago".
-- **Open OT Schedules** and **Open OT Rooms** jump to those screens.
+  state. Beside it the board says when the data was fetched, for example "Live · updated 10:42".
+- **OT Schedules** and **OT Rooms**, beside the heading, jump to those screens.
 
 ### The tiles
 
-Six tiles count the rooms for the chosen day: **Active rooms**, **Occupied**, **Idle**, **Blocked**,
-**Next up** and **Cases in progress**.
+Under **Rooms**, six tiles count the rooms for the chosen day: **Active rooms**, **Occupied**,
+**Next up**, **Idle**, **Blocked** and **Cases in progress**. A tile is coloured when it has something
+to show (green for occupied, amber for next up, red for blocked, violet for cases in progress) and grey
+when its count is zero; **Blocked** turns green when no room is blocked.
 
 ### Room cards
 
-Each configured OT room has a card, with a coloured strip along the top and a state badge. Under the
+Under **Theatres**, each configured OT room has a card, with a thin coloured strip along the top and a
+state badge. Under the
 room name is its space number and specialty (or its notes).
 
 | State badge | Colour | Meaning |

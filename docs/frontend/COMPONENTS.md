@@ -133,6 +133,23 @@ fabricate a trend series to make a tile look richer.
 
 `accent` maps to the semantic tokens below (`primary | success | warning | info | destructive`) — pick the one that matches the metric's meaning, not an arbitrary color.
 
+### `MetricTile`
+
+`frontend/src/components/ui/metric-tile.tsx`
+
+The common dashboard tile: a tinted, tone-coloured block with a small
+uppercase label, the figure and an optional note. The Today dashboard
+(`dashboard-board.tsx`) and the OT Board both use it, so every operational
+board reads as one family — do not hand-build gradient or shadowed KPI cards.
+Pick the `tone` by what the figure asks of the reader (green when clear, the
+list's own tone while something waits, amber/orange/red when it needs action;
+`ATTENTION_TONES` holds those three). Pass `href` to make the tile a link into
+the page that works it.
+
+```tsx
+<MetricTile label="Blocked" value={metrics.blockedRooms} note="Approved block in place" tone={metrics.blockedRooms > 0 ? 'red' : 'green'} />
+```
+
 ### `EmptyState`
 
 `frontend/src/components/ui/empty-state.tsx`

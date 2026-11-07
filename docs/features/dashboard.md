@@ -26,7 +26,9 @@ red) — or "every list is clear". A Refresh button forces a cache refresh.
 
 Each tile is one figure, coloured by what it asks of the reader (green when
 clear, its list's own tone while something waits, red when overdue or urgent)
-and links to the page that works it.
+and links to the page that works it. Tiles render through the shared
+`MetricTile` (`frontend/src/components/ui/metric-tile.tsx`), which other
+operational boards such as the OT Board reuse.
 
 | Group | Tiles |
 |---|---|
