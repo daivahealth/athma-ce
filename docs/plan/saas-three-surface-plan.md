@@ -23,7 +23,7 @@ The Atlassian pattern (marketing site / signup & provisioning / product app) is 
 
 ## 2. Where the codebase actually is
 
-- **No public surface.** The only anonymous routes are `/login`, `/reset-password`, and `/debug`. No landing page, pricing, or signup.
+- **No public surface.** The only anonymous routes are `/login`, `/reset-password`, and `/confirm-reset`. No landing page, pricing, or signup.
 - **No provisioning pipeline.** `POST /api/v1/tenants` (foundation service) requires the `TENANT_CREATE` permission and inserts a single row — no admin user, no default roles, no facility, no config bootstrap. A working tenant today is only produced by manually running ~20 SQL seed files.
 - **Tenancy is header-from-JWT, not subdomain.** Tenant context flows as an `x-tenant-id` header derived from a JWT claim. The `domain` column on tenants is stored but never read for routing (good news — see §3).
 - **Auth is client-side only.** Tokens live in `localStorage`; route protection is a `useEffect` check in two layouts. No Next.js middleware auth gate, no httpOnly-cookie session. Acceptable for a closed pilot; not acceptable once outsiders touch the platform.

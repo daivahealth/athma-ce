@@ -41,13 +41,15 @@ every lab test that still needs a specimen, before it is handed to the lab.
 Tests are grouped so that one row is one specimen to take: tests for the same patient that need the same
 kind of specimen are collected together, even if they came from different orders. Each row shows:
 
-- **Patient**: name, age, gender and MRN.
-- **Specimen Group**: how many tests across how many orders the specimen covers ("3 tests across 2
-  orders"), with a chip for each order.
-- **Collection Profile**: the specimen type, the collection method, and a fasting badge.
+- **Patient**: initials, name, MRN, gender and age.
+- **Tests**: a chip for each test the specimen is for, and underneath how many tests across how many
+  orders the one draw covers ("3 tests · 2 orders, one draw").
+- **Specimen**: the specimen type, the collection method, and a fasting badge.
 - **Status**: where the row is in collection, and the barcode once a label has been prepared.
-- **Tests**: a chip for each test the specimen is for.
-- **Ordered**: when the order was placed.
+- **Ordered**: the date and time the order was placed.
+
+Above the table, two counts summarise the queue: how many rows are **to prepare** and how many are
+**labelled, awaiting draw**.
 
 | Badge | Colour | Meaning |
 | --- | --- | --- |
@@ -56,10 +58,10 @@ kind of specimen are collected together, even if they came from different orders
 | **Fasting** (with hours, such as **Fasting 12h**) | Orange | The patient must have fasted. Check before you draw. |
 | **No fasting** | Grey | No fasting requirement. |
 
-To see one patient's specimens only, use **Patient Filter** and search by name, MRN or mobile. Clear the
-search to see the whole queue again.
+To see one patient's specimens only, use the patient search above the table ("Filter by patient name, MRN
+or mobile"). Clear the search to see the whole queue again.
 
-When nothing is waiting, the queue says "No pending lab tests require specimen collection."
+When nothing is waiting, the queue says **Nothing to collect**.
 
 ### Prepare a label and collect
 
@@ -86,8 +88,9 @@ Prepared**) to send it again.
 
 ## Lab Operations
 
-**Lab Operations** (`/results/lab/operations`) holds the lab's internal worklists. It has four tabs, one
-per stage, each with a count of what is waiting in it:
+**Lab Operations** (`/results/lab/operations`) holds the lab's internal worklists. Across the top, four
+step cards (**Step 1** to **Step 4**) act as tabs, one per stage, each showing how many items are waiting
+in it. The selected stage is highlighted:
 
 | Tab | What it is for | What moves a row on |
 | --- | --- | --- |
@@ -103,15 +106,16 @@ per stage, each with a count of what is waiting in it:
 Both tabs list specimens with the same columns:
 
 - **Specimen**: the barcode and the specimen type.
-- **Order**: the order name and code.
+- **Order**: the order name and code. Orders that are not routine also show their priority (for
+  example **stat** in red or **urgent** in orange).
 - **Tests**: a chip for each test on the specimen.
-- **Collected**: when it was marked collected.
+- **Collected**: the date and time it was marked collected.
 
 1. On **Receiving**, when the specimen is in your hands, press **Receive**. It moves to **Accessioning**.
 2. On **Accessioning**, press **Accession**. The specimen is given an accession number and its tests move
    to **Processing**.
 
-When a tab is empty it says "No specimens are waiting in this stage."
+When a tab is empty it says "No specimens are waiting in this stage." under a short heading.
 
 ### Reject a specimen
 
@@ -136,7 +140,8 @@ One row per test on each accessioned specimen:
 - **Specimen**: barcode and type.
 - **Test**: name and code.
 - **Accession**: the accession number, or **Pending**.
-- **Status**: the test's current state, such as **accessioned** or **processing**.
+- **Status**: the test's current state as a coloured badge, such as **accessioned** (indigo) or
+  **processing** (amber).
 
 Press **Start Processing** when the test goes on the analyser or bench. The button then reads **Processing
 Started** and is greyed out. It is only available while the status is **accessioned**.
@@ -147,7 +152,8 @@ When the tab is empty it says "No accessioned work is waiting for processing."
 
 ### Result Entry
 
-Lists tests ready for results with their **Order**, **Test**, **Specimen** and **Accession**. Press
+Lists tests ready for results with their **Order** (and priority, if not routine), **Test**,
+**Specimen** and **Accession**. Press
 **Open Result Entry** to go to the order's report on [Lab results for an order](#lab-results-for-an-order),
 where you enter the results.
 
@@ -160,26 +166,28 @@ processing starts.
 
 **Go to:** **Lab** > **Lab Results** in the sidebar.
 
-The count above the table says how many results match ("Found 42 lab results"). Each row shows:
+Each row shows:
 
-- **Order Name** and **Patient**.
-- **Specimen**: the specimen type, with the specimen number underneath.
-- **Items**: how many analyte rows the report has, or **Narrative** for a narrative test.
-- **Abnormal**: how many results are abnormal, in amber, with the number of critical ones in red after it
-  ("(2 critical)"). A grey **0** means nothing is flagged.
+- **Patient**: initials, name, MRN, gender and age.
+- **Test**: the order name, with the specimen type and specimen number underneath.
+- **Findings**: a solid red **N critical** badge and an amber **N abnormal** badge when results are
+  flagged. When nothing is flagged it says **All N in range** in green, **Narrative report** for a
+  narrative test, or **No values yet** before results are entered.
 - **Status**: the report status (below).
-- **Reported**: when the report was issued, or **-** if it has not been.
+- **Reported**: the date and time the report was issued, or **Not reported**.
 
-Click a row, or press **View**, to open the report.
+Click a row (or focus it and press Enter) to open the report. The footer says which rows you are seeing
+("Showing 1–20 of 42 results").
 
 ### Find a result
 
-- Type in **Search lab results...** to search the list. It updates as you type.
-- Use the status filter (**All Statuses**, **Draft**, **Preliminary**, **Final**, **Amended**,
+- Type in **Search lab results** to search the list. It updates as you type.
+- Use the status buttons beside the search (**All**, **Draft**, **Preliminary**, **Final**, **Amended**,
   **Cancelled**) to narrow it.
 - Twenty rows show at a time. Use **Previous** and **Next** under the table to page through.
 
-When nothing matches the list says "No lab results found".
+When a search or filter matches nothing the list says **No results match**; press **Clear filters** to
+reset both. When there are no lab reports at all it says **No lab results yet**.
 
 ### Report statuses
 
@@ -210,27 +218,31 @@ lab orders that match your search.
 The report page (`/results/lab/{orderId}`) is where results are entered and read. It is the same page
 whether you came from **Lab Results** or from the **Result Entry** tab of Lab Operations.
 
-If no report exists yet, the page says "No lab report exists for this order yet." Press **Create Lab
-Report** to start one.
+If no report exists yet, the page says **No lab report yet** ("No lab report exists for this order yet.").
+Press **Create Lab Report** to start one.
 
 ### The header
 
-The top card shows **Lab Report**, the report status, the encounter number, and the patient's name, age,
-gender and MRN. If the patient was triaged in this encounter it also shows their **Triage Vitals** and
-their **Allergies** in red. The back arrow returns you to **Lab Results**.
+The top card shows **Lab Report**, the report status, the encounter number, and the patient's initials,
+name, age, gender and MRN. If the patient was triaged in this encounter it also shows their triage
+vitals as small chips (such as **HR 82 bpm**) and each allergy as a red **Allergies** badge. The back
+arrow returns you to **Lab Results**.
 
 ### Order & Specimen Summary
 
 This card shows where the order is and whether it is on time:
 
-- **Order**: the order name, with badges for its priority (green for routine, red for stat, urgent or
-  critical, amber otherwise), order code and order status, and how many lab orders the encounter has.
+- **Order**: the order name, with badges for its priority (grey for routine, solid red for stat or
+  critical, solid orange for urgent or asap, amber otherwise), order code and order status, and how many
+  lab orders the encounter has.
 - **Specimen No.** and **Accession No.**, each with its current status.
-- **Turnaround Time**: the target for this test ("4 hour target from order time"), with **Elapsed**, **Due
-  By** and **Remaining** (or how long it is **overdue**).
-- **Workflow Timeline**: when the order was **Ordered**, **Collected**, **Received**, **Processing** and
-  **Reported**. Steps not reached yet say **Pending**. Press **Show timeline** for a larger view with
-  separate dates and times; **Hide timeline** folds it back.
+- **Workflow Timeline**: a row of five steps, **Ordered**, **Collected**, **Received**, **Processing**
+  and **Reported**, each with its date and time. A completed step has a coloured tick. The step after
+  the furthest one reached is ringed and says **Up next**. An earlier step with no time recorded says
+  **Not recorded**, and steps still to come say **Pending**.
+- **Turnaround Time**: the target for this test ("4 hour target from order time"), a bar showing how much
+  of the target has been used, and **Elapsed**, **Due By** and **Remaining** (or how long it is
+  **overdue**). The panel takes the colour of the turnaround badge.
 - When the order has more than one test, a table lists each **Ordered Test** with its **Code**,
   **Specimen**, **Accession** and **Status**.
 
@@ -238,7 +250,7 @@ This card shows where the order is and whether it is on time:
 | --- | --- | --- |
 | **Within TAT** | Green | Not yet reported and comfortably inside the target. |
 | **Approaching TAT** | Amber | Not yet reported and within an hour (or a fifth of the target, if shorter) of the due time. |
-| **TAT breached** | Red | Past the due time, whether or not it has since been reported. |
+| **TAT breached** | Solid red | Past the due time, whether or not it has since been reported. |
 | **TAT met** | Green | Reported before the due time. |
 | **TAT not configured** | Grey | The test has no turnaround target in the catalogue ("No lab test TAT configured"). |
 
@@ -254,19 +266,23 @@ on the right shows **Draft**, **Preliminary**, **Final** with the current step h
 - **Value** (numbers only), **Unit**, **Ref Low** and **Ref High**.
 - **Comment**.
 
-**Interpretation** fills itself in as you type a value against a low and high range:
+**Flag** fills itself in as you type a value against a low and high range. An out-of-range value also
+gets an arrow (↑ or ↓) inside the value box, and the row gets a coloured edge:
 
-| Interpretation | Row colour | When |
+| Flag | Row colour | When |
 | --- | --- | --- |
-| **normal** | Green label | Inside the range. |
-| **low** / **high** | Amber | Below the low limit or above the high limit. |
-| **critical_low** | Red, bold | At or below half the low limit. |
-| **critical_high** | Red, bold | At or above one and a half times the high limit. |
+| **Normal** | Green label | Inside the range. |
+| **Low** / **High** | Amber | Below the low limit or above the high limit. |
+| **Critical low** | Red, bold, solid red label | At or below half the low limit. |
+| **Critical high** | Red, bold, solid red label | At or above one and a half times the high limit. |
 
-These flags feed the **Abnormal** count on Lab Results.
+These flags feed the **Findings** column on Lab Results.
 
-Press **+ Add Item** to add an analyte row that is not on the template, and **x** at the end of a row to
-remove it. Add any free-text remarks under **Comments**.
+Press **Add Item** to add an analyte row that is not on the template, and the **×** at the end of a row
+to remove it. Add any free-text remarks under **Comments**.
+
+The bar at the bottom of the card stays in view while you scroll. It shows how many values are entered
+("4 of 12 values entered") and how many are critical or abnormal, next to the buttons.
 
 When you are ready:
 
@@ -296,9 +312,11 @@ only) and **Finalize Report**.
 
 A **Final** or **Amended** report opens read-only.
 
-- A structured report shows a table of **Test Name**, **Code**, **Result**, **Unit**, **Reference
-  Range**, **Status** and **Comment**. Abnormal rows are tinted amber and critical rows red, with the
-  result in bold. Any **Comments** follow, then the **Reported** and **Verified** times.
+- A structured report shows a table of **Test** (with its code underneath), **Result**, **Unit**,
+  **Reference Range**, **Status** and **Comment**. Abnormal rows are tinted amber and critical rows red,
+  with a coloured left edge, the result in bold and an arrow (↑ or ↓) beside it. The heading shows how
+  many results are critical and abnormal. Any **Comments** follow, then the **Reported** and
+  **Verified** times along the bottom.
 - A narrative report shows each filled-in section under **Pathology Report**. Empty sections are left
   out, and **Internal Notes** are not shown.
 - A version marker such as **v2 (amended)** appears next to the status when the report has been revised.
@@ -318,8 +336,8 @@ It shows the patient header, an **Ordered Test Context** card (**Order**, **Test
 - **Back to Worklists** returns to [Lab Operations](#lab-operations).
 - **Mark Result Entered** marks the test as resulted and returns to Lab Operations.
 
-While it loads it says "Preparing result entry..."; if the test cannot be opened it says "Unable to open
-lab result entry for this ordered test."
+While it loads it shows grey placeholder blocks; if the test cannot be opened it says "Unable to open lab
+result entry for this ordered test." with a **Back to Worklists** button.
 
 ## Not live yet
 

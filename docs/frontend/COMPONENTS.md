@@ -251,6 +251,7 @@ Tone maps in use:
 | Appointments | `modules/clinical/utils/appointment-tone.ts` | `/scheduling/appointments` status |
 | Encounters | `modules/clinical/utils/encounter-tone.ts` | `/encounters` status, class, priority (`stat` solid) |
 | Lab collection | `modules/clinical/utils/lab-collection-tone.ts` | `/results/lab/collection` state, fasting |
+| Lab results | `modules/clinical/utils/lab-result-tone.ts` | report status (`ResultStatusBadge`, also on imaging and procedure), analyte interpretation (critical solid), lab stage, order priority across `/results/lab`, `/results/lab/operations` and the report page |
 | OT | `modules/ot/ot-tone.ts` | OT requests, schedules, reports, board (`EMERGENCY` solid) |
 | Billing | `modules/rcm/utils/billing-tone.ts` | `/invoices` status, `/revenue-cycle/claims` status and payer type |
 | Oncology | `plugins/oncology/lib/oncology-tone.ts` | every oncology `StatusBadge`, care-plan modality and intent, protocol phase |
@@ -293,6 +294,27 @@ Navigation entries, feature flags and plugin sections are unchanged — add a
 module by adding to `navSections` or through a plugin's `navigation`
 (see `docs/development/PLUGIN-DEVELOPMENT.md`), not by editing the markup.
 
+## App shell width on phones
+
+The `(clinical)` and `(dashboard)` route-group layouts
+(`frontend/src/app/[locale]/(clinical|dashboard)/layout.tsx`) and the topbar
+(`frontend/src/components/layout/topbar.tsx`) must fit a 375px viewport with
+no sideways page scroll (`document.documentElement.scrollWidth ===
+clientWidth`):
+
+- The content column beside the sidebar is `flex-1 min-w-0`. Without
+  `min-w-0` a flex child never shrinks below its content, so one wide table
+  or the topbar stretched the whole page. With it, the shared `Table`
+  (`components/ui/table.tsx`, wrapped in `overflow-auto`) scrolls inside its
+  card instead. Keep `min-w-0` on any new flex wrapper around page content.
+- Below `sm` the topbar drops to essentials: tighter padding, an icon-only
+  **New Patient** button (labelled via `aria-label`), and the theme toggle
+  and page-help button hidden. Page help stays reachable with `?` and the
+  Help Centre via the mobile drawer. The patient search takes the remaining
+  width. The label and both buttons return at `sm`, the full padding at `md`,
+  and from `lg` (desktop) the topbar is laid out exactly as before. The
+  clinical `main` keeps its `px-6` gutter from `md` (`px-4` below).
+
 ## Help Centre
 
 The in-app user manual, ported from prrapp. End users reach it three ways:
@@ -304,7 +326,8 @@ The in-app user manual, ported from prrapp. End users reach it three ways:
   beside them.
 - **The help drawer** — the question-mark button in the topbar (**Help for
   this page**, `useHelp().openHelp`), or `?` anywhere outside a text field,
-  opens the page for the screen the user is on in a right-hand sheet,
+  opens the page for the screen the user is on in a right-hand sheet (the
+  button is hidden below `sm`; the `?` shortcut still works there),
   scrolled to the section that names that screen.
 - Links between pages, and from a page into the app.
 

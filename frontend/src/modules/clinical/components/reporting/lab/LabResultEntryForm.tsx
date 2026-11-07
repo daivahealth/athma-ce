@@ -1,7 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { FlaskConical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { ToneBadge } from '@/components/ui/tone-badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,6 +27,7 @@ import {
 } from '../../../hooks/use-lab-operations';
 import { useLabTestResultTemplates } from '@/modules/foundation/hooks/use-catalogs';
 import { buildLabDisplayRows } from './lab-report-grouping';
+import { interpretationArrow, interpretationLabel, interpretationTone } from '../../../utils/lab-result-tone';
 
 interface LabResultEntryFormProps {
   report: LabReport;
@@ -203,12 +208,17 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
     transitionStatus.isPending ||
     completeResultEntry.isPending;
 
+  const enteredCount = items.filter(
+    (item) => item.valueNumeric != null || Boolean(item.valueString) || Boolean(item.valueCode),
+  ).length;
+  const criticalCount = items.filter((item) => item.criticalFlag).length;
+  const abnormalCount = items.filter((item) => item.abnormalFlag && !item.criticalFlag).length;
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold">Results</h2>
+    <Card className="overflow-hidden">
+      <div className="flex flex-col gap-3 border-b border-border/60 px-5 py-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2 className="font-display text-lg font-semibold tracking-tight">Results</h2>
           <ResultStatusBadge status={report.reportStatus} />
           <ReportVersionIndicator
             version={report.version}
@@ -219,184 +229,215 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
         <ResultStatusWorkflow currentStatus={report.reportStatus} />
       </div>
 
-      {/* Result Items */}
-      <div className="rounded-lg border p-4 space-y-4">
+      <div className="px-5 pt-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-medium">Result Items</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Result Items</h3>
           {isEditable && (
-            <Button variant="outline" size="sm" onClick={addItem}>
-              + Add Item
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={addItem}>
+              <Plus className="h-3.5 w-3.5" />
+              Add Item
             </Button>
           )}
         </div>
-
-        {/* Table Header */}
-        <div className="grid grid-cols-12 gap-2 text-xs font-medium text-muted-foreground border-b pb-2">
-          <div className="col-span-2">Test Name</div>
-          <div className="col-span-1">Code</div>
-          <div className="col-span-2">Value</div>
-          <div className="col-span-1">Unit</div>
-          <div className="col-span-1">Ref Low</div>
-          <div className="col-span-1">Ref High</div>
-          <div className="col-span-1">Interpretation</div>
-          <div className="col-span-2">Comment</div>
-          <div className="col-span-1"></div>
-        </div>
-
-        {/* Items */}
-        {displayRows.map((row) => {
-          if (row.kind === 'group') {
-            return (
-              <div key={row.key} className="rounded-md bg-muted/30 px-3 py-2 text-sm font-semibold">
-                {row.label}
-              </div>
-            );
-          }
-
-          const index = findItemIndex(row.key, row.item.testCode, row.item.codeSystem);
-          if (index === -1) return null;
-
-          const item = items[index];
-          const isAbnormal = item.abnormalFlag;
-          const isCritical = item.criticalFlag;
-
-          return (
-            <div
-              key={row.key}
-              className={cn(
-                'grid grid-cols-12 gap-2 items-center py-1',
-                isCritical && 'bg-red-50 rounded px-1',
-                isAbnormal && !isCritical && 'bg-amber-50 rounded px-1',
-              )}
-            >
-              <div className={cn('col-span-2', row.indentLevel > 0 && 'pl-6')}>
-                <Input
-                  value={item.testName}
-                  onChange={(e) => updateItem(index, 'testName', e.target.value)}
-                  disabled={!isEditable}
-                  placeholder="Test name"
-                  className="h-8 text-sm"
-                />
-              </div>
-              <div className="col-span-1">
-                <Input
-                  value={item.testCode}
-                  onChange={(e) => updateItem(index, 'testCode', e.target.value)}
-                  disabled={!isEditable}
-                  placeholder="LOINC"
-                  className="h-8 text-sm"
-                />
-              </div>
-              <div className="col-span-2">
-                <Input
-                  type="number"
-                  value={item.valueNumeric ?? ''}
-                  onChange={(e) =>
-                    updateItem(
-                      index,
-                      'valueNumeric',
-                      e.target.value ? parseFloat(e.target.value) : undefined,
-                    )
-                  }
-                  disabled={!isEditable}
-                  placeholder="Result"
-                  className={cn(
-                    'h-8 text-sm',
-                    isCritical && 'border-red-500 text-red-700 font-bold',
-                    isAbnormal && !isCritical && 'border-amber-500 text-amber-700 font-semibold',
-                  )}
-                />
-              </div>
-              <div className="col-span-1">
-                <Input
-                  value={item.unit || ''}
-                  onChange={(e) => updateItem(index, 'unit', e.target.value)}
-                  disabled={!isEditable}
-                  placeholder="Unit"
-                  className="h-8 text-sm"
-                />
-              </div>
-              <div className="col-span-1">
-                <Input
-                  type="number"
-                  value={item.refRangeLow ?? ''}
-                  onChange={(e) =>
-                    updateItem(
-                      index,
-                      'refRangeLow',
-                      e.target.value ? parseFloat(e.target.value) : undefined,
-                    )
-                  }
-                  disabled={!isEditable}
-                  placeholder="Low"
-                  className="h-8 text-sm"
-                />
-              </div>
-              <div className="col-span-1">
-                <Input
-                  type="number"
-                  value={item.refRangeHigh ?? ''}
-                  onChange={(e) =>
-                    updateItem(
-                      index,
-                      'refRangeHigh',
-                      e.target.value ? parseFloat(e.target.value) : undefined,
-                    )
-                  }
-                  disabled={!isEditable}
-                  placeholder="High"
-                  className="h-8 text-sm"
-                />
-              </div>
-              <div className="col-span-1">
-                <span
-                  className={cn(
-                    'text-xs px-1.5 py-0.5 rounded',
-                    item.interpretation === 'normal' && 'bg-green-100 text-green-700',
-                    item.interpretation === 'high' && 'bg-amber-100 text-amber-700',
-                    item.interpretation === 'low' && 'bg-amber-100 text-amber-700',
-                    item.interpretation === 'critical_high' && 'bg-red-100 text-red-700',
-                    item.interpretation === 'critical_low' && 'bg-red-100 text-red-700',
-                  )}
-                >
-                  {item.interpretation || '-'}
-                </span>
-              </div>
-              <div className="col-span-2">
-                <Input
-                  value={item.comment || ''}
-                  onChange={(e) => updateItem(index, 'comment', e.target.value)}
-                  disabled={!isEditable}
-                  placeholder="Comment"
-                  className="h-8 text-sm"
-                />
-              </div>
-              <div className="col-span-1">
-                {isEditable && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeItem(index)}
-                    className="h-8 w-8 p-0 text-red-500"
-                  >
-                    x
-                  </Button>
-                )}
-              </div>
-            </div>
-          );
-        })}
-
-        {displayRows.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground py-4">
-            No result items. Click &quot;+ Add Item&quot; to begin entering results.
-          </p>
-        )}
       </div>
 
-      {/* Comments */}
-      <div className="rounded-lg border p-4 space-y-2">
-        <Label htmlFor="comments">Comments</Label>
+      <div className="overflow-x-auto px-5 pb-2 pt-3">
+        <div className="min-w-[960px]">
+          <div className="grid grid-cols-12 gap-2 rounded-lg bg-muted/40 px-2 py-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            <div className="col-span-2">Test Name</div>
+            <div className="col-span-1">Code</div>
+            <div className="col-span-2">Value</div>
+            <div className="col-span-1">Unit</div>
+            <div className="col-span-1">Ref Low</div>
+            <div className="col-span-1">Ref High</div>
+            <div className="col-span-1">Flag</div>
+            <div className="col-span-2">Comment</div>
+            <div className="col-span-1" />
+          </div>
+
+          <div className="mt-1 space-y-1">
+            {displayRows.map((row) => {
+              if (row.kind === 'group') {
+                return (
+                  <div
+                    key={row.key}
+                    className="px-2 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                  >
+                    {row.label}
+                  </div>
+                );
+              }
+
+              const index = findItemIndex(row.key, row.item.testCode, row.item.codeSystem);
+              if (index === -1) return null;
+
+              const item = items[index];
+              const isAbnormal = item.abnormalFlag;
+              const isCritical = item.criticalFlag;
+              const arrow = interpretationArrow(item.interpretation);
+
+              return (
+                <div
+                  key={row.key}
+                  className={cn(
+                    'grid grid-cols-12 items-center gap-2 rounded-lg border-l-[3px] px-2 py-1.5 transition-colors',
+                    isCritical
+                      ? 'border-l-red-500 bg-red-50/70 dark:bg-red-950/30'
+                      : isAbnormal
+                        ? 'border-l-amber-400 bg-amber-50/60 dark:bg-amber-950/20'
+                        : 'border-l-transparent hover:bg-muted/30',
+                  )}
+                >
+                  <div className={cn('col-span-2', row.indentLevel > 0 && 'pl-4')}>
+                    <Input
+                      value={item.testName}
+                      onChange={(e) => updateItem(index, 'testName', e.target.value)}
+                      disabled={!isEditable}
+                      placeholder="Test name"
+                      aria-label="Test name"
+                      className="h-8 text-sm font-medium"
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <Input
+                      value={item.testCode}
+                      onChange={(e) => updateItem(index, 'testCode', e.target.value)}
+                      disabled={!isEditable}
+                      placeholder="LOINC"
+                      aria-label="Test code"
+                      className="h-8 font-mono text-xs"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <div className="relative">
+                      <Input
+                        type="number"
+                        value={item.valueNumeric ?? ''}
+                        onChange={(e) =>
+                          updateItem(
+                            index,
+                            'valueNumeric',
+                            e.target.value ? parseFloat(e.target.value) : undefined,
+                          )
+                        }
+                        disabled={!isEditable}
+                        placeholder="Result"
+                        aria-label={`${item.testName || 'Result'} value`}
+                        className={cn(
+                          'h-8 pr-7 font-mono text-sm tabular-nums [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+                          isCritical && 'border-red-500 font-bold text-red-700 focus-visible:ring-red-500 dark:text-red-300',
+                          isAbnormal && !isCritical && 'border-amber-500 font-semibold text-amber-700 focus-visible:ring-amber-500 dark:text-amber-300',
+                        )}
+                      />
+                      {arrow ? (
+                        <span
+                          className={cn(
+                            'pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-sm font-semibold',
+                            isCritical ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400',
+                          )}
+                          aria-hidden="true"
+                        >
+                          {arrow}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="col-span-1">
+                    <Input
+                      value={item.unit || ''}
+                      onChange={(e) => updateItem(index, 'unit', e.target.value)}
+                      disabled={!isEditable}
+                      placeholder="Unit"
+                      aria-label="Unit"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <Input
+                      type="number"
+                      value={item.refRangeLow ?? ''}
+                      onChange={(e) =>
+                        updateItem(
+                          index,
+                          'refRangeLow',
+                          e.target.value ? parseFloat(e.target.value) : undefined,
+                        )
+                      }
+                      disabled={!isEditable}
+                      placeholder="Low"
+                      aria-label="Reference low"
+                      className="h-8 font-mono text-xs"
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <Input
+                      type="number"
+                      value={item.refRangeHigh ?? ''}
+                      onChange={(e) =>
+                        updateItem(
+                          index,
+                          'refRangeHigh',
+                          e.target.value ? parseFloat(e.target.value) : undefined,
+                        )
+                      }
+                      disabled={!isEditable}
+                      placeholder="High"
+                      aria-label="Reference high"
+                      className="h-8 font-mono text-xs"
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    {item.interpretation ? (
+                      <ToneBadge tone={interpretationTone(item.interpretation)} strong={Boolean(isCritical)}>
+                        {interpretationLabel(item.interpretation)}
+                      </ToneBadge>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    )}
+                  </div>
+                  <div className="col-span-2">
+                    <Input
+                      value={item.comment || ''}
+                      onChange={(e) => updateItem(index, 'comment', e.target.value)}
+                      disabled={!isEditable}
+                      placeholder="Comment"
+                      aria-label="Comment"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-1 flex justify-end">
+                    {isEditable && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeItem(index)}
+                        className="h-8 w-8 p-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                        aria-label={`Remove ${item.testName || 'row'}`}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {displayRows.length === 0 && (
+            <EmptyState
+              icon={FlaskConical}
+              title="No result items yet"
+              description="Press Add Item to start entering analyte values."
+              className="py-8"
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-2 px-5 pb-5 pt-3">
+        <Label htmlFor="comments" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          Comments
+        </Label>
         <Textarea
           id="comments"
           value={reportData.comments || ''}
@@ -407,26 +448,34 @@ export function LabResultEntryForm({ report, onSaved }: LabResultEntryFormProps)
         />
       </div>
 
-      {/* Actions */}
       {isEditable && (
-        <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={handleSave} disabled={isSaving}>
-            Save Draft
-          </Button>
-          {report.reportStatus === ReportStatus.DRAFT && (
-            <Button
-              variant="secondary"
-              onClick={handleSubmitPreliminary}
-              disabled={isSaving}
-            >
-              Submit as Preliminary
+        <div className="sticky bottom-0 z-10 flex flex-col gap-3 border-t border-border/60 bg-card/95 px-5 py-3 backdrop-blur supports-[backdrop-filter]:bg-card/80 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <span>
+              <span className="font-semibold text-foreground">{enteredCount}</span> of {items.length} values entered
+            </span>
+            {criticalCount > 0 ? (
+              <ToneBadge tone="red" strong>
+                {criticalCount} critical
+              </ToneBadge>
+            ) : null}
+            {abnormalCount > 0 ? <ToneBadge tone="amber">{abnormalCount} abnormal</ToneBadge> : null}
+          </div>
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button variant="outline" onClick={handleSave} disabled={isSaving}>
+              Save Draft
             </Button>
-          )}
-          <Button onClick={handleSubmitFinal} disabled={isSaving}>
-            Finalize Report
-          </Button>
+            {report.reportStatus === ReportStatus.DRAFT && (
+              <Button variant="secondary" onClick={handleSubmitPreliminary} disabled={isSaving}>
+                Submit as Preliminary
+              </Button>
+            )}
+            <Button onClick={handleSubmitFinal} disabled={isSaving}>
+              Finalize Report
+            </Button>
+          </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

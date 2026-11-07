@@ -1,14 +1,19 @@
 import type { Metadata } from 'next';
 import { Inter, Outfit } from 'next/font/google';
 import '@/styles/globals.css';
+import { DEPLOYMENT_MODE, getDeploymentModeInfo } from '@/lib/config/deployment';
+
+// Non-production instances say so in the tab title ("Login | Athma [DEMO]") and stay out of search indexes.
+const isProductionDeployment = DEPLOYMENT_MODE === 'production';
+const titleSuffix = isProductionDeployment ? '' : ` [${getDeploymentModeInfo().label}]`;
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit', display: 'swap' });
 
 export const metadata: Metadata = {
   title: {
-    default: 'Athma',
-    template: '%s | Athma',
+    default: `Athma${titleSuffix}`,
+    template: `%s | Athma${titleSuffix}`,
   },
   description: 'Unified PMS, EHR, and ECM for modern healthcare teams.',
   applicationName: 'Athma',
@@ -31,6 +36,7 @@ export const metadata: Metadata = {
     apple: '/apple-icon',
   },
   manifest: '/manifest.json',
+  ...(isProductionDeployment ? {} : { robots: { index: false, follow: false } }),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

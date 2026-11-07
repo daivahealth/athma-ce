@@ -17,7 +17,11 @@ import { PathologyReportForm } from '@/modules/clinical/components/reporting/lab
 import { PathologyReportViewer } from '@/modules/clinical/components/reporting/lab/PathologyReportViewer';
 import { ReportPatientHeader } from '@/modules/clinical/components/reporting/ReportPatientHeader';
 import { ReportStatus, type LabReport, type PathologyReport } from '@/modules/clinical/types/reporting';
+import { FilePlus2, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useLabTest, useLabTestResultTemplates } from '@/modules/foundation/hooks/use-catalogs';
 
 export default function LabResultPage() {
@@ -43,7 +47,13 @@ export default function LabResultPage() {
   const isLoading = isLoadingLabReports || isLoadingPathologyReports;
 
   if (isLoading) {
-    return <div className="p-6">Loading...</div>;
+    return (
+      <div className="space-y-6 px-6 pb-6 pt-2" aria-busy="true" aria-label="Loading lab report">
+        <Skeleton className="h-36 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-80 w-full rounded-xl" />
+      </div>
+    );
   }
 
   const sourceReports = isNarrativeReport ? pathologyReports : reports;
@@ -64,23 +74,30 @@ export default function LabResultPage() {
 
   if (!displayReport) {
     return (
-      <div className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Lab Results</h2>
-        <p className="text-muted-foreground mb-4">No lab report exists for this order yet.</p>
-        <Button
-          onClick={async () => {
-            if (isNarrativeReport) {
-              await createPathologyReport.mutateAsync({ orderId });
-              refetchPathology();
-            } else {
-              await createReport.mutateAsync({ orderId });
-              refetch();
+      <div className="px-6 pb-6 pt-2">
+        <Card>
+          <EmptyState
+            icon={FilePlus2}
+            title="No lab report yet"
+            description="No lab report exists for this order yet. Start one to enter results."
+            action={
+              <Button
+                onClick={async () => {
+                  if (isNarrativeReport) {
+                    await createPathologyReport.mutateAsync({ orderId });
+                    refetchPathology();
+                  } else {
+                    await createReport.mutateAsync({ orderId });
+                    refetch();
+                  }
+                }}
+                disabled={createReport.isPending || createPathologyReport.isPending}
+              >
+                Create Lab Report
+              </Button>
             }
-          }}
-          disabled={createReport.isPending || createPathologyReport.isPending}
-        >
-          Create Lab Report
-        </Button>
+          />
+        </Card>
       </div>
     );
   }
@@ -90,10 +107,11 @@ export default function LabResultPage() {
     displayReport.reportStatus === ReportStatus.PRELIMINARY;
 
   return (
-    <div className="px-6 pb-6 pt-2 space-y-6">
+    <div className="space-y-6 px-6 pb-6 pt-2 page-transition">
       {!isEditable ? (
         <div className="flex justify-end print:hidden">
-          <Button variant="outline" onClick={() => window.print()}>
+          <Button variant="outline" className="gap-1.5" onClick={() => window.print()}>
+            <Printer className="h-4 w-4" />
             Print Result
           </Button>
         </div>

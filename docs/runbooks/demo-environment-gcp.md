@@ -46,6 +46,7 @@ Browser calls cross subdomains. Foundation, clinical, prm and ai-gateway allow t
 - **Clinical runs through ts-node (`--transpile-only`):** the oncology plugin's module entrypoint is TypeScript and is `require()`d at boot (discovered from `/app/plugins`).
 - **Build order:** turbo does not order builds by `file:` workspace dependencies. The Dockerfile builds contracts/types, then utils, then the other shared packages, then everything else.
 - **Frontend contract types:** the frontend imports `backend/contracts/src` by relative path, so the image keeps the repo layout.
+- **Deployment mode:** the frontend builds with `NEXT_PUBLIC_DEPLOYMENT_MODE=demo`, which shows the "DEMO: not for production or clinical use, no real or live patient data" banner, a `DEMO` badge and a `[DEMO]` tab-title suffix, and sets `noindex`. Override it with `DEPLOYMENT_MODE=<mode>` in `.env`, then rebuild the frontend. See [Deployment Mode](../features/DEPLOYMENT-MODE.md).
 
 ## Monthly cost (approximate, on-demand)
 
