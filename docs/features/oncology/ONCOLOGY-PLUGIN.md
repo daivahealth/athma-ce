@@ -29,7 +29,7 @@ All staging, tumor board, and care plan records link back to a `CancerDiagnosis`
 
 | Nav Item          | Route                         | Description                                       |
 |-------------------|-------------------------------|---------------------------------------------------|
-| Oncology Dashboard | `/oncology/dashboard`        | Service summary: the day's chemo/day-care/RT work, approvals waiting, caseload and pathway gaps (`GET /dashboard`) |
+| Oncology Dashboard | `/oncology/dashboard`        | Operations tab: the day's chemo/day-care/RT work, approvals waiting, caseload and pathway gaps (`GET /dashboard`). Population health tab (`?view=population`): incidence, age/gender, stage at diagnosis, time to treatment, outcomes, geography, screenable cancers (`GET /dashboard/population`) |
 | Oncology Registry | `/oncology/registry`          | All cancer patients with diagnosis summary        |
 | Tumor Staging     | `/oncology/staging`           | Staging records across patients                   |
 | Tumor Board       | `/oncology/tumor-board`       | MDT case reviews and decisions                    |
@@ -405,12 +405,13 @@ frontend/src/plugins/oncology/
     ├── TreatmentIntentBadge.tsx      # Colored badge component
     ├── protocol-builder/             # Phase builder, regimen matrix, schedule preview
     ├── treatment-schedule/DaySheet.tsx # Timed day sheet (checks, sequence, supportive care)
+    ├── dashboard/PopulationHealthView.tsx # Population health tab (Recharts incidence + age/gender, stage bar)
     ├── cockpit/                      # Patient cockpit: DiseaseOverview, TreatmentJourney, MarkerTrends, NextUp
     ├── StaffSelect.tsx               # Staff picker (tumour-board attendees)
     └── shared.tsx                    # LoadingState, EmptyState, StatusBadge, PatientCell
 
 frontend/src/app/[locale]/(dashboard)/oncology/
-├── dashboard/page.tsx                # Oncology Dashboard (MetricTile rows + MDT/orders/caseload panels)
+├── dashboard/page.tsx                # Oncology Dashboard: Operations and Population health tabs
 ├── registry/
 │   ├── page.tsx                      # Registry list with AddDiagnosisSheet
 │   └── [patientId]/page.tsx          # Patient cancer cockpit (see below)

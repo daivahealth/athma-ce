@@ -1,16 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MetricTile } from '@/components/ui/metric-tile';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ToneBadge, type BadgeTone } from '@/components/ui/tone-badge';
 import { TONE_BAR } from '@/components/ui/tone-classes';
 import { cn } from '@/lib/utils';
+import { PopulationHealthView } from '@/plugins/oncology/components/dashboard/PopulationHealthView';
 import { useOncologyDashboard } from '@/plugins/oncology/hooks/use-oncology';
 import { oncologyStatusTone } from '@/plugins/oncology/lib/oncology-tone';
 import { addDaysIso, formatDate, formatShortDate, todayIso } from '@/plugins/oncology/lib/treatment-day';
@@ -101,11 +103,11 @@ function CancerTypeBars({ rows }: { rows: OncologyDashboard['caseload']['byCance
 }
 
 /**
- * Service-level oncology dashboard: caseload, the day's chemotherapy and
- * radiotherapy work, approvals waiting, tumour board and care-pathway gaps.
- * Laid out like the Today dashboard and the OT Board.
+ * Operations view: caseload, the day's chemotherapy and radiotherapy work,
+ * approvals waiting, tumour board and care-pathway gaps. Laid out like the
+ * Today dashboard and the OT Board.
  */
-export default function OncologyDashboardPage() {
+function OperationsView() {
   const params = useParams<{ locale: string }>();
   const locale = params?.locale ?? 'en';
   const base = `/${locale}/oncology`;
@@ -284,7 +286,7 @@ export default function OncologyDashboardPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-6 page-transition">
+    <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-1.5">
           <Button
@@ -468,5 +470,45 @@ export default function OncologyDashboardPage() {
         </div>
       ) : null}
     </div>
+  );
+}
+
+type DashboardView = 'operations' | 'population';
+
+/**
+ * Oncology Dashboard: the day's operations, or the population health view of
+ * the cancer registry (`?view=population`).
+ */
+export default function OncologyDashboardPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const view: DashboardView = searchParams.get('view') === 'population' ? 'population' : 'operations';
+
+  const setView = (next: string) => {
+    const query = new URLSearchParams(searchParams.toString());
+    if (next === 'population') query.set('view', 'population');
+    else query.delete('view');
+    const search = query.toString();
+    router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
+  };
+
+  return (
+    <Tabs value={view} onValueChange={setView} className="flex flex-col gap-6 page-transition">
+      <TabsList aria-label="Dashboard view" className="self-start">
+        <TabsTrigger value="operations" className="px-4">
+          Operations
+        </TabsTrigger>
+        <TabsTrigger value="population" className="px-4">
+          Population health
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="operations" className="mt-0">
+        <OperationsView />
+      </TabsContent>
+      <TabsContent value="population" className="mt-0">
+        <PopulationHealthView />
+      </TabsContent>
+    </Tabs>
   );
 }

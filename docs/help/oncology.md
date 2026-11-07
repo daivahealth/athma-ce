@@ -91,7 +91,12 @@ cards and on the day-care worklist.
 
 ## Oncology Dashboard
 
-The dashboard shows one day, today by default. Use the arrows or the date box to look at another day,
+The dashboard has two tabs: **Operations** (the day's work) and **Population health** (who has
+cancer and how they are doing).
+
+### Operations
+
+The Operations tab shows one day, today by default. Use the arrows or the date box to look at another day,
 and **Today** to come back. It refreshes itself every minute; **Refresh** updates it now. The line under
 the heading says how many items are waiting for sign-off.
 
@@ -111,6 +116,29 @@ tile to open the screen where that work is done.
 Below the tiles, **Upcoming tumour board** lists the open cases (overdue ones in red),
 **Chemo orders needing action** lists orders waiting for approval, verification or on hold, and
 **Active disease by cancer type** shows the caseload split by cancer type.
+
+### Population health
+
+Choose a period (**All time**, **Last 12 months**, **Last 3 years** or **Last 5 years**). Every figure
+counts the diagnoses dated in that period.
+
+- **Tiles**: patients and diagnoses, median age at diagnosis, the share diagnosed at stage III–IV, the
+  median days from diagnosis to first treatment, the share treated within 30 days, and the share of care
+  plans with curative intent (with remission and recurrence rates). Late stage turns amber at 30% and
+  orange at 50%; time to treatment turns amber above 30 days, and treated-within-30-days below 70%.
+- **New diagnoses by month**: the last 12 months. Point at a bar for the exact count.
+- **Age at diagnosis by gender**: diagnoses in each age band, female and male side by side.
+- **Stage at diagnosis**: the first staging recorded for each diagnosis, from stage 0 (lightest) to
+  stage IV (darkest), plus unstaged.
+- **By cancer type**: the ten commonest cancers with median age, late-stage share, days to treatment and
+  remission share.
+- **Screenable cancers**: breast, cervical, oral and colorectal cancers, which have screening
+  programmes. A high late-stage share here points to missed early detection.
+- **Where patients live**: patients by city, from the address on their registration.
+- **Outcomes and intent**: current clinical status and treatment intent across the cohort.
+
+First treatment is the earliest chemo order, treatment schedule start or radiation start for the
+diagnosis. Survival is not shown, because the patient record does not hold a date of death.
 
 ## Oncology Registry
 
