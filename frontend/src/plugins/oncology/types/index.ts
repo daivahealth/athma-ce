@@ -795,3 +795,73 @@ export interface OncologyLabPoint {
   abnormal_flag?: boolean | null;
   observed_at: string;
 }
+
+// ============================================
+// Oncology Dashboard (GET /plugins/oncology/dashboard)
+// ============================================
+
+export interface OncologyDashboardPatient {
+  patientId: string;
+  mrn: string;
+  displayName: string;
+  gender: string;
+  age: number;
+}
+
+export interface OncologyDashboardCount {
+  key: string;
+  count: number;
+}
+
+export interface OncologyDashboard {
+  date: string;
+  generatedAt: string;
+  caseload: {
+    activePatients: number;
+    registeredPatients: number;
+    newDiagnosesLast30Days: number;
+    metastatic: number;
+    byClinicalStatus: OncologyDashboardCount[];
+    byCancerType: OncologyDashboardCount[];
+  };
+  pathwayGaps: { unstaged: number; withoutCarePlan: number; notDiscussedAtTumorBoard: number };
+  chemo: {
+    ordersToday: number;
+    inProgressToday: number;
+    completedToday: number;
+    awaitingApproval: number;
+    awaitingVerification: number;
+    held: number;
+  };
+  dayCare: { scheduled: number; notYetOrdered: number; ordered: number; given: number; held: number };
+  radiation: {
+    activeCourses: number;
+    prescriptionsAwaitingApproval: number;
+    fractionsToday: number;
+    fractionsDelivered: number;
+    fractionsMissed: number;
+  };
+  tumorBoard: {
+    today: number;
+    next7Days: number;
+    overdue: number;
+    upcoming: Array<{
+      id: string;
+      meetingDate: string | null;
+      status: string;
+      cancerType: string;
+      primarySite: string | null;
+      patient: OncologyDashboardPatient | null;
+    }>;
+  };
+  plans: { carePlansDraft: number; carePlansActive: number; schedulesActive: number; schedulesOnHold: number };
+  ordersNeedingAction: Array<{
+    id: string;
+    scheduledDate: string | null;
+    status: string;
+    cycleNumber: number;
+    protocolCode: string;
+    protocolName: string;
+    patient: OncologyDashboardPatient | null;
+  }>;
+}

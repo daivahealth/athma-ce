@@ -12,6 +12,7 @@ const oncologyPlugin: FrontendPluginManifest = {
       labelKey: 'nav.oncology',
       icon: 'Radiation',
       children: [
+        { href: '/oncology/dashboard', labelKey: 'nav.oncologyDashboard', icon: 'LayoutDashboard' },
         { href: '/oncology/registry', labelKey: 'nav.oncologyRegistry', icon: 'ClipboardList' },
         { href: '/oncology/staging', labelKey: 'nav.tumorStaging', icon: 'Target' },
         { href: '/oncology/tumor-board', labelKey: 'nav.tumorBoard', icon: 'Users' },

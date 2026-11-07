@@ -105,6 +105,7 @@
     "rbac": "التحكم في الصلاحيات",
     "pluginManagement": "إدارة الإضافات",
     "oncology": "الأورام",
+    "oncologyDashboard": "لوحة الأورام",
     "oncologyRegistry": "سجل الأورام",
     "tumorStaging": "تصنيف الورم",
     "tumorBoard": "مجلس الأورام",

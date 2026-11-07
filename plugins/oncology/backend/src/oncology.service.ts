@@ -467,6 +467,220 @@ export class OncologyService {
     };
   }
 
+  // ============================================
+  // Oncology Dashboard
+  // ============================================
+
+  /**
+   * One-call summary for the Oncology Dashboard: caseload, the day's chemo and
+   * radiation work, approvals waiting across the service, tumour board and
+   * care-pathway gaps. Every query is tenant-scoped; `date` is the board day.
+   */
+  async getDashboard(date?: string) {
+    const tenantId = this.getTenantId();
+    const day = date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : new Date().toISOString().slice(0, 10);
+    const n = (v: unknown) => Number(v ?? 0);
+    const ACTIVE_DISEASE = `('active','recurrence','relapsed')`;
+
+    const [caseload, statusRows, cancerTypeRows, gaps, chemo, dayCare, radiation, tumorBoard, plans, boardCases, actionOrders] =
+      await Promise.all([
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT
+             COUNT(DISTINCT patient_id) FILTER (WHERE clinical_status IN ${ACTIVE_DISEASE}) AS active_patients,
+             COUNT(DISTINCT patient_id) AS registered_patients,
+             COUNT(*) FILTER (WHERE diagnosis_date > $2::date - INTERVAL '30 days' AND diagnosis_date <= $2::date) AS new_last_30,
+             COUNT(*) FILTER (WHERE clinical_status IN ${ACTIVE_DISEASE} AND metastatic_status = 'distant') AS metastatic
+           FROM plugin_oncology.cancer_diagnoses WHERE tenant_id = $1::uuid`,
+          tenantId, day,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT clinical_status AS key, COUNT(*) AS count FROM plugin_oncology.cancer_diagnoses
+           WHERE tenant_id = $1::uuid GROUP BY clinical_status`,
+          tenantId,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT cancer_type AS key, COUNT(*) AS count FROM plugin_oncology.cancer_diagnoses
+           WHERE tenant_id = $1::uuid AND clinical_status IN ${ACTIVE_DISEASE}
+           GROUP BY cancer_type ORDER BY COUNT(*) DESC, cancer_type LIMIT 8`,
+          tenantId,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT
+             COUNT(*) FILTER (WHERE NOT EXISTS (
+               SELECT 1 FROM plugin_oncology.tumor_staging ts
+               WHERE ts.cancer_diagnosis_id = cd.id AND ts.tenant_id = cd.tenant_id)) AS unstaged,
+             COUNT(*) FILTER (WHERE NOT EXISTS (
+               SELECT 1 FROM plugin_oncology.oncology_care_plans cp
+               WHERE cp.cancer_diagnosis_id = cd.id AND cp.tenant_id = cd.tenant_id
+                 AND cp.status IN ('draft','active','on_hold'))) AS without_care_plan,
+             COUNT(*) FILTER (WHERE NOT EXISTS (
+               SELECT 1 FROM plugin_oncology.tumor_board_cases tb
+               WHERE tb.cancer_diagnosis_id = cd.id AND tb.tenant_id = cd.tenant_id)) AS not_discussed
+           FROM plugin_oncology.cancer_diagnoses cd
+           WHERE cd.tenant_id = $1::uuid AND cd.clinical_status IN ${ACTIVE_DISEASE}`,
+          tenantId,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT
+             COUNT(*) FILTER (WHERE scheduled_date = $2::date AND status <> 'cancelled') AS today_total,
+             COUNT(*) FILTER (WHERE scheduled_date = $2::date AND status = 'in_progress') AS today_in_progress,
+             COUNT(*) FILTER (WHERE scheduled_date = $2::date AND status = 'completed') AS today_completed,
+             COUNT(*) FILTER (WHERE status = 'pending') AS awaiting_approval,
+             COUNT(*) FILTER (WHERE status = 'approved') AS awaiting_verification,
+             COUNT(*) FILTER (WHERE status = 'held') AS held
+           FROM plugin_oncology.chemo_orders WHERE tenant_id = $1::uuid`,
+          tenantId, day,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT
+             COUNT(*) FILTER (WHERE status NOT IN ('skipped','cancelled')) AS total,
+             COUNT(*) FILTER (WHERE status = 'planned') AS planned,
+             COUNT(*) FILTER (WHERE status = 'ordered') AS ordered,
+             COUNT(*) FILTER (WHERE status = 'given') AS given,
+             COUNT(*) FILTER (WHERE status = 'held') AS held
+           FROM plugin_oncology.treatment_days WHERE tenant_id = $1::uuid AND scheduled_date = $2::date`,
+          tenantId, day,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT
+             (SELECT COUNT(*) FROM plugin_oncology.radiation_prescriptions
+               WHERE tenant_id = $1::uuid AND status = 'ACTIVE') AS active_courses,
+             (SELECT COUNT(*) FROM plugin_oncology.radiation_prescriptions
+               WHERE tenant_id = $1::uuid AND status = 'DRAFT') AS awaiting_approval,
+             (SELECT COUNT(*) FROM plugin_oncology.radiation_fractions
+               WHERE tenant_id = $1::uuid AND planned_date = $2::date AND status <> 'CANCELLED') AS fractions_today,
+             (SELECT COUNT(*) FROM plugin_oncology.radiation_fractions
+               WHERE tenant_id = $1::uuid AND planned_date = $2::date AND status = 'DELIVERED') AS fractions_delivered,
+             (SELECT COUNT(*) FROM plugin_oncology.radiation_fractions
+               WHERE tenant_id = $1::uuid AND planned_date = $2::date AND status = 'MISSED') AS fractions_missed`,
+          tenantId, day,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT
+             COUNT(*) FILTER (WHERE meeting_date = $2::date) AS today,
+             COUNT(*) FILTER (WHERE meeting_date >= $2::date AND meeting_date < $2::date + 7
+                              AND status IN ('scheduled','in_review')) AS next_7_days,
+             COUNT(*) FILTER (WHERE meeting_date < $2::date AND status IN ('scheduled','in_review')) AS overdue
+           FROM plugin_oncology.tumor_board_cases WHERE tenant_id = $1::uuid`,
+          tenantId, day,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT
+             (SELECT COUNT(*) FROM plugin_oncology.oncology_care_plans
+               WHERE tenant_id = $1::uuid AND status = 'draft') AS care_plans_draft,
+             (SELECT COUNT(*) FROM plugin_oncology.oncology_care_plans
+               WHERE tenant_id = $1::uuid AND status = 'active') AS care_plans_active,
+             (SELECT COUNT(*) FROM plugin_oncology.treatment_plans
+               WHERE tenant_id = $1::uuid AND status = 'active') AS schedules_active,
+             (SELECT COUNT(*) FROM plugin_oncology.treatment_plans
+               WHERE tenant_id = $1::uuid AND status = 'on_hold') AS schedules_on_hold`,
+          tenantId,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT tbc.id, tbc.patient_id, tbc.meeting_date, tbc.status, cd.cancer_type, cd.primary_site,
+             p.mrn AS patient_mrn, p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+             p.display_name AS patient_display_name, p.gender AS patient_gender, p.date_of_birth AS patient_date_of_birth
+           FROM plugin_oncology.tumor_board_cases tbc
+           JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = tbc.cancer_diagnosis_id AND cd.tenant_id = tbc.tenant_id
+           LEFT JOIN public.patients p ON p.id = tbc.patient_id
+           WHERE tbc.tenant_id = $1::uuid AND tbc.status IN ('scheduled','in_review')
+             AND tbc.meeting_date >= $2::date - 30
+           ORDER BY tbc.meeting_date ASC LIMIT 6`,
+          tenantId, day,
+        ),
+        this.prisma.$queryRawUnsafe<any[]>(
+          `SELECT co.id, co.patient_id, co.scheduled_date, co.status, co.cycle_number,
+             cp.code AS protocol_code, cp.name AS protocol_name,
+             p.mrn AS patient_mrn, p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+             p.display_name AS patient_display_name, p.gender AS patient_gender, p.date_of_birth AS patient_date_of_birth
+           FROM plugin_oncology.chemo_orders co
+           JOIN plugin_oncology.chemo_protocols cp ON cp.id = co.protocol_id
+           LEFT JOIN public.patients p ON p.id = co.patient_id
+           WHERE co.tenant_id = $1::uuid AND co.status IN ('pending','approved','held')
+           ORDER BY co.scheduled_date ASC LIMIT 8`,
+          tenantId,
+        ),
+      ]);
+
+    const counts = (rows: any[]) => rows.map((r) => ({ key: String(r.key ?? 'unknown'), count: n(r.count) }));
+    const patient = (r: any) => {
+      const display = this.buildPatientDisplay(r);
+      return display
+        ? { patientId: display.patientId, mrn: display.mrn, displayName: display.displayName, gender: display.gender, age: display.age }
+        : null;
+    };
+    const isoDate = (v: unknown) => (v ? new Date(v as string).toISOString().slice(0, 10) : null);
+    const [c, g, ch, dc, rt, tb, pl] = [caseload[0], gaps[0], chemo[0], dayCare[0], radiation[0], tumorBoard[0], plans[0]];
+
+    return {
+      date: day,
+      generatedAt: new Date().toISOString(),
+      caseload: {
+        activePatients: n(c?.active_patients),
+        registeredPatients: n(c?.registered_patients),
+        newDiagnosesLast30Days: n(c?.new_last_30),
+        metastatic: n(c?.metastatic),
+        byClinicalStatus: counts(statusRows),
+        byCancerType: counts(cancerTypeRows),
+      },
+      pathwayGaps: {
+        unstaged: n(g?.unstaged),
+        withoutCarePlan: n(g?.without_care_plan),
+        notDiscussedAtTumorBoard: n(g?.not_discussed),
+      },
+      chemo: {
+        ordersToday: n(ch?.today_total),
+        inProgressToday: n(ch?.today_in_progress),
+        completedToday: n(ch?.today_completed),
+        awaitingApproval: n(ch?.awaiting_approval),
+        awaitingVerification: n(ch?.awaiting_verification),
+        held: n(ch?.held),
+      },
+      dayCare: {
+        scheduled: n(dc?.total),
+        notYetOrdered: n(dc?.planned),
+        ordered: n(dc?.ordered),
+        given: n(dc?.given),
+        held: n(dc?.held),
+      },
+      radiation: {
+        activeCourses: n(rt?.active_courses),
+        prescriptionsAwaitingApproval: n(rt?.awaiting_approval),
+        fractionsToday: n(rt?.fractions_today),
+        fractionsDelivered: n(rt?.fractions_delivered),
+        fractionsMissed: n(rt?.fractions_missed),
+      },
+      tumorBoard: {
+        today: n(tb?.today),
+        next7Days: n(tb?.next_7_days),
+        overdue: n(tb?.overdue),
+        upcoming: boardCases.map((r) => ({
+          id: r.id,
+          meetingDate: isoDate(r.meeting_date),
+          status: r.status,
+          cancerType: r.cancer_type,
+          primarySite: r.primary_site,
+          patient: patient(r),
+        })),
+      },
+      plans: {
+        carePlansDraft: n(pl?.care_plans_draft),
+        carePlansActive: n(pl?.care_plans_active),
+        schedulesActive: n(pl?.schedules_active),
+        schedulesOnHold: n(pl?.schedules_on_hold),
+      },
+      ordersNeedingAction: actionOrders.map((r) => ({
+        id: r.id,
+        scheduledDate: isoDate(r.scheduled_date),
+        status: r.status,
+        cycleNumber: r.cycle_number,
+        protocolCode: r.protocol_code,
+        protocolName: r.protocol_name,
+        patient: patient(r),
+      })),
+    };
+  }
+
   async getPatientCancerSummary(patientId: string) {
     const tenantId = this.getTenantId();
 

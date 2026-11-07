@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,9 @@ export default function ChemoOrdersPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  // ?status= lets the Oncology Dashboard deep-link to one status
+  const initialStatus = useSearchParams().get('status') ?? '';
+  const [statusFilter, setStatusFilter] = useState(initialStatus);
 
   const { data, isLoading } = useChemoOrders(statusFilter ? { status: statusFilter } : undefined);
   const allOrders: ChemoOrder[] = data?.data ?? [];

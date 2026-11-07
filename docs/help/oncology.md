@@ -2,8 +2,8 @@
 title: 'Oncology'
 group: 'Clinical care'
 order: 60
-routes: ['/oncology/registry', '/oncology/staging', '/oncology/tumor-board', '/oncology/care-plans', '/oncology/protocols', '/oncology/orders', '/oncology/treatment-plans', '/oncology/day-care', '/oncology/radiation', '/oncology/catalogs', '/oncology/timeline']
-description: 'The cancer pathway from the Oncology Registry through staging, tumour board and care plans to chemo protocols, chemo orders, treatment schedules, the day-care worklist, radiation therapy, catalogs and the cancer timeline.'
+routes: ['/oncology/dashboard', '/oncology/registry', '/oncology/staging', '/oncology/tumor-board', '/oncology/care-plans', '/oncology/protocols', '/oncology/orders', '/oncology/treatment-plans', '/oncology/day-care', '/oncology/radiation', '/oncology/catalogs', '/oncology/timeline']
+description: 'The Oncology Dashboard and the cancer pathway from the Oncology Registry through staging, tumour board and care plans to chemo protocols, chemo orders, treatment schedules, the day-care worklist, radiation therapy, catalogs and the cancer timeline.'
 ---
 
 Shown when your organisation has Oncology switched on.
@@ -24,6 +24,9 @@ step leans on the one before it:
 9. **Radiation Therapy**: prescriptions, simulation, planning, fractions and reviews.
 10. **Catalogs**: the reference lists (cancer types, sites, histologies) the forms pick from.
 11. **Cancer Timeline**: one patient's whole journey on a single line.
+
+**Oncology Dashboard**, at the top of the section, is the service at a glance. See
+[Oncology Dashboard](#oncology-dashboard).
 
 A patient can have more than one diagnosis (a second primary, or a recurrence tracked separately).
 Staging, tumour board cases, care plans and orders always belong to one diagnosis.
@@ -85,6 +88,29 @@ palliative purple, surveillance sky.
 A chemo protocol's phases are coloured by their position, in this order: sky, violet, emerald, orange,
 fuchsia. The same colour marks the phase in the protocol builder, on the treatment schedule's cycle
 cards and on the day-care worklist.
+
+## Oncology Dashboard
+
+The dashboard shows one day, today by default. Use the arrows or the date box to look at another day,
+and **Today** to come back. It refreshes itself every minute; **Refresh** updates it now. The line under
+the heading says how many items are waiting for sign-off.
+
+Each tile is coloured by what it asks of you: amber or orange when something is waiting, red when
+something was missed or is overdue, green when all is clear, grey when there is nothing to show. Click a
+tile to open the screen where that work is done.
+
+- **Treatment today**: patients on the day-care worklist and how many have no chemo order yet, chemo
+  running now, radiation fractions planned and missed, and active chemo and radiation courses.
+- **Waiting for action**: chemo orders to approve, to verify and on hold, radiation prescriptions and
+  care plans to approve, and tumour board cases whose meeting date has passed without a decision.
+  The chemo tiles open **Chemo Orders** already filtered to that status.
+- **Caseload and pathway gaps**: patients with active disease (active, recurrence or relapsed), new
+  diagnoses in the last 30 days, metastatic patients, and active diagnoses that have no staging, no open
+  care plan, or have never been to a tumour board.
+
+Below the tiles, **Upcoming tumour board** lists the open cases (overdue ones in red),
+**Chemo orders needing action** lists orders waiting for approval, verification or on hold, and
+**Active disease by cancer type** shows the caseload split by cancer type.
 
 ## Oncology Registry
 
