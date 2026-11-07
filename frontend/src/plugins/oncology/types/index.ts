@@ -865,3 +865,38 @@ export interface OncologyDashboard {
     patient: OncologyDashboardPatient | null;
   }>;
 }
+
+// Oncology population health (GET /plugins/oncology/dashboard/population)
+export interface OncologyPopulationHealth {
+  months: number;
+  generatedAt: string;
+  summary: {
+    diagnoses: number;
+    patients: number;
+    medianAgeAtDiagnosis: number | null;
+    lateStagePercent: number | null;
+    stagedPercent: number | null;
+    metastaticPercent: number | null;
+    medianDaysToTreatment: number | null;
+    treatedWithin30DaysPercent: number | null;
+    withTreatmentDate: number;
+    recurrencePercent: number | null;
+    remissionPercent: number | null;
+    curativeIntentPercent: number | null;
+  };
+  incidenceByMonth: Array<{ month: string; count: number }>;
+  ageGender: Array<{ band: string; male: number; female: number; other: number }>;
+  stageAtDiagnosis: Array<{ stage: string; count: number }>;
+  byCancerType: Array<{
+    cancerType: string;
+    diagnoses: number;
+    medianAge: number | null;
+    lateStagePercent: number | null;
+    medianDaysToTreatment: number | null;
+    remissionPercent: number | null;
+  }>;
+  byCity: OncologyDashboardCount[];
+  byClinicalStatus: OncologyDashboardCount[];
+  byTreatmentIntent: OncologyDashboardCount[];
+  screenableCancers: Array<{ programme: string; diagnoses: number; lateStagePercent: number | null }>;
+}

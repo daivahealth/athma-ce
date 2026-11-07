@@ -34,6 +34,12 @@ export class OncologyController {
     return { success: true, data: await this.oncologyService.getDashboard(date) };
   }
 
+  @Get('dashboard/population')
+  @Permissions('oncology.registry.read')
+  async getPopulationHealth(@Query('months') months?: string) {
+    return { success: true, data: await this.oncologyService.getPopulationHealth(months ? parseInt(months, 10) : 0) };
+  }
+
   // ============================================
   // Cancer Diagnosis
   // ============================================
