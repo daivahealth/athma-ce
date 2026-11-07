@@ -690,161 +690,218 @@ export class OncologyService {
   async getPopulationHealth(months = 0) {
     const tenantId = this.getTenantId();
     const window = Number.isInteger(months) && months > 0 && months <= 240 ? months : 0;
-    const n = (v: unknown) => Number(v ?? 0);
-    const num = (v: unknown) => (v === null || v === undefined ? null : Math.round(Number(v) * 10) / 10);
 
-    // One CTE: the cohort with stage at diagnosis (earliest staging), age at
-    // diagnosis and the first planned treatment date across chemo and RT.
-    const cohort = `
-      WITH cohort AS (
-        SELECT cd.id, cd.patient_id, cd.cancer_type, cd.diagnosis_date, cd.clinical_status,
-          cd.metastatic_status, cd.is_recurrence,
-          p.gender, NULLIF(TRIM(p.city), '') AS city,
-          EXTRACT(YEAR FROM age(cd.diagnosis_date, p.date_of_birth))::int AS age_at_dx,
-          (SELECT ts.stage_group FROM plugin_oncology.tumor_staging ts
-            WHERE ts.cancer_diagnosis_id = cd.id AND ts.tenant_id = cd.tenant_id
-            ORDER BY ts.staging_date ASC, ts.created_at ASC LIMIT 1) AS stage_raw,
-          (SELECT cp.treatment_intent FROM plugin_oncology.oncology_care_plans cp
-            WHERE cp.cancer_diagnosis_id = cd.id AND cp.tenant_id = cd.tenant_id AND cp.status <> 'cancelled'
-            ORDER BY cp.created_at ASC LIMIT 1) AS intent,
-          LEAST(
-            (SELECT MIN(co.scheduled_date) FROM plugin_oncology.chemo_orders co
-              WHERE co.cancer_diagnosis_id = cd.id AND co.tenant_id = cd.tenant_id
-                AND co.status NOT IN ('draft','cancelled')),
-            (SELECT MIN(tp.start_date) FROM plugin_oncology.treatment_plans tp
-              WHERE tp.cancer_diagnosis_id = cd.id AND tp.tenant_id = cd.tenant_id AND tp.status <> 'cancelled'),
-            (SELECT MIN(rp.planned_start_date) FROM plugin_oncology.radiation_prescriptions rp
-              WHERE rp.cancer_profile_id = cd.id AND rp.tenant_id = cd.tenant_id AND rp.status <> 'CANCELLED')
-          ) AS first_treatment
-        FROM plugin_oncology.cancer_diagnoses cd
-        LEFT JOIN public.patients p ON p.id = cd.patient_id
-        WHERE cd.tenant_id = $1::uuid
-          AND ($2::int = 0 OR cd.diagnosis_date > CURRENT_DATE - make_interval(months => $2::int))
-      ), staged AS (
-        SELECT *,
-          CASE
-            WHEN stage_raw IS NULL OR TRIM(stage_raw) = '' THEN 'Unstaged'
-            WHEN stage_raw ~* '^(stage\\s*)?(0|is|tis)' THEN '0'
-            WHEN stage_raw ~* '^(stage\\s*)?IV' THEN 'IV'
-            WHEN stage_raw ~* '^(stage\\s*)?III' THEN 'III'
-            WHEN stage_raw ~* '^(stage\\s*)?II' THEN 'II'
-            WHEN stage_raw ~* '^(stage\\s*)?I' THEN 'I'
-            ELSE 'Unstaged'
-          END AS stage,
-          CASE WHEN first_treatment IS NOT NULL AND first_treatment >= diagnosis_date
-               THEN first_treatment - diagnosis_date END AS days_to_treatment
-        FROM cohort
-      )`;
-    const q = <T = any>(select: string) => this.prisma.$queryRawUnsafe<T[]>(cohort + select, tenantId, window);
+    // One set-based pass: the cohort joined to pre-aggregated lookups (first
+    // staging, first care-plan intent, earliest chemo / schedule / RT start),
+    // returning one small row per diagnosis. Every breakdown below is grouped
+    // in memory from these rows, so the cohort is computed once.
+    const rows = await this.prisma.$queryRawUnsafe<
+      Array<{
+        patient_id: string;
+        cancer_type: string;
+        dx_month: string;
+        clinical_status: string;
+        metastatic_status: string;
+        is_recurrence: boolean;
+        gender: string | null;
+        city: string | null;
+        age_at_dx: number | null;
+        stage_raw: string | null;
+        intent: string | null;
+        days_to_treatment: number | null;
+      }>
+    >(
+      `WITH cohort AS (
+         SELECT cd.id, cd.patient_id, cd.cancer_type, cd.diagnosis_date, cd.clinical_status,
+           cd.metastatic_status, cd.is_recurrence
+         FROM plugin_oncology.cancer_diagnoses cd
+         WHERE cd.tenant_id = $1::uuid
+           AND ($2::int = 0 OR cd.diagnosis_date > CURRENT_DATE - make_interval(months => $2::int))
+       ),
+       first_stage AS (
+         SELECT DISTINCT ON (ts.cancer_diagnosis_id) ts.cancer_diagnosis_id AS id, ts.stage_group
+         FROM plugin_oncology.tumor_staging ts JOIN cohort c ON c.id = ts.cancer_diagnosis_id
+         WHERE ts.tenant_id = $1::uuid
+         ORDER BY ts.cancer_diagnosis_id, ts.staging_date ASC, ts.created_at ASC
+       ),
+       first_intent AS (
+         SELECT DISTINCT ON (cp.cancer_diagnosis_id) cp.cancer_diagnosis_id AS id, cp.treatment_intent
+         FROM plugin_oncology.oncology_care_plans cp JOIN cohort c ON c.id = cp.cancer_diagnosis_id
+         WHERE cp.tenant_id = $1::uuid AND cp.status <> 'cancelled'
+         ORDER BY cp.cancer_diagnosis_id, cp.created_at ASC
+       ),
+       starts AS (
+         SELECT id, MIN(start_date) AS first_treatment FROM (
+           SELECT co.cancer_diagnosis_id AS id, co.scheduled_date AS start_date
+           FROM plugin_oncology.chemo_orders co
+           WHERE co.tenant_id = $1::uuid AND co.status NOT IN ('draft','cancelled')
+           UNION ALL
+           SELECT tp.cancer_diagnosis_id, tp.start_date
+           FROM plugin_oncology.treatment_plans tp
+           WHERE tp.tenant_id = $1::uuid AND tp.status <> 'cancelled'
+           UNION ALL
+           SELECT rp.cancer_profile_id, rp.planned_start_date
+           FROM plugin_oncology.radiation_prescriptions rp
+           WHERE rp.tenant_id = $1::uuid AND rp.status <> 'CANCELLED'
+         ) s WHERE id IS NOT NULL AND start_date IS NOT NULL GROUP BY id
+       )
+       SELECT c.patient_id, c.cancer_type, to_char(c.diagnosis_date, 'YYYY-MM') AS dx_month,
+         c.clinical_status, c.metastatic_status, c.is_recurrence,
+         p.gender, NULLIF(TRIM(p.city), '') AS city,
+         EXTRACT(YEAR FROM age(c.diagnosis_date, p.date_of_birth))::int AS age_at_dx,
+         fs.stage_group AS stage_raw, fi.treatment_intent AS intent,
+         CASE WHEN st.first_treatment >= c.diagnosis_date
+              THEN (st.first_treatment - c.diagnosis_date)::int END AS days_to_treatment
+       FROM cohort c
+       LEFT JOIN public.patients p ON p.id = c.patient_id
+       LEFT JOIN first_stage fs ON fs.id = c.id
+       LEFT JOIN first_intent fi ON fi.id = c.id
+       LEFT JOIN starts st ON st.id = c.id`,
+      tenantId,
+      window,
+    );
 
+    // Stage at diagnosis folded to 0, I–IV or Unstaged (IIIB → III, is/Tis → 0).
+    const stageOf = (raw: string | null): string => {
+      const s = (raw ?? '').trim().replace(/^stage\s*/i, '');
+      if (!s) return 'Unstaged';
+      if (/^(0|is|tis)/i.test(s)) return '0';
+      if (/^IV/i.test(s)) return 'IV';
+      if (/^III/i.test(s)) return 'III';
+      if (/^II/i.test(s)) return 'II';
+      if (/^I/i.test(s)) return 'I';
+      return 'Unstaged';
+    };
     // Cancers with population screening programmes (breast, cervix, oral cavity, colorectum).
-    const SCREENABLE = `CASE
-        WHEN cancer_type ~* 'breast' THEN 'Breast'
-        WHEN cancer_type ~* 'cervi' THEN 'Cervical'
-        WHEN cancer_type ~* '(oral|mouth|tongue|buccal|lip)' THEN 'Oral'
-        WHEN cancer_type ~* '(colorectal|colon|rect)' THEN 'Colorectal'
-      END`;
+    const screenableOf = (type: string): string | null =>
+      /breast/i.test(type) ? 'Breast'
+        : /cervi/i.test(type) ? 'Cervical'
+          : /(oral|mouth|tongue|buccal|lip)/i.test(type) ? 'Oral'
+            : /(colorectal|colon|rect)/i.test(type) ? 'Colorectal'
+              : null;
+    const bandOf = (age: number | null): string =>
+      age === null ? 'Unknown' : age < 18 ? '0-17' : age < 40 ? '18-39' : age < 50 ? '40-49' : age < 60 ? '50-59' : age < 70 ? '60-69' : '70+';
+    const genderOf = (g: string | null): 'male' | 'female' | 'other' => {
+      const v = (g ?? '').toLowerCase();
+      return v === 'male' || v === 'm' ? 'male' : v === 'female' || v === 'f' ? 'female' : 'other';
+    };
+    /** Same as PERCENTILE_CONT(0.5): linear interpolation, nulls ignored, one decimal. */
+    const median = (values: Array<number | null>): number | null => {
+      const v = values.filter((x): x is number => x !== null).sort((a, b) => a - b);
+      if (v.length === 0) return null;
+      const mid = (v.length - 1) / 2;
+      const m = v[Math.floor(mid)] + (v[Math.ceil(mid)] - v[Math.floor(mid)]) * (mid - Math.floor(mid));
+      return Math.round(m * 10) / 10;
+    };
+    const pct = (part: number, whole: number) => (whole > 0 ? Math.round((part / whole) * 100) : null);
+    const byCount = <T extends { count: number }>(a: T & { key: string }, b: T & { key: string }) =>
+      b.count - a.count || a.key.localeCompare(b.key);
+    const tally = (keys: string[]) => {
+      const m = new Map<string, number>();
+      for (const k of keys) m.set(k, (m.get(k) ?? 0) + 1);
+      return [...m.entries()].map(([key, count]) => ({ key, count })).sort(byCount);
+    };
 
-    const [headline, trend, ageGender, stages, byType, places, statuses, intents, screening] = await Promise.all([
-      q(`SELECT
-           COUNT(*) AS diagnoses,
-           COUNT(DISTINCT patient_id) AS patients,
-           PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY age_at_dx) AS median_age,
-           COUNT(*) FILTER (WHERE stage IN ('I','II','III','IV','0')) AS staged,
-           COUNT(*) FILTER (WHERE stage IN ('III','IV')) AS late_stage,
-           COUNT(*) FILTER (WHERE metastatic_status = 'distant') AS metastatic,
-           PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY days_to_treatment) AS median_days_to_treatment,
-           COUNT(days_to_treatment) AS with_treatment_date,
-           COUNT(*) FILTER (WHERE days_to_treatment <= 30) AS treated_within_30,
-           COUNT(*) FILTER (WHERE clinical_status IN ('recurrence','relapsed') OR is_recurrence) AS recurrence,
-           COUNT(*) FILTER (WHERE clinical_status IN ('remission','resolved')) AS remission,
-           COUNT(intent) AS with_intent,
-           COUNT(*) FILTER (WHERE intent = 'curative') AS curative
-         FROM staged`),
-      // Monthly incidence over the last 12 months, zero-filled.
-      q(`, months AS (
-           SELECT generate_series(date_trunc('month', CURRENT_DATE) - INTERVAL '11 months',
-                                  date_trunc('month', CURRENT_DATE), INTERVAL '1 month')::date AS month)
-         SELECT to_char(m.month, 'YYYY-MM') AS month, COUNT(s.id) AS count
-         FROM months m LEFT JOIN staged s ON date_trunc('month', s.diagnosis_date) = m.month
-         GROUP BY m.month ORDER BY m.month`),
-      q(`SELECT
-           CASE WHEN age_at_dx IS NULL THEN 'Unknown'
-                WHEN age_at_dx < 18 THEN '0-17'
-                WHEN age_at_dx < 40 THEN '18-39'
-                WHEN age_at_dx < 50 THEN '40-49'
-                WHEN age_at_dx < 60 THEN '50-59'
-                WHEN age_at_dx < 70 THEN '60-69'
-                ELSE '70+' END AS band,
-           COUNT(*) FILTER (WHERE LOWER(gender) IN ('male','m')) AS male,
-           COUNT(*) FILTER (WHERE LOWER(gender) IN ('female','f')) AS female,
-           COUNT(*) FILTER (WHERE gender IS NULL OR LOWER(gender) NOT IN ('male','m','female','f')) AS other
-         FROM staged GROUP BY 1`),
-      q(`SELECT stage AS key, COUNT(*) AS count FROM staged GROUP BY stage`),
-      q(`SELECT cancer_type,
-           COUNT(*) AS diagnoses,
-           PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY age_at_dx) AS median_age,
-           COUNT(*) FILTER (WHERE stage IN ('I','II','III','IV','0')) AS staged,
-           COUNT(*) FILTER (WHERE stage IN ('III','IV')) AS late_stage,
-           PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY days_to_treatment) AS median_days_to_treatment,
-           COUNT(*) FILTER (WHERE clinical_status IN ('remission','resolved')) AS remission
-         FROM staged GROUP BY cancer_type ORDER BY COUNT(*) DESC, cancer_type LIMIT 10`),
-      q(`SELECT COALESCE(city, 'Not recorded') AS key, COUNT(DISTINCT patient_id) AS count
-         FROM staged GROUP BY 1 ORDER BY COUNT(DISTINCT patient_id) DESC, 1 LIMIT 8`),
-      q(`SELECT clinical_status AS key, COUNT(*) AS count FROM staged GROUP BY clinical_status ORDER BY COUNT(*) DESC`),
-      q(`SELECT COALESCE(intent, 'not_set') AS key, COUNT(*) AS count FROM staged GROUP BY 1 ORDER BY COUNT(*) DESC`),
-      q(`SELECT ${SCREENABLE} AS programme,
-           COUNT(*) AS diagnoses,
-           COUNT(*) FILTER (WHERE stage IN ('I','II','III','IV','0')) AS staged,
-           COUNT(*) FILTER (WHERE stage IN ('III','IV')) AS late_stage
-         FROM staged WHERE ${SCREENABLE} IS NOT NULL GROUP BY 1 ORDER BY COUNT(*) DESC`),
-    ]);
+    const cohort = rows.map((r) => ({
+      ...r,
+      stage: stageOf(r.stage_raw),
+      age: r.age_at_dx === null ? null : Number(r.age_at_dx),
+      days: r.days_to_treatment === null ? null : Number(r.days_to_treatment),
+    }));
+    const STAGED = new Set(['0', 'I', 'II', 'III', 'IV']);
+    const LATE = new Set(['III', 'IV']);
+    const groupStats = (items: typeof cohort) => {
+      const staged = items.filter((r) => STAGED.has(r.stage)).length;
+      return {
+        staged,
+        late: items.filter((r) => LATE.has(r.stage)).length,
+        remission: items.filter((r) => r.clinical_status === 'remission' || r.clinical_status === 'resolved').length,
+      };
+    };
 
-    const h = headline[0] ?? {};
-    const pct = (part: unknown, whole: unknown) => (n(whole) > 0 ? Math.round((n(part) / n(whole)) * 100) : null);
-    const counts = (rows: any[]) => rows.map((r) => ({ key: String(r.key ?? 'unknown'), count: n(r.count) }));
+    const all = groupStats(cohort);
+    const withDays = cohort.filter((r) => r.days !== null);
+    const withIntent = cohort.filter((r) => r.intent !== null);
+
+    // Last 12 calendar months (server time), zero-filled.
+    const now = new Date();
+    const monthKeys = Array.from({ length: 12 }, (_, i) => {
+      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11 + i, 1));
+      return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+    });
+    const perMonth = new Map(tally(cohort.map((r) => r.dx_month)).map((x) => [x.key, x.count]));
+
     const BANDS = ['0-17', '18-39', '40-49', '50-59', '60-69', '70+', 'Unknown'];
     const STAGES = ['0', 'I', 'II', 'III', 'IV', 'Unstaged'];
+    const types = new Map<string, typeof cohort>();
+    for (const r of cohort) types.set(r.cancer_type, [...(types.get(r.cancer_type) ?? []), r]);
+    const screen = new Map<string, typeof cohort>();
+    for (const r of cohort) {
+      const programme = screenableOf(r.cancer_type);
+      if (programme) screen.set(programme, [...(screen.get(programme) ?? []), r]);
+    }
+    const cityPatients = new Map<string, Set<string>>();
+    for (const r of cohort) {
+      const key = r.city ?? 'Not recorded';
+      cityPatients.set(key, (cityPatients.get(key) ?? new Set()).add(r.patient_id));
+    }
 
     return {
       months: window,
       generatedAt: new Date().toISOString(),
       summary: {
-        diagnoses: n(h.diagnoses),
-        patients: n(h.patients),
-        medianAgeAtDiagnosis: num(h.median_age),
-        lateStagePercent: pct(h.late_stage, h.staged),
-        stagedPercent: pct(h.staged, h.diagnoses),
-        metastaticPercent: pct(h.metastatic, h.diagnoses),
-        medianDaysToTreatment: num(h.median_days_to_treatment),
-        treatedWithin30DaysPercent: pct(h.treated_within_30, h.with_treatment_date),
-        withTreatmentDate: n(h.with_treatment_date),
-        recurrencePercent: pct(h.recurrence, h.diagnoses),
-        remissionPercent: pct(h.remission, h.diagnoses),
-        curativeIntentPercent: pct(h.curative, h.with_intent),
+        diagnoses: cohort.length,
+        patients: new Set(cohort.map((r) => r.patient_id)).size,
+        medianAgeAtDiagnosis: median(cohort.map((r) => r.age)),
+        lateStagePercent: pct(all.late, all.staged),
+        stagedPercent: pct(all.staged, cohort.length),
+        metastaticPercent: pct(cohort.filter((r) => r.metastatic_status === 'distant').length, cohort.length),
+        medianDaysToTreatment: median(cohort.map((r) => r.days)),
+        treatedWithin30DaysPercent: pct(withDays.filter((r) => (r.days as number) <= 30).length, withDays.length),
+        withTreatmentDate: withDays.length,
+        recurrencePercent: pct(
+          cohort.filter((r) => r.clinical_status === 'recurrence' || r.clinical_status === 'relapsed' || r.is_recurrence).length,
+          cohort.length,
+        ),
+        remissionPercent: pct(all.remission, cohort.length),
+        curativeIntentPercent: pct(withIntent.filter((r) => r.intent === 'curative').length, withIntent.length),
       },
-      incidenceByMonth: trend.map((r) => ({ month: r.month, count: n(r.count) })),
+      incidenceByMonth: monthKeys.map((month) => ({ month, count: perMonth.get(month) ?? 0 })),
       ageGender: BANDS.map((band) => {
-        const r = ageGender.find((x) => x.band === band);
-        return { band, male: n(r?.male), female: n(r?.female), other: n(r?.other) };
+        const inBand = cohort.filter((r) => bandOf(r.age) === band);
+        return {
+          band,
+          male: inBand.filter((r) => genderOf(r.gender) === 'male').length,
+          female: inBand.filter((r) => genderOf(r.gender) === 'female').length,
+          other: inBand.filter((r) => genderOf(r.gender) === 'other').length,
+        };
       }).filter((r) => r.band !== 'Unknown' || r.male + r.female + r.other > 0),
-      stageAtDiagnosis: STAGES.map((stage) => ({ stage, count: n(stages.find((s) => s.key === stage)?.count) })),
-      byCancerType: byType.map((r) => ({
-        cancerType: r.cancer_type,
-        diagnoses: n(r.diagnoses),
-        medianAge: num(r.median_age),
-        lateStagePercent: pct(r.late_stage, r.staged),
-        medianDaysToTreatment: num(r.median_days_to_treatment),
-        remissionPercent: pct(r.remission, r.diagnoses),
-      })),
-      byCity: counts(places),
-      byClinicalStatus: counts(statuses),
-      byTreatmentIntent: counts(intents),
-      screenableCancers: screening.map((r) => ({
-        programme: r.programme,
-        diagnoses: n(r.diagnoses),
-        lateStagePercent: pct(r.late_stage, r.staged),
-      })),
+      stageAtDiagnosis: STAGES.map((stage) => ({ stage, count: cohort.filter((r) => r.stage === stage).length })),
+      byCancerType: [...types.entries()]
+        .map(([key, items]) => ({ key, count: items.length, items }))
+        .sort(byCount)
+        .slice(0, 10)
+        .map(({ key, items }) => {
+          const g = groupStats(items);
+          return {
+            cancerType: key,
+            diagnoses: items.length,
+            medianAge: median(items.map((r) => r.age)),
+            lateStagePercent: pct(g.late, g.staged),
+            medianDaysToTreatment: median(items.map((r) => r.days)),
+            remissionPercent: pct(g.remission, items.length),
+          };
+        }),
+      byCity: [...cityPatients.entries()].map(([key, ids]) => ({ key, count: ids.size })).sort(byCount).slice(0, 8),
+      byClinicalStatus: tally(cohort.map((r) => r.clinical_status)),
+      byTreatmentIntent: tally(cohort.map((r) => r.intent ?? 'not_set')),
+      screenableCancers: [...screen.entries()]
+        .map(([key, items]) => ({ key, count: items.length, items }))
+        .sort(byCount)
+        .map(({ key, items }) => {
+          const g = groupStats(items);
+          return { programme: key, diagnoses: items.length, lateStagePercent: pct(g.late, g.staged) };
+        }),
     };
   }
 
