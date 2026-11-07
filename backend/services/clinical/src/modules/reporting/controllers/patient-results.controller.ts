@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Param,
@@ -25,6 +26,8 @@ export class PatientResultsController {
   @ApiQuery({ name: 'type', required: false, description: 'Filter by report type: lab, imaging, procedure' })
   @ApiQuery({ name: 'status', required: false, description: 'Filter by report status' })
   @ApiQuery({ name: 'search', required: false, description: 'Search by order name or patient name' })
+  @ApiQuery({ name: 'from', required: false, description: 'Reported (or, if not yet reported, created) at or after (ISO 8601)' })
+  @ApiQuery({ name: 'to', required: false, description: 'Reported (or, if not yet reported, created) before (ISO 8601, exclusive)' })
   @ApiQuery({ name: 'page', required: false, description: 'Page number (default: 1)' })
   @ApiQuery({ name: 'limit', required: false, description: 'Items per page (default: 20)' })
   async getAll(
@@ -32,6 +35,8 @@ export class PatientResultsController {
     @Query('type') reportType?: string,
     @Query('status') reportStatus?: string,
     @Query('search') search?: string,
+    @Query('from') from?: string,
+    @Query('to') to?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
@@ -39,6 +44,8 @@ export class PatientResultsController {
       reportType,
       reportStatus,
       search,
+      from: parseDateQuery('from', from),
+      to: parseDateQuery('to', to),
       page: page ? parseInt(page, 10) : undefined,
       limit: limit ? parseInt(limit, 10) : undefined,
     });
@@ -96,4 +103,13 @@ export class PatientResultsController {
       ...(limit ? { limit: parseInt(limit, 10) } : {}),
     });
   }
+}
+
+function parseDateQuery(name: string, value?: string): Date | undefined {
+  if (!value) return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    throw new BadRequestException(`Invalid ${name} date: ${value}`);
+  }
+  return date;
 }

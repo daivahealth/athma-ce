@@ -246,10 +246,23 @@ export class PatientResultsService {
       reportType?: string | undefined;
       reportStatus?: string | undefined;
       search?: string | undefined;
+      from?: Date | undefined;
+      to?: Date | undefined;
       page?: number | undefined;
       limit?: number | undefined;
     },
   ): Promise<{ results: PatientResultSummary[]; total: number }> {
+    // Day window on the timestamp the list shows: reportedAt, or createdAt while not yet reported.
+    const range =
+      options?.from || options?.to
+        ? {
+            ...(options.from ? { gte: options.from } : {}),
+            ...(options.to ? { lt: options.to } : {}),
+          }
+        : undefined;
+    const dateFilter = range
+      ? { OR: [{ reportedAt: range }, { reportedAt: null, createdAt: range }] }
+      : undefined;
     const page = options?.page || 1;
     const limit = options?.limit || 20;
     const skip = (page - 1) * limit;
@@ -261,6 +274,7 @@ export class PatientResultsService {
     if (!options?.reportType || options.reportType === 'lab') {
       const where: any = { tenantId, ...(searchFilter ?? {}) };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
+      if (dateFilter) where.AND = [dateFilter];
 
       const labReports = await this.prisma.labReport.findMany({
         where,
@@ -339,6 +353,7 @@ export class PatientResultsService {
     if (!options?.reportType || options.reportType === 'imaging') {
       const where: any = { tenantId, ...(searchFilter ?? {}) };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
+      if (dateFilter) where.AND = [dateFilter];
 
       const imagingReports = await this.prisma.imagingReport.findMany({
         where,
@@ -372,6 +387,7 @@ export class PatientResultsService {
     if (!options?.reportType || options.reportType === 'procedure') {
       const where: any = { tenantId, ...(searchFilter ?? {}) };
       if (options?.reportStatus) where.reportStatus = options.reportStatus;
+      if (dateFilter) where.AND = [dateFilter];
 
       const procedureReports = await this.prisma.procedureReport.findMany({
         where,

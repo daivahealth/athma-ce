@@ -15,7 +15,7 @@ import type {
 
 export function useLabWorklist(
   stage: LabWorklistStage,
-  params?: { encounterId?: string; patientId?: string },
+  params?: { encounterId?: string; patientId?: string; from?: string; to?: string },
 ) {
   return useQuery({
     queryKey: ['lab-operations', 'worklist', stage, params],

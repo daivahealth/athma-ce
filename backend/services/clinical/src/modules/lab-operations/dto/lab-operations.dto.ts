@@ -300,6 +300,22 @@ export class LabWorklistQueryDto {
   @IsOptional()
   @IsUUID('4')
   patientId?: string;
+
+  @ApiPropertyOptional({
+    description:
+      'Inclusive lower bound (ISO 8601). Collection filters on order time; other stages filter on specimen collection time.',
+  })
+  @IsOptional()
+  @IsDateString()
+  from?: string;
+
+  @ApiPropertyOptional({
+    description:
+      'Exclusive upper bound (ISO 8601). Collection filters on order time; other stages filter on specimen collection time.',
+  })
+  @IsOptional()
+  @IsDateString()
+  to?: string;
 }
 
 export class LabResultEntryContextResponseDto {

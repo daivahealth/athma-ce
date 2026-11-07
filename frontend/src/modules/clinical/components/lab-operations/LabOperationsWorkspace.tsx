@@ -23,7 +23,7 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { labPriorityTone, labStageTone } from '../../utils/lab-result-tone';
-import { LabDateTime, SpecimenCode, WorklistSkeleton } from './lab-ui';
+import { LabDateFilter, LabDateTime, SpecimenCode, WorklistSkeleton, useLabDayFilter } from './lab-ui';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import {
@@ -95,10 +95,11 @@ export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) 
   const [selectedSpecimen, setSelectedSpecimen] = useState<LabSpecimen | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
 
-  const receiving = useLabWorklist('receiving');
-  const accessioning = useLabWorklist('accessioning');
-  const processing = useLabWorklist('processing');
-  const resultEntry = useLabWorklist('result-entry');
+  const { date, setDate, range } = useLabDayFilter();
+  const receiving = useLabWorklist('receiving', range);
+  const accessioning = useLabWorklist('accessioning', range);
+  const processing = useLabWorklist('processing', range);
+  const resultEntry = useLabWorklist('result-entry', range);
 
   const receiveMutation = useReceiveLabSpecimen();
   const accessionMutation = useAccessionLabSpecimen();
@@ -168,6 +169,7 @@ export function LabOperationsWorkspace({ locale }: LabOperationsWorkspaceProps) 
         title="Lab Operations"
         subtitle="Receive, register, process and result specimens inside the lab"
         icon={FileText}
+        actions={<LabDateFilter value={date} onChange={setDate} label="Collected on" />}
       />
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as LabOperationsStage)} className="space-y-4">
