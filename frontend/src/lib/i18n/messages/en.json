@@ -107,6 +107,7 @@
     "rbac": "RBAC",
     "pluginManagement": "Plugin Management",
     "oncology": "Oncology",
+    "oncologyDashboard": "Oncology Dashboard",
     "oncologyRegistry": "Oncology Registry",
     "tumorStaging": "Tumor Staging",
     "tumorBoard": "Tumor Board",

@@ -4,12 +4,18 @@ import type {
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
   RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan, OncologyLabPoint,
   RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
-  CancerTimelineEvent, TreatmentPlan, TreatmentPlanSummary, WorklistDay,
+  CancerTimelineEvent, TreatmentPlan, TreatmentPlanSummary, WorklistDay, OncologyDashboard,
 } from '../types';
 
 const BASE_URL = '/plugins/oncology';
 
 export const oncologyService = {
+  // Dashboard
+  async getDashboard(date?: string): Promise<OncologyDashboard> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/dashboard`, { params: date ? { date } : undefined });
+    return data.data;
+  },
+
   // Cancer Diagnosis
   async listDiagnoses(params?: { patientId?: string; clinicalStatus?: string; cancerType?: string; page?: number; limit?: number }) {
     const { data } = await clinicalClient.get(`${BASE_URL}/diagnoses`, { params });

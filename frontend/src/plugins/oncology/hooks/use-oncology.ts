@@ -41,7 +41,18 @@ const oncologyKeys = {
   histologies: () => [...oncologyKeys.catalogs(), 'histologies'] as const,
   histologyList: (params?: Record<string, unknown>) => [...oncologyKeys.histologies(), 'list', params] as const,
   timeline: (patientId: string) => [...oncologyKeys.all, 'timeline', patientId] as const,
+  dashboard: (date: string) => [...oncologyKeys.all, 'dashboard', date] as const,
 };
+
+// Dashboard
+export function useOncologyDashboard(date: string) {
+  return useQuery({
+    queryKey: oncologyKeys.dashboard(date),
+    queryFn: () => oncologyService.getDashboard(date),
+    enabled: /^\d{4}-\d{2}-\d{2}$/.test(date),
+    refetchInterval: 60_000,
+  });
+}
 
 // Cancer Diagnosis
 export function useCancerDiagnoses(params?: { patientId?: string; clinicalStatus?: string; cancerType?: string }) {

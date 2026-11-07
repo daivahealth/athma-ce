@@ -25,6 +25,16 @@ export class OncologyController {
   constructor(private readonly oncologyService: OncologyService) {}
 
   // ============================================
+  // Dashboard
+  // ============================================
+
+  @Get('dashboard')
+  @Permissions('oncology.registry.read')
+  async getDashboard(@Query('date') date?: string) {
+    return { success: true, data: await this.oncologyService.getDashboard(date) };
+  }
+
+  // ============================================
   // Cancer Diagnosis
   // ============================================
 

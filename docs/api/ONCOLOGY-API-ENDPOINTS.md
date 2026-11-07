@@ -8,6 +8,44 @@
 
 ---
 
+## Dashboard
+
+### Get Dashboard Summary
+```
+GET /api/v1/plugins/oncology/dashboard?date=YYYY-MM-DD
+```
+**Permission:** `oncology.registry.read`
+
+One-call summary behind the Oncology Dashboard (`/oncology/dashboard`). Every figure is scoped to the
+caller's tenant. `date` is the board day (defaults to today, server time); it drives the day's chemo,
+day-care and radiation figures and the tumour-board windows. Approval queues and caseload figures are
+across all dates.
+
+"Active disease" means `clinical_status` in `active`, `recurrence`, `relapsed`.
+
+| Field | Meaning |
+|-------|---------|
+| `caseload.activePatients` / `registeredPatients` | Distinct patients with active disease / any diagnosis |
+| `caseload.newDiagnosesLast30Days` | Diagnoses dated in the 30 days up to `date` |
+| `caseload.metastatic` | Active diagnoses with `metastatic_status = 'distant'` |
+| `caseload.byClinicalStatus`, `byCancerType` | `{ key, count }` rows; cancer types are active disease, top 8 |
+| `pathwayGaps.unstaged` | Active diagnoses with no staging record |
+| `pathwayGaps.withoutCarePlan` | Active diagnoses with no `draft`/`active`/`on_hold` care plan |
+| `pathwayGaps.notDiscussedAtTumorBoard` | Active diagnoses never put on a tumour board |
+| `chemo.ordersToday`, `inProgressToday`, `completedToday` | Chemo orders scheduled on `date` (cancelled excluded) |
+| `chemo.awaitingApproval` / `awaitingVerification` / `held` | Orders in `pending` / `approved` / `held` (any date) |
+| `dayCare.*` | Treatment days on `date`: scheduled (not skipped/cancelled), `planned` (no order yet), `ordered`, `given`, `held` |
+| `radiation.activeCourses` / `prescriptionsAwaitingApproval` | Prescriptions `ACTIVE` / `DRAFT` |
+| `radiation.fractionsToday`, `fractionsDelivered`, `fractionsMissed` | Fractions planned on `date` |
+| `tumorBoard.today`, `next7Days`, `overdue` | Cases meeting on `date`; open (`scheduled`/`in_review`) cases in the next 7 days; open cases dated before `date` |
+| `tumorBoard.upcoming[]` | Up to 6 open cases from 30 days before `date`, oldest first, with `patient` |
+| `plans.*` | Care plans `draft`/`active`; treatment schedules `active`/`on_hold` |
+| `ordersNeedingAction[]` | Up to 8 chemo orders in `pending`/`approved`/`held`, earliest scheduled first, with `patient` |
+
+`patient` is `{ patientId, mrn, displayName, gender, age }` or null.
+
+---
+
 ## Cancer Diagnosis
 
 ### List Diagnoses
