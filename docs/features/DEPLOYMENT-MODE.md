@@ -24,7 +24,7 @@ The demo stack in `infrastructure/demo-gcp/` builds with `demo` by default. Over
 
 | Where | What |
 |---|---|
-| App shell (dashboard and clinical layouts) | Full-width banner above the topbar with the mode's notice and links to Terms and Privacy (`EnvironmentBanner`) |
+| App shell (dashboard and clinical layouts) | Full-width banner above the topbar with the mode's notice and links to Terms and Privacy (`EnvironmentBanner`). Its **×** button closes it for the rest of the browser session (`sessionStorage` key `athma.environment-banner.dismissed`); a new session shows it again, and the topbar badge stays visible meanwhile |
 | Topbar | Compact `DEV` / `DEMO` / `STAGING` pill next to the sidebar toggle that stays visible while scrolling; the notice is its tooltip (`EnvironmentBadge`) |
 | Login screen | The badge under the logo and the notice above the sign-in form |
 | Terms and Privacy pages | The banner, plus a highlighted "Demonstration environment" (or "<MODE> environment") section listing the restrictions |
