@@ -40,6 +40,31 @@ screen here yet.
 On every create and edit screen below, the breadcrumb above the title (**RCM Setup** › the list) takes
 you back, and **Cancel** beside the save button returns to the list without saving.
 
+## The RCM Setup page
+
+**RCM Setup** (`/rcm-setup`) is a menu page with a tile for each setup screen. It has no figures or
+lists of its own.
+
+**Go to:** **Administration** > **RCM Setup** in the sidebar.
+
+The page is headed **RCM Setup**. Under it are six tiles, two to a row on a wide screen. Click
+anywhere on a tile to open that screen:
+
+| Tile | What it holds | Section |
+| --- | --- | --- |
+| **Payers** | Insurers, government schemes and other payers. | [Payers](#payers) |
+| **Billing items** | The charge master: every billable code and its list price. | [Billing items](#billing-items) |
+| **Charge posting rules** | How clinical events become charges automatically. | [Charge posting rules](#charge-posting-rules) |
+| **Fee schedules** | Base rates and payer price lists. | [Fee schedules](#fee-schedules) |
+| **Payer contracts** | What each payer has agreed to pay. | [Payer contracts](#payer-contracts) |
+| **Catalog mappings** | Which billing item each clinical catalog item charges. | [Catalog mappings](#catalog-mappings) |
+
+Set them up in roughly this order: billing items first, then catalog mappings so orders produce
+charges, then payers, fee schedules and contracts for insured patients.
+
+The line under the heading mentions clearinghouses and billing preferences, but neither has a
+screen here yet.
+
 ## Payers
 
 **Payers** (`/rcm-setup/payers`) lists every payer: **Payer** (name and electronic ID), **Type**,
