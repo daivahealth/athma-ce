@@ -199,18 +199,6 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
             </Button>
           </div>
 
-          {/* Help for the screen on hand, in a side panel; the sidebar's Help Centre has the whole manual */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={openHelp}
-            title="Help for this page (?)"
-            aria-label="Help for this page"
-            aria-keyshortcuts="?"
-          >
-            <CircleHelp className="h-5 w-5" />
-          </Button>
-
           {/* Notifications */}
           <NotificationCenter />
 
