@@ -1,30 +1,8 @@
 'use client';
 
-import Link from 'next/link';
+import { ATTENTION_TONES, MetricTile } from '@/components/ui/metric-tile';
 import type { BadgeTone } from '@/components/ui/tone-badge';
-import { cn } from '@/lib/utils';
 import type { DashboardMetrics } from '@/modules/reporting/hooks/use-dashboard-metrics';
-
-/** A tile per tone, written out so Tailwind keeps them (ported from prrapp's dashboard board). */
-const TILE: Partial<Record<BadgeTone, string>> = {
-  sky: 'border-sky-200 bg-sky-50 text-sky-900 hover:border-sky-400 dark:border-sky-800/70 dark:bg-sky-950/40 dark:text-sky-100',
-  blue: 'border-blue-200 bg-blue-50 text-blue-900 hover:border-blue-400 dark:border-blue-800/70 dark:bg-blue-950/40 dark:text-blue-100',
-  violet:
-    'border-violet-200 bg-violet-50 text-violet-900 hover:border-violet-400 dark:border-violet-800/70 dark:bg-violet-950/40 dark:text-violet-100',
-  teal: 'border-teal-200 bg-teal-50 text-teal-900 hover:border-teal-400 dark:border-teal-800/70 dark:bg-teal-950/40 dark:text-teal-100',
-  green:
-    'border-green-200 bg-green-50 text-green-900 hover:border-green-400 dark:border-green-800/70 dark:bg-green-950/40 dark:text-green-100',
-  amber:
-    'border-amber-200 bg-amber-50 text-amber-900 hover:border-amber-400 dark:border-amber-800/70 dark:bg-amber-950/40 dark:text-amber-100',
-  orange:
-    'border-orange-200 bg-orange-50 text-orange-900 hover:border-orange-400 dark:border-orange-800/70 dark:bg-orange-950/40 dark:text-orange-100',
-  red: 'border-red-300 bg-red-50 text-red-900 hover:border-red-500 dark:border-red-800/70 dark:bg-red-950/40 dark:text-red-100',
-  slate:
-    'border-slate-200 bg-slate-50 text-slate-800 hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200',
-};
-
-/** Tones that ask the reader to do something. */
-const ATTENTION: ReadonlySet<BadgeTone> = new Set(['amber', 'orange', 'red']);
 
 export interface BoardTile {
   key: string;
@@ -208,35 +186,7 @@ export function buildBoard(metrics: DashboardMetrics, formatMoney: (value: numbe
 }
 
 export function countNeedingAttention(groups: BoardGroup[]): number {
-  return groups.flatMap((group) => group.tiles).filter((tile) => ATTENTION.has(tile.tone)).length;
-}
-
-function MetricTile({ tile, isLoading, locale }: { tile: BoardTile; isLoading: boolean; locale: string }) {
-  return (
-    <Link
-      href={`/${locale}${tile.href}`}
-      data-metric={tile.key}
-      data-tone={tile.tone}
-      className={cn(
-        'flex min-h-24 flex-col justify-between rounded-xl border px-4 py-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        TILE[tile.tone] ?? TILE.slate,
-      )}
-    >
-      <span className="text-[11px] font-medium uppercase tracking-wide opacity-80">{tile.label}</span>
-      <span className="text-2xl font-semibold tabular-nums">
-        {isLoading ? (
-          <span className="opacity-50">…</span>
-        ) : tile.value === null ? (
-          '—'
-        ) : typeof tile.value === 'number' ? (
-          tile.value.toLocaleString('en-GB')
-        ) : (
-          tile.value
-        )}
-      </span>
-      {tile.note && !isLoading ? <span className="text-[11px] opacity-80">{tile.note}</span> : null}
-    </Link>
-  );
+  return groups.flatMap((group) => group.tiles).filter((tile) => ATTENTION_TONES.has(tile.tone)).length;
 }
 
 /**
@@ -261,7 +211,16 @@ export function DashboardBoard({
           </h2>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
             {group.tiles.map((tile) => (
-              <MetricTile key={tile.key} tile={tile} isLoading={isLoading} locale={locale} />
+              <MetricTile
+                key={tile.key}
+                metricKey={tile.key}
+                label={tile.label}
+                value={tile.value}
+                note={tile.note}
+                tone={tile.tone}
+                href={`/${locale}${tile.href}`}
+                isLoading={isLoading}
+              />
             ))}
           </div>
         </section>
