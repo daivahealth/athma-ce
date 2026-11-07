@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { Droplets, FlaskConical, HeartPulse, IdCard, Pill, Plus, Save, TestTube, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FormActions, FormField, FormSection } from '@/components/forms/form-layout';
+import { LoadingState } from '@/plugins/oncology/components/shared';
 import { useProtocol, useUpdateProtocol, useCancerTypes } from '@/plugins/oncology/hooks/use-oncology';
 import type { LabPrerequisite, HydrationOrder, OncologyCancerType, ProtocolPhase } from '@/plugins/oncology/types';
 import { ProtocolRegimenBuilder } from '@/plugins/oncology/components/protocol-builder/ProtocolRegimenBuilder';
@@ -78,218 +81,219 @@ export default function EditProtocolPage() {
     back();
   };
 
-  if (isLoading) return <div className="text-muted-foreground p-8">Loading...</div>;
+  const header = (
+    <PageHeader
+      title="Edit Protocol"
+      subtitle={protocol ? `${protocol.code} · ${protocol.name}` : undefined}
+      icon={FlaskConical}
+      breadcrumb={
+        <Breadcrumb items={[{ href: `/${params.locale}/oncology/protocols`, label: 'Chemo Protocols' }, { label: 'Edit' }]} />
+      }
+    />
+  );
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 page-transition">
+        {header}
+        <LoadingState />
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={back}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Edit Protocol</h1>
-          <p className="text-muted-foreground text-sm">{protocol?.code} · {protocol?.name}</p>
-        </div>
-      </div>
+    <div className="space-y-6 page-transition">
+      {header}
 
       <div className="space-y-6">
-        <Card>
-          <CardHeader><CardTitle>Protocol Identity</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Protocol Code <span className="text-xs text-muted-foreground">(read-only)</span></Label>
-                <Input value={code} disabled className="bg-muted/30" />
-              </div>
-              <div className="space-y-2">
-                <Label>Protocol Name *</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} />
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>Cancer Type *</Label>
-                <Select
-                  value={cancerType || '__none'}
-                  onValueChange={(v) => setCancerType(v === '__none' ? '' : v)}
-                >
-                  <SelectTrigger><SelectValue placeholder="Select cancer type..." /></SelectTrigger>
-                  <SelectContent className="max-h-72 overflow-y-auto">
-                    <SelectItem value="__none">— Select cancer type —</SelectItem>
-                    {cancerTypes.map((ct) => (
-                      <SelectItem key={ct.id} value={ct.name}>
-                        {ct.name}
-                        {ct.category && (
-                          <span className="ml-2 text-xs text-muted-foreground">({ct.category})</span>
-                        )}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {cancerType && !cancerTypes.some((ct) => ct.name === cancerType) && cancerTypes.length > 0 && (
-                  <p className="text-xs text-amber-600">
-                    Current value &ldquo;{cancerType}&rdquo; not in catalog — select a replacement above.
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label>Treatment Intent *</Label>
-                <Select value={intent || '__none'} onValueChange={(v) => setIntent(v === '__none' ? '' : v)}>
-                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">— Select —</SelectItem>
-                    <SelectItem value="curative">Curative</SelectItem>
-                    <SelectItem value="adjuvant">Adjuvant</SelectItem>
-                    <SelectItem value="neoadjuvant">Neoadjuvant</SelectItem>
-                    <SelectItem value="palliative">Palliative</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Emetogenic Risk</Label>
-                <Select value={emetogenicRisk || '__none'} onValueChange={(v) => setEmetogenicRisk(v === '__none' ? '' : v)}>
-                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">— Not specified —</SelectItem>
-                    <SelectItem value="minimal">Minimal</SelectItem>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="moderate">Moderate</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Description</Label>
-              <textarea className="w-full min-h-[60px] rounded-md border border-input bg-background px-3 py-2 text-sm" value={description} onChange={(e) => setDescription(e.target.value)} />
-            </div>
-          </CardContent>
-        </Card>
+        <FormSection icon={IdCard} title="Protocol Identity" description="Code, name, cancer type, intent and emetogenic risk">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="code" label={<>Protocol Code <span className="text-xs text-muted-foreground">(read-only)</span></>}>
+              <Input id="code" value={code} disabled className="bg-muted/30" />
+            </FormField>
+            <FormField id="name" label="Protocol Name" required>
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+            </FormField>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <FormField id="cancerType" label="Cancer Type" required>
+              <Select
+                value={cancerType || '__none'}
+                onValueChange={(v) => setCancerType(v === '__none' ? '' : v)}
+              >
+                <SelectTrigger id="cancerType"><SelectValue placeholder="Select cancer type..." /></SelectTrigger>
+                <SelectContent className="max-h-72 overflow-y-auto">
+                  <SelectItem value="__none">— Select cancer type —</SelectItem>
+                  {cancerTypes.map((ct) => (
+                    <SelectItem key={ct.id} value={ct.name}>
+                      {ct.name}
+                      {ct.category && (
+                        <span className="ml-2 text-xs text-muted-foreground">({ct.category})</span>
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {cancerType && !cancerTypes.some((ct) => ct.name === cancerType) && cancerTypes.length > 0 && (
+                <p className="text-xs text-warning">
+                  Current value &ldquo;{cancerType}&rdquo; not in catalog — select a replacement above.
+                </p>
+              )}
+            </FormField>
+            <FormField id="intent" label="Treatment Intent" required>
+              <Select value={intent || '__none'} onValueChange={(v) => setIntent(v === '__none' ? '' : v)}>
+                <SelectTrigger id="intent"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none">— Select —</SelectItem>
+                  <SelectItem value="curative">Curative</SelectItem>
+                  <SelectItem value="adjuvant">Adjuvant</SelectItem>
+                  <SelectItem value="neoadjuvant">Neoadjuvant</SelectItem>
+                  <SelectItem value="palliative">Palliative</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+            <FormField id="emetogenicRisk" label="Emetogenic Risk">
+              <Select value={emetogenicRisk || '__none'} onValueChange={(v) => setEmetogenicRisk(v === '__none' ? '' : v)}>
+                <SelectTrigger id="emetogenicRisk"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none">— Not specified —</SelectItem>
+                  <SelectItem value="minimal">Minimal</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="moderate">Moderate</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+          </div>
+          <FormField id="description" label="Description">
+            <Textarea id="description" className="min-h-[60px]" value={description} onChange={(e) => setDescription(e.target.value)} />
+          </FormField>
+        </FormSection>
 
         <ProtocolRegimenBuilder phases={phases} onChange={setPhases} errors={showErrors ? phaseErrors : []} />
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Pre-medications</CardTitle>
-              <Button type="button" variant="ghost" size="sm" onClick={() => setPremedications((p) => [...p, ''])}>
-                <Plus className="h-4 w-4 mr-1" />Add
-              </Button>
+        <FormSection
+          icon={Pill}
+          title="Pre-medications"
+          description="Drugs given before each administration"
+          contentClassName="space-y-2"
+          actions={
+            <Button type="button" variant="ghost" size="sm" onClick={() => setPremedications((p) => [...p, ''])}>
+              <Plus className="h-4 w-4 mr-1" />Add
+            </Button>
+          }
+        >
+          {premedications.map((pm, i) => (
+            <div key={i} className="flex gap-2 items-center">
+              <Input className="h-8" value={pm} onChange={(e) => setPremedications((p) => p.map((x, idx) => idx === i ? e.target.value : x))} />
+              {premedications.length > 1 && (
+                <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive" onClick={() => setPremedications((p) => p.filter((_, idx) => idx !== i))}>
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              )}
             </div>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {premedications.map((pm, i) => (
-              <div key={i} className="flex gap-2 items-center">
-                <Input className="h-8" value={pm} onChange={(e) => setPremedications((p) => p.map((x, idx) => idx === i ? e.target.value : x))} />
-                {premedications.length > 1 && (
-                  <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive" onClick={() => setPremedications((p) => p.filter((_, idx) => idx !== i))}>
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+          ))}
+        </FormSection>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Hydration Protocol</CardTitle>
-              <Button type="button" variant="ghost" size="sm" onClick={() => setHydration((p) => [...p, { fluid: '', ratePerHour: 0, durationHours: 0, timing: 'pre' }])}>
-                <Plus className="h-4 w-4 mr-1" />Add
-              </Button>
+        <FormSection
+          icon={Droplets}
+          title="Hydration Protocol"
+          description="IV fluids before, with or after the regimen"
+          contentClassName="space-y-3"
+          actions={
+            <Button type="button" variant="ghost" size="sm" onClick={() => setHydration((p) => [...p, { fluid: '', ratePerHour: 0, durationHours: 0, timing: 'pre' }])}>
+              <Plus className="h-4 w-4 mr-1" />Add
+            </Button>
+          }
+        >
+          {hydration.length === 0 && <p className="text-xs text-muted-foreground">No hydration orders</p>}
+          {hydration.map((h, i) => (
+            <div key={i} className="grid grid-cols-4 gap-2 items-center">
+              <Input className="h-8" value={h.fluid} onChange={(e) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, fluid: e.target.value } : x))} placeholder="Fluid" />
+              <Input className="h-8" type="number" value={h.ratePerHour || ''} onChange={(e) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, ratePerHour: parseInt(e.target.value, 10) || 0 } : x))} placeholder="Rate (mL/hr)" />
+              <Input className="h-8" type="number" value={h.durationHours || ''} onChange={(e) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, durationHours: parseInt(e.target.value, 10) || 0 } : x))} placeholder="Duration (hr)" />
+              <div className="flex gap-1 items-center">
+                <Select value={h.timing} onValueChange={(v) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, timing: v as HydrationOrder['timing'] } : x))}>
+                  <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pre">Pre</SelectItem>
+                    <SelectItem value="concurrent">Concurrent</SelectItem>
+                    <SelectItem value="post">Post</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive flex-shrink-0" onClick={() => setHydration((p) => p.filter((_, idx) => idx !== i))}>
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </div>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {hydration.length === 0 && <p className="text-xs text-muted-foreground">No hydration orders</p>}
-            {hydration.map((h, i) => (
-              <div key={i} className="grid grid-cols-4 gap-2 items-center">
-                <Input className="h-8" value={h.fluid} onChange={(e) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, fluid: e.target.value } : x))} placeholder="Fluid" />
-                <Input className="h-8" type="number" value={h.ratePerHour || ''} onChange={(e) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, ratePerHour: parseInt(e.target.value, 10) || 0 } : x))} placeholder="Rate (mL/hr)" />
-                <Input className="h-8" type="number" value={h.durationHours || ''} onChange={(e) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, durationHours: parseInt(e.target.value, 10) || 0 } : x))} placeholder="Duration (hr)" />
-                <div className="flex gap-1 items-center">
-                  <Select value={h.timing} onValueChange={(v) => setHydration((p) => p.map((x, idx) => idx === i ? { ...x, timing: v as HydrationOrder['timing'] } : x))}>
-                    <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pre">Pre</SelectItem>
-                      <SelectItem value="concurrent">Concurrent</SelectItem>
-                      <SelectItem value="post">Post</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive flex-shrink-0" onClick={() => setHydration((p) => p.filter((_, idx) => idx !== i))}>
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+          ))}
+        </FormSection>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Lab Prerequisites</CardTitle>
-              <Button type="button" variant="ghost" size="sm" onClick={() => setLabPrerequisites((p) => [...p, { test: '', parameter: '', unit: '', timing: 'within 7 days' }])}>
-                <Plus className="h-4 w-4 mr-1" />Add
-              </Button>
+        <FormSection
+          icon={TestTube}
+          title="Lab Prerequisites"
+          description="Results required before each cycle can start"
+          contentClassName="space-y-3"
+          actions={
+            <Button type="button" variant="ghost" size="sm" onClick={() => setLabPrerequisites((p) => [...p, { test: '', parameter: '', unit: '', timing: 'within 7 days' }])}>
+              <Plus className="h-4 w-4 mr-1" />Add
+            </Button>
+          }
+        >
+          {labPrerequisites.length === 0 && <p className="text-xs text-muted-foreground">No lab prerequisites</p>}
+          {labPrerequisites.map((lab, i) => (
+            <div key={i} className="grid grid-cols-5 gap-2 items-center">
+              <Input className="h-8" value={lab.test} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, test: e.target.value } : x))} placeholder="Test" />
+              <Input className="h-8" value={lab.parameter} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, parameter: e.target.value } : x))} placeholder="Parameter" />
+              <Input className="h-8" type="number" value={lab.minValue ?? ''} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, minValue: parseFloat(e.target.value) || undefined } : x))} placeholder="Min value" />
+              <Input className="h-8" value={lab.unit} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, unit: e.target.value } : x))} placeholder="Unit" />
+              <div className="flex gap-1 items-center">
+                <Select value={lab.timing} onValueChange={(v) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, timing: v } : x))}>
+                  <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="within 24 hours">Within 24h</SelectItem>
+                    <SelectItem value="within 48 hours">Within 48h</SelectItem>
+                    <SelectItem value="within 7 days">Within 7 days</SelectItem>
+                    <SelectItem value="within 14 days">Within 14 days</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive flex-shrink-0" onClick={() => setLabPrerequisites((p) => p.filter((_, idx) => idx !== i))}>
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </div>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {labPrerequisites.length === 0 && <p className="text-xs text-muted-foreground">No lab prerequisites</p>}
-            {labPrerequisites.map((lab, i) => (
-              <div key={i} className="grid grid-cols-5 gap-2 items-center">
-                <Input className="h-8" value={lab.test} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, test: e.target.value } : x))} placeholder="Test" />
-                <Input className="h-8" value={lab.parameter} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, parameter: e.target.value } : x))} placeholder="Parameter" />
-                <Input className="h-8" type="number" value={lab.minValue ?? ''} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, minValue: parseFloat(e.target.value) || undefined } : x))} placeholder="Min value" />
-                <Input className="h-8" value={lab.unit} onChange={(e) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, unit: e.target.value } : x))} placeholder="Unit" />
-                <div className="flex gap-1 items-center">
-                  <Select value={lab.timing} onValueChange={(v) => setLabPrerequisites((p) => p.map((x, idx) => idx === i ? { ...x, timing: v } : x))}>
-                    <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="within 24 hours">Within 24h</SelectItem>
-                      <SelectItem value="within 48 hours">Within 48h</SelectItem>
-                      <SelectItem value="within 7 days">Within 7 days</SelectItem>
-                      <SelectItem value="within 14 days">Within 14 days</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive flex-shrink-0" onClick={() => setLabPrerequisites((p) => p.filter((_, idx) => idx !== i))}>
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+          ))}
+        </FormSection>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Supportive Care</CardTitle>
-              <Button type="button" variant="ghost" size="sm" onClick={() => setSupportiveCare((p) => [...p, ''])}>
-                <Plus className="h-4 w-4 mr-1" />Add
-              </Button>
+        <FormSection
+          icon={HeartPulse}
+          title="Supportive Care"
+          description="Growth factors, antiemetics and other supportive orders"
+          contentClassName="space-y-2"
+          actions={
+            <Button type="button" variant="ghost" size="sm" onClick={() => setSupportiveCare((p) => [...p, ''])}>
+              <Plus className="h-4 w-4 mr-1" />Add
+            </Button>
+          }
+        >
+          {supportiveCare.map((sc, i) => (
+            <div key={i} className="flex gap-2 items-center">
+              <Input className="h-8" value={sc} onChange={(e) => setSupportiveCare((p) => p.map((x, idx) => idx === i ? e.target.value : x))} />
+              {supportiveCare.length > 1 && (
+                <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive" onClick={() => setSupportiveCare((p) => p.filter((_, idx) => idx !== i))}>
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              )}
             </div>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {supportiveCare.map((sc, i) => (
-              <div key={i} className="flex gap-2 items-center">
-                <Input className="h-8" value={sc} onChange={(e) => setSupportiveCare((p) => p.map((x, idx) => idx === i ? e.target.value : x))} />
-                {supportiveCare.length > 1 && (
-                  <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive" onClick={() => setSupportiveCare((p) => p.filter((_, idx) => idx !== i))}>
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+          ))}
+        </FormSection>
 
-        <div className="flex gap-4">
-          <Button variant="outline" onClick={back} disabled={updateProtocol.isPending}>Cancel</Button>
-          <Button onClick={handleSubmit} disabled={!isValid || updateProtocol.isPending}>
+        <FormActions onCancel={back} busy={updateProtocol.isPending}>
+          <Button onClick={handleSubmit} disabled={!isValid || updateProtocol.isPending} className="gap-2">
+            <Save className="h-4 w-4" />
             {updateProtocol.isPending ? 'Saving...' : 'Save Changes'}
           </Button>
-        </div>
+        </FormActions>
       </div>
     </div>
   );

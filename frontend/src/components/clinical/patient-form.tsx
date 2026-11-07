@@ -1,13 +1,10 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
@@ -16,12 +13,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Fingerprint, IdCard, Phone, Save, Siren, UserCog, UserPlus, type LucideIcon } from 'lucide-react';
+import { Fingerprint, IdCard, Phone, Siren, UserCog, UserPlus } from 'lucide-react';
 import { PageHeader } from '@/components/ui/page-header';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
-import { cn } from '@/lib/utils';
+import {
+  FIELD_CONTROL,
+  FormActions,
+  FormField as Field,
+  FormSection,
+  NATIVE_SELECT,
+  invalidProps,
+} from '@/components/forms/form-layout';
 import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
-import { useCountries, useNationalities, useNameTitles } from '@/modules/clinical/hooks/use-valuesets';
+import {
+  useCountries,
+  useNationalities,
+  useNameTitles,
+} from '@/modules/clinical/hooks/use-valuesets';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
 const patientSchema = z.object({
@@ -146,7 +154,8 @@ export function PatientForm({
       payload.title = titleConcept?.display || titleCode;
     }
 
-    const optionalString = (value?: string) => (value && value.trim().length > 0 ? value.trim() : undefined);
+    const optionalString = (value?: string) =>
+      value && value.trim().length > 0 ? value.trim() : undefined;
 
     const optionalFields: Array<[keyof CreatePatientDto, string | undefined]> = [
       ['middleName', optionalString(data.middleName)],
@@ -154,7 +163,12 @@ export function PatientForm({
       ['nationalId', optionalString(data.nationalId)],
       ['nationalIdType', optionalString(data.nationalIdType)],
       ['passportNumber', optionalString(data.passportNumber)],
-      ['preferredLanguage', optionalString((data as PatientFormData & { preferredLanguage?: string }).preferredLanguage)],
+      [
+        'preferredLanguage',
+        optionalString(
+          (data as PatientFormData & { preferredLanguage?: string }).preferredLanguage,
+        ),
+      ],
       ['alternateContactNumber', optionalString(data.alternateContactNumber)],
       ['email', optionalString(data.email)],
       ['address', optionalString(data.address)],
@@ -240,7 +254,11 @@ export function PatientForm({
             </Field>
 
             <Field id="middleName" label="Middle Name">
-              <Input id="middleName" autoComplete="additional-name" {...form.register('middleName')} />
+              <Input
+                id="middleName"
+                autoComplete="additional-name"
+                {...form.register('middleName')}
+              />
             </Field>
 
             <Field id="lastName" label="Last Name" required error={errors.lastName?.message}>
@@ -254,7 +272,12 @@ export function PatientForm({
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field id="dateOfBirth" label="Date of Birth" required error={errors.dateOfBirth?.message}>
+            <Field
+              id="dateOfBirth"
+              label="Date of Birth"
+              required
+              error={errors.dateOfBirth?.message}
+            >
               <Input
                 id="dateOfBirth"
                 type="date"
@@ -277,9 +300,18 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <FormSection icon={Phone} title="Contact Information" description="How to reach the patient">
+        <FormSection
+          icon={Phone}
+          title="Contact Information"
+          description="How to reach the patient"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field id="phoneNumber" label="Phone Number" required error={errors.phoneNumber?.message}>
+            <Field
+              id="phoneNumber"
+              label="Phone Number"
+              required
+              error={errors.phoneNumber?.message}
+            >
               <Input
                 id="phoneNumber"
                 type="tel"
@@ -290,7 +322,11 @@ export function PatientForm({
             </Field>
 
             <Field id="alternateContactNumber" label="Alternate Contact">
-              <Input id="alternateContactNumber" type="tel" {...form.register('alternateContactNumber')} />
+              <Input
+                id="alternateContactNumber"
+                type="tel"
+                {...form.register('alternateContactNumber')}
+              />
             </Field>
 
             <Field id="email" label="Email" error={errors.email?.message}>
@@ -305,7 +341,12 @@ export function PatientForm({
           </div>
 
           <Field id="address" label="Address">
-            <Textarea id="address" autoComplete="street-address" {...form.register('address')} rows={2} />
+            <Textarea
+              id="address"
+              autoComplete="street-address"
+              {...form.register('address')}
+              rows={2}
+            />
           </Field>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -318,8 +359,15 @@ export function PatientForm({
             </Field>
 
             <Field id="country" label="Country">
-              <select id="country" {...form.register('country')} disabled={isLoadingCountries} className={NATIVE_SELECT}>
-                <option value="">{isLoadingCountries ? 'Loading countries...' : 'Select country'}</option>
+              <select
+                id="country"
+                {...form.register('country')}
+                disabled={isLoadingCountries}
+                className={NATIVE_SELECT}
+              >
+                <option value="">
+                  {isLoadingCountries ? 'Loading countries...' : 'Select country'}
+                </option>
                 {countriesData?.concepts.map((country) => (
                   <option key={country.code} value={country.code}>
                     {country.display}
@@ -334,7 +382,11 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <FormSection icon={Fingerprint} title="Identity Information" description="Nationality and identity documents">
+        <FormSection
+          icon={Fingerprint}
+          title="Identity Information"
+          description="Nationality and identity documents"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Field id="nationality" label="Nationality">
               <select
@@ -343,7 +395,9 @@ export function PatientForm({
                 disabled={isLoadingNationalities}
                 className={NATIVE_SELECT}
               >
-                <option value="">{isLoadingNationalities ? 'Loading nationalities...' : 'Select nationality'}</option>
+                <option value="">
+                  {isLoadingNationalities ? 'Loading nationalities...' : 'Select nationality'}
+                </option>
                 {nationalitiesData?.concepts.map((nationality) => (
                   <option key={nationality.code} value={nationality.code}>
                     {nationality.display}
@@ -362,14 +416,22 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <FormSection icon={Siren} title="Emergency Contact" description="Who to call on the patient's behalf">
+        <FormSection
+          icon={Siren}
+          title="Emergency Contact"
+          description="Who to call on the patient's behalf"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Field id="emergencyContactName" label="Name">
               <Input id="emergencyContactName" {...form.register('emergencyContactName')} />
             </Field>
 
             <Field id="emergencyContactNumber" label="Contact Number">
-              <Input id="emergencyContactNumber" type="tel" {...form.register('emergencyContactNumber')} />
+              <Input
+                id="emergencyContactNumber"
+                type="tel"
+                {...form.register('emergencyContactNumber')}
+              />
             </Field>
 
             <Field id="emergencyContactRelation" label="Relation">
@@ -378,104 +440,12 @@ export function PatientForm({
           </div>
         </FormSection>
 
-        <div className="flex flex-col-reverse gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
-            Fields marked <span className="text-destructive">*</span> are required.
-          </p>
-          <div className="flex flex-col-reverse gap-2 sm:flex-row">
-            <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting} className="gap-2">
-              <Save className="h-4 w-4" />
-              {isSubmitting ? 'Saving...' : mode === 'create' ? 'Save Patient' : 'Save Changes'}
-            </Button>
-          </div>
-        </div>
+        <FormActions
+          submitLabel={mode === 'create' ? 'Save Patient' : 'Save Changes'}
+          busy={isSubmitting}
+          onCancel={onCancel}
+        />
       </form>
-    </div>
-  );
-}
-
-/**
- * Shared control sizing. `dark:[color-scheme:dark]` makes the browser draw the
- * native date picker and option list dark when the app (not the OS) is dark.
- */
-const FIELD_CONTROL = 'dark:[color-scheme:dark]';
-
-/** Native <select> drawn like `SelectTrigger`/`Input` from `components/ui`. */
-const NATIVE_SELECT = cn(
-  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-all',
-  'hover:border-ring/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-  'disabled:cursor-not-allowed disabled:opacity-50',
-  FIELD_CONTROL,
-);
-
-/** aria + destructive styling for a control whose field failed validation. */
-function invalidProps(id: string, error: string | undefined, className?: string) {
-  return {
-    'aria-invalid': error ? true : undefined,
-    'aria-describedby': error ? `${id}-error` : undefined,
-    className: cn(className, error && 'border-destructive focus-visible:ring-destructive hover:border-destructive'),
-  };
-}
-
-function FormSection({
-  icon: Icon,
-  title,
-  description,
-  children,
-}: {
-  icon: LucideIcon;
-  title: string;
-  description?: string;
-  children: ReactNode;
-}) {
-  return (
-    <Card className="hover:translate-y-0">
-      <CardHeader className="flex-row items-start gap-3 space-y-0 pb-4">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-          <Icon className="h-4 w-4" aria-hidden />
-        </span>
-        <div className="space-y-1">
-          <CardTitle className="text-base">{title}</CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">{children}</CardContent>
-    </Card>
-  );
-}
-
-function Field({
-  id,
-  label,
-  required,
-  error,
-  children,
-}: {
-  id: string;
-  label: string;
-  required?: boolean;
-  error?: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={id} className={cn(error && 'text-destructive')}>
-        {label}
-        {required && (
-          <span className="ml-0.5 text-destructive">
-            *
-          </span>
-        )}
-      </Label>
-      {children}
-      {error && (
-        <p id={`${id}-error`} role="alert" className="text-sm font-medium text-destructive">
-          {error}
-        </p>
-      )}
     </div>
   );
 }

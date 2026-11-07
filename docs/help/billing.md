@@ -57,8 +57,9 @@ If the list cannot be read, a red box says "Failed to load invoices:" followed b
 
 ### Raising an invoice
 
-**Go to:** **Invoices**, then **New invoice** (`/invoices/new`). The page is headed **Create invoice**
-with the currency beside it.
+**Go to:** **Invoices**, then **New invoice** (`/invoices/new`). The page is headed **Create invoice**,
+with an **Invoices** breadcrumb above the title to go back and the currency on the right. Fields
+marked with a red * are required.
 
 1. **Patient**: search by name, MRN or mobile and pick the patient.
 2. **Encounter** (optional): the patient's encounters are listed with date, time, doctor and status.
@@ -73,7 +74,7 @@ with the currency beside it.
    **Remove** deletes one (the last row cannot be removed).
 5. Check the totals box: **Gross amount**, **Total discounts**, **Net amount**, **Amount paid** and
    **Balance due**.
-6. Press **Create invoice**.
+6. Press **Create invoice**, or **Cancel** to go back to the list without saving.
 
 **Check:** a toast says "Invoice created" and you return to the list. The invoice number is made
 from your organisation's invoice number format, prefix and start number settings. The status is set
@@ -131,7 +132,8 @@ The columns are **Receipt #**, **Patient**, **Date**, **Amount** and **Method**.
 
 ### Taking a receipt
 
-**Go to:** **Receipts**, then **New receipt** (`/receipts/new`), headed **Create receipt**.
+**Go to:** **Receipts**, then **New receipt** (`/receipts/new`), headed **Create receipt** with a
+**Receipts** breadcrumb above the title to go back.
 
 1. **Patient**: search and pick.
 2. **Invoice ID** (optional): the invoice's internal ID. This only records which invoice the
@@ -144,9 +146,9 @@ The columns are **Receipt #**, **Patient**, **Date**, **Amount** and **Method**.
    stored in the base currency at paid amount times rate.
 6. **Payment method**, **Transaction reference** (such as the card machine's transaction ID) and
    **Notes**.
-7. **Allocations (optional)**: to settle invoices, enter each **Invoice ID** and **Amount**. **Add
+7. **Allocations** (optional): to settle invoices, enter each **Invoice ID** and **Amount**. **Add
    allocation** adds a row. Rows with no invoice or a zero amount are ignored.
-8. Press **Save receipt**.
+8. Press **Save receipt**, or **Cancel** to go back to the list without saving.
 
 **Check:** "Receipt created" and you return to the list. Each allocation adds to that invoice's
 amount paid and lowers its balance, moving it to **Partial** or **Paid**. The receipt is posted to
@@ -160,10 +162,12 @@ amount (...) exceeds receipt amount (...)").
 
 ### Working a receipt
 
-Open a receipt (`/receipts/{id}`): **Receipt #**, the amount, the payment method badge, and cards
-for **Patient**, **Receipt date** and **Reference**.
+Open a receipt (`/receipts/{id}`): the amount as the title, **Receipt #** under it, the payment
+method badge on the right, and cards for **Patient**, **Receipt date** and **Reference**. The
+**Receipts** breadcrumb above the title goes back to the list.
 
-- **Edit receipt**: the same form as above, with **Update receipt**. A toast says "Receipt updated".
+- The same form as above follows, with **Update receipt**. A toast says "Receipt updated". **Cancel**
+  goes back to the list.
 - **Allocations**: the allocations already made (**Invoice**, **Amount**, **Allocated at**), or "No
   allocations recorded." Below, add more: **Invoice ID** and **Amount** per row, **Add another
   invoice** for more rows, then **Allocate**. With no usable row the screen says "Add at least one

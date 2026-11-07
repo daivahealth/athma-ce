@@ -153,7 +153,7 @@ export interface TumorBoardCase {
 }
 
 export interface TumorBoardAttendee {
-  staffId: string;
+  staffId?: string;
   role: string;
   specialty: string;
 }
@@ -509,6 +509,8 @@ export interface RadiationPrescription {
   total_dose_gy?: number;
   dose_per_fraction_gy?: number;
   planned_fractions?: number;
+  /** Fractions delivered so far (list endpoint). */
+  delivered_fractions?: number;
   concurrent_chemo: boolean;
   planned_start_date?: string;
   planned_end_date?: string;
@@ -757,6 +759,9 @@ export interface TreatmentPlanSummary {
   total_cycles: number;
   total_days: number;
   given_days: number;
+  completed_cycles: number;
+  /** First cycle not yet completed; null once every cycle is done. */
+  current_cycle: number | null;
   patientDisplay?: OncologyPatientDisplay | null;
 }
 
@@ -772,5 +777,21 @@ export interface WorklistDay extends TreatmentDay {
   phase_name?: string;
   dose_level?: number;
   total_cycles: number;
+  /** From the chemo order's pre-chemo checklist; null when there is no order. */
+  labs_reviewed?: boolean | null;
+  labs_within_range?: boolean | null;
+  order_administered_at?: string | null;
   patientDisplay?: OncologyPatientDisplay | null;
+}
+
+/** One tumour-marker result, from registry/:patientId/labs/history. */
+export interface OncologyLabPoint {
+  test_code: string;
+  test_name: string;
+  value_numeric: string | number;
+  unit?: string | null;
+  ref_range_low?: string | number | null;
+  ref_range_high?: string | number | null;
+  abnormal_flag?: boolean | null;
+  observed_at: string;
 }

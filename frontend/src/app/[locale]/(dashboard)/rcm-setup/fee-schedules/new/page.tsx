@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { Table2 } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useToast } from '@/components/ui/use-toast';
 import { FeeScheduleForm } from '@/modules/rcm/components/fee-schedule-form';
 import { useCreateFeeSchedule } from '@/modules/rcm/hooks/use-fee-schedules';
@@ -25,21 +24,27 @@ export default function NewFeeSchedulePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <Button variant="ghost" size="sm" asChild>
-        <Link href={`/${locale}/rcm-setup/fee-schedules`}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to fee schedules
-        </Link>
-      </Button>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        title="New fee schedule"
+        subtitle="Define a price list and the period it applies"
+        icon={Table2}
+        breadcrumb={
+          <Breadcrumb
+            items={[
+              { href: `/${locale}/rcm-setup`, label: 'RCM Setup' },
+              { href: `/${locale}/rcm-setup/fee-schedules`, label: 'Fee schedules' },
+              { label: 'New' },
+            ]}
+          />
+        }
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>New fee schedule</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FeeScheduleForm onSubmit={handleSubmit} isSubmitting={createSchedule.isPending} />
-        </CardContent>
-      </Card>
+      <FeeScheduleForm
+        onSubmit={handleSubmit}
+        isSubmitting={createSchedule.isPending}
+        onCancel={() => router.push(`/${locale}/rcm-setup/fee-schedules`)}
+      />
     </div>
   );
 }

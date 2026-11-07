@@ -143,6 +143,8 @@ function PlanSummary({ plan, onStatus, onMeasures, busy }: {
   const [crcl, setCrcl] = useState(String(plan.creatinine_clearance ?? ''));
   const active = plan.days.filter((d) => !['skipped', 'cancelled'].includes(d.status));
   const given = plan.days.filter((d) => d.status === 'given').length;
+  const cyclesDone = plan.cycles.filter((c) => c.status === 'completed').length;
+  const current = plan.cycles.find((c) => c.status === 'in_progress') ?? plan.cycles.find((c) => c.status === 'planned');
   const next = plan.days.find((d) => ['planned', 'ordered', 'held'].includes(d.status));
   const end = active.at(-1)?.scheduled_date;
 
@@ -153,7 +155,12 @@ function PlanSummary({ plan, onStatus, onMeasures, busy }: {
           <Stat label="Status"><StatusBadge status={plan.status} /></Stat>
           <Stat label="Start → end">{formatDayMonthYear(plan.start_date)} → {end ? formatDayMonthYear(end) : '—'}</Stat>
           <Stat label="Next treatment">{next ? `${formatShortDate(next.scheduled_date)} · C${next.cycle_number} D${next.cycle_day}` : '—'}</Stat>
-          <Stat label="Progress">{given} / {active.length} treatment days given</Stat>
+          <Stat label="Progress">
+            <div className="font-medium">
+              {current ? `Cycle ${current.cycle_number} of ${plan.cycles.length}` : `${cyclesDone} of ${plan.cycles.length} cycles done`}
+            </div>
+            <div className="text-xs text-muted-foreground">{cyclesDone} cycles complete · {given}/{active.length} treatment days given</div>
+          </Stat>
           <Stat label="Dosing basis">
             BSA {plan.bsa ?? '—'} m² · {plan.weight_kg ?? '—'} kg · {plan.height_cm ?? '—'} cm
             {plan.creatinine_clearance ? ` · CrCl ${plan.creatinine_clearance}` : ''}
@@ -311,10 +318,10 @@ function CycleCard({
                   <div className="text-xs text-muted-foreground font-mono">C{d.cycle_number} D{d.cycle_day}</div>
                 </div>
                 <div className="w-24 shrink-0"><StatusBadge status={d.status} /></div>
-                <div className={cn('flex-1 min-w-[220px]', ['skipped', 'cancelled'].includes(d.status) && 'line-through text-muted-foreground')}>
+                <div className={cn('flex flex-1 min-w-[220px] flex-wrap items-baseline gap-x-3 gap-y-0.5', ['skipped', 'cancelled'].includes(d.status) && 'line-through text-muted-foreground')}>
                   {chemo.map((i) => (
-                    <span key={i.sequence} className="mr-3 whitespace-nowrap">
-                      {i.drug} <span className="font-medium">{formatDose(i)}</span>
+                    <span key={i.sequence}>
+                      {i.drug} <span className="font-medium whitespace-nowrap">{formatDose(i)}</span>
                     </span>
                   ))}
                   {warn && <span className="text-xs text-amber-700 dark:text-amber-400">needs attention</span>}

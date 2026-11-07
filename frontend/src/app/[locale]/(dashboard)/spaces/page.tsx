@@ -6,6 +6,8 @@ import { ResourceTable } from '@/components/tables/resource-table';
 import { useFacilitySpaces } from '@/modules/foundation/hooks/use-facility-spaces';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
+import { PageHeader } from '@/components/ui/page-header';
+import { DoorOpen } from 'lucide-react';
 
 interface SpaceRow {
   id: string;
@@ -54,8 +56,12 @@ export default function SpacesPage() {
 
   return (
     <div className="space-y-6">
-      <ResourceTable
+      <PageHeader
         title="Spaces"
+        subtitle="Rooms, wards and other physical spaces across facilities"
+        icon={DoorOpen}
+      />
+      <ResourceTable
         columns={columns}
         data={spaceRows}
         isLoading={isLoading}

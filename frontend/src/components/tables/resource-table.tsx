@@ -12,7 +12,13 @@ import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
 interface ResourceTableProps<TData extends { id: string }> {
+  /**
+   * Card-level heading. Only for a table that is one section of a larger page
+   * (e.g. "Concepts" on a value-set detail page). List pages put their title,
+   * subtitle and "New …" action in a `PageHeader` above the table instead.
+   */
   title?: string;
+  /** Right-aligned control in the card heading, next to `title`. */
   cta?: ReactNode;
   columns: ColumnDef<TData>[];
   data?: TData[];
@@ -46,15 +52,14 @@ export function ResourceTable<TData extends { id: string }>({
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
   const resolvedEmptyState = emptyMessage ?? emptyState;
 
-  const showDefaultCta = cta === undefined;
-  const hasHeader = !!(title || showDefaultCta || cta);
+  const hasHeader = !!(title || cta);
 
   return (
     <Card>
       {hasHeader && (
         <CardHeader className="flex flex-row items-center justify-between">
           {title && <CardTitle className="text-xl font-semibold">{title}</CardTitle>}
-          {showDefaultCta ? <Button size="sm">New</Button> : cta}
+          {cta}
         </CardHeader>
       )}
       <CardContent className="p-0">

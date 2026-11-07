@@ -2,14 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, User, Dna } from 'lucide-react';
+import { CalendarRange, ClipboardList, FileText, Layers, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { FIELD_CONTROL, FormActions, FormField, FormSection } from '@/components/forms/form-layout';
+import { DiagnosisContextCard, PatientContextCard } from '@/plugins/oncology/components/FormContextCards';
+import { LoadingState } from '@/plugins/oncology/components/shared';
 import { useOncologyCarePlan, useProtocols, useUpdateOncologyCarePlan } from '@/plugins/oncology/hooks/use-oncology';
 import type { ChemoProtocol } from '@/plugins/oncology/types';
 import {
@@ -75,167 +80,94 @@ export default function EditCarePlanPage() {
     back();
   };
 
-  if (isLoading) return <div className="text-muted-foreground p-8">Loading...</div>;
+  const header = (
+    <PageHeader
+      title="Edit Care Plan"
+      subtitle={carePlan?.plan_number ?? undefined}
+      icon={FileText}
+      breadcrumb={
+        <Breadcrumb items={[{ href: `/${params.locale}/oncology/care-plans`, label: 'Care Plans' }, { label: 'Edit' }]} />
+      }
+    />
+  );
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 page-transition">
+        {header}
+        <LoadingState />
+      </div>
+    );
+  }
 
   const patient = carePlan?.patientDisplay;
-  const age = patient?.dateOfBirth
-    ? Math.floor((Date.now() - new Date(patient.dateOfBirth).getTime()) / 31557600000)
-    : null;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={back}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Edit Care Plan</h1>
-          {carePlan?.plan_number && (
-            <p className="text-muted-foreground text-sm font-mono">{carePlan.plan_number}</p>
-          )}
-        </div>
-      </div>
+    <div className="space-y-6 page-transition">
+      {header}
 
-      {/* Context banner — Patient + Cancer Diagnosis */}
       {carePlan && (
-        <div className="grid grid-cols-2 gap-4">
-          {/* Blue patient card */}
-          <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-900/40 dark:from-blue-950/40 dark:to-indigo-950/40 p-4">
-            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-100/60 dark:bg-blue-900/20" />
-            <div className="relative space-y-2">
-              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/50">
-                  <User className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-xs font-semibold uppercase tracking-wider">Patient</span>
-              </div>
-              <p className="text-base font-bold text-foreground leading-tight">
-                {patient?.displayName || '—'}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {patient?.mrn && (
-                  <span className="inline-flex items-center rounded-md bg-blue-100/70 dark:bg-blue-900/40 px-2 py-0.5 text-xs font-mono font-medium text-blue-700 dark:text-blue-300">
-                    {patient.mrn}
-                  </span>
-                )}
-                {age !== null && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
-                    {age} yrs
-                  </span>
-                )}
-                {patient?.gender && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
-                    {patient.gender}
-                  </span>
-                )}
-                {patient?.phoneNumber && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-blue-100 dark:border-blue-900/50 px-2 py-0.5 text-xs text-muted-foreground">
-                    {patient.phoneNumber}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Rose/purple cancer diagnosis card */}
-          <div className="relative overflow-hidden rounded-xl border border-rose-200 bg-gradient-to-br from-rose-50 to-purple-50 dark:border-rose-900/40 dark:from-rose-950/40 dark:to-purple-950/40 p-4">
-            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-rose-100/60 dark:bg-rose-900/20" />
-            <div className="relative space-y-2">
-              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
-                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-100 dark:bg-rose-900/50">
-                  <Dna className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-xs font-semibold uppercase tracking-wider">Cancer Diagnosis</span>
-              </div>
-              <p className="text-base font-bold text-foreground leading-tight">
-                {carePlan.cancer_type || '—'}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {carePlan.primary_site && (
-                  <span className="inline-flex items-center rounded-md bg-rose-100/70 dark:bg-rose-900/40 px-2 py-0.5 text-xs font-medium text-rose-700 dark:text-rose-300">
-                    {carePlan.primary_site}
-                    {carePlan.primary_site_code && (
-                      <span className="font-mono ml-1 opacity-70">({carePlan.primary_site_code})</span>
-                    )}
-                  </span>
-                )}
-                {carePlan.laterality && carePlan.laterality !== 'not_applicable' && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs capitalize text-muted-foreground">
-                    {carePlan.laterality}
-                  </span>
-                )}
-                {carePlan.diagnosis_date && (
-                  <span className="inline-flex items-center rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs text-muted-foreground">
-                    Dx {new Date(carePlan.diagnosis_date).toLocaleDateString()}
-                  </span>
-                )}
-                {carePlan.metastatic_status && carePlan.metastatic_status !== 'unknown' && (
-                  <span className="inline-flex items-center rounded-md bg-amber-100/70 dark:bg-amber-900/30 px-2 py-0.5 text-xs capitalize font-medium text-amber-700 dark:text-amber-400">
-                    {carePlan.metastatic_status}
-                  </span>
-                )}
-                {carePlan.clinical_status && (
-                  <span className="inline-flex items-center rounded-md bg-emerald-100/70 dark:bg-emerald-900/30 px-2 py-0.5 text-xs capitalize font-medium text-emerald-700 dark:text-emerald-400">
-                    {carePlan.clinical_status}
-                  </span>
-                )}
-                {carePlan.diagnosis_grade && (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-purple-100/70 dark:bg-purple-900/30 px-2 py-0.5 text-xs font-medium text-purple-700 dark:text-purple-300">
-                    <span className="opacity-70">Grade</span> {carePlan.diagnosis_grade}
-                  </span>
-                )}
-                {carePlan.diagnosis_histology && (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-white/70 dark:bg-white/10 border border-rose-100 dark:border-rose-900/50 px-2 py-0.5 text-xs text-muted-foreground">
-                    <span className="opacity-70">Histology</span>
-                    <span className="font-medium text-foreground">{carePlan.diagnosis_histology}</span>
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <PatientContextCard
+            patient={{
+              name: patient?.displayName || '—',
+              mrn: patient?.mrn,
+              dateOfBirth: patient?.dateOfBirth,
+              gender: patient?.gender,
+              phone: patient?.phoneNumber,
+            }}
+          />
+          <DiagnosisContextCard
+            diagnosis={{
+              cancerType: carePlan.cancer_type || '—',
+              primarySite: carePlan.primary_site,
+              primarySiteCode: carePlan.primary_site_code,
+              laterality: carePlan.laterality,
+              diagnosisDate: carePlan.diagnosis_date,
+              metastaticStatus: carePlan.metastatic_status,
+              clinicalStatus: carePlan.clinical_status,
+              grade: carePlan.diagnosis_grade,
+              histology: carePlan.diagnosis_histology,
+            }}
+          />
         </div>
       )}
 
       <div className="space-y-6">
-        <Card>
-          <CardHeader><CardTitle>Treatment Plan</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Treatment Intent *</Label>
-                <Select value={treatmentIntent || '__none'} onValueChange={(v) => setTreatmentIntent(v === '__none' ? '' : v)}>
-                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">— Select —</SelectItem>
-                    <SelectItem value="curative">Curative</SelectItem>
-                    <SelectItem value="adjuvant">Adjuvant</SelectItem>
-                    <SelectItem value="neoadjuvant">Neoadjuvant</SelectItem>
-                    <SelectItem value="palliative">Palliative</SelectItem>
-                    <SelectItem value="surveillance">Surveillance</SelectItem>
-                    <SelectItem value="supportive">Supportive</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Oncology Subspecialty</Label>
-                <Select value={subspecialty || '__none'} onValueChange={(v) => setSubspecialty(v === '__none' ? '' : v)}>
-                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">— Not specified —</SelectItem>
-                    <SelectItem value="medical_oncology">Medical Oncology</SelectItem>
-                    <SelectItem value="surgical_oncology">Surgical Oncology</SelectItem>
-                    <SelectItem value="radiation_oncology">Radiation Oncology</SelectItem>
-                    <SelectItem value="hemato_oncology">Haemato-Oncology</SelectItem>
-                    <SelectItem value="gynec_oncology">Gynecologic Oncology</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <FormSection icon={ClipboardList} title="Treatment Plan" description="Intent of treatment and the treating subspecialty">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="treatmentIntent" label="Treatment Intent" required>
+              <Select value={treatmentIntent || '__none'} onValueChange={(v) => setTreatmentIntent(v === '__none' ? '' : v)}>
+                <SelectTrigger id="treatmentIntent"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none">— Select —</SelectItem>
+                  <SelectItem value="curative">Curative</SelectItem>
+                  <SelectItem value="adjuvant">Adjuvant</SelectItem>
+                  <SelectItem value="neoadjuvant">Neoadjuvant</SelectItem>
+                  <SelectItem value="palliative">Palliative</SelectItem>
+                  <SelectItem value="surveillance">Surveillance</SelectItem>
+                  <SelectItem value="supportive">Supportive</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+            <FormField id="subspecialty" label="Oncology Subspecialty">
+              <Select value={subspecialty || '__none'} onValueChange={(v) => setSubspecialty(v === '__none' ? '' : v)}>
+                <SelectTrigger id="subspecialty"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none">— Not specified —</SelectItem>
+                  <SelectItem value="medical_oncology">Medical Oncology</SelectItem>
+                  <SelectItem value="surgical_oncology">Surgical Oncology</SelectItem>
+                  <SelectItem value="radiation_oncology">Radiation Oncology</SelectItem>
+                  <SelectItem value="hemato_oncology">Haemato-Oncology</SelectItem>
+                  <SelectItem value="gynec_oncology">Gynecologic Oncology</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormField>
+          </div>
+        </FormSection>
 
         {/* Modalities — each with its own schedule (and protocol for chemo) */}
-        <Card>
+        <Card className="hover:translate-y-0">
           <CardContent className="pt-6">
             <ModalityPlanEditor
               rows={modalities}
@@ -245,55 +177,41 @@ export default function EditCarePlanPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle>Overall Schedule</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Start Date</Label>
-                <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>End Date</Label>
-                <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <FormSection icon={CalendarRange} title="Overall Schedule" description="Start and end of the whole care plan">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField id="startDate" label="Start Date">
+              <Input id="startDate" type="date" className={FIELD_CONTROL} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            </FormField>
+            <FormField id="endDate" label="End Date">
+              <Input id="endDate" type="date" className={FIELD_CONTROL} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+            </FormField>
+          </div>
+        </FormSection>
 
-        <Card>
-          <CardHeader><CardTitle>Status &amp; Notes</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Plan Status</Label>
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="on_hold">On Hold</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Notes</Label>
-              <textarea
-                className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </div>
-          </CardContent>
-        </Card>
+        <FormSection icon={Layers} title="Status & Notes" description="Where the plan stands, with any rationale or instructions">
+          <FormField id="status" label="Plan Status">
+            <Select value={status} onValueChange={setStatus}>
+              <SelectTrigger id="status"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="on_hold">On Hold</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormField>
+          <FormField id="notes" label="Notes">
+            <Textarea id="notes" className="min-h-[80px]" value={notes} onChange={(e) => setNotes(e.target.value)} />
+          </FormField>
+        </FormSection>
 
-        <div className="flex gap-4">
-          <Button variant="outline" onClick={back} disabled={updatePlan.isPending}>Cancel</Button>
-          <Button onClick={handleSubmit} disabled={!isValid || updatePlan.isPending}>
+        <FormActions onCancel={back} busy={updatePlan.isPending}>
+          <Button onClick={handleSubmit} disabled={!isValid || updatePlan.isPending} className="gap-2">
+            <Save className="h-4 w-4" />
             {updatePlan.isPending ? 'Saving...' : 'Save Changes'}
           </Button>
-        </div>
+        </FormActions>
       </div>
     </div>
   );

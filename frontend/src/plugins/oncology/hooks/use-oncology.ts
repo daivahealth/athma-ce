@@ -12,6 +12,7 @@ const oncologyKeys = {
   registryList: (params?: Record<string, unknown>) => [...oncologyKeys.registry(), 'list', params] as const,
   registrySummary: (patientId: string) => [...oncologyKeys.registry(), 'summary', patientId] as const,
   registryLabs: (patientId: string) => [...oncologyKeys.registry(), 'labs', patientId] as const,
+  registryLabHistory: (patientId: string) => [...oncologyKeys.registry(), 'labs', patientId, 'history'] as const,
   staging: () => [...oncologyKeys.all, 'staging'] as const,
   stagingList: (params?: Record<string, unknown>) => [...oncologyKeys.staging(), 'list', params] as const,
   stagingDetail: (id: string) => [...oncologyKeys.staging(), 'detail', id] as const,
@@ -101,6 +102,14 @@ export function usePatientOncologyLabs(patientId: string) {
   return useQuery({
     queryKey: oncologyKeys.registryLabs(patientId),
     queryFn: () => oncologyService.getRelevantLabs(patientId),
+    enabled: !!patientId,
+  });
+}
+
+export function usePatientOncologyLabHistory(patientId: string) {
+  return useQuery({
+    queryKey: oncologyKeys.registryLabHistory(patientId),
+    queryFn: () => oncologyService.getLabHistory(patientId),
     enabled: !!patientId,
   });
 }
@@ -767,11 +776,17 @@ export function useTreatmentPlan(id: string) {
   });
 }
 
-export function useTreatmentDays(params: { date?: string; from?: string; to?: string; status?: string }, enabled = true) {
+export function useTreatmentDays(
+  params: { date?: string; from?: string; to?: string; status?: string },
+  enabled = true,
+  /** Poll interval in ms (e.g. a day-care board on a wall screen); off by default. */
+  refetchInterval: number | false = false,
+) {
   return useQuery({
     queryKey: oncologyKeys.treatmentDays(params),
     queryFn: () => oncologyService.listTreatmentDays(params),
     enabled,
+    refetchInterval,
   });
 }
 

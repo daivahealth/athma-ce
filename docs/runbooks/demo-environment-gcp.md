@@ -69,14 +69,67 @@ gcloud compute instances start athma-demo --zone=asia-south1-a --project=athma-c
 Containers restart automatically (`restart: unless-stopped`).
 
 ## Deploy or update
+
+### First deploy
 1. Package the source from the repo root on a dev machine, excluding `node_modules`, `dist`, `.next`, `.git` and `.env*`, and copy it to the VM with `gcloud compute scp`. Extract it into `/opt/athma`.
-2. On the first deploy, create `/opt/athma/infrastructure/demo-gcp/.env` from `.env.example`, generating every secret with `openssl rand`.
+2. Create `/opt/athma/infrastructure/demo-gcp/.env` from `.env.example`, generating every secret with `openssl rand`.
 3. Build and start the stack:
    ```bash
    cd /opt/athma/infrastructure/demo-gcp
    sudo docker compose build
    sudo docker compose up -d
    ```
+
+### Redeploy
+Build the new release next to the running one, so the site stays up during the build, then swap directories.
+
+1. On a dev machine, package the commit to deploy and copy it over:
+   ```bash
+   git fetch origin
+   git archive --format=tar.gz -o athma.tgz origin/main
+   gcloud compute scp athma.tgz athma-demo:/tmp/athma.tgz --zone=asia-south1-a --project=athma-ce-demo
+   ```
+2. On the VM, free disk space first. Docker's build cache grows by several GB per build, and the 30 GB disk fills up with "no space left on device" partway through the build. Pruning does not touch running containers or the images they use.
+   ```bash
+   sudo docker builder prune -af && sudo docker image prune -f && df -h /
+   ```
+3. Extract the release, reuse the existing secrets, record the revision, and build:
+   ```bash
+   sudo rm -rf /opt/athma-new && sudo mkdir /opt/athma-new
+   sudo tar xzf /tmp/athma.tgz -C /opt/athma-new
+   sudo cp -p /opt/athma/infrastructure/demo-gcp/.env /opt/athma-new/infrastructure/demo-gcp/.env
+   echo <commit-sha> | sudo tee /opt/athma-new/.deployed-rev
+   cd /opt/athma-new/infrastructure/demo-gcp && sudo docker compose build
+   ```
+   The compose project name is `athma-demo`, so the build retags the live images, but running containers keep the old ones until `up -d`.
+4. Apply schema changes (see [Schema changes](#schema-changes)) after stopping the app services, then swap and start:
+   ```bash
+   cd /opt/athma/infrastructure/demo-gcp
+   sudo docker compose stop foundation clinical rcm prm ai-gateway abdm-connector frontend
+   # apply migrations here
+   sudo rm -rf /opt/athma-prev && sudo mv /opt/athma /opt/athma-prev && sudo mv /opt/athma-new /opt/athma
+   cd /opt/athma/infrastructure/demo-gcp && sudo docker compose up -d
+   ```
+5. Prune the build cache again (step 2), then check the stack (see [Triage](#triage)). Each API host should answer, for example `curl -s -o /dev/null -w "%{http_code}" https://foundation.<DEMO_DOMAIN>/api/v1/health`.
+
+`/opt/athma-prev` keeps the previous source tree. Rolling back means swapping it back and rebuilding, and reversing any schema changes by hand.
+
+### Schema changes
+The containers do not run migrations at startup, and the demo database has no `_prisma_migrations` history because it was restored from a dump (see [Reset demo data](#reset-demo-data)). Apply every schema change in the deployed range by hand:
+
+1. List what changed since the deployed revision (`cat /opt/athma/.deployed-rev` on the VM):
+   ```bash
+   git diff --stat <deployed-sha> origin/main -- '*migrations*' '*schema.prisma' plugins/*/backend/prisma
+   ```
+2. Run each new migration SQL file against its database (`zeal_foundation`, `zeal_clinical`, `zeal_rcm`, `zeal_prm`, `zeal_abdm`, `zeal_analytics`). Plugin schemas such as `plugin_oncology` live in `zeal_clinical`:
+   ```bash
+   sudo docker exec -i athma-demo-postgres-1 psql -v ON_ERROR_STOP=1 -U zeal_user -d zeal_foundation < <migration>.sql
+   ```
+3. A `schema.prisma` change without a migration file (plugin schemas often have none) needs its SQL written by hand. To see what is still missing, diff a database against its schema from inside the service container that owns it:
+   ```bash
+   sudo docker compose exec -T prm sh -c 'cd /app/backend/shared/database-prm && npx prisma migrate diff --from-url "$PRM_DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --script'
+   ```
+   Review the output before applying it. Apply only additive statements without asking; a dropped column or table can lose demo data.
 
 ## Reset demo data
 Demo data is copied from a local dev database that has been seeded with `seed/run-seeds.sh`:
@@ -149,3 +202,5 @@ Tenant secrets (`tenant_secrets`) are encrypted with the source machine's `SECRE
 - `sudo docker compose ps` and `sudo docker compose logs -f --tail=200 <service>`
 - Memory pressure: run `free -h`. The stack uses about 3–4 GB, and swap absorbs build spikes. Resize to e2-standard-4 if services are OOM-killed.
 - TLS failures: Caddy needs ports 80 and 443 reachable from the internet. Check `sudo docker compose logs caddy`.
+- Disk full (`no space left on device` during a build): `sudo docker builder prune -af && sudo docker image prune -f`.
+- `The table ... does not exist` in a service log: a schema change was not applied. See [Schema changes](#schema-changes).

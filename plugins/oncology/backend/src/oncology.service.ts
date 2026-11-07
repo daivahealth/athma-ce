@@ -408,8 +408,8 @@ export class OncologyService {
         ) as latest_staging_system,
         (SELECT cp.status FROM plugin_oncology.oncology_care_plans cp
          WHERE cp.cancer_diagnosis_id = cd.id AND cp.tenant_id = cd.tenant_id
-         AND cp.status IN ('draft', 'active', 'on_hold')
-         ORDER BY cp.created_at DESC LIMIT 1
+         AND cp.status <> 'cancelled'
+         ORDER BY (cp.status IN ('draft', 'active', 'on_hold')) DESC, cp.created_at DESC LIMIT 1
         ) as care_plan_status
       FROM plugin_oncology.cancer_diagnoses cd
       LEFT JOIN public.patients p ON p.id = cd.patient_id
@@ -526,6 +526,29 @@ export class OncologyService {
          AND lr.report_status IN ('FINAL', 'AMENDED')
          AND lri.test_code IN (SELECT loinc_code FROM lab_test_master WHERE test_category = 'Oncology')
        ORDER BY lri.test_code, lr.reported_at DESC`,
+      patientId, tenantId,
+    );
+  }
+
+  /**
+   * Every FINAL/AMENDED result of the patient's oncology tumour-marker tests
+   * (lab catalog category 'Oncology'), oldest first — for trend charts.
+   * Read-only display; not used for safety gating.
+   */
+  async getLabHistory(patientId: string) {
+    const tenantId = this.getTenantId();
+
+    return this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT lri.test_code, lri.test_name, lri.value_numeric, lri.unit,
+              lri.ref_range_low, lri.ref_range_high, lri.abnormal_flag,
+              COALESCE(lr.collection_date, lr.reported_at) AS observed_at
+       FROM lab_result_items lri
+       JOIN lab_reports lr ON lr.id = lri.lab_report_id
+       WHERE lr.patient_id = $1::uuid AND lr.tenant_id = $2::uuid
+         AND lr.report_status IN ('FINAL', 'AMENDED')
+         AND lri.value_numeric IS NOT NULL
+         AND lri.test_code IN (SELECT loinc_code FROM lab_test_master WHERE test_category = 'Oncology')
+       ORDER BY lri.test_code, observed_at`,
       patientId, tenantId,
     );
   }
@@ -742,9 +765,13 @@ export class OncologyService {
   ) {
     const tenantId = this.getTenantId();
     let query = `
-      SELECT cp.*, cd.cancer_type, cd.primary_site
+      SELECT cp.*, cd.cancer_type, cd.primary_site,
+             p.mrn AS patient_mrn, p.display_name AS patient_display_name,
+             p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+             p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender
       FROM plugin_oncology.oncology_care_plans cp
       JOIN plugin_oncology.cancer_diagnoses cd ON cp.cancer_diagnosis_id = cd.id
+      LEFT JOIN public.patients p ON p.id = cp.patient_id
       WHERE cp.tenant_id = $1::uuid`;
     const params: unknown[] = [tenantId];
     let paramIdx = 2;
@@ -769,7 +796,13 @@ export class OncologyService {
     query += ` ORDER BY cp.created_at DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
     params.push(limit, (page - 1) * limit);
 
-    const data = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    const rows = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    const data = rows.map((row) => {
+      const patientDisplay = this.buildPatientDisplay(row);
+      const clean = { ...row };
+      for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_') && k !== 'patient_id')) delete clean[k];
+      return { ...clean, patientDisplay };
+    });
     return { data };
   }
 
@@ -2162,6 +2195,9 @@ export class OncologyService {
     const countQuery = `SELECT COUNT(*) as count FROM plugin_oncology.radiation_prescriptions rp ${where}`;
     const dataQuery = `
       SELECT rp.*,
+        (SELECT COUNT(*)::int FROM plugin_oncology.radiation_fractions f
+           JOIN plugin_oncology.radiation_treatment_plans tp ON tp.id = f.treatment_plan_id
+          WHERE tp.prescription_id = rp.id AND f.status = 'DELIVERED') as delivered_fractions,
         p.mrn as patient_mrn, p.first_name as patient_first_name,
         p.last_name as patient_last_name, p.display_name as patient_display_name,
         p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,

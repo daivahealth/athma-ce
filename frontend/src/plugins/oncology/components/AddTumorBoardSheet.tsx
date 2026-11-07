@@ -21,6 +21,7 @@ import {
 import { Plus, Trash2 } from 'lucide-react';
 import { useCancerDiagnoses, useCreateTumorBoardCase, useUpdateTumorBoardCase } from '../hooks/use-oncology';
 import type { CancerDiagnosis, TumorBoardCase } from '../types';
+import { StaffSelect } from '@/plugins/oncology/components/StaffSelect';
 
 interface AddTumorBoardSheetProps {
   open: boolean;
@@ -29,6 +30,7 @@ interface AddTumorBoardSheetProps {
 }
 
 interface AttendeeRow {
+  staffId?: string;
   role: string;
   specialty: string;
 }
@@ -70,7 +72,7 @@ const ROLES = [
 
 function defaultAttendees(existing?: TumorBoardCase['attendees']): AttendeeRow[] {
   if (existing && existing.length > 0) {
-    return existing.map((a) => ({ role: a.role, specialty: a.specialty }));
+    return existing.map((a) => ({ staffId: a.staffId ?? '', role: a.role ?? '', specialty: a.specialty ?? '' }));
   }
   return [{ role: '', specialty: '' }];
 }
@@ -124,7 +126,9 @@ export function AddTumorBoardSheet({ open, onOpenChange, boardCase }: AddTumorBo
   const handleSubmit = async () => {
     if (!cancerDiagnosisId || !meetingDate) return;
 
-    const filledAttendees = attendees.filter((a) => a.role || a.specialty);
+    const filledAttendees = attendees
+      .filter((a) => a.staffId || a.role || a.specialty)
+      .map((a) => ({ ...(a.staffId ? { staffId: a.staffId } : {}), role: a.role, specialty: a.specialty }));
 
     const payload: Record<string, unknown> = {
       cancerDiagnosisId,
@@ -283,7 +287,9 @@ export function AddTumorBoardSheet({ open, onOpenChange, boardCase }: AddTumorBo
 
             {attendees.map((attendee, i) => (
               <div key={i} className="flex gap-2 items-start">
-                <div className="flex-1 grid grid-cols-2 gap-2">
+                <div className="flex-1 grid grid-cols-1 gap-2">
+                  <StaffSelect value={attendee.staffId} onChange={(v) => updateAttendee(i, 'staffId', v)} className="h-8 text-xs" ariaLabel={`Attendee ${i + 1}`} />
+                  <div className="grid grid-cols-2 gap-2">
                   <Select value={attendee.role || '__none'} onValueChange={(v) => updateAttendee(i, 'role', v === '__none' ? '' : v)}>
                     <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Role" /></SelectTrigger>
                     <SelectContent>
@@ -298,6 +304,7 @@ export function AddTumorBoardSheet({ open, onOpenChange, boardCase }: AddTumorBo
                       {SPECIALTIES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                     </SelectContent>
                   </Select>
+                  </div>
                 </div>
                 {attendees.length > 1 && (
                   <Button

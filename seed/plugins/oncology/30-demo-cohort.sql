@@ -932,8 +932,15 @@ BEGIN
               ELSIF plan_on_hold AND NOT hold_used THEN
                 dstatus := 'held'; hold_used := true;
               ELSIF ddate = today THEN
+                -- Today's unit mid-morning: some done, some infusing, the rest in the sign-off chain.
                 dstatus := 'ordered';
-                ostatus := (ARRAY['pending', 'approved', 'verified', 'verified'])[1 + floor(pg_temp.h('os:' || k || cyc_n || d) * 4)::int];
+                ostatus := CASE
+                  WHEN pg_temp.h('os:' || k || cyc_n || d) < 0.20 THEN 'completed'
+                  WHEN pg_temp.h('os:' || k || cyc_n || d) < 0.35 THEN 'in_progress'
+                  WHEN pg_temp.h('os:' || k || cyc_n || d) < 0.50 THEN 'pending'
+                  WHEN pg_temp.h('os:' || k || cyc_n || d) < 0.70 THEN 'approved'
+                  ELSE 'verified' END;
+                IF ostatus = 'completed' THEN dstatus := 'given'; END IF;
               ELSIF ddate <= today + 3 AND pg_temp.h('pre:' || k || cyc_n || d) < 0.6 THEN
                 dstatus := 'ordered';
                 ostatus := CASE WHEN pg_temp.h('os:' || k || cyc_n || d) < 0.5 THEN 'pending' ELSE 'approved' END;
@@ -962,7 +969,8 @@ BEGIN
                   drug_preparation_details, nurse_verification_checklist, notes, created_at, updated_at
                 ) VALUES (
                   order_id, TEN, p.id, enc_id, pr.id, MED, cyc_n, d, ddate,
-                  CASE WHEN ostatus = 'completed' THEN ddate + TIME '10:00' + make_interval(mins => (pg_temp.h('at:' || k || cyc_n || d) * 240)::int) END,
+                  CASE WHEN ostatus = 'completed' AND ddate = today THEN ddate + TIME '08:45' + make_interval(mins => (pg_temp.h('at:' || k || cyc_n || d) * 90)::int)
+                       WHEN ostatus = 'completed' THEN ddate + TIME '10:00' + make_interval(mins => (pg_temp.h('at:' || k || cyc_n || d) * 240)::int) END,
                   v_bsa, wt, ht, v_crcl, dx_id, cp_id,
                   COALESCE((SELECT jsonb_agg(jsonb_build_object('drug', x->>'drug',
                       'adjustmentPercent', round((x->>'levelDose')::numeric / NULLIF((x->>'protocolDose')::numeric, 0) * 100),
@@ -971,20 +979,20 @@ BEGIN
                     WHERE x->>'kind' = 'chemo' AND lvl <> 0 AND (x->>'levelDose') <> (x->>'protocolDose')), '[]'::jsonb),
                   jsonb_build_object('consentDocumented', true, 'consentDate', chemo_start - 3, 'allergiesReviewed', true,
                     'allergiesSummary', 'No known drug allergies', 'labsReviewed', ostatus <> 'pending', 'labsDate', ddate - 1,
-                    'labsWithinRange', ostatus <> 'pending', 'bsaVerified', true, 'doseVerified', ostatus <> 'pending', 'premedicationsOrdered', true),
+                    'labsWithinRange', ostatus <> 'pending' AND NOT (ddate = today AND ostatus IN ('approved', 'verified') AND pg_temp.h('lab:' || k || cyc_n || d) < 0.15), 'bsaVerified', true, 'doseVerified', ostatus <> 'pending', 'premedicationsOrdered', true),
                   ostatus,
-                  CASE WHEN ostatus IN ('verified', 'completed') THEN NURSE2 END,
-                  CASE WHEN ostatus IN ('verified', 'completed') THEN ddate - 1 + TIME '17:00' END,
-                  CASE WHEN ostatus IN ('approved', 'verified', 'completed') THEN MED END,
-                  CASE WHEN ostatus IN ('approved', 'verified', 'completed') THEN ddate - 1 + TIME '15:00' END,
-                  CASE WHEN ostatus = 'completed' THEN NURSE1 END,
+                  CASE WHEN ostatus IN ('verified', 'in_progress', 'completed') THEN NURSE2 END,
+                  CASE WHEN ostatus IN ('verified', 'in_progress', 'completed') THEN ddate - 1 + TIME '17:00' END,
+                  CASE WHEN ostatus IN ('approved', 'verified', 'in_progress', 'completed') THEN MED END,
+                  CASE WHEN ostatus IN ('approved', 'verified', 'in_progress', 'completed') THEN ddate - 1 + TIME '15:00' END,
+                  CASE WHEN ostatus IN ('in_progress', 'completed') THEN NURSE1 END,
                   aes,
                   CASE WHEN ostatus = 'completed' THEN COALESCE((SELECT jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
                       'drug', x->>'drug', 'startedAt', to_char(ddate + TIME '10:30', 'YYYY-MM-DD"T"HH24:MI:SS"+05:30"'),
                       'completedAt', to_char(ddate + TIME '10:30' + make_interval(mins => COALESCE((x->>'infusionDurationMin')::int, 30)), 'YYYY-MM-DD"T"HH24:MI:SS"+05:30"'),
                       'accessSite', CASE WHEN x->>'route' = 'IV' THEN 'Chemoport' END)))
                     FROM jsonb_array_elements(items) x WHERE x->>'kind' = 'chemo'), '[]'::jsonb) ELSE '[]'::jsonb END,
-                  CASE WHEN ostatus IN ('verified', 'completed') THEN COALESCE((SELECT jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
+                  CASE WHEN ostatus IN ('verified', 'in_progress', 'completed') THEN COALESCE((SELECT jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
                       'drug', x->>'drug', 'preparedBy', 'Oncology pharmacy', 'preparedAt', to_char(ddate + TIME '09:15', 'YYYY-MM-DD"T"HH24:MI:SS"+05:30"'),
                       'diluent', x->>'diluent', 'finalConcentration', (x->>'calculatedDose') || ' ' || (x->>'calculatedUnit'))))
                     FROM jsonb_array_elements(items) x WHERE x->>'kind' = 'chemo' AND x->>'route' = 'IV'), '[]'::jsonb) ELSE '[]'::jsonb END,

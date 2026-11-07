@@ -90,6 +90,7 @@ Filters:
 Response behavior:
 - `search` matches patient first name, last name, display name, MRN, or phone number
 - each OT request includes `patientDisplay`, matching the standard Clinical `PatientDisplayDto`
+- each OT request includes `reports` with its latest OT report only (all reports come from `GET /ot/requests/:id`)
 
 ### `GET /ot/requests/:id`
 

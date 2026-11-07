@@ -38,6 +38,25 @@ All staging, tumor board, and care plan records link back to a `CancerDiagnosis`
 | Treatment Schedules | `/oncology/treatment-plans` | Patient schedules generated from a protocol — cycles, dates, doses |
 | Day-care Worklist | `/oncology/day-care`          | All patients due on a date: administration sheets + pharmacy prep |
 
+### Patient cancer cockpit
+
+`/oncology/registry/:patientId` (opened by clicking a registry row) is the patient's oncology overview:
+
+- **Header:** name, MRN, age and sex, cancer type, stage and treatment intent. Links go to the active treatment schedule, the care plan and the timeline.
+- **Disease overview:**
+  - *Diagnosis:* site, histology, grade, ICD and morphology codes, and biomarkers.
+  - *Stage:* stage group with an I–IV meter, TNM boxes and the staging basis.
+  - *Status:* clinical and metastatic status, ECOG, intent, and the care plan's steps with their progress.
+- **Treatment journey:** one lane per modality on a shared time axis.
+  - Surgery comes from OT bookings, chemotherapy from treatment schedules (filled by cycles completed), and radiotherapy from prescriptions (filled by fractions delivered, from the list endpoint's `delivered_fractions`).
+  - Endocrine and targeted therapy come from the care plan and run open-ended.
+  - Diagnosis and tumour-board markers sit on the axis, with a today line. Hovering or focusing a bar shows its details.
+- **Tumour markers:** one chart per marker from `GET /registry/:patientId/labs/history`. Different units are never put on one axis. Each chart shows the upper limit of normal dashed and chemotherapy/radiotherapy periods shaded, with the latest value, a normal/above flag, change from peak and a value table.
+- **Next up:** upcoming chemo days, radiotherapy fractions or start, surgery, tumour boards and care-plan milestones, soonest first.
+- **History:** staging, tumour-board decisions, surgical history and care plans.
+
+The primary diagnosis is the active one, else the first. Staging and care plans are taken from that diagnosis.
+
 ---
 
 ## Data Model
@@ -225,7 +244,19 @@ keeps the full dose and the item carries a warning.
 schedule or starts one), `/oncology/treatment-plans/new` (care plan, protocol, C1D1 date, height,
 weight, CrCl → preview → generate), `/oncology/treatment-plans/[id]` (cycle cards with delay and
 dose level, day rows with day sheet and order actions), `/oncology/day-care` (date worklist:
-per-patient administration sheets with timed sequence, and a pharmacy prep table with drug totals).
+a board, per-patient administration sheets with timed sequence, and a pharmacy prep table with
+drug totals).
+
+**Day-care board** (the worklist's first tab):
+
+- **Summary:** patients today, done, infusing now, still to treat, labs to clear, and oral dispenses.
+- **Where everyone is:** one lane per stage, worked out from the treatment day and its chemo order: to order (no order) → awaiting approval (pending/draft) → pharmacy check (approved) → ready to give (verified) → infusing (in progress) → done (given/completed), plus held. Each card shows the protocol and cycle/day, dose level, chair time or "Oral — dispense", and a lab gate from the order's pre-chemo checklist (labs OK / pending / out of range). Cards link to the order, or to the schedule when there is no order.
+- **Chair plan:** a planned chair-by-time grid (units open 08:00, first chairs 08:30, close 18:00, 15-minute turnover). Chair time is infusion durations + hydration hours + 30 minutes for pre-meds + 15 minutes to settle.
+  - Patients who are done or infusing are placed first, then the rest by stage, longest first, each in the first chair to free up.
+  - The chair count starts at enough for ~85% use and can be changed.
+  - Overruns past 18:00 are flagged, and a now line shows on today.
+  - It is a planning aid: chairs are not stored.
+- **Big screen:** shows the board full screen for a nurses'-station display, with larger type and a clock, refreshing every minute (`useTreatmentDays(…, refetchInterval)`). Where the browser refuses full screen, it fills the window instead. Esc or Exit closes it.
 
 **Colour:** statuses (care plan, order, plan, day, radiation) render as tone badges from one
 vocabulary in `frontend/src/plugins/oncology/lib/oncology-tone.ts`; care-plan modalities and
@@ -345,9 +376,10 @@ deterministic cancer journey, usually the 900 `MRN-DEMO-*` patients from
   fraction, a schedule a few days before cycle 1. Later ones appear only as
   planned modalities in the care plan.
 - **Relative to today**: patients registered in the last ~12 days are still
-  in work-up (provisional diagnosis, tumour board scheduled). Today has a
-  day-care list of pending, approved and verified orders, with the next few
-  days partly ordered, and patients mid-radiotherapy. Older patients are in
+  in work-up (provisional diagnosis, tumour board scheduled). Today's day-care
+  list is a mid-morning mix: some given, some infusing, the rest pending,
+  approved or verified, and a few with labs out of range. The next few days
+  are partly ordered, and some patients are mid-radiotherapy. Older patients are in
   surveillance, remission, palliative care or progression.
 - **Extra protocols**: the seed adds five protocols if they are missing:
   `CisRT-Weekly`, `CROSS`, `Metronomic-HN` (oral metronomic methotrexate +
@@ -355,6 +387,7 @@ deterministic cancer journey, usually the 900 `MRN-DEMO-*` patients from
 - **Re-running** is safe. Ids derive from `onco-demo:<key>`, and a re-run
   first deletes the earlier run's rows and rows of patients that no longer
   exist. Patients with a hand-built diagnosis are not touched.
+
 
 ---
 
@@ -371,12 +404,14 @@ frontend/src/plugins/oncology/
     ├── TreatmentIntentBadge.tsx      # Colored badge component
     ├── protocol-builder/             # Phase builder, regimen matrix, schedule preview
     ├── treatment-schedule/DaySheet.tsx # Timed day sheet (checks, sequence, supportive care)
-    └── shared.tsx                    # LoadingState, EmptyState, StatusBadge
+    ├── cockpit/                      # Patient cockpit: DiseaseOverview, TreatmentJourney, MarkerTrends, NextUp
+    ├── StaffSelect.tsx               # Staff picker (tumour-board attendees)
+    └── shared.tsx                    # LoadingState, EmptyState, StatusBadge, PatientCell
 
 frontend/src/app/[locale]/(dashboard)/oncology/
 ├── registry/
 │   ├── page.tsx                      # Registry list with AddDiagnosisSheet
-│   └── [patientId]/page.tsx          # Full patient cancer profile
+│   └── [patientId]/page.tsx          # Patient cancer cockpit (see below)
 ├── staging/
 │   ├── page.tsx                      # Tumor staging list
 │   ├── new/page.tsx
@@ -401,7 +436,7 @@ frontend/src/app/[locale]/(dashboard)/oncology/
 │   ├── page.tsx                      # Schedule list (?carePlanId= redirects)
 │   ├── new/page.tsx                  # Start schedule from a care plan
 │   └── [id]/page.tsx                 # Cycle/day schedule, delay, dose level, day sheet, orders
-└── day-care/page.tsx                 # Date worklist: administration + pharmacy prep
+└── day-care/page.tsx                 # Date worklist: board (plugins/oncology/components/day-care/), administration, pharmacy prep
 ```
 
 ---

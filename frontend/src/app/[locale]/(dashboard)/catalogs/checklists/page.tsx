@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Eye } from 'lucide-react';
+import { Eye, ListChecks } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,8 @@ import { CreateTemplateDialog } from './_components/create-template-dialog';
 import { useChecklistTemplates } from '@/modules/clinical/hooks/use-checklists';
 import type { ChecklistTemplate } from '@/modules/clinical/types/checklist';
 import { ChecklistTemplateStatus, ChecklistCategory } from '@/modules/clinical/types/checklist';
+import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusVariant: Record<ChecklistTemplateStatus, 'default' | 'secondary' | 'outline' | 'destructive'> = {
   [ChecklistTemplateStatus.ACTIVE]: 'default',
@@ -112,24 +114,14 @@ export default function ChecklistTemplatesPage() {
   );
 
   return (
-    <div className="space-y-4">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => router.push(`/${locale}/catalogs`)}
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to catalogs
-      </Button>
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Checklist Templates</h1>
-          <p className="text-muted-foreground">
-            Manage reusable clinical checklists and auto-create rules for inpatient workflows.
-          </p>
-        </div>
-        <CreateTemplateDialog />
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Checklist Templates"
+        subtitle="Manage reusable clinical checklists and auto-create rules for inpatient workflows."
+        icon={ListChecks}
+        breadcrumb={<Breadcrumb items={[{ href: `/${locale}/catalogs`, label: 'Catalogs' }, { label: 'Checklist Templates' }]} />}
+        actions={<CreateTemplateDialog />}
+      />
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex-1 min-w-[220px]">

@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, endOfDay, startOfDay, subDays } from 'date-fns';
-import { Search, Eye, Plus, Calendar, User } from 'lucide-react';
+import { Search, Eye, Plus, Calendar, User, FileText } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -21,6 +21,7 @@ import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
 import type { Invoice } from '@/modules/rcm/types/invoice';
 import { InvoiceStatus } from '@/modules/rcm/types/invoice';
 import { invoiceStatusTone } from '@/modules/rcm/utils/billing-tone';
+import { PageHeader } from '@/components/ui/page-header';
 
 const statusLabel: Record<InvoiceStatus, string> = {
   [InvoiceStatus.UNPAID]: 'Unpaid',
@@ -190,6 +191,18 @@ export default function InvoicesPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Invoices"
+        subtitle="Patient bills and their payment status"
+        icon={FileText}
+        actions={
+          <Button asChild>
+            <Link href={`/${locale}/invoices/new`}>
+              <Plus className="mr-2 h-4 w-4" /> New invoice
+            </Link>
+          </Button>
+        }
+      />
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -265,14 +278,6 @@ export default function InvoicesPage() {
         </div>
       ) : (
         <ResourceTable
-          title="Invoices"
-          cta={
-            <Button size="sm" asChild>
-              <Link href={`/${locale}/invoices/new`}>
-                <Plus className="mr-2 h-4 w-4" /> New invoice
-              </Link>
-            </Button>
-          }
           columns={columns}
           data={filtered}
           isLoading={isLoading}

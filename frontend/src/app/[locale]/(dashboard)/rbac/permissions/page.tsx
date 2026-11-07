@@ -2,6 +2,8 @@
 
 import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
+import { PageHeader } from '@/components/ui/page-header';
+import { KeyRound } from 'lucide-react';
 
 interface PermissionRow {
   id: string;
@@ -25,7 +27,12 @@ const data: PermissionRow[] = [
 export default function PermissionsPage() {
   return (
     <div className="space-y-6">
-      <ResourceTable title="Permissions" columns={columns} data={data} />
+      <PageHeader
+        title="Permissions"
+        subtitle="Permission codes that roles can grant"
+        icon={KeyRound}
+      />
+      <ResourceTable columns={columns} data={data} />
     </div>
   );
 }
