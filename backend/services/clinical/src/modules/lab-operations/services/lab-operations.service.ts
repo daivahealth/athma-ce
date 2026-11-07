@@ -1215,6 +1215,21 @@ export class LabOperationsService {
     return run;
   }
 
+  /**
+   * Worklist `from` (inclusive) / `to` (exclusive) window, as a where-fragment on the given
+   * timestamp field. Returns `{}` when neither bound is supplied.
+   */
+  private worklistDateWhere<F extends 'orderedAt' | 'collectedAt'>(
+    query: LabWorklistQueryDto,
+    field: F,
+  ): { [K in F]?: { gte?: Date; lt?: Date } } {
+    if (!query.from && !query.to) return {};
+    const range: { gte?: Date; lt?: Date } = {};
+    if (query.from) range.gte = new Date(query.from);
+    if (query.to) range.lt = new Date(query.to);
+    return { [field]: range } as { [K in F]?: { gte?: Date; lt?: Date } };
+  }
+
   private async getCollectionWorklist(tenantId: string, query: LabWorklistQueryDto) {
     const preparedSpecimens = await this.prisma.labSpecimen.findMany({
       where: {
@@ -1224,6 +1239,7 @@ export class LabOperationsService {
           orderType: 'lab',
           ...(query.encounterId ? { encounterId: query.encounterId } : {}),
           ...(query.patientId ? { patientId: query.patientId } : {}),
+          ...this.worklistDateWhere(query, 'orderedAt'),
           status: {
             not: 'cancelled',
           },
@@ -1282,6 +1298,7 @@ export class LabOperationsService {
           orderType: 'lab',
           ...(query.encounterId ? { encounterId: query.encounterId } : {}),
           ...(query.patientId ? { patientId: query.patientId } : {}),
+          ...this.worklistDateWhere(query, 'orderedAt'),
           status: {
             not: 'cancelled',
           },
@@ -1509,6 +1526,7 @@ export class LabOperationsService {
       where: {
         tenantId,
         status: LabSpecimenStatus.COLLECTED,
+        ...this.worklistDateWhere(query, 'collectedAt'),
         order: {
           ...(query.encounterId ? { encounterId: query.encounterId } : {}),
           ...(query.patientId ? { patientId: query.patientId } : {}),
@@ -1526,6 +1544,7 @@ export class LabOperationsService {
       where: {
         tenantId,
         status: LabSpecimenStatus.RECEIVED,
+        ...this.worklistDateWhere(query, 'collectedAt'),
         order: {
           ...(query.encounterId ? { encounterId: query.encounterId } : {}),
           ...(query.patientId ? { patientId: query.patientId } : {}),
@@ -1546,6 +1565,7 @@ export class LabOperationsService {
           in: [LabSpecimenStatus.ACCESSIONED, LabSpecimenStatus.PROCESSING],
         },
         specimen: {
+          ...this.worklistDateWhere(query, 'collectedAt'),
           order: {
             ...(query.encounterId ? { encounterId: query.encounterId } : {}),
             ...(query.patientId ? { patientId: query.patientId } : {}),
@@ -1588,6 +1608,7 @@ export class LabOperationsService {
           in: [LabSpecimenStatus.PROCESSING, LabSpecimenStatus.RESULT_ENTERED],
         },
         specimen: {
+          ...this.worklistDateWhere(query, 'collectedAt'),
           order: {
             ...(query.encounterId ? { encounterId: query.encounterId } : {}),
             ...(query.patientId ? { patientId: query.patientId } : {}),

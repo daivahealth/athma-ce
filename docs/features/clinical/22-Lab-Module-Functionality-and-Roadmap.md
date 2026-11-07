@@ -88,6 +88,11 @@ Current frontend route:
 The collection queue shows its state as a tone badge (amber "Ready to Prepare", emerald "Label
 Prepared") and marks a fasting requirement in orange (`frontend/src/modules/clinical/utils/lab-collection-tone.ts`).
 
+The queue is filtered to a single **Ordered on** day, which defaults to today. Previous / next
+day buttons, a date input and a **Today** shortcut sit beside the patient search; future days are
+not selectable. Orders from earlier days that are still uncollected only appear when that day is
+selected.
+
 ### 3. Lab Internal Operations Workflow
 
 Available now:
@@ -108,6 +113,10 @@ Current worklist stages:
 - `accessioning`
 - `processing`
 - `result-entry`
+
+All four stages are filtered to a single **Collected on** day (specimen collection time), which
+defaults to today; the day picker is in the page header and the stage counts follow it. Work
+collected on an earlier day and still pending only shows when that day is selected.
 
 ### 4. Structured Lab Reporting
 
@@ -160,6 +169,11 @@ Current behavior:
 Available now:
 
 - `/results/lab` is fed by aggregated patient results
+- `/results/lab` shows one **Reported on** day at a time, defaulting to today. A report matches
+  the day by `reportedAt`, or by `createdAt` while it has not been reported yet (drafts), so the
+  day always agrees with the "Reported" column. Backed by optional `from` / `to` (ISO 8601,
+  inclusive / exclusive) query params on `GET /patient-results`, which apply to lab, pathology,
+  imaging and procedure reports alike.
 - lab orders become visible in the reporting queue as soon as processing starts
 - specimen type and specimen number are shown in the list
 - duplicate draft rows are collapsed to one visible row per lab order

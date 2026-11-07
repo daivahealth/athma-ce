@@ -21,7 +21,7 @@ import type {
 class LabOperationsService {
   async getWorklist(
     stage: LabWorklistStage,
-    params?: { encounterId?: string; patientId?: string },
+    params?: { encounterId?: string; patientId?: string; from?: string; to?: string },
   ): Promise<LabCollectionWorklistItem[] | LabSpecimen[] | LabProcessingWorklistItem[]> {
     const response = await clinicalClient.get(`/lab-operations/worklists/${stage}`, {
       params,

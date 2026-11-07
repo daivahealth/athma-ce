@@ -62,12 +62,28 @@ Optional query parameters:
 
 - `encounterId`
 - `patientId`
+- `from` — ISO 8601 instant, inclusive lower bound
+- `to` — ISO 8601 instant, exclusive upper bound
+
+`from` / `to` filter on a stage-specific timestamp:
+
+| Stage | Field filtered |
+| --- | --- |
+| `collection` | order `orderedAt` (both prepared specimens and not-yet-prepared tests) |
+| `receiving`, `accessioning` | specimen `collectedAt` |
+| `processing`, `result-entry` | parent specimen `collectedAt` |
+
+Either bound may be sent alone; omitting both keeps the previous unfiltered behaviour. The server
+does not apply a time zone: the frontend sends the user's local midnight-to-midnight window as UTC
+instants (see `localDayRange` in `frontend/src/modules/clinical/components/lab-operations/lab-ui.tsx`).
+Invalid values are rejected with `400` by the DTO validation.
 
 Collection worklist response notes:
 
 - each collection group includes `patientDisplay`, matching the shared Clinical `PatientDisplayDto`
 - use `patientDisplay.displayName`, `mrn`, `age`, and `gender` for patient identity rendering instead of showing only UUID-linked context
 - the collection frontend route uses the existing `patientId` query parameter to filter the queue to a single patient
+- the collection frontend route also sends `from` / `to` for the selected "Ordered on" day (today by default)
 - each collection group also exposes a workflow state:
   - `ready`: no specimen label has been prepared yet
   - `prepared`: a pending specimen exists with barcode/label content ready for printing or reprinting

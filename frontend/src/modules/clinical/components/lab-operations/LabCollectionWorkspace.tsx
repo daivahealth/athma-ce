@@ -16,13 +16,22 @@ import { useCollectLabSpecimen, useLabWorklist, usePrepareLabSpecimen, usePrintL
 import type { LabCollectionWorklistItem, LabSpecimenLabelPayload } from '../../types/lab-operations';
 import type { PatientDisplayDTO } from '../../types/patient';
 import { LAB_COLLECTION_STATE_LABEL, fastingTone, labCollectionStateTone } from '../../utils/lab-collection-tone';
-import { LabDateTime, LabPatientCell, SpecimenCode, WorklistSkeleton } from './lab-ui';
+import {
+  LabDateFilter,
+  LabDateTime,
+  LabPatientCell,
+  SpecimenCode,
+  WorklistSkeleton,
+  useLabDayFilter,
+} from './lab-ui';
 
 export function LabCollectionWorkspace() {
   const [selectedPatient, setSelectedPatient] = useState<PatientDisplayDTO | null>(null);
   const toast = useToast();
+  const { date, setDate, range } = useLabDayFilter();
   const collection = useLabWorklist('collection', {
     patientId: selectedPatient?.id,
+    ...range,
   });
   const prepareMutation = usePrepareLabSpecimen();
   const collectMutation = useCollectLabSpecimen();
@@ -52,13 +61,16 @@ export function LabCollectionWorkspace() {
 
       <Card className="overflow-hidden">
         <div className="flex flex-col gap-3 border-b border-border/60 p-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="w-full lg:max-w-md">
-            <PatientSearchSelect
-              value={selectedPatient}
-              onSelect={(patient) => setSelectedPatient(patient as PatientDisplayDTO)}
-              onClear={() => setSelectedPatient(null)}
-              placeholder="Filter by patient name, MRN or mobile"
-            />
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto">
+            <div className="w-full sm:min-w-[20rem] lg:max-w-md">
+              <PatientSearchSelect
+                value={selectedPatient}
+                onSelect={(patient) => setSelectedPatient(patient as PatientDisplayDTO)}
+                onClear={() => setSelectedPatient(null)}
+                placeholder="Filter by patient name, MRN or mobile"
+              />
+            </div>
+            <LabDateFilter value={date} onChange={setDate} label="Ordered on" />
           </div>
           {!collection.isLoading && items.length > 0 ? (
             <div className="flex flex-wrap items-center gap-2">

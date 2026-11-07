@@ -1,3 +1,7 @@
+import { useMemo, useState } from 'react';
+import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 
 /** Shared building blocks so the lab worklists read as one family. */
@@ -94,6 +98,97 @@ export function LabDateTime({ value, empty = '—' }: { value?: string | Date | 
     <div>
       <div className="text-sm text-foreground">{formatted.day}</div>
       <div className="text-xs text-muted-foreground">{formatted.time}</div>
+    </div>
+  );
+}
+
+/** `YYYY-MM-DD` for a Date in the browser's local time zone (the value an `<input type="date">` uses). */
+export function toLocalDateInput(date: Date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function shiftDateInput(value: string, days: number) {
+  const [y, m, d] = value.split('-').map(Number);
+  return toLocalDateInput(new Date(y, m - 1, d + days));
+}
+
+/**
+ * Local-day window for a `YYYY-MM-DD` value as ISO instants: `from` is local midnight (inclusive),
+ * `to` is the next local midnight (exclusive). Sent as the lab list `from` / `to` query params.
+ */
+export function localDayRange(value: string) {
+  const [y, m, d] = value.split('-').map(Number);
+  return {
+    from: new Date(y, m - 1, d).toISOString(),
+    to: new Date(y, m - 1, d + 1).toISOString(),
+  };
+}
+
+/** Selected day for a lab list, defaulting to today, plus its `from` / `to` query window. */
+export function useLabDayFilter() {
+  const [date, setDate] = useState(() => toLocalDateInput());
+  const range = useMemo(() => localDayRange(date), [date]);
+  return { date, setDate, range };
+}
+
+/** Day picker for lab lists: previous / next day, a date input and a jump back to today. */
+export function LabDateFilter({
+  value,
+  onChange,
+  label = 'Date',
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  label?: string;
+}) {
+  const today = toLocalDateInput();
+  return (
+    <div className="flex items-center gap-1" role="group" aria-label={`${label} filter`}>
+      <Button
+        type="button"
+        variant="outline"
+        size="icon"
+        className="h-9 w-9 shrink-0"
+        onClick={() => onChange(shiftDateInput(value, -1))}
+        aria-label="Previous day"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </Button>
+      <div className="relative">
+        <CalendarDays className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          type="date"
+          value={value}
+          max={today}
+          onChange={(event) => onChange(event.target.value || today)}
+          className="h-9 w-[11.5rem] pl-9"
+          aria-label={label}
+        />
+      </div>
+      <Button
+        type="button"
+        variant="outline"
+        size="icon"
+        className="h-9 w-9 shrink-0"
+        onClick={() => onChange(shiftDateInput(value, 1))}
+        disabled={value >= today}
+        aria-label="Next day"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className="h-9"
+        onClick={() => onChange(today)}
+        disabled={value === today}
+      >
+        Today
+      </Button>
     </div>
   );
 }
