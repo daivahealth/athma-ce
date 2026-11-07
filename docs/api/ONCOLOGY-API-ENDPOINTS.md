@@ -44,6 +44,45 @@ across all dates.
 
 `patient` is `{ patientId, mrn, displayName, gender, age }` or null.
 
+### Get Population Health
+```
+GET /api/v1/plugins/oncology/dashboard/population?months=0
+```
+**Permission:** `oncology.registry.read`
+
+Population health view behind the dashboard's **Population health** tab. The cohort is every diagnosis
+in the caller's tenant dated within `months` of today (`0` or omitted = all time; capped at 240).
+
+Derived per diagnosis:
+- **Stage at diagnosis**: the earliest staging record's `stage_group`, folded to `0`, `I`, `II`, `III`,
+  `IV` (sub-stages such as `IIIB` fold to `III`; `is`/`Tis` to `0`) or `Unstaged`.
+- **Age at diagnosis**: from the patient's date of birth to `diagnosis_date`.
+- **First treatment**: the earliest of the first non-draft, non-cancelled chemo order's
+  `scheduled_date`, a non-cancelled treatment schedule's `start_date` and a non-cancelled radiation
+  prescription's `planned_start_date` (linked by `cancer_profile_id`). Days to treatment counts only
+  starts on or after the diagnosis date.
+- **Treatment intent**: the first non-cancelled care plan's intent.
+
+| Field | Meaning |
+|-------|---------|
+| `summary.diagnoses`, `patients` | Diagnoses and distinct patients in the cohort |
+| `summary.medianAgeAtDiagnosis` | Median age at diagnosis (years) |
+| `summary.lateStagePercent` / `stagedPercent` | Stage III–IV as a share of staged diagnoses / staged share of all |
+| `summary.metastaticPercent` | `metastatic_status = 'distant'` share |
+| `summary.medianDaysToTreatment`, `treatedWithin30DaysPercent`, `withTreatmentDate` | Diagnosis to first treatment, over diagnoses with a start date |
+| `summary.remissionPercent` / `recurrencePercent` | `remission`/`resolved` share / `recurrence`/`relapsed` or `is_recurrence` share |
+| `summary.curativeIntentPercent` | Curative share of diagnoses with a care-plan intent |
+| `incidenceByMonth[]` | `{ month: 'YYYY-MM', count }` for the last 12 calendar months, zero-filled |
+| `ageGender[]` | `{ band, male, female, other }` for bands `0-17`, `18-39`, `40-49`, `50-59`, `60-69`, `70+` (and `Unknown` when present) |
+| `stageAtDiagnosis[]` | `{ stage, count }` for `0`, `I`, `II`, `III`, `IV`, `Unstaged` |
+| `byCancerType[]` | Top 10 cancer types: diagnoses, median age, late-stage %, median days to treatment, remission % |
+| `byCity[]` | Top 8 cities by distinct patients (`Not recorded` when blank) |
+| `byClinicalStatus[]`, `byTreatmentIntent[]` | `{ key, count }`; intent `not_set` when no care plan |
+| `screenableCancers[]` | Breast, cervical, oral and colorectal cancers (matched on `cancer_type`): diagnoses and late-stage % |
+
+Percentages are whole numbers, or null when the denominator is zero. Survival is not reported: the
+patient record has no date of death.
+
 ---
 
 ## Cancer Diagnosis

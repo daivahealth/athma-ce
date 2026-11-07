@@ -42,6 +42,7 @@ const oncologyKeys = {
   histologyList: (params?: Record<string, unknown>) => [...oncologyKeys.histologies(), 'list', params] as const,
   timeline: (patientId: string) => [...oncologyKeys.all, 'timeline', patientId] as const,
   dashboard: (date: string) => [...oncologyKeys.all, 'dashboard', date] as const,
+  population: (months: number) => [...oncologyKeys.all, 'dashboard', 'population', months] as const,
 };
 
 // Dashboard
@@ -51,6 +52,15 @@ export function useOncologyDashboard(date: string) {
     queryFn: () => oncologyService.getDashboard(date),
     enabled: /^\d{4}-\d{2}-\d{2}$/.test(date),
     refetchInterval: 60_000,
+  });
+}
+
+export function useOncologyPopulationHealth(months: number, enabled = true) {
+  return useQuery({
+    queryKey: oncologyKeys.population(months),
+    queryFn: () => oncologyService.getPopulationHealth(months),
+    enabled,
+    staleTime: 5 * 60_000,
   });
 }
 
