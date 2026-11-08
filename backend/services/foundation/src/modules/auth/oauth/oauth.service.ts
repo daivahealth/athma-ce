@@ -12,7 +12,7 @@ import {
   type OAuthProviderId,
   type OAuthTokenResponse,
 } from './oauth-providers';
-import { FixedWindowLimiter } from './rate-limiter';
+import { FixedWindowLimiter } from '../../../common/rate-limit/fixed-window-limiter';
 
 /**
  * External sign-in (Google, Microsoft, GitHub) for the public demo.

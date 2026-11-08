@@ -276,6 +276,9 @@ export async function exchangeOAuthTicket(ticket: string) {
   return data;
 }
 
+/** Foundation client without auth interceptors, for public endpoints. */
+export const publicFoundationClient = axios.create({ baseURL: FOUNDATION_BASE_URL });
+
 export async function logout(options: { refreshToken?: string; allDevices?: boolean } = {}) {
   try {
     // Send logout request to server with current refresh token

@@ -110,3 +110,26 @@ export const EMAIL_LOGIN_MODE: EmailLoginMode = parseEmailLoginMode(
   process.env.NEXT_PUBLIC_LOGIN_EMAIL,
   DEPLOYMENT_MODE,
 );
+
+/**
+ * Whether `/{locale}` shows the public landing page (what Athma is, the demo,
+ * open source, production access requests) instead of going straight to the app.
+ *
+ * Set with NEXT_PUBLIC_LANDING_PAGE=on|off (build time). Defaults to `on` for
+ * the demo mode and `off` otherwise. See docs/features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md.
+ */
+export function parseLandingPage(raw: string | undefined, mode: DeploymentMode): boolean {
+  const key = raw?.trim().toLowerCase();
+  if (key === 'on' || key === 'true') return true;
+  if (key === 'off' || key === 'false') return false;
+  return mode === 'demo';
+}
+
+// Literal process.env access so Next inlines the value into the client bundle.
+export const LANDING_PAGE_ENABLED: boolean = parseLandingPage(
+  process.env.NEXT_PUBLIC_LANDING_PAGE,
+  DEPLOYMENT_MODE,
+);
+
+/** Public source repository linked from the landing page. */
+export const SOURCE_REPOSITORY_URL = 'https://github.com/daivahealth/athma-ce';

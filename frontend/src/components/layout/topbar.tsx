@@ -23,6 +23,7 @@ import {
   SquareStack,
   ShieldCheck,
   Puzzle,
+  Inbox,
   Check,
   Plus,
   CircleHelp,
@@ -38,6 +39,7 @@ import { NotificationCenter } from './notification-center';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { decodeAccessToken } from '@/lib/auth/tokens';
+import { PLATFORM_ACCESS_REQUEST_READ } from '@/modules/access-requests/api';
 import { getSession, logout, switchFacility } from '@/lib/api/client';
 import { useToast } from '@/components/ui/use-toast';
 import Link from 'next/link';
@@ -257,6 +259,14 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
                   {t('nav.pluginManagement')}
                 </Link>
               </DropdownMenuItem>
+              {claims?.permissions?.includes(PLATFORM_ACCESS_REQUEST_READ) && (
+                <DropdownMenuItem asChild>
+                  <Link href={`/${locale}/access-requests`} className="flex items-center gap-2 cursor-pointer">
+                    <Inbox className="h-4 w-4" />
+                    Access requests
+                  </Link>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 

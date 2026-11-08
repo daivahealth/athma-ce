@@ -707,3 +707,30 @@ model OAuthLoginTicket {
   @@index([expiresAt])
   @@map("oauth_login_tickets")
 }
+
+/// Production access request submitted from the public site. Instance-wide
+/// (not tenant data); readable only with platform.access_request.read.
+/// See docs/features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md.
+model AccessRequest {
+  id               String    @id @default(uuid()) @map("id") @db.Uuid
+  organisationName String    @map("organisation_name")
+  organisationType String    @map("organisation_type")
+  contactName      String    @map("contact_name")
+  email            String    @map("email")
+  phone            String?   @map("phone")
+  country          String    @map("country")
+  facilityCount    Int?      @map("facility_count")
+  bedCount         Int?      @map("bed_count")
+  modules          String[]  @default([]) @map("modules")
+  message          String?   @map("message")
+  /// 'new' | 'contacted' | 'approved' | 'declined'
+  status           String    @default("new") @map("status")
+  adminNotes       String?   @map("admin_notes")
+  reviewedAt       DateTime? @map("reviewed_at") @db.Timestamptz(6)
+  reviewedBy       String?   @map("reviewed_by") @db.Uuid
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([status, createdAt])
+  @@map("access_requests")
+}

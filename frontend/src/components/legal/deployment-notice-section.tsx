@@ -23,6 +23,19 @@ export function DeploymentNoticeSection() {
         <li>Data may be reset, changed or deleted at any time without notice, and is not backed up for recovery.</li>
         <li>Nothing shown here is medical advice or may be relied on for diagnosis or treatment decisions.</li>
         <li>Availability, performance and security are not guaranteed to production standards.</li>
+        {isDemo && (
+          <>
+            <li>
+              If you sign in with Google, Microsoft or GitHub, we store your name, email address, that account&apos;s
+              ID and when you accepted these terms, to give you read-only access to the demo. You can ask us to delete
+              your demo account at any time.
+            </li>
+            <li>
+              If you request production access, we store the details you submit (organisation, name, email, phone,
+              country and message) to contact you about your request.
+            </li>
+          </>
+        )}
       </ul>
     </LegalSection>
   );

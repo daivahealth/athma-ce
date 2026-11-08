@@ -12,7 +12,8 @@ SELECT
 FROM permissions p
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
--- Tenant Admin gets administrative permissions (excluding tenant management)
+-- Tenant Admin gets administrative permissions (excluding tenant management
+-- and instance-wide platform permissions)
 INSERT INTO role_permissions (id, role_id, permission_id, created_at)
 SELECT
   gen_random_uuid(),
@@ -20,7 +21,7 @@ SELECT
   p.id,
   NOW()
 FROM permissions p
-WHERE p.resource NOT IN ('tenant', 'plugin')
+WHERE p.resource NOT IN ('tenant', 'plugin', 'platform')
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
 -- Tenant Admin may view and (de)activate plugins for their tenant, but

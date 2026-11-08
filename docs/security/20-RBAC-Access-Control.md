@@ -447,6 +447,10 @@ When adding an endpoint that a read-only user should be able to call with POST (
 
 Public visitors sign in with an external account; foundation provisions them in the demo tenant as `demo_visitor` with `read_only` access to every facility. Identities are matched by provider subject, never by email, and external users have no usable password. A Google identity listed in `OAUTH_PLATFORM_ADMINS` gets `super_admin` + `tenant_admin` instead. Design and safeguards: [ADR-0016](../ADR/ADR-0016-external-identity-providers.md).
 
+### Platform permissions
+
+Permissions with resource `platform` (currently `platform.access_request.read` and `platform.access_request.manage`) cover instance-wide data, not a tenant's: prospects' contact details from the [access request form](../features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md). They are granted to `super_admin` only; the seeds keep them from `tenant_admin` and `demo_visitor`. Platform admins sign in through `OAUTH_PLATFORM_ADMINS` (ADR-0016).
+
 ### Reading your own user record
 
 `GET /users/:id`, `GET /users/:userId/facilities` and `GET /users/:userId/facilities/check/:facilityId` carry `@AllowSelf(...)`: a user may read their own record and facilities without `user.read`. The app shell needs this for every user, and it lets `demo_visitor` run without `user.read`.
