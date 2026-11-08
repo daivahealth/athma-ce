@@ -134,6 +134,19 @@ function bearerToken(req: Request): string | null {
   return scheme?.toLowerCase() === 'bearer' && token ? token : null;
 }
 
+/**
+ * `access_token` query parameter, for GET/HEAD only. EventSource (Server-Sent
+ * Events, such as prm's /v1/notifications/stream) cannot send an
+ * Authorization header, so those streams pass the JWT in the URL.
+ */
+function queryToken(req: Request): string | null {
+  const raw = req.originalUrl || req.url || '';
+  const index = raw.indexOf('?');
+  if (index < 0) return null;
+  const value = new URLSearchParams(raw.slice(index + 1)).get('access_token');
+  return value && value.length < 8192 ? value : null;
+}
+
 function requestPath(req: Request): string {
   const raw = req.originalUrl || req.url || '';
   const path = raw.split('?')[0] ?? '';
@@ -210,8 +223,8 @@ export function readOnlyAccessMiddleware(options: WriteAccessOptions = {}) {
     }
 
     const path = requestPath(req);
-    const token = bearerToken(req);
     const safe = SAFE_METHODS.has(method);
+    const token = bearerToken(req) ?? (safe ? queryToken(req) : null);
 
     const providedKey = headerValue(req, 'x-internal-api-key');
     const internalCall = !!(providedKey && internalKey && safeEqual(providedKey, internalKey));

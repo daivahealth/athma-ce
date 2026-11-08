@@ -262,3 +262,27 @@ describe('sandbox endpoints for read-only visitors', () => {
     expect(run('POST', '/api/v1/sandboxes/0cb106e3-d228-44a0-9c0a-d484cebd0fa1/extend', readOnly).res.statusCode).toBe(403);
   });
 });
+
+describe('access_token query parameter (Server-Sent Events)', () => {
+  const enforce: WriteAccessOptions = {
+    requireTokenForWrites: true,
+    requireTokenForReads: 'enforce',
+    jwtSecret: SECRET,
+    internalApiKey: 'internal-key',
+  };
+  const raw = token({ sub: 'u1', userId: 'u1', tenantId: 'tenant-a', roles: ['physician'] });
+
+  it('authenticates a GET stream with the token in the URL', () => {
+    expect(run('GET', `/v1/notifications/stream?access_token=${raw}`, undefined, enforce).next).toHaveBeenCalled();
+  });
+
+  it('still binds the tenant from a URL token', () => {
+    const { res } = run('GET', `/v1/notifications/stream?access_token=${raw}`, undefined, enforce, { 'x-tenant-id': 'tenant-b' });
+    expect(res.statusCode).toBe(403);
+  });
+
+  it('never accepts a URL token for writes', () => {
+    const { res } = run('POST', `/api/v1/patients?access_token=${raw}`, undefined, enforce);
+    expect(res.statusCode).toBe(401);
+  });
+});
