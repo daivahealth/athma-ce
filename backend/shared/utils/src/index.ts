@@ -5,3 +5,4 @@ export * from './request-context.interceptor';
 export * from './request-context.module';
 export * from './name-formatter';
 export * from './guards';
+export * from './tenant-data';

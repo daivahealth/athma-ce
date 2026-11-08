@@ -461,7 +461,11 @@ Public visitors sign in with an external account; foundation provisions them in 
 
 ### Platform permissions
 
-Permissions with resource `platform` (currently `platform.access_request.read` and `platform.access_request.manage`) cover instance-wide data, not a tenant's: prospects' contact details from the [access request form](../features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md). They are granted to `super_admin` only; the seeds keep them from `tenant_admin` and `demo_visitor`. Platform admins sign in through `OAUTH_PLATFORM_ADMINS` (ADR-0016).
+Permissions with resource `platform` (`platform.access_request.read`/`manage` and `platform.sandbox.read`/`manage`) cover instance-wide data, not a tenant's: prospects' contact details from the [access request form](../features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md) and the list of [sandbox tenants](../features/SANDBOX-TENANTS.md) with their owners. They are granted to `super_admin` only; the seeds keep them from `tenant_admin` and `demo_visitor`. Platform admins sign in through `OAUTH_PLATFORM_ADMINS` (ADR-0016).
+
+### Sandbox owners
+
+A sandbox owner ([ADR-0017](../ADR/ADR-0017-sandbox-tenants.md)) holds `tenant_admin` in their own sandbox tenant only, and stays `demo_visitor` (read-only) in the demo tenant. The two accounts share the external identity; `POST /sandboxes/switch` issues a session for one or the other, so a token always carries one tenant, and tenant binding refuses any request that names the other. The copied `super_admin` role is removed from every sandbox. `READ_ONLY_ALLOWED_PATHS` lets read-only visitors create, switch to, extend and delete their own sandbox (`/sandboxes`, `/sandboxes/switch`, `/sandboxes/mine`, `/sandboxes/mine/extend`).
 
 ### Reading your own user record
 

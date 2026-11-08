@@ -17,6 +17,7 @@ import { validateEnvironment } from './config/validation.schema';
 // Core modules
 import { DatabaseModule } from './database/database.module';
 import { TenantModule } from './tenant/tenant.module';
+import { TenantSetupModule } from './tenant-setup/tenant-setup.module';
 
 // Feature modules
 import { EventsModule } from './events/events.module';
@@ -55,6 +56,7 @@ import { ConsentModule } from './clients/consent/consent.module';
     // Auth & tenant context
     SharedAuthModule,
     TenantModule,
+    TenantSetupModule,
 
     // Feature modules
     EventsModule,

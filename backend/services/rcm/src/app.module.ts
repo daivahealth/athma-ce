@@ -7,6 +7,7 @@ import { ObservabilityModule } from '@zeal/observability';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { InsuranceModule } from './modules/insurance/insurance.module';
+import { TenantSetupModule } from './modules/tenant-setup/tenant-setup.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { MedicalCodingModule } from './modules/medical-coding/medical-coding.module';
 import { CatalogMappingModule } from './modules/catalog-mappings/catalog-mapping.module';
@@ -28,6 +29,7 @@ import { PharmacyModule } from './modules/pharmacy/pharmacy.module';
     RcmDatabaseModule,
     RequestContextModule,
     SharedAuthModule,
+    TenantSetupModule,
     InsuranceModule,
     BillingModule,
     MedicalCodingModule,

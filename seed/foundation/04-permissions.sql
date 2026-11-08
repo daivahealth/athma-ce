@@ -423,5 +423,7 @@ ON CONFLICT (code) DO NOTHING;
 -- Platform permissions (instance-wide; super_admin only, never tenant_admin or demo_visitor)
 INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
   ('00000000-0000-0000-0045-000000000001', 'platform.access_request.read', 'View Access Requests', 'List production access requests submitted from the public site', 'platform', 'read', NOW(), NOW()),
-  ('00000000-0000-0000-0045-000000000002', 'platform.access_request.manage', 'Manage Access Requests', 'Change the status and notes of access requests', 'platform', 'manage', NOW(), NOW())
+  ('00000000-0000-0000-0045-000000000002', 'platform.access_request.manage', 'Manage Access Requests', 'Change the status and notes of access requests', 'platform', 'manage', NOW(), NOW()),
+  ('00000000-0000-0000-0045-000000000003', 'platform.sandbox.read', 'View Sandboxes', 'List sandbox tenants on the public demo', 'platform', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0045-000000000004', 'platform.sandbox.manage', 'Manage Sandboxes', 'Delete or extend sandbox tenants', 'platform', 'manage', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;

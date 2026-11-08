@@ -408,6 +408,10 @@ export const SECRET_MANAGE = 'secret.manage';
 export const PLATFORM_ACCESS_REQUEST_READ = 'platform.access_request.read';
 /** Change the status and notes of access requests. */
 export const PLATFORM_ACCESS_REQUEST_MANAGE = 'platform.access_request.manage';
+/** List sandbox tenants (ADR-0017) */
+export const PLATFORM_SANDBOX_READ = 'platform.sandbox.read';
+/** Delete or extend any sandbox tenant */
+export const PLATFORM_SANDBOX_MANAGE = 'platform.sandbox.manage';
 
 // ============================================
 // PERMISSION GROUPS (for convenience)
@@ -834,6 +838,8 @@ export const ALL_PERMISSIONS = [
   // Platform (instance-wide)
   { code: PLATFORM_ACCESS_REQUEST_READ, name: 'View Access Requests', resource: 'platform', action: 'read' },
   { code: PLATFORM_ACCESS_REQUEST_MANAGE, name: 'Manage Access Requests', resource: 'platform', action: 'manage' },
+  { code: PLATFORM_SANDBOX_READ, name: 'View Sandboxes', resource: 'platform', action: 'read' },
+  { code: PLATFORM_SANDBOX_MANAGE, name: 'Manage Sandboxes', resource: 'platform', action: 'manage' },
 ];
 
 /**

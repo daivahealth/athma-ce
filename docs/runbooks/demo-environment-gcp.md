@@ -162,6 +162,36 @@ sudo docker exec -i athma-demo-postgres-1 psql -v ON_ERROR_STOP=1 -U zeal_user -
   < backend/shared/database-clinical/migrations/014_per_tenant_document_numbers.sql
 ```
 
+## Sandboxes
+
+Signed-in visitors can create their own sandbox hospital ([SANDBOX-TENANTS.md](../features/SANDBOX-TENANTS.md)). Off by default (`SANDBOX_ENABLED=false`).
+
+To turn on:
+
+1. Apply foundation migration `20261108020000_sandboxes` (the `sandboxes` table and the `platform.sandbox.*` permissions for `super_admin`):
+   ```bash
+   sudo docker exec -i athma-demo-postgres-1 psql -v ON_ERROR_STOP=1 -U zeal_user -d zeal_foundation \
+     < backend/shared/database-foundation/prisma/migrations/20261108020000_sandboxes/migration.sql
+   ```
+2. Make sure reads are enforced (see [Tenant isolation](#tenant-isolation)): sandbox creation is refused while `AUTH_REQUIRE_TOKEN_FOR_READS` is not `true`.
+3. Add `SANDBOX_ENABLED=true` to `.env` and recreate the backend: `sudo docker compose up -d foundation clinical rcm prm ai-gateway`. Every service reads it: the internal copy and purge endpoints refuse without it.
+
+Limits (`.env`, defaults): `SANDBOX_MAX_ACTIVE=50`, `SANDBOX_LIFETIME_DAYS=30`, `SANDBOX_EXTENSION_DAYS=30`, `SANDBOX_MAX_CREATES_PER_DAY=3`. Each sandbox copies the demo hospital's setup (a few MB; the patients are not copied).
+
+Checking on sandboxes:
+
+```bash
+sudo docker exec athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation -c \
+  "select organisation_name, organisation_type, status, owner_email, created_at, expires_at, left(error, 80) from sandboxes order by created_at desc limit 20"
+sudo docker compose logs --since 1h foundation 2>&1 | grep -i sandbox
+```
+
+- **Stuck in `provisioning`:** the sweep marks it `failed` after an hour and removes partial data.
+- **`failed` with a service error:** cleanup is retried every 15 minutes until every service has removed the data. The owner can create another.
+- **Delete one by hand:** use the platform admin API (`DELETE /api/v1/sandboxes/{id}`) or set `expires_at` in the past and wait for the sweep. Never delete a sandbox tenant's rows with SQL against the demo tenant id.
+
+Turning sandboxes off (`SANDBOX_ENABLED=false`) stops creation and the expiry sweep; owners can still switch to existing sandboxes, which stay until sandboxes are turned on again and the sweep expires them.
+
 The seeded `admin@zeal.local` has a random password on the demo (root-only `/root/athma-demo-admin.txt` on the VM); the published `Admin@123` does not work there. Platform admins sign in with Google (`OAUTH_PLATFORM_ADMINS`).
 
 Create the role and the shared visitor account (`visitor@athma.demo` / `Visitor@123`) once, and again after any seed or plugin that adds permissions:

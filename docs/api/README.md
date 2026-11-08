@@ -137,6 +137,7 @@ Refer to individual service documentation:
 - [Lab Operations API](./LAB-OPERATIONS-API.md)
 - [OT APIs](./OT-API-ENDPOINTS.md)
 - [Access Requests API](./ACCESS-REQUESTS-API.md) — public production access requests and their review (platform admins)
+- [Sandboxes API](./SANDBOXES-API.md) — self-serve sandbox tenants: create, switch, extend, delete, and the internal copy/purge endpoints
 - [Form Master APIs](./FORM-MASTER-API-ENDPOINTS.md) — OpenMedForm integration: master form upload, patient/encounter form responses
 - [Facility APIs](./postman/FACILITY-ENDPOINTS-GUIDE.md)
 - [Specialty APIs](../features/specialty-management/)

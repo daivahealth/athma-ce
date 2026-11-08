@@ -72,6 +72,10 @@ export const READ_ONLY_ALLOWED_PATHS: readonly RegExp[] = [
   /\/reports\/validate$/,
   // Public production access request form (landing page), also used by demo visitors
   /\/access-requests$/,
+  // Creating, switching to, extending and deleting the visitor's own sandbox (ADR-0017)
+  /\/sandboxes$/,
+  /\/sandboxes\/switch$/,
+  /\/sandboxes\/mine(\/extend)?$/,
 ];
 
 /** Unsafe-method paths that are legitimately called without a token. */
