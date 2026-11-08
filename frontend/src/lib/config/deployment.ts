@@ -133,3 +133,9 @@ export const LANDING_PAGE_ENABLED: boolean = parseLandingPage(
 
 /** Public source repository linked from the landing page. */
 export const SOURCE_REPOSITORY_URL = 'https://github.com/daivahealth/athma-ce';
+
+/**
+ * Contact for privacy requests on the demo (DPDP Act). Set with
+ * NEXT_PUBLIC_PRIVACY_CONTACT_EMAIL; empty shows a generic pointer to daiva.health.
+ */
+export const PRIVACY_CONTACT_EMAIL: string = (process.env.NEXT_PUBLIC_PRIVACY_CONTACT_EMAIL ?? '').trim();

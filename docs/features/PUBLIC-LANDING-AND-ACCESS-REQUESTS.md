@@ -28,13 +28,14 @@ Abuse controls: a hidden honeypot field (submissions that fill it are dropped si
 
 ## Reviewing requests
 
-Platform admins open **Access requests** from the gear (Administration) menu, `/{locale}/access-requests`. The menu item shows only when the token carries `platform.access_request.read`. Each request shows the organisation, contact (with a `mailto:` link), modules and message; the admin can add internal notes and mark it `contacted`, `approved` or `declined`. Filters show counts per status. No email is sent on a new request yet; check the page.
+Platform admins open **Access requests** from the gear (Administration) menu, `/{locale}/access-requests`. The menu item shows only when the token carries `platform.access_request.read`. Each request shows the organisation, contact (with a `mailto:` link), modules and message; the admin can add internal notes and mark it `contacted`, `approved` or `declined`. Filters show counts per status. When email is configured (`SMTP_*` and `ACCESS_REQUEST_NOTIFY_TO`, see the demo runbook), each new request also emails the operator a summary with a link to this page, with the requester as reply-to. Sending never delays or fails the request.
 
 ## Permissions and data
 
 - Access requests are **instance-wide**, not tenant data (`access_requests` in `zeal_foundation`, no `tenant_id`).
 - `platform.access_request.read` and `platform.access_request.manage` (resource `platform`) are granted to `super_admin` only. `tenant_admin` (seed `05-role-permissions.sql`) and `demo_visitor` (seed `21-demo-visitor.sql`) never receive resource `platform`, so hospital admins and visitors cannot read prospects' contact details. Platform admins come from `OAUTH_PLATFORM_ADMINS` (ADR-0016).
 - The demo notice on the Terms and Privacy pages lists what the demo stores: social sign-in identity data and access request details.
+- On demo builds the Privacy Policy adds **Personal data on this demo** (`DemoPrivacySection`): what is collected and why, storage in Google Cloud Mumbai, retention (demo accounts 12 months after last sign-in, access requests 24 months after last contact), no sale or sharing, and DPDP Act rights with the contact in `NEXT_PUBLIC_PRIVACY_CONTACT_EMAIL` (`PRIVACY_CONTACT_EMAIL` in the demo `.env`). The wording is a draft pending Daiva Health's approval.
 
 API: [ACCESS-REQUESTS-API.md](../api/ACCESS-REQUESTS-API.md).
 

@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-foundation';
 import { FixedWindowLimiter } from '../../common/rate-limit/fixed-window-limiter';
+import { MailService } from '../../common/mail/mail.service';
 import {
   ACCESS_REQUEST_STATUSES,
   type AccessRequestStatus,
@@ -20,7 +21,16 @@ export class AccessRequestService {
   private readonly perIp = new FixedWindowLimiter(5, 60 * 60_000);
   private readonly perEmail = new FixedWindowLimiter(3, 24 * 60 * 60_000);
 
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly notifyTo = (process.env.ACCESS_REQUEST_NOTIFY_TO ?? '')
+    .split(',')
+    .map((address) => address.trim())
+    .filter(Boolean);
+  private readonly appUrl = (process.env.PUBLIC_APP_URL ?? process.env.OAUTH_FRONTEND_URL ?? '').replace(/\/+$/, '');
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mail: MailService,
+  ) {}
 
   /** Stores a request. Returns false when it was dropped (honeypot). */
   async submit(dto: CreateAccessRequestDto, ip: string): Promise<boolean> {
@@ -47,7 +57,35 @@ export class AccessRequestService {
       select: { id: true },
     });
     this.logger.log(`New access request ${created.id} (${dto.organisationType}, ${dto.country})`);
+    // Fire and forget: the requester's answer never waits on email.
+    void this.notify(dto);
     return true;
+  }
+
+  /** Emails ACCESS_REQUEST_NOTIFY_TO about a new request, when email is configured. */
+  async notify(dto: CreateAccessRequestDto): Promise<boolean> {
+    if (this.notifyTo.length === 0) return false;
+    const lines = [
+      `${dto.contactName} from ${dto.organisationName} asked for production access.`,
+      '',
+      `Organisation: ${dto.organisationName} (${dto.organisationType})`,
+      `Country: ${dto.country}`,
+      `Contact: ${dto.contactName} <${dto.email}>${dto.phone ? `, ${dto.phone}` : ''}`,
+      dto.facilityCount || dto.bedCount
+        ? `Size: ${dto.facilityCount ?? '?'} facilities, ${dto.bedCount ?? '?'} beds`
+        : null,
+      dto.modules?.length ? `Modules: ${Array.from(new Set(dto.modules)).join(', ')}` : null,
+      dto.message ? `\nMessage:\n${dto.message}` : null,
+      '',
+      this.appUrl ? `Review it: ${this.appUrl}/en/access-requests` : 'Review it under Administration > Access requests.',
+    ].filter((line): line is string => line !== null);
+    return this.mail.send({
+      to: this.notifyTo,
+      // Strip line breaks: the organisation name is user input and ends up in a header.
+      subject: `Athma access request: ${dto.organisationName.replace(/[\r\n]+/g, ' ')}`.slice(0, 150),
+      text: lines.join('\n'),
+      replyTo: dto.email,
+    });
   }
 
   async list(status?: AccessRequestStatus) {

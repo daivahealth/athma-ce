@@ -135,6 +135,8 @@ The containers do not run migrations at startup, and the demo database has no `_
 
 Public visitors use the read-only `demo_visitor` role; their writes are refused by every service. The backend containers run with `AUTH_REQUIRE_TOKEN_FOR_WRITES=true` (compose default), so writes without a valid JWT or the internal key are refused with 401. See [Read-only access](../security/20-RBAC-Access-Control.md#read-only-access).
 
+The seeded `admin@zeal.local` has a random password on the demo (root-only `/root/athma-demo-admin.txt` on the VM); the published `Admin@123` does not work there. Platform admins sign in with Google (`OAUTH_PLATFORM_ADMINS`).
+
 Create the role and the shared visitor account (`visitor@athma.demo` / `Visitor@123`) once, and again after any seed or plugin that adds permissions:
 
 ```bash
@@ -187,7 +189,45 @@ sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation \
 
 Platform admins must sign out and in again to pick up the new permissions. Review requests under the gear menu, **Access requests**. No email is sent for new requests.
 
-## Reset demo data## Reset demo data
+## Public address (SITE_DOMAIN)
+
+The web app's public address is `SITE_DOMAIN` (for example `athma.daiva.health`); `DEMO_DOMAIN` and `app.DEMO_DOMAIN` redirect to it (308), so every visitor has one browser session and sign-in always returns to the same address. The APIs stay on `*.DEMO_DOMAIN`, so OAuth redirect URIs do not change. Unset, `SITE_DOMAIN` is `DEMO_DOMAIN` and nothing redirects.
+
+Order matters, or the old address redirects to one that does not resolve:
+
+1. Add a Netlify DNS `A` record `athma` → `34.100.225.182` and wait until `dig +short athma.daiva.health` returns it.
+2. Add `SITE_DOMAIN=athma.daiva.health` to `.env`, then `sudo docker compose up -d caddy foundation` (Caddy fetches the certificate on first request).
+3. Optionally update the Google OAuth branding links (home page, privacy, terms) to the new address.
+
+## Email alerts
+
+New access requests can email the operator. Foundation sends through SMTP (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, optional `MAIL_FROM`) to `ACCESS_REQUEST_NOTIFY_TO` (comma-separated), with the requester as reply-to. Without them nothing is sent and requests are still stored.
+
+For Gmail: turn on 2-Step Verification on the account, create an app password at https://myaccount.google.com/apppasswords, then in `.env`:
+
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=<gmail address>
+SMTP_PASS=<16-character app password>
+ACCESS_REQUEST_NOTIFY_TO=<where alerts go>
+```
+
+and `sudo docker compose up -d foundation`. Failures are logged by foundation (`Email "…" failed`) and never block the request.
+
+## India demo content
+
+`infrastructure/demo-gcp/india/` presents the demo tenant as an Indian hospital group: tenant "Athma Demo Hospital", the Dubai clinic becomes "Athma City Clinic" (Pune), staff get Indian names (same gender) with +91 phones and `@demo.athma.example` emails, copies of staff names on appointments, schedules and dispensings follow, and the sample payer drops the Zeal brand. Ids do not change. Run after any reseed or `27-demo-activity.sql` refresh (back up first):
+
+```bash
+# VM
+cd /opt/athma/infrastructure/demo-gcp/india
+sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation -v ON_ERROR_STOP=1 < 01-foundation.sql
+sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_clinical   -v ON_ERROR_STOP=1 < 02-clinical.sql
+sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_rcm        -v ON_ERROR_STOP=1 < 03-rcm.sql
+```
+
+## Reset demo data
 Demo data is copied from a local dev database that has been seeded with `seed/run-seeds.sh`:
 
 ```bash

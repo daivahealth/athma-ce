@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { LegalDocument, LegalSection } from '@/components/legal/legal-shell';
 import { DeploymentNoticeSection } from '@/components/legal/deployment-notice-section';
+import { DemoPrivacySection } from '@/components/legal/demo-privacy-section';
 
 export const metadata: Metadata = { title: 'Privacy Policy' };
 
@@ -11,6 +12,7 @@ export default function PrivacyPage() {
       lead="Your data belongs to you. This policy explains how data is handled in Athma, an open-source, self-hosted product from Daiva Health."
     >
       <DeploymentNoticeSection />
+      <DemoPrivacySection />
 
       <LegalSection heading="1. Daiva Health does not collect clinical data">
         <p>

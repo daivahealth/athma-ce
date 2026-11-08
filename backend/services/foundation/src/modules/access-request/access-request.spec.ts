@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { AccessRequestRateLimitedError, AccessRequestService } from './access-request.service';
+import type { MailMessage, MailService } from '../../common/mail/mail.service';
 import { CreateAccessRequestDto } from './dto/access-request.dto';
 
 const valid = {
@@ -62,24 +63,35 @@ describe('CreateAccessRequestDto', () => {
   });
 });
 
+function fakeMail() {
+  const sent: MailMessage[] = [];
+  const mail = { send: async (message: MailMessage) => (sent.push(message), true), isConfigured: () => true };
+  return { sent, mail: mail as unknown as MailService };
+}
+
 describe('AccessRequestService', () => {
+  const savedEnv = { ...process.env };
+  afterEach(() => {
+    process.env = { ...savedEnv };
+  });
+
   it('stores a request with modules de-duplicated', async () => {
     const { client, rows } = fakePrisma();
-    const service = new AccessRequestService(client);
+    const service = new AccessRequestService(client, fakeMail().mail);
     await expect(service.submit(toDto(valid).dto, '1.1.1.1')).resolves.toBe(true);
     expect(rows[0]).toMatchObject({ email: 'asha@example.com', modules: ['oncology', 'billing'] });
   });
 
   it('silently drops honeypot submissions', async () => {
     const { client, rows } = fakePrisma();
-    const service = new AccessRequestService(client);
+    const service = new AccessRequestService(client, fakeMail().mail);
     await expect(service.submit(toDto({ ...valid, website: 'http://spam' }).dto, '1.1.1.1')).resolves.toBe(false);
     expect(rows).toHaveLength(0);
   });
 
   it('limits requests per IP and per email', async () => {
     const { client } = fakePrisma();
-    const service = new AccessRequestService(client);
+    const service = new AccessRequestService(client, fakeMail().mail);
     for (let i = 0; i < 3; i++) {
       await service.submit(toDto({ ...valid }).dto, `10.0.0.${i}`);
     }
@@ -95,9 +107,31 @@ describe('AccessRequestService', () => {
 
   it('returns counts for every status', async () => {
     const { client } = fakePrisma();
-    const service = new AccessRequestService(client);
+    const service = new AccessRequestService(client, fakeMail().mail);
     await service.submit(toDto(valid).dto, '3.3.3.3');
     const result = await service.list();
     expect(result.counts).toEqual({ new: 1, contacted: 0, approved: 0, declined: 0 });
+  });
+
+  it('emails the operator about a new request, with the requester as reply-to', async () => {
+    process.env.ACCESS_REQUEST_NOTIFY_TO = 'ops@example.com, owner@example.com';
+    process.env.PUBLIC_APP_URL = 'https://athma.example/';
+    const { client } = fakePrisma();
+    const { sent, mail } = fakeMail();
+    const service = new AccessRequestService(client, mail);
+    await service.notify(toDto({ ...valid, organisationName: 'Line\nBreak Hospital' }).dto);
+    expect(sent).toHaveLength(1);
+    expect(sent[0]).toMatchObject({ to: ['ops@example.com', 'owner@example.com'], replyTo: 'asha@example.com' });
+    expect(sent[0]!.subject).toBe('Athma access request: Line Break Hospital');
+    expect(sent[0]!.text).toContain('Review it: https://athma.example/en/access-requests');
+    expect(sent[0]!.text).toContain('Modules: oncology, billing');
+  });
+
+  it('sends nothing when no recipient is configured', async () => {
+    delete process.env.ACCESS_REQUEST_NOTIFY_TO;
+    const { client } = fakePrisma();
+    const { sent, mail } = fakeMail();
+    await new AccessRequestService(client, mail).notify(toDto(valid).dto);
+    expect(sent).toHaveLength(0);
   });
 });
