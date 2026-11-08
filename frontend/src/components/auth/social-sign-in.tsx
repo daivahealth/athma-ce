@@ -23,10 +23,22 @@ export const OAUTH_ERROR_MESSAGES: Record<string, string> = {
 function GoogleMark() {
   return (
     <svg viewBox="0 0 48 48" className="h-4 w-4" aria-hidden="true">
-      <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.5 30.2 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.8 6.1C12.4 13.7 17.7 9.5 24 9.5z" />
-      <path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z" />
-      <path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.8-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.8-6.1z" />
-      <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.2-13.5-9.9l-7.8 6.1C6.6 42.6 14.6 48 24 48z" />
+      <path
+        fill="#EA4335"
+        d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.5 30.2 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.8 6.1C12.4 13.7 17.7 9.5 24 9.5z"
+      />
+      <path
+        fill="#4285F4"
+        d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.8-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.8-6.1z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.2-13.5-9.9l-7.8 6.1C6.6 42.6 14.6 48 24 48z"
+      />
     </svg>
   );
 }
@@ -53,7 +65,18 @@ const ICONS: Record<OAuthProviderId, () => JSX.Element> = {
  * nothing when the instance has no external sign-in configured. New accounts
  * get read-only access to the demo hospital (see ADR-0016).
  */
-export function SocialSignIn({ locale, returnTo, className }: { locale: string; returnTo?: string; className?: string }) {
+export function SocialSignIn({
+  locale,
+  returnTo,
+  className,
+  onAvailabilityChange,
+}: {
+  locale: string;
+  returnTo?: string;
+  className?: string;
+  /** Called once the provider list loads: true when at least one provider is enabled. */
+  onAvailabilityChange?: (available: boolean) => void;
+}) {
   const [providers, setProviders] = useState<Array<{ id: OAuthProviderId; label: string }>>([]);
   const [accepted, setAccepted] = useState(false);
   const consentId = useId();
@@ -62,14 +85,21 @@ export function SocialSignIn({ locale, returnTo, className }: { locale: string; 
     let active = true;
     getOAuthProviders()
       .then((data) => {
-        if (active) setProviders(data.providers ?? []);
+        if (!active) return;
+        const list = data.providers ?? [];
+        setProviders(list);
+        onAvailabilityChange?.(list.length > 0);
       })
       .catch(() => {
-        if (active) setProviders([]);
+        if (!active) return;
+        setProviders([]);
+        onAvailabilityChange?.(false);
       });
     return () => {
       active = false;
     };
+    // Load once; the callback identity does not matter.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (providers.length === 0) return null;
@@ -88,7 +118,9 @@ export function SocialSignIn({ locale, returnTo, className }: { locale: string; 
               className="h-10 w-full justify-center gap-2 bg-background/60"
               disabled={!accepted}
               onClick={() => {
-                window.location.assign(oauthStartUrl(provider.id, { locale, ...(returnTo ? { returnTo } : {}) }));
+                window.location.assign(
+                  oauthStartUrl(provider.id, { locale, ...(returnTo ? { returnTo } : {}) }),
+                );
               }}
             >
               <Icon />
@@ -97,7 +129,10 @@ export function SocialSignIn({ locale, returnTo, className }: { locale: string; 
           );
         })}
       </div>
-      <label htmlFor={consentId} className="flex cursor-pointer items-start gap-2 text-left text-xs leading-snug text-muted-foreground">
+      <label
+        htmlFor={consentId}
+        className="flex cursor-pointer items-start gap-2 text-left text-xs leading-snug text-muted-foreground"
+      >
         <input
           id={consentId}
           type="checkbox"
@@ -107,21 +142,23 @@ export function SocialSignIn({ locale, returnTo, className }: { locale: string; 
         />
         <span>
           I agree to the demo{' '}
-          <Link href={`/${locale}/terms`} className="font-medium underline underline-offset-2 hover:text-primary">
+          <Link
+            href={`/${locale}/terms`}
+            className="font-medium underline underline-offset-2 hover:text-primary"
+          >
             Terms
           </Link>{' '}
           and{' '}
-          <Link href={`/${locale}/privacy`} className="font-medium underline underline-offset-2 hover:text-primary">
+          <Link
+            href={`/${locale}/privacy`}
+            className="font-medium underline underline-offset-2 hover:text-primary"
+          >
             Privacy Policy
           </Link>
-          . Athma stores your name and email to give you read-only access to the demo hospital. Its records are fictitious.
+          . Athma stores your name and email to give you read-only access to the demo hospital. Its
+          records are fictitious.
         </span>
       </label>
-      <div className="flex items-center gap-3 pt-1 text-xs text-muted-foreground" aria-hidden="true">
-        <span className="h-px flex-1 bg-border" />
-        or sign in with email
-        <span className="h-px flex-1 bg-border" />
-      </div>
     </div>
   );
 }

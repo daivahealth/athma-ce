@@ -42,7 +42,16 @@ A user holding the `demo_visitor` role gets a read-only access token (`readOnly:
 - the environment banner adds "You are exploring in read-only mode; changes are not saved", and the topbar badge reads `DEMO · READ-ONLY`;
 - when a write is refused, the API client shows a "Read-only demo" toast (at most one every 4 seconds), next to whatever error the screen itself shows.
 
-Visitors usually arrive through **social sign-in**: when the instance has external providers configured, the login page shows "Continue with Google / Microsoft / GitHub" above the email form, enabled once the visitor ticks the demo Terms and Privacy consent (`SocialSignIn`, `frontend/src/components/auth/social-sign-in.tsx`). After the provider round trip, `/{locale}/auth/callback` exchanges the one-time ticket for a session. Design: [ADR-0016](../ADR/ADR-0016-external-identity-providers.md).
+Visitors usually arrive through **social sign-in**: when the instance has external providers configured, the login page shows "Continue with Google / Microsoft / GitHub", enabled once the visitor ticks the demo Terms and Privacy consent (`SocialSignIn`, `frontend/src/components/auth/social-sign-in.tsx`). After the provider round trip, `/{locale}/auth/callback` exchanges the one-time ticket for a session. Design: [ADR-0016](../ADR/ADR-0016-external-identity-providers.md).
+
+**Email sign-in on the login page** is controlled by `NEXT_PUBLIC_LOGIN_EMAIL` (build time; `EMAIL_LOGIN_MODE` in `frontend/src/lib/config/deployment.ts`):
+
+| Value | Login page |
+|---|---|
+| `collapsed` (default in `demo` mode) | Only the external sign-in buttons, with a small "Staff sign-in with email" link that expands the email + password form |
+| `visible` (default in every other mode) | The email + password form is shown as usual, below the external buttons under an "or sign in with email" divider |
+
+The form is always shown when no external provider is enabled or the provider list cannot be loaded, and when the URL has `?staff=1` (a bookmarkable staff link) or `?email=`. Collapsing only changes the page: `POST /auth/login` still accepts email and password.
 
 `frontend/src/lib/auth/read-only.ts` holds `useIsReadOnlyUser()`, `isReadOnlyError()` and the toast. The read-only state is read from the stored access token after mount, so server render and first paint never show it.
 
@@ -58,7 +67,7 @@ Visitors usually arrive through **social sign-in**: when the instance has extern
 
 | File | Role |
 |---|---|
-| `frontend/src/lib/config/deployment.ts` | Parses the mode, labels and notices |
+| `frontend/src/lib/config/deployment.ts` | Parses the mode, labels and notices, and `EMAIL_LOGIN_MODE` |
 | `frontend/src/components/layout/environment-banner.tsx` | `EnvironmentBanner` and `EnvironmentBadge` (with the read-only notice) |
 | `frontend/src/lib/auth/read-only.ts` | Read-only user detection and the refused-write toast |
 | `frontend/src/components/legal/legal-shell.tsx` | Legal page header/footer, `LegalLinks`, document and section layout |

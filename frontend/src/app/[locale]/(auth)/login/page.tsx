@@ -18,7 +18,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { getApiErrorMessage } from '@/lib/api/errors';
 import { EnvironmentBadge } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
-import { DEPLOYMENT_MODE, getDeploymentModeInfo } from '@/lib/config/deployment';
+import { DEPLOYMENT_MODE, EMAIL_LOGIN_MODE, getDeploymentModeInfo } from '@/lib/config/deployment';
 import { AlertTriangle } from 'lucide-react';
 import { SocialSignIn, OAUTH_ERROR_MESSAGES } from '@/components/auth/social-sign-in';
 
@@ -36,8 +36,19 @@ function LoginPageContent() {
   const t = useTranslations('actions');
   const toast = useToast();
   const oauthError = searchParams.get('oauthError');
+  // null while the provider list loads
+  const [socialAvailable, setSocialAvailable] = useState<boolean | null>(null);
+  const [emailExpanded, setEmailExpanded] = useState(
+    EMAIL_LOGIN_MODE === 'visible' ||
+      !!searchParams.get('email') ||
+      searchParams.get('staff') === '1',
+  );
+  // Without external sign-in the email form is the only way in, so never hide it then.
+  const showEmailForm = emailExpanded || socialAvailable === false;
   const [error, setError] = useState<string | null>(
-    oauthError ? OAUTH_ERROR_MESSAGES[oauthError] ?? OAUTH_ERROR_MESSAGES.provider_error ?? null : null,
+    oauthError
+      ? (OAUTH_ERROR_MESSAGES[oauthError] ?? OAUTH_ERROR_MESSAGES.provider_error ?? null)
+      : null,
   );
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -126,47 +137,83 @@ function LoginPageContent() {
               <p>{getDeploymentModeInfo().notice}</p>
             </div>
           )}
-          <SocialSignIn locale={params.locale} />
-          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-2 text-left">
-              <Label htmlFor="email" className="text-muted-foreground">Email</Label>
-              <Input id="email" type="email" {...form.register('email')} required autoComplete="email" className="bg-background/50 focus-visible:ring-primary/30" />
+          <SocialSignIn locale={params.locale} onAvailabilityChange={setSocialAvailable} />
+          {socialAvailable && showEmailForm && (
+            <div
+              className="flex items-center gap-3 text-xs text-muted-foreground"
+              aria-hidden="true"
+            >
+              <span className="h-px flex-1 bg-border" />
+              or sign in with email
+              <span className="h-px flex-1 bg-border" />
             </div>
-            <div className="space-y-2 text-left">
-              <Label htmlFor="password" className="text-muted-foreground">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                {...form.register('password')}
-                required
-                autoComplete="current-password"
-                className="bg-background/50 focus-visible:ring-primary/30"
-              />
-            </div>
-            {form.watch('mfaCode') && (
-              <div className="space-y-2">
-                <Label htmlFor="mfaCode">MFA Code</Label>
-                <Input id="mfaCode" {...form.register('mfaCode')} inputMode="numeric" />
-              </div>
-            )}
-            {error && <p className="text-sm text-destructive font-medium">{error}</p>}
-            <div className="pt-2">
-              <Button
-                type="submit"
-                className="w-full h-11 text-base bg-gradient-to-b from-primary/90 to-primary shadow-lg shadow-primary/20"
+          )}
+          {socialAvailable && !showEmailForm && (
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setEmailExpanded(true)}
+                className="text-xs font-medium text-muted-foreground underline underline-offset-2 hover:text-primary"
               >
-                {t('login')}
-              </Button>
+                Staff sign-in with email
+              </button>
             </div>
-          </form>
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <Link href={`/${params.locale}/reset-password`} className="hover:text-primary">
-              Forgot password?
-            </Link>
-            <Link href={`/${params.locale}/confirm-reset`} className="hover:text-primary">
-              I have a reset token
-            </Link>
-          </div>
+          )}
+          {showEmailForm && (
+            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="space-y-2 text-left">
+                <Label htmlFor="email" className="text-muted-foreground">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  {...form.register('email')}
+                  required
+                  autoComplete="email"
+                  className="bg-background/50 focus-visible:ring-primary/30"
+                />
+              </div>
+              <div className="space-y-2 text-left">
+                <Label htmlFor="password" className="text-muted-foreground">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  {...form.register('password')}
+                  required
+                  autoComplete="current-password"
+                  className="bg-background/50 focus-visible:ring-primary/30"
+                />
+              </div>
+              {form.watch('mfaCode') && (
+                <div className="space-y-2">
+                  <Label htmlFor="mfaCode">MFA Code</Label>
+                  <Input id="mfaCode" {...form.register('mfaCode')} inputMode="numeric" />
+                </div>
+              )}
+              {error && <p className="text-sm text-destructive font-medium">{error}</p>}
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  className="w-full h-11 text-base bg-gradient-to-b from-primary/90 to-primary shadow-lg shadow-primary/20"
+                >
+                  {t('login')}
+                </Button>
+              </div>
+            </form>
+          )}
+          {showEmailForm && (
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <Link href={`/${params.locale}/reset-password`} className="hover:text-primary">
+                Forgot password?
+              </Link>
+              <Link href={`/${params.locale}/confirm-reset`} className="hover:text-primary">
+                I have a reset token
+              </Link>
+            </div>
+          )}
           <LegalLinks locale={params.locale} className="border-t border-border/40 pt-4" />
         </CardContent>
       </Card>

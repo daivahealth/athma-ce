@@ -86,3 +86,27 @@ export function getDeploymentModeInfo(mode: DeploymentMode = DEPLOYMENT_MODE): D
 }
 
 export const IS_PRODUCTION_DEPLOYMENT = DEPLOYMENT_MODE === 'production';
+
+/**
+ * How the login page shows the email + password form.
+ *
+ * - `visible`: shown as usual.
+ * - `collapsed`: hidden behind a "Staff sign-in with email" link when external
+ *   sign-in (Google, Microsoft, GitHub) is available, so visitors see one way in.
+ *
+ * Set with NEXT_PUBLIC_LOGIN_EMAIL (build time). Defaults to `collapsed` for the
+ * demo mode and `visible` otherwise. See docs/features/DEPLOYMENT-MODE.md.
+ */
+export type EmailLoginMode = 'visible' | 'collapsed';
+
+export function parseEmailLoginMode(raw: string | undefined, mode: DeploymentMode): EmailLoginMode {
+  const key = raw?.trim().toLowerCase();
+  if (key === 'visible' || key === 'collapsed') return key;
+  return mode === 'demo' ? 'collapsed' : 'visible';
+}
+
+// Literal process.env access so Next inlines the value into the client bundle.
+export const EMAIL_LOGIN_MODE: EmailLoginMode = parseEmailLoginMode(
+  process.env.NEXT_PUBLIC_LOGIN_EMAIL,
+  DEPLOYMENT_MODE,
+);
