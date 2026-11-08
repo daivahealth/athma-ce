@@ -165,6 +165,7 @@ services:
         NEXT_PUBLIC_PRM_BASE_URL: https://prm.${DEMO_DOMAIN}
         NEXT_PUBLIC_AI_GATEWAY_BASE_URL: https://ai.${DEMO_DOMAIN}
         NEXT_PUBLIC_DEPLOYMENT_MODE: ${DEPLOYMENT_MODE:-demo}
+        NEXT_PUBLIC_LOGIN_EMAIL: ${LOGIN_EMAIL:-}
 
   caddy:
     image: caddy:2-alpine
