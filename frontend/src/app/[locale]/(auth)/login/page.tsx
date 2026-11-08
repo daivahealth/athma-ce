@@ -18,7 +18,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { getApiErrorMessage } from '@/lib/api/errors';
 import { EnvironmentBadge } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
-import { DEPLOYMENT_MODE, EMAIL_LOGIN_MODE, getDeploymentModeInfo } from '@/lib/config/deployment';
+import { DEPLOYMENT_MODE, EMAIL_LOGIN_MODE, LANDING_PAGE_ENABLED, getDeploymentModeInfo } from '@/lib/config/deployment';
 import { AlertTriangle } from 'lucide-react';
 import { SocialSignIn, OAUTH_ERROR_MESSAGES } from '@/components/auth/social-sign-in';
 
@@ -213,6 +213,18 @@ function LoginPageContent() {
                 I have a reset token
               </Link>
             </div>
+          )}
+          {LANDING_PAGE_ENABLED && (
+            <p className="text-center text-xs text-muted-foreground">
+              New to Athma?{' '}
+              <Link href={`/${params.locale}`} className="font-medium underline underline-offset-2 hover:text-primary">
+                What it is
+              </Link>{' '}
+              ·{' '}
+              <Link href={`/${params.locale}/request-access`} className="font-medium underline underline-offset-2 hover:text-primary">
+                Request production access
+              </Link>
+            </p>
           )}
           <LegalLinks locale={params.locale} className="border-t border-border/40 pt-4" />
         </CardContent>

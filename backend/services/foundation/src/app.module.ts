@@ -20,6 +20,7 @@ import { SpaceModule } from './modules/space/space.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { PluginModule } from './modules/plugin/plugin.module';
 import { SecretModule } from './modules/secret/secret.module';
+import { AccessRequestModule } from './modules/access-request/access-request.module';
 import { CountryPackModule } from './modules/country-pack/country-pack.module';
 import { RegistryLinkModule } from './modules/registry-link/registry-link.module';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
@@ -51,6 +52,7 @@ import { LoggerService } from './common/logger/logger.service';
     RbacModule,
     PluginModule,
     SecretModule,
+    AccessRequestModule,
     CountryPackModule,
     RegistryLinkModule,
     // CatalogModule removed - catalog models moved to Clinical database

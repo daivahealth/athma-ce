@@ -172,7 +172,22 @@ sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation \
 
 Visitors who signed in: `select provider, email, last_login_at from user_identities order by created_at desc;` in `zeal_foundation`.
 
-## Reset demo data
+## Landing page and access requests
+
+The demo build shows the public landing page at `/` and the "Request production access" form ([feature doc](../features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md)). Turn the landing page off with `LANDING_PAGE=off` in `.env` and rebuild the frontend.
+
+The `access_requests` table and the platform permissions come from migration `20261108010000_access_requests`; apply it by hand on the VM:
+
+```bash
+# VM
+cd /opt/athma
+sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation \
+  < backend/shared/database-foundation/prisma/migrations/20261108010000_access_requests/migration.sql
+```
+
+Platform admins must sign out and in again to pick up the new permissions. Review requests under the gear menu, **Access requests**. No email is sent for new requests.
+
+## Reset demo data## Reset demo data
 Demo data is copied from a local dev database that has been seeded with `seed/run-seeds.sh`:
 
 ```bash

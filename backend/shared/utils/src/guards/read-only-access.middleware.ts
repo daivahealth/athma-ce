@@ -56,12 +56,15 @@ export const READ_ONLY_ALLOWED_PATHS: readonly RegExp[] = [
   /\/payer-contracts\/calculate-price$/,
   /\/fee-schedules\/lookup-price$/,
   /\/reports\/validate$/,
+  // Public production access request form (landing page), also used by demo visitors
+  /\/access-requests$/,
 ];
 
 /** Unsafe-method paths that are legitimately called without a token. */
 export const PUBLIC_WRITE_PATHS: readonly RegExp[] = [
   /\/auth\/(login|refresh|reset-password|confirm-reset-password|mfa\/verify)$/,
   /\/auth\/oauth\/exchange$/,
+  /\/access-requests$/,
 ];
 
 export interface WriteAccessOptions {

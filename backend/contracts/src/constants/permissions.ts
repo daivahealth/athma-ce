@@ -400,6 +400,16 @@ export const SECRET_READ = 'secret.read';
 export const SECRET_MANAGE = 'secret.manage';
 
 // ============================================
+// PLATFORM PERMISSIONS (instance-wide, not tenant data)
+// Granted to super_admin only; tenant_admin and demo_visitor never get
+// resource 'platform'. See docs/features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md
+// ============================================
+/** List production access requests (contact details of prospects). */
+export const PLATFORM_ACCESS_REQUEST_READ = 'platform.access_request.read';
+/** Change the status and notes of access requests. */
+export const PLATFORM_ACCESS_REQUEST_MANAGE = 'platform.access_request.manage';
+
+// ============================================
 // PERMISSION GROUPS (for convenience)
 // ============================================
 
@@ -820,6 +830,10 @@ export const ALL_PERMISSIONS = [
   // Tenant Secrets
   { code: SECRET_READ, name: 'View Secret Metadata', resource: 'secret', action: 'read' },
   { code: SECRET_MANAGE, name: 'Manage Secrets', resource: 'secret', action: 'manage' },
+
+  // Platform (instance-wide)
+  { code: PLATFORM_ACCESS_REQUEST_READ, name: 'View Access Requests', resource: 'platform', action: 'read' },
+  { code: PLATFORM_ACCESS_REQUEST_MANAGE, name: 'Manage Access Requests', resource: 'platform', action: 'manage' },
 ];
 
 /**

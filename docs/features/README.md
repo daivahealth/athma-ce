@@ -57,6 +57,7 @@ This folder contains feature-specific documentation organized by domain and modu
   - Specialty APIs
 
 - **[DEPLOYMENT-MODE.md](./DEPLOYMENT-MODE.md)** - Deployment mode (dev/demo/staging/production), environment banner and demo disclaimer, Terms & Privacy pages
+- **[PUBLIC-LANDING-AND-ACCESS-REQUESTS.md](./PUBLIC-LANDING-AND-ACCESS-REQUESTS.md)** - Public landing page for the demo and production access requests
 
 ### 📅 Scheduling Features
 

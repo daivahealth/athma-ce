@@ -17,12 +17,14 @@ INSERT INTO roles (id, tenant_id, code, name, description, is_system, created_at
 ON CONFLICT (id) DO NOTHING;
 
 -- Every read permission, except ones that would expose secrets, other
--- tenants, audit trails or other visitors' accounts.
+-- tenants, audit trails, other visitors' accounts or platform data
+-- (access requests hold prospects' contact details).
 INSERT INTO role_permissions (id, role_id, permission_id, created_at)
 SELECT gen_random_uuid(), '00000000-0000-0000-0000-000000000109', p.id, NOW()
 FROM permissions p
 WHERE (p.action IN ('read', 'view', 'list', 'search') OR p.code ~ '[.:](read|view|list)$')
   AND p.code NOT IN ('secret.read', 'tenant.read', 'audit.read', 'user.read')
+  AND p.resource <> 'platform'
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
 -- Shared visitor account

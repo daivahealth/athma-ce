@@ -419,3 +419,9 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0044-000000000008', 'specialty.read', 'Read Specialties', 'View specialties', 'specialty', 'read', NOW(), NOW()),
   ('00000000-0000-0000-0044-000000000009', 'specialty.manage', 'Manage Specialties', 'Create/update/delete specialties', 'specialty', 'manage', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
+
+-- Platform permissions (instance-wide; super_admin only, never tenant_admin or demo_visitor)
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0045-000000000001', 'platform.access_request.read', 'View Access Requests', 'List production access requests submitted from the public site', 'platform', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0045-000000000002', 'platform.access_request.manage', 'Manage Access Requests', 'Change the status and notes of access requests', 'platform', 'manage', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;

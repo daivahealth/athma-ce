@@ -68,6 +68,7 @@ describe('readOnlyAccessMiddleware', () => {
       '/api/v1/scheduling/availability/check-slot',
       '/api/v1/patients/123/consents/check/action',
       '/api/v1/ot/schedules/conflicts/check?x=1',
+      '/api/v1/access-requests',
     ]) {
       expect(run('POST', url, readOnly).next).toHaveBeenCalled();
     }
@@ -114,6 +115,8 @@ describe('readOnlyAccessMiddleware with requireTokenForWrites', () => {
 
   it('allows anonymous reads and public auth writes', () => {
     expect(run('GET', '/api/v1/patients', undefined, strict).next).toHaveBeenCalled();
+    expect(run('POST', '/api/v1/access-requests', undefined, strict).next).toHaveBeenCalled();
+    expect(run('PATCH', '/api/v1/access-requests/abc', undefined, strict).res.statusCode).toBe(401);
     expect(run('POST', '/api/v1/auth/login', undefined, strict).next).toHaveBeenCalled();
     expect(run('POST', '/api/v1/auth/reset-password', undefined, strict).next).toHaveBeenCalled();
   });
