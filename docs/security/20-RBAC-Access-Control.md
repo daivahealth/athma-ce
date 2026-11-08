@@ -443,6 +443,10 @@ Every service (foundation, clinical, rcm, prm, ai-gateway) mounts `readOnlyAcces
 
 When adding an endpoint that a read-only user should be able to call with POST (a search or a calculation that writes nothing), add its path to `READ_ONLY_ALLOWED_PATHS` and a case to `read-only-access.middleware.spec.ts`.
 
+### External sign-in (Google, Microsoft, GitHub)
+
+Public visitors sign in with an external account; foundation provisions them in the demo tenant as `demo_visitor` with `read_only` access to every facility. Identities are matched by provider subject, never by email, and external users have no usable password. A Google identity listed in `OAUTH_PLATFORM_ADMINS` gets `super_admin` + `tenant_admin` instead. Design and safeguards: [ADR-0016](../ADR/ADR-0016-external-identity-providers.md).
+
 ### Reading your own user record
 
 `GET /users/:id`, `GET /users/:userId/facilities` and `GET /users/:userId/facilities/check/:facilityId` carry `@AllowSelf(...)`: a user may read their own record and facilities without `user.read`. The app shell needs this for every user, and it lets `demo_visitor` run without `user.read`.

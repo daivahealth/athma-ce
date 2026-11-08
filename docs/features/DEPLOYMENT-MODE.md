@@ -42,6 +42,8 @@ A user holding the `demo_visitor` role gets a read-only access token (`readOnly:
 - the environment banner adds "You are exploring in read-only mode; changes are not saved", and the topbar badge reads `DEMO · READ-ONLY`;
 - when a write is refused, the API client shows a "Read-only demo" toast (at most one every 4 seconds), next to whatever error the screen itself shows.
 
+Visitors usually arrive through **social sign-in**: when the instance has external providers configured, the login page shows "Continue with Google / Microsoft / GitHub" above the email form, enabled once the visitor ticks the demo Terms and Privacy consent (`SocialSignIn`, `frontend/src/components/auth/social-sign-in.tsx`). After the provider round trip, `/{locale}/auth/callback` exchanges the one-time ticket for a session. Design: [ADR-0016](../ADR/ADR-0016-external-identity-providers.md).
+
 `frontend/src/lib/auth/read-only.ts` holds `useIsReadOnlyUser()`, `isReadOnlyError()` and the toast. The read-only state is read from the stored access token after mount, so server render and first paint never show it.
 
 ## Terms & Conditions and Privacy Policy

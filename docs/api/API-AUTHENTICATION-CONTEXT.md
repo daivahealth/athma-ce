@@ -186,6 +186,19 @@ Every service refuses some writes before they reach a controller (see [Read-only
 
 Service-to-service writes must send either the caller's bearer token or `x-internal-api-key`.
 
+## External Sign-in
+
+Foundation endpoints (all public), design in [ADR-0016](../ADR/ADR-0016-external-identity-providers.md):
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/api/v1/auth/oauth/providers` | `{ providers: [{ id, label }], termsVersion }`; empty list when the instance has no external sign-in configured |
+| `GET` | `/api/v1/auth/oauth/{google\|microsoft\|github}/start?locale=en&acceptTerms=true&returnTo=/en/dashboard` | Sets the `athma_oauth` cookie and redirects (302) to the provider. Without `acceptTerms=true` it redirects to `/{locale}/login?oauthError=terms_required` |
+| `GET` | `/api/v1/auth/oauth/{provider}/callback` | Provider redirect target. Redirects to `/{locale}/auth/callback#ticket=…&returnTo=…`, or to `/{locale}/login?oauthError=<code>` |
+| `POST` | `/api/v1/auth/oauth/exchange` | Body `{ "ticket": "…" }`. Returns the same body as `POST /auth/login`. A ticket works once, for 2 minutes; otherwise `401` |
+
+`oauthError` codes: `provider_denied`, `invalid_state`, `terms_required`, `rate_limited`, `account_disabled`, `provider_disabled`, `not_configured`, `provider_error`.
+
 ## Audit Fields
 
 ### Automatic Population

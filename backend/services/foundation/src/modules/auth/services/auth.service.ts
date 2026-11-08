@@ -130,6 +130,15 @@ export class AuthService {
       }
     }
 
+    return this.issueSession(user, deviceId ?? undefined);
+  }
+
+  /**
+   * Issues access and refresh tokens for an authenticated user. Shared by
+   * password login and external sign-in (OAuthController), so both produce
+   * the same tokens and session record.
+   */
+  async issueSession(user: { id: string; tenantId: string }, deviceId?: string): Promise<LoginResponse> {
     const userAgent = RequestContext.getUserAgent() ?? 'auth-service';
     const contextStore = {
       tenantId: user.tenantId,

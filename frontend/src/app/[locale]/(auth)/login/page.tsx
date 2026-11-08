@@ -20,6 +20,7 @@ import { EnvironmentBadge } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
 import { DEPLOYMENT_MODE, getDeploymentModeInfo } from '@/lib/config/deployment';
 import { AlertTriangle } from 'lucide-react';
+import { SocialSignIn, OAUTH_ERROR_MESSAGES } from '@/components/auth/social-sign-in';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -34,7 +35,10 @@ function LoginPageContent() {
   const searchParams = useSearchParams();
   const t = useTranslations('actions');
   const toast = useToast();
-  const [error, setError] = useState<string | null>(null);
+  const oauthError = searchParams.get('oauthError');
+  const [error, setError] = useState<string | null>(
+    oauthError ? OAUTH_ERROR_MESSAGES[oauthError] ?? OAUTH_ERROR_MESSAGES.provider_error ?? null : null,
+  );
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -122,6 +126,7 @@ function LoginPageContent() {
               <p>{getDeploymentModeInfo().notice}</p>
             </div>
           )}
+          <SocialSignIn locale={params.locale} />
           <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-2 text-left">
               <Label htmlFor="email" className="text-muted-foreground">Email</Label>

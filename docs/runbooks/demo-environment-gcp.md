@@ -145,6 +145,33 @@ sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation <
 
 Check: log in as the visitor, open any patient, and try to save a change. It should be refused with a "Read-only demo" toast.
 
+## Social sign-in (Google, Microsoft, GitHub)
+
+Visitors sign in with an existing account and land as read-only `demo_visitor` users ([ADR-0016](../ADR/ADR-0016-external-identity-providers.md)). Each provider shows up on the login page once its client id and secret are in `.env`.
+
+Register one app per provider. In every case the redirect URI is `https://foundation.<DEMO_DOMAIN>/api/v1/auth/oauth/<provider>/callback`:
+
+| Provider | Where | Settings |
+|---|---|---|
+| Google | Google Cloud console → APIs & Services → Credentials → OAuth client ID (Web application), in project `athma-ce-demo` | Consent screen: External, scopes `openid email profile`, app name "Athma Demo", links to `https://<DEMO_DOMAIN>/en/privacy` and `/en/terms`. Redirect URI `…/auth/oauth/google/callback` |
+| Microsoft | Microsoft Entra admin center → App registrations → New registration | Supported account types: "Any Entra ID tenant + personal Microsoft accounts". Platform Web, redirect URI `…/auth/oauth/microsoft/callback`. Certificates & secrets → new client secret (note its expiry). API permissions: `openid email profile User.Read` (delegated) |
+| GitHub | GitHub → Settings → Developer settings → OAuth Apps → New (under the daivahealth org) | Homepage `https://<DEMO_DOMAIN>`, callback URL `…/auth/oauth/github/callback` |
+
+Put the ids and secrets in `/opt/athma/infrastructure/demo-gcp/.env` (`OAUTH_GOOGLE_CLIENT_ID`, `OAUTH_GOOGLE_CLIENT_SECRET`, and so on) together with `OAUTH_PLATFORM_ADMINS=google:<your Google email>`, then `sudo docker compose up -d foundation`. No rebuild is needed.
+
+Check: `curl -s https://foundation.<DEMO_DOMAIN>/api/v1/auth/oauth/providers` lists the providers, and signing in with a fresh account lands read-only.
+
+The `user_identities` and `oauth_login_tickets` tables come from migration `20261108000000_user_identities`; apply it by hand on the VM (see [Schema changes](#schema-changes)):
+
+```bash
+# VM
+cd /opt/athma
+sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation \
+  < backend/shared/database-foundation/prisma/migrations/20261108000000_user_identities/migration.sql
+```
+
+Visitors who signed in: `select provider, email, last_login_at from user_identities order by created_at desc;` in `zeal_foundation`.
+
 ## Reset demo data
 Demo data is copied from a local dev database that has been seeded with `seed/run-seeds.sh`:
 

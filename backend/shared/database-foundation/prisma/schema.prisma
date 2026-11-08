@@ -50,6 +50,8 @@ model User {
   trustedDevices        UserTrustedDevice[]
   userFacilities        UserFacility[]
   grantedFacilityAccess UserFacility[]      @relation("FacilityAccessGrantor")
+  identities            UserIdentity[]
+  loginTickets          OAuthLoginTicket[]
   tenant                Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   staff                 Staff?              @relation(fields: [staffId], references: [id], onDelete: SetNull)
   defaultFacility       Facility?           @relation("UserDefaultFacility", fields: [defaultFacilityId], references: [id])
@@ -661,4 +663,47 @@ model SecretAccessLog {
   @@index([tenantId, key])
   @@index([createdAt])
   @@map("secret_access_logs")
+}
+
+/// External sign-in identity (Google, Microsoft, GitHub) linked to a user in one tenant.
+/// Keyed by the provider's stable subject id, never by email. See docs/ADR/ADR-0016-external-identity-providers.md.
+model UserIdentity {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  /// 'google' | 'microsoft' | 'github'
+  provider        String    @map("provider")
+  providerSubject String    @map("provider_subject")
+  /// Email as reported by the provider (contact only; not used for matching).
+  email           String?   @map("email")
+  emailVerified   Boolean   @default(false) @map("email_verified")
+  displayName     String?   @map("display_name")
+  termsVersion    String?   @map("terms_version")
+  termsAcceptedAt DateTime? @map("terms_accepted_at") @db.Timestamptz(6)
+  lastLoginAt     DateTime? @map("last_login_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, provider, providerSubject])
+  @@index([userId])
+  @@map("user_identities")
+}
+
+/// One-time ticket handed to the frontend after an external sign-in; exchanged once for tokens.
+model OAuthLoginTicket {
+  id         String    @id @default(uuid()) @map("id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  /// SHA-256 of the ticket value; the value itself is never stored.
+  ticketHash String    @unique @map("ticket_hash")
+  expiresAt  DateTime  @map("expires_at") @db.Timestamptz(6)
+  consumedAt DateTime? @map("consumed_at") @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@map("oauth_login_tickets")
 }

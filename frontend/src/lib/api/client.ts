@@ -243,6 +243,39 @@ export async function login(payload: { email: string; password: string; mfaCode?
   return data;
 }
 
+export type OAuthProviderId = 'google' | 'microsoft' | 'github';
+
+export interface OAuthProvidersResponse {
+  providers: Array<{ id: OAuthProviderId; label: string }>;
+  termsVersion: string;
+}
+
+/** External sign-in providers enabled on this instance (empty when not configured). */
+export async function getOAuthProviders(): Promise<OAuthProvidersResponse> {
+  const { data } = await authClient.get<OAuthProvidersResponse>('/oauth/providers');
+  return data;
+}
+
+/** Full-page URL that starts external sign-in. The user must have accepted the terms. */
+export function oauthStartUrl(provider: OAuthProviderId, options: { locale: string; returnTo?: string }): string {
+  const params = new URLSearchParams({ locale: options.locale, acceptTerms: 'true' });
+  if (options.returnTo) params.set('returnTo', options.returnTo);
+  return `${authClient.defaults.baseURL}/oauth/${provider}/start?${params.toString()}`;
+}
+
+/** Exchanges the one-time ticket from the external sign-in callback for a session. */
+export async function exchangeOAuthTicket(ticket: string) {
+  const { data } = await authClient.post('/oauth/exchange', { ticket });
+  if (data.accessToken) {
+    session = {
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken ?? null,
+      user: decodeAccessToken(data.accessToken),
+    };
+  }
+  return data;
+}
+
 export async function logout(options: { refreshToken?: string; allDevices?: boolean } = {}) {
   try {
     // Send logout request to server with current refresh token
