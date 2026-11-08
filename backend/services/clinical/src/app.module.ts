@@ -10,6 +10,7 @@ import { ConsentModule } from './modules/consent/consent.module';
 import { HieModule } from './modules/hie/hie.module';
 import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { EncounterModule } from './modules/encounter/encounter.module';
+import { TenantSetupModule } from './modules/tenant-setup/tenant-setup.module';
 import { ChartingModule } from './modules/charting/charting.module';
 import { ObservationsModule } from './modules/observations/observations.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
@@ -46,6 +47,7 @@ import { LoggerService } from './common/logger/logger.service';
     HieModule,
     SchedulingModule,
     EncounterModule,
+    TenantSetupModule,
     ChartingModule,
     ObservationsModule,
     CatalogModule,

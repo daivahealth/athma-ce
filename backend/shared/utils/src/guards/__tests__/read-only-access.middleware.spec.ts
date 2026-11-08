@@ -248,3 +248,17 @@ describe('authenticated reads', () => {
     expect(run('GET', '/api/v1/patients', undefined, { ...base, requireTokenForReads: 'off' }).next).toHaveBeenCalled();
   });
 });
+
+describe('sandbox endpoints for read-only visitors', () => {
+  it('lets a visitor create, switch to, extend and delete their own sandbox', () => {
+    expect(run('POST', '/api/v1/sandboxes', readOnly).next).toHaveBeenCalled();
+    expect(run('POST', '/api/v1/sandboxes/switch', readOnly).next).toHaveBeenCalled();
+    expect(run('POST', '/api/v1/sandboxes/mine/extend', readOnly).next).toHaveBeenCalled();
+    expect(run('DELETE', '/api/v1/sandboxes/mine', readOnly).next).toHaveBeenCalled();
+  });
+
+  it('still refuses the platform admin routes', () => {
+    expect(run('DELETE', '/api/v1/sandboxes/0cb106e3-d228-44a0-9c0a-d484cebd0fa1', readOnly).res.statusCode).toBe(403);
+    expect(run('POST', '/api/v1/sandboxes/0cb106e3-d228-44a0-9c0a-d484cebd0fa1/extend', readOnly).res.statusCode).toBe(403);
+  });
+});

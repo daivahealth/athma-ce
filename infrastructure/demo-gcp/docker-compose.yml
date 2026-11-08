@@ -28,6 +28,12 @@ x-backend: &backend
     # Refuse writes that carry neither a valid JWT nor the internal key (public demo). See docs/security/20-RBAC-Access-Control.md
     AUTH_REQUIRE_TOKEN_FOR_WRITES: ${AUTH_REQUIRE_TOKEN_FOR_WRITES:-true}
     AUTH_REQUIRE_TOKEN_FOR_READS: ${AUTH_REQUIRE_TOKEN_FOR_READS:-report}
+    # Self-serve sandbox tenants (ADR-0017). Off until reads are enforced; see the runbook.
+    SANDBOX_ENABLED: ${SANDBOX_ENABLED:-false}
+    SANDBOX_MAX_ACTIVE: ${SANDBOX_MAX_ACTIVE:-50}
+    SANDBOX_LIFETIME_DAYS: ${SANDBOX_LIFETIME_DAYS:-30}
+    SANDBOX_EXTENSION_DAYS: ${SANDBOX_EXTENSION_DAYS:-30}
+    SANDBOX_MAX_CREATES_PER_DAY: ${SANDBOX_MAX_CREATES_PER_DAY:-3}
     # External sign-in (ADR-0016). A provider is enabled only when its client id and secret are set.
     PUBLIC_DEMO_TENANT_ID: ${PUBLIC_DEMO_TENANT_ID:-11111111-1111-1111-1111-111111111111}
     OAUTH_FRONTEND_URL: https://${SITE_DOMAIN:-${DEMO_DOMAIN}}
@@ -59,6 +65,7 @@ x-backend: &backend
     CLINICAL_SERVICE_URL: http://clinical:3011
     CLINICAL_CONSENT_SERVICE_URL: http://clinical:3011/api/v1/consent
     RCM_SERVICE_URL: http://rcm:3012
+    PRM_SERVICE_URL: http://prm:3013
     ABDM_CONNECTOR_URL: http://abdm-connector:3016
 
 services:

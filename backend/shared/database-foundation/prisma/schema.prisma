@@ -734,3 +734,33 @@ model AccessRequest {
   @@index([status, createdAt])
   @@map("access_requests")
 }
+
+/// Self-serve sandbox tenants on the public demo (ADR-0017). Instance-wide
+/// record; the sandbox's own data lives under tenant_id in every service.
+model Sandbox {
+  id               String    @id @default(uuid()) @map("id") @db.Uuid
+  /// The sandbox tenant (tenants.id); kept after deletion for the record.
+  tenantId         String    @unique @map("tenant_id") @db.Uuid
+  /// Owner, by external identity: one live sandbox per provider subject.
+  ownerProvider    String    @map("owner_provider")
+  ownerSubject     String    @map("owner_subject")
+  ownerEmail       String?   @map("owner_email")
+  ownerName        String?   @map("owner_name")
+  organisationName String    @map("organisation_name")
+  organisationType String    @map("organisation_type")
+  modules          String[]  @default([]) @map("modules")
+  /// 'provisioning' | 'active' | 'failed' | 'expired' | 'deleted'
+  status           String    @default("provisioning") @map("status")
+  error            String?   @map("error")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  activatedAt      DateTime? @map("activated_at") @db.Timestamptz(6)
+  expiresAt        DateTime? @map("expires_at") @db.Timestamptz(6)
+  extendedAt       DateTime? @map("extended_at") @db.Timestamptz(6)
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
+  lastSwitchAt     DateTime? @map("last_switch_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([ownerProvider, ownerSubject])
+  @@index([status, expiresAt])
+  @@map("sandboxes")
+}

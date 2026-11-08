@@ -1,6 +1,6 @@
 # ADR-0017: Self-Serve Sandbox Tenants on the Public Demo
 
-**Status:** Accepted (isolation prerequisites implemented; provisioning in progress)
+**Status:** Accepted (isolation and provisioning implemented; sandbox screens in progress)
 **Date:** 2026-11-08
 **Deciders:** Engineering Team
 **Related:** ADR-0003 (multitenancy), ADR-0005 (RBAC), ADR-0016 (external identity providers)
@@ -35,19 +35,19 @@ The four keys above become `(tenant_id, …)` unique (clinical migration `014_pe
 
 "Create my sandbox" creates a new tenant and copies the demo tenant's **setup**, not its patients: facilities, departments, clinics, spaces, wards and beds, staff with specialties and schedules, roles with their permissions, tenant-owned catalogues and templates, price lists, payers and contracts, engagement rules, and oncology protocols. Global rows (`tenant_id IS NULL` catalogues, permissions, specialties) are shared, not copied.
 
-New primary keys are derived, not looked up: `new_id = uuid_generate_v5(sandbox_tenant_id, old_id::text)`. Every reference to a copied row, including references across databases (a clinical `facility_id` pointing at a foundation facility), maps with the same function, so the copy needs no id-mapping tables and each database can be copied independently. References to global rows are left unchanged.
+New primary keys are derived, not looked up: `new_id = md5(sandbox_tenant_id || ':' || old_id)::uuid` (`sandboxRowId` in `@zeal/shared-utils`; plain `md5` so no extension is needed). Every reference to a copied row, including references across databases (a clinical `facility_id` pointing at a foundation facility), maps with the same function, so the copy needs no id-mapping tables. Each service copies its own database through an internal endpoint (`/internal/tenant-setup/copy`); foundation calls them in order (foundation, clinical, rcm, prm), passing the keys already copied so cross-database references are remapped. The copy is generic: any `uuid` or `uuid[]` column whose value is the key of a copied row is remapped, so new columns need no code. References to global rows are left unchanged. Values inside JSON columns are not remapped.
 
 ### 4. Organisation type and modules choose what is shown, not what is copied
 
-The creation form asks for the organisation name, type (clinic, hospital, multi-speciality hospital, cancer centre, diagnostic centre, day care) and modules. The type preselects modules (a clinic gets outpatient, lab, pharmacy and billing; a cancer centre gets everything including oncology). Everything is copied either way; modules that are off are hidden from navigation by a per-tenant "modules enabled" setting, and oncology uses the existing plugin activation. A module can be switched on later without re-provisioning.
+The creation form asks for the organisation name, type (clinic, hospital, multi-speciality hospital, cancer centre, diagnostic centre, day care) and modules. The type preselects modules (a clinic gets outpatient, lab, pharmacy and billing; a cancer centre gets everything including oncology). Everything is copied either way; modules that are off are hidden by the existing per-tenant navigation switches (`tenant_configs` `feature.nav.*`, for example `feature.nav.inpatientCare`), and oncology also by its plugin activation. A module can be switched on later without re-provisioning. Mapping: [SANDBOX-TENANTS.md](../features/SANDBOX-TENANTS.md#modules).
 
 ### 5. The visitor becomes the sandbox's administrator
 
-The sandbox gets a user linked to the same external identity (`user_identities` is keyed by tenant, provider and subject), with `tenant_admin` and admin access to every sandbox facility. The visitor switches between the demo hospital (read-only) and their sandbox; switching issues a fresh session for the user in the target tenant, so each token carries exactly one tenant.
+The sandbox gets a user linked to the same external identity (`user_identities` is keyed by tenant, provider and subject), with `tenant_admin`, admin access to every sandbox facility and a staff record of their own. The copied `super_admin` role is removed from the sandbox. The visitor switches between the demo hospital (read-only) and their sandbox; switching issues a fresh session for the user in the target tenant, so each token carries exactly one tenant.
 
 ### 6. Limits
 
-One sandbox per person, at most 50 active on the instance, deleted 30 days after creation with one extension. Deletion removes the tenant's rows from every database.
+One sandbox per person, at most 3 created per person per day, at most 50 active on the instance, deleted 30 days after creation with one extension. Deletion blocks sign-in at once, then removes the tenant's rows from every database (every table with `tenant_id`, children by cascade) and the tenant row; the `sandboxes` record is kept. Provisioning and removal run one at a time inside the single foundation instance; running several foundation instances would need a shared queue or lock.
 
 ## Consequences
 
