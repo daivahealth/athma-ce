@@ -24,6 +24,7 @@ import {
   ShieldCheck,
   Puzzle,
   Inbox,
+  Boxes,
   Check,
   Plus,
   CircleHelp,
@@ -34,6 +35,8 @@ import { useHelp } from '@/components/help/help-provider';
 import { ThemeToggle } from './theme-toggle';
 import { SidebarTrigger } from './sidebar';
 import { EnvironmentBadge } from './environment-banner';
+import { WorkspaceSwitcher } from './workspace-switcher';
+import { PLATFORM_SANDBOX_READ } from '@/modules/sandboxes/api';
 import { PatientSearch } from './patient-search';
 import { NotificationCenter } from './notification-center';
 import { useEffect, useState } from 'react';
@@ -161,6 +164,8 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
       <div className="mx-2 md:mx-3 h-4 w-px shrink-0 bg-sidebar-border" aria-hidden="true" />
       {/* Deployment mode (DEV / DEMO / STAGING); hidden in production */}
       <EnvironmentBadge className="mr-2 md:mr-3" />
+      {/* Public demo: switch between the read-only demo hospital and the user's sandbox */}
+      <WorkspaceSwitcher locale={locale} className="md:mr-3" />
 
       {/* min-w-0 lets the search shrink on phones instead of pushing the header past the viewport */}
       <div className="flex min-w-0 flex-1 items-center justify-between gap-2 md:gap-4">
@@ -169,7 +174,7 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
 
         {/* Center Search Area */}
         <div className="flex min-w-0 flex-1 lg:flex-none w-full lg:w-auto items-center justify-center gap-2">
-          <div className="min-w-0 w-full lg:w-[450px]">
+          <div className="min-w-0 w-full lg:w-[320px] 2xl:w-[450px]">
             <PatientSearch locale={locale} />
           </div>
           <Button asChild className="shrink-0 whitespace-nowrap px-2.5 sm:px-4 bg-gradient-to-b from-primary/90 to-primary shadow-sm border border-primary/20 hover:shadow-md transition-all">
@@ -264,6 +269,14 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
                   <Link href={`/${locale}/access-requests`} className="flex items-center gap-2 cursor-pointer">
                     <Inbox className="h-4 w-4" />
                     Access requests
+                  </Link>
+                </DropdownMenuItem>
+              )}
+              {claims?.permissions?.includes(PLATFORM_SANDBOX_READ) && (
+                <DropdownMenuItem asChild>
+                  <Link href={`/${locale}/sandboxes`} className="flex items-center gap-2 cursor-pointer">
+                    <Boxes className="h-4 w-4" />
+                    Sandboxes
                   </Link>
                 </DropdownMenuItem>
               )}

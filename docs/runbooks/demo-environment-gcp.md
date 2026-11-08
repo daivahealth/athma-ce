@@ -173,8 +173,13 @@ To turn on:
    sudo docker exec -i athma-demo-postgres-1 psql -v ON_ERROR_STOP=1 -U zeal_user -d zeal_foundation \
      < backend/shared/database-foundation/prisma/migrations/20261108020000_sandboxes/migration.sql
    ```
-2. Make sure reads are enforced (see [Tenant isolation](#tenant-isolation)): sandbox creation is refused while `AUTH_REQUIRE_TOKEN_FOR_READS` is not `true`.
-3. Add `SANDBOX_ENABLED=true` to `.env` and recreate the backend: `sudo docker compose up -d foundation clinical rcm prm ai-gateway`. Every service reads it: the internal copy and purge endpoints refuse without it.
+2. Apply foundation migration `20261108030000_nav_operating_theatre` (instance default for the new Operating Theatre menu switch; without it the OT menu disappears for every tenant):
+   ```bash
+   sudo docker exec -i athma-demo-postgres-1 psql -v ON_ERROR_STOP=1 -U zeal_user -d zeal_foundation \
+     < backend/shared/database-foundation/prisma/migrations/20261108030000_nav_operating_theatre/migration.sql
+   ```
+3. Make sure reads are enforced (see [Tenant isolation](#tenant-isolation)): sandbox creation is refused while `AUTH_REQUIRE_TOKEN_FOR_READS` is not `true`.
+4. Add `SANDBOX_ENABLED=true` to `.env` and recreate the backend: `sudo docker compose up -d foundation clinical rcm prm ai-gateway`. Every service reads it: the internal copy and purge endpoints refuse without it.
 
 Limits (`.env`, defaults): `SANDBOX_MAX_ACTIVE=50`, `SANDBOX_LIFETIME_DAYS=30`, `SANDBOX_EXTENSION_DAYS=30`, `SANDBOX_MAX_CREATES_PER_DAY=3`. Each sandbox copies the demo hospital's setup (a few MB; the patients are not copied).
 

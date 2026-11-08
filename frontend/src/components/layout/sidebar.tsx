@@ -111,6 +111,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    featureFlag: 'feature.nav.operatingTheatre',
     items: [
       {
         icon: Scissors,

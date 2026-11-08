@@ -118,6 +118,7 @@ FROM (VALUES
   ('feature.nav.prm'),
   ('feature.nav.analytics'),
   ('feature.nav.wellness'),
-  ('feature.nav.membership')
+  ('feature.nav.membership'),
+  ('feature.nav.operatingTheatre')
 ) AS t(k)
 ON CONFLICT (config_key) DO UPDATE SET value = 'true', updated_at = CURRENT_TIMESTAMP;

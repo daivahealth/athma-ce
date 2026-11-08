@@ -29,7 +29,7 @@ Outpatient (registration, appointments, encounters, orders) and billing are alwa
 | Module | Switch (`tenant_configs`) | Clinic | Hospital, multi-speciality | Cancer centre | Diagnostic centre | Day care | Other |
 |---|---|---|---|---|---|---|---|
 | `inpatient` | `feature.nav.inpatientCare` | | ✓ | ✓ | | | ✓ |
-| `operating_theatre` | `feature.nav.operatingTheatre` | | ✓ | ✓ | | ✓ | ✓ |
+| `operating_theatre` | `feature.nav.operatingTheatre` (new; instance default on, migration `20261108030000_nav_operating_theatre`) | | ✓ | ✓ | | ✓ | ✓ |
 | `diagnostics` (lab, imaging, procedure results) | `feature.nav.resultsReporting` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `pharmacy` | `feature.nav.pharmacy` | ✓ | ✓ | ✓ | | ✓ | ✓ |
 | `insurance` (claims, eligibility, pre-auth) | `feature.nav.revenueCycle` | | ✓ | ✓ | | | ✓ |
@@ -37,6 +37,19 @@ Outpatient (registration, appointments, encounters, orders) and billing are alwa
 | `analytics` | `feature.nav.analytics` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 Everything is copied either way, so a module can be switched on later under Configurations.
+
+## Screens
+
+| Where | What |
+|---|---|
+| `/{locale}/sandbox` (**My sandbox**) | Create form (name, type, modules preselected by type, acknowledgement); progress while provisioning (polls every 2 s); details with days left, **Open my sandbox** / **Back to the demo hospital**, **Extend by 30 days** (once) and **Delete sandbox** (confirm dialog; deleting from inside the sandbox switches back to the demo). Shows why when sandboxes are off or the account signed in with a password |
+| Topbar (`WorkspaceSwitcher`, tablet width and up) | **Create sandbox**, **My sandbox** or **Demo hospital**; icon-only below 1536 px |
+| Environment banner | Read-only visitors: **Create your own sandbox** link. In a sandbox: its name, days left and **Manage** |
+| Topbar badge | `DEMO · SANDBOX` in a sandbox (`DEMO · READ-ONLY` for visitors) |
+| Gear menu → **Sandboxes** (`/{locale}/sandboxes`) | Platform admins (`platform.sandbox.read`): every sandbox with owner, modules and status, filter by status, **Extend** and **Delete** with `platform.sandbox.manage` |
+| Privacy Policy (demo builds) | What a sandbox stores and when it is deleted |
+
+Switching stores the new tokens and reloads the app at the dashboard, so cached data, the facility and the menu switches all belong to the new tenant. Sandbox status comes from `useMySandbox()` (`frontend/src/modules/sandboxes/use-my-sandbox.ts`), only on demo builds.
 
 ## The owner's account
 
@@ -70,3 +83,6 @@ Sandboxes are refused (`503 SANDBOX_UNAVAILABLE`) unless `SANDBOX_ENABLED=true`,
 | `backend/services/foundation/src/modules/sandbox/` | Sandbox records, orchestration, switch, expiry sweep, API |
 | `backend/services/{clinical,rcm}/src/modules/tenant-setup/`, `backend/services/prm/src/tenant-setup/` | Internal copy and purge endpoints and table lists |
 | `backend/shared/database-foundation/prisma/migrations/20261108020000_sandboxes/` | `sandboxes` table and platform permissions |
+| `frontend/src/modules/sandboxes/` | API calls, module defaults, `useMySandbox` |
+| `frontend/src/app/[locale]/(dashboard)/sandbox/page.tsx`, `.../sandboxes/page.tsx` | My sandbox; platform admin list |
+| `frontend/src/components/layout/workspace-switcher.tsx` | Topbar switch |

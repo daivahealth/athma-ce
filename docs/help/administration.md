@@ -127,6 +127,7 @@ The sidebar's optional sections are settings in the **features** category, all o
 | `feature.nav.analytics` | Analytics |
 | `feature.nav.wellness` | Wellness |
 | `feature.nav.membership` | Membership |
+| `feature.nav.operatingTheatre` | Operating Theatre (on by default, so existing tenants keep it) |
 
 1. On **Effective Configuration**, search for `feature.nav`.
 2. Flip the switch for the section.

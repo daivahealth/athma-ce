@@ -36,12 +36,18 @@ export function DemoPrivacySection() {
           you about your request.
         </li>
         <li>
+          <strong>When you create a sandbox:</strong> the organisation name and type you give, the modules you choose,
+          and everything you enter in it. A sandbox is for trying Athma and must not contain real patient data. Only you
+          can open it; we can see the list of sandboxes and their owners to run the service.
+        </li>
+        <li>
           <strong>Where it is kept:</strong> on Google Cloud in Mumbai, India. New request alerts are sent to us by
           email through Google. We do not sell or share your data, and we do not use it for advertising.
         </li>
         <li>
           <strong>How long:</strong> demo accounts until you ask us to delete them, or for 12 months after your last
-          sign-in; access requests for up to 24 months after we last contacted you.
+          sign-in; sandboxes and everything in them are deleted 30 days after creation (60 if you extend it), or
+          sooner if you delete them; access requests for up to 24 months after we last contacted you.
         </li>
         <li>
           <strong>Your rights:</strong> you can ask to see, correct or delete your data, withdraw your consent, or raise

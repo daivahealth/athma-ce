@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { AlertTriangle, FlaskConical, Wrench, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsReadOnlyUser } from '@/lib/auth/read-only';
+import { daysLeft } from '@/modules/sandboxes/api';
+import { useMySandbox } from '@/modules/sandboxes/use-my-sandbox';
 import {
   DEPLOYMENT_MODE,
   getDeploymentModeInfo,
@@ -76,6 +78,10 @@ const getServerSnapshot = () => false;
 export function EnvironmentBanner({ locale, className }: { locale: string; className?: string }) {
   const dismissed = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const readOnly = useIsReadOnlyUser();
+  const { data: sandboxStatus } = useMySandbox();
+  const sandbox = sandboxStatus?.sandbox;
+  const inSandbox = !!sandboxStatus?.inSandbox && !!sandbox;
+  const canCreateSandbox = !!sandboxStatus?.available && sandboxStatus.eligible && sandbox?.status !== 'active';
 
   if (DEPLOYMENT_MODE === 'production' || dismissed) return null;
   const info = getDeploymentModeInfo();
@@ -96,9 +102,29 @@ export function EnvironmentBanner({ locale, className }: { locale: string; class
       <Icon className={cn('mt-0.5 h-3.5 w-3.5 shrink-0 md:mt-0', tone.icon)} aria-hidden="true" />
       <p className="min-w-0 flex-1">
         <span className="font-semibold">{info.label}:</span> {info.notice}{' '}
+        {inSandbox && sandbox && (
+          <>
+            <span className="font-semibold">
+              You are in your sandbox, {sandbox.organisationName}: changes are saved here only
+              {sandbox.expiresAt && ` until it is deleted in ${daysLeft(sandbox.expiresAt)} days`}.
+            </span>{' '}
+            <Link href={`/${locale}/sandbox`} className="whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary">
+              Manage
+            </Link>
+            {' · '}
+          </>
+        )}
         {readOnly && (
           <>
             <span className="font-semibold">You are exploring in read-only mode; changes are not saved.</span>{' '}
+            {canCreateSandbox && (
+              <>
+                <Link href={`/${locale}/sandbox`} className="whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary">
+                  Create your own sandbox
+                </Link>{' '}
+                to try changes.{' '}
+              </>
+            )}
           </>
         )}
         <Link href={`/${locale}/terms`} className="whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary">
@@ -125,8 +151,10 @@ export function EnvironmentBanner({ locale, className }: { locale: string; class
 /** Compact pill for the sticky topbar, so the mode stays visible after scrolling. */
 export function EnvironmentBadge({ className }: { className?: string }) {
   const readOnly = useIsReadOnlyUser();
+  const { data: sandboxStatus } = useMySandbox();
   if (DEPLOYMENT_MODE === 'production') return null;
   const info = getDeploymentModeInfo();
+  const suffix = sandboxStatus?.inSandbox ? ' · SANDBOX' : readOnly ? ' · READ-ONLY' : '';
   return (
     <span
       title={readOnly ? `${info.notice} Read-only access: changes are not saved.` : info.notice}
@@ -137,7 +165,7 @@ export function EnvironmentBadge({ className }: { className?: string }) {
         className,
       )}
     >
-      {readOnly ? `${info.label} · READ-ONLY` : info.label}
+      {`${info.label}${suffix}`}
     </span>
   );
 }
