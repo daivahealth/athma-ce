@@ -181,11 +181,16 @@ The request page is read-only. Use the buttons on the list to change its status.
 ## OT Schedules
 
 **OT Schedules** (`/ot/schedules`) lists booked theatre slots in start-time order. Each row shows the
-**Start Time** (and when it ends), the **Room**, the **Patient**, the **Status**, the **Anaesthesia**
-type, and **Current** or **Historical**. A request rebooked into a new slot keeps its old slot as
-**Historical**.
+**Start Time** (the date, then the start and end times), the **Room**, the **Patient** (name, MRN,
+sex and age), the **Status**, and the **Anaesthesia** type. A request rebooked into a new slot keeps
+its old slot, marked **Historical slot** under its status.
 
-Search by patient and filter by status as on the requests list. Click a row, or **View**, to open it.
+Under **Actions**, each row has one button for its next step and a **⋯** menu holding **View**,
+**Postpone** and **Cancel** (only the ones that fit its status). On a narrow screen the table scrolls
+sideways.
+
+Search by patient and filter by status as on the requests list. Click a row, or **View** in the **⋯**
+menu, to open it.
 
 ### Booking a case
 
@@ -238,9 +243,12 @@ The colours run cool to warm to green through the day, so a list or board reads 
 case is at **Patient In OT**, **Anaesthesia Started** or **Surgery Started**, its room shows as
 **Case in progress** on the board.
 
-Each step shows "OT schedule updated" on success, or "Workflow action failed" with the reason.
+Each step shows "OT schedule updated" with the step's name, for example "Confirm done.", or
+"Workflow action failed" with the reason.
 
 ### Postponing or cancelling a slot
+
+Both are in the row's **⋯** menu.
 
 - **Postpone** is offered while the case is **Planned**, **Confirmed** or **Patient Ready**.
 - **Cancel** is offered at any status except **Cancelled**, **Postponed** and **Patient Shifted To
