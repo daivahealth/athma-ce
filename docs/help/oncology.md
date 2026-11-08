@@ -91,31 +91,8 @@ cards and on the day-care worklist.
 
 ## Oncology Dashboard
 
-The dashboard has two tabs: **Operations** (the day's work) and **Population health** (who has
-cancer and how they are doing).
-
-### Operations
-
-The Operations tab shows one day, today by default. Use the arrows or the date box to look at another day,
-and **Today** to come back. It refreshes itself every minute; **Refresh** updates it now. The line under
-the heading says how many items are waiting for sign-off.
-
-Each tile is coloured by what it asks of you: amber or orange when something is waiting, red when
-something was missed or is overdue, green when all is clear, grey when there is nothing to show. Click a
-tile to open the screen where that work is done.
-
-- **Treatment today**: patients on the day-care worklist and how many have no chemo order yet, chemo
-  running now, radiation fractions planned and missed, and active chemo and radiation courses.
-- **Waiting for action**: chemo orders to approve, to verify and on hold, radiation prescriptions and
-  care plans to approve, and tumour board cases whose meeting date has passed without a decision.
-  The chemo tiles open **Chemo Orders** already filtered to that status.
-- **Caseload and pathway gaps**: patients with active disease (active, recurrence or relapsed), new
-  diagnoses in the last 30 days, metastatic patients, and active diagnoses that have no staging, no open
-  care plan, or have never been to a tumour board.
-
-Below the tiles, **Upcoming tumour board** lists the open cases (overdue ones in red),
-**Chemo orders needing action** lists orders waiting for approval, verification or on hold, and
-**Active disease by cancer type** shows the caseload split by cancer type.
+The dashboard has two tabs: **Population health** (who has cancer and how they are doing), which
+opens first, and **Operations** (the day's work).
 
 ### Population health
 
@@ -139,6 +116,29 @@ counts the diagnoses dated in that period.
 
 First treatment is the earliest chemo order, treatment schedule start or radiation start for the
 diagnosis. Survival is not shown, because the patient record does not hold a date of death.
+
+### Operations
+
+The Operations tab shows one day, today by default. Use the arrows or the date box to look at another day,
+and **Today** to come back. It refreshes itself every minute; **Refresh** updates it now. The line under
+the heading says how many items are waiting for sign-off.
+
+Each tile is coloured by what it asks of you: amber or orange when something is waiting, red when
+something was missed or is overdue, green when all is clear, grey when there is nothing to show. Click a
+tile to open the screen where that work is done.
+
+- **Treatment today**: patients on the day-care worklist and how many have no chemo order yet, chemo
+  running now, radiation fractions planned and missed, and active chemo and radiation courses.
+- **Waiting for action**: chemo orders to approve, to verify and on hold, radiation prescriptions and
+  care plans to approve, and tumour board cases whose meeting date has passed without a decision.
+  The chemo tiles open **Chemo Orders** already filtered to that status.
+- **Caseload and pathway gaps**: patients with active disease (active, recurrence or relapsed), new
+  diagnoses in the last 30 days, metastatic patients, and active diagnoses that have no staging, no open
+  care plan, or have never been to a tumour board.
+
+Below the tiles, **Upcoming tumour board** lists the open cases (overdue ones in red),
+**Chemo orders needing action** lists orders waiting for approval, verification or on hold, and
+**Active disease by cancer type** shows the caseload split by cancer type.
 
 ## Oncology Registry
 

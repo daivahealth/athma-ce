@@ -476,18 +476,19 @@ function OperationsView() {
 type DashboardView = 'operations' | 'population';
 
 /**
- * Oncology Dashboard: the day's operations, or the population health view of
- * the cancer registry (`?view=population`).
+ * Oncology Dashboard: the population health view of the cancer registry
+ * (default), or the day's operations (`?view=operations`). An old
+ * `?view=population` link still opens the default tab.
  */
 export default function OncologyDashboardPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const view: DashboardView = searchParams.get('view') === 'population' ? 'population' : 'operations';
+  const view: DashboardView = searchParams.get('view') === 'operations' ? 'operations' : 'population';
 
   const setView = (next: string) => {
     const query = new URLSearchParams(searchParams.toString());
-    if (next === 'population') query.set('view', 'population');
+    if (next === 'operations') query.set('view', 'operations');
     else query.delete('view');
     const search = query.toString();
     router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
@@ -496,11 +497,11 @@ export default function OncologyDashboardPage() {
   return (
     <Tabs value={view} onValueChange={setView} className="flex flex-col gap-6 page-transition">
       <TabsList aria-label="Dashboard view" className="self-start">
-        <TabsTrigger value="operations" className="px-4">
-          Operations
-        </TabsTrigger>
         <TabsTrigger value="population" className="px-4">
           Population health
+        </TabsTrigger>
+        <TabsTrigger value="operations" className="px-4">
+          Operations
         </TabsTrigger>
       </TabsList>
       <TabsContent value="operations" className="mt-0">
