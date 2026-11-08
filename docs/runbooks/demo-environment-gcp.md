@@ -131,6 +131,20 @@ The containers do not run migrations at startup, and the demo database has no `_
    ```
    Review the output before applying it. Apply only additive statements without asking; a dropped column or table can lose demo data.
 
+## Read-only visitors
+
+Public visitors use the read-only `demo_visitor` role; their writes are refused by every service. The backend containers run with `AUTH_REQUIRE_TOKEN_FOR_WRITES=true` (compose default), so writes without a valid JWT or the internal key are refused with 401. See [Read-only access](../security/20-RBAC-Access-Control.md#read-only-access).
+
+Create the role and the shared visitor account (`visitor@athma.demo` / `Visitor@123`) once, and again after any seed or plugin that adds permissions:
+
+```bash
+# VM
+cd /opt/athma
+sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation < seed/foundation/21-demo-visitor.sql
+```
+
+Check: log in as the visitor, open any patient, and try to save a change. It should be refused with a "Read-only demo" toast.
+
 ## Reset demo data
 Demo data is copied from a local dev database that has been seeded with `seed/run-seeds.sh`:
 

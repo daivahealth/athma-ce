@@ -35,6 +35,15 @@ Production shows none of these.
 
 The demo disclaimer covers: not for production or clinical use; no real or live patient data or PHI/PII; all records are fictitious; data may be reset or deleted without notice and is not backed up for recovery; nothing shown is medical advice; availability and security are not guaranteed to production standards.
 
+## Read-only demo visitors
+
+A user holding the `demo_visitor` role gets a read-only access token (`readOnly: true`), and every backend service refuses their writes with `403 READ_ONLY_ACCESS` (see [Read-only access](../security/20-RBAC-Access-Control.md#read-only-access)). The UI does not hide action buttons; instead:
+
+- the environment banner adds "You are exploring in read-only mode; changes are not saved", and the topbar badge reads `DEMO · READ-ONLY`;
+- when a write is refused, the API client shows a "Read-only demo" toast (at most one every 4 seconds), next to whatever error the screen itself shows.
+
+`frontend/src/lib/auth/read-only.ts` holds `useIsReadOnlyUser()`, `isReadOnlyError()` and the toast. The read-only state is read from the stored access token after mount, so server render and first paint never show it.
+
 ## Terms & Conditions and Privacy Policy
 
 - Routes: `/{locale}/terms` and `/{locale}/privacy`, in the `(legal)` route group. They are public (no auth guard), so they can be opened from the login screen.
@@ -48,7 +57,8 @@ The demo disclaimer covers: not for production or clinical use; no real or live 
 | File | Role |
 |---|---|
 | `frontend/src/lib/config/deployment.ts` | Parses the mode, labels and notices |
-| `frontend/src/components/layout/environment-banner.tsx` | `EnvironmentBanner` and `EnvironmentBadge` |
+| `frontend/src/components/layout/environment-banner.tsx` | `EnvironmentBanner` and `EnvironmentBadge` (with the read-only notice) |
+| `frontend/src/lib/auth/read-only.ts` | Read-only user detection and the refused-write toast |
 | `frontend/src/components/legal/legal-shell.tsx` | Legal page header/footer, `LegalLinks`, document and section layout |
 | `frontend/src/components/legal/deployment-notice-section.tsx` | Instance notice on the legal pages |
 | `frontend/src/app/[locale]/(legal)/` | Terms and Privacy routes |

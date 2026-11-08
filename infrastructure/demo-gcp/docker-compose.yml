@@ -25,6 +25,8 @@ x-backend: &backend
     JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
     JWT_RESET_SECRET: ${JWT_RESET_SECRET}
     INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+    # Refuse writes that carry neither a valid JWT nor the internal key (public demo). See docs/security/20-RBAC-Access-Control.md
+    AUTH_REQUIRE_TOKEN_FOR_WRITES: ${AUTH_REQUIRE_TOKEN_FOR_WRITES:-true}
     SECRETS_MASTER_KEY: ${SECRETS_MASTER_KEY}
     SECRETS_MASTER_KEY_VERSION: "1"
     CORS_ORIGINS: https://${DEMO_DOMAIN},https://app.${DEMO_DOMAIN}

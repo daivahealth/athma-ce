@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Request, Headers } from '@n
 import { UserFacilityService } from './user-facility.service';
 import { AssignFacilityDto } from './dto/assign-facility.dto';
 import { SetDefaultFacilityDto } from './dto/set-default-facility.dto';
-import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permissions, AllowSelf } from '../auth/decorators/permissions.decorator';
 import { USER_READ, USER_UPDATE } from '@zeal/contracts';
 
 @Controller('users/:userId/facilities')
@@ -11,6 +11,7 @@ export class UserFacilityController {
 
   @Get()
   @Permissions(USER_READ)
+  @AllowSelf('userId')
   getUserFacilities(
     @Param('userId') userId: string,
     @Headers('x-tenant-id') tenantId?: string,
@@ -41,6 +42,7 @@ export class UserFacilityController {
 
   @Get('check/:facilityId')
   @Permissions(USER_READ)
+  @AllowSelf('userId')
   async checkAccess(@Param('userId') userId: string, @Param('facilityId') facilityId: string) {
     const hasAccess = await this.userFacilityService.hasAccessToFacility(userId, facilityId);
     return {

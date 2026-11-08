@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LinkStaffDto } from './dto/link-staff.dto';
-import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permissions, AllowSelf } from '../auth/decorators/permissions.decorator';
 import { USER_CREATE, USER_DELETE, USER_READ, USER_UPDATE } from '@zeal/contracts';
 
 @ApiTags('Users')
@@ -78,6 +78,7 @@ export class UserController {
 
   @Get(':id')
   @Permissions(USER_READ)
+  @AllowSelf('id')
   @ApiOperation({
     summary: 'Get user by ID',
     description: 'Retrieves a single user by their UUID'
