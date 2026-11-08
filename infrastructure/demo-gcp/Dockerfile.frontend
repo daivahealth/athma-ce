@@ -25,6 +25,8 @@ ARG NEXT_PUBLIC_DEPLOYMENT_MODE=demo
 ARG NEXT_PUBLIC_LOGIN_EMAIL=
 # Empty = default for the mode (landing page on in demo)
 ARG NEXT_PUBLIC_LANDING_PAGE=
+# Privacy contact shown on the demo privacy page (DPDP Act)
+ARG NEXT_PUBLIC_PRIVACY_CONTACT_EMAIL=
 ENV NEXT_PUBLIC_OBSERVABILITY_ENABLED=false \
     NEXT_PUBLIC_DEBUG_API=false \
     NEXT_TELEMETRY_DISABLED=1

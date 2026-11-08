@@ -1,7 +1,12 @@
 # Automatic HTTPS (Let's Encrypt) for each public hostname.
-# DEMO_DOMAIN is e.g. athma-ce-demo.daiva.health or 34-100-1-2.sslip.io.
-# The frontend answers on the bare domain and on app.<domain>.
-{$DEMO_DOMAIN}, app.{$DEMO_DOMAIN} {
+# DEMO_DOMAIN is e.g. athma-ce-demo.daiva.health or 34-100-1-2.sslip.io; the APIs
+# live on its subdomains. SITE_DOMAIN is the public address of the web app
+# (e.g. athma.daiva.health); it defaults to DEMO_DOMAIN. The web app answers on
+# SITE_DOMAIN, and DEMO_DOMAIN / app.DEMO_DOMAIN redirect there, so every visitor
+# uses one address (one browser session, one sign-in return URL).
+{$SITE_DOMAIN}, {$DEMO_DOMAIN}, app.{$DEMO_DOMAIN} {
+	@other not host {$SITE_DOMAIN}
+	redir @other https://{$SITE_DOMAIN}{uri} 308
 	encode gzip
 	reverse_proxy frontend:3000
 }
