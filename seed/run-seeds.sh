@@ -49,6 +49,7 @@ FOUNDATION_FILES=(
   "foundation/16-rbac-expanded.sql"  # expanded RBAC
   "foundation/17-user-facilities.sql" # user facility access
   "foundation/20-clinical-configs.sql" # clinical workflow configuration defaults
+  "foundation/21-demo-visitor.sql"   # read-only demo_visitor role + shared visitor account
 )
 
 CLINICAL_FILES=(

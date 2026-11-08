@@ -9,6 +9,8 @@ export interface JwtClaims {
   facilityId?: string;
   facilityIds?: string[];
   sessionId?: string;
+  /** Set for read-only roles (demo visitor); the backend refuses every write. */
+  readOnly?: boolean;
   iat?: number;
   exp?: number;
 }

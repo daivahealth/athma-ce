@@ -171,6 +171,21 @@ curl --location 'http://localhost:3011/api/v1/patients' \
 }
 ```
 
+## Write Access Rules
+
+Every service refuses some writes before they reach a controller (see [Read-only access](../security/20-RBAC-Access-Control.md#read-only-access)):
+
+| Status | `code` in body | When |
+|---|---|---|
+| `403` | `READ_ONLY_ACCESS` | The access token has `readOnly: true` (demo visitor) and the request is not `GET`/`HEAD`/`OPTIONS` or an allowlisted session/check endpoint |
+| `401` | `AUTH_REQUIRED` | `AUTH_REQUIRE_TOKEN_FOR_WRITES` is on (the public demo) and an unsafe request carries no token that verifies and no valid `x-internal-api-key`. Headers alone (`x-user-id` etc.) are not enough to write |
+
+```json
+{ "statusCode": 403, "error": "Forbidden", "code": "READ_ONLY_ACCESS", "message": "This account has read-only access to the demo hospital. Create your own sandbox to try changes." }
+```
+
+Service-to-service writes must send either the caller's bearer token or `x-internal-api-key`.
+
 ## Audit Fields
 
 ### Automatic Population

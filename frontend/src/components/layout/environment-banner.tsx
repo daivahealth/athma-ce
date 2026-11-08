@@ -4,6 +4,7 @@ import { useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, FlaskConical, Wrench, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useIsReadOnlyUser } from '@/lib/auth/read-only';
 import {
   DEPLOYMENT_MODE,
   getDeploymentModeInfo,
@@ -74,6 +75,7 @@ const getServerSnapshot = () => false;
  */
 export function EnvironmentBanner({ locale, className }: { locale: string; className?: string }) {
   const dismissed = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const readOnly = useIsReadOnlyUser();
 
   if (DEPLOYMENT_MODE === 'production' || dismissed) return null;
   const info = getDeploymentModeInfo();
@@ -94,6 +96,11 @@ export function EnvironmentBanner({ locale, className }: { locale: string; class
       <Icon className={cn('mt-0.5 h-3.5 w-3.5 shrink-0 md:mt-0', tone.icon)} aria-hidden="true" />
       <p className="min-w-0 flex-1">
         <span className="font-semibold">{info.label}:</span> {info.notice}{' '}
+        {readOnly && (
+          <>
+            <span className="font-semibold">You are exploring in read-only mode; changes are not saved.</span>{' '}
+          </>
+        )}
         <Link href={`/${locale}/terms`} className="whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary">
           Terms
         </Link>
@@ -117,11 +124,12 @@ export function EnvironmentBanner({ locale, className }: { locale: string; class
 
 /** Compact pill for the sticky topbar, so the mode stays visible after scrolling. */
 export function EnvironmentBadge({ className }: { className?: string }) {
+  const readOnly = useIsReadOnlyUser();
   if (DEPLOYMENT_MODE === 'production') return null;
   const info = getDeploymentModeInfo();
   return (
     <span
-      title={info.notice}
+      title={readOnly ? `${info.notice} Read-only access: changes are not saved.` : info.notice}
       data-deployment-mode={DEPLOYMENT_MODE}
       className={cn(
         'inline-flex shrink-0 items-center rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wider',
@@ -129,7 +137,7 @@ export function EnvironmentBadge({ className }: { className?: string }) {
         className,
       )}
     >
-      {info.label}
+      {readOnly ? `${info.label} · READ-ONLY` : info.label}
     </span>
   );
 }

@@ -4,7 +4,7 @@ import * as argon2 from 'argon2';
 import { UserService, UserPermissions, UserWithRoles } from './user.service';
 import { MfaService } from './mfa.service';
 import { UserRepository } from '../repositories/user.repository';
-import { RequestContext } from '@zeal/shared-utils';
+import { RequestContext, isReadOnlyRoleSet } from '@zeal/shared-utils';
 import { PrismaService } from '@zeal/database-foundation';
 // Temporary local types until contracts package is fixed
 interface LoginRequest {
@@ -418,6 +418,9 @@ export class AuthService {
       defaultFacilityId,
       facilityId: activeFacilityId,
       facilityIds,
+      // Read-only roles (demo visitor) get a token every service refuses to
+      // write with; see readOnlyAccessMiddleware in @zeal/shared-utils.
+      ...(isReadOnlyRoleSet(permissions.roles) ? { readOnly: true } : {}),
       iat: Math.floor(Date.now() / 1000),
     };
 

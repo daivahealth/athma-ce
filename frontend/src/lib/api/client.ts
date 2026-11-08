@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { isTokenExpired, decodeAccessToken } from '@/lib/auth/tokens';
+import { isReadOnlyError, notifyReadOnlyRefusal } from '@/lib/auth/read-only';
 import type { AuthSession } from '@/types/auth';
 
 /**
@@ -203,6 +204,9 @@ const createApiInterceptor = (client: typeof foundationClient) => {
       return response;
     },
     (error) => {
+      if (isReadOnlyError(error)) {
+        notifyReadOnlyRefusal();
+      }
       // Log the raw rejection alongside the parsed fields: a cancelled request
       // or a non-axios throw has no config/response, which previously rendered
       // as an unhelpful empty object.

@@ -13,12 +13,13 @@ The athma-ce Platform implements a comprehensive **Role-Based Access Control (RB
 3. [Permission Hierarchy](#permission-hierarchy)
 4. [System Roles](#system-roles)
 5. [Permission Categories](#permission-categories)
-6. [Multi-Tenancy & RBAC](#multi-tenancy--rbac)
-7. [Implementation Guidelines](#implementation-guidelines)
-8. [API Authorization](#api-authorization)
-9. [Audit & Compliance](#audit--compliance)
-10. [Best Practices](#best-practices)
-11. [Examples](#examples)
+6. [Read-only access](#read-only-access)
+7. [Multi-Tenancy & RBAC](#multi-tenancy--rbac)
+8. [Implementation Guidelines](#implementation-guidelines)
+9. [API Authorization](#api-authorization)
+10. [Audit & Compliance](#audit--compliance)
+11. [Best Practices](#best-practices)
+12. [Examples](#examples)
 
 ---
 
@@ -411,6 +412,40 @@ admin.settings.update
 admin.integrations.manage
 admin.audit_logs.read
 ```
+
+---
+
+## Read-only access
+
+Some users must see everything but change nothing: visitors to the public demo hospital. Read-only access is enforced in two layers, so a missed UI button or a controller without a guard cannot leak a write.
+
+### The `demo_visitor` role
+
+- Seeded by `seed/foundation/21-demo-visitor.sql` in the demo tenant. It holds every permission whose action is `read`, `view`, `list` or `search`, **except** `secret.read`, `tenant.read`, `audit.read` and `user.read`, so a visitor cannot see tenant secrets, other tenants, audit trails or other visitors' accounts. Re-run the seed after adding permissions (plugins included) so the role picks them up.
+- The same seed creates a shared visitor account `visitor@athma.demo` (password `Visitor@123`) with `read_only` access to every facility of the demo tenant.
+- Role codes that make a token read-only are listed in `READ_ONLY_ROLE_CODES` (`backend/shared/utils/src/guards/read-only-access.middleware.ts`).
+
+### `readOnly` token claim
+
+Foundation adds `readOnly: true` to the access token of any user holding a read-only role, at login, refresh and facility switch (`AuthService.generateAccessToken`). The claim is derived from roles every time a token is issued, so removing the role takes effect at the next refresh.
+
+### Enforcement middleware
+
+Every service (foundation, clinical, rcm, prm, ai-gateway) mounts `readOnlyAccessMiddleware()` from `@zeal/shared-utils` in `main.ts`, ahead of routing and after CORS:
+
+| Request | Result |
+|---|---|
+| `GET`, `HEAD`, `OPTIONS` | Passes; normal guards apply |
+| Unsafe method with a `readOnly` token | `403` with `code: "READ_ONLY_ACCESS"`, unless the path is on `READ_ONLY_ALLOWED_PATHS` (session endpoints such as `auth/refresh`, `auth/logout`, `auth/switch-facility`, and POST endpoints that only check or compute, such as `scheduling/availability/check-slot`) |
+| Unsafe method with no valid token, when `AUTH_REQUIRE_TOKEN_FOR_WRITES=true` | `401` with `code: "AUTH_REQUIRED"`, unless it carries a valid `x-internal-api-key` or hits `PUBLIC_WRITE_PATHS` (`auth/login`, `auth/refresh`, password reset, `auth/mfa/verify`) |
+
+`AUTH_REQUIRE_TOKEN_FOR_WRITES` exists because several controllers (for example `clinical-codings` in clinical and several ai-gateway modules) trust the `x-tenant-id` / `x-user-id` headers without a JWT guard. Without it, a read-only user could drop the token and write with headers alone. With it on, the middleware verifies the token against `JWT_SECRET` and refuses to start if the secret is missing. The demo stack (`infrastructure/demo-gcp/docker-compose.yml`) turns it on by default; other deployments should turn it on too once their service-to-service callers send a token or the internal key.
+
+When adding an endpoint that a read-only user should be able to call with POST (a search or a calculation that writes nothing), add its path to `READ_ONLY_ALLOWED_PATHS` and a case to `read-only-access.middleware.spec.ts`.
+
+### Reading your own user record
+
+`GET /users/:id`, `GET /users/:userId/facilities` and `GET /users/:userId/facilities/check/:facilityId` carry `@AllowSelf(...)`: a user may read their own record and facilities without `user.read`. The app shell needs this for every user, and it lets `demo_visitor` run without `user.read`.
 
 ---
 

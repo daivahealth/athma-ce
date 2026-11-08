@@ -13,6 +13,7 @@ const { initializeObservability } = require('@zeal/observability');
 initializeObservability();
 
 const { NestFactory } = require('@nestjs/core');
+const { readOnlyAccessMiddleware } = require('@zeal/shared-utils');
 const { ValidationPipe } = require('@nestjs/common');
 const { AppModule } = require('./app.module');
 const { LoggerService } = require('./common/logger/logger.service');
@@ -63,6 +64,11 @@ async function bootstrap() {
       'x-facility-id',
     ],
   });
+
+  // Refuse writes from read-only (demo visitor) tokens, and, when
+  // AUTH_REQUIRE_TOKEN_FOR_WRITES=true, writes without a valid token.
+  // After enableCors so refusals still carry CORS headers.
+  app.use(readOnlyAccessMiddleware());
 
   const port = process.env.PORT ?? 3011;
 

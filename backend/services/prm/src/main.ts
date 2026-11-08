@@ -18,6 +18,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { readOnlyAccessMiddleware } from '@zeal/shared-utils';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
@@ -68,6 +69,11 @@ async function bootstrap() {
       'x-facility-id',
     ],
   });
+
+  // Refuse writes from read-only (demo visitor) tokens, and, when
+  // AUTH_REQUIRE_TOKEN_FOR_WRITES=true, writes without a valid token.
+  // After enableCors so refusals still carry CORS headers.
+  app.use(readOnlyAccessMiddleware());
 
   // Swagger/OpenAPI setup
   const swaggerConfig = new DocumentBuilder()

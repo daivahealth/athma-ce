@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { ALLOW_SELF_KEY } from '../decorators/permissions.decorator';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -20,6 +21,15 @@ export class PermissionsGuard implements CanActivate {
 
     if (!user) {
       throw new ForbiddenException('User not authenticated');
+    }
+
+    const selfParam = this.reflector.getAllAndOverride<string | undefined>(ALLOW_SELF_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    const ownId = user.userId ?? user.sub ?? user.id;
+    if (selfParam && ownId && request.params?.[selfParam] === ownId) {
+      return true;
     }
 
     const userPermissions = user.permissions || [];
