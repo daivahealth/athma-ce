@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './controllers/auth.controller';
+import { OAuthController } from './oauth/oauth.controller';
+import { OAuthService } from './oauth/oauth.service';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { MfaService } from './services/mfa.service';
@@ -20,7 +22,7 @@ import { DEFAULT_ACCESS_TOKEN_EXPIRY, resolveExpiresIn } from './utils/jwt-expir
       },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, OAuthController],
   providers: [
     // Service-wide auth (issue #134): every foundation route requires a valid
     // JWT unless @Public; @Permissions is enforced where declared. Declared
@@ -28,6 +30,7 @@ import { DEFAULT_ACCESS_TOKEN_EXPIRY, resolveExpiresIn } from './utils/jwt-expir
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
     AuthService,
+    OAuthService,
     UserService,
     MfaService,
     UserRepository,

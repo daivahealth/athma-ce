@@ -61,6 +61,7 @@ export const READ_ONLY_ALLOWED_PATHS: readonly RegExp[] = [
 /** Unsafe-method paths that are legitimately called without a token. */
 export const PUBLIC_WRITE_PATHS: readonly RegExp[] = [
   /\/auth\/(login|refresh|reset-password|confirm-reset-password|mfa\/verify)$/,
+  /\/auth\/oauth\/exchange$/,
 ];
 
 export interface WriteAccessOptions {
