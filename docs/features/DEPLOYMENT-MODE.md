@@ -39,7 +39,7 @@ The demo disclaimer covers: not for production or clinical use; no real or live 
 
 A user holding the `demo_visitor` role gets a read-only access token (`readOnly: true`), and every backend service refuses their writes with `403 READ_ONLY_ACCESS` (see [Read-only access](../security/20-RBAC-Access-Control.md#read-only-access)). The UI does not hide action buttons; instead:
 
-- the environment banner adds "You are exploring in read-only mode; changes are not saved", and the topbar badge reads `DEMO · READ-ONLY`;
+- the environment banner adds "You are exploring in read-only mode; changes are not saved" (with a **Create your own sandbox** link when [sandboxes](./SANDBOX-TENANTS.md) are on), and the topbar badge reads `DEMO · READ-ONLY` (`DEMO · SANDBOX` inside the user's sandbox);
 - when a write is refused, the API client shows a "Read-only demo" toast (at most one every 4 seconds), next to whatever error the screen itself shows.
 
 Visitors usually arrive through **social sign-in**: when the instance has external providers configured, the login page shows "Continue with Google / Microsoft / GitHub", enabled once the visitor ticks the demo Terms and Privacy consent (`SocialSignIn`, `frontend/src/components/auth/social-sign-in.tsx`). After the provider round trip, `/{locale}/auth/callback` exchanges the one-time ticket for a session. Design: [ADR-0016](../ADR/ADR-0016-external-identity-providers.md).

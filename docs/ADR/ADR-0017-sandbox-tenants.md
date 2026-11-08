@@ -1,6 +1,6 @@
 # ADR-0017: Self-Serve Sandbox Tenants on the Public Demo
 
-**Status:** Accepted (isolation and provisioning implemented; sandbox screens in progress)
+**Status:** Accepted (implemented)
 **Date:** 2026-11-08
 **Deciders:** Engineering Team
 **Related:** ADR-0003 (multitenancy), ADR-0005 (RBAC), ADR-0016 (external identity providers)

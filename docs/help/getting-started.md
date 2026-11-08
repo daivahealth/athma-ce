@@ -2,7 +2,7 @@
 title: 'Getting started'
 group: 'Getting started'
 order: 10
-routes: ['/dashboard', '/profile']
+routes: ['/dashboard', '/profile', '/sandbox']
 description: 'Signing in and resetting your password, the Health AI+ dashboard, the sidebar and topbar, switching facility, patient search, notifications, your profile, and how to use this Help Centre.'
 ---
 
@@ -259,6 +259,27 @@ browser.
 
 The cog opens **Administration**: **Tenants**, **Facilities**, **Users**, **Staff**, **Spaces**,
 **RBAC** and **Plugin Management**. See [Administration](administration.md).
+
+## Your own sandbox (public demo)
+
+On the public demo the demo hospital is read-only. To try registering patients, booking, ordering and
+billing, create a sandbox: your own hospital with the demo hospital's setup and no patients.
+
+1. Sign in with Google, Microsoft or GitHub. The shared email visitor account cannot have a sandbox.
+2. Select **Create sandbox** in the topbar (or **Create your own sandbox** in the banner).
+3. Enter your organisation's name, pick its type, and check the modules. The type preselects
+   sensible modules: a clinic has no inpatient or operating theatre, a cancer centre has oncology.
+4. Tick that the sandbox is temporary and holds no real patient data, then select **Create my
+   sandbox**. It is ready in under a minute.
+5. Select **Open my sandbox**. The badge reads **DEMO · SANDBOX** and the banner names your sandbox.
+
+**Check:** a patient you register in the sandbox appears in **Patients**, and its MRN starts again
+from 000001.
+
+The topbar button switches between your sandbox and the demo hospital (on a phone, use **Manage**
+in the banner). A sandbox is deleted 30 days after you create it; on **My sandbox** you can extend it
+once by 30 days, or delete it now. Switch modules on later under **Configurations**
+(`feature.nav.*`, see Administration).
 
 ## Your profile
 
