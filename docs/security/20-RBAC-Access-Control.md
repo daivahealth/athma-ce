@@ -451,6 +451,8 @@ Most controllers in clinical, ai-gateway and foundation read the tenant from the
 - If the token verifies, a missing `x-tenant-id` is filled in from the token and `x-user-id` is overwritten with the token's user.
 - A request with a valid `x-internal-api-key` is a service-to-service call and may name any tenant.
 
+For `GET`/`HEAD`, the middleware also takes the token from an `access_token` query parameter when there is no `Authorization` header, because `EventSource` (Server-Sent Events, such as prm's `/v1/notifications/stream`) cannot send headers; tenant binding applies to it the same way. Writes never accept a URL token.
+
 Tokenless requests used to be able to read any tenant by naming it in the header. `AUTH_REQUIRE_TOKEN_FOR_READS=true` closes that, so service-to-service reads (clinical to foundation, rcm to clinical, the config client, ai-gateway's catalog writer) send `x-internal-api-key`. Deployments with more than one tenant that untrusted users can sign in to, such as the public demo with sandbox tenants ([ADR-0017](../ADR/ADR-0017-sandbox-tenants.md)), must run with both switches on. Roll out reads with `report` first and check the service logs.
 
 When adding an endpoint that a read-only user should be able to call with POST (a search or a calculation that writes nothing), add its path to `READ_ONLY_ALLOWED_PATHS` and a case to `read-only-access.middleware.spec.ts`.

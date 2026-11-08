@@ -186,7 +186,7 @@ Every service refuses some writes before they reach a controller (see [Read-only
 { "statusCode": 403, "error": "Forbidden", "code": "READ_ONLY_ACCESS", "message": "This account has read-only access to the demo hospital. Create your own sandbox to try changes." }
 ```
 
-Service-to-service calls, reads included, must send either the caller's bearer token or `x-internal-api-key`. With a user token, `x-user-id` is always taken from the token.
+Service-to-service calls, reads included, must send either the caller's bearer token or `x-internal-api-key`. Server-Sent Events streams, which cannot send headers, may pass the token as `?access_token=` on `GET` only. With a user token, `x-user-id` is always taken from the token.
 
 ## External Sign-in
 
