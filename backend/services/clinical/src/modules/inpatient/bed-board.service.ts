@@ -55,6 +55,8 @@ export class BedBoardService {
     this.foundationApi = axios.create({
       baseURL: `${foundationServiceUrl}/api/v1`,
       timeout: 10000,
+      // Service-to-service call: the internal key authenticates it (AUTH_REQUIRE_TOKEN_FOR_READS).
+      headers: process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {},
     });
 
     this.logger.log(`Foundation API client initialized: ${foundationServiceUrl}`);

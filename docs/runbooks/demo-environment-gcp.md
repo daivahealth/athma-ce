@@ -135,6 +135,33 @@ The containers do not run migrations at startup, and the demo database has no `_
 
 Public visitors use the read-only `demo_visitor` role; their writes are refused by every service. The backend containers run with `AUTH_REQUIRE_TOKEN_FOR_WRITES=true` (compose default), so writes without a valid JWT or the internal key are refused with 401. See [Read-only access](../security/20-RBAC-Access-Control.md#read-only-access).
 
+## Tenant isolation
+
+Every service refuses a request whose token names a different tenant from its `x-tenant-id` header (`403 TENANT_MISMATCH`). Reads without a token are controlled by `AUTH_REQUIRE_TOKEN_FOR_READS`: the compose default is `report`, which only logs. Sandbox tenants ([ADR-0017](../ADR/ADR-0017-sandbox-tenants.md)) must not be enabled until it is `true`.
+
+To switch reads to enforcing:
+
+1. With `report` on, browse the demo signed in and signed out (landing, login, request access, a few modules), then look for refusals that would have happened:
+   ```bash
+   cd /opt/athma/infrastructure/demo-gcp
+   sudo docker compose logs --since 24h foundation clinical rcm prm ai-gateway 2>&1 | grep 'tokenless read would be refused' | sort | uniq -c | sort -rn | head -30
+   ```
+   Lines from the browser before sign-in or from a service-to-service call need fixing first; probes from the internet (random paths) are expected.
+2. Add `AUTH_REQUIRE_TOKEN_FOR_READS=true` to `.env`, then `sudo docker compose up -d foundation clinical rcm prm ai-gateway`.
+3. Check that a tokenless read is refused and the site still works:
+   ```bash
+   curl -s -o /dev/null -w '%{http_code}\n' https://clinical.athma-ce-demo.daiva.health/api/v1/patients   # 401
+   ```
+
+Rolling back is removing the line and recreating the services.
+
+Clinical migration `014_per_tenant_document_numbers.sql` makes patient MRNs, encounter numbers, admission numbers and consent template codes unique per tenant. Apply it with the other schema changes:
+
+```bash
+sudo docker exec -i athma-demo-postgres-1 psql -v ON_ERROR_STOP=1 -U zeal_user -d zeal_clinical \
+  < backend/shared/database-clinical/migrations/014_per_tenant_document_numbers.sql
+```
+
 The seeded `admin@zeal.local` has a random password on the demo (root-only `/root/athma-demo-admin.txt` on the VM); the published `Admin@123` does not work there. Platform admins sign in with Google (`OAUTH_PLATFORM_ADMINS`).
 
 Create the role and the shared visitor account (`visitor@athma.demo` / `Visitor@123`) once, and again after any seed or plugin that adds permissions:

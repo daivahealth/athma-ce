@@ -83,6 +83,7 @@ export class CatalogWriterService {
       'x-user-id': userId,
       'x-facility-id': facilityId,
       'Content-Type': 'application/json',
+      ...(process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {}),
     };
 
     let inserted = 0;
@@ -153,6 +154,7 @@ export class CatalogWriterService {
         'x-tenant-id': tenantId,
         'x-user-id': userId,
         'x-facility-id': facilityId,
+        ...(process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {}),
       };
 
       const response = await axios.get(url, {

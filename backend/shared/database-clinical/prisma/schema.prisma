@@ -480,7 +480,7 @@ model ChecklistInstanceResponse {
 
 model Patient {
   id                String             @id @default(uuid()) @map("id") @db.Uuid
-  mrn               String             @unique @map("mrn") @db.VarChar(50)
+  mrn               String             @map("mrn") @db.VarChar(50)
   tenantId          String             @map("tenant_id") @db.Uuid
 
   // Identity
@@ -566,6 +566,7 @@ model Patient {
   @@index([tenantId, createdAtFacility], map: "idx_patients_tenant_created_facility")
   @@index([tenantId, registrationSource], map: "idx_patients_tenant_reg_source")
   @@map("patients")
+  @@unique([tenantId, mrn], map: "uq_patients_tenant_mrn")
 }
 
 model Appointment {
@@ -603,7 +604,7 @@ model Appointment {
 
 model Encounter {
   id                   String    @id @default(uuid()) @map("id") @db.Uuid
-  encounterNumber      String    @unique @map("encounter_number") @db.VarChar(50)
+  encounterNumber      String    @map("encounter_number") @db.VarChar(50)
   tenantId             String    @map("tenant_id") @db.Uuid
   patientId            String    @map("patient_id") @db.Uuid
   facilityId           String    @map("facility_id") @db.Uuid
@@ -658,6 +659,7 @@ model Encounter {
   @@index([tenantId, status], map: "idx_encounters_tenant_status")
   @@index([tenantId, patientId, primaryStaffId, startTime], map: "idx_encounters_patient_staff_date")
   @@map("encounters")
+  @@unique([tenantId, encounterNumber], map: "uq_encounters_tenant_number")
 }
 
 // ========================================
@@ -1161,7 +1163,7 @@ model ConsentTemplate {
   tenantId        String   @map("tenant_id") @db.Uuid
 
   // Template Details
-  templateCode    String   @unique @map("template_code") @db.VarChar(100)
+  templateCode    String   @map("template_code") @db.VarChar(100)
   consentType     String   @map("consent_type") @db.VarChar(100)
   consentCategory String   @map("consent_category") @db.VarChar(50)
 
@@ -1191,6 +1193,7 @@ model ConsentTemplate {
   @@index([tenantId, consentCategory], map: "idx_consent_template_category")
   @@index([tenantId, status], map: "idx_consent_template_status")
   @@map("consent_templates")
+  @@unique([tenantId, templateCode], map: "uq_consent_templates_tenant_code")
 }
 // ========================================
 // SCHEDULING MODELS
@@ -2213,7 +2216,7 @@ model InpatientAdmission {
   encounterId             String    @unique @map("encounter_id") @db.Uuid // Links to Encounter with encounterClass = 'IMP'
 
   // Admission Details
-  admissionNumber         String    @unique @map("admission_number") @db.VarChar(50)
+  admissionNumber         String    @map("admission_number") @db.VarChar(50)
   admissionDate           DateTime  @map("admission_date") @db.Timestamptz(6)
   admissionType           String    @map("admission_type") @db.VarChar(50) // elective, emergency, maternity, day_case, transfer
   admissionSource         String    @map("admission_source") @db.VarChar(50) // emergency_room, outpatient_dept, transfer_in, direct, physician_referral
@@ -2304,6 +2307,7 @@ model InpatientAdmission {
   @@index([tenantId, currentWardId, admissionStatus], map: "idx_admissions_ward_status") // Ward board query
   @@index([tenantId, currentWardId, nextVitalsAt], map: "idx_admissions_ward_vitals") // Dashboard vitals overdue
   @@map("inpatient_admissions")
+  @@unique([tenantId, admissionNumber], map: "uq_inpatient_admissions_tenant_number")
 }
 
 /// Bed Assignment - Track bed assignment history and transfers

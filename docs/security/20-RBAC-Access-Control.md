@@ -435,11 +435,23 @@ Every service (foundation, clinical, rcm, prm, ai-gateway) mounts `readOnlyAcces
 
 | Request | Result |
 |---|---|
-| `GET`, `HEAD`, `OPTIONS` | Passes; normal guards apply |
+| Token names a different tenant from the `x-tenant-id` header | `403` with `code: "TENANT_MISMATCH"`, for every method (see [Tenant binding](#tenant-binding)) |
+| `GET`, `HEAD` with no valid token, when `AUTH_REQUIRE_TOKEN_FOR_READS=true` | `401` with `code: "AUTH_REQUIRED"`, unless it carries a valid `x-internal-api-key` or hits `PUBLIC_READ_PATHS` (health checks, `auth/oauth/providers`, `auth/oauth/{provider}/start` and `/callback`, `configs/resolve` and `configs/effective`, API docs). `report` logs `[access] tokenless read would be refused` instead |
+| `GET`, `HEAD`, `OPTIONS` otherwise | Passes; normal guards apply |
 | Unsafe method with a `readOnly` token | `403` with `code: "READ_ONLY_ACCESS"`, unless the path is on `READ_ONLY_ALLOWED_PATHS` (session endpoints such as `auth/refresh`, `auth/logout`, `auth/switch-facility`, and POST endpoints that only check or compute, such as `scheduling/availability/check-slot`) |
 | Unsafe method with no valid token, when `AUTH_REQUIRE_TOKEN_FOR_WRITES=true` | `401` with `code: "AUTH_REQUIRED"`, unless it carries a valid `x-internal-api-key` or hits `PUBLIC_WRITE_PATHS` (`auth/login`, `auth/refresh`, password reset, `auth/mfa/verify`) |
 
 `AUTH_REQUIRE_TOKEN_FOR_WRITES` exists because several controllers (for example `clinical-codings` in clinical and several ai-gateway modules) trust the `x-tenant-id` / `x-user-id` headers without a JWT guard. Without it, a read-only user could drop the token and write with headers alone. With it on, the middleware verifies the token against `JWT_SECRET` and refuses to start if the secret is missing. The demo stack (`infrastructure/demo-gcp/docker-compose.yml`) turns it on by default; other deployments should turn it on too once their service-to-service callers send a token or the internal key.
+
+### Tenant binding
+
+Most controllers in clinical, ai-gateway and foundation read the tenant from the `x-tenant-id` header (only rcm's `TenantContextGuard` and prm's `@TenantId()` take it from the token). The middleware therefore binds the header to the token for every service:
+
+- If the bearer token's `tenantId` differs from `x-tenant-id`, the request is refused with `403 TENANT_MISMATCH`. This holds even when the token cannot be verified (it can only narrow access), and there is no exemption for `super_admin`.
+- If the token verifies, a missing `x-tenant-id` is filled in from the token and `x-user-id` is overwritten with the token's user.
+- A request with a valid `x-internal-api-key` is a service-to-service call and may name any tenant.
+
+Tokenless requests used to be able to read any tenant by naming it in the header. `AUTH_REQUIRE_TOKEN_FOR_READS=true` closes that, so service-to-service reads (clinical to foundation, rcm to clinical, the config client, ai-gateway's catalog writer) send `x-internal-api-key`. Deployments with more than one tenant that untrusted users can sign in to, such as the public demo with sandbox tenants ([ADR-0017](../ADR/ADR-0017-sandbox-tenants.md)), must run with both switches on. Roll out reads with `report` first and check the service logs.
 
 When adding an endpoint that a read-only user should be able to call with POST (a search or a calculation that writes nothing), add its path to `READ_ONLY_ALLOWED_PATHS` and a case to `read-only-access.middleware.spec.ts`.
 

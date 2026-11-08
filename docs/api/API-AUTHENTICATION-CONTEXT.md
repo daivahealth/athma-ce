@@ -179,12 +179,14 @@ Every service refuses some writes before they reach a controller (see [Read-only
 |---|---|---|
 | `403` | `READ_ONLY_ACCESS` | The access token has `readOnly: true` (demo visitor) and the request is not `GET`/`HEAD`/`OPTIONS` or an allowlisted session/check endpoint |
 | `401` | `AUTH_REQUIRED` | `AUTH_REQUIRE_TOKEN_FOR_WRITES` is on (the public demo) and an unsafe request carries no token that verifies and no valid `x-internal-api-key`. Headers alone (`x-user-id` etc.) are not enough to write |
+| `403` | `TENANT_MISMATCH` | Any method: the bearer token's `tenantId` differs from `x-tenant-id`. Send the token's own tenant, or omit the header and the service fills it in |
+| `401` | `AUTH_REQUIRED` | `AUTH_REQUIRE_TOKEN_FOR_READS=true` and a `GET`/`HEAD` carries neither a token that verifies nor a valid `x-internal-api-key`, outside the public read paths (health, external sign-in start/callback/providers, config resolution, API docs) |
 
 ```json
 { "statusCode": 403, "error": "Forbidden", "code": "READ_ONLY_ACCESS", "message": "This account has read-only access to the demo hospital. Create your own sandbox to try changes." }
 ```
 
-Service-to-service writes must send either the caller's bearer token or `x-internal-api-key`.
+Service-to-service calls, reads included, must send either the caller's bearer token or `x-internal-api-key`. With a user token, `x-user-id` is always taken from the token.
 
 ## External Sign-in
 

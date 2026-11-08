@@ -56,6 +56,7 @@ This folder contains all documentation related to the multi-tenancy implementati
 The multi-tenancy system uses a **3-layer defense-in-depth approach**:
 
 ### Layer 1: HTTP Middleware
+- `readOnlyAccessMiddleware` (`@zeal/shared-utils`, every service) refuses a request whose bearer token names a different tenant from `x-tenant-id` (`403 TENANT_MISMATCH`) and fills the header from the token when it is missing. See [Tenant binding](../security/20-RBAC-Access-Control.md#tenant-binding)
 - Extracts `x-tenant-id` from request headers
 - Validates UUID format
 - Stores tenant context in AsyncLocalStorage
