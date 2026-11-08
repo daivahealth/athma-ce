@@ -13,5 +13,9 @@ export {
   AUTH_REQUIRED_ERROR_CODE,
   READ_ONLY_ALLOWED_PATHS,
   PUBLIC_WRITE_PATHS,
+  PUBLIC_READ_PATHS,
+  TENANT_MISMATCH_ERROR_CODE,
+  parseReadTokenMode,
+  type ReadTokenMode,
   type WriteAccessOptions,
 } from './read-only-access.middleware';

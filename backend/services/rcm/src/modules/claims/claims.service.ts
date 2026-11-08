@@ -86,7 +86,10 @@ export class ClaimsService {
         userId?: string,
     ): Promise<PatientDisplayDto | null> {
         try {
-            const headers: Record<string, string> = { 'x-tenant-id': tenantId };
+            const headers: Record<string, string> = {
+                'x-tenant-id': tenantId,
+                ...(process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {}),
+            };
             if (authHeader) {
                 headers['authorization'] = authHeader;
             }

@@ -11,6 +11,8 @@ export class OtFoundationService {
     this.foundationApi = axios.create({
       baseURL: `${foundationUrl}/api/v1`,
       timeout: 5000,
+      // Service-to-service call: the internal key authenticates it (AUTH_REQUIRE_TOKEN_FOR_READS).
+      headers: process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {},
     });
   }
 

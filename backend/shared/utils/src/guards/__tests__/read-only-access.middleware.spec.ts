@@ -5,6 +5,8 @@ import {
   isReadOnlyRoleSet,
   READ_ONLY_ERROR_CODE,
   AUTH_REQUIRED_ERROR_CODE,
+  TENANT_MISMATCH_ERROR_CODE,
+  parseReadTokenMode,
   type WriteAccessOptions,
 } from '../read-only-access.middleware';
 
@@ -38,7 +40,7 @@ function run(
   };
   const next = jest.fn();
   readOnlyAccessMiddleware(options)(req as never, res as never, next);
-  return { res, next };
+  return { res, next, req };
 }
 
 const readOnly = `Bearer ${token({ sub: 'u1', roles: ['demo_visitor'], readOnly: true })}`;
@@ -150,5 +152,99 @@ describe('isReadOnlyRoleSet', () => {
     expect(isReadOnlyRoleSet(['physician', 'demo_visitor'])).toBe(true);
     expect(isReadOnlyRoleSet(['physician'])).toBe(false);
     expect(isReadOnlyRoleSet(undefined)).toBe(false);
+  });
+});
+
+describe('tenant binding', () => {
+  const strict: WriteAccessOptions = { requireTokenForWrites: true, jwtSecret: SECRET, internalApiKey: 'internal-key' };
+  const tenantA = `Bearer ${token({ sub: 'u1', userId: 'u1', tenantId: 'tenant-a', roles: ['tenant_admin'] })}`;
+
+  it('refuses a request whose tenant header differs from the token', () => {
+    for (const method of ['GET', 'POST']) {
+      const { res, next } = run(method, '/api/v1/patients', tenantA, strict, { 'x-tenant-id': 'tenant-b' });
+      expect(next).not.toHaveBeenCalled();
+      expect(res.statusCode).toBe(403);
+      expect(res.body).toMatchObject({ code: TENANT_MISMATCH_ERROR_CODE });
+    }
+  });
+
+  it('refuses a mismatch even when the token cannot be verified', () => {
+    const forged = `Bearer ${jwt.sign({ sub: 'u1', tenantId: 'tenant-a' }, 'other-secret')}`;
+    const { res } = run('GET', '/api/v1/patients', forged, { requireTokenForWrites: false, jwtSecret: SECRET }, {
+      'x-tenant-id': 'tenant-b',
+    });
+    expect(res.statusCode).toBe(403);
+  });
+
+  it('fills a missing tenant header and overwrites the user header from a verified token', () => {
+    const { next, req } = run('POST', '/api/v1/patients', tenantA, strict, { 'x-user-id': 'someone-else' });
+    expect(next).toHaveBeenCalled();
+    expect(req.headers['x-tenant-id']).toBe('tenant-a');
+    expect(req.headers['x-user-id']).toBe('u1');
+  });
+
+  it('lets a matching tenant header through', () => {
+    expect(run('POST', '/api/v1/patients', tenantA, strict, { 'x-tenant-id': 'tenant-a' }).next).toHaveBeenCalled();
+  });
+
+  it('trusts service-to-service calls with the internal key for any tenant', () => {
+    const { next } = run('GET', '/api/v1/patients', tenantA, strict, {
+      'x-tenant-id': 'tenant-b',
+      'x-internal-api-key': 'internal-key',
+    });
+    expect(next).toHaveBeenCalled();
+  });
+});
+
+describe('authenticated reads', () => {
+  const base: WriteAccessOptions = { requireTokenForWrites: true, jwtSecret: SECRET, internalApiKey: 'internal-key' };
+  const enforce: WriteAccessOptions = { ...base, requireTokenForReads: 'enforce' };
+
+  it('parses the setting', () => {
+    expect(parseReadTokenMode('true')).toBe('enforce');
+    expect(parseReadTokenMode('report')).toBe('report');
+    expect(parseReadTokenMode(undefined)).toBe('off');
+    expect(parseReadTokenMode('yes')).toBe('off');
+  });
+
+  it('refuses tokenless reads when enforced', () => {
+    const { res, next } = run('GET', '/api/v1/patients', undefined, enforce, { 'x-tenant-id': 'tenant-a' });
+    expect(next).not.toHaveBeenCalled();
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toMatchObject({ code: AUTH_REQUIRED_ERROR_CODE });
+  });
+
+  it('refuses reads with an invalid token when enforced', () => {
+    const forged = `Bearer ${jwt.sign({ sub: 'u1' }, 'other-secret')}`;
+    expect(run('GET', '/api/v1/patients', forged, enforce).res.statusCode).toBe(401);
+  });
+
+  it('allows tokens, the internal key, public paths and preflight', () => {
+    expect(run('GET', '/api/v1/patients', normal, enforce).next).toHaveBeenCalled();
+    expect(run('GET', '/api/v1/patients', undefined, enforce, { 'x-internal-api-key': 'internal-key' }).next).toHaveBeenCalled();
+    for (const url of [
+      '/api/v1/health',
+      '/health',
+      '/api/v1/health/ready',
+      '/api/v1/auth/oauth/providers',
+      '/api/v1/auth/oauth/google/start',
+      '/api/v1/auth/oauth/github/callback?code=x',
+      '/api/v1/configs/resolve?key=a',
+      '/api/docs',
+    ]) {
+      expect(run('GET', url, undefined, enforce).next).toHaveBeenCalled();
+    }
+    expect(run('OPTIONS', '/api/v1/patients', undefined, enforce).next).toHaveBeenCalled();
+  });
+
+  it('only reports in report mode', () => {
+    const report = jest.fn();
+    const { next } = run('GET', '/api/v1/patients', undefined, { ...base, requireTokenForReads: 'report', report });
+    expect(next).toHaveBeenCalled();
+    expect(report).toHaveBeenCalledWith('[access] tokenless read would be refused: GET /api/v1/patients');
+  });
+
+  it('leaves tokenless reads alone when off', () => {
+    expect(run('GET', '/api/v1/patients', undefined, { ...base, requireTokenForReads: 'off' }).next).toHaveBeenCalled();
   });
 });

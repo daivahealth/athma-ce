@@ -27,6 +27,7 @@ x-backend: &backend
     INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     # Refuse writes that carry neither a valid JWT nor the internal key (public demo). See docs/security/20-RBAC-Access-Control.md
     AUTH_REQUIRE_TOKEN_FOR_WRITES: ${AUTH_REQUIRE_TOKEN_FOR_WRITES:-true}
+    AUTH_REQUIRE_TOKEN_FOR_READS: ${AUTH_REQUIRE_TOKEN_FOR_READS:-report}
     # External sign-in (ADR-0016). A provider is enabled only when its client id and secret are set.
     PUBLIC_DEMO_TENANT_ID: ${PUBLIC_DEMO_TENANT_ID:-11111111-1111-1111-1111-111111111111}
     OAUTH_FRONTEND_URL: https://${SITE_DOMAIN:-${DEMO_DOMAIN}}

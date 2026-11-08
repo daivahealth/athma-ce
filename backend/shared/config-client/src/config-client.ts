@@ -37,6 +37,8 @@ export class ConfigClient {
     this.httpClient = axios.create({
       baseURL: options.foundationBaseUrl,
       timeout: 5000,
+      // Service-to-service call: the internal key authenticates it (AUTH_REQUIRE_TOKEN_FOR_READS).
+      headers: process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {},
     });
 
     this.enableCache = options.enableCache ?? true;

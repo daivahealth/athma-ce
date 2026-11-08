@@ -35,7 +35,7 @@ export class ConsentTemplateService {
   ) {
     // Check if template code already exists
     const existing = await this.prisma.consentTemplate.findUnique({
-      where: { templateCode: dto.templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode: dto.templateCode } },
     });
 
     if (existing) {
@@ -77,7 +77,7 @@ export class ConsentTemplateService {
     language: string = 'en'
   ) {
     const template = await this.prisma.consentTemplate.findUnique({
-      where: { templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode } },
     });
 
     if (!template || template.tenantId !== tenantId) {
@@ -141,7 +141,7 @@ export class ConsentTemplateService {
     updates: Partial<CreateConsentTemplateDto>
   ) {
     const template = await this.prisma.consentTemplate.findUnique({
-      where: { templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode } },
     });
 
     if (!template || template.tenantId !== tenantId) {
@@ -149,7 +149,7 @@ export class ConsentTemplateService {
     }
 
     const updated = await this.prisma.consentTemplate.update({
-      where: { templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode } },
       data: updates,
     });
 
@@ -165,7 +165,7 @@ export class ConsentTemplateService {
     updates: Partial<CreateConsentTemplateDto>
   ) {
     const oldTemplate = await this.prisma.consentTemplate.findUnique({
-      where: { templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode } },
     });
 
     if (!oldTemplate || oldTemplate.tenantId !== tenantId) {
@@ -174,7 +174,7 @@ export class ConsentTemplateService {
 
     // Mark old template as superseded
     await this.prisma.consentTemplate.update({
-      where: { templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode } },
       data: {
         status: 'superseded',
       },
@@ -209,7 +209,7 @@ export class ConsentTemplateService {
    */
   async deactivateTemplate(tenantId: string, templateCode: string) {
     const template = await this.prisma.consentTemplate.findUnique({
-      where: { templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode } },
     });
 
     if (!template || template.tenantId !== tenantId) {
@@ -217,7 +217,7 @@ export class ConsentTemplateService {
     }
 
     return this.prisma.consentTemplate.update({
-      where: { templateCode },
+      where: { tenantId_templateCode: { tenantId, templateCode } },
       data: { status: 'inactive' },
     });
   }
