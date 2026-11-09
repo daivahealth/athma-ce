@@ -551,8 +551,9 @@ export class OncologyService {
          JOIN lab_reports x ON x.id = lri.lab_report_id
          WHERE x.tenant_id = $1::uuid AND x.report_status IN ('FINAL', 'AMENDED')
            AND (lri.abnormal_flag = true OR lri.critical_flag = true OR lri.interpretation IN ('high', 'critical_high', 'abnormal'))
+           -- Catalogue rows are tenant-specific or global (tenant_id NULL, as 02-lab-test-catalog.sql seeds them).
            AND lri.test_code IN (SELECT loinc_code FROM lab_test_master
-                                 WHERE tenant_id = x.tenant_id AND test_category = 'Oncology')
+                                 WHERE (tenant_id = x.tenant_id OR tenant_id IS NULL) AND test_category = 'Oncology')
            AND COALESCE(x.verified_at, x.reported_at, x.updated_at) >= NOW() - ($2::int * INTERVAL '1 day')
            ${patientFilter} ${notDecided('tumor_marker', 'lri.id')}
          ORDER BY result_at DESC LIMIT 500`,
