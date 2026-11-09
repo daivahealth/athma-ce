@@ -1,15 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAllResults } from '@/modules/clinical/hooks/use-reporting';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { ResultStatusBadge } from '@/modules/clinical/components/reporting/ResultStatusBadge';
+import { reportStatusTone } from '@/modules/clinical/utils/lab-result-tone';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { LoadingSpinner } from '@/components/ui/loading';
+import { EmptyState } from '@/components/ui/empty-state';
 import { PageHeader } from '@/components/ui/page-header';
-import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ToneBadge } from '@/components/ui/tone-badge';
+import { cn } from '@/lib/utils';
 import {
   Table,
   TableBody,
@@ -18,181 +22,252 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Search, ScanLine, Eye, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, ChevronLeft, ChevronRight, ScanLine, Search, SearchX } from 'lucide-react';
+import { LabPatientCell } from '@/modules/clinical/components/lab-operations/lab-ui';
 import { NewReportDialog } from '@/modules/clinical/components/reporting/NewReportDialog';
 import type { PatientResult } from '@/modules/clinical/types/reporting';
+
+const STATUS_FILTERS = [
+  { value: 'all', label: 'All' },
+  { value: 'DRAFT', label: 'Draft' },
+  { value: 'PRELIMINARY', label: 'Preliminary' },
+  { value: 'FINAL', label: 'Final' },
+  { value: 'AMENDED', label: 'Amended' },
+  { value: 'CANCELLED', label: 'Cancelled' },
+] as const;
+
+const DOT_CLASS: Record<string, string> = {
+  slate: 'bg-slate-400',
+  amber: 'bg-amber-500',
+  emerald: 'bg-emerald-500',
+  blue: 'bg-blue-500',
+  red: 'bg-red-500',
+};
+
+function formatDay(value: string | null) {
+  if (!value) return null;
+  return new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function formatTime(value: string | null) {
+  if (!value) return null;
+  return new Date(value).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
 
 export default function ImagingResultsListPage() {
   const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search, 300);
   const [page, setPage] = useState(1);
   const limit = 20;
 
   const { data, isLoading, error } = useAllResults({
     type: 'imaging',
     status: statusFilter !== 'all' ? statusFilter : undefined,
+    search: debouncedSearch.trim() || undefined,
     page,
     limit,
   });
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return '-';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
+  const errorMessage =
+    error && typeof error === 'object' && 'response' in error
+      ? ((error as { response?: { data?: { message?: string } } }).response?.data?.message ??
+        'Please try again or contact support.')
+      : 'Please try again or contact support.';
 
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
+  const firstRow = data && data.total > 0 ? (page - 1) * limit + 1 : 0;
+  const lastRow = data ? Math.min(page * limit, data.total) : 0;
+  const isFiltered = statusFilter !== 'all' || debouncedSearch.trim().length > 0;
+  const openResult = (result: PatientResult) => router.push(`/${locale}/results/imaging/${result.orderId}`);
 
   return (
     <div className="space-y-6 page-transition">
       <PageHeader
         title="Imaging Results"
-        subtitle="View and manage radiology and imaging reports"
+        subtitle="Radiology and imaging reports across the facility, newest first"
         icon={ScanLine}
         actions={<NewReportDialog reportType="imaging" />}
       />
 
-      <Card className="p-4">
-        <div className="flex gap-4 items-center">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <Card className="overflow-hidden">
+        <div className="flex flex-col gap-3 border-b border-border/60 p-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="relative w-full lg:max-w-sm">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search imaging results..."
-              className="pl-10"
-              disabled
+              placeholder="Search by patient, MRN or study"
+              className="pl-9"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search imaging results"
             />
           </div>
-          <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setPage(1); }}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="DRAFT">Draft</SelectItem>
-              <SelectItem value="PRELIMINARY">Preliminary</SelectItem>
-              <SelectItem value="FINAL">Final</SelectItem>
-              <SelectItem value="AMENDED">Amended</SelectItem>
-              <SelectItem value="CANCELLED">Cancelled</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </Card>
-
-      {isLoading && (
-        <div className="flex justify-center items-center py-12">
-          <LoadingSpinner size="lg" text="Loading imaging results..." />
-        </div>
-      )}
-
-      {error && (
-        <Card className="p-6 text-center">
-          <p className="text-destructive font-semibold mb-2">Error loading imaging results</p>
-          <p className="text-sm text-muted-foreground">
-            {(error as any)?.response?.data?.message || 'Please try again or contact support.'}
-          </p>
-        </Card>
-      )}
-
-      {!isLoading && !error && data && (
-        <div className="space-y-4">
-          <div className="text-sm text-muted-foreground">
-            Found {data.total} imaging result{data.total !== 1 ? 's' : ''}
+          <div
+            role="radiogroup"
+            aria-label="Filter by report status"
+            className="flex flex-wrap items-center gap-1 rounded-lg bg-muted/60 p-1"
+          >
+            {STATUS_FILTERS.map((filter) => {
+              const active = statusFilter === filter.value;
+              return (
+                <button
+                  key={filter.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => {
+                    setStatusFilter(filter.value);
+                    setPage(1);
+                  }}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    active
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {filter.value !== 'all' ? (
+                    <span
+                      className={cn('size-1.5 rounded-full', DOT_CLASS[reportStatusTone(filter.value)])}
+                      aria-hidden="true"
+                    />
+                  ) : null}
+                  {filter.label}
+                </button>
+              );
+            })}
           </div>
+        </div>
 
-          {data.results.length === 0 ? (
-            <Card className="p-12 text-center">
-              <ScanLine className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-lg font-medium mb-2">No imaging results found</p>
-              <p className="text-muted-foreground">
-                Imaging results will appear here once reports are created from clinical orders.
-              </p>
-            </Card>
+        {isLoading ? (
+          <ResultsSkeleton />
+        ) : error ? (
+          <EmptyState icon={AlertTriangle} title="Couldn't load imaging results" description={errorMessage} />
+        ) : !data || data.results.length === 0 ? (
+          isFiltered ? (
+            <EmptyState
+              icon={SearchX}
+              title="No results match"
+              description="Try a different search or status filter."
+              action={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSearch('');
+                    setStatusFilter('all');
+                  }}
+                >
+                  Clear filters
+                </Button>
+              }
+            />
           ) : (
-            <Card>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order Name</TableHead>
-                    <TableHead>Patient</TableHead>
-                    <TableHead>Modality</TableHead>
-                    <TableHead>Body Part</TableHead>
-                    <TableHead>Critical</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Reported</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+            <EmptyState
+              icon={ScanLine}
+              title="No imaging results yet"
+              description="Imaging reports appear here once they are created from clinical orders."
+            />
+          )
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/30 hover:bg-muted/30">
+                <TableHead className="pl-4">Patient</TableHead>
+                <TableHead>Study</TableHead>
+                <TableHead>Impression</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Reported</TableHead>
+                <TableHead className="w-10" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.results.map((result: PatientResult) => {
+                const summary = result.imagingSummary;
+                return (
+                  <TableRow
+                    key={result.id}
+                    tabIndex={0}
+                    className="group cursor-pointer focus-visible:bg-muted/50 focus-visible:outline-none"
+                    onClick={() => openResult(result)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') openResult(result);
+                    }}
+                  >
+                    <TableCell className="pl-4">
+                      <LabPatientCell
+                        name={result.patientName}
+                        mrn={result.patientDisplay?.mrn}
+                        age={result.patientDisplay?.age}
+                        gender={result.patientDisplay?.gender}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium text-foreground">{result.orderName}</div>
+                      <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+                        {summary?.modality ? <ToneBadge tone="sky">{summary.modality}</ToneBadge> : null}
+                        <span className="capitalize">{summary?.bodyPart || 'Body part not recorded'}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="max-w-xs">
+                      <div className="flex flex-col items-start gap-1">
+                        {summary?.criticalFinding ? (
+                          <ToneBadge tone="red" strong>
+                            <AlertTriangle className="h-3 w-3" aria-hidden="true" />
+                            Critical finding
+                          </ToneBadge>
+                        ) : null}
+                        {summary?.impression ? (
+                          <p className="line-clamp-2 text-xs text-muted-foreground" title={summary.impression}>
+                            {summary.impression}
+                          </p>
+                        ) : !summary?.criticalFinding ? (
+                          <span className="text-xs text-muted-foreground">No impression yet</span>
+                        ) : null}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <ResultStatusBadge status={result.reportStatus} />
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {result.reportedAt ? (
+                        <>
+                          <div className="text-sm text-foreground">{formatDay(result.reportedAt)}</div>
+                          <div className="text-xs text-muted-foreground">{formatTime(result.reportedAt)}</div>
+                        </>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Not reported</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="pr-4 text-right">
+                      <ChevronRight
+                        className="ml-auto h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+                        aria-hidden="true"
+                      />
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.results.map((result: PatientResult) => (
-                    <TableRow
-                      key={result.id}
-                      className="cursor-pointer"
-                      onClick={() => router.push(`/${locale}/results/imaging/${result.orderId}`)}
-                    >
-                      <TableCell className="font-medium">{result.orderName}</TableCell>
-                      <TableCell>{result.patientName}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {result.imagingSummary?.modality || '-'}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {result.imagingSummary?.bodyPart || '-'}
-                      </TableCell>
-                      <TableCell>
-                        {result.imagingSummary?.criticalFinding ? (
-                          <Badge variant="outline" className="bg-red-100 text-red-700 border-red-200">
-                            <AlertTriangle className="h-3 w-3 mr-1" />
-                            Critical
-                          </Badge>
-                        ) : (
-                          <span className="text-muted-foreground text-sm">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <ResultStatusBadge status={result.reportStatus} />
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {formatDate(result.reportedAt)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(`/${locale}/results/imaging/${result.orderId}`);
-                          }}
-                        >
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-          )}
+                );
+              })}
+            </TableBody>
+          </Table>
+        )}
 
-          {totalPages > 1 && (
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </div>
-              <div className="flex gap-2">
+        {data && data.total > 0 && !isLoading && !error ? (
+          <div className="flex flex-col gap-3 border-t border-border/60 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-sm text-muted-foreground">
+              Showing <span className="font-medium text-foreground">{firstRow}–{lastRow}</span> of{' '}
+              <span className="font-medium text-foreground">{data.total}</span> results
+            </div>
+            {totalPages > 1 ? (
+              <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
@@ -202,6 +277,9 @@ export default function ImagingResultsListPage() {
                   <ChevronLeft className="h-4 w-4" />
                   Previous
                 </Button>
+                <span className="text-xs text-muted-foreground">
+                  {page} / {totalPages}
+                </span>
                 <Button
                   variant="outline"
                   size="sm"
@@ -212,10 +290,33 @@ export default function ImagingResultsListPage() {
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
-            </div>
-          )}
+            ) : null}
+          </div>
+        ) : null}
+      </Card>
+    </div>
+  );
+}
+
+function ResultsSkeleton() {
+  return (
+    <div className="divide-y divide-border/60" aria-busy="true" aria-label="Loading imaging results">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 px-4 py-4">
+          <Skeleton className="size-9 rounded-full" />
+          <div className="w-48 space-y-2">
+            <Skeleton className="h-3.5 w-32" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-3.5 w-44" />
+            <Skeleton className="h-3 w-28" />
+          </div>
+          <Skeleton className="h-5 w-24 rounded-full" />
+          <Skeleton className="h-5 w-16 rounded-full" />
+          <Skeleton className="h-3.5 w-20" />
         </div>
-      )}
+      ))}
     </div>
   );
 }
