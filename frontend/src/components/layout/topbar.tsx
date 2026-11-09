@@ -30,7 +30,10 @@ import {
   CircleHelp,
   FileText,
   Lock,
+  Moon,
+  Sun,
 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useHelp } from '@/components/help/help-provider';
 import { ThemeToggle } from './theme-toggle';
 import { SidebarTrigger } from './sidebar';
@@ -61,6 +64,9 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   const toast = useToast();
   const router = useRouter();
   const { openHelp } = useHelp();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+  const toggleTheme = () => setTheme(isDark ? 'light' : 'dark');
   const [session, setSession] = useState(getSession());
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [switching, setSwitching] = useState(false);
@@ -158,7 +164,9 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   };
 
   return (
-    <header className="flex h-14 min-w-0 items-center bg-background/95 backdrop-blur-md px-3 md:px-6 border-b border-border sticky top-0 z-40 transition-all">
+    // Below lg the header wraps into two rows: controls on top, search + New Patient
+    // underneath, so a phone or a tablet with the sidebar open never scrolls sideways.
+    <header className="sticky top-0 z-40 flex min-w-0 flex-wrap items-center gap-y-2 border-b border-border bg-background/95 px-3 py-2 backdrop-blur-md transition-all md:px-6 lg:h-14 lg:flex-nowrap lg:py-0">
       {/* Sidebar toggle (prrapp style): collapses the desktop sidebar, opens the drawer on mobile */}
       <SidebarTrigger onMobileToggle={onSidebarToggle} className="-ml-2" />
       <div className="mx-2 md:mx-3 h-4 w-px shrink-0 bg-sidebar-border" aria-hidden="true" />
@@ -167,210 +175,216 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
       {/* Public demo: switch between the read-only demo hospital and the user's sandbox */}
       <WorkspaceSwitcher locale={locale} className="md:mr-3" />
 
-      {/* min-w-0 lets the search shrink on phones instead of pushing the header past the viewport */}
-      <div className="flex min-w-0 flex-1 items-center justify-between gap-2 md:gap-4">
-        {/* Spacer for left side balance */}
-        <div className="hidden lg:flex flex-1" />
+      {/* Search area: its own full-width row below lg, centred in the remaining space from lg.
+          min-w-0 + max-w let the search shrink instead of pushing the header past the viewport. */}
+      <div className="order-last flex w-full min-w-0 items-center gap-2 lg:order-none lg:w-auto lg:flex-1 lg:justify-center lg:px-4">
+        <div className="min-w-0 flex-1 lg:max-w-[320px] 2xl:max-w-[450px]">
+          <PatientSearch locale={locale} />
+        </div>
+        <Button asChild className="shrink-0 whitespace-nowrap px-2.5 sm:px-4 lg:px-2.5 xl:px-4 bg-gradient-to-b from-primary/90 to-primary shadow-sm border border-primary/20 hover:shadow-md transition-all">
+          <Link href={`/${locale}/patients/new`} aria-label="New Patient" title="New Patient">
+            <Plus className="h-4 w-4 sm:mr-2 lg:mr-0 xl:mr-2" />
+            {/* Icon-only on phones and on the single-row lg layout, where the search needs the width */}
+            <span className="hidden sm:inline lg:hidden xl:inline">New Patient</span>
+          </Link>
+        </Button>
+      </div>
 
-        {/* Center Search Area */}
-        <div className="flex min-w-0 flex-1 lg:flex-none w-full lg:w-auto items-center justify-center gap-2">
-          <div className="min-w-0 w-full lg:w-[320px] 2xl:w-[450px]">
-            <PatientSearch locale={locale} />
-          </div>
-          <Button asChild className="shrink-0 whitespace-nowrap px-2.5 sm:px-4 bg-gradient-to-b from-primary/90 to-primary shadow-sm border border-primary/20 hover:shadow-md transition-all">
-            <Link href={`/${locale}/patients/new`} aria-label="New Patient">
-              <Plus className="h-4 w-4 sm:mr-2" />
-              {/* Icon-only below sm so the search keeps usable width on phones */}
-              <span className="hidden sm:inline">New Patient</span>
-            </Link>
+      <div className="ml-auto flex shrink-0 items-center justify-end gap-1 sm:gap-2 lg:ml-0">
+        {/* Theme toggle and page help sit inline from xl; below that they are
+            items in the user menu so the right-hand icons fit */}
+        <div className="hidden xl:flex items-center gap-2">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
+          {/* Help for the screen on hand, in a side panel; the sidebar's Help Centre has the whole manual */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={openHelp}
+            title="Help for this page (?)"
+            aria-label="Help for this page"
+            aria-keyshortcuts="?"
+          >
+            <CircleHelp className="h-5 w-5" />
           </Button>
         </div>
 
-        <div className="flex shrink-0 lg:flex-1 items-center justify-end gap-1 sm:gap-2">
-          {/* Theme toggle and page help are hidden below sm to fit a 375px phone;
-              the sidebar's Help Centre stays reachable from the mobile drawer */}
-          <div className="hidden sm:flex items-center gap-2">
-            {/* Theme Toggle */}
-            <ThemeToggle />
+        {/* Notifications */}
+        <NotificationCenter />
 
-            {/* Help for the screen on hand, in a side panel; the sidebar's Help Centre has the whole manual */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={openHelp}
-              title="Help for this page (?)"
-              aria-label="Help for this page"
-              aria-keyshortcuts="?"
-            >
-              <CircleHelp className="h-5 w-5" />
+        <Separator orientation="vertical" className="hidden sm:block h-6" />
+
+        {/* Settings Menu */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="Administration" title="Administration">
+              <Settings className="h-5 w-5" />
             </Button>
-          </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>{t('nav.administration')}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/tenants`} className="flex items-center gap-2 cursor-pointer">
+                <Building2 className="h-4 w-4" />
+                {t('nav.tenants')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/facilities`} className="flex items-center gap-2 cursor-pointer">
+                <Hospital className="h-4 w-4" />
+                {t('nav.facilities')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/users`} className="flex items-center gap-2 cursor-pointer">
+                <Users className="h-4 w-4" />
+                {t('nav.users')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/staff`} className="flex items-center gap-2 cursor-pointer">
+                <Stethoscope className="h-4 w-4" />
+                {t('nav.staff')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/spaces`} className="flex items-center gap-2 cursor-pointer">
+                <SquareStack className="h-4 w-4" />
+                {t('nav.spaces')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/rbac/roles`} className="flex items-center gap-2 cursor-pointer">
+                <ShieldCheck className="h-4 w-4" />
+                {t('nav.rbac')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/plugin-management`} className="flex items-center gap-2 cursor-pointer">
+                <Puzzle className="h-4 w-4" />
+                {t('nav.pluginManagement')}
+              </Link>
+            </DropdownMenuItem>
+            {claims?.permissions?.includes(PLATFORM_ACCESS_REQUEST_READ) && (
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/access-requests`} className="flex items-center gap-2 cursor-pointer">
+                  <Inbox className="h-4 w-4" />
+                  Access requests
+                </Link>
+              </DropdownMenuItem>
+            )}
+            {claims?.permissions?.includes(PLATFORM_SANDBOX_READ) && (
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/sandboxes`} className="flex items-center gap-2 cursor-pointer">
+                  <Boxes className="h-4 w-4" />
+                  Sandboxes
+                </Link>
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-          {/* Notifications */}
-          <NotificationCenter />
+        {/* User Menu */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="Account menu" title="Account">
+              <User className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">
+                  {claims?.email ?? 'Not authenticated'}
+                </p>
+                <p className="text-xs leading-none text-muted-foreground">
+                  {claims?.roles?.length ? `Role: ${claims.roles[0]}` : 'No roles assigned'}
+                </p>
+              </div>
+            </DropdownMenuLabel>
 
-          <Separator orientation="vertical" className="hidden sm:block h-6" />
+            {/* Facility Switching Section */}
+            {facilities.length > 1 && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                  <Building2 className="h-3 w-3" />
+                  Switch Facility
+                </DropdownMenuLabel>
+                {facilities.map((facility) => {
+                  const isCurrent = facility.id === claims?.facilityId;
+                  const isDefault = facility.id === claims?.defaultFacilityId;
 
-          {/* Settings Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Settings className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>{t('nav.administration')}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/tenants`} className="flex items-center gap-2 cursor-pointer">
-                  <Building2 className="h-4 w-4" />
-                  {t('nav.tenants')}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/facilities`} className="flex items-center gap-2 cursor-pointer">
-                  <Hospital className="h-4 w-4" />
-                  {t('nav.facilities')}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/users`} className="flex items-center gap-2 cursor-pointer">
-                  <Users className="h-4 w-4" />
-                  {t('nav.users')}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/staff`} className="flex items-center gap-2 cursor-pointer">
-                  <Stethoscope className="h-4 w-4" />
-                  {t('nav.staff')}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/spaces`} className="flex items-center gap-2 cursor-pointer">
-                  <SquareStack className="h-4 w-4" />
-                  {t('nav.spaces')}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/rbac/roles`} className="flex items-center gap-2 cursor-pointer">
-                  <ShieldCheck className="h-4 w-4" />
-                  {t('nav.rbac')}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/plugin-management`} className="flex items-center gap-2 cursor-pointer">
-                  <Puzzle className="h-4 w-4" />
-                  {t('nav.pluginManagement')}
-                </Link>
-              </DropdownMenuItem>
-              {claims?.permissions?.includes(PLATFORM_ACCESS_REQUEST_READ) && (
-                <DropdownMenuItem asChild>
-                  <Link href={`/${locale}/access-requests`} className="flex items-center gap-2 cursor-pointer">
-                    <Inbox className="h-4 w-4" />
-                    Access requests
-                  </Link>
-                </DropdownMenuItem>
-              )}
-              {claims?.permissions?.includes(PLATFORM_SANDBOX_READ) && (
-                <DropdownMenuItem asChild>
-                  <Link href={`/${locale}/sandboxes`} className="flex items-center gap-2 cursor-pointer">
-                    <Boxes className="h-4 w-4" />
-                    Sandboxes
-                  </Link>
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {claims?.email ?? 'Not authenticated'}
-                  </p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {claims?.roles?.length ? `Role: ${claims.roles[0]}` : 'No roles assigned'}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-
-              {/* Facility Switching Section */}
-              {facilities.length > 1 && (
-                <>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                    <Building2 className="h-3 w-3" />
-                    Switch Facility
-                  </DropdownMenuLabel>
-                  {facilities.map((facility) => {
-                    const isCurrent = facility.id === claims?.facilityId;
-                    const isDefault = facility.id === claims?.defaultFacilityId;
-
-                    return (
-                      <DropdownMenuItem
-                        key={facility.id}
-                        onClick={() => handleSwitchFacility(facility.id)}
-                        className={cn(
-                          "cursor-pointer",
-                          isCurrent && "bg-accent"
-                        )}
-                        disabled={isCurrent || switching}
-                      >
-                        <div className="flex w-full items-center justify-between">
-                          <div className="flex flex-col gap-0.5">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm">{facility.name}</span>
-                              {isDefault && (
-                                <span className="text-xs text-muted-foreground">(Home)</span>
-                              )}
-                            </div>
-                            <span className="text-xs text-muted-foreground capitalize">
-                              {facility.facilityType}
-                            </span>
+                  return (
+                    <DropdownMenuItem
+                      key={facility.id}
+                      onClick={() => handleSwitchFacility(facility.id)}
+                      className={cn(
+                        "cursor-pointer",
+                        isCurrent && "bg-accent"
+                      )}
+                      disabled={isCurrent || switching}
+                    >
+                      <div className="flex w-full items-center justify-between">
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm">{facility.name}</span>
+                            {isDefault && (
+                              <span className="text-xs text-muted-foreground">(Home)</span>
+                            )}
                           </div>
-                          {isCurrent && <Check className="h-4 w-4" />}
+                          <span className="text-xs text-muted-foreground capitalize">
+                            {facility.facilityType}
+                          </span>
                         </div>
-                      </DropdownMenuItem>
-                    );
-                  })}
-                </>
-              )}
+                        {isCurrent && <Check className="h-4 w-4" />}
+                      </div>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </>
+            )}
 
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/profile`} className="flex items-center gap-2 cursor-pointer">
-                  <User className="h-4 w-4" />
-                  {t('nav.profile')}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/terms`} className="flex items-center gap-2 cursor-pointer">
-                  <FileText className="h-4 w-4" />
-                  Terms &amp; Conditions
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${locale}/privacy`} className="flex items-center gap-2 cursor-pointer">
-                  <Lock className="h-4 w-4" />
-                  Privacy Policy
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 text-destructive cursor-pointer">
-                <LogOut className="h-4 w-4" />
-                {t('actions.logout')}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+            {/* Below xl the topbar has no room for these two icons; they live here instead */}
+            <DropdownMenuSeparator className="xl:hidden" />
+            <DropdownMenuItem onClick={openHelp} className="flex items-center gap-2 cursor-pointer xl:hidden">
+              <CircleHelp className="h-4 w-4" />
+              Help for this page
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={toggleTheme} className="flex items-center gap-2 cursor-pointer xl:hidden">
+              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {isDark ? 'Light mode' : 'Dark mode'}
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/profile`} className="flex items-center gap-2 cursor-pointer">
+                <User className="h-4 w-4" />
+                {t('nav.profile')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/terms`} className="flex items-center gap-2 cursor-pointer">
+                <FileText className="h-4 w-4" />
+                Terms &amp; Conditions
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/privacy`} className="flex items-center gap-2 cursor-pointer">
+                <Lock className="h-4 w-4" />
+                Privacy Policy
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 text-destructive cursor-pointer">
+              <LogOut className="h-4 w-4" />
+              {t('actions.logout')}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
