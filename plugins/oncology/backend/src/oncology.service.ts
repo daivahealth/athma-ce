@@ -16,6 +16,17 @@ import {
   resolveInitialStatus,
 } from './chemo-order-rules';
 import { OncologySettingsService } from './oncology-settings';
+import {
+  CandidateEvidence,
+  CandidateSourceType,
+  classifyImaging,
+  classifyPathology,
+  groupByPatient,
+  isCancerIcdCode,
+  isCandidateSourceType,
+} from './registry-candidates';
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Matches PatientDisplayDto from @zeal/contracts — defined locally because the plugin
 // directory is outside backend/node_modules and cannot resolve @zeal/contracts at runtime.
@@ -263,6 +274,8 @@ export class OncologyService {
 
   async createCancerDiagnosis(data: Record<string, unknown>) {
     const tenantId = this.getTenantId();
+    // Results from the candidate queue that led to this registration (optional).
+    const candidateSources = this.parseCandidateSources(data.candidateSources);
     const results = await this.prisma.$queryRawUnsafe<any[]>(
       `INSERT INTO plugin_oncology.cancer_diagnoses (
         id, tenant_id, patient_id, encounter_id, encounter_diagnosis_id,
@@ -305,6 +318,9 @@ export class OncologyService {
       data.notes ?? null,
     );
     const r = results[0];
+    if (candidateSources.length > 0) {
+      await this.recordCandidateDecisions(tenantId, r.patient_id, candidateSources, 'added', null, r.id);
+    }
     await this.logTimelineEvent({
       patientId: r.patient_id,
       cancerDiagnosisId: r.id,
@@ -465,6 +481,195 @@ export class OncologyService {
       data,
       pagination: { page, limit, total: Number(total[0]?.count ?? 0) },
     };
+  }
+
+  // ============================================
+  // Registry Candidate Queue
+  // ============================================
+
+  /**
+   * Patients not yet in the registry whose recent finalised results point to
+   * cancer: malignant pathology, suspicious imaging, a coded C00–C97/D00–D09
+   * diagnosis, or an abnormal oncology tumour marker. Computed on read from
+   * clinical results (tenant-scoped); results a clinician has already acted on
+   * (registry_candidate_decisions) are left out. See registry-candidates.ts.
+   */
+  async listRegistryCandidates(
+    filters: { days?: number | undefined; search?: string | undefined; strength?: string | undefined; patientId?: string | undefined } = {},
+  ) {
+    const tenantId = this.getTenantId();
+    const days = Math.min(Math.max(filters.days ?? 180, 1), 730);
+    const patientFilter = filters.patientId ? ` AND x.patient_id = $3::uuid` : '';
+    const params: unknown[] = [tenantId, days, ...(filters.patientId ? [filters.patientId] : [])];
+
+    // Shared exclusions: patient already registered, or this result already decided.
+    const notDecided = (type: string, idCol: string) => `
+      AND NOT EXISTS (SELECT 1 FROM plugin_oncology.cancer_diagnoses cd
+                      WHERE cd.tenant_id = x.tenant_id AND cd.patient_id = x.patient_id)
+      AND NOT EXISTS (SELECT 1 FROM plugin_oncology.registry_candidate_decisions d
+                      WHERE d.tenant_id = x.tenant_id AND d.source_type = '${type}' AND d.source_id = ${idCol})`;
+
+    const [pathology, imaging, diagnoses, markers] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT x.id, x.patient_id, x.diagnosis, x.comment, x.specimen_type, co.order_name,
+                COALESCE(x.verified_at, x.reported_at, x.updated_at) AS result_at
+         FROM pathology_reports x
+         LEFT JOIN clinical_orders co ON co.id = x.order_id
+         WHERE x.tenant_id = $1::uuid AND x.report_status IN ('FINAL', 'AMENDED')
+           AND COALESCE(x.verified_at, x.reported_at, x.updated_at) >= NOW() - ($2::int * INTERVAL '1 day')
+           ${patientFilter} ${notDecided('pathology', 'x.id')}
+         ORDER BY result_at DESC LIMIT 500`,
+        ...params,
+      ),
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT x.id, x.patient_id, x.impression, x.findings, x.modality, x.body_part, co.order_name,
+                COALESCE(x.reviewed_at, x.reported_at, x.updated_at) AS result_at
+         FROM imaging_reports x
+         LEFT JOIN clinical_orders co ON co.id = x.order_id
+         WHERE x.tenant_id = $1::uuid AND x.report_status IN ('FINAL', 'AMENDED')
+           AND COALESCE(x.reviewed_at, x.reported_at, x.updated_at) >= NOW() - ($2::int * INTERVAL '1 day')
+           ${patientFilter} ${notDecided('imaging', 'x.id')}
+         ORDER BY result_at DESC LIMIT 500`,
+        ...params,
+      ),
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT x.id, x.patient_id, x.icd_code, x.diagnosis_name, x.diagnosis_type, x.diagnosed_at AS result_at
+         FROM encounter_diagnoses x
+         WHERE x.tenant_id = $1::uuid
+           AND x.diagnosis_type IN ('primary', 'secondary')
+           AND (x.icd_code ~* '^C[0-9]{2}' OR x.icd_code ~* '^D0[0-9]')
+           AND x.diagnosed_at >= NOW() - ($2::int * INTERVAL '1 day')
+           ${patientFilter} ${notDecided('diagnosis', 'x.id')}
+         ORDER BY result_at DESC LIMIT 500`,
+        ...params,
+      ),
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT lri.id, x.patient_id, lri.test_name, lri.value_numeric, lri.value_string, lri.unit,
+                lri.ref_range_high, lri.ref_range_text, lri.interpretation,
+                COALESCE(x.verified_at, x.reported_at, x.updated_at) AS result_at
+         FROM lab_result_items lri
+         JOIN lab_reports x ON x.id = lri.lab_report_id
+         WHERE x.tenant_id = $1::uuid AND x.report_status IN ('FINAL', 'AMENDED')
+           AND (lri.abnormal_flag = true OR lri.critical_flag = true OR lri.interpretation IN ('high', 'critical_high', 'abnormal'))
+           AND lri.test_code IN (SELECT loinc_code FROM lab_test_master
+                                 WHERE tenant_id = x.tenant_id AND test_category = 'Oncology')
+           AND COALESCE(x.verified_at, x.reported_at, x.updated_at) >= NOW() - ($2::int * INTERVAL '1 day')
+           ${patientFilter} ${notDecided('tumor_marker', 'lri.id')}
+         ORDER BY result_at DESC LIMIT 500`,
+        ...params,
+      ),
+    ]);
+
+    const iso = (d: unknown) => (d ? new Date(d as string).toISOString() : null);
+    const evidence: Array<CandidateEvidence & { patientId: string }> = [];
+
+    for (const r of pathology) {
+      const m = classifyPathology(r);
+      if (!m) continue;
+      evidence.push({
+        patientId: r.patient_id, sourceType: 'pathology', sourceId: r.id, strength: 'high',
+        title: r.order_name || (r.specimen_type ? `Pathology — ${r.specimen_type}` : 'Pathology report'),
+        excerpt: m.excerpt, matchedTerms: m.matchedTerms, resultAt: iso(r.result_at),
+      });
+    }
+    for (const r of imaging) {
+      const m = classifyImaging(r);
+      if (!m) continue;
+      evidence.push({
+        patientId: r.patient_id, sourceType: 'imaging', sourceId: r.id, strength: 'medium',
+        title: r.order_name || [r.modality, r.body_part].filter(Boolean).join(' ') || 'Imaging report',
+        excerpt: m.excerpt, matchedTerms: m.matchedTerms, resultAt: iso(r.result_at),
+      });
+    }
+    for (const r of diagnoses) {
+      if (!isCancerIcdCode(r.icd_code)) continue;
+      evidence.push({
+        patientId: r.patient_id, sourceType: 'diagnosis', sourceId: r.id, strength: 'high',
+        title: 'Coded diagnosis', excerpt: `${r.icd_code} — ${r.diagnosis_name}`,
+        matchedTerms: [r.icd_code], resultAt: iso(r.result_at), icdCode: r.icd_code,
+      });
+    }
+    for (const r of markers) {
+      const value = r.value_numeric != null ? String(Number(r.value_numeric)) : (r.value_string ?? '');
+      const ref = r.ref_range_high != null ? ` (ref ≤ ${Number(r.ref_range_high)})` : r.ref_range_text ? ` (ref ${r.ref_range_text})` : '';
+      evidence.push({
+        patientId: r.patient_id, sourceType: 'tumor_marker', sourceId: r.id, strength: 'low',
+        title: r.test_name, excerpt: `${value}${r.unit ? ` ${r.unit}` : ''}${ref} — above normal`,
+        matchedTerms: [r.test_name], resultAt: iso(r.result_at),
+      });
+    }
+
+    let groups = groupByPatient(evidence);
+    if (filters.strength) groups = groups.filter((g) => g.strength === filters.strength);
+    if (groups.length === 0) return { data: [], total: 0 };
+
+    const patients = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT p.id as patient_id, p.mrn as patient_mrn, p.first_name as patient_first_name,
+              p.last_name as patient_last_name, p.display_name as patient_display_name,
+              p.gender as patient_gender, p.date_of_birth as patient_date_of_birth
+       FROM public.patients p
+       WHERE p.tenant_id = $1::uuid AND p.id = ANY($2::uuid[])`,
+      tenantId, groups.map((g) => g.patientId),
+    );
+    const byId = new Map(patients.map((p) => [p.patient_id, this.buildPatientDisplay(p)]));
+
+    let data = groups.map((g) => ({ ...g, patientDisplay: byId.get(g.patientId) ?? null }));
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      data = data.filter((d) => {
+        const p = d.patientDisplay;
+        return !!p && [p.displayName, p.mrn, `${p.firstName} ${p.lastName}`].some((s) => s?.toLowerCase().includes(q));
+      });
+    }
+    return { data, total: data.length };
+  }
+
+  /** Records a clinician's decision on candidate evidence so it leaves the queue. */
+  private async recordCandidateDecisions(
+    tenantId: string,
+    patientId: string,
+    sources: Array<{ sourceType: CandidateSourceType; sourceId: string }>,
+    decision: 'added' | 'dismissed',
+    reason: string | null,
+    cancerDiagnosisId: string | null,
+  ) {
+    const userId = this.getCurrentUserId();
+    for (const s of sources) {
+      await this.prisma.$executeRawUnsafe(
+        `INSERT INTO plugin_oncology.registry_candidate_decisions
+           (id, tenant_id, patient_id, source_type, source_id, decision, reason, cancer_diagnosis_id, decided_by, decided_at)
+         VALUES (gen_random_uuid(), $1::uuid, $2::uuid, $3, $4::uuid, $5, $6, $7::uuid, $8::uuid, NOW())
+         ON CONFLICT (tenant_id, source_type, source_id) DO UPDATE SET
+           decision = EXCLUDED.decision, reason = EXCLUDED.reason,
+           cancer_diagnosis_id = EXCLUDED.cancer_diagnosis_id,
+           decided_by = EXCLUDED.decided_by, decided_at = NOW()`,
+        tenantId, patientId, s.sourceType, s.sourceId, decision, reason, cancerDiagnosisId, userId,
+      );
+    }
+  }
+
+  private parseCandidateSources(raw: unknown): Array<{ sourceType: CandidateSourceType; sourceId: string }> {
+    if (raw == null) return [];
+    if (!Array.isArray(raw)) throw new BadRequestException('candidateSources must be an array');
+    return raw.map((s) => {
+      const { sourceType, sourceId } = (s ?? {}) as Record<string, unknown>;
+      if (!isCandidateSourceType(sourceType) || typeof sourceId !== 'string' || !UUID_RE.test(sourceId)) {
+        throw new BadRequestException('Each candidate source needs a valid sourceType and sourceId');
+      }
+      return { sourceType, sourceId };
+    });
+  }
+
+  /** Dismisses a candidate: the listed results are marked reviewed and leave the queue. */
+  async dismissRegistryCandidate(patientId: string, body: Record<string, unknown>) {
+    const tenantId = this.getTenantId();
+    if (!UUID_RE.test(patientId)) throw new BadRequestException('Invalid patientId');
+    const sources = this.parseCandidateSources(body.sources);
+    if (sources.length === 0) throw new BadRequestException('sources is required');
+    const reason = typeof body.reason === 'string' && body.reason.trim() ? body.reason.trim() : null;
+    if (!reason) throw new BadRequestException('A reason is required to dismiss a candidate');
+    await this.recordCandidateDecisions(tenantId, patientId, sources, 'dismissed', reason, null);
+    return { patientId, dismissed: sources.length };
   }
 
   // ============================================

@@ -23,6 +23,30 @@ CancerDiagnosis  →  TumorStaging  →  TumorBoardCase  →  OncologyCarePlan
 
 All staging, tumor board, and care plan records link back to a `CancerDiagnosis` as the anchor record. A patient may have multiple diagnoses (e.g., a second primary or a recurrence tracked separately).
 
+### Registry candidate queue — how patients enter the registry
+
+Patients normally enter the registry from the **candidate queue** (Registry → **Candidates** tab), not from a blank form. The queue is built by the system from finalised clinical results; a clinician reviews each candidate and either adds the patient or dismisses the finding.
+
+```
+Finalised result (last 180 days, tenant-scoped)        Evidence strength
+  pathology_reports  diagnosis/comment = malignancy  →  high   ("Confirmed")
+  encounter_diagnoses ICD-10 C00–C97 / D00–D09        →  high   ("Confirmed")
+  imaging_reports    impression/findings suspicious  →  medium ("Suspected")
+                     (BI-RADS 4–6, LI-RADS 5/M, PI-RADS 4–5, Lung-RADS 4, O-RADS 4–5, TI-RADS 5, "suspicious for malignancy")
+  lab_result_items   abnormal Oncology-category marker →  low  ("Indicative")
+        ↓ grouped per patient (strength = strongest evidence)
+  excluded: patient already has a cancer_diagnoses row; result already in registry_candidate_decisions
+        ↓
+  Candidates tab → Add to Registry (pre-filled form, results linked)  |  Dismiss (reason required)
+```
+
+- **Computed on read.** `GET /registry/candidates` runs the queries each time; there is no background job. Rules live in `backend/src/registry-candidates.ts` (pure, unit-tested). Text matching is clause by clause: a clause with a negation before the term ("negative for malignancy", "no evidence of metastatic disease") does not count.
+- **Pre-filled registration.** *Add to Registry* opens `/oncology/registry/new?patientId=…`: the patient is preselected, the source results are shown, the diagnosis date is the earliest confirming result (else the earliest result), a coded C/D0 diagnosis fills the ICD-10 code, and verification status defaults to *Provisional* when there is no confirming result. Saving sends `candidateSources`, which are recorded as `added` with the new diagnosis id.
+- **Dismissal is per result.** Dismissing records each shown result as `dismissed` with the reason. A *new* qualifying result for the same patient brings them back.
+- **Already-registered patients never appear.** A second primary or recurrence for a registered patient is added from that patient's registry entry.
+- **Manual entry** stays available as **Add Manually** (e.g. a patient referred with an outside biopsy that is not in the system).
+- This is a worklist aid, not a diagnosis: the queue never registers anyone by itself.
+
 ---
 
 ## Navigation
@@ -30,7 +54,7 @@ All staging, tumor board, and care plan records link back to a `CancerDiagnosis`
 | Nav Item          | Route                         | Description                                       |
 |-------------------|-------------------------------|---------------------------------------------------|
 | Oncology Dashboard | `/oncology/dashboard`        | Population health tab (default): incidence, age/gender, stage at diagnosis, time to treatment, outcomes, geography, screenable cancers (`GET /dashboard/population`). Operations tab (`?view=operations`): the day's chemo/day-care/RT work, approvals waiting, caseload and pathway gaps (`GET /dashboard`) |
-| Oncology Registry | `/oncology/registry`          | All cancer patients with diagnosis summary        |
+| Oncology Registry | `/oncology/registry`          | **Registered** tab: all cancer patients with diagnosis summary. **Candidates** tab: system-generated queue of unregistered patients whose results suggest cancer (see [candidate queue](#registry-candidate-queue--how-patients-enter-the-registry)) |
 | Tumor Staging     | `/oncology/staging`           | Staging records across patients                   |
 | Tumor Board       | `/oncology/tumor-board`       | MDT case reviews and decisions                    |
 | Care Plans        | `/oncology/care-plans`        | Treatment plans linked to diagnoses               |
@@ -95,6 +119,22 @@ Every oncology patient starts here. Maps to FHIR mCODE `PrimaryCancerCondition`.
 | `notes` | TEXT? | |
 
 **Relations:** → `tumor_stagings[]`, `tumor_board_cases[]`, `oncology_care_plans[]`, `chemo_orders[]`
+
+### `registry_candidate_decisions`
+
+What a clinician did with one piece of candidate-queue evidence, so it leaves the queue. The queue itself is not stored.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `patient_id` | UUID | |
+| `source_type` | VARCHAR(30) | `pathology` \| `imaging` \| `diagnosis` \| `tumor_marker` |
+| `source_id` | UUID | `pathology_reports.id` \| `imaging_reports.id` \| `encounter_diagnoses.id` \| `lab_result_items.id` |
+| `decision` | VARCHAR(20) | `added` \| `dismissed` |
+| `reason` | TEXT? | Required for `dismissed` |
+| `cancer_diagnosis_id` | UUID? | Set for `added` |
+| `decided_by`, `decided_at` | | Audit |
+
+Unique on `(tenant_id, source_type, source_id)`; a later decision on the same result overwrites the earlier one. Created by `npm run db:push` in `plugins/oncology` (no migration file).
 
 ### `tumor_stagings`
 
@@ -401,7 +441,8 @@ frontend/src/plugins/oncology/
 ├── services/oncology-service.ts      # Axios API calls (BASE_URL = '/plugins/oncology')
 ├── hooks/use-oncology.ts             # React Query hooks
 └── components/
-    ├── AddDiagnosisSheet.tsx         # Slide-over form: Add to Registry
+    ├── AddDiagnosisSheet.tsx         # Slide-over diagnosis form (legacy; the registry uses registry/new)
+    ├── RegistryCandidateQueue.tsx    # Candidate queue, evidence list, dismiss dialog
     ├── TreatmentIntentBadge.tsx      # Colored badge component
     ├── protocol-builder/             # Phase builder, regimen matrix, schedule preview
     ├── treatment-schedule/DaySheet.tsx # Timed day sheet (checks, sequence, supportive care)
@@ -413,7 +454,8 @@ frontend/src/plugins/oncology/
 frontend/src/app/[locale]/(dashboard)/oncology/
 ├── dashboard/page.tsx                # Oncology Dashboard: Operations and Population health tabs
 ├── registry/
-│   ├── page.tsx                      # Registry list with AddDiagnosisSheet
+│   ├── page.tsx                      # Registered / Candidates tabs (?tab=candidates opens the queue)
+│   ├── new/page.tsx                  # Registration form; ?patientId= pre-fills from the candidate queue
 │   └── [patientId]/page.tsx          # Patient cancer cockpit (see below)
 ├── staging/
 │   ├── page.tsx                      # Tumor staging list
@@ -457,6 +499,7 @@ plugins/oncology/
         ├── oncology.controller.ts    # REST endpoints via @PluginController('oncology')
         ├── oncology.service.ts       # Raw SQL via $queryRawUnsafe() (no cross-schema Prisma joins)
         ├── protocol-phases.ts        # Phase regimen parse/derive/resolve
+        ├── registry-candidates.ts    # Candidate-queue rules: malignancy/RADS text matching, ICD ranges, grouping
         ├── treatment-schedule.ts     # Pure schedule generation + dosing (BSA, weight, AUC)
         ├── treatment-schedule.service.ts    # Treatment plans, cycles, days, worklist
         └── treatment-schedule.controller.ts # /treatment-plans, /treatment-days

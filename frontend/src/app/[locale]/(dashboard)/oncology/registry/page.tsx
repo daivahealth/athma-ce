@@ -1,14 +1,16 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { Pencil, Plus, Search, UserRound } from 'lucide-react';
-import { useOncologyRegistry } from '@/plugins/oncology/hooks/use-oncology';
+import { FileSearch, Pencil, Plus, Search, UserRound } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useOncologyRegistry, useRegistryCandidates } from '@/plugins/oncology/hooks/use-oncology';
+import { RegistryCandidateQueue } from '@/plugins/oncology/components/RegistryCandidateQueue';
 import { LoadingState, StatusBadge, PatientCell } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
 import type { CancerDiagnosis } from '@/plugins/oncology/types';
@@ -19,6 +21,20 @@ export default function OncologyRegistryPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [clinicalStatusFilter, setClinicalStatusFilter] = useState('');
+  const [tab, setTab] = useState(useSearchParams().get('tab') === 'candidates' ? 'candidates' : 'registered');
+  const [strengthFilter, setStrengthFilter] = useState('');
+
+  // Candidate queue: unregistered patients whose recent results suggest cancer.
+  const { data: candidateData, isLoading: candidatesLoading } = useRegistryCandidates({
+    search: searchQuery || undefined,
+    strength: strengthFilter || undefined,
+  });
+  const candidates = candidateData?.data ?? [];
+  // Badge count is unfiltered so it does not change while the user types a search.
+  const { data: allCandidates } = useRegistryCandidates();
+  const candidateCount = allCandidates?.total ?? 0;
+  const goNew = (patientId?: string) =>
+    router.push(`/${params.locale}/oncology/registry/new${patientId ? `?patientId=${patientId}` : ''}`);
 
   const { data, isLoading } = useOncologyRegistry({
     search: searchQuery || undefined,
@@ -34,14 +50,39 @@ export default function OncologyRegistryPage() {
         subtitle="All registered cancer patients with diagnosis and staging summary"
         icon={UserRound}
         actions={
-          <Button onClick={() => router.push(`/${params.locale}/oncology/registry/new`)}>
+          <Button variant="outline" onClick={() => goNew()}>
             <Plus className="h-4 w-4 mr-2" />
-            Add to Registry
+            Add Manually
           </Button>
         }
       />
 
-      <div className="flex gap-3 flex-wrap">
+      {candidateCount > 0 && tab === 'registered' && (
+        <button
+          type="button"
+          onClick={() => setTab('candidates')}
+          className="flex w-full items-center gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm text-amber-900 hover:bg-amber-100 dark:border-amber-800/70 dark:bg-amber-950/40 dark:text-amber-200"
+        >
+          <FileSearch className="h-4 w-4 shrink-0" />
+          <span>
+            <strong>{candidateCount} patient{candidateCount !== 1 ? 's' : ''}</strong> ha{candidateCount !== 1 ? 've' : 's'} results
+            that suggest cancer and {candidateCount !== 1 ? 'are' : 'is'} not in the registry yet. Review candidates →
+          </span>
+        </button>
+      )}
+
+      <Tabs value={tab} onValueChange={setTab}>
+        <TabsList>
+          <TabsTrigger value="registered">Registered</TabsTrigger>
+          <TabsTrigger value="candidates" className="gap-2">
+            Candidates
+            {candidateCount > 0 && (
+              <span className="rounded-full bg-amber-500 px-1.5 text-[11px] font-semibold leading-4 text-white">{candidateCount}</span>
+            )}
+          </TabsTrigger>
+        </TabsList>
+
+      <div className="flex gap-3 flex-wrap mt-4">
         <div className="relative flex-1 min-w-[220px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -51,6 +92,19 @@ export default function OncologyRegistryPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        {tab === 'candidates' ? (
+          <Select value={strengthFilter || 'all'} onValueChange={(v) => setStrengthFilter(v === 'all' ? '' : v)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Evidence" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All evidence</SelectItem>
+              <SelectItem value="high">Confirmed</SelectItem>
+              <SelectItem value="medium">Suspected</SelectItem>
+              <SelectItem value="low">Indicative</SelectItem>
+            </SelectContent>
+          </Select>
+        ) : (
         <Select
           value={clinicalStatusFilter || 'all'}
           onValueChange={(v) => setClinicalStatusFilter(v === 'all' ? '' : v)}
@@ -67,8 +121,22 @@ export default function OncologyRegistryPage() {
             <SelectItem value="resolved">Resolved</SelectItem>
           </SelectContent>
         </Select>
+        )}
       </div>
 
+      <TabsContent value="candidates" className="mt-4">
+        <p className="mb-3 text-sm text-muted-foreground">
+          Patients not yet in the registry whose finalised results from the last 6 months suggest cancer. Review the
+          evidence, then add the patient to the registry or dismiss the finding.
+        </p>
+        <RegistryCandidateQueue
+          candidates={candidates}
+          isLoading={candidatesLoading}
+          onAdd={(c) => goNew(c.patientId)}
+        />
+      </TabsContent>
+
+      <TabsContent value="registered" className="mt-4">
       {isLoading ? (
         <LoadingState />
       ) : entries.length === 0 ? (
@@ -77,10 +145,17 @@ export default function OncologyRegistryPage() {
           <p className="text-muted-foreground">
             {data ? 'No patients match the current filters' : 'No cancer diagnoses registered yet'}
           </p>
-          <Button variant="outline" onClick={() => router.push(`/${params.locale}/oncology/registry/new`)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add First Patient
-          </Button>
+          {candidateCount > 0 ? (
+            <Button onClick={() => setTab('candidates')}>
+              <FileSearch className="h-4 w-4 mr-2" />
+              Review {candidateCount} Candidate{candidateCount !== 1 ? 's' : ''}
+            </Button>
+          ) : (
+            <Button variant="outline" onClick={() => goNew()}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add First Patient
+            </Button>
+          )}
         </div>
       ) : (
         <div className="border rounded-lg overflow-hidden">
@@ -155,6 +230,8 @@ export default function OncologyRegistryPage() {
           </div>
         </div>
       )}
+      </TabsContent>
+      </Tabs>
     </div>
   );
 }

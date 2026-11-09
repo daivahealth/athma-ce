@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Activity, ChevronsUpDown, Check, Dna, Save, Search, UserRound } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { Activity, ChevronsUpDown, Check, Dna, FileSearch, Save, Search, UserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +26,9 @@ import {
   useSiteMappings,
   usePrimarySites,
   useHistologies,
+  useRegistryCandidates,
 } from '@/plugins/oncology/hooks/use-oncology';
+import { CandidateEvidenceList } from '@/plugins/oncology/components/RegistryCandidateQueue';
 import type {
   OncologyCancerType,
   OncologyCancerTypeSiteMapping,
@@ -49,6 +51,15 @@ export default function NewDiagnosisPage() {
 
   // Patient
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+
+  // Opened from the candidate queue: load that patient's evidence and prefill from it.
+  const candidatePatientId = useSearchParams().get('patientId');
+  const { data: candidateData } = useRegistryCandidates(
+    candidatePatientId ? { patientId: candidatePatientId, days: 730 } : undefined,
+    !!candidatePatientId,
+  );
+  const candidate = candidateData?.data.find((c) => c.patientId === candidatePatientId) ?? null;
+  const fromCandidate = !!candidate && selectedPatient?.id === candidate.patientId;
 
   // Cancer Identity — catalog-driven
   const [cancerTypeOpen, setCancerTypeOpen] = useState(false);
@@ -73,6 +84,28 @@ export default function NewDiagnosisPage() {
   const [isRecurrence, setIsRecurrence] = useState(false);
   const [ecogAtDiagnosis, setEcogAtDiagnosis] = useState('');
   const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (!candidate?.patientDisplay || selectedPatient) return;
+    const pd = candidate.patientDisplay;
+    setSelectedPatient({
+      id: pd.patientId, firstName: pd.firstName, lastName: pd.lastName, fullName: pd.displayName,
+      mrn: pd.mrn, dateOfBirth: pd.dateOfBirth, gender: pd.gender, phoneNumber: pd.phoneNumber,
+    } as unknown as Patient);
+    // Diagnosis date: the earliest confirming result (biopsy / coded diagnosis), else the earliest result.
+    const confirming = candidate.evidence.filter((e) => e.strength === 'high' && e.resultAt);
+    const dated = (confirming.length ? confirming : candidate.evidence.filter((e) => e.resultAt))
+      .map((e) => e.resultAt as string).sort();
+    if (dated[0]) {
+      const d = new Date(dated[0]);
+      setDiagnosisDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+    }
+    const coded = candidate.evidence.find((e) => e.sourceType === 'diagnosis' && e.icdCode);
+    if (coded?.icdCode) setIcdCode(coded.icdCode);
+    // Only a confirming result makes the registration "confirmed"; imaging/markers alone are provisional.
+    if (!confirming.length) setVerificationStatus('provisional');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [candidate]);
 
   // Catalog data
   const { data: cancerTypesData } = useCancerTypes({ active: 'true' });
@@ -167,6 +200,10 @@ export default function NewDiagnosisPage() {
       isRecurrence,
       ecogAtDiagnosis: ecogAtDiagnosis ? parseInt(ecogAtDiagnosis, 10) : undefined,
       notes: notes || undefined,
+      // Records which queue results led to this registration, so they leave the queue.
+      candidateSources: fromCandidate
+        ? candidate!.evidence.map((e) => ({ sourceType: e.sourceType, sourceId: e.sourceId }))
+        : undefined,
     } as Record<string, unknown>);
     back();
   };
@@ -190,6 +227,16 @@ export default function NewDiagnosisPage() {
             patient={patientSummary(selectedPatient)}
             onChange={() => setSelectedPatient(null)}
           />
+        )}
+
+        {fromCandidate && (
+          <FormSection
+            icon={FileSearch}
+            title="Source Results"
+            description="The results that put this patient in the candidate queue. They are linked to this registration when you save."
+          >
+            <CandidateEvidenceList candidate={candidate!} />
+          </FormSection>
         )}
 
         {selectedPatient && (

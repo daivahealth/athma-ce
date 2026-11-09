@@ -206,6 +206,66 @@ Aggregated view: one row per cancer diagnosis, enriched with latest staging and 
 
 ---
 
+### List Registry Candidates
+```
+GET /api/v1/plugins/oncology/registry/candidates
+```
+**Permission:** `oncology.registry.read`
+
+The candidate queue: patients **not** in the registry whose finalised results suggest cancer, one entry per patient, strongest evidence first, then most recent. Computed on each call from `pathology_reports`, `imaging_reports`, `encounter_diagnoses` and `lab_result_items` (tenant-scoped); results already recorded in `registry_candidate_decisions` are left out. Not paginated.
+
+**Query params:**
+| Param | Type | Description |
+|-------|------|-------------|
+| `days` | number | Look-back window on the result date. Default 180, clamped to 1–730 |
+| `strength` | string | `high` \| `medium` \| `low` — filter on the patient's strongest evidence |
+| `search` | string | Patient name or MRN |
+| `patientId` | UUID | One patient (used by the pre-filled registration form) |
+
+**Response:**
+```json
+{
+  "success": true,
+  "total": 1,
+  "data": [{
+    "patientId": "...",
+    "strength": "high",
+    "latestResultAt": "2026-11-06T10:49:59.572Z",
+    "patientDisplay": { "patientId": "...", "mrn": "MRN-0512", "displayName": "...", "age": 52, "gender": "male" },
+    "evidence": [{
+      "sourceType": "pathology",
+      "sourceId": "...",
+      "strength": "high",
+      "title": "Core biopsy, breast",
+      "excerpt": "Left breast, core biopsy: Invasive ductal carcinoma, grade 2.",
+      "matchedTerms": ["carcinoma"],
+      "resultAt": "2026-11-06T10:49:59.572Z",
+      "icdCode": null
+    }]
+  }]
+}
+```
+
+Strength: `high` = malignant pathology or ICD-10 C00–C97/D00–D09; `medium` = suspicious imaging; `low` = abnormal Oncology-category tumour marker.
+
+---
+
+### Dismiss a Registry Candidate
+```
+POST /api/v1/plugins/oncology/registry/candidates/:patientId/dismiss
+```
+**Permission:** `oncology.diagnosis.write`
+
+```json
+{ "reason": "Not a cancer case on review", "sources": [{ "sourceType": "pathology", "sourceId": "..." }] }
+```
+
+Records each source as `dismissed`. `reason` and at least one source are required (400 otherwise). A later qualifying result for the patient brings them back to the queue.
+
+**Adding from the queue** uses `POST /diagnoses` with an optional `candidateSources` array (same shape as `sources`). After the diagnosis is created, each source is recorded as `added` with the new `cancer_diagnosis_id`.
+
+---
+
 ### Get Patient Cancer Summary
 ```
 GET /api/v1/plugins/oncology/registry/:patientId/summary

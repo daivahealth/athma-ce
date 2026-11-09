@@ -23,6 +23,30 @@ export interface OncologyPatientDisplay {
   preferredLanguage?: string;
 }
 
+/** One result that suggests cancer, shown in the registry candidate queue. */
+export type RegistryCandidateSourceType = 'pathology' | 'imaging' | 'diagnosis' | 'tumor_marker';
+export type RegistryCandidateStrength = 'high' | 'medium' | 'low';
+
+export interface RegistryCandidateEvidence {
+  sourceType: RegistryCandidateSourceType;
+  sourceId: string;
+  strength: RegistryCandidateStrength;
+  title: string;
+  excerpt: string;
+  matchedTerms: string[];
+  resultAt: string | null;
+  icdCode?: string | null;
+}
+
+/** A patient not yet in the registry whose recent results suggest cancer. */
+export interface RegistryCandidate {
+  patientId: string;
+  strength: RegistryCandidateStrength;
+  latestResultAt: string | null;
+  evidence: RegistryCandidateEvidence[];
+  patientDisplay: OncologyPatientDisplay | null;
+}
+
 export interface CancerDiagnosis {
   id: string;
   tenant_id: string;
