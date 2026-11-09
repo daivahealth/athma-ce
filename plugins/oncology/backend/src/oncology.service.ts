@@ -511,7 +511,7 @@ export class OncologyService {
 
     const [pathology, imaging, diagnoses, markers] = await Promise.all([
       this.prisma.$queryRawUnsafe<any[]>(
-        `SELECT x.id, x.patient_id, x.diagnosis, x.comment, x.specimen_type, co.order_name,
+        `SELECT x.id, x.patient_id, x.order_id, x.diagnosis, x.comment, x.specimen_type, co.order_name,
                 COALESCE(x.verified_at, x.reported_at, x.updated_at) AS result_at
          FROM pathology_reports x
          LEFT JOIN clinical_orders co ON co.id = x.order_id
@@ -522,7 +522,7 @@ export class OncologyService {
         ...params,
       ),
       this.prisma.$queryRawUnsafe<any[]>(
-        `SELECT x.id, x.patient_id, x.impression, x.findings, x.modality, x.body_part, co.order_name,
+        `SELECT x.id, x.patient_id, x.order_id, x.impression, x.findings, x.modality, x.body_part, co.order_name,
                 COALESCE(x.reviewed_at, x.reported_at, x.updated_at) AS result_at
          FROM imaging_reports x
          LEFT JOIN clinical_orders co ON co.id = x.order_id
@@ -544,7 +544,7 @@ export class OncologyService {
         ...params,
       ),
       this.prisma.$queryRawUnsafe<any[]>(
-        `SELECT lri.id, x.patient_id, lri.test_name, lri.value_numeric, lri.value_string, lri.unit,
+        `SELECT lri.id, x.patient_id, x.order_id, lri.test_name, lri.value_numeric, lri.value_string, lri.unit,
                 lri.ref_range_high, lri.ref_range_text, lri.interpretation,
                 COALESCE(x.verified_at, x.reported_at, x.updated_at) AS result_at
          FROM lab_result_items lri
@@ -570,7 +570,7 @@ export class OncologyService {
       evidence.push({
         patientId: r.patient_id, sourceType: 'pathology', sourceId: r.id, strength: 'high',
         title: r.order_name || (r.specimen_type ? `Pathology — ${r.specimen_type}` : 'Pathology report'),
-        excerpt: m.excerpt, matchedTerms: m.matchedTerms, resultAt: iso(r.result_at),
+        excerpt: m.excerpt, matchedTerms: m.matchedTerms, resultAt: iso(r.result_at), orderId: r.order_id,
       });
     }
     for (const r of imaging) {
@@ -579,7 +579,7 @@ export class OncologyService {
       evidence.push({
         patientId: r.patient_id, sourceType: 'imaging', sourceId: r.id, strength: 'medium',
         title: r.order_name || [r.modality, r.body_part].filter(Boolean).join(' ') || 'Imaging report',
-        excerpt: m.excerpt, matchedTerms: m.matchedTerms, resultAt: iso(r.result_at),
+        excerpt: m.excerpt, matchedTerms: m.matchedTerms, resultAt: iso(r.result_at), orderId: r.order_id,
       });
     }
     for (const r of diagnoses) {
@@ -587,7 +587,7 @@ export class OncologyService {
       evidence.push({
         patientId: r.patient_id, sourceType: 'diagnosis', sourceId: r.id, strength: 'high',
         title: 'Coded diagnosis', excerpt: `${r.icd_code} — ${r.diagnosis_name}`,
-        matchedTerms: [r.icd_code], resultAt: iso(r.result_at), icdCode: r.icd_code,
+        matchedTerms: [r.icd_code], resultAt: iso(r.result_at), icdCode: r.icd_code, orderId: null,
       });
     }
     for (const r of markers) {
@@ -596,7 +596,7 @@ export class OncologyService {
       evidence.push({
         patientId: r.patient_id, sourceType: 'tumor_marker', sourceId: r.id, strength: 'low',
         title: r.test_name, excerpt: `${value}${r.unit ? ` ${r.unit}` : ''}${ref} — above normal`,
-        matchedTerms: [r.test_name], resultAt: iso(r.result_at),
+        matchedTerms: [r.test_name], resultAt: iso(r.result_at), orderId: r.order_id,
       });
     }
 

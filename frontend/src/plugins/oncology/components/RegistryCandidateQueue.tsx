@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { FileSearch, FlaskConical, Microscope, ScanLine, Stethoscope, UserPlus, X } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,6 +17,7 @@ import { LoadingState, PatientCell } from './shared';
 import { useDismissRegistryCandidate } from '../hooks/use-oncology';
 import type {
   RegistryCandidate,
+  RegistryCandidateEvidence,
   RegistryCandidateSourceType,
   RegistryCandidateStrength,
 } from '../types';
@@ -36,12 +39,22 @@ const dateFmt = new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'sho
 export const formatResultDate = (iso: string | null) => (iso ? dateFmt.format(new Date(iso)) : '—');
 
 /** The evidence rows for one candidate: what the result was and why it was flagged. */
+/** Result page of the report the evidence came from; coded diagnoses have none. */
+export function evidenceReportHref(locale: string, e: RegistryCandidateEvidence): string | null {
+  if (!e.orderId) return null;
+  if (e.sourceType === 'imaging') return `/${locale}/results/imaging/${e.orderId}`;
+  if (e.sourceType === 'pathology' || e.sourceType === 'tumor_marker') return `/${locale}/results/lab/${e.orderId}`;
+  return null;
+}
+
 export function CandidateEvidenceList({ candidate }: { candidate: RegistryCandidate }) {
+  const locale = (useParams()?.locale as string | undefined) ?? 'en';
   return (
     <ul className="space-y-2">
       {candidate.evidence.map((e) => {
         const meta = SOURCE_META[e.sourceType];
         const Icon = meta.icon;
+        const href = evidenceReportHref(locale, e);
         return (
           <li key={`${e.sourceType}:${e.sourceId}`} className="flex gap-3 rounded-md border bg-muted/20 p-3">
             <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
@@ -49,7 +62,17 @@ export function CandidateEvidenceList({ candidate }: { candidate: RegistryCandid
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
                 <span className="font-medium">{meta.label}</span>
                 <span className="text-muted-foreground">·</span>
-                <span className="min-w-0 truncate">{e.title}</span>
+                {href ? (
+                  <Link
+                    href={href}
+                    className="min-w-0 truncate text-primary underline-offset-4 hover:underline focus-visible:underline"
+                    title="Open the report"
+                  >
+                    {e.title}
+                  </Link>
+                ) : (
+                  <span className="min-w-0 truncate">{e.title}</span>
+                )}
                 <span className="text-xs text-muted-foreground whitespace-nowrap">{formatResultDate(e.resultAt)}</span>
                 <ToneBadge tone={STRENGTH_META[e.strength].tone}>{STRENGTH_META[e.strength].label}</ToneBadge>
               </div>

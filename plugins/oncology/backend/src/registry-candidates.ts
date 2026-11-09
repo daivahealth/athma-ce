@@ -26,6 +26,8 @@ export interface CandidateEvidence {
   matchedTerms: string[];
   resultAt: string | null;
   icdCode?: string | null;
+  /** Order the result belongs to, for opening the report (lab or imaging result page). Null for coded diagnoses. */
+  orderId?: string | null;
 }
 
 export interface CandidatePatientGroup {

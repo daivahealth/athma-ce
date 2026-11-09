@@ -36,6 +36,8 @@ export interface RegistryCandidateEvidence {
   matchedTerms: string[];
   resultAt: string | null;
   icdCode?: string | null;
+  /** Order of the source result; links to its lab or imaging result page. Null for coded diagnoses. */
+  orderId?: string | null;
 }
 
 /** A patient not yet in the registry whose recent results suggest cancer. */
