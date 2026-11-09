@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { useCreditNotes } from '@/modules/rcm/hooks/use-credit-notes';
 import type { CreditNote, CreditNoteStatus } from '@/modules/rcm/types/credit-note';
 import { PageHeader } from '@/components/ui/page-header';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<CreditNoteStatus, string> = {
   draft: 'Draft',
@@ -30,26 +31,7 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
   {
     id: 'patient',
     header: 'Patient',
-    cell: ({ row }) => {
-      const patientDisplay = row.original.patientDisplay;
-      const displayName = patientDisplay?.displayName || row.original.patientDisplayName;
-      const mrn = patientDisplay?.mrn || row.original.mrn;
-
-      if (displayName) {
-        return (
-          <div>
-            <p className="font-medium">{displayName}</p>
-            {mrn && <p className="text-xs text-muted-foreground">MRN: {mrn}</p>}
-          </div>
-        );
-      }
-
-      return (
-        <p className="font-mono text-xs text-muted-foreground" title={row.original.patientId}>
-          {row.original.patientId.slice(0, 8)}...
-        </p>
-      );
-    },
+    cell: ({ row }) => <PatientIdentity source={row.original} />,
   },
   {
     accessorKey: 'amount',

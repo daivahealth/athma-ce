@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Plus, Search, User, ClipboardCheck } from 'lucide-react';
+import { Eye, Plus, Search, ClipboardCheck } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent } from '@/components/ui/card';
@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { usePreAuthRequests } from '@/modules/rcm/hooks/use-preauth';
 import type { PreAuthRequest, PreAuthStatus } from '@/modules/rcm/types/preauth';
 import { PageHeader } from '@/components/ui/page-header';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<PreAuthStatus, string> = {
   draft: 'Draft',
@@ -35,33 +36,7 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
   {
     id: 'patient',
     header: 'Patient',
-    cell: ({ row }) => {
-      const pd = row.original.patientDisplay;
-      if (!pd) {
-        return (
-          <p className="font-mono text-xs text-muted-foreground" title={row.original.patientId}>
-            {row.original.patientId.slice(0, 8)}...
-          </p>
-        );
-      }
-      return (
-        <div className="flex items-center gap-2">
-          <User className="h-4 w-4 text-muted-foreground" />
-          <div className="flex flex-col gap-0.5">
-            <span className="font-medium">
-              {pd.displayName || 'Unknown patient'}
-            </span>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>MRN: {pd.mrn || '—'}</span>
-              <span>&bull;</span>
-              <span>
-                {pd.gender || '—'} / {pd.age != null ? `${pd.age}y` : '—'}
-              </span>
-            </div>
-          </div>
-        </div>
-      );
-    },
+    cell: ({ row }) => <PatientIdentity source={row.original} />,
   },
   {
     accessorKey: 'payerId',

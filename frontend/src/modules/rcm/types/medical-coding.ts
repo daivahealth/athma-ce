@@ -11,7 +11,15 @@ export interface CodingSession {
   id: string;
   tenantId: string;
   encounterId: string;
-  patientId: string;
+  /** Resolved by RCM from the encounter in Clinical; null when the lookup failed. */
+  patientId: string | null;
+  patientDisplay?: {
+    patientId: string;
+    displayName: string;
+    mrn: string;
+    gender: string;
+    age: number | null;
+  } | null;
   coderId?: string | null;
   status: CodingSessionStatus | string;
   priority?: string | null;

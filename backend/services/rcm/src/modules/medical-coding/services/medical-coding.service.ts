@@ -3,6 +3,7 @@ import { PrismaService } from '@zeal/database-rcm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { resolveClinicalApiUrl } from '../../../common/service-urls';
+import { fetchEncounterPatientMap, PatientDisplayContext } from '../../../common/patient-display';
 
 /**
  * MedicalCodingService
@@ -362,8 +363,12 @@ export class MedicalCodingService {
   /**
    * Get coding sessions needing review (for coder inbox)
    */
-  async getPendingCodingSessions(tenantId: string, limit: number = 50) {
-    return this.prisma.codingSession.findMany({
+  async getPendingCodingSessions(
+    tenantId: string,
+    limit: number = 50,
+    ctx?: Omit<PatientDisplayContext, 'tenantId'>,
+  ) {
+    const sessions = await this.prisma.codingSession.findMany({
       where: {
         tenantId,
         status: { in: ['auto_generated', 'in_progress'] },
@@ -379,12 +384,13 @@ export class MedicalCodingService {
       orderBy: { createdAt: 'asc' },
       take: limit,
     });
+    return this.attachPatients(tenantId, sessions, ctx);
   }
 
   /**
    * Find all coding sessions with filters
    */
-  async findAllSessions(tenantId: string, filters: any) {
+  async findAllSessions(tenantId: string, filters: any, ctx?: Omit<PatientDisplayContext, 'tenantId'>) {
     const where: any = { tenantId };
 
     if (filters.status) where.status = filters.status;
@@ -395,7 +401,7 @@ export class MedicalCodingService {
       if (filters.dateTo) where.createdAt.lte = new Date(filters.dateTo);
     }
 
-    return this.prisma.codingSession.findMany({
+    const sessions = await this.prisma.codingSession.findMany({
       where,
       include: {
         diagnoses: { where: { usedForBilling: true }, orderBy: { sequence: 'asc' } },
@@ -404,19 +410,43 @@ export class MedicalCodingService {
       orderBy: { createdAt: 'desc' },
       take: filters.limit || 100,
     });
+    return this.attachPatients(tenantId, sessions, ctx);
+  }
+
+  /**
+   * Coding sessions store only an encounter id; resolve each encounter's
+   * patient from Clinical so screens can show name, MRN, gender and age.
+   */
+  private async attachPatients<T extends { encounterId: string }>(
+    tenantId: string,
+    sessions: T[],
+    ctx?: Omit<PatientDisplayContext, 'tenantId'>,
+  ): Promise<Array<T & { patientId: string | null; patientDisplay: unknown }>> {
+    const map = await fetchEncounterPatientMap(
+      this.httpService,
+      sessions.map((s) => s.encounterId),
+      { tenantId, ...ctx },
+    );
+    return sessions.map((session) => {
+      const patient = map.get(session.encounterId);
+      return { ...session, patientId: patient?.patientId ?? null, patientDisplay: patient?.patientDisplay ?? null };
+    });
   }
 
   /**
    * Find coding session by ID
    */
-  async findSessionById(tenantId: string, sessionId: string) {
-    return this.prisma.codingSession.findFirst({
+  async findSessionById(tenantId: string, sessionId: string, ctx?: Omit<PatientDisplayContext, 'tenantId'>) {
+    const session = await this.prisma.codingSession.findFirst({
       where: { tenantId, id: sessionId },
       include: {
         diagnoses: { orderBy: { sequence: 'asc' } },
         procedures: { orderBy: { sequence: 'asc' }, include: { billingItem: true, charges: true } },
       },
     });
+    if (!session) return session;
+    const [withPatient] = await this.attachPatients(tenantId, [session], ctx);
+    return withPatient;
   }
 
   /**

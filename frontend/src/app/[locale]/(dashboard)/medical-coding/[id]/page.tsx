@@ -30,6 +30,7 @@ import {
 } from '@/modules/rcm/hooks/use-medical-coding';
 import type { CreateDiagnosisInput, CreateProcedureInput } from '@/modules/rcm/types/medical-coding';
 import { CodingSessionStatus } from '@/modules/rcm/types/medical-coding';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const toLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
@@ -132,9 +133,7 @@ export default function CodingSessionDetailPage() {
         <CardContent className="grid gap-4 md:grid-cols-2">
           <div>
             <p className="text-sm text-muted-foreground">Patient</p>
-            <p className="font-mono text-xs" title={session.patientId}>
-              {session.patientId}
-            </p>
+            <PatientIdentity source={session} size="lg" className="mt-2" />
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Encounter</p>

@@ -26,6 +26,7 @@ import {
   useDeleteDebitNote,
 } from '@/modules/rcm/hooks/use-debit-notes';
 import type { DebitNoteStatus } from '@/modules/rcm/types/debit-note';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<DebitNoteStatus, string> = {
   draft: 'Draft',
@@ -84,9 +85,6 @@ export default function DebitNoteDetailPage() {
       </div>
     );
   }
-
-  const patientName = debitNote.patientDisplayName || debitNote.patientDisplay?.displayName;
-  const patientMrn = debitNote.mrn || debitNote.patientDisplay?.mrn;
 
   return (
     <div className="space-y-6">
@@ -151,14 +149,7 @@ export default function DebitNoteDetailPage() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Patient</p>
-              {patientName ? (
-                <div>
-                  <p className="font-medium">{patientName}</p>
-                  {patientMrn && <p className="text-sm text-muted-foreground">MRN: {patientMrn}</p>}
-                </div>
-              ) : (
-                <p className="font-mono text-sm">{debitNote.patientId.slice(0, 8)}...</p>
-              )}
+              <PatientIdentity source={debitNote} size="lg" className="mt-2" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Date</p>

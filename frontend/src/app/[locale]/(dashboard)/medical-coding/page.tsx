@@ -16,6 +16,7 @@ import { useCodingSessions, usePendingCodingSessions, useCoderProductivity, useC
 import type { CodingSession } from '@/modules/rcm/types/medical-coding';
 import { CodingSessionStatus } from '@/modules/rcm/types/medical-coding';
 import { PageHeader } from '@/components/ui/page-header';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
   [CodingSessionStatus.NEW]: 'secondary',
@@ -30,14 +31,14 @@ const statusLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g,
 
 const createColumns = (locale: string, router: ReturnType<typeof useRouter>): ColumnDef<CodingSession>[] => [
   {
-    accessorKey: 'patientId',
+    id: 'patient',
     header: 'Patient',
     cell: ({ row }) => (
-      <div>
-        <p className="font-mono text-xs" title={row.original.patientId}>
-          {row.original.patientId.slice(0, 8)}…
+      <div className="space-y-1">
+        <PatientIdentity source={row.original} />
+        <p className="pl-12 text-xs text-muted-foreground">
+          Encounter <span className="font-mono">{row.original.encounterId.slice(0, 8)}</span>
         </p>
-        <p className="text-xs text-muted-foreground">Encounter {row.original.encounterId.slice(0, 6)}…</p>
       </div>
     ),
   },
@@ -107,7 +108,9 @@ export default function MedicalCodingPage() {
     const term = search.trim().toLowerCase();
     if (!term) return sanitized;
     return sanitized.filter((session) =>
-      `${session.patientId} ${session.encounterId}`.toLowerCase().includes(term),
+      `${session.patientDisplay?.displayName ?? ''} ${session.patientDisplay?.mrn ?? ''} ${session.encounterId}`
+        .toLowerCase()
+        .includes(term),
     );
   }, [sanitized, search]);
 
@@ -177,7 +180,8 @@ export default function MedicalCodingPage() {
                   size="sm"
                   onClick={() => router.push(`/${locale}/medical-coding/${session.id}`)}
                 >
-                  {session.patientId.slice(0, 6)}… ({statusLabel(session.status)})
+                  {session.patientDisplay?.displayName ?? `Encounter ${session.encounterId.slice(0, 6)}`}
+                  <span className="ml-1.5 text-muted-foreground">· {statusLabel(session.status)}</span>
                 </Button>
               ))}
             </div>
@@ -191,7 +195,7 @@ export default function MedicalCodingPage() {
         <div className="relative flex-1 min-w-[240px] max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by patient or encounter..."
+            placeholder="Search by patient name, MRN, or encounter..."
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             className="pl-9"

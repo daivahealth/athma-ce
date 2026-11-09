@@ -46,6 +46,12 @@ Above the table:
 The columns are **Invoice #**, **Patient** (name, MRN, gender and age), **Date**, **Net amount**,
 **Balance** and **Status**. Click a row, or **View**, to open the invoice.
 
+Every billing list and detail page (invoices, receipts, refunds, credit and debit notes, claims,
+eligibility, pre-authorisation and medical coding) shows the patient the same way: an initials
+badge, the patient's name, the MRN in a small tag, then gender and age. If the patient's details
+cannot be looked up, it reads **Patient details unavailable** with the first eight characters of
+the internal ID under it.
+
 | Status | Colour | Meaning |
 | --- | --- | --- |
 | **Unpaid** | Orange | Nothing paid yet. |
@@ -298,7 +304,7 @@ with these columns:
 | Column | What it shows |
 | --- | --- |
 | **Credit note #** / **Debit note #** | The note's number. |
-| **Patient** | The patient's name, with the **MRN** under it. If the name cannot be looked up, the first eight characters of the patient's internal ID instead. |
+| **Patient** | The patient's name, MRN, gender and age. If the patient cannot be looked up, the name and MRN saved on the note, or **Patient details unavailable** when there are none. |
 | **Amount** | The note's total, to two decimal places, followed by its currency. |
 | **Status** | **Draft**, **Posted** or **Voided**. On the list all three are the same grey badge; the colours appear only on the note itself. |
 | **Actions** | **View**, which opens the note (see [Posting and voiding](#posting-and-voiding)). |
@@ -377,17 +383,19 @@ receipt number format.
 - Four tiles: **Total sessions**, **Pending**, **In review** and **Submitted**.
 - **Coder productivity**: per coder, sessions completed, diagnoses and procedures coded. "No
   productivity data." when there is none.
-- **Pending inbox**: up to six pending sessions as buttons; click one to open it.
-- **Coding sessions**: the full list with **Patient** (shortened patient and encounter IDs),
-  **Status**, **Priority**, **Coder** (or **Unassigned**) and **Updated**. Search by patient or
-  encounter ID, filter by status, or type a **Queue** name. **Review** opens the session.
+- **Pending inbox**: up to six pending sessions as buttons, labelled with the patient's name;
+  click one to open it.
+- **Coding sessions**: the full list with **Patient** (name, MRN, gender and age, with the
+  shortened encounter ID under it), **Status**, **Priority**, **Coder** (or **Unassigned**) and
+  **Updated**. Search by patient name, MRN or encounter ID, filter by status, or type a **Queue**
+  name. **Review** opens the session.
 
 Statuses are **New**, **Pending**, **In Review**, **Returned**, **Completed** and **Submitted**.
 
 ### Coding a session
 
-Open a session (`/medical-coding/{id}`). **Session summary** shows the patient ID, encounter ID,
-coder and last update.
+Open a session (`/medical-coding/{id}`). **Session summary** shows the patient (name, MRN,
+gender and age), encounter ID, coder and last update.
 
 1. For a **Pending** session, press **Start review**. "Review started".
 2. **Diagnoses**: under **Add diagnosis**, enter the **Code**, **System** (ICD-10 by default) and
@@ -413,5 +421,5 @@ each action, who did it, notes and when.
   is shown.
 - **Receipts**: an allocated receipt cannot be deleted, and there is no way to remove an allocation
   on screen.
-- **Medical coding**: patients, encounters and coders show as internal IDs, not names. There is no
-  button to create or assign a session on these screens.
+- **Medical coding**: encounters and coders show as internal IDs, not names. There is no button to
+  create or assign a session on these screens.

@@ -43,6 +43,9 @@ export class MedicalCodingController {
   @ApiResponse({ status: 200, description: 'Sessions retrieved' })
   async findAllSessions(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('authorization') authHeader: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Query('status') status?: CodingSessionStatus,
     @Query('encounterId') encounterId?: string,
     @Query('patientId') patientId?: string,
@@ -58,7 +61,7 @@ export class MedicalCodingController {
     if (dateTo) filters.dateTo = dateTo;
     if (limit) filters.limit = parseInt(limit);
 
-    return this.medicalCodingService.findAllSessions(tenantId, filters);
+    return this.medicalCodingService.findAllSessions(tenantId, filters, { authHeader, facilityId, userId });
   }
 
   @Get('sessions/pending')
@@ -70,10 +73,17 @@ export class MedicalCodingController {
   @ApiResponse({ status: 200, description: 'Pending sessions retrieved' })
   async getPendingSessions(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('authorization') authHeader: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Query('limit') limit?: string,
   ) {
     const limitNumber = limit ? parseInt(limit) : 50;
-    return this.medicalCodingService.getPendingCodingSessions(tenantId, limitNumber);
+    return this.medicalCodingService.getPendingCodingSessions(tenantId, limitNumber, {
+      authHeader,
+      facilityId,
+      userId,
+    });
   }
 
   @Get('sessions/:id')
@@ -81,9 +91,12 @@ export class MedicalCodingController {
   @ApiResponse({ status: 200, description: 'Session found' })
   async findSessionById(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('authorization') authHeader: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Param('id') id: string,
   ) {
-    return this.medicalCodingService.findSessionById(tenantId, id);
+    return this.medicalCodingService.findSessionById(tenantId, id, { authHeader, facilityId, userId });
   }
 
   @Get('sessions/encounter/:encounterId')

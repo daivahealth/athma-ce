@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { ArrowLeft, Send, ShieldCheck, User } from 'lucide-react';
+import { ArrowLeft, Send, ShieldCheck } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { useClaim, useSubmitClaim, useValidateClaim } from '@/modules/rcm/hooks/use-claims';
 import type { ClaimStatus } from '@/modules/rcm/types/claims';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<ClaimStatus, string> = {
   draft: 'Draft',
@@ -106,21 +107,7 @@ export default function ClaimDetailPage() {
         <CardContent className="grid gap-4 md:grid-cols-2 text-sm">
           <div>
             <p className="text-muted-foreground">Patient</p>
-            {claim.patientDisplay ? (
-              <div className="flex items-center gap-2 mt-1">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-0.5">
-                  <p className="font-medium">{claim.patientDisplay.displayName || 'Unknown patient'}</p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>MRN: {claim.patientDisplay.mrn || '—'}</span>
-                    <span>&bull;</span>
-                    <span>{claim.patientDisplay.gender || '—'} / {claim.patientDisplay.age != null ? `${claim.patientDisplay.age}y` : '—'}</span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="font-mono">{claim.patientId.slice(0, 8)}...</p>
-            )}
+            <PatientIdentity source={claim} size="lg" className="mt-2" />
           </div>
           <div>
             <p className="text-muted-foreground">Encounter ID</p>
