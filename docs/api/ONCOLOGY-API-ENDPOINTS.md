@@ -240,13 +240,16 @@ The candidate queue: patients **not** in the registry whose finalised results su
       "excerpt": "Left breast, core biopsy: Invasive ductal carcinoma, grade 2.",
       "matchedTerms": ["carcinoma"],
       "resultAt": "2026-11-06T10:49:59.572Z",
-      "icdCode": null
+      "icdCode": null,
+      "orderId": "..."
     }]
   }]
 }
 ```
 
 Strength: `high` = malignant pathology or ICD-10 C00–C97/D00–D09; `medium` = suspicious imaging; `low` = abnormal Oncology-category tumour marker.
+
+`orderId` is the `clinical_orders` row the result belongs to, for opening the report: pathology and tumour markers at `/results/lab/:orderId`, imaging at `/results/imaging/:orderId`. It is `null` for coded diagnoses, which have no report.
 
 ---
 

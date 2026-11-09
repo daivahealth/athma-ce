@@ -171,7 +171,8 @@ suggests cancer:
 - **Indicative** (grey): a tumour marker above normal, with nothing else.
 
 Each candidate shows the results that flagged them: the type, test, date and the sentence that
-matched. Statements such as "negative for malignancy" are not counted.
+matched. Statements such as "negative for malignancy" are not counted. Select a test name to open
+the full report (coded diagnoses have no report).
 
 1. Read the results.
 2. Press **Add to Registry** to register the patient (see below), or **Dismiss** to remove them from
