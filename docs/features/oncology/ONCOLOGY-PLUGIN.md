@@ -435,7 +435,10 @@ deterministic cancer journey, usually the 900 `MRN-DEMO-*` patients from
   [candidate queue](#registry-candidate-queue--how-patients-enter-the-registry)
   has work. Each slot takes, by hash, a patient of the right sex and age with
   an outpatient visit 7–55 days ago, and gets one FINAL result ordered on that
-  visit (a real `clinical_orders` row; histopathology reported 4 days later):
+  visit, with a real `clinical_orders` row. Pathology and PSA orders also carry their
+  `lab_order_tests` row linked to the lab catalogue (Histopathology Examination, 33717-0, is a
+  narrative test), so the lab result page opens the report. Histopathology is reported 2 days later,
+  inside the 72-hour turnaround target:
 
   | Slot | Result | Expected in queue |
   |------|--------|-------------------|

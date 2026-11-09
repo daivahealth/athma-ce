@@ -659,21 +659,21 @@ CREATE TEMP TABLE onc_cand_slot (
   findings text, complaint text, icd text, icd_name text, value numeric
 ) ON COMMIT DROP;
 INSERT INTO onc_cand_slot VALUES
-(1, 'female', 35, 'pathology', '88305', 'Histopathology — core biopsy, breast', 'Core biopsy, right breast', NULL, NULL,
+(1, 'female', 35, 'pathology', '33717-0', 'Histopathology — core biopsy, breast', 'Core biopsy, right breast', NULL, NULL,
  'Palpable lump right breast upper outer quadrant for 2 months. Ultrasound: 2.1 cm irregular hypoechoic lesion.',
  'Three grey-white linear cores, 1.0 to 1.6 cm long. All embedded in A1.',
  'Infiltrating tumour cells in nests, cords and tubules with moderate nuclear pleomorphism; 9 mitoses per 10 HPF. No DCIS component seen in the cores.',
  'Right breast, upper outer quadrant, core biopsy: Invasive ductal carcinoma (NST), Nottingham grade 2 (3+2+2 = 7/9).',
  'ER, PR and HER2 immunohistochemistry requested on block A1.', NULL,
  'Lump in the right breast for 2 months', NULL, NULL, NULL),
-(2, 'male', 30, 'pathology', '88305', 'Histopathology — punch biopsy, oral cavity', 'Punch biopsy, tongue', NULL, NULL,
+(2, 'male', 30, 'pathology', '33717-0', 'Histopathology — punch biopsy, oral cavity', 'Punch biopsy, tongue', NULL, NULL,
  'Non-healing ulcer on the left lateral border of the tongue for 3 months. Chews tobacco.',
  'Single grey-white tissue piece 0.6 x 0.4 x 0.3 cm. Entirely embedded.',
  'Sheets and islands of atypical squamous cells with keratin pearls and intercellular bridges, infiltrating the underlying stroma.',
  'Left lateral border of tongue, punch biopsy: Moderately differentiated squamous cell carcinoma, keratinising. Depth of invasion at least 4 mm in this sample.',
  'Clinical staging with CECT face and neck advised.', NULL,
  'Non-healing ulcer on the tongue for 3 months', NULL, NULL, NULL),
-(3, NULL, 45, 'pathology', '88305', 'Histopathology — colonoscopic biopsy', 'Colonoscopic biopsy, sigmoid colon', NULL, NULL,
+(3, NULL, 45, 'pathology', '33717-0', 'Histopathology — colonoscopic biopsy', 'Colonoscopic biopsy, sigmoid colon', NULL, NULL,
  'Altered bowel habit and bleeding per rectum for 2 months. Ulceroproliferative growth at 25 cm on colonoscopy.',
  'Five grey-brown tissue bits, the largest 0.4 cm. All embedded.',
  'Complex, back-to-back malignant glands with dirty necrosis, infiltrating through the muscularis mucosae.',
@@ -699,7 +699,7 @@ INSERT INTO onc_cand_slot VALUES
  'Right upper abdominal discomfort and weight loss', 'C22.0', 'Liver cell carcinoma', NULL),
 (7, 'male', 50, 'marker', '83112-3', 'Prostate Specific Antigen (PSA), Total', 'Serum', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
  'Increased urinary frequency and nocturia for 6 months', NULL, NULL, 14.2),
-(8, NULL, 30, 'pathology', '88305', 'Histopathology — endoscopic biopsy, stomach', 'Endoscopic biopsy, gastric antrum', NULL, NULL,
+(8, NULL, 30, 'pathology', '33717-0', 'Histopathology — endoscopic biopsy, stomach', 'Endoscopic biopsy, gastric antrum', NULL, NULL,
  'Epigastric pain and dyspepsia for 4 months. Antral erosions on endoscopy.',
  'Four grey-white tissue bits, the largest 0.3 cm. All embedded.',
  'Antral mucosa with a dense lymphoplasmacytic infiltrate, neutrophilic activity and curved bacilli on the surface epithelium.',
@@ -1597,13 +1597,14 @@ WHERE tenant_id = '11111111-1111-1111-1111-111111111111' AND created_at > NOW()
 -- ---------------------------------------------------------------------------
 -- Registry candidate results (slots chosen above). The order sits on the
 -- patient's recent outpatient visit; imaging and lab results come back the
--- same day, histopathology 4 days later (never after yesterday).
+-- same day, histopathology 2 days later, inside the 72-hour lab turnaround target (never after
+-- yesterday).
 -- ---------------------------------------------------------------------------
 CREATE TEMP TABLE onc_cand_row ON COMMIT DROP AS
 SELECT *,
        pg_temp.u('cand-ord:' || c.slot) AS order_id,
        c.enc_day + TIME '11:30' AS ordered_at,
-       LEAST(c.enc_day + CASE s.kind WHEN 'pathology' THEN 4 ELSE 0 END, CURRENT_DATE - 1) + TIME '15:00' AS result_at
+       LEAST(c.enc_day + CASE s.kind WHEN 'pathology' THEN 2 ELSE 0 END, CURRENT_DATE - 1) + TIME '15:00' AS result_at
 FROM onc_cand c JOIN onc_cand_slot s USING (slot);
 
 UPDATE encounters e SET chief_complaint = r.complaint, presenting_symptoms = r.complaint,
@@ -1613,10 +1614,23 @@ FROM onc_cand_row r WHERE e.id = r.enc_id;
 INSERT INTO clinical_orders (id, tenant_id, encounter_id, patient_id, order_type, order_code, code_system, order_name,
   priority, status, clinical_indication, result_status, ordered_by, ordered_at, performed_at, resulted_at, created_at, updated_at)
 SELECT r.order_id, '11111111-1111-1111-1111-111111111111'::uuid, r.enc_id, r.patient_id,
-  CASE r.kind WHEN 'imaging' THEN 'imaging' ELSE 'lab' END, r.order_code, CASE r.kind WHEN 'marker' THEN 'LOINC' ELSE 'CPT' END,
+  CASE r.kind WHEN 'imaging' THEN 'imaging' ELSE 'lab' END, r.order_code, CASE r.kind WHEN 'imaging' THEN 'CPT' ELSE 'LOINC' END,
   r.order_name, 'routine', 'completed', COALESCE(r.history, r.complaint), 'final',
   '6d2df89a-3f81-5338-b197-373d347031db'::uuid, r.ordered_at, r.ordered_at + INTERVAL '30 minutes', r.result_at, r.ordered_at, r.result_at
 FROM onc_cand_row r WHERE r.kind IN ('pathology', 'imaging', 'marker');
+
+-- Lab orders carry their test, as orders placed in the app do. The result page reads the test's
+-- report style from it: Histopathology Examination (33717-0) is narrative, so the page shows the
+-- pathology report; without this link it looks for a structured lab report and finds none.
+INSERT INTO lab_order_tests (id, tenant_id, order_id, lab_test_master_id, test_code, code_system, test_name, loinc_code,
+  cpt_code, specimen_type, status, created_at, updated_at)
+SELECT pg_temp.u('cand-lot:' || r.slot), '11111111-1111-1111-1111-111111111111'::uuid, r.order_id,
+  (SELECT m.id FROM lab_test_master m
+   WHERE m.loinc_code = r.order_code AND (m.tenant_id = '11111111-1111-1111-1111-111111111111' OR m.tenant_id IS NULL)
+   ORDER BY m.tenant_id NULLS LAST LIMIT 1),
+  r.order_code, 'LOINC', r.order_name, r.order_code, CASE r.kind WHEN 'pathology' THEN '88305' END,
+  r.specimen, 'completed', r.ordered_at, r.result_at
+FROM onc_cand_row r WHERE r.kind IN ('pathology', 'marker');
 
 INSERT INTO pathology_reports (id, tenant_id, order_id, encounter_id, patient_id, report_status, version, specimen_type,
   collection_date, received_date, clinical_history, specimen_received, gross_description, microscopic_description, diagnosis, comment,
