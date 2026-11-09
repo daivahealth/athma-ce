@@ -17,6 +17,7 @@ import {
   CreditNoteStatus,
 } from '../dto/credit-note.dto';
 import { PatientLedgerService } from './patient-ledger.service';
+import { resolveClinicalApiUrl, resolveFoundationApiUrl } from '../../../common/service-urls';
 
 interface PatientDisplayDto {
   patientId: string;
@@ -30,10 +31,8 @@ interface PatientDisplayDto {
 @Injectable()
 export class CreditNoteService {
   private readonly logger = new Logger(CreditNoteService.name);
-  private readonly foundationApiUrl =
-    process.env.FOUNDATION_API_URL || 'http://localhost:3010/api/v1';
-  private readonly clinicalApiUrl =
-    process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+  private readonly foundationApiUrl = resolveFoundationApiUrl();
+  private readonly clinicalApiUrl = resolveClinicalApiUrl();
 
   constructor(
     private readonly prisma: PrismaService,
@@ -128,7 +127,10 @@ export class CreditNoteService {
         headers['authorization'] = authHeader;
       }
       const response = await firstValueFrom(
-        this.httpService.get(`${this.foundationApiUrl}/configs/resolve/${configKey}`, { headers }),
+        this.httpService.get(`${this.foundationApiUrl}/configs/resolve`, {
+          headers,
+          params: { key: configKey },
+        }),
       );
       return response?.data?.value ?? null;
     } catch (error) {

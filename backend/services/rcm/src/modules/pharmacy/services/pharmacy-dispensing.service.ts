@@ -23,11 +23,12 @@ import {
 } from '../dto/pharmacy-dispensing.dto';
 import { PharmacyStockService } from './pharmacy-stock.service';
 import { PharmacyChargeService } from './pharmacy-charge.service';
+import { resolveClinicalServiceApiUrl } from '../../../common/service-urls';
 
 @Injectable()
 export class PharmacyDispensingService {
   private readonly logger = new Logger(PharmacyDispensingService.name);
-  private readonly clinicalServiceUrl = process.env.CLINICAL_SERVICE_URL ?? 'http://localhost:3011/api/v1';
+  private readonly clinicalServiceUrl = resolveClinicalServiceApiUrl();
 
   constructor(
     private readonly prisma: PrismaService,

@@ -23,14 +23,13 @@ import {
 } from '../dto/refund.dto';
 import { PatientDisplayDto } from './invoice.service';
 import { PatientLedgerService } from './patient-ledger.service';
+import { resolveClinicalApiUrl, resolveFoundationApiUrl } from '../../../common/service-urls';
 
 @Injectable()
 export class RefundService {
   private readonly logger = new Logger(RefundService.name);
-  private readonly clinicalApiUrl =
-    process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
-  private readonly foundationApiUrl =
-    process.env.FOUNDATION_API_URL || 'http://localhost:3010/api/v1';
+  private readonly clinicalApiUrl = resolveClinicalApiUrl();
+  private readonly foundationApiUrl = resolveFoundationApiUrl();
 
   constructor(
     private readonly prisma: PrismaService,
@@ -57,7 +56,10 @@ export class RefundService {
         headers['authorization'] = authHeader;
       }
       const response = await firstValueFrom(
-        this.httpService.get(`${this.foundationApiUrl}/configs/resolve/${configKey}`, { headers }),
+        this.httpService.get(`${this.foundationApiUrl}/configs/resolve`, {
+          headers,
+          params: { key: configKey },
+        }),
       );
       return response?.data?.value ?? null;
     } catch (error) {

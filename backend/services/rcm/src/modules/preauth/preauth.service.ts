@@ -10,6 +10,7 @@ import {
     PreAuthStatus,
     PreAuthUrgency,
 } from './dto/preauth.dto';
+import { resolveClinicalApiUrl } from '../../common/service-urls';
 
 export interface PatientDisplayDto {
     patientId: string;
@@ -31,7 +32,7 @@ export interface PatientDisplayDto {
 @Injectable()
 export class PreAuthService {
     private readonly logger = new Logger(PreAuthService.name);
-    private readonly clinicalApiUrl = process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+    private readonly clinicalApiUrl = resolveClinicalApiUrl();
 
     constructor(
         private readonly prisma: PrismaService,

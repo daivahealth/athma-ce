@@ -12,6 +12,7 @@
     "start": "node dist/main.js",
     "dev": "NODE_ENV=development ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
     "type-check": "tsc --noEmit -p tsconfig.build.json",
+    "test": "jest --passWithNoTests",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -20,7 +21,6 @@
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.2.0",
     "@nestjs/platform-express": "^10.2.0",
-
     "@nestjs/swagger": "^7.4.2",
     "@zeal/contracts": "file:../../contracts",
     "@zeal/database-rcm": "file:../../shared/database-rcm",
@@ -34,5 +34,20 @@
     "@types/node": "^20.10.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
+    }
   }
 }

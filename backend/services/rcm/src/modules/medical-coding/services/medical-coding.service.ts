@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { resolveClinicalApiUrl } from '../../../common/service-urls';
 
 /**
  * MedicalCodingService
@@ -24,7 +25,7 @@ import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class MedicalCodingService {
   private readonly logger = new Logger(MedicalCodingService.name);
-  private readonly clinicalApiUrl = process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+  private readonly clinicalApiUrl = resolveClinicalApiUrl();
 
   constructor(
     private readonly prisma: PrismaService,

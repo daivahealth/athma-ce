@@ -12,6 +12,7 @@ import {
 } from './dto/claim.dto';
 import { ClaimGeneratorFactory } from './generators/claim-generator.factory';
 import { ClaimWithDetails } from './generators/claim-generator.interface';
+import { resolveClinicalApiUrl } from '../../common/service-urls';
 
 export interface PatientDisplayDto {
     patientId: string;
@@ -33,7 +34,7 @@ export interface PatientDisplayDto {
 @Injectable()
 export class ClaimsService {
     private readonly logger = new Logger(ClaimsService.name);
-    private readonly clinicalApiUrl = process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+    private readonly clinicalApiUrl = resolveClinicalApiUrl();
 
     constructor(
         private readonly prisma: PrismaService,
