@@ -142,8 +142,8 @@ Below the tiles, **Upcoming tumour board** lists the open cases (overdue ones in
 
 ## Oncology Registry
 
-**Oncology Registry** (`/oncology/registry`) lists every registered cancer diagnosis, one row per
-diagnosis.
+**Oncology Registry** (`/oncology/registry`) has two tabs: **Registered** lists every registered cancer
+diagnosis, one row per diagnosis; **Candidates** lists patients the system thinks should be added.
 
 - **Patient**: name, MRN, gender and age.
 - **Cancer Type** and **Primary Site**.
@@ -156,11 +156,42 @@ diagnosis.
 
 Search by patient name or MRN, and filter by clinical status. The count of patients is under the table.
 
+### Review registry candidates
+
+**Go to:** **Oncology Registry** → **Candidates**. When anyone is waiting, an amber banner on the
+**Registered** tab and a count on the tab say so.
+
+A patient appears here when they are not in the registry yet and a result from the last 6 months
+suggests cancer:
+
+- **Confirmed** (red): a finalised biopsy or pathology report that reports a malignancy, or a coded
+  cancer diagnosis (ICD-10 C00–C97, or D00–D09 in situ).
+- **Suspected** (amber): an imaging report suspicious for malignancy, such as BI-RADS 4 or 5,
+  PI-RADS 4 or 5, LI-RADS 5 or Lung-RADS 4.
+- **Indicative** (grey): a tumour marker above normal, with nothing else.
+
+Each candidate shows the results that flagged them: the type, test, date and the sentence that
+matched. Statements such as "negative for malignancy" are not counted.
+
+1. Read the results.
+2. Press **Add to Registry** to register the patient (see below), or **Dismiss** to remove them from
+   the queue. Dismissing needs a reason; pick one or type your own.
+
+**Check:** the patient is gone from **Candidates**. A dismissed patient comes back only if a new result
+suggests cancer.
+
 ### Add a diagnosis
 
-**Go to:** **Add to Registry** (`/oncology/registry/new`).
+**Go to:** **Candidates** → **Add to Registry** on the patient. For a patient with no result in the
+system, such as one referred with an outside biopsy, use **Add Manually**
+(`/oncology/registry/new`).
 
-1. Pick the patient.
+From the queue, the patient is already picked, **Source Results** shows the results, and the
+**Diagnosis Date** is set to the date of the confirming result. A coded diagnosis fills the
+**ICD-10 Code**. If there is only imaging or a tumour marker, **Verification Status** starts as
+**Provisional**. Check and change these as needed.
+
+1. Pick the patient (manual entry only).
 2. Under **Cancer Identity**, choose the **Cancer Type** (type to search). The **Primary Site** list then
    shows only the sites mapped to that cancer type, marked "(filtered for selected cancer type)", with the
    usual site marked **(default)**. If the cancer type has no mapped sites, every site is offered.

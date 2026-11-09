@@ -106,6 +106,35 @@ export class OncologyController {
     return { success: true, ...result };
   }
 
+  /** Candidate queue: unregistered patients with recent results that point to cancer. */
+  @Get('registry/candidates')
+  @Permissions('oncology.registry.read')
+  async listRegistryCandidates(
+    @Query('days') days?: string,
+    @Query('search') search?: string,
+    @Query('strength') strength?: string,
+    @Query('patientId') patientId?: string,
+  ) {
+    const result = await this.oncologyService.listRegistryCandidates({
+      days: days ? parseInt(days, 10) || undefined : undefined,
+      search,
+      strength,
+      patientId,
+    });
+    return { success: true, ...result };
+  }
+
+  @Post('registry/candidates/:patientId/dismiss')
+  @Permissions('oncology.diagnosis.write')
+  @HttpCode(HttpStatus.OK)
+  async dismissRegistryCandidate(@Param('patientId') patientId: string, @Body() body: Record<string, unknown>) {
+    try {
+      return { success: true, data: await this.oncologyService.dismissRegistryCandidate(patientId, body) };
+    } catch (err: unknown) {
+      this.handleError('dismissRegistryCandidate', err);
+    }
+  }
+
   @Get('registry/:patientId/summary')
   @Permissions('oncology.registry.read')
   async getPatientSummary(@Param('patientId') patientId: string) {

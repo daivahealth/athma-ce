@@ -10,6 +10,7 @@ const oncologyKeys = {
   diagnosisDetail: (id: string) => [...oncologyKeys.diagnoses(), 'detail', id] as const,
   registry: () => [...oncologyKeys.all, 'registry'] as const,
   registryList: (params?: Record<string, unknown>) => [...oncologyKeys.registry(), 'list', params] as const,
+  registryCandidates: (params?: Record<string, unknown>) => [...oncologyKeys.registry(), 'candidates', params] as const,
   registrySummary: (patientId: string) => [...oncologyKeys.registry(), 'summary', patientId] as const,
   registryLabs: (patientId: string) => [...oncologyKeys.registry(), 'labs', patientId] as const,
   registryLabHistory: (patientId: string) => [...oncologyKeys.registry(), 'labs', patientId, 'history'] as const,
@@ -98,6 +99,29 @@ export function useUpdateCancerDiagnosis() {
       oncologyService.updateDiagnosis(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: oncologyKeys.diagnoses() });
+      queryClient.invalidateQueries({ queryKey: oncologyKeys.registry() });
+    },
+  });
+}
+
+// Registry candidate queue
+export function useRegistryCandidates(
+  params?: { days?: number; search?: string; strength?: string; patientId?: string },
+  enabled = true,
+) {
+  return useQuery({
+    queryKey: oncologyKeys.registryCandidates(params),
+    queryFn: () => oncologyService.listRegistryCandidates(params),
+    enabled,
+  });
+}
+
+export function useDismissRegistryCandidate() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ patientId, ...body }: Parameters<typeof oncologyService.dismissRegistryCandidate>[1] & { patientId: string }) =>
+      oncologyService.dismissRegistryCandidate(patientId, body),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: oncologyKeys.registry() });
     },
   });

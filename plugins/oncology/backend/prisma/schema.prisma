@@ -673,3 +673,32 @@ model CancerTimelineEvent {
   @@map("cancer_timeline_events")
   @@schema("plugin_oncology")
 }
+
+/// A clinician's decision on one piece of registry-candidate evidence (a pathology,
+/// imaging or tumour-marker result, or a coded diagnosis). The candidate queue is
+/// computed from finalised results on read; this table only records what was done
+/// with each result so it does not come back: `added` (the patient was added to
+/// the registry from it) or `dismissed` (reviewed and not a registry case).
+model RegistryCandidateDecision {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  patientId         String    @map("patient_id") @db.Uuid
+
+  // pathology | imaging | diagnosis | tumor_marker
+  sourceType        String    @map("source_type") @db.VarChar(30)
+  // pathology_reports.id | imaging_reports.id | encounter_diagnoses.id | lab_result_items.id
+  sourceId          String    @map("source_id") @db.Uuid
+
+  // added | dismissed
+  decision          String    @db.VarChar(20)
+  reason            String?   @db.Text
+  cancerDiagnosisId String?   @map("cancer_diagnosis_id") @db.Uuid
+
+  decidedBy         String?   @map("decided_by") @db.Uuid
+  decidedAt         DateTime  @default(now()) @map("decided_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, sourceType, sourceId])
+  @@index([tenantId, patientId])
+  @@map("registry_candidate_decisions")
+  @@schema("plugin_oncology")
+}

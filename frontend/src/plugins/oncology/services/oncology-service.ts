@@ -4,7 +4,7 @@ import type {
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
   RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan, OncologyLabPoint,
   RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
-  CancerTimelineEvent, TreatmentPlan, TreatmentPlanSummary, WorklistDay, OncologyDashboard, OncologyPopulationHealth,
+  CancerTimelineEvent, RegistryCandidate, RegistryCandidateSourceType, TreatmentPlan, TreatmentPlanSummary, WorklistDay, OncologyDashboard, OncologyPopulationHealth,
 } from '../types';
 
 const BASE_URL = '/plugins/oncology';
@@ -46,6 +46,17 @@ export const oncologyService = {
   async listRegistry(params?: { cancerType?: string; clinicalStatus?: string; search?: string; page?: number; limit?: number }) {
     const { data } = await clinicalClient.get(`${BASE_URL}/registry`, { params });
     return data;
+  },
+
+  /** Unregistered patients with recent results that suggest cancer. */
+  async listRegistryCandidates(params?: { days?: number; search?: string; strength?: string; patientId?: string }): Promise<{ data: RegistryCandidate[]; total: number }> {
+    const { data } = await clinicalClient.get(`${BASE_URL}/registry/candidates`, { params });
+    return { data: data.data ?? [], total: data.total ?? 0 };
+  },
+
+  async dismissRegistryCandidate(patientId: string, body: { reason: string; sources: Array<{ sourceType: RegistryCandidateSourceType; sourceId: string }> }) {
+    const { data } = await clinicalClient.post(`${BASE_URL}/registry/candidates/${patientId}/dismiss`, body);
+    return data.data;
   },
 
   async getRegistrySummary(patientId: string) {
