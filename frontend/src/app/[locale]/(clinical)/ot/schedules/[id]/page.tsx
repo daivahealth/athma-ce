@@ -1,17 +1,42 @@
 'use client';
 
 import * as React from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { format } from 'date-fns';
-import { ArrowLeft, FileSignature, User, Users } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useParams } from 'next/navigation';
+import { format, isSameDay } from 'date-fns';
+import {
+  Activity,
+  AlertTriangle,
+  CalendarClock,
+  ClipboardList,
+  Clock,
+  DoorOpen,
+  FileSignature,
+  History,
+  Syringe,
+  Users,
+} from 'lucide-react';
+import { TONE_TEXT, TONE_WASH } from '@/components/ui/tone-classes';
+import { cn } from '@/lib/utils';
 import { useOtSchedule, useOtScheduleHistory } from '@/modules/ot/hooks/use-ot';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
-import { OtScheduleStatusBadge, OtReportStatusBadge } from '@/modules/ot/components/ot-status-badge';
+import { otScheduleStatusTone } from '@/modules/ot/ot-tone';
+import {
+  OtReportStatusBadge,
+  OtScheduleStatusBadge,
+} from '@/modules/ot/components/ot-status-badge';
+import { OtErrorPanel, humanize } from '@/modules/ot/components/ot-list';
+import {
+  OtDetailHero,
+  OtDetailSkeleton,
+  OtFact,
+  OtLinkRow,
+  OtSection,
+  OtStatusTimeline,
+} from '@/modules/ot/components/ot-detail';
+import type { OtScheduleStatus } from '@/modules/ot/types';
 
-function fmt(value?: string | null): string {
-  if (!value) return '—';
+function fmt(value?: string | null): string | null {
+  if (!value) return null;
   try {
     return format(new Date(value), 'dd MMM yyyy, HH:mm');
   } catch {
@@ -19,17 +44,87 @@ function fmt(value?: string | null): string {
   }
 }
 
-function humanizeRole(role: string): string {
-  return role
-    .toLowerCase()
-    .split('_')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
+function range(startIso?: string | null, endIso?: string | null) {
+  if (!startIso) return null;
+  const start = new Date(startIso);
+  if (!endIso) return `${format(start, 'dd MMM yyyy, HH:mm')} – in progress`;
+  const end = new Date(endIso);
+  return `${format(start, 'dd MMM yyyy, HH:mm')} – ${format(end, isSameDay(start, end) ? 'HH:mm' : 'dd MMM, HH:mm')}`;
+}
+
+/** The day-of-surgery steps in order, for the progress tracker. */
+const FLOW: OtScheduleStatus[] = [
+  'PLANNED',
+  'CONFIRMED',
+  'PATIENT_READY',
+  'PATIENT_IN_OT',
+  'ANAESTHESIA_STARTED',
+  'SURGERY_STARTED',
+  'SURGERY_COMPLETED',
+  'PATIENT_SHIFTED_TO_RECOVERY',
+];
+
+const FLOW_LABEL: Partial<Record<OtScheduleStatus, string>> = {
+  PATIENT_IN_OT: 'In OT',
+  ANAESTHESIA_STARTED: 'Anaesthesia',
+  SURGERY_STARTED: 'Surgery',
+  SURGERY_COMPLETED: 'Completed',
+  PATIENT_SHIFTED_TO_RECOVERY: 'Recovery',
+};
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/);
+  return (
+    (parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length - 1][0] : '')
+  ).toUpperCase();
+}
+
+/** A horizontal stepper across the theatre stages, filled up to the current one. */
+function FlowTracker({ status }: { status: OtScheduleStatus }) {
+  const index = FLOW.indexOf(status);
+  return (
+    <ol className="grid grid-cols-4 gap-y-4 sm:grid-cols-8">
+      {FLOW.map((step, i) => {
+        const done = index >= 0 && i < index;
+        const current = i === index;
+        return (
+          <li key={step} className="relative flex flex-col items-center text-center">
+            {i > 0 ? (
+              <span
+                className={cn(
+                  'absolute right-1/2 top-3 h-0.5 w-full -translate-y-1/2',
+                  done || current ? 'bg-primary' : 'bg-border',
+                )}
+                aria-hidden="true"
+              />
+            ) : null}
+            <span
+              className={cn(
+                'relative z-10 flex size-6 items-center justify-center rounded-full border-2 text-[10px] font-semibold',
+                done && 'border-primary bg-primary text-primary-foreground',
+                current && 'border-primary bg-background text-primary ring-4 ring-primary/15',
+                !done && !current && 'border-border bg-background text-muted-foreground',
+              )}
+            >
+              {i + 1}
+            </span>
+            <span
+              className={cn(
+                'mt-1.5 px-1 text-[11px] leading-tight',
+                current ? 'font-semibold text-foreground' : 'text-muted-foreground',
+              )}
+            >
+              {FLOW_LABEL[step] ?? humanize(step)}
+            </span>
+          </li>
+        );
+      })}
+    </ol>
+  );
 }
 
 export default function OtScheduleDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const locale = (params.locale as string) || 'en';
   const id = params.id as string;
 
@@ -42,182 +137,183 @@ export default function OtScheduleDetailPage() {
     (staff ?? []).forEach((s) => m.set(s.id, s.displayName || `${s.firstName} ${s.lastName}`));
     return m;
   }, [staff]);
+  const staffName = (staffId?: string | null) =>
+    staffId ? (staffMap.get(staffId) ?? staffId) : null;
 
-  const staffName = (staffId?: string | null) => (staffId ? staffMap.get(staffId) ?? staffId : null);
-  const roomName = schedule?.roomDisplayName || schedule?.room?.space?.name || null;
+  if (isLoading) return <OtDetailSkeleton />;
+  if (error || !schedule)
+    return <OtErrorPanel error={error ?? new Error('OT schedule not found.')} />;
+
+  const roomName = schedule.roomDisplayName || schedule.room?.space?.name || 'OT Schedule';
+  const roomDescription =
+    schedule.roomDisplayDescription ||
+    [schedule.room?.space?.spaceNumber].filter(Boolean).join(' · ');
+  const offFlow = schedule.status === 'CANCELLED' || schedule.status === 'POSTPONED';
+
+  const team: Array<{ role: string; name: string | null }> = [
+    { role: 'Primary surgeon', name: staffName(schedule.primarySurgeonId) },
+    ...(schedule.assistantSurgeonIds ?? []).map((sid) => ({
+      role: 'Assistant surgeon',
+      name: staffName(sid),
+    })),
+    { role: 'Anaesthetist', name: staffName(schedule.anaesthetistId) },
+    { role: 'Scrub nurse', name: staffName(schedule.scrubNurseId) },
+    { role: 'Circulating nurse', name: staffName(schedule.circulatingNurseId) },
+    { role: 'Technician', name: staffName(schedule.technicianId) },
+    ...(schedule.teamMembers ?? []).map((member) => ({
+      role: humanize(member.role),
+      name: staffName(member.staffId),
+    })),
+  ];
+  // Always show the surgeon and anaesthetist slots; other roles only when someone is assigned.
+  // Team members often repeat the named slots, so drop duplicates of the same person in the same role.
+  const ALWAYS_SHOWN = ['Primary surgeon', 'Anaesthetist'];
+  const seen = new Set<string>();
+  const uniqueTeam = team.filter((member) => {
+    if (!member.name && !ALWAYS_SHOWN.includes(member.role)) return false;
+    const key = `${member.role.toLowerCase()}|${member.name ?? ''}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={() => router.push(`/${locale}/ot/schedules`)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <OtDetailHero
+        backHref={`/${locale}/ot/schedules`}
+        backLabel="OT Schedules"
+        kicker="Theatre booking"
+        icon={CalendarClock}
+        title={roomName}
+        subtitle={roomDescription || undefined}
+        tone={otScheduleStatusTone(schedule.status)}
+        badges={
+          <>
+            <OtScheduleStatusBadge status={schedule.status} />
+            {!schedule.isCurrent ? (
+              <span className="rounded-full border bg-muted/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                Historical slot
+              </span>
+            ) : null}
+          </>
+        }
+        patient={schedule}
+        facts={
+          <>
+            <OtFact label="Scheduled" icon={CalendarClock} className="sm:col-span-2">
+              {range(schedule.scheduledStartTime, schedule.scheduledEndTime)}
+            </OtFact>
+            <OtFact label="Actual" icon={Clock} className="sm:col-span-2">
+              {range(schedule.actualStartTime, schedule.actualEndTime)}
+            </OtFact>
+            <OtFact label="Anaesthesia" icon={Syringe}>
+              {schedule.anaesthesiaType}
+            </OtFact>
+            <OtFact label="Room" icon={DoorOpen}>
+              {roomName}
+            </OtFact>
+          </>
+        }
+      />
 
-      {isLoading ? (
-        <div className="py-8 text-center text-muted-foreground">Loading OT schedule...</div>
-      ) : error || !schedule ? (
-        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
-          {error instanceof Error ? error.message : 'OT schedule not found.'}
+      {schedule.postponedReason || schedule.cancelledReason ? (
+        <div
+          className={cn(
+            'flex items-start gap-2.5 rounded-xl border px-4 py-3 text-sm',
+            schedule.cancelledReason
+              ? [TONE_WASH.red, TONE_TEXT.red]
+              : [TONE_WASH.amber, TONE_TEXT.amber],
+          )}
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div>
+            <p className="font-semibold">{schedule.cancelledReason ? 'Cancelled' : 'Postponed'}</p>
+            <p>{schedule.cancelledReason || schedule.postponedReason}</p>
+          </div>
         </div>
-      ) : (
-        <>
-          <Card>
-            <CardHeader>
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    {roomName || 'OT Schedule'}
-                    <OtScheduleStatusBadge status={schedule.status} />
-                  </CardTitle>
-                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                    <User className="h-4 w-4" />
-                    <span className="font-medium text-foreground">
-                      {schedule.patientDisplay?.displayName || 'Unknown patient'}
-                    </span>
-                    <span>
-                      MRN: {schedule.patientDisplay?.mrn || '—'} · {schedule.patientDisplay?.gender || '—'} /{' '}
-                      {schedule.patientDisplay?.age ?? '—'}y
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
-              <div>
-                <p className="text-xs text-muted-foreground">Scheduled Start</p>
-                <p className="font-medium">{fmt(schedule.scheduledStartTime)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Scheduled End</p>
-                <p className="font-medium">{fmt(schedule.scheduledEndTime)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Actual Start</p>
-                <p className="font-medium">{fmt(schedule.actualStartTime)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Actual End</p>
-                <p className="font-medium">{fmt(schedule.actualEndTime)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Primary Surgeon</p>
-                <p className="font-medium">{staffName(schedule.primarySurgeonId) || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Anaesthetist</p>
-                <p className="font-medium">{staffName(schedule.anaesthetistId) || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Scrub Nurse</p>
-                <p className="font-medium">{staffName(schedule.scrubNurseId) || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Circulating Nurse</p>
-                <p className="font-medium">{staffName(schedule.circulatingNurseId) || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Technician</p>
-                <p className="font-medium">{staffName(schedule.technicianId) || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Anaesthesia Type</p>
-                <p className="font-medium">{schedule.anaesthesiaType || '—'}</p>
-              </div>
-              {schedule.assistantSurgeonIds?.length ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Assistant Surgeons</p>
-                  <p className="font-medium">
-                    {schedule.assistantSurgeonIds.map((sid) => staffName(sid) || sid).join(', ')}
-                  </p>
-                </div>
-              ) : null}
-              {schedule.postponedReason ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Postponed Reason</p>
-                  <p className="font-medium text-amber-600 dark:text-amber-400">{schedule.postponedReason}</p>
-                </div>
-              ) : null}
-              {schedule.cancelledReason ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Cancelled Reason</p>
-                  <p className="font-medium text-destructive">{schedule.cancelledReason}</p>
-                </div>
-              ) : null}
-            </CardContent>
-          </Card>
+      ) : null}
 
-          {schedule.teamMembers && schedule.teamMembers.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Users className="h-4 w-4" /> Team Members
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {schedule.teamMembers.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center justify-between rounded-lg border border-border/60 bg-card/60 p-2.5 text-sm"
+      {!offFlow ? (
+        <OtSection title="Day-of-surgery progress" icon={Activity}>
+          <FlowTracker status={schedule.status} />
+        </OtSection>
+      ) : null}
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <OtSection title="Theatre team" icon={Users}>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {uniqueTeam.map((member, index) => (
+                <li
+                  key={`${member.role}-${index}`}
+                  className="flex items-center gap-3 rounded-xl border bg-background px-3.5 py-2.5"
+                >
+                  <span
+                    className={cn(
+                      'flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ring-1 ring-inset',
+                      member.name
+                        ? 'bg-primary/10 text-primary ring-primary/15'
+                        : 'bg-muted text-muted-foreground ring-border',
+                    )}
+                    aria-hidden="true"
                   >
-                    <span className="font-medium">{staffName(member.staffId) || member.staffId}</span>
-                    <span className="text-xs text-muted-foreground">{humanizeRole(member.role)}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          ) : null}
-
-          {schedule.reports && schedule.reports.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">OT Reports</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {schedule.reports.map((r) => (
-                  <button
-                    key={r.id}
-                    type="button"
-                    onClick={() => router.push(`/${locale}/ot/reports/${r.id}`)}
-                    className="flex w-full items-center justify-between rounded-lg border border-border/60 bg-card/60 p-2.5 text-left text-sm hover:bg-accent/40"
-                  >
-                    <span className="flex items-center gap-2">
-                      <FileSignature className="h-4 w-4 text-muted-foreground" />
-                      {r.reportNumber}
-                    </span>
-                    <OtReportStatusBadge status={r.reportStatus} />
-                  </button>
-                ))}
-              </CardContent>
-            </Card>
-          ) : null}
-
-          {history && history.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Status History</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {[...history]
-                  .sort((a, b) => b.changedAt.localeCompare(a.changedAt))
-                  .map((event) => (
-                    <div
-                      key={event.id}
-                      className="flex items-center justify-between rounded-lg border border-border/60 bg-card/60 p-2.5 text-sm"
+                    {member.name ? initials(member.name) : '?'}
+                  </span>
+                  <div className="min-w-0">
+                    <p
+                      className={cn(
+                        'truncate text-sm font-medium',
+                        !member.name && 'text-muted-foreground',
+                      )}
                     >
-                      <span>
-                        {event.fromStatus ? `${event.fromStatus} → ` : ''}
-                        {event.toStatus}
-                      </span>
-                      <span className="text-xs text-muted-foreground">{fmt(event.changedAt)}</span>
-                    </div>
-                  ))}
-              </CardContent>
-            </Card>
-          ) : null}
-        </>
-      )}
+                      {member.name || 'Not assigned'}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">{member.role}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </OtSection>
+
+          <OtSection title="Linked records" icon={FileSignature}>
+            <div className="space-y-2">
+              <OtLinkRow
+                href={`/${locale}/ot/requests/${schedule.otRequestId}`}
+                icon={ClipboardList}
+                title="OT request"
+                meta="Open the original request"
+              />
+              {(schedule.reports ?? []).map((r) => (
+                <OtLinkRow
+                  key={r.id}
+                  href={`/${locale}/ot/reports/${r.id}`}
+                  icon={FileSignature}
+                  title={r.reportNumber}
+                  meta={r.signedAt ? `Signed ${fmt(r.signedAt)}` : `Created ${fmt(r.createdAt)}`}
+                  badge={<OtReportStatusBadge status={r.reportStatus} />}
+                />
+              ))}
+              {!schedule.reports?.length ? (
+                <p className="px-1 pt-1 text-xs text-muted-foreground">
+                  No operative report written yet.
+                </p>
+              ) : null}
+            </div>
+          </OtSection>
+        </div>
+
+        <OtSection title="Status history" icon={History} className="self-start">
+          {history && history.length > 0 ? (
+            <OtStatusTimeline
+              events={history}
+              toneOf={otScheduleStatusTone}
+              formatDate={(iso) => fmt(iso) ?? iso}
+            />
+          ) : (
+            <p className="text-sm text-muted-foreground">No status changes recorded yet.</p>
+          )}
+        </OtSection>
+      </div>
     </div>
   );
 }

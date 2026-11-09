@@ -1,13 +1,33 @@
 'use client';
 
 import { useDeferredValue, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { format } from 'date-fns';
-import { Ban, CheckCircle2, Eye, FileText, Filter, Plus, Search, Send, ShieldCheck, User } from 'lucide-react';
+import { format, formatDistanceToNow } from 'date-fns';
+import {
+  Ban,
+  CalendarDays,
+  CheckCircle2,
+  ClipboardList,
+  Eye,
+  FileText,
+  MoreHorizontal,
+  Plus,
+  Send,
+  ShieldCheck,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { EmptyState } from '@/components/ui/empty-state';
+import { PageHeader } from '@/components/ui/page-header';
+import { PatientIdentity } from '@/components/ui/patient-identity';
 import {
   Table,
   TableBody,
@@ -19,7 +39,35 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { useOtRequests, useTransitionOtRequest } from '@/modules/ot/hooks/use-ot';
 import { OT_REQUEST_STATUSES, type OtRequestStatus } from '@/modules/ot/types';
-import { OtRequestPriorityBadge, OtRequestStatusBadge } from '@/modules/ot/components/ot-status-badge';
+import { OT_REQUEST_STATUS_TONE } from '@/modules/ot/ot-tone';
+import {
+  OtRequestPriorityBadge,
+  OtRequestStatusBadge,
+} from '@/modules/ot/components/ot-status-badge';
+import {
+  OtDateTime,
+  OtErrorPanel,
+  OtListToolbar,
+  OtSearchInput,
+  OtStatusFilter,
+  OtTableSkeleton,
+  countBy,
+} from '@/modules/ot/components/ot-list';
+
+type RequestAction = 'submit' | 'review' | 'approve' | 'complete' | 'cancel';
+
+const STATUS_OPTIONS = OT_REQUEST_STATUSES.map((value) => ({
+  value,
+  tone: OT_REQUEST_STATUS_TONE[value],
+}));
+const CLOSED: OtRequestStatus[] = ['COMPLETED', 'CANCELLED', 'REJECTED'];
+const ACTION_DONE: Record<RequestAction, string> = {
+  submit: 'Request submitted.',
+  review: 'Request moved to review.',
+  approve: 'Request approved.',
+  complete: 'Request completed.',
+  cancel: 'Request cancelled.',
+};
 
 export default function OtRequestsPage() {
   const params = useParams() as { locale: string };
@@ -27,49 +75,49 @@ export default function OtRequestsPage() {
   const publishToast = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | OtRequestStatus>('all');
-  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const deferredSearchQuery = useDeferredValue(searchQuery.trim());
 
-  const { data: requests, isLoading, error } = useOtRequests(
-    deferredSearchQuery || statusFilter !== 'all'
-      ? {
-          ...(deferredSearchQuery ? { search: deferredSearchQuery } : {}),
-          ...(statusFilter !== 'all' ? { status: statusFilter } : {}),
-        }
-      : undefined
-  );
+  // Status is filtered here rather than on the server so each chip can show its count.
+  const {
+    data: requests,
+    isLoading,
+    error,
+  } = useOtRequests(deferredSearchQuery ? { search: deferredSearchQuery } : undefined);
 
   const submitRequest = useTransitionOtRequest('submit');
   const reviewRequest = useTransitionOtRequest('review');
   const approveRequest = useTransitionOtRequest('approve');
   const completeRequest = useTransitionOtRequest('complete');
   const cancelRequest = useTransitionOtRequest('cancel');
+  const executors = {
+    submit: submitRequest,
+    review: reviewRequest,
+    approve: approveRequest,
+    complete: completeRequest,
+    cancel: cancelRequest,
+  };
+  const isMutating = Object.values(executors).some((m) => m.isPending);
 
-  const orderedRequests = useMemo(
+  const allRequests = useMemo(
     () =>
       [...(requests ?? [])].sort(
-        (a, b) => new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime()
+        (a, b) => new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime(),
       ),
-    [requests]
+    [requests],
   );
+  const counts = useMemo(() => countBy(allRequests, (r) => r.status), [allRequests]);
+  const visibleRequests = useMemo(
+    () =>
+      statusFilter === 'all' ? allRequests : allRequests.filter((r) => r.status === statusFilter),
+    [allRequests, statusFilter],
+  );
+  const awaitingDecision = (counts.REQUESTED ?? 0) + (counts.UNDER_REVIEW ?? 0);
+  const readyToSchedule = counts.APPROVED ?? 0;
 
-  const handleAction = async (
-    id: string,
-    action: 'submit' | 'review' | 'approve' | 'complete' | 'cancel'
-  ) => {
+  const handleAction = async (id: string, action: RequestAction) => {
     try {
-      const executor = {
-        submit: submitRequest,
-        review: reviewRequest,
-        approve: approveRequest,
-        complete: completeRequest,
-        cancel: cancelRequest,
-      }[action];
-
-      await executor.mutateAsync({ id });
-      publishToast({
-        title: 'OT request updated',
-        description: `Request ${action.replace('-', ' ')} completed.`,
-      });
+      await executors[action].mutateAsync({ id });
+      publishToast({ title: 'OT request updated', description: ACTION_DONE[action] });
     } catch (error) {
       publishToast({
         variant: 'destructive',
@@ -79,220 +127,241 @@ export default function OtRequestsPage() {
     }
   };
 
+  const requestHref = (id: string) => `/${params.locale}/ot/requests/${id}`;
+  const newHref = `/${params.locale}/ot/requests/new`;
+  const filtered = Boolean(deferredSearchQuery) || statusFilter !== 'all';
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">OT Requests</h1>
-          <p className="text-muted-foreground">
-            Manage OT demand from draft through approval, scheduling, and completion.
-          </p>
-        </div>
-        <Button onClick={() => router.push(`/${params.locale}/ot/requests/new`)}>
-          <Plus className="mr-2 h-4 w-4" />
-          New OT Request
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <PageHeader
+        icon={ClipboardList}
+        title="OT Requests"
+        subtitle="Theatre demand from draft through approval, scheduling and completion."
+        actions={
+          <Button asChild>
+            <Link href={newHref}>
+              <Plus className="mr-2 h-4 w-4" />
+              New OT Request
+            </Link>
+          </Button>
+        }
+      />
 
-      <Card>
-        <CardContent className="pt-6">
-          <div className="mb-6 flex gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search patients by name, MRN, or phone..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <Select
-                value={statusFilter}
-                onValueChange={(value) => setStatusFilter(value as 'all' | OtRequestStatus)}
-              >
-                <SelectTrigger className="w-[220px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All statuses</SelectItem>
-                  {OT_REQUEST_STATUSES.map((status) => (
-                    <SelectItem key={status} value={status}>
-                      {status}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+      <Card className="overflow-hidden">
+        <OtListToolbar
+          search={<OtSearchInput value={searchQuery} onChange={setSearchQuery} />}
+          summary={
+            !isLoading && !error ? (
+              <span>
+                {awaitingDecision > 0 ? (
+                  <span className="font-medium text-amber-700 dark:text-amber-300">
+                    {awaitingDecision} awaiting approval
+                  </span>
+                ) : (
+                  <span>None awaiting approval</span>
+                )}
+                {readyToSchedule > 0 ? (
+                  <>
+                    {' · '}
+                    <span className="font-medium text-emerald-700 dark:text-emerald-300">
+                      {readyToSchedule} ready to schedule
+                    </span>
+                  </>
+                ) : null}
+                {' · '}
+                {visibleRequests.length} of {allRequests.length} shown
+              </span>
+            ) : null
+          }
+          filters={
+            <OtStatusFilter
+              options={STATUS_OPTIONS}
+              value={statusFilter}
+              onChange={setStatusFilter}
+              counts={counts}
+              total={allRequests.length}
+            />
+          }
+        />
 
-          {isLoading ? (
-            <div className="flex justify-center py-8">
-              <div className="text-muted-foreground">Loading OT requests...</div>
-            </div>
-          ) : error ? (
-            <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
-              {(error as Error).message}
-            </div>
-          ) : orderedRequests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <FileText className="mb-4 h-12 w-12 text-muted-foreground" />
-              <h3 className="mb-2 text-lg font-semibold">No OT requests found</h3>
-              <p className="mb-4 text-sm text-muted-foreground">
-                {searchQuery || statusFilter !== 'all'
-                  ? 'Try adjusting your search criteria.'
-                  : 'Create the first theatre request or change the current filter.'}
-              </p>
-              <Button onClick={() => router.push(`/${params.locale}/ot/requests/new`)}>
-                <Plus className="mr-2 h-4 w-4" />
-                Create OT Request
-              </Button>
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Procedure</TableHead>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Preferred Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Requested At</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orderedRequests.map((request) => (
+        {isLoading ? (
+          <OtTableSkeleton />
+        ) : error ? (
+          <OtErrorPanel error={error} className="m-5" />
+        ) : visibleRequests.length === 0 ? (
+          <EmptyState
+            icon={FileText}
+            title={filtered ? 'No requests match' : 'No OT requests yet'}
+            description={
+              filtered
+                ? 'Try another name or MRN, or pick a different status.'
+                : 'Raise the first theatre request for a patient’s operation.'
+            }
+            action={
+              filtered ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setStatusFilter('all');
+                  }}
+                >
+                  Clear filters
+                </Button>
+              ) : (
+                <Button asChild size="sm">
+                  <Link href={newHref}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create OT Request
+                  </Link>
+                </Button>
+              )
+            }
+          />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="pl-5">Procedure</TableHead>
+                <TableHead>Patient</TableHead>
+                <TableHead className="whitespace-nowrap">Preferred date</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="pr-5 text-right">
+                  <span className="sr-only">Actions</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {visibleRequests.map((request) => {
+                const detail = [request.procedureCode, request.surgeryType]
+                  .filter(Boolean)
+                  .join(' · ');
+                const primary: { action: RequestAction; label: string; icon: typeof Send } | null =
+                  request.status === 'DRAFT'
+                    ? { action: 'submit', label: 'Submit', icon: Send }
+                    : request.status === 'REQUESTED' || request.status === 'UNDER_REVIEW'
+                      ? { action: 'approve', label: 'Approve', icon: CheckCircle2 }
+                      : request.status === 'SCHEDULED'
+                        ? { action: 'complete', label: 'Complete', icon: CheckCircle2 }
+                        : null;
+                return (
                   <TableRow
                     key={request.id}
                     className="cursor-pointer"
-                    onClick={() => router.push(`/${params.locale}/ot/requests/${request.id}`)}
+                    onClick={() => router.push(requestHref(request.id))}
                   >
-                    <TableCell>
-                      <div className="space-y-1">
-                        <div className="font-medium text-primary hover:underline">{request.procedureName}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {request.procedureCode || request.surgeryType || 'Procedure details pending'}
-                        </div>
-                        {request.remarks ? (
-                          <div className="line-clamp-1 text-sm text-muted-foreground">
-                            {request.remarks}
-                          </div>
-                        ) : null}
-                      </div>
-                    </TableCell>
-                    <TableCell>
+                    <TableCell className="max-w-[340px] py-4 pl-5">
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-muted-foreground" />
-                        <div className="flex flex-col gap-0.5">
-                          <span className="font-medium">
-                            {request.patientDisplay?.displayName || 'Unknown patient'}
-                          </span>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span>MRN: {request.patientDisplay?.mrn || '—'}</span>
-                            <span>•</span>
-                            <span>
-                              {request.patientDisplay?.gender || '—'} /{' '}
-                              {request.patientDisplay?.age ?? '—'}y
-                            </span>
-                          </div>
-                        </div>
+                        <Link
+                          href={requestHref(request.id)}
+                          className="truncate text-sm font-semibold text-foreground hover:text-primary hover:underline"
+                          onClick={(e) => e.stopPropagation()}
+                          title={request.procedureName}
+                        >
+                          {request.procedureName}
+                        </Link>
+                        <OtRequestPriorityBadge priority={request.priority} />
+                      </div>
+                      <div
+                        className="mt-0.5 truncate text-xs text-muted-foreground"
+                        title={request.remarks ?? undefined}
+                      >
+                        {[detail, request.remarks].filter(Boolean).join(' — ') ||
+                          'Procedure details pending'}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <OtRequestPriorityBadge priority={request.priority} />
+                    <TableCell className="py-4">
+                      <PatientIdentity source={request} />
                     </TableCell>
-                    <TableCell>
-                      {request.preferredDate
-                        ? format(new Date(request.preferredDate), 'dd MMM yyyy')
-                        : 'Not set'}
+                    <TableCell className="py-4">
+                      {request.preferredDate ? (
+                        <div className="flex items-center gap-2">
+                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                          <OtDateTime
+                            date={format(new Date(request.preferredDate), 'dd MMM yyyy')}
+                          />
+                        </div>
+                      ) : (
+                        <OtDateTime date="Not set" muted />
+                      )}
                     </TableCell>
-                    <TableCell>
-                      <OtRequestStatusBadge status={request.status} />
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(request.requestedAt), 'dd MMM yyyy, HH:mm')}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => router.push(`/${params.locale}/ot/requests/${request.id}`)}
+                    <TableCell className="py-4">
+                      <div className="flex flex-col items-start gap-1">
+                        <OtRequestStatusBadge status={request.status} />
+                        <span
+                          className="whitespace-nowrap text-xs text-muted-foreground"
+                          title={format(new Date(request.requestedAt), 'dd MMM yyyy, HH:mm')}
                         >
-                          <Eye className="mr-2 h-4 w-4" />
-                          View
-                        </Button>
-                        {request.status === 'DRAFT' && (
+                          Requested{' '}
+                          {formatDistanceToNow(new Date(request.requestedAt), { addSuffix: true })}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-4 pr-5">
+                      <div
+                        className="flex items-center justify-end gap-1.5"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {primary ? (
                           <Button
                             size="sm"
-                            onClick={() => handleAction(request.id, 'submit')}
-                            disabled={submitRequest.isPending}
+                            variant={primary.action === 'complete' ? 'outline' : 'default'}
+                            onClick={() => handleAction(request.id, primary.action)}
+                            disabled={isMutating}
                           >
-                            <Send className="mr-2 h-4 w-4" />
-                            Submit
+                            <primary.icon className="mr-1.5 h-3.5 w-3.5" />
+                            {primary.label}
                           </Button>
-                        )}
-                        {request.status === 'REQUESTED' && (
-                          <>
+                        ) : null}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleAction(request.id, 'review')}
-                              disabled={reviewRequest.isPending}
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8"
+                              aria-label="More actions"
                             >
-                              <ShieldCheck className="mr-2 h-4 w-4" />
-                              Review
+                              <MoreHorizontal className="h-4 w-4" />
                             </Button>
-                            <Button
-                              size="sm"
-                              onClick={() => handleAction(request.id, 'approve')}
-                              disabled={approveRequest.isPending}
-                            >
-                              Approve
-                            </Button>
-                          </>
-                        )}
-                        {request.status === 'UNDER_REVIEW' && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleAction(request.id, 'approve')}
-                            disabled={approveRequest.isPending}
-                          >
-                            Approve
-                          </Button>
-                        )}
-                        {request.status === 'SCHEDULED' && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleAction(request.id, 'complete')}
-                            disabled={completeRequest.isPending}
-                          >
-                            <CheckCircle2 className="mr-2 h-4 w-4" />
-                            Complete
-                          </Button>
-                        )}
-                        {!['COMPLETED', 'CANCELLED', 'REJECTED'].includes(request.status) && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleAction(request.id, 'cancel')}
-                            disabled={cancelRequest.isPending}
-                          >
-                            <Ban className="mr-2 h-4 w-4" />
-                            Cancel
-                          </Button>
-                        )}
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-44">
+                            <DropdownMenuItem onClick={() => router.push(requestHref(request.id))}>
+                              <Eye className="mr-2 h-4 w-4" />
+                              View request
+                            </DropdownMenuItem>
+                            {request.status === 'REQUESTED' ? (
+                              <DropdownMenuItem
+                                disabled={isMutating}
+                                onClick={() => handleAction(request.id, 'review')}
+                              >
+                                <ShieldCheck className="mr-2 h-4 w-4" />
+                                Send for review
+                              </DropdownMenuItem>
+                            ) : null}
+                            {!CLOSED.includes(request.status) ? (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  disabled={isMutating}
+                                  className="text-destructive focus:text-destructive"
+                                  onClick={() => handleAction(request.id, 'cancel')}
+                                >
+                                  <Ban className="mr-2 h-4 w-4" />
+                                  Cancel request
+                                </DropdownMenuItem>
+                              </>
+                            ) : null}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
+                );
+              })}
+            </TableBody>
+          </Table>
+        )}
       </Card>
     </div>
   );

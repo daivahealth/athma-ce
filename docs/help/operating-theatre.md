@@ -23,6 +23,26 @@ Shifting the patient to recovery completes the request automatically.
 What you can see and press depends on your role's OT permissions. If a list loads with a red message
 instead of rows, your role may not have access to that part of the module; ask your administrator.
 
+### How the OT lists work
+
+**OT Requests**, **OT Schedules** and **OT Reports** share one layout:
+
+- A search box, **Search by patient name, MRN or phone**. The **×** in the box clears it.
+- A row of status chips under it, starting with **All**. Each chip shows how many rows in the current
+  search have that status; press one to show only those rows, or **All** to show everything again.
+  **OT Schedules** has many statuses, so it shows only the chips that have rows.
+- On the right, a short line on what needs attention (for example "2 awaiting signature") and how
+  many rows are shown.
+- Each patient shows as an initials badge, name, MRN tag, gender and age. A patient whose details
+  could not be loaded shows as **Patient details unavailable**.
+- Each row has at most one button for its main next step, and a **⋯** menu holding **View** and the
+  less common actions such as **Cancel**. Click anywhere else on a row to open it.
+- When nothing matches, the list says so and offers **Clear filters**.
+
+The record pages (a request, schedule or report) share a layout too: a back link to the list, a card
+with the record's title, status badges and actions, the patient beside the key facts, then sections
+below. **Status history** is a timeline, newest first, with a coloured dot for each status.
+
 ## OT Board
 
 **OT Board** (`/ot/board`) is the live picture of every theatre for one day. It is laid out like the
@@ -82,12 +102,11 @@ them in [OT Rooms](#ot-rooms) first.
 ## OT Requests
 
 **OT Requests** (`/ot/requests`) lists every theatre request, newest first. Each row shows the
-**Procedure** (with its code or surgery type, and any remarks), the **Patient** (name, MRN, gender and
-age), **Priority**, **Preferred Date**, **Status** and **Requested At**.
+**Procedure** with its priority badge (and its code, surgery type and any remarks underneath), the
+**Patient**, the **Preferred date**, and the **Status** with how long ago it was requested. The line
+above the list counts the requests awaiting approval and those ready to schedule.
 
-- Search by patient name, MRN or phone in **Search patients by name, MRN, or phone...**.
-- Filter by status with the drop-down (**All statuses** by default).
-- Click a row, or **View**, to open the request.
+Search, filter and open rows as described in [How the OT lists work](#how-the-ot-lists-work).
 
 ### Priority and status badges
 
@@ -141,19 +160,20 @@ on the list with the new row at **Draft**.
 
 ### Moving a request along
 
-The list shows only the buttons that fit each row's status:
+Each row shows the main step for its status as a button; the rest are in the **⋯** menu:
 
-| Status | Buttons |
-| --- | --- |
-| **Draft** | **Submit**, **Cancel** |
-| **Requested** | **Review**, **Approve**, **Cancel** |
-| **Under Review** | **Approve**, **Cancel** |
-| **Approved** | **Cancel** |
-| **Scheduled** | **Complete**, **Cancel** |
+| Status | Button | In the **⋯** menu |
+| --- | --- | --- |
+| **Draft** | **Submit** | **Cancel request** |
+| **Requested** | **Approve** | **Send for review**, **Cancel request** |
+| **Under Review** | **Approve** | **Cancel request** |
+| **Approved** | None | **Cancel request** |
+| **Scheduled** | **Complete** | **Cancel request** |
 
-Each press shows "OT request updated" on success, or "Workflow action failed" with the reason.
+Each press shows "OT request updated" with what happened (for example "Request approved."), or
+"Workflow action failed" with the reason.
 
-- **Approve** works straight from **Requested**; you do not have to **Review** first.
+- **Approve** works straight from **Requested**; you do not have to send it for review first.
 - **Complete** only works once the case's schedule has reached **Surgery Completed** or **Patient
   Shifted To Recovery**. Otherwise it is refused with "OT request can only be completed after surgery
   is completed or shifted to recovery". You rarely need it: shifting the patient to recovery completes
@@ -163,34 +183,33 @@ Each press shows "OT request updated" on success, or "Workflow action failed" wi
 
 ### The request page
 
-Opening a request (`/ot/requests/{id}`) shows the procedure with its status badge, the patient, and
-the plan: **Priority**, **Surgery Type**, **Procedure Code**, **Expected Duration**, **Preferred
-Date**, **Preferred Room**, **Primary Surgeon**, **Anaesthesia**, **Blood Required**, **Requested
-At**, and, when filled in, **Diagnosis**, **Remarks**, **Special Equipment**, **Implants** and
-**Rejection Reason**.
+Opening a request (`/ot/requests/{id}`) shows the procedure with its code and surgery type, its status
+and priority badges, and the patient beside **Preferred date**, **Duration**, **Preferred room**,
+**Primary surgeon** and **Requested**. A rejected request shows the **Rejection reason** in a red box.
 
 Below it:
 
-- **OT Schedules**: every slot this request has been booked into, with its status. Click one to open
-  it.
-- **OT Reports**: the operative reports for the case. Click one to open it.
-- **Status History**: each status change, newest first, with its time.
+- **Clinical details**: **Diagnosis**, **Anaesthesia planned**, whether an **Anaesthetist** is
+  required, **Blood** (a red **Blood required** badge when it is) and **Remarks**.
+- **Equipment and implants**: the special equipment and implants requested, as tags.
+- **Schedules and reports**: every slot this request has been booked into and its operative reports,
+  each with its status. Click one to open it.
+- **Status history**, on the right.
 
 The request page is read-only. Use the buttons on the list to change its status.
 
 ## OT Schedules
 
-**OT Schedules** (`/ot/schedules`) lists booked theatre slots in start-time order. Each row shows the
-**Start Time** (the date, then the start and end times), the **Room**, the **Patient** (name, MRN,
-sex and age), the **Status**, and the **Anaesthesia** type. A request rebooked into a new slot keeps
-its old slot, marked **Historical slot** under its status.
+**OT Schedules** (`/ot/schedules`) lists booked theatre slots in start-time order. Each row shows
+**When** (a calendar tile with the month and day, the weekday and year, and the start and end times),
+the **Patient**, the **Room** (with its description and the anaesthesia type), and the **Status**. A
+request rebooked into a new slot keeps its old slot, dimmed and marked **Historical slot** under its
+status. The line above the list counts the cases in theatre now.
 
-Under **Actions**, each row has one button for its next step and a **⋯** menu holding **View**,
-**Postpone** and **Cancel** (only the ones that fit its status). On a narrow screen the table scrolls
-sideways.
+Each row has one button for its next step and a **⋯** menu holding **View schedule**, **Postpone**
+and **Cancel** (only the ones that fit its status). On a narrow screen the table scrolls sideways.
 
-Search by patient and filter by status as on the requests list. Click a row, or **View** in the **⋯**
-menu, to open it.
+Search, filter and open rows as described in [How the OT lists work](#how-the-ot-lists-work).
 
 ### Booking a case
 
@@ -259,21 +278,27 @@ again.
 
 ### The schedule page
 
-Opening a schedule (`/ot/schedules/{id}`) shows the room with the status badge, the patient, the
-**Scheduled Start** and **Scheduled End**, the **Actual Start** and **Actual End**, the team by name,
-the **Anaesthesia Type**, and, when set, **Assistant Surgeons**, **Postponed Reason** and **Cancelled
-Reason**.
+Opening a schedule (`/ot/schedules/{id}`) shows the room with its status badge, and the patient beside
+the **Scheduled** and **Actual** times, the **Anaesthesia** type and the **Room**. A postponed or
+cancelled slot shows its reason in an amber or red box.
 
-Below it are the **Team Members** roster, the case's **OT Reports** (click to open), and the **Status
-History**, newest first. The page is read-only; use the buttons on the list to move the case on.
+Below it:
+
+- **Day-of-surgery progress**: the eight theatre steps from **Planned** to **Recovery**, filled up to
+  the current one. It is hidden for a cancelled or postponed slot.
+- **Theatre team**: everyone on the case with their role. The primary surgeon and anaesthetist always
+  show, as **Not assigned** when nobody is set.
+- **Linked records**: the original OT request and the case's operative reports. Click one to open it.
+- **Status history**, on the right. The page is read-only; use the buttons on the list to move the case on.
 
 ## OT Reports
 
 **OT Reports** (`/ot/reports`) lists the operative reports, newest first. Each row shows the
-**Report** number with its remarks, the **Schedule** start time, the **Patient**, the **Status**,
-**Created At** (and when it was signed, or **Not signed**), and the number of **Versions**.
+**Report** number (with a **v2**, **v3** … tag once it has been amended) and its remarks, the
+**Patient**, the **Surgery** date and times, and the **Status** with how long ago it was signed or,
+if unsigned, created. The line above the list counts the reports awaiting signature.
 
-Search by patient and filter by status as on the other lists.
+Search, filter and open rows as described in [How the OT lists work](#how-the-ot-lists-work).
 
 | Status | Colour | Meaning |
 | --- | --- | --- |
@@ -307,7 +332,8 @@ at **Draft**.
 
 ### Signing
 
-Press **Sign** on a **Draft** or **Amended** report, on the list or on the report page. A toast says
+Press **Sign** on a **Draft** or **Amended** report on the list, or **Sign report** on the report
+page. A toast says
 "OT report signed: The operative report is now signed." If refused, it says "Unable to sign OT
 report" with the reason.
 
@@ -323,24 +349,31 @@ report" with the reason.
 
 ### Cancelling a report
 
-**Cancel** is on every report row that is not already **Cancelled**. It acts at once, with no
+**Cancel report** is in the **⋯** menu of every report row that is not already **Cancelled**. It acts
+at once, with no
 confirmation, and says "OT report cancelled: The report was moved to cancelled status."
 
 ### The report page
 
-Opening a report (`/ot/reports/{id}`) shows the report number with its status, the patient,
-**Created**, **Signed** and **Schedule** times, any **Remarks**, and the **Operative Report** itself,
-laid out field by field. Lists show as bullets; empty fields say **Not documented** or **None**.
-**Sign** and **Amend** are here too.
+Opening a report (`/ot/reports/{id}`) shows the report number with its remarks, status and version,
+and the patient beside the **Surgery**, **Created** and **Signed** times (**Awaiting signature** until
+it is signed). **Sign report** and **Amend** are here too.
 
-When a report has more than one version, **Version History** lists them, newest first, with the
-current one marked **(current)**.
+Below it, **Operative note** lays out the current version field by field. Lists show as bullets;
+empty fields say **Not documented** or **None**. On the right, **Version history** lists every
+version, newest first, with the current one marked **Current**, and **Related** links to the OT
+schedule and the OT request.
 
 ## OT Rooms
 
-**OT Rooms** (`/ot/rooms`) lists the rooms set up for theatre scheduling, active and inactive, by
-name. Each row shows the **Room** and its space number, the **Facility** and floor, the
-**Specialty**, the **Space Type**, the **Status** (**Active** or **Inactive**) and **Notes**.
+**OT Rooms** (`/ot/rooms`) shows the rooms set up for theatre scheduling, active and inactive, as a
+card per room, by name. Each card shows the room name and space number, an **Active** or
+**Inactive** badge (inactive rooms are dimmed), the **Specialty** (**Any specialty** when none is
+set), the **Floor**, the **Facility** and space type, and the room's notes. A room whose space
+details cannot be loaded is named after its specialty, for example "Orthopedics OT".
+
+Search rooms by name, number, specialty or notes, and use the **All**, **Active** and **Inactive**
+chips to filter.
 
 Rooms come from the facility's spaces, which are set up in
 [Administration](administration.md). This screen marks a space as a theatre and adds OT details.
