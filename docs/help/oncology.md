@@ -843,18 +843,31 @@ cancer journey": search the registered patients by name or MRN and press **View 
 
 ### A patient's timeline
 
-The patient's timeline (`/oncology/timeline/{patientId}`) runs down the page as dated events
-along a date rail, each coloured by category: **Diagnosis**, **Staging**, **Tumor Board**, **Care Plan**,
-**Chemotherapy**, **Radiation**, **Surgery**, **Response**, **Follow-up** and **Note**. The legend at the
-top shows the categories present. A run of related events, such as the sessions of a chemo course, is
-grouped into one card. Major milestones have a ring round their dot; warnings (a held chemo, for
-example) amber; adverse events red.
+The patient's timeline (`/oncology/timeline/{patientId}`) opens with the patient's name, MRN and cancer
+type, the **Diagnosed** date, how far into the journey they are (**Day N**, counting the diagnosis day as
+day 0) and the **Latest** event.
+
+**Treatment journey** below it draws the whole journey on one time line, from the first event to today:
+one row each for **Diagnosis & planning**, **Surgery**, **Chemotherapy**, **Radiotherapy**, **Response &
+follow-up** and **Notes** (only the rows the patient has). A chemo or radiotherapy course is a bar with a
+tick for each cycle or session; a cycle that was held or deferred has an amber tick. Other events are
+dots, larger for major milestones. A dashed line marks today. Select a bar or dot to jump to it in the
+list below. On a narrow screen the chart scrolls sideways.
+
+The list below starts with anything **Upcoming** (for example a scheduled tumour board), then **Today**,
+then the events **newest first**, under a heading for each month. Each event shows its date and its day of
+the journey; a course shows its date range and is filed under the month it ended. Events are coloured by
+category: **Diagnosis**, **Staging**, **Tumor Board**, **Care Plan**, **Chemotherapy**, **Radiation**,
+**Surgery**, **Response**, **Follow-up** and **Note**. The sessions of a chemo or radiotherapy course are
+grouped into one card; open it to see them, latest first. Major milestones have a ring round their dot;
+warnings (a held chemo, for example) amber; adverse events red.
 
 Events are added automatically as records are made: diagnoses, staging, tumour board cases and
 decisions, care plans, chemo started, completed and held, and radiation. Where an event has a source, its
 card opens it (the staging, the order, the prescription…).
 
-- **Filter Events** by type and by **From** and **To** dates; **Clear filters** resets them.
+- Press a category (**Diagnosis**, **Chemotherapy**…) above the list to hide or show it, in the list and
+  the chart; use **From** and **To** to limit the dates. **Clear filters** resets both.
 - **Add Event** (or **Add a manual note**) records something with no workflow of its own: a **Date**,
   **Category** (**Note**, **Surgery**, **Response Assessment**, **Follow-up**), **Title**, **Description**,
   an optional diagnosis, and **Mark as major milestone**. Press **Add Event**.

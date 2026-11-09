@@ -87,8 +87,11 @@ export function TimelineGroupCard({ group, getDeepLink, onView, onDelete, deleti
   const style = getCategoryStyle(group.category);
   const Icon = style.icon;
   const progress = getProgress(group);
-  const isActive = group.completedCount < (group.totalPlanned ?? group.sessionCount)
-    && group.heldOrCancelledCount === 0;
+  // A radiotherapy course is prescribed -> started -> completed (one completed event ends it);
+  // a chemo course is active until every planned (or recorded) cycle is completed.
+  const isActive = group.category === 'radiation'
+    ? group.completedCount === 0
+    : group.completedCount < (group.totalPlanned ?? group.sessionCount) && group.heldOrCancelledCount === 0;
 
   return (
     <div className={cn('rounded-xl border border-l-4 overflow-hidden', style.border, style.bg)}>
@@ -130,7 +133,7 @@ export function TimelineGroupCard({ group, getDeepLink, onView, onDelete, deleti
               )}
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {statBoxesFor(group).map((box) => (
                 <StatBox key={box.label} label={box.label} value={box.value} />
               ))}

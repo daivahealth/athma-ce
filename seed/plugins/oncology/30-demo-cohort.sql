@@ -1260,7 +1260,10 @@ BEGIN
             INSERT INTO plugin_oncology.cancer_timeline_events (tenant_id, patient_id, cancer_diagnosis_id, event_type, event_date, title, description, source_entity, source_id, metadata, severity, created_by)
             VALUES (TEN, p.id, dx_id, 'radiation_completed', rt_end + TIME '12:00', 'Radiotherapy completed — ' || delivered || '/' || (rt->>'fx') || ' fractions',
               CASE WHEN missed > 0 THEN missed || ' fraction(s) missed.' ELSE 'No interruptions.' END,
-              'radiation_prescription', rx_id, jsonb_build_object('totalDoseGy', (rt->>'dose')::numeric, 'plannedFractions', (rt->>'fx')::int, 'modality', 'PHOTON', 'technique', rt->>'tech'), 'milestone', RAD);
+              'radiation_prescription', rx_id, jsonb_build_object('totalDoseGy', (rt->>'dose')::numeric, 'plannedFractions', (rt->>'fx')::int, 'modality', 'PHOTON', 'technique', rt->>'tech',
+                -- As the app's completion summary writes them (oncology.service.ts, radiation_completed).
+                'deliveredFractions', delivered, 'deliveredTotalDoseGy', round((rt->>'dose')::numeric * delivered / (rt->>'fx')::int, 2),
+                'interruptions', missed > 0), 'milestone', RAD);
           END IF;
           modalities := modalities || jsonb_build_array(jsonb_build_object(
             'modality', 'radiation', 'sequence', i,

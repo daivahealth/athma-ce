@@ -64,6 +64,7 @@ Finalised result (last 180 days, tenant-scoped)        Evidence strength
 | Chemo Orders      | `/oncology/orders`            | Per-patient chemotherapy orders (Phase 2)         |
 | Treatment Schedules | `/oncology/treatment-plans` | Patient schedules generated from a protocol — cycles, dates, doses |
 | Day-care Worklist | `/oncology/day-care`          | All patients due on a date: administration sheets + pharmacy prep |
+| Cancer Timeline   | `/oncology/timeline/:patientId` | One patient's journey: a **Treatment journey** swimlane chart (diagnosis & planning, surgery, chemotherapy, radiotherapy, response; courses as bars with a tick per cycle, held cycles amber; today marked) above a feed that lists **Upcoming** events, then **Today**, then events **newest first** under month headings, each with its day since diagnosis. Category chips filter both; From/To dates filter on the server (`GET /timeline/:patientId`) |
 
 ### Patient cancer cockpit
 
@@ -468,6 +469,8 @@ frontend/src/plugins/oncology/
 ├── types/index.ts                    # TypeScript interfaces (snake_case, matches raw SQL)
 ├── services/oncology-service.ts      # Axios API calls (BASE_URL = '/plugins/oncology')
 ├── hooks/use-oncology.ts             # React Query hooks
+├── lib/group-timeline.ts             # Groups chemo/RT events into courses; oldest- or newest-first
+├── lib/timeline-journey.ts           # Pure layout for the timeline's journey chart, day-of-journey
 └── components/
     ├── AddDiagnosisSheet.tsx         # Slide-over diagnosis form (legacy; the registry uses registry/new)
     ├── RegistryCandidateQueue.tsx    # Candidate queue, evidence list, dismiss dialog
@@ -477,6 +480,8 @@ frontend/src/plugins/oncology/
     ├── dashboard/PopulationHealthView.tsx # Population health tab (Recharts incidence + age/gender, stage bar)
     ├── cockpit/                      # Patient cockpit: DiseaseOverview, TreatmentJourney, MarkerTrends, NextUp
     ├── StaffSelect.tsx               # Staff picker (tumour-board attendees)
+    ├── TimelineJourney.tsx           # Cancer timeline swimlane overview (layout from lib/timeline-journey.ts)
+    ├── TimelineEventCard.tsx / TimelineGroupCard.tsx # Timeline feed cards (a course groups its sessions)
     └── shared.tsx                    # LoadingState, EmptyState, StatusBadge, PatientCell
 
 frontend/src/app/[locale]/(dashboard)/oncology/
@@ -509,7 +514,8 @@ frontend/src/app/[locale]/(dashboard)/oncology/
 │   ├── page.tsx                      # Schedule list (?carePlanId= redirects)
 │   ├── new/page.tsx                  # Start schedule from a care plan
 │   └── [id]/page.tsx                 # Cycle/day schedule, delay, dose level, day sheet, orders
-└── day-care/page.tsx                 # Date worklist: board (plugins/oncology/components/day-care/), administration, pharmacy prep
+├── day-care/page.tsx                 # Date worklist: board (plugins/oncology/components/day-care/), administration, pharmacy prep
+└── timeline/[patientId]/page.tsx     # Cancer timeline: journey chart + newest-first feed
 ```
 
 ---
