@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
+import { forwardUserAuthorization } from '../../../common/http/forward-user-authorization';
 
 @Injectable()
 export class OtFoundationService {
@@ -8,12 +9,12 @@ export class OtFoundationService {
 
   constructor() {
     const foundationUrl = process.env.FOUNDATION_SERVICE_URL || 'http://localhost:3010';
-    this.foundationApi = axios.create({
+    this.foundationApi = forwardUserAuthorization(axios.create({
       baseURL: `${foundationUrl}/api/v1`,
       timeout: 5000,
       // Service-to-service call: the internal key authenticates it (AUTH_REQUIRE_TOKEN_FOR_READS).
       headers: process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {},
-    });
+    }));
   }
 
   async getSpace(spaceId: string, tenantId: string) {

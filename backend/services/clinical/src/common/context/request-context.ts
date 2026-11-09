@@ -10,6 +10,11 @@ export interface RequestContext {
   tenantId?: string;
   userId?: string;
   facilityId?: string;
+  /**
+   * The caller's `Authorization` header, forwarded on calls to other services
+   * (see common/http/forward-user-authorization.ts). Never log it.
+   */
+  authorization?: string;
   ip?: string;
   userAgent?: string;
   path?: string;
@@ -37,6 +42,7 @@ export const RequestContextService = {
       ...(context.tenantId && { tenantId: context.tenantId }),
       ...(context.userId && { userId: context.userId }),
       ...(context.facilityId && { facilityId: context.facilityId }),
+      ...(context.authorization && { authorization: context.authorization }),
       ...(context.ip && { ip: context.ip }),
       ...(context.userAgent && { userAgent: context.userAgent }),
       ...(context.path && { path: context.path }),

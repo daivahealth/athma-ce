@@ -9,6 +9,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { BedBrowserQueryDto, BedBrowserStatus } from './dto/bed-browser-query.dto';
+import { forwardUserAuthorization } from '../../common/http/forward-user-authorization';
 
 export interface BedMasterData {
   id: string;
@@ -49,12 +50,12 @@ export class BedBrowserService {
   constructor(private readonly prisma: PrismaService) {
     const foundationServiceUrl = process.env.FOUNDATION_SERVICE_URL || 'http://localhost:3010';
 
-    this.foundationApi = axios.create({
+    this.foundationApi = forwardUserAuthorization(axios.create({
       baseURL: `${foundationServiceUrl}/api/v1`,
       timeout: 10000,
       // Service-to-service call: the internal key authenticates it (AUTH_REQUIRE_TOKEN_FOR_READS).
       headers: process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {},
-    });
+    }));
 
     this.logger.log(`Foundation API client initialized: ${foundationServiceUrl}`);
   }
