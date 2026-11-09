@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { join } from 'node:path';
+import { readdirSync } from 'node:fs';
+import { basename, dirname, join, sep } from 'node:path';
 
 import {
   HELP_GROUP_ORDER,
@@ -118,6 +119,28 @@ describe('the manual in docs/help', () => {
       }
     }
     expect(broken).toEqual([]);
+  });
+
+  it('has a page for every staff screen (add its path to a page in docs/help)', () => {
+    // Screens people reach before signing in, or the legal pages, have no Help button.
+    const noHelp = ['/', '/auth', '/login', '/confirm-reset', '/reset-password', '/request-access', '/privacy', '/terms'];
+    const appDir = join(__dirname, '../../app/[locale]');
+    const screens = (readdirSync(appDir, { recursive: true }) as string[])
+      .filter((file) => basename(file) === 'page.tsx')
+      .map((file) =>
+        `/${dirname(file)}`
+          .split(sep)
+          .join('/')
+          .replace(/\/\([^)]*\)/g, '') // route groups such as (dashboard)
+          .replace(/\[[^\]]+\]/g, 'x') // dynamic segments
+          .replace(/\/\.$|\/$/, '') || '/'
+      );
+    const missing = screens.filter(
+      (screen) =>
+        !noHelp.some((path) => routeMatches(path, screen) && (path !== '/' || screen === '/')) &&
+        !findHelpForPath(helpDocs, screen).primary
+    );
+    expect(missing).toEqual([]);
   });
 
   it('finds a page by full-text search', () => {

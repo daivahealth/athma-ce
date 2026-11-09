@@ -2,8 +2,8 @@
 title: 'Administration'
 group: 'Administration'
 order: 170
-routes: ['/configurations', '/catalogs', '/tenants', '/facilities', '/users', '/staff', '/spaces', '/rbac', '/plugin-management']
-description: 'Tenant and facility context, configurations and feature switches, ABDM settings, clinical catalogs, tenants, facilities, users, staff, spaces, roles and plugins.'
+routes: ['/configurations', '/catalogs', '/tenants', '/facilities', '/users', '/staff', '/spaces', '/rbac', '/plugin-management', '/plugins', '/access-requests', '/sandboxes']
+description: 'Tenant and facility context, configurations and feature switches, ABDM settings, clinical catalogs, tenants, facilities, users, staff, spaces, roles, plugins, and the platform admin screens for access requests and sandboxes.'
 ---
 
 Administration is where you set up the organisation the rest of the app runs on: which features are
@@ -16,7 +16,8 @@ You reach it two ways:
   **Clinical Catalogs**, **RCM Setup** and **PE Setup**.
 - The **Administration** menu behind the gear icon in the topbar: **Tenants**, **Facilities**, **Users**,
   **Staff**, **Spaces**, **RBAC** and, below a divider, **Plugin Management**. These screens are not in
-  the sidebar, so the gear menu is the way in.
+  the sidebar, so the gear menu is the way in. Platform administrators also see
+  [Access requests](#access-requests) and [Sandboxes](#sandboxes) at the bottom of this menu.
 
 **RCM Setup** is explained in [Billing setup](billing-setup.md) and **PE Setup** in
 [Patient engagement](patient-engagement.md#pe-setup).
@@ -578,6 +579,83 @@ Below the plugins, **Connectors & Capabilities** lists standalone connector serv
 installed through the plugin registry. The **ABDM Connector** shows **Enabled** or **Disabled** (from
 the ABDM activation switch) and the capabilities bound to it. **Configure** opens
 [ABDM Settings](#abdm-settings).
+
+### Plugin screens
+
+A plugin's own screens open under `/plugins/{id}` (for example a plugin's dashboard). If the plugin
+is not installed, the screen says **Plugin "_id_" is not installed**; if it is installed but switched
+off for your tenant, **Plugin "_name_" is not enabled for this tenant**. Switch it on from
+[Plugin Management](#activating-a-plugin-for-your-tenant). How to use a plugin's screens is on that
+plugin's own help page, such as [Oncology](oncology.md).
+
+## Access requests
+
+**Access requests** (`/access-requests`) lists the requests for production access that people send
+from the public site's **Request access** form. It is for platform administrators only: the gear menu
+shows it only if your account has the `platform.access_request.read` permission, which hospital
+administrators and demo visitors never have.
+
+The buttons along the top filter the list: **All**, **new**, **contacted**, **approved** and
+**declined**, each with its count. The list opens on **new**.
+
+Each request is a card showing:
+
+- the organisation's name, its type and country, and the number of facilities and beds if given;
+- a status badge: **new** blue, **contacted** amber, **approved** green, **declined** grey;
+- the contact's name, email (click it to write to them) and phone;
+- **Interested in:** the modules they ticked, and their message;
+- when it was received.
+
+### Working a request
+
+1. Type anything the team should know in **Internal notes**. The requester never sees these.
+2. Select **Mark contacted**, **Mark approved** or **Mark declined**. The card's own status is not
+   offered. Your notes are saved with the new status.
+3. **Access request updated** confirms it, and the card moves to that status's filter.
+
+To save notes without changing the status, select **Save notes**; it appears once you have changed
+the notes. **Update failed** gives the server's reason.
+
+Marking a request **approved** only records the decision. It does not create a tenant or send the
+requester anything: set up their organisation under [Tenants](#tenants) and contact them yourself.
+
+## Sandboxes
+
+**Sandboxes** (`/sandboxes`) lists every sandbox hospital that demo visitors have created on this
+instance (see [Your own sandbox](getting-started.md#your-own-sandbox-public-demo)). It is for platform
+administrators only: the gear menu shows it only if your account has the `platform.sandbox.read`
+permission.
+
+The heading shows how many sandboxes are in use against the instance's limit, and how many days a
+sandbox lives, for example "12 of 50 in use · deleted after 30 days". The buttons below it filter by
+status, each with its count: **All**, **active**, **provisioning**, **failed**, **expired**,
+**deleting** and **deleted**. The list opens on **active**.
+
+| Status | Colour | Meaning |
+|---|---|---|
+| **active** | Green | Ready and usable until its expiry date. |
+| **provisioning** | Blue | Being created; usually ready in under a minute. |
+| **failed** | Red | Creation failed; the reason is shown in red on the card. |
+| **expired** | Amber | Past its date. Sign-in is blocked and its data is being removed. |
+| **deleting** | Amber | Deleted by its owner or an administrator; data is being removed. |
+| **deleted** | Grey | Gone. Kept in the list as a record. |
+
+Each card shows the sandbox's name and status, its type, the owner's name and email and how they
+signed in (Google, Microsoft or GitHub), when it was created, the days left (for active sandboxes),
+when the owner last opened it, and the modules it has switched on.
+
+### Extending or deleting a sandbox
+
+With the `platform.sandbox.manage` permission, an active sandbox's card has two buttons:
+
+- **Extend** adds 30 days. Unlike the owner, who can extend only once, you can extend as often as
+  needed. **Sandbox extended** confirms it.
+- **Delete** asks "Delete _name_ and all its data? This cannot be undone." Confirm, and **Sandbox
+  deletion started** confirms it. Nobody can sign in to the sandbox from then on, and the card moves to
+  **deleting**, then **deleted**.
+
+**Extend failed** or **Delete failed** gives the server's reason. Without the manage permission the
+list is read-only.
 
 ## Not live yet
 
