@@ -3,8 +3,10 @@
 - **Status**: Accepted
 - **Date**: 2025-10-01
 - **Owners**: Architecture Team, AI/ML Team
-- **Related**: ADR-0001 (Language Split), ADR-0003 (Multi-Tenancy)
+- **Related**: ADR-0001 (Language Split), ADR-0003 (Multi-Tenancy), ADR-0018 (AI-Native Architecture)
 - **Context**: Healthcare AI requires privacy-preserving, explainable, and auditable model serving
+
+> **Implementation status (2026-11-09):** Shadow mode, the A/B testing framework, on-premises/VPC model serving and the document AI pipeline described below are **not built**. Today `ai-gateway` calls hosted LLM providers (Anthropic, OpenAI, OpenAI-compatible) for narrative, coding, report building, catalogue population and semantic search. For how AI fits the data, domain and interaction layers (provenance, suggestions and review, capabilities, agents), see [ADR-0018](./ADR-0018-ai-native-architecture.md).
 
 ## 1) Decision
 
