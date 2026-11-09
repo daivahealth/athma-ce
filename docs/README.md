@@ -35,7 +35,7 @@ Welcome to the athma-ce Healthcare Platform documentation. This folder contains 
 
 | Plugin | Feature Doc | API Doc | ADR |
 |--------|-------------|---------|-----|
-| Oncology | [Oncology Plugin](./features/oncology/ONCOLOGY-PLUGIN.md) | [Oncology API](./api/ONCOLOGY-API-ENDPOINTS.md) | [ADR-0014](./ADR/ADR-0014-specialty-plugin-architecture.md) |
+| Oncology | [Oncology Plugin](./features/oncology/ONCOLOGY-PLUGIN.md) | [Oncology API](./api/ONCOLOGY-API-ENDPOINTS.md) | [ADR-0014](./ADR/ADR-0014-specialty-plugin-architecture.md), [ADR-0019](./ADR/ADR-0019-registry-candidate-audit-and-ai-assist.md) (proposed) |
 
 ## 📖 Related Documentation
 

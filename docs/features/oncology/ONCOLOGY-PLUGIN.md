@@ -46,6 +46,7 @@ Finalised result (last 180 days, tenant-scoped)        Evidence strength
 - **Already-registered patients never appear.** A second primary or recurrence for a registered patient is added from that patient's registry entry.
 - **Manual entry** stays available as **Add Manually** (e.g. a patient referred with an outside biopsy that is not in the system).
 - This is a worklist aid, not a diagnosis: the queue never registers anyone by itself.
+- **Planned (proposed, not built):** decision audit metadata (rule id and version, a snapshot of the evidence, reason codes) and an advisory AI assist for triage labels and registry prefill. See [ADR-0019](../../ADR/ADR-0019-registry-candidate-audit-and-ai-assist.md).
 
 ---
 
