@@ -780,7 +780,8 @@ export function usePatientTimeline(patientId: string, params?: {
   eventType?: string; fromDate?: string; toDate?: string; cancerDiagnosisId?: string;
 }) {
   return useQuery({
-    queryKey: oncologyKeys.timeline(patientId),
+    // Filters are part of the key so changing them refetches; mutations invalidate the patient prefix.
+    queryKey: [...oncologyKeys.timeline(patientId), params ?? {}],
     queryFn: () => oncologyService.getTimeline(patientId, params),
     enabled: !!patientId,
   });

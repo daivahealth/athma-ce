@@ -14,7 +14,7 @@ export interface TimelineGroupNode {
   category: 'chemotherapy' | 'radiation';
   /** Protocol / modality name shown in the group header. */
   label: string;
-  /** One row per rendered session - for chemo, de-duplicated to one (most-advanced) event per cycle. */
+  /** One row per rendered session - for chemo, de-duplicated to one (most-advanced) event per cycle. Oldest first. */
   events: CancerTimelineEvent[];
   startDate: string;
   endDate: string;
@@ -22,6 +22,8 @@ export interface TimelineGroupNode {
   cycleRange?: string;
   completedCount: number;
   heldOrCancelledCount: number;
+  /** Cycles that were held (deferred) at some point, even if later given. Chemo only. */
+  heldCycles: number[];
   /** Distinct cycles/sessions actually recorded. */
   sessionCount: number;
   /** Planned total from the protocol, when known (chemo only). */
@@ -96,7 +98,7 @@ function dedupeByCycle(events: CancerTimelineEvent[]): CancerTimelineEvent[] {
   const byCycle = new Map<number | string, CancerTimelineEvent>();
   const order: (number | string)[] = [];
   for (const event of events) {
-    const cycle = event.metadata?.cycleNumber as number | undefined ?? event.id;
+    const cycle = (event.metadata?.cycleNumber as number | undefined) ?? event.id;
     const existing = byCycle.get(cycle);
     if (!existing) {
       byCycle.set(cycle, event);
@@ -120,7 +122,11 @@ function dedupeByCycle(events: CancerTimelineEvent[]): CancerTimelineEvent[] {
  * resulting session is emitted as a single node instead - grouping only
  * pays off once there's actually something to collapse.
  */
-export function groupTimelineEvents(events: CancerTimelineEvent[]): TimelineNode[] {
+export function groupTimelineEvents(
+  events: CancerTimelineEvent[],
+  direction: 'oldest-first' | 'newest-first' = 'oldest-first',
+): TimelineNode[] {
+  const newestFirst = direction === 'newest-first';
   const buckets = new Map<string, CancerTimelineEvent[]>();
   const order: string[] = [];
 
@@ -142,17 +148,20 @@ export function groupTimelineEvents(events: CancerTimelineEvent[]): TimelineNode
   for (const key of order) {
     const rawEvents = buckets.get(key)!;
     const category = getCategory(rawEvents[0].event_type) as 'chemotherapy' | 'radiation';
-    const sessions = category === 'chemotherapy'
-      ? dedupeByCycle([...rawEvents].sort((a, b) => a.event_date.localeCompare(b.event_date)))
-      : [...rawEvents].sort((a, b) => a.event_date.localeCompare(b.event_date));
+    const sessions =
+      category === 'chemotherapy'
+        ? dedupeByCycle([...rawEvents].sort((a, b) => a.event_date.localeCompare(b.event_date)))
+        : [...rawEvents].sort((a, b) => a.event_date.localeCompare(b.event_date));
 
     for (const e of rawEvents) groupedEventIds.add(e.id);
     if (sessions.length < 2) continue; // nothing to collapse
 
-    const completedCount = sessions.filter((e) =>
-      e.event_type === 'chemo_completed' || e.event_type === 'radiation_completed').length;
-    const heldOrCancelledCount = sessions.filter((e) =>
-      e.event_type === 'chemo_held' || e.event_type === 'chemo_cancelled').length;
+    const completedCount = sessions.filter(
+      (e) => e.event_type === 'chemo_completed' || e.event_type === 'radiation_completed',
+    ).length;
+    const heldOrCancelledCount = sessions.filter(
+      (e) => e.event_type === 'chemo_held' || e.event_type === 'chemo_cancelled',
+    ).length;
 
     // Merge metadata across all raw events chronologically - later events
     // (e.g. chemo_completed, radiation_completed) carry the most complete
@@ -175,6 +184,14 @@ export function groupTimelineEvents(events: CancerTimelineEvent[]): TimelineNode
       cycleRange: category === 'chemotherapy' ? cycleRangeFor(sessions) : undefined,
       completedCount,
       heldOrCancelledCount,
+      heldCycles: [
+        ...new Set(
+          rawEvents
+            .filter((e) => e.event_type === 'chemo_held')
+            .map((e) => e.metadata?.cycleNumber)
+            .filter((c): c is number => typeof c === 'number'),
+        ),
+      ].sort((a, b) => a - b),
       sessionCount: sessions.length,
       totalPlanned: num(merged.protocolTotalCycles),
       bsa: num(merged.bsa),
@@ -185,9 +202,9 @@ export function groupTimelineEvents(events: CancerTimelineEvent[]): TimelineNode
       deliveredTotalDoseGy: num(merged.deliveredTotalDoseGy),
       plannedFractions: num(merged.plannedFractions),
       deliveredFractions: num(merged.deliveredFractions),
-      // Position the group where its first event falls, so it reads
-      // chronologically alongside ungrouped entries.
-      sortDate: sessions[0].event_date,
+      // Oldest-first, a course sits where it began; newest-first, where its latest session
+      // falls, so an ongoing course stays near the top.
+      sortDate: newestFirst ? sessions[sessions.length - 1].event_date : sessions[0].event_date,
     });
   }
 
@@ -213,6 +230,8 @@ export function groupTimelineEvents(events: CancerTimelineEvent[]): TimelineNode
     nodes.push({ kind: 'single', event, sortDate: event.event_date });
   }
 
-  nodes.sort((a, b) => a.sortDate.localeCompare(b.sortDate));
+  nodes.sort((a, b) =>
+    newestFirst ? b.sortDate.localeCompare(a.sortDate) : a.sortDate.localeCompare(b.sortDate),
+  );
   return nodes;
 }

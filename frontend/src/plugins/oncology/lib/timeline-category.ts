@@ -166,7 +166,7 @@ export function getCategory(type: TimelineEventType | string): TimelineCategory 
   if (type.startsWith('chemo')) return 'chemotherapy';
   if (type.startsWith('radiation') || type === 'simulation') return 'radiation';
   if (type.startsWith('surgery') || type.startsWith('surgical')) return 'surgery';
-  if (type === 'response_assessment') return 'response';
+  if (type === 'response_assessment' || type === 'response') return 'response';
   if (type === 'follow_up') return 'follow_up';
   return 'custom';
 }
