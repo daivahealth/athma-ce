@@ -204,6 +204,15 @@ The bar across the top of every screen holds, from the middle to the right:
 - The settings menu (the cog), with the administration screens.
 - Your user menu (the person icon), with the facility switcher, **Profile** and **Sign out**.
 
+On narrower screens the bar makes room rather than running off the edge:
+
+- Below a wide desktop screen, the theme toggle and **Help for this page** move into your user menu
+  (the person icon), as **Dark mode** or **Light mode** and **Help for this page**, and **New
+  Patient** shows only its **+** icon.
+- On a tablet or phone, or a small laptop with the sidebar open, the bar takes two rows: the menu
+  icon, the environment badge and the icons on top, and **Patient search** with **New Patient**
+  underneath. On a phone **New Patient** is the **+** button at the end of the search box.
+
 ### Finding a patient
 
 The search box reads **Search patients by name, MRN, phone**.
@@ -252,8 +261,9 @@ goes up.
 
 ### Light and dark theme
 
-The sun or moon button switches between the light and dark theme. Your choice is remembered in this
-browser.
+The sun or moon button switches between the light and dark theme. Where the topbar has no room for
+it, open your user menu (the person icon) and choose **Dark mode** or **Light mode**. Your choice is
+remembered in this browser.
 
 ### The settings menu
 
@@ -307,8 +317,8 @@ related page, often straight to the right heading.
 
 ### Help for the screen you are on
 
-Press the question mark in the topbar (**Help for this page**), or the `?` key on any screen (not
-while typing in a box). A panel slides in from the right with the manual's page for that screen,
+Press the question mark in the topbar (**Help for this page**; on narrower screens it is in your
+user menu, the person icon), or the `?` key on any screen (not while typing in a box). A panel slides in from the right with the manual's page for that screen,
 scrolled to the section that explains it: on a patient's cancer profile, for example, it opens at
 **Patient Cancer Profile**. **Open in the Help Centre**, at the foot of the panel, opens the same
 section full width. Where another page also covers the screen, it is offered as related

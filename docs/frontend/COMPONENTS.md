@@ -315,22 +315,30 @@ module by adding to `navSections` or through a plugin's `navigation`
 
 The `(clinical)` and `(dashboard)` route-group layouts
 (`frontend/src/app/[locale]/(clinical|dashboard)/layout.tsx`) and the topbar
-(`frontend/src/components/layout/topbar.tsx`) must fit a 375px viewport with
-no sideways page scroll (`document.documentElement.scrollWidth ===
-clientWidth`):
+(`frontend/src/components/layout/topbar.tsx`) must fit 375, 768, 1024 and
+1280 px viewports, with the sidebar open, with no sideways page scroll
+(`document.documentElement.scrollWidth === clientWidth`) and no overlapping
+controls:
 
 - The content column beside the sidebar is `flex-1 min-w-0`. Without
   `min-w-0` a flex child never shrinks below its content, so one wide table
   or the topbar stretched the whole page. With it, the shared `Table`
   (`components/ui/table.tsx`, wrapped in `overflow-auto`) scrolls inside its
   card instead. Keep `min-w-0` on any new flex wrapper around page content.
-- Below `sm` the topbar drops to essentials: tighter padding, an icon-only
-  **New Patient** button (labelled via `aria-label`), and the theme toggle
-  and page-help button hidden. Page help stays reachable with `?` and the
-  Help Centre via the mobile drawer. The patient search takes the remaining
-  width. The label and both buttons return at `sm`, the full padding at `md`,
-  and from `lg` (desktop) the topbar is laid out exactly as before. The
-  clinical `main` keeps its `px-6` gutter from `md` (`px-4` below).
+- Below `lg` the topbar `flex-wrap`s into two rows: sidebar toggle,
+  `EnvironmentBadge`, `WorkspaceSwitcher` and the icons on top; patient
+  search and **New Patient** on a full-width second row (`order-last
+  w-full`). From `lg` it is one `h-14` row with the search area centred in
+  the remaining space. The search is `flex-1 min-w-0` with a max width
+  (`lg:max-w-[320px] 2xl:max-w-[450px]`), never a fixed width, so it shrinks
+  instead of pushing the icons off-screen.
+- **New Patient** is icon-only (labelled via `aria-label`) below `sm` and on
+  the single-row `lg` layout; its label shows at `sm`–`lg` and from `xl`.
+- The theme toggle and page-help button sit inline from `xl`. Below `xl` they
+  are `xl:hidden` items in the user menu (**Dark mode** / **Light mode**,
+  **Help for this page**), so every control stays reachable at every width.
+  `?` still opens page help everywhere.
+- The clinical `main` keeps its `px-6` gutter from `md` (`px-4` below).
 
 ## Help Centre
 
@@ -343,8 +351,8 @@ The in-app user manual, ported from prrapp. End users reach it three ways:
   beside them.
 - **The help drawer** — the question-mark button in the topbar (**Help for
   this page**, `useHelp().openHelp`), or `?` anywhere outside a text field,
-  opens the page for the screen the user is on in a right-hand sheet (the
-  button is hidden below `sm`; the `?` shortcut still works there),
+  opens the page for the screen the user is on in a right-hand sheet (below
+  `xl` the button is an item in the user menu instead),
   scrolled to the section that names that screen.
 - Links between pages, and from a page into the app.
 
