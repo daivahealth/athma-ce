@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { AlertTriangle, HandCoins, Split, Trash2, User } from 'lucide-react';
+import { AlertTriangle, HandCoins, Split, Trash2 } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,7 @@ import {
 } from '@/modules/rcm/hooks/use-receipts';
 import { PaymentMethod } from '@/modules/rcm/types/receipt';
 import type { AllocateReceiptInput, CreateReceiptInput } from '@/modules/rcm/types/receipt';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const paymentLabels: Record<string, string> = {
   [PaymentMethod.CASH]: 'Cash',
@@ -160,28 +161,7 @@ export default function ReceiptDetailPage() {
             <CardTitle className="text-sm text-muted-foreground">Patient</CardTitle>
           </CardHeader>
           <CardContent>
-            {receipt.patientDisplay ? (
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-0.5">
-                  <p className="font-medium">
-                    {receipt.patientDisplay.displayName || 'Unknown patient'}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>MRN: {receipt.patientDisplay.mrn || '—'}</span>
-                    <span>&bull;</span>
-                    <span>
-                      {receipt.patientDisplay.gender || '—'} /{' '}
-                      {receipt.patientDisplay.age != null ? `${receipt.patientDisplay.age}y` : '—'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="font-mono text-sm" title={receipt.patientId}>
-                {receipt.patientId.slice(0, 8)}...
-              </p>
-            )}
+            <PatientIdentity source={receipt} size="lg" />
           </CardContent>
         </Card>
         <Card className="hover:translate-y-0">

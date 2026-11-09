@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, endOfDay, startOfDay, subDays } from 'date-fns';
-import { Calendar, Eye, Plus, Search, User, FileCheck } from 'lucide-react';
+import { Calendar, Eye, Plus, Search, FileCheck } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -20,6 +20,7 @@ import { useClaims } from '@/modules/rcm/hooks/use-claims';
 import type { Claim, ClaimStatus } from '@/modules/rcm/types/claims';
 import { claimStatusTone, payerTypeTone } from '@/modules/rcm/utils/billing-tone';
 import { PageHeader } from '@/components/ui/page-header';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<ClaimStatus, string> = {
   draft: 'Draft',
@@ -49,33 +50,7 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
   {
     id: 'patient',
     header: 'Patient',
-    cell: ({ row }) => {
-      const pd = row.original.patientDisplay;
-      if (!pd) {
-        return (
-          <p className="font-mono text-xs text-muted-foreground" title={row.original.patientId}>
-            {row.original.patientId.slice(0, 8)}...
-          </p>
-        );
-      }
-      return (
-        <div className="flex items-center gap-2">
-          <User className="h-4 w-4 text-muted-foreground" />
-          <div className="flex flex-col gap-0.5">
-            <span className="font-medium">
-              {pd.displayName || 'Unknown patient'}
-            </span>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>MRN: {pd.mrn || '—'}</span>
-              <span>&bull;</span>
-              <span>
-                {pd.gender || '—'} / {pd.age != null ? `${pd.age}y` : '—'}
-              </span>
-            </div>
-          </div>
-        </div>
-      );
-    },
+    cell: ({ row }) => <PatientIdentity source={row.original} />,
   },
   {
     id: 'payer',

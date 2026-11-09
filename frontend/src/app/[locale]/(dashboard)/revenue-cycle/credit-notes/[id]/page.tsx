@@ -26,6 +26,7 @@ import {
   useDeleteCreditNote,
 } from '@/modules/rcm/hooks/use-credit-notes';
 import type { CreditNoteStatus } from '@/modules/rcm/types/credit-note';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<CreditNoteStatus, string> = {
   draft: 'Draft',
@@ -84,9 +85,6 @@ export default function CreditNoteDetailPage() {
       </div>
     );
   }
-
-  const patientName = creditNote.patientDisplayName || creditNote.patientDisplay?.displayName;
-  const patientMrn = creditNote.mrn || creditNote.patientDisplay?.mrn;
 
   return (
     <div className="space-y-6">
@@ -151,14 +149,7 @@ export default function CreditNoteDetailPage() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Patient</p>
-              {patientName ? (
-                <div>
-                  <p className="font-medium">{patientName}</p>
-                  {patientMrn && <p className="text-sm text-muted-foreground">MRN: {patientMrn}</p>}
-                </div>
-              ) : (
-                <p className="font-mono text-sm">{creditNote.patientId.slice(0, 8)}...</p>
-              )}
+              <PatientIdentity source={creditNote} size="lg" className="mt-2" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Date</p>

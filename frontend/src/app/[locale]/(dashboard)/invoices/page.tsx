@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, endOfDay, startOfDay, subDays } from 'date-fns';
-import { Search, Eye, Plus, Calendar, User, FileText } from 'lucide-react';
+import { Search, Eye, Plus, Calendar, FileText } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -22,6 +22,7 @@ import type { Invoice } from '@/modules/rcm/types/invoice';
 import { InvoiceStatus } from '@/modules/rcm/types/invoice';
 import { invoiceStatusTone } from '@/modules/rcm/utils/billing-tone';
 import { PageHeader } from '@/components/ui/page-header';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabel: Record<InvoiceStatus, string> = {
   [InvoiceStatus.UNPAID]: 'Unpaid',
@@ -37,57 +38,41 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
     accessorKey: 'invoiceNumber',
     header: 'Invoice #',
     cell: ({ getValue }) => (
-      <span className="font-medium">{getValue<string>()}</span>
+      <span className="whitespace-nowrap font-medium">{getValue<string>()}</span>
     ),
   },
   {
     id: 'patient',
     header: 'Patient',
-    cell: ({ row }) => {
-      const pd = row.original.patientDisplay;
-      if (!pd) {
-        return (
-          <p className="font-mono text-xs text-muted-foreground" title={row.original.patientId}>
-            {row.original.patientId.slice(0, 8)}...
-          </p>
-        );
-      }
-      return (
-        <div className="flex items-center gap-2">
-          <User className="h-4 w-4 text-muted-foreground" />
-          <div className="flex flex-col gap-0.5">
-            <span className="font-medium">
-              {pd.displayName || 'Unknown patient'}
-            </span>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>MRN: {pd.mrn || '—'}</span>
-              <span>&bull;</span>
-              <span>
-                {pd.gender || '—'} / {pd.age != null ? `${pd.age}y` : '—'}
-              </span>
-            </div>
-          </div>
-        </div>
-      );
-    },
+    cell: ({ row }) => <PatientIdentity source={row.original} />,
   },
   {
     accessorKey: 'invoiceDate',
     header: 'Date',
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return value ? format(new Date(value), 'PP') : '—';
+      return <span className="whitespace-nowrap">{value ? format(new Date(value), 'PP') : '—'}</span>;
     },
   },
   {
     accessorKey: 'netAmount',
     header: 'Net amount',
-    cell: ({ row }) => formatCurrency(row.original.netAmount, row.original.currency),
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap tabular-nums">
+        {formatCurrency(row.original.netAmount, row.original.currency)}
+      </span>
+    ),
   },
   {
     accessorKey: 'balanceDue',
     header: 'Balance',
-    cell: ({ row }) => formatCurrency(row.original.balanceDue, row.original.currency),
+    cell: ({ row }) => (
+      <span
+        className={`whitespace-nowrap tabular-nums ${Number(row.original.balanceDue) > 0 ? 'font-medium text-foreground' : 'text-muted-foreground'}`}
+      >
+        {formatCurrency(row.original.balanceDue, row.original.currency)}
+      </span>
+    ),
   },
   {
     accessorKey: 'status',

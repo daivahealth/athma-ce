@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { format } from 'date-fns';
-import { ArrowLeft, CreditCard, Slash, User } from 'lucide-react';
+import { ArrowLeft, CreditCard, Slash } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import {
   useCancelInvoice,
 } from '@/modules/rcm/hooks/use-invoices';
 import { InvoiceStatus } from '@/modules/rcm/types/invoice';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusVariant: Record<InvoiceStatus, 'default' | 'secondary' | 'outline' | 'destructive'> = {
   [InvoiceStatus.UNPAID]: 'destructive',
@@ -96,7 +97,6 @@ export default function InvoiceDetailPage() {
   }
 
   const formatMoney = (value: number) => `${Number(value).toFixed(2)} ${invoice.currency}`;
-  const pd = invoice.patientDisplay;
 
   const invoiceLines =
     invoice.invoiceLines ?? (invoice as any).invoice_lines ?? (invoice as any).lines ?? [];
@@ -124,23 +124,7 @@ export default function InvoiceDetailPage() {
             <CardTitle className="text-sm text-muted-foreground">Patient</CardTitle>
           </CardHeader>
           <CardContent>
-            {pd ? (
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-0.5">
-                  <p className="font-medium">{pd.displayName || 'Unknown patient'}</p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>MRN: {pd.mrn || '—'}</span>
-                    <span>&bull;</span>
-                    <span>{pd.gender || '—'} / {pd.age != null ? `${pd.age}y` : '—'}</span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="font-mono text-sm" title={invoice.patientId}>
-                {invoice.patientId.slice(0, 8)}...
-              </p>
-            )}
+            <PatientIdentity source={invoice} size="lg" />
           </CardContent>
         </Card>
         <Card>

@@ -187,6 +187,8 @@ src/
 | GET | `/medical-coding/sessions/pending` | Get pending sessions |
 | GET | `/medical-coding/sessions/:id` | Get session |
 | GET | `/medical-coding/sessions/encounter/:encounterId` | Get by encounter |
+
+The list, pending and single-session reads add `patientId` and `patientDisplay` (name, MRN, gender, age) to each session. Coding sessions store only an encounter id, so RCM reads `GET /encounters/:id` from Clinical, forwarding the caller's `authorization`, `x-tenant-id`, `x-facility-id` and `x-user-id`; a failed lookup leaves both `null`. The helper is `src/common/patient-display.ts`. The `patientId` query filter on the list is accepted but not applied (sessions have no patient column).
 | PUT | `/medical-coding/sessions/:id/start-review` | Start review |
 | PUT | `/medical-coding/sessions/:id` | Update session |
 | POST | `/medical-coding/sessions/:id/submit` | Submit for billing |

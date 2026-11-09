@@ -11,7 +11,6 @@ import {
   PlayCircle,
   Ban,
   Trash2,
-  User,
   Clock,
   FileText,
 } from 'lucide-react';
@@ -50,6 +49,7 @@ import {
   useDeleteRefund,
 } from '@/modules/rcm/hooks/use-refunds';
 import { RefundStatus, RefundMethod } from '@/modules/rcm/types/refund';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<string, string> = {
   [RefundStatus.PENDING]: 'Pending',
@@ -392,28 +392,7 @@ export default function RefundDetailPage() {
             <CardTitle className="text-sm text-muted-foreground">Patient</CardTitle>
           </CardHeader>
           <CardContent>
-            {refund.patientDisplay ? (
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-0.5">
-                  <p className="font-medium">
-                    {refund.patientDisplay.displayName || 'Unknown patient'}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>MRN: {refund.patientDisplay.mrn || '—'}</span>
-                    <span>&bull;</span>
-                    <span>
-                      {refund.patientDisplay.gender || '—'} /{' '}
-                      {refund.patientDisplay.age != null ? `${refund.patientDisplay.age}y` : '—'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="font-mono text-sm" title={refund.patientId}>
-                {refund.patientId.slice(0, 8)}...
-              </p>
-            )}
+            <PatientIdentity source={refund} size="lg" />
           </CardContent>
         </Card>
         <Card>

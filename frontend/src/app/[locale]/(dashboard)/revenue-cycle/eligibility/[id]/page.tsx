@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useEligibilityRequest } from '@/modules/rcm/hooks/use-eligibility';
 import type { EligibilityStatus } from '@/modules/rcm/types/eligibility';
+import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusLabels: Record<EligibilityStatus, string> = {
   accepted: 'Accepted',
@@ -57,21 +58,7 @@ export default function EligibilityDetailPage() {
         <CardContent className="grid gap-4 md:grid-cols-2 text-sm">
           <div>
             <p className="text-muted-foreground">Patient</p>
-            {request.patientDisplay ? (
-              <div className="flex items-center gap-2 mt-1">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-0.5">
-                  <p className="font-medium">{request.patientDisplay.displayName || 'Unknown patient'}</p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>MRN: {request.patientDisplay.mrn || '—'}</span>
-                    <span>&bull;</span>
-                    <span>{request.patientDisplay.gender || '—'} / {request.patientDisplay.age != null ? `${request.patientDisplay.age}y` : '—'}</span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="font-mono">{request.patientId.slice(0, 8)}...</p>
-            )}
+            <PatientIdentity source={request} size="lg" className="mt-2" />
           </div>
           <div>
             <p className="text-muted-foreground">Payer ID</p>
