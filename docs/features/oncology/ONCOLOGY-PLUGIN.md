@@ -386,7 +386,8 @@ See also: [Troubleshooting Plugin Activation](../../troubleshooting/README.md)
 `seed/plugins/oncology/30-demo-cohort.sql` is an **opt-in** seed (not in
 `run-seeds.sh`). It gives every other patient of the demo tenant a
 deterministic cancer journey, usually the 900 `MRN-DEMO-*` patients from
-`clinical/27-demo-activity.sql`. Run it after that file, on the same day.
+`clinical/27-demo-activity.sql`, except 8 held back as registry candidates
+(below). Run it after that file, on the same day.
 
 - **Case mix**: 29 templates weighted toward the case mix of an Indian
   tertiary cancer centre, by sex and age band. Examples: oral cavity and
@@ -428,6 +429,28 @@ deterministic cancer journey, usually the 900 `MRN-DEMO-*` patients from
 - **Re-running** is safe. Ids derive from `onco-demo:<key>`, and a re-run
   first deletes the earlier run's rows and rows of patients that no longer
   exist. Patients with a hand-built diagnosis are not touched.
+- **Registry candidates**: 8 `MRN-DEMO-*` patients are not registered, so the
+  [candidate queue](#registry-candidate-queue--how-patients-enter-the-registry)
+  has work. Each slot takes, by hash, a patient of the right sex and age with
+  an outpatient visit 7–55 days ago, and gets one FINAL result ordered on that
+  visit (a real `clinical_orders` row; histopathology reported 4 days later):
+
+  | Slot | Result | Expected in queue |
+  |------|--------|-------------------|
+  | 1 | Core biopsy, breast: invasive ductal carcinoma | high |
+  | 2 | Punch biopsy, tongue: squamous cell carcinoma | high |
+  | 3 | Colonoscopic biopsy: adenocarcinoma, sigmoid colon | high |
+  | 4 | Diagnostic mammogram: BI-RADS 5 | medium |
+  | 5 | Low-dose CT chest: Lung-RADS 4B | medium |
+  | 6 | Coded encounter diagnosis C22.0 only | high |
+  | 7 | PSA 14.2 ng/mL only | low |
+  | 8 | Gastric biopsy: "negative for dysplasia and malignancy" | not listed |
+
+  Every run removes these results, any registry entry added for these patients
+  during a demo, and all their `registry_candidate_decisions`, so adds and
+  dismissals are reset by the daily refresh. The demo VM's inpatient overlay
+  (`infrastructure/demo-gcp/inpatient/02-clinical.sql`) only admits registered
+  patients, so candidates are not on the oncology wards.
 
 
 ---

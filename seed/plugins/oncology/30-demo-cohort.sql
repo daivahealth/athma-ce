@@ -19,6 +19,22 @@
 --   cancer_timeline_events, and oncology chief complaints / ICD-10 diagnoses
 --   on the patient's existing encounters.
 --
+-- Registry candidates: 8 demo patients (MRN-DEMO-*, picked by hash from those
+-- with an outpatient visit 7-55 days ago) are held back from the cohort and
+-- stay unregistered. Each gets one finalised result on that visit, with its
+-- clinical_orders row, so the registry candidate queue has work:
+--   1 breast core biopsy — invasive ductal carcinoma          → high
+--   2 tongue punch biopsy — squamous cell carcinoma           → high
+--   3 colonoscopic biopsy — adenocarcinoma                    → high
+--   4 mammogram — BI-RADS 5                                   → medium
+--   5 low-dose CT chest — Lung-RADS 4B                        → medium
+--   6 coded encounter diagnosis C22.0 only (no report)        → high
+--   7 PSA 14.2 ng/mL only (tumour marker)                     → low
+--   8 gastric biopsy — "negative for dysplasia and malignancy" → must NOT be listed
+-- Every run deletes these results, any registry entry made for these
+-- patients in a demo, and all registry_candidate_decisions for them, so the
+-- queue is back to these 7 patients after each refresh.
+--
 -- Run it after 27-demo-activity.sql (same day). It is deterministic (hash
 -- based) and re-runnable: it removes its own rows (ids derived from
 -- 'onco-demo:'), and rows of patients that no longer exist, before writing.
@@ -626,11 +642,111 @@ INSERT INTO onc_stage VALUES
 ('TESTIS',3,'IIIB','pT2','N2','M1a',30,'distant','S>C','curative');
 
 -- ---------------------------------------------------------------------------
--- Remove a previous run, and plugin rows of patients that no longer exist
--- (re-running 27-demo-activity.sql recreates the demo patients).
+-- Registry candidates: demo patients held back from the cohort. Each slot
+-- gets one result that the registry candidate queue
+-- (GET /plugins/oncology/registry/candidates, registry-candidates.ts) should
+-- pick up, written after the journeys below. Slot 8 is a benign biopsy that
+-- must NOT be listed. A slot takes the MRN-DEMO-* patient of the right sex
+-- and age with an outpatient visit 7-55 days ago, chosen by hash, so results
+-- fall in the last ~2 months.
 -- ---------------------------------------------------------------------------
+CREATE TEMP TABLE onc_cand_slot (
+  slot int PRIMARY KEY, sex text, age_min int, kind text,           -- kind: pathology | imaging | diagnosis | marker
+  order_code text, order_name text, specimen text, body_part text, technique text,
+  history text, gross text, micro text,
+  result text,                                                       -- pathology diagnosis / imaging impression
+  note text,                                                         -- pathology comment / imaging recommendation
+  findings text, complaint text, icd text, icd_name text, value numeric
+) ON COMMIT DROP;
+INSERT INTO onc_cand_slot VALUES
+(1, 'female', 35, 'pathology', '88305', 'Histopathology — core biopsy, breast', 'Core biopsy, right breast', NULL, NULL,
+ 'Palpable lump right breast upper outer quadrant for 2 months. Ultrasound: 2.1 cm irregular hypoechoic lesion.',
+ 'Three grey-white linear cores, 1.0 to 1.6 cm long. All embedded in A1.',
+ 'Infiltrating tumour cells in nests, cords and tubules with moderate nuclear pleomorphism; 9 mitoses per 10 HPF. No DCIS component seen in the cores.',
+ 'Right breast, upper outer quadrant, core biopsy: Invasive ductal carcinoma (NST), Nottingham grade 2 (3+2+2 = 7/9).',
+ 'ER, PR and HER2 immunohistochemistry requested on block A1.', NULL,
+ 'Lump in the right breast for 2 months', NULL, NULL, NULL),
+(2, 'male', 30, 'pathology', '88305', 'Histopathology — punch biopsy, oral cavity', 'Punch biopsy, tongue', NULL, NULL,
+ 'Non-healing ulcer on the left lateral border of the tongue for 3 months. Chews tobacco.',
+ 'Single grey-white tissue piece 0.6 x 0.4 x 0.3 cm. Entirely embedded.',
+ 'Sheets and islands of atypical squamous cells with keratin pearls and intercellular bridges, infiltrating the underlying stroma.',
+ 'Left lateral border of tongue, punch biopsy: Moderately differentiated squamous cell carcinoma, keratinising. Depth of invasion at least 4 mm in this sample.',
+ 'Clinical staging with CECT face and neck advised.', NULL,
+ 'Non-healing ulcer on the tongue for 3 months', NULL, NULL, NULL),
+(3, NULL, 45, 'pathology', '88305', 'Histopathology — colonoscopic biopsy', 'Colonoscopic biopsy, sigmoid colon', NULL, NULL,
+ 'Altered bowel habit and bleeding per rectum for 2 months. Ulceroproliferative growth at 25 cm on colonoscopy.',
+ 'Five grey-brown tissue bits, the largest 0.4 cm. All embedded.',
+ 'Complex, back-to-back malignant glands with dirty necrosis, infiltrating through the muscularis mucosae.',
+ 'Sigmoid colon, colonoscopic biopsy: Adenocarcinoma, moderately differentiated, invading the submucosa.',
+ 'Mismatch repair immunohistochemistry (MLH1, PMS2, MSH2, MSH6) to follow.', NULL,
+ 'Blood in stools and altered bowel habit for 2 months', NULL, NULL, NULL),
+(4, 'female', 40, 'imaging', '77066', 'Diagnostic mammogram with targeted ultrasound, bilateral', 'Mammography', 'Breast (bilateral)',
+ 'Full-field digital mammography, CC and MLO views, with targeted ultrasound of the left breast.',
+ 'Lump in the left breast noticed 6 weeks ago.', NULL, NULL,
+ 'Left breast: BI-RADS 5, highly suggestive of malignancy. Right breast: BI-RADS 1.',
+ 'Ultrasound-guided core biopsy of the left breast mass.',
+ 'Left breast upper outer quadrant: 1.8 cm irregular spiculated mass with pleomorphic microcalcifications. Ultrasound shows a hypoechoic, taller-than-wide lesion with angular margins. Two left axillary nodes with cortical thickening. Right breast: scattered fibroglandular density.',
+ 'Lump in the left breast for 6 weeks', NULL, NULL, NULL),
+(5, 'male', 50, 'imaging', '71271', 'Low-dose CT chest (lung cancer screening)', 'CT', 'Chest',
+ 'Low-dose non-contrast CT of the chest, 1 mm reconstructions.',
+ 'Smoker, 30 pack-years. Annual lung cancer screening.', NULL, NULL,
+ 'Lung-RADS 4B: suspicious part-solid nodule in the right upper lobe.',
+ 'PET-CT and tissue sampling; discuss at the thoracic MDT.',
+ 'Right upper lobe apical segment: 2.3 cm part-solid nodule with a 14 mm solid component and spiculated margins. No mediastinal or hilar lymphadenopathy. No pleural effusion. Centrilobular emphysema.',
+ 'Annual lung screening CT — smoker, 30 pack-years', NULL, NULL, NULL),
+(6, NULL, 40, 'diagnosis', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+ 'Referred with an outside triphasic CT showing a 4 cm segment VI lesion with arterial enhancement and washout; chronic hepatitis B.', NULL,
+ 'Right upper abdominal discomfort and weight loss', 'C22.0', 'Liver cell carcinoma', NULL),
+(7, 'male', 50, 'marker', '83112-3', 'Prostate Specific Antigen (PSA), Total', 'Serum', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+ 'Increased urinary frequency and nocturia for 6 months', NULL, NULL, 14.2),
+(8, NULL, 30, 'pathology', '88305', 'Histopathology — endoscopic biopsy, stomach', 'Endoscopic biopsy, gastric antrum', NULL, NULL,
+ 'Epigastric pain and dyspepsia for 4 months. Antral erosions on endoscopy.',
+ 'Four grey-white tissue bits, the largest 0.3 cm. All embedded.',
+ 'Antral mucosa with a dense lymphoplasmacytic infiltrate, neutrophilic activity and curved bacilli on the surface epithelium.',
+ 'Gastric antrum, endoscopic biopsy: Chronic active gastritis with Helicobacter pylori-like organisms. Negative for dysplasia and malignancy.',
+ 'No evidence of carcinoma or lymphoma in the sections examined.', NULL,
+ 'Epigastric pain and dyspepsia for 4 months', NULL, NULL, NULL);
+
+CREATE TEMP TABLE onc_cand (slot int PRIMARY KEY, patient_id uuid UNIQUE, enc_id uuid, enc_day date) ON COMMIT DROP;
+DO $$
+DECLARE c record;
+BEGIN
+  FOR c IN SELECT * FROM onc_cand_slot ORDER BY slot LOOP
+    INSERT INTO onc_cand
+    SELECT c.slot, p.id, e.id, e.start_time::date
+    FROM patients p
+    JOIN LATERAL (
+      SELECT e.id, e.start_time FROM encounters e
+      WHERE e.patient_id = p.id AND e.encounter_class = 'AMB' AND e.encounter_number NOT LIKE 'ONC-ENC-%'
+        AND e.start_time::date BETWEEN CURRENT_DATE - 55 AND CURRENT_DATE - 7
+      ORDER BY e.start_time DESC LIMIT 1
+    ) e ON true
+    WHERE p.tenant_id = '11111111-1111-1111-1111-111111111111' AND p.mrn LIKE 'MRN-DEMO-%'
+      AND (c.sex IS NULL OR p.gender = c.sex)
+      AND EXTRACT(YEAR FROM age(CURRENT_DATE, p.date_of_birth)) >= c.age_min
+      AND NOT EXISTS (SELECT 1 FROM onc_cand x WHERE x.patient_id = p.id)
+    ORDER BY md5('cand:' || c.slot || ':' || p.id)
+    LIMIT 1;
+  END LOOP;
+END $$;
+
+-- ---------------------------------------------------------------------------
+-- Remove a previous run, and plugin rows of patients that no longer exist
+-- (re-running 27-demo-activity.sql recreates the demo patients). Candidate
+-- patients are cleaned too, so anything added to the registry for them in a
+-- demo (and every add/dismiss decision) is reset.
+-- ---------------------------------------------------------------------------
+DELETE FROM clinical_orders WHERE id IN (SELECT pg_temp.u('cand-ord:' || slot) FROM onc_cand_slot); -- reports cascade
+DELETE FROM encounter_diagnoses WHERE id IN (SELECT pg_temp.u('cand-dx:' || slot) FROM onc_cand_slot);
+DELETE FROM plugin_oncology.registry_candidate_decisions d
+WHERE d.patient_id IN (SELECT patient_id FROM onc_cand)
+   OR d.source_id IN (SELECT pg_temp.u('cand-' || k || ':' || slot) FROM onc_cand_slot, unnest(ARRAY['path', 'img', 'dx', 'mki']) k)
+   OR NOT EXISTS (SELECT 1 FROM patients p WHERE p.id = d.patient_id);
+
 CREATE TEMP TABLE onc_old (patient_id uuid PRIMARY KEY) ON COMMIT DROP;
 INSERT INTO onc_old
+SELECT patient_id FROM onc_cand
+UNION
 SELECT d.patient_id FROM plugin_oncology.cancer_diagnoses d
 WHERE d.tenant_id = '11111111-1111-1111-1111-111111111111' AND d.id = pg_temp.u('dx:' || d.patient_id)
 UNION
@@ -672,7 +788,8 @@ WHERE ed.patient_id IN (SELECT patient_id FROM onc_old)
 DELETE FROM encounters WHERE encounter_number LIKE 'ONC-ENC-%';
 
 -- ---------------------------------------------------------------------------
--- Cohort: every active patient of the tenant without a cancer diagnosis.
+-- Cohort: every active patient of the tenant without a cancer diagnosis,
+-- except the registry candidates held back above.
 -- Each gets at least one encounter (the first oncology consult).
 -- ---------------------------------------------------------------------------
 CREATE TEMP TABLE onc_patient ON COMMIT DROP AS
@@ -680,7 +797,8 @@ SELECT p.id, p.mrn, p.gender, p.date_of_birth, p.first_name, p.last_name,
        LEAST(p.created_at::date, COALESCE((SELECT MIN(e.start_time)::date FROM encounters e WHERE e.patient_id = p.id), p.created_at::date)) AS reg
 FROM patients p
 WHERE p.tenant_id = '11111111-1111-1111-1111-111111111111'
-  AND NOT EXISTS (SELECT 1 FROM plugin_oncology.cancer_diagnoses d WHERE d.patient_id = p.id);
+  AND NOT EXISTS (SELECT 1 FROM plugin_oncology.cancer_diagnoses d WHERE d.patient_id = p.id)
+  AND NOT EXISTS (SELECT 1 FROM onc_cand c WHERE c.patient_id = p.id);
 
 -- Screens that show patients.display_name (e.g. the cancer timeline header) need it set.
 UPDATE patients p SET display_name = trim(p.first_name || ' ' || p.last_name)
@@ -1476,6 +1594,67 @@ DELETE FROM plugin_oncology.treatment_plans
 WHERE tenant_id = '11111111-1111-1111-1111-111111111111' AND created_at > NOW()
   AND id = pg_temp.u('tp:' || patient_id);
 
+-- ---------------------------------------------------------------------------
+-- Registry candidate results (slots chosen above). The order sits on the
+-- patient's recent outpatient visit; imaging and lab results come back the
+-- same day, histopathology 4 days later (never after yesterday).
+-- ---------------------------------------------------------------------------
+CREATE TEMP TABLE onc_cand_row ON COMMIT DROP AS
+SELECT *,
+       pg_temp.u('cand-ord:' || c.slot) AS order_id,
+       c.enc_day + TIME '11:30' AS ordered_at,
+       LEAST(c.enc_day + CASE s.kind WHEN 'pathology' THEN 4 ELSE 0 END, CURRENT_DATE - 1) + TIME '15:00' AS result_at
+FROM onc_cand c JOIN onc_cand_slot s USING (slot);
+
+UPDATE encounters e SET chief_complaint = r.complaint, presenting_symptoms = r.complaint,
+  notes = COALESCE(r.history, r.note)
+FROM onc_cand_row r WHERE e.id = r.enc_id;
+
+INSERT INTO clinical_orders (id, tenant_id, encounter_id, patient_id, order_type, order_code, code_system, order_name,
+  priority, status, clinical_indication, result_status, ordered_by, ordered_at, performed_at, resulted_at, created_at, updated_at)
+SELECT r.order_id, '11111111-1111-1111-1111-111111111111'::uuid, r.enc_id, r.patient_id,
+  CASE r.kind WHEN 'imaging' THEN 'imaging' ELSE 'lab' END, r.order_code, CASE r.kind WHEN 'marker' THEN 'LOINC' ELSE 'CPT' END,
+  r.order_name, 'routine', 'completed', COALESCE(r.history, r.complaint), 'final',
+  '6d2df89a-3f81-5338-b197-373d347031db'::uuid, r.ordered_at, r.ordered_at + INTERVAL '30 minutes', r.result_at, r.ordered_at, r.result_at
+FROM onc_cand_row r WHERE r.kind IN ('pathology', 'imaging', 'marker');
+
+INSERT INTO pathology_reports (id, tenant_id, order_id, encounter_id, patient_id, report_status, version, specimen_type,
+  collection_date, received_date, clinical_history, specimen_received, gross_description, microscopic_description, diagnosis, comment,
+  reported_by, verified_by, reported_at, verified_at, created_at, updated_at)
+SELECT pg_temp.u('cand-path:' || r.slot), '11111111-1111-1111-1111-111111111111'::uuid, r.order_id, r.enc_id, r.patient_id, 'FINAL', 1, r.specimen,
+  r.ordered_at + INTERVAL '30 minutes', r.ordered_at + INTERVAL '3 hours', r.history, r.specimen || ', in 10% neutral buffered formalin',
+  r.gross, r.micro, r.result, r.note,
+  'e64ff25b-9d46-5b0e-9bc3-6596a5850cee'::uuid, 'e64ff25b-9d46-5b0e-9bc3-6596a5850cee'::uuid,
+  r.result_at - INTERVAL '1 hour', r.result_at, r.ordered_at, r.result_at
+FROM onc_cand_row r WHERE r.kind = 'pathology';
+
+INSERT INTO imaging_reports (id, tenant_id, order_id, encounter_id, patient_id, report_status, version, modality, body_part,
+  technique, comparison, findings, impression, recommendations, critical_finding, accession_number,
+  reported_by, reviewed_by, reported_at, reviewed_at, created_at, updated_at)
+SELECT pg_temp.u('cand-img:' || r.slot), '11111111-1111-1111-1111-111111111111'::uuid, r.order_id, r.enc_id, r.patient_id, 'FINAL', 1, r.specimen, r.body_part,
+  r.technique, 'No prior imaging available.', r.findings, r.result, r.note, false, 'ACC-CAND-' || to_char(r.enc_day, 'YYMMDD') || '-' || r.slot,
+  'e64ff25b-9d46-5b0e-9bc3-6596a5850cee'::uuid, 'e64ff25b-9d46-5b0e-9bc3-6596a5850cee'::uuid,
+  r.result_at - INTERVAL '1 hour', r.result_at, r.ordered_at, r.result_at
+FROM onc_cand_row r WHERE r.kind = 'imaging';
+
+INSERT INTO lab_reports (id, tenant_id, order_id, encounter_id, patient_id, report_status, version, specimen_type,
+  collection_date, received_date, reported_by, reported_at, verified_at, created_at, updated_at)
+SELECT pg_temp.u('cand-lab:' || r.slot), '11111111-1111-1111-1111-111111111111'::uuid, r.order_id, r.enc_id, r.patient_id, 'FINAL', 1, r.specimen,
+  r.ordered_at + INTERVAL '30 minutes', r.ordered_at + INTERVAL '1 hour', '6d2df89a-3f81-5338-b197-373d347031db'::uuid,
+  r.result_at - INTERVAL '30 minutes', r.result_at, r.ordered_at, r.result_at
+FROM onc_cand_row r WHERE r.kind = 'marker';
+INSERT INTO lab_result_items (id, tenant_id, lab_report_id, sort_order, test_code, code_system, test_name, value_numeric, unit,
+  ref_range_low, ref_range_high, abnormal_flag, critical_flag, created_at, updated_at)
+SELECT pg_temp.u('cand-mki:' || r.slot), '11111111-1111-1111-1111-111111111111'::uuid, pg_temp.u('cand-lab:' || r.slot), 1,
+  r.order_code, 'LOINC', r.order_name, r.value, 'ng/mL', 0, 4, true, false, r.result_at, r.result_at
+FROM onc_cand_row r WHERE r.kind = 'marker';
+
+INSERT INTO encounter_diagnoses (id, tenant_id, encounter_id, patient_id, icd_code, icd_version, diagnosis_name, diagnosis_type,
+  diagnosis_rank, is_chronic, onset_date, clinical_notes, diagnosed_by, diagnosed_at, created_at, updated_at)
+SELECT pg_temp.u('cand-dx:' || r.slot), '11111111-1111-1111-1111-111111111111'::uuid, r.enc_id, r.patient_id, r.icd, 'ICD-10', r.icd_name, 'primary',
+  1, false, r.enc_day, COALESCE(r.history, r.note), '6d2df89a-3f81-5338-b197-373d347031db'::uuid, r.enc_day + TIME '11:00', r.enc_day + TIME '11:00', r.enc_day + TIME '11:00'
+FROM onc_cand_row r WHERE r.kind = 'diagnosis';
+
 COMMIT;
 
 -- Summary for the seed log.
@@ -1486,4 +1665,6 @@ UNION ALL SELECT 'active care plans', COUNT(*) FROM plugin_oncology.oncology_car
 UNION ALL SELECT 'day-care today', COUNT(*) FROM plugin_oncology.treatment_days WHERE scheduled_date = CURRENT_DATE AND status NOT IN ('skipped', 'cancelled')
 UNION ALL SELECT 'chemo orders', COUNT(*) FROM plugin_oncology.chemo_orders
 UNION ALL SELECT 'patients on radiotherapy now', COUNT(*) FROM plugin_oncology.radiation_prescriptions WHERE status = 'ACTIVE'
-UNION ALL SELECT 'fractions today', COUNT(*) FROM plugin_oncology.radiation_fractions WHERE planned_date = CURRENT_DATE;
+UNION ALL SELECT 'fractions today', COUNT(*) FROM plugin_oncology.radiation_fractions WHERE planned_date = CURRENT_DATE
+UNION ALL SELECT 'registry candidate results', COUNT(*) FROM clinical_orders WHERE id IN (SELECT pg_temp.u('cand-ord:' || g) FROM generate_series(1, 8) g)
+UNION ALL SELECT 'registry candidate diagnoses', COUNT(*) FROM encounter_diagnoses WHERE id IN (SELECT pg_temp.u('cand-dx:' || g) FROM generate_series(1, 8) g);

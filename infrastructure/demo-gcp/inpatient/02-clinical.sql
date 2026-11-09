@@ -82,7 +82,9 @@ SELECT row_number() OVER (ORDER BY p.created_at, p.mrn) AS rn, p.id, p.gender,
        EXISTS (SELECT 1 FROM plugin_oncology.cancer_diagnoses d
                WHERE d.patient_id = p.id AND d.icd_code ~ '^C(8[1-9]|9[0-6])') AS haem
 FROM patients p
-WHERE p.mrn LIKE 'MRN-DEMO-%';
+WHERE p.mrn LIKE 'MRN-DEMO-%'
+  -- Registry candidates held back by 30-demo-cohort.sql are not oncology inpatients.
+  AND EXISTS (SELECT 1 FROM plugin_oncology.cancer_diagnoses d WHERE d.patient_id = p.id);
 CREATE INDEX ON onc_pt (rn);
 
 -- Physicians (names as the India overlay presents them) and ward nurses.
