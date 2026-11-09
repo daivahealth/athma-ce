@@ -1,0 +1,12 @@
+# /etc/cron.d/athma-demo — demo VM data upkeep (see docs/runbooks/demo-environment-gcp.md).
+# Install: sudo install -m 644 /opt/athma/infrastructure/demo-gcp/cron/athma-demo /etc/cron.d/athma-demo
+# The VM clock is UTC; times below are given in IST (UTC+5:30) in the comments.
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# 00:15 IST daily: roll all generated demo data forward to the new day.
+45 18 * * * root /opt/athma/infrastructure/demo-gcp/refresh-demo-data.sh >> /var/log/athma-demo-refresh.log 2>&1
+# 12:30 IST daily: refresh again so today's clinic shows the morning as done.
+0 7 * * * root /opt/athma/infrastructure/demo-gcp/refresh-demo-data.sh >> /var/log/athma-demo-refresh.log 2>&1
+# 22:00 UTC on the 1st (03:30 IST on the 2nd): vacuum, prune Docker cache, trim logs.
+0 22 1 * * root /opt/athma/infrastructure/demo-gcp/monthly-maintenance.sh >> /var/log/athma-demo-refresh.log 2>&1

@@ -304,11 +304,73 @@ sudo ./db-snapshot.sh restore /opt/athma/dbdump
 sudo docker compose up -d
 ```
 
-### Refresh the dashboard's demo activity
-The HealthAI+ dashboard's worklists, forecast and Week/Month views read 13 months of activity that
+### Keep the demo data current (daily refresh)
+Since 2026-11-09 the VM refreshes all generated demo data itself, so graphs,
+worklists and the ward board always run up to today.
+`infrastructure/demo-gcp/refresh-demo-data.sh` re-runs the whole chain below
+in dependency order: the inpatient ward overlay, demo activity, invoices,
+oncology cohort, cancer-centre clinical overlay, India name overlays, and
+inpatient beds. It takes about 90 seconds. It runs with
+`PGTZ=Asia/Kolkata`, so "today", clinic hours and admission times are Indian
+times. It stops at the first failing script. Each script is one transaction,
+so a failure keeps that script's previous rows.
+
+`/etc/cron.d/athma-demo` (source: `infrastructure/demo-gcp/cron/athma-demo`)
+runs the refresh at 00:15 IST, to roll over to the new day. It runs it again
+at 12:30 IST, so today's clinic shows the morning as done. On the 1st of each
+month, `monthly-maintenance.sh` runs at 22:00 UTC. It runs `VACUUM (FULL,
+ANALYZE)` on every database to reclaim the dead rows the refreshes leave,
+prunes Docker build cache and dangling images, and trims the journal and the
+refresh log. Output goes to `/var/log/athma-demo-refresh.log`.
+
+The data does not grow: every script deletes its own rows before writing.
+On 2026-11-09 all databases together were about 230 MB, so no monthly data
+purge is needed. The monthly job does not delete backups or sandbox tenants.
+
+```bash
+# VM: install or update the schedule after a deploy that changes it
+sudo install -m 644 /opt/athma/infrastructure/demo-gcp/cron/athma-demo /etc/cron.d/athma-demo
+# run a refresh now
+sudo /opt/athma/infrastructure/demo-gcp/refresh-demo-data.sh
+```
+
+The cron jobs call the scripts in `/opt/athma`, so a deploy (directory swap)
+picks up script changes automatically. Within 30 minutes of a refresh, press
+**Refresh** on the dashboard to see the new numbers before the cache rebuilds.
+
+### Inpatient demo data (wards and beds)
+The demo database was restored without departments, wards or beds, so the ward
+board, bed board and bed search were empty. `infrastructure/demo-gcp/inpatient/`
+fixes this (demo VM only; local development keeps `seed/foundation/09-wards.sql`
+and `10-beds.sql`):
+
+- `01-foundation.sql` adds the **Inpatient Services** department to Cancer
+  Hospital, plus seven oncology wards with 96 beds: Medical Oncology Male and
+  Female, Surgical Oncology, Haemato-Oncology, Bone Marrow Transplant Unit,
+  Oncology ICU and Palliative Care. Bed MED-M-20 is under maintenance.
+- `02-clinical.sql` adds about 10 oncology admissions a day over 13 months
+  (`DEMO-ADM-ONC-*`, encounters `DEMO-ENC-IPO-*`). The case mix covers chemo
+  cycles, surgery, febrile neutropenia, ICU, palliative care,
+  haemato-oncology and BMT, each with a realistic length of stay.
+  Every current demo inpatient gets a bed in a ward that fits the case and
+  gender, with an open bed assignment. Each one also gets acuity, board flags,
+  a vitals rhythm (some overdue), a primary nurse and discharge planning
+  status. The newest two admissions wait for a bed, and beds freed by the
+  latest discharges await cleaning. About 64 patients are in, about 65%
+  occupancy.
+
+Ward and bed ids are `uuid_generate_v5` names (`ward:ONC-<code>`,
+`bed:ONC-<code>:<nnn>`) that both files derive. The clinical database cannot
+read foundation, so keep the two ward plans in step. The new admissions have
+no invoices: `09-demo-invoices.sql` bills only `27-demo-activity.sql` stays.
+
+### Refresh the dashboard's demo activity (manual)
+The daily refresh above does this. The HealthAI+ dashboard's worklists,
+forecast and Week/Month views read 13 months of activity that
 `seed/clinical/27-demo-activity.sql` and `seed/rcm/09-demo-invoices.sql`
-generate relative to the day they run. The history goes stale as days pass, so
-re-run both (same day) shortly before a demo. They only replace their own rows
+generate relative to the day they run. To run them by hand, run both on the
+same day, then the cancer-centre, India and inpatient overlays (or just run
+`refresh-demo-data.sh`). They only replace their own rows
 (MRN `MRN-DEMO-*`, encounter `DEMO-ENC-*`, admission `DEMO-ADM-*`, invoice
 `DEMO-INV-*`), so they are safe on a database that has had real demo use:
 
@@ -346,7 +408,10 @@ $P -d zeal_clinical   < seed/plugins/oncology/30-demo-cohort.sql      # ~20 s
 $P -d zeal_clinical   < infrastructure/demo-gcp/cancer-centre/02-clinical.sql
 ```
 
-All three scripts can be re-run safely. `30-demo-cohort.sql` replaces only the
+The clinical scripts can be re-run safely. `01-foundation.sql` is a one-time
+overlay: since users were added after 2026-11-05, re-running it fails on
+`user_facilities_user_id_facility_id_key`, so the daily refresh skips it.
+`30-demo-cohort.sql` replaces only the
 rows it wrote earlier, and rows of patients that no longer exist. Re-running
 `27-demo-activity.sql` recreates the demo patients, so always run the cohort
 again after it. Otherwise the demo patients have no cancer data, and their
