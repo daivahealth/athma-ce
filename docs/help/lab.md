@@ -181,13 +181,19 @@ Click a row (or focus it and press Enter) to open the report. The footer says wh
 
 ### Find a result
 
-- Type in **Search lab results** to search the list. It updates as you type.
+- Pick the dates at the top right. The list shows reports issued in that range (drafts by the date
+  they were started), and opens on **Today**. Press **Last 7 days** or **Last 30 days**, or type a
+  first and last day. A range can be up to 92 days; if you pick a longer one, the other end moves to
+  fit.
+- Type in **Search lab results** to search within those dates. It updates as you type. To find an
+  older report for one patient, widen the dates, or open the report from the patient's own results.
 - Use the status buttons beside the search (**All**, **Draft**, **Preliminary**, **Final**, **Amended**,
   **Cancelled**) to narrow it.
 - Twenty rows show at a time. Use **Previous** and **Next** under the table to page through.
 
 When a search or filter matches nothing the list says **No results match**; press **Clear filters** to
-reset both. When there are no lab reports at all it says **No lab results yet**.
+reset both (the dates stay as they are). When there are no lab reports in the dates it says **No lab
+results in these dates**.
 
 ### Report statuses
 
