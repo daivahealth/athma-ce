@@ -3,12 +3,13 @@ import { HttpService } from '@nestjs/axios';
 import { PrismaService } from '@zeal/database-rcm';
 import { firstValueFrom } from 'rxjs';
 import { PharmacyQueueFiltersDto } from '../dto/pharmacy-queue.dto';
+import { resolveClinicalServiceApiUrl, resolveFoundationApiUrl } from '../../../common/service-urls';
 
 @Injectable()
 export class PharmacyQueueService {
   private readonly logger = new Logger(PharmacyQueueService.name);
-  private readonly clinicalServiceUrl = process.env.CLINICAL_SERVICE_URL ?? 'http://localhost:3011/api/v1';
-  private readonly foundationServiceUrl = process.env.FOUNDATION_API_URL ?? 'http://localhost:3010/api/v1';
+  private readonly clinicalServiceUrl = resolveClinicalServiceApiUrl();
+  private readonly foundationServiceUrl = resolveFoundationApiUrl();
 
   constructor(
     private readonly prisma: PrismaService,

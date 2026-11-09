@@ -11,6 +11,7 @@ import {
 import { MockEligibilityConnector } from './connectors/mock.connector';
 import { NhcxEligibilityConnector } from './connectors/nhcx.connector';
 import { EligibilityConnector } from './connectors/eligibility-connector.interface';
+import { resolveClinicalApiUrl } from '../../common/service-urls';
 
 export interface PatientDisplayDto {
     patientId: string;
@@ -33,7 +34,7 @@ export interface PatientDisplayDto {
 export class EligibilityService {
     private readonly logger = new Logger(EligibilityService.name);
     private readonly connectors: Map<string, EligibilityConnector> = new Map();
-    private readonly clinicalApiUrl = process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+    private readonly clinicalApiUrl = resolveClinicalApiUrl();
 
     constructor(
         private readonly prisma: PrismaService,

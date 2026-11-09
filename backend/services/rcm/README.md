@@ -224,12 +224,14 @@ NODE_ENV=development
 # Database
 RCM_DATABASE_URL=postgresql://zeal_user:zeal_password@localhost:5432/zeal_rcm
 
-# Clinical Service (for encounter data)
+# Clinical Service (patients, encounters). Pharmacy reads CLINICAL_SERVICE_URL.
 CLINICAL_API_URL=http://localhost:3011
 
-# Foundation Service (for authentication)
-FOUNDATION_API_URL=http://localhost:3010
+# Foundation Service (config resolution, staff)
+FOUNDATION_API_URL=http://localhost:3010/api/v1
 ```
+
+Upstream URLs may be a bare origin or include the API prefix: when the value has no path, RCM appends `/api/v1` (see `src/common/service-urls.ts`). Unset values default to `http://localhost:3011/api/v1` (clinical) and `http://localhost:3010/api/v1` (foundation).
 
 ## Development
 

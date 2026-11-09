@@ -28,6 +28,8 @@ Caddy terminates TLS (Let's Encrypt) and routes by hostname, because every backe
 | `prm.<DEMO_DOMAIN>` | prm :3013 |
 | `ai.<DEMO_DOMAIN>` | ai-gateway :3015 |
 
+Inside the compose network the services call each other by container name, set in the shared backend environment (`CLINICAL_API_URL`, `CLINICAL_SERVICE_URL`, `FOUNDATION_API_URL` and others). RCM accepts these either as a bare origin (`http://clinical:3011`) or with the prefix (`http://clinical:3011/api/v1`): it appends `/api/v1` when the value has no path. Other services may not, so keep `/api/v1` on `FOUNDATION_API_URL`.
+
 The abdm-connector (:3016) is internal only.
 
 `DEMO_DOMAIN` is `athma-ce-demo.daiva.health`, so the app is at `https://athma-ce-demo.daiva.health`. `daiva.health` DNS is hosted in Netlify, which needs two `A` records:

@@ -10,11 +10,12 @@ import {
 } from '../dto/receipt.dto';
 import { PatientDisplayDto } from './invoice.service';
 import { PatientLedgerService } from './patient-ledger.service';
+import { resolveClinicalApiUrl } from '../../../common/service-urls';
 
 @Injectable()
 export class ReceiptService {
   private readonly logger = new Logger(ReceiptService.name);
-  private readonly clinicalApiUrl = process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+  private readonly clinicalApiUrl = resolveClinicalApiUrl();
 
   constructor(
     private readonly prisma: PrismaService,
