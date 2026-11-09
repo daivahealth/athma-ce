@@ -169,9 +169,12 @@ Current behavior:
 Available now:
 
 - `/results/lab` is fed by aggregated patient results
-- `/results/lab` shows one **Reported on** day at a time, defaulting to today. A report matches
-  the day by `reportedAt`, or by `createdAt` while it has not been reported yet (drafts), so the
-  day always agrees with the "Reported" column. Backed by optional `from` / `to` (ISO 8601,
+- `/results/lab` shows a **Reported** date range, defaulting to today, with **Today**, **Last 7
+  days** and **Last 30 days** presets and first/last day inputs. The range is capped at 92 days
+  (`MAX_LAB_RANGE_DAYS`) because `GET /patient-results` loads every report in the window before
+  paging. A report matches by `reportedAt`, or by `createdAt` while it has not been reported yet
+  (drafts), so the dates always agree with the "Reported" column. Lab Collection and Lab Operations
+  keep their single-day filter. Backed by optional `from` / `to` (ISO 8601,
   inclusive / exclusive) query params on `GET /patient-results`, which apply to lab, pathology,
   imaging and procedure reports alike.
 - lab orders become visible in the reporting queue as soon as processing starts

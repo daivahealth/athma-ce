@@ -31,9 +31,10 @@ import {
   SearchX,
 } from 'lucide-react';
 import {
-  LabDateFilter,
+  LabDateRangeFilter,
   LabPatientCell,
-  useLabDayFilter,
+  MAX_LAB_RANGE_DAYS,
+  useLabDateRangeFilter,
 } from '@/modules/clinical/components/lab-operations/lab-ui';
 import { NewReportDialog } from '@/modules/clinical/components/reporting/NewReportDialog';
 import type { PatientResult } from '@/modules/clinical/types/reporting';
@@ -73,21 +74,21 @@ export default function LabResultsListPage() {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebouncedValue(search, 300);
   const [page, setPage] = useState(1);
-  const { date, setDate, range } = useLabDayFilter();
+  const { range, setRange, query } = useLabDateRangeFilter();
   const limit = 20;
 
   const { data, isLoading, error } = useAllResults({
     type: 'lab',
     status: statusFilter !== 'all' ? statusFilter : undefined,
     search: debouncedSearch.trim() || undefined,
-    ...range,
+    ...query,
     page,
     limit,
   });
 
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, date]);
+  }, [debouncedSearch, range]);
 
   const errorMessage =
     error && typeof error === 'object' && 'response' in error
@@ -105,11 +106,11 @@ export default function LabResultsListPage() {
     <div className="space-y-6 page-transition">
       <PageHeader
         title="Lab Results"
-        subtitle="Laboratory reports across the facility for the selected day, newest first"
+        subtitle="Laboratory reports across the facility for the selected dates, newest first"
         icon={FlaskConical}
         actions={
           <>
-            <LabDateFilter value={date} onChange={setDate} label="Reported on" />
+            <LabDateRangeFilter value={range} onChange={setRange} label="Reported" />
             <NewReportDialog reportType="lab" />
           </>
         }
@@ -191,8 +192,8 @@ export default function LabResultsListPage() {
           ) : (
             <EmptyState
               icon={FlaskConical}
-              title="No lab results on this day"
-              description="Pick another date, or reports appear here once results are entered against lab orders."
+              title="No lab results in these dates"
+              description={`Pick a wider range (up to ${MAX_LAB_RANGE_DAYS} days), or reports appear here once results are entered against lab orders.`}
             />
           )
         ) : (
