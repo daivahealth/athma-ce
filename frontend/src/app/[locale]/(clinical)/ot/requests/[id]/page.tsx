@@ -1,21 +1,48 @@
 'use client';
 
 import * as React from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { format } from 'date-fns';
-import { ArrowLeft, Clock, FileSignature, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  useOtRequest,
-  useOtRequestHistory,
-  useOtRooms,
-} from '@/modules/ot/hooks/use-ot';
+  AlertTriangle,
+  CalendarClock,
+  CalendarDays,
+  ClipboardList,
+  Clock,
+  DoorOpen,
+  Droplet,
+  FileSignature,
+  History,
+  Package,
+  Stethoscope,
+  Syringe,
+  Timer,
+  UserRound,
+} from 'lucide-react';
+import { ToneBadge } from '@/components/ui/tone-badge';
+import { TONE_TEXT, TONE_WASH } from '@/components/ui/tone-classes';
+import { cn } from '@/lib/utils';
+import { useOtRequest, useOtRequestHistory, useOtRooms } from '@/modules/ot/hooks/use-ot';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
-import { OtRequestStatusBadge, OtScheduleStatusBadge, OtReportStatusBadge } from '@/modules/ot/components/ot-status-badge';
+import { otRequestStatusTone } from '@/modules/ot/ot-tone';
+import {
+  OtReportStatusBadge,
+  OtRequestPriorityBadge,
+  OtRequestStatusBadge,
+  OtScheduleStatusBadge,
+} from '@/modules/ot/components/ot-status-badge';
+import { OtErrorPanel } from '@/modules/ot/components/ot-list';
+import {
+  OtDetailHero,
+  OtDetailSkeleton,
+  OtFact,
+  OtLinkRow,
+  OtSection,
+  OtStatusTimeline,
+} from '@/modules/ot/components/ot-detail';
 
-function fmt(value?: string | null): string {
-  if (!value) return '—';
+function fmt(value?: string | null): string | null {
+  if (!value) return null;
   try {
     return format(new Date(value), 'dd MMM yyyy, HH:mm');
   } catch {
@@ -23,18 +50,30 @@ function fmt(value?: string | null): string {
   }
 }
 
-function fmtDate(value?: string | null): string {
-  if (!value) return '—';
+function fmtDate(value?: string | null): string | null {
+  if (!value) return null;
   try {
-    return format(new Date(value), 'dd MMM yyyy');
+    return format(new Date(value), 'EEE, dd MMM yyyy');
   } catch {
     return value;
   }
 }
 
+function ChipList({ items, empty }: { items?: string[] | null; empty: string }) {
+  if (!items?.length) return <p className="text-sm text-muted-foreground">{empty}</p>;
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {items.map((item) => (
+        <ToneBadge key={item} tone="slate" className="px-2.5 py-1 text-xs">
+          {item}
+        </ToneBadge>
+      ))}
+    </div>
+  );
+}
+
 export default function OtRequestDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const locale = (params.locale as string) || 'en';
   const id = params.id as string;
 
@@ -57,203 +96,161 @@ export default function OtRequestDetailPage() {
     return m;
   }, [staff]);
 
-  const roomName = request?.preferredOtRoomSpaceId
-    ? roomMap.get(request.preferredOtRoomSpaceId) ?? request.preferredOtRoomSpaceId
+  if (isLoading) return <OtDetailSkeleton />;
+  if (error || !request)
+    return <OtErrorPanel error={error ?? new Error('OT request not found.')} />;
+
+  const roomName = request.preferredOtRoomSpaceId
+    ? (roomMap.get(request.preferredOtRoomSpaceId) ?? 'Room not loaded')
     : null;
-  const surgeonName = request?.primarySurgeonId
-    ? staffMap.get(request.primarySurgeonId) ?? request.primarySurgeonId
+  const surgeonName = request.primarySurgeonId
+    ? (staffMap.get(request.primarySurgeonId) ?? request.primarySurgeonId)
     : null;
+  const subtitle = [request.procedureCode, request.surgeryType].filter(Boolean).join(' · ');
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={() => router.push(`/${locale}/ot/requests`)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-      </div>
+    <div className="space-y-6 page-transition">
+      <OtDetailHero
+        backHref={`/${locale}/ot/requests`}
+        backLabel="OT Requests"
+        kicker="OT request"
+        icon={ClipboardList}
+        title={request.procedureName}
+        subtitle={subtitle || undefined}
+        tone={otRequestStatusTone(request.status)}
+        badges={
+          <>
+            <OtRequestStatusBadge status={request.status} />
+            <OtRequestPriorityBadge priority={request.priority} />
+          </>
+        }
+        patient={request}
+        facts={
+          <>
+            <OtFact label="Preferred date" icon={CalendarDays}>
+              {fmtDate(request.preferredDate)}
+            </OtFact>
+            <OtFact label="Duration" icon={Timer}>
+              {request.expectedDurationMinutes ? `${request.expectedDurationMinutes} min` : null}
+            </OtFact>
+            <OtFact label="Preferred room" icon={DoorOpen}>
+              {roomName}
+            </OtFact>
+            <OtFact label="Primary surgeon" icon={Stethoscope}>
+              {surgeonName}
+            </OtFact>
+            <OtFact label="Requested" icon={Clock}>
+              {fmt(request.requestedAt)}
+            </OtFact>
+          </>
+        }
+      />
 
-      {isLoading ? (
-        <div className="py-8 text-center text-muted-foreground">Loading OT request...</div>
-      ) : error || !request ? (
-        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
-          {error instanceof Error ? error.message : 'OT request not found.'}
+      {request.status === 'REJECTED' && request.rejectionReason ? (
+        <div
+          className={cn(
+            'flex items-start gap-2.5 rounded-xl border px-4 py-3 text-sm',
+            TONE_WASH.red,
+            TONE_TEXT.red,
+          )}
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div>
+            <p className="font-semibold">Rejected</p>
+            <p>{request.rejectionReason}</p>
+          </div>
         </div>
-      ) : (
-        <>
-          <Card>
-            <CardHeader>
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    {request.procedureName}
-                    <OtRequestStatusBadge status={request.status} />
-                  </CardTitle>
-                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                    <User className="h-4 w-4" />
-                    <span className="font-medium text-foreground">
-                      {request.patientDisplay?.displayName || 'Unknown patient'}
-                    </span>
-                    <span>
-                      MRN: {request.patientDisplay?.mrn || '—'} · {request.patientDisplay?.gender || '—'} /{' '}
-                      {request.patientDisplay?.age ?? '—'}y
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
-              <div>
-                <p className="text-xs text-muted-foreground">Priority</p>
-                <p className="font-medium capitalize">{request.priority?.toLowerCase() ?? '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Surgery Type</p>
-                <p className="font-medium">{request.surgeryType || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Procedure Code</p>
-                <p className="font-medium">{request.procedureCode || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Expected Duration</p>
-                <p className="font-medium">
-                  {request.expectedDurationMinutes ? `${request.expectedDurationMinutes} minutes` : '—'}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Preferred Date</p>
-                <p className="font-medium">{fmtDate(request.preferredDate)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Preferred Room</p>
-                <p className="font-medium">{roomName || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Primary Surgeon</p>
-                <p className="font-medium">{surgeonName || '—'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Anaesthesia</p>
-                <p className="font-medium">
-                  {request.anaesthesiaTypePlanned || '—'}
-                  {request.anaesthetistRequired ? ' · Anaesthetist required' : ''}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Blood Required</p>
-                <p className="font-medium">{request.bloodRequired ? 'Yes' : 'No'}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Requested At</p>
-                <p className="font-medium">{fmt(request.requestedAt)}</p>
-              </div>
-              {request.diagnosis ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Diagnosis</p>
-                  <p className="font-medium">{request.diagnosis}</p>
-                </div>
-              ) : null}
-              {request.remarks ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Remarks</p>
-                  <p className="font-medium">{request.remarks}</p>
-                </div>
-              ) : null}
-              {request.specialEquipmentRequired?.length ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Special Equipment</p>
-                  <p className="font-medium">{request.specialEquipmentRequired.join(', ')}</p>
-                </div>
-              ) : null}
-              {request.implantsRequired?.length ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Implants</p>
-                  <p className="font-medium">{request.implantsRequired.join(', ')}</p>
-                </div>
-              ) : null}
-              {request.status === 'REJECTED' && request.rejectionReason ? (
-                <div className="sm:col-span-2">
-                  <p className="text-xs text-muted-foreground">Rejection Reason</p>
-                  <p className="font-medium text-destructive">{request.rejectionReason}</p>
-                </div>
-              ) : null}
-            </CardContent>
-          </Card>
+      ) : null}
 
-          {request.schedules && request.schedules.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">OT Schedules</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {request.schedules.map((s) => (
-                  <button
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <OtSection title="Clinical details" icon={Stethoscope}>
+            <dl className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+              <OtFact label="Diagnosis" wide>
+                {request.diagnosis}
+              </OtFact>
+              <OtFact label="Anaesthesia planned" icon={Syringe}>
+                {request.anaesthesiaTypePlanned}
+              </OtFact>
+              <OtFact label="Anaesthetist" icon={UserRound}>
+                {request.anaesthetistRequired ? 'Required' : 'Not required'}
+              </OtFact>
+              <OtFact label="Blood" icon={Droplet}>
+                {request.bloodRequired ? (
+                  <ToneBadge tone="red" withDot>
+                    Blood required
+                  </ToneBadge>
+                ) : (
+                  'Not required'
+                )}
+              </OtFact>
+              <OtFact label="Remarks" wide>
+                {request.remarks ? (
+                  <span className="whitespace-pre-wrap font-normal">{request.remarks}</span>
+                ) : null}
+              </OtFact>
+            </dl>
+          </OtSection>
+
+          <OtSection title="Equipment and implants" icon={Package}>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div className="space-y-2">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  Special equipment
+                </p>
+                <ChipList items={request.specialEquipmentRequired} empty="None requested" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  Implants
+                </p>
+                <ChipList items={request.implantsRequired} empty="None requested" />
+              </div>
+            </div>
+          </OtSection>
+
+          <OtSection title="Schedules and reports" icon={CalendarClock}>
+            {request.schedules?.length || request.reports?.length ? (
+              <div className="space-y-2">
+                {(request.schedules ?? []).map((s) => (
+                  <OtLinkRow
                     key={s.id}
-                    type="button"
-                    onClick={() => router.push(`/${locale}/ot/schedules/${s.id}`)}
-                    className="flex w-full items-center justify-between rounded-lg border border-border/60 bg-card/60 p-2.5 text-left text-sm hover:bg-accent/40"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      {fmt(s.scheduledStartTime)}
-                    </span>
-                    <OtScheduleStatusBadge status={s.status} />
-                  </button>
+                    href={`/${locale}/ot/schedules/${s.id}`}
+                    icon={CalendarClock}
+                    title={fmt(s.scheduledStartTime) ?? 'OT schedule'}
+                    meta={s.roomDisplayName || s.room?.space?.name || 'Theatre booking'}
+                    badge={<OtScheduleStatusBadge status={s.status} />}
+                  />
                 ))}
-              </CardContent>
-            </Card>
-          ) : null}
-
-          {request.reports && request.reports.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">OT Reports</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {request.reports.map((r) => (
-                  <button
+                {(request.reports ?? []).map((r) => (
+                  <OtLinkRow
                     key={r.id}
-                    type="button"
-                    onClick={() => router.push(`/${locale}/ot/reports/${r.id}`)}
-                    className="flex w-full items-center justify-between rounded-lg border border-border/60 bg-card/60 p-2.5 text-left text-sm hover:bg-accent/40"
-                  >
-                    <span className="flex items-center gap-2">
-                      <FileSignature className="h-4 w-4 text-muted-foreground" />
-                      {r.reportNumber}
-                    </span>
-                    <OtReportStatusBadge status={r.reportStatus} />
-                  </button>
+                    href={`/${locale}/ot/reports/${r.id}`}
+                    icon={FileSignature}
+                    title={r.reportNumber}
+                    meta={r.signedAt ? `Signed ${fmt(r.signedAt)}` : `Created ${fmt(r.createdAt)}`}
+                    badge={<OtReportStatusBadge status={r.reportStatus} />}
+                  />
                 ))}
-              </CardContent>
-            </Card>
-          ) : null}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Not scheduled yet.</p>
+            )}
+          </OtSection>
+        </div>
 
+        <OtSection title="Status history" icon={History} className="self-start">
           {history && history.length > 0 ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Status History</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {[...history]
-                  .sort((a, b) => b.changedAt.localeCompare(a.changedAt))
-                  .map((event) => (
-                    <div
-                      key={event.id}
-                      className="flex items-center justify-between rounded-lg border border-border/60 bg-card/60 p-2.5 text-sm"
-                    >
-                      <span>
-                        {event.fromStatus ? `${event.fromStatus} → ` : ''}
-                        {event.toStatus}
-                      </span>
-                      <span className="text-xs text-muted-foreground">{fmt(event.changedAt)}</span>
-                    </div>
-                  ))}
-              </CardContent>
-            </Card>
-          ) : null}
-        </>
-      )}
+            <OtStatusTimeline
+              events={history}
+              toneOf={otRequestStatusTone}
+              formatDate={(iso) => fmt(iso) ?? iso}
+            />
+          ) : (
+            <p className="text-sm text-muted-foreground">No status changes recorded yet.</p>
+          )}
+        </OtSection>
+      </div>
     </div>
   );
 }

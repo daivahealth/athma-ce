@@ -1,20 +1,21 @@
 'use client';
 
 import { useDeferredValue, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format, isSameDay } from 'date-fns';
 import {
   CalendarClock,
+  ChevronRight,
+  DoorOpen,
   Eye,
-  Filter,
   MoreHorizontal,
   PauseCircle,
   Plus,
-  Search,
   StopCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,15 +23,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
+import { EmptyState } from '@/components/ui/empty-state';
 import { PageHeader } from '@/components/ui/page-header';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { PatientIdentity } from '@/components/ui/patient-identity';
 import {
   Table,
   TableBody,
@@ -40,10 +35,28 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useToast } from '@/components/ui/use-toast';
+import { cn } from '@/lib/utils';
 import { useOtSchedules, useTransitionOtSchedule } from '@/modules/ot/hooks/use-ot';
 import { OT_SCHEDULE_STATUSES, type OtScheduleStatus } from '@/modules/ot/types';
+import { OT_SCHEDULE_STATUS_TONE } from '@/modules/ot/ot-tone';
 import { OtScheduleStatusBadge } from '@/modules/ot/components/ot-status-badge';
+import {
+  OtDateTime,
+  OtErrorPanel,
+  OtListToolbar,
+  OtSearchInput,
+  OtStatusFilter,
+  OtTableSkeleton,
+  countBy,
+} from '@/modules/ot/components/ot-list';
 import { useSpecialtyLabel } from '@/modules/foundation/hooks/use-specialties';
+
+const STATUS_OPTIONS = OT_SCHEDULE_STATUSES.map((value) => ({
+  value,
+  tone: OT_SCHEDULE_STATUS_TONE[value],
+}));
+/** Statuses where the patient is physically in theatre. */
+const IN_THEATRE: OtScheduleStatus[] = ['PATIENT_IN_OT', 'ANAESTHESIA_STARTED', 'SURGERY_STARTED'];
 
 type ScheduleAction =
   | 'confirm'
@@ -80,14 +93,6 @@ const NOT_CANCELLABLE: OtScheduleStatus[] = [
   'PATIENT_SHIFTED_TO_RECOVERY',
 ];
 
-function humanize(value: string) {
-  return value
-    .toLowerCase()
-    .split('_')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
 /** "13:00 – 16:05", adding the end date only when the case runs past midnight. */
 function timeRange(startIso: string, endIso: string) {
   const start = new Date(startIso);
@@ -104,21 +109,15 @@ export default function OtSchedulesPage() {
   const publishToast = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | OtScheduleStatus>('all');
-  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const deferredSearchQuery = useDeferredValue(searchQuery.trim());
 
+  // Status is filtered here rather than on the server so each chip can show its count.
   const {
     data: schedules,
     isLoading,
     error,
-  } = useOtSchedules(
-    deferredSearchQuery || statusFilter !== 'all'
-      ? {
-          ...(deferredSearchQuery ? { search: deferredSearchQuery } : {}),
-          ...(statusFilter !== 'all' ? { status: statusFilter } : {}),
-        }
-      : undefined,
-  );
-  const orderedSchedules = useMemo(
+  } = useOtSchedules(deferredSearchQuery ? { search: deferredSearchQuery } : undefined);
+  const allSchedules = useMemo(
     () =>
       [...(schedules ?? [])].sort(
         (a, b) =>
@@ -126,6 +125,14 @@ export default function OtSchedulesPage() {
       ),
     [schedules],
   );
+  const counts = useMemo(() => countBy(allSchedules, (s) => s.status), [allSchedules]);
+  const orderedSchedules = useMemo(
+    () =>
+      statusFilter === 'all' ? allSchedules : allSchedules.filter((s) => s.status === statusFilter),
+    [allSchedules, statusFilter],
+  );
+  const inTheatre = IN_THEATRE.reduce((sum, status) => sum + (counts[status] ?? 0), 0);
+  const filtered = Boolean(deferredSearchQuery) || statusFilter !== 'all';
 
   const confirmSchedule = useTransitionOtSchedule('confirm');
   const patientReady = useTransitionOtSchedule('patient-ready');
@@ -177,223 +184,234 @@ export default function OtSchedulesPage() {
     }
   };
 
+  const scheduleHref = (id: string) => `/${params.locale}/ot/schedules/${id}`;
+  const newHref = `/${params.locale}/ot/schedules/new`;
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 page-transition">
       <PageHeader
+        icon={CalendarClock}
         title="OT Schedules"
-        subtitle="Allocate rooms and progress theatre cases through the OT workflow."
+        subtitle="Book rooms and step each theatre case through the day-of-surgery workflow."
         actions={
-          <Button onClick={() => router.push(`/${params.locale}/ot/schedules/new`)}>
-            <Plus className="mr-2 h-4 w-4" />
-            New OT Schedule
+          <Button asChild>
+            <Link href={newHref}>
+              <Plus className="mr-2 h-4 w-4" />
+              New OT Schedule
+            </Link>
           </Button>
         }
       />
 
-      <Card>
-        <CardContent className="pt-6">
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search patients by name, MRN, or phone..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <Select
-                value={statusFilter}
-                onValueChange={(value) => setStatusFilter(value as 'all' | OtScheduleStatus)}
-              >
-                <SelectTrigger className="w-full sm:w-[220px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All statuses</SelectItem>
-                  {OT_SCHEDULE_STATUSES.map((status) => (
-                    <SelectItem key={status} value={status}>
-                      {humanize(status)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+      <Card className="overflow-hidden">
+        <OtListToolbar
+          search={<OtSearchInput value={searchQuery} onChange={setSearchQuery} />}
+          summary={
+            !isLoading && !error ? (
+              <span>
+                {inTheatre > 0 ? (
+                  <span className="font-medium text-orange-700 dark:text-orange-300">
+                    {inTheatre} in theatre now
+                  </span>
+                ) : (
+                  <span>No case in theatre</span>
+                )}
+                {' · '}
+                {orderedSchedules.length} of {allSchedules.length} shown
+              </span>
+            ) : null
+          }
+          filters={
+            <OtStatusFilter
+              options={STATUS_OPTIONS}
+              value={statusFilter}
+              onChange={setStatusFilter}
+              counts={counts}
+              total={allSchedules.length}
+              hideEmpty
+            />
+          }
+        />
 
-          {isLoading ? (
-            <div className="flex justify-center py-8">
-              <div className="text-muted-foreground">Loading OT schedules...</div>
-            </div>
-          ) : error ? (
-            <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
-              {(error as Error).message}
-            </div>
-          ) : orderedSchedules.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <CalendarClock className="mb-4 h-12 w-12 text-muted-foreground" />
-              <h3 className="mb-2 text-lg font-semibold">No OT schedules found</h3>
-              <p className="mb-4 text-sm text-muted-foreground">
-                {searchQuery || statusFilter !== 'all'
-                  ? 'Try adjusting your search criteria.'
-                  : 'Create the first schedule for an approved OT request.'}
-              </p>
-              <Button onClick={() => router.push(`/${params.locale}/ot/schedules/new`)}>
-                <Plus className="mr-2 h-4 w-4" />
-                Create OT Schedule
-              </Button>
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="whitespace-nowrap">Start Time</TableHead>
-                  <TableHead>Room</TableHead>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Anaesthesia</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orderedSchedules.map((schedule) => {
-                  const nextStep = NEXT_STEP[schedule.status];
-                  const canPostpone = POSTPONABLE.includes(schedule.status);
-                  const canCancel = !NOT_CANCELLABLE.includes(schedule.status);
-                  const roomDescription =
-                    schedule.roomDisplayDescription ||
-                    [schedule.room?.space?.spaceNumber, specialtyLabel(schedule.room?.specialty)]
-                      .filter(Boolean)
-                      .join(' • ');
-                  const patient = schedule.patientDisplay;
-                  const demographics = [
-                    patient?.gender,
-                    patient?.age != null ? `${patient.age}y` : null,
-                  ]
+        {isLoading ? (
+          <OtTableSkeleton />
+        ) : error ? (
+          <OtErrorPanel error={error} className="m-5" />
+        ) : orderedSchedules.length === 0 ? (
+          <EmptyState
+            icon={CalendarClock}
+            title={filtered ? 'No schedules match' : 'No OT schedules yet'}
+            description={
+              filtered
+                ? 'Try another name or MRN, or pick a different status.'
+                : 'Book the first theatre slot for an approved OT request.'
+            }
+            action={
+              filtered ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setStatusFilter('all');
+                  }}
+                >
+                  Clear filters
+                </Button>
+              ) : (
+                <Button asChild size="sm">
+                  <Link href={newHref}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create OT Schedule
+                  </Link>
+                </Button>
+              )
+            }
+          />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="whitespace-nowrap pl-5">When</TableHead>
+                <TableHead>Patient</TableHead>
+                <TableHead>Room</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="pr-5 text-right">
+                  <span className="sr-only">Actions</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {orderedSchedules.map((schedule) => {
+                const nextStep = NEXT_STEP[schedule.status];
+                const canPostpone = POSTPONABLE.includes(schedule.status);
+                const canCancel = !NOT_CANCELLABLE.includes(schedule.status);
+                const roomDescription =
+                  schedule.roomDisplayDescription ||
+                  [schedule.room?.space?.spaceNumber, specialtyLabel(schedule.room?.specialty)]
                     .filter(Boolean)
-                    .join(' / ');
+                    .join(' · ');
+                const start = new Date(schedule.scheduledStartTime);
 
-                  return (
-                    <TableRow
-                      key={schedule.id}
-                      className="cursor-pointer"
-                      onClick={() => router.push(`/${params.locale}/ot/schedules/${schedule.id}`)}
-                    >
-                      <TableCell className="whitespace-nowrap align-top">
-                        <div className="font-medium text-primary">
-                          {format(new Date(schedule.scheduledStartTime), 'dd MMM yyyy')}
+                return (
+                  <TableRow
+                    key={schedule.id}
+                    className={cn('cursor-pointer', !schedule.isCurrent && 'opacity-70')}
+                    onClick={() => router.push(scheduleHref(schedule.id))}
+                  >
+                    <TableCell className="py-4 pl-5">
+                      <div className="flex items-center gap-3">
+                        <div className="flex w-11 shrink-0 flex-col items-center rounded-lg border bg-muted/40 py-1 leading-none">
+                          <span className="text-[10px] font-semibold uppercase tracking-wide text-primary">
+                            {format(start, 'MMM')}
+                          </span>
+                          <span className="mt-0.5 text-base font-semibold tabular-nums text-foreground">
+                            {format(start, 'dd')}
+                          </span>
                         </div>
-                        <div className="text-sm tabular-nums text-muted-foreground">
-                          {timeRange(schedule.scheduledStartTime, schedule.scheduledEndTime)}
-                        </div>
-                      </TableCell>
-                      <TableCell className="max-w-[220px] align-top">
-                        <div className="truncate font-medium">
-                          {schedule.roomDisplayName ||
-                            schedule.room?.space?.name ||
-                            'Configured OT Room'}
-                        </div>
-                        {roomDescription && (
+                        <OtDateTime
+                          date={format(start, 'EEEE, yyyy')}
+                          time={timeRange(schedule.scheduledStartTime, schedule.scheduledEndTime)}
+                        />
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <PatientIdentity source={schedule} />
+                    </TableCell>
+                    <TableCell className="max-w-[240px] py-4">
+                      <div className="flex items-start gap-2">
+                        <DoorOpen className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                        <div className="min-w-0">
+                          <div className="truncate text-sm font-medium">
+                            {schedule.roomDisplayName ||
+                              schedule.room?.space?.name ||
+                              'Configured OT Room'}
+                          </div>
                           <div
-                            className="truncate text-sm text-muted-foreground"
+                            className="truncate text-xs text-muted-foreground"
                             title={roomDescription}
                           >
-                            {roomDescription}
+                            {[roomDescription, schedule.anaesthesiaType]
+                              .filter(Boolean)
+                              .join(' · ') || 'Anaesthesia not set'}
                           </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <div className="flex flex-col items-start gap-1 whitespace-nowrap">
+                        <OtScheduleStatusBadge status={schedule.status} />
+                        {!schedule.isCurrent && (
+                          <span className="text-xs text-muted-foreground">Historical slot</span>
                         )}
-                      </TableCell>
-                      <TableCell className="align-top">
-                        <div className="whitespace-nowrap font-medium">
-                          {patient?.displayName || 'Unknown patient'}
-                        </div>
-                        <div className="whitespace-nowrap text-xs text-muted-foreground">
-                          {patient?.mrn || 'No MRN'}
-                          {demographics && <span className="capitalize"> · {demographics}</span>}
-                        </div>
-                      </TableCell>
-                      <TableCell className="align-top">
-                        <div className="flex flex-col items-start gap-1 whitespace-nowrap">
-                          <OtScheduleStatusBadge status={schedule.status} />
-                          {!schedule.isCurrent && (
-                            <span className="text-xs text-muted-foreground">Historical slot</span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap align-top">
-                        {schedule.anaesthesiaType || (
-                          <span className="text-muted-foreground">Not set</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-4 pr-5">
+                      <div
+                        className="flex items-center justify-end gap-1.5"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {nextStep && (
+                          <Button
+                            size="sm"
+                            className="whitespace-nowrap"
+                            onClick={() => runAction(schedule.id, nextStep.action)}
+                            disabled={isMutating}
+                          >
+                            {nextStep.label}
+                            <ChevronRight className="ml-1 h-3.5 w-3.5" />
+                          </Button>
                         )}
-                      </TableCell>
-                      <TableCell className="align-top">
-                        <div
-                          className="flex items-center justify-end gap-2"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {nextStep && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              size="sm"
-                              className="whitespace-nowrap"
-                              onClick={() => runAction(schedule.id, nextStep.action)}
-                              disabled={isMutating}
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8"
+                              aria-label="More actions"
                             >
-                              {nextStep.label}
+                              <MoreHorizontal className="h-4 w-4" />
                             </Button>
-                          )}
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                className="h-8 w-8"
-                                aria-label="More actions"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-44">
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-44">
+                            <DropdownMenuItem
+                              onClick={() => router.push(scheduleHref(schedule.id))}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View schedule
+                            </DropdownMenuItem>
+                            {canPostpone && (
                               <DropdownMenuItem
-                                onClick={() =>
-                                  router.push(`/${params.locale}/ot/schedules/${schedule.id}`)
-                                }
+                                disabled={isMutating}
+                                onClick={() => runAction(schedule.id, 'postpone')}
                               >
-                                <Eye className="mr-2 h-4 w-4" />
-                                View
+                                <PauseCircle className="mr-2 h-4 w-4" />
+                                Postpone
                               </DropdownMenuItem>
-                              {canPostpone && (
+                            )}
+                            {canCancel && (
+                              <>
+                                <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   disabled={isMutating}
-                                  onClick={() => runAction(schedule.id, 'postpone')}
+                                  className="text-destructive focus:text-destructive"
+                                  onClick={() => runAction(schedule.id, 'cancel')}
                                 >
-                                  <PauseCircle className="mr-2 h-4 w-4" />
-                                  Postpone
+                                  <StopCircle className="mr-2 h-4 w-4" />
+                                  Cancel
                                 </DropdownMenuItem>
-                              )}
-                              {canCancel && (
-                                <>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    disabled={isMutating}
-                                    className="text-destructive focus:text-destructive"
-                                    onClick={() => runAction(schedule.id, 'cancel')}
-                                  >
-                                    <StopCircle className="mr-2 h-4 w-4" />
-                                    Cancel
-                                  </DropdownMenuItem>
-                                </>
-                              )}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
+                              </>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        )}
       </Card>
     </div>
   );

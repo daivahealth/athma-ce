@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Input } from '@/components/ui/input';
 import { MetricTile } from '@/components/ui/metric-tile';
+import { PatientIdentity } from '@/components/ui/patient-identity';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ToneBadge, type BadgeTone } from '@/components/ui/tone-badge';
 import { TONE_BAR, TONE_TEXT, TONE_WASH } from '@/components/ui/tone-classes';
@@ -52,15 +53,7 @@ function CasePanel({ title, item, emptyLabel }: { title: string; item?: OtBoardC
               {formatTime(item.plannedStartTime)} – {formatTime(item.plannedEndTime)}
             </div>
           </div>
-          <div className="space-y-0.5">
-            <div className="text-sm font-medium leading-tight text-foreground">
-              {item.patientDisplay?.displayName || 'Unknown patient'}
-            </div>
-            <div className="text-xs text-muted-foreground">
-              MRN: {item.patientDisplay?.mrn || '—'} · {item.patientDisplay?.gender || '—'} /{' '}
-              {item.patientDisplay?.age ?? '—'}y
-            </div>
-          </div>
+          <PatientIdentity source={item} />
           <OtScheduleStatusBadge status={item.scheduleStatus} />
         </div>
       ) : (
