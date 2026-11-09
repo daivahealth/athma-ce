@@ -64,7 +64,9 @@ function formatDuration(minutes: number | null | undefined) {
 
 const NO_COMPLICATION_PATTERN = /^(none|nil|n\/?a|no(ne)?\s+(known\s+)?complications?(\s+noted)?|uneventful)\.?$/i;
 
-function hasComplications(text: string | null | undefined): text is string {
+// Plain boolean, not a `text is string` guard: "None" is a string too, and a guard
+// would narrow the no-complications branch to `never`.
+function hasComplications(text: string | null | undefined): boolean {
   const value = text?.trim();
   return Boolean(value) && !NO_COMPLICATION_PATTERN.test(value as string);
 }
