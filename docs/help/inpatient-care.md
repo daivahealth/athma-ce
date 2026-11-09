@@ -103,35 +103,45 @@ To move or discharge the patient, use the [Ward Board](#ward-board) and [Dischar
 ## Ward Board
 
 **Ward Board** (`/inpatient/wards`) shows every bed in your facility, grouped by ward, with the patient in
-each.
+each. The heading says "All wards" or how many are selected, the bed count and when the board was last
+loaded. **Refresh** reloads it.
 
 - **Grid** and **List** switch the layout.
-- **Ward Filter**: **All Wards** shows the whole facility. Click ward chips to show only those wards;
-  **Select All** picks every chip. The heading says "All wards" or how many are selected.
-- Status chips filter the beds, each with its count: **All Beds**, **Occupied**, **Available**,
-  **Cleaning**, **Maintenance**.
+- **Facility occupancy** shows the share of beds occupied as a ring, the occupied and total beds, and how
+  many are ready for admission.
+- The status tiles filter the beds, each with its count: **All Beds**, **Occupied**, **Available**,
+  **Cleaning**, **Maintenance**. Click an active tile again to go back to all beds.
+- **Search patient, MRN or bed** narrows the board to beds whose code, room, patient name or MRN match.
+- Ward chips: **All Wards** shows the whole facility. Click ward chips to show only those wards; each chip
+  shows its occupied and total beds, such as "4/8".
 
-Each ward heading counts its occupied, available and cleaning beds.
+Each ward is a card whose heading gives its code, bed count and occupancy, with a coloured bar and counts
+of occupied, available, cleaning and maintenance beds. If nothing matches the search and filters, "No beds
+match" offers **Clear filters**. If the board cannot load, "Could not load the ward board" offers **Try
+again**.
 
-| Bed badge | Edge | Meaning |
+| Bed badge | Colour | Meaning |
 | --- | --- | --- |
-| **Occupied** | Green | A patient is in the bed |
-| **Available** | Grey, dashed card | "Bed Available", ready for admission |
+| **Occupied** | Blue | A patient is in the bed |
+| **Available** | Green | "Bed Available", ready for patient admission, with **Admit Patient** |
 | **Cleaning** | Amber | "Bed in Cleaning", awaiting environmental services |
-| **Maintenance** | Amber | Out of use for maintenance |
+| **Maintenance** | Rose | "Under Maintenance", out of use until maintenance is done |
 
-An occupied bed shows the patient's initials, name, age, gender and MRN, and up to three flags (a **+n**
-chip counts the rest):
+An occupied bed shows the patient's initials, name, age, gender and MRN, the day of the stay (the day of
+admission is **Day 1**), the attending physician when known, and up to three flags (a **+n** chip counts
+the rest; the list layout shows two):
 
 | Flag | Colour |
 | --- | --- |
 | **Low / Moderate / High Fall Risk** | Amber |
 | **NPO** | Rose |
 | **Telemetry** | Sky |
-| **Isolation** | Theme colour |
+| **Isolation** | Violet |
 | **Allergies** | Orange |
 
 Occupied beds carry four buttons: **Meds**, **Orders**, **Transfer** and **Channel**.
+
+**Admit Patient** on an available bed opens **New Admission** with that ward and bed already chosen.
 
 ### Prescribe from the board
 
@@ -356,8 +366,6 @@ Each save is a new version; reopening the summary shows the latest version's sec
 
 ## Not live yet
 
-- **Admit Patient** on a free bed in the Ward Board does nothing yet. Use **Admit Patient To This Bed** on
-  the [Bed Browser](#bed-browser) or **New Admission** on [Admissions](#admissions).
 - Some screens exist but are not linked from anywhere and are early or technical. Reach them only by
   typing the address:
   - **Transfer Patient** (`/inpatient/admissions/{id}/transfer`) asks for raw ward and bed IDs. Use

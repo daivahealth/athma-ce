@@ -4,59 +4,40 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogCloseButton } from '@/components/ui/dialog';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PageHeader } from '@/components/ui/page-header';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import { cn } from '@/lib/utils';
 import { useBedSearch } from '@/modules/clinical/hooks/use-bed-search';
 import { useBedBrowser } from '@/modules/clinical/hooks/use-bed-browser';
 import { useMultiWardBedBoard, useTransferPatient, useTransferHistory } from '@/modules/clinical/hooks/use-inpatient';
 import { WardPrescriptionDialog } from '@/modules/clinical/components/inpatient/ward-prescription-dialog';
 import { WardOrdersDialog } from '@/modules/clinical/components/inpatient/ward-orders-dialog';
-import type {
-  WardBoardAdmission,
-  WardBoardAction,
-  WardBoardFlags,
-  WardBoardOccupancy,
-} from '@/modules/clinical/types/inpatient';
+import {
+  BedCard,
+  BedRow,
+  BoardSummary,
+  WardBoardSkeleton,
+  WardSectionHeader,
+  bedStatusKey,
+  countStatuses,
+  patientNameOf,
+  type BedAction,
+  type BedStatusKey,
+  type WardBoardBedEntry,
+} from '@/modules/clinical/components/inpatient/ward-board-view';
 import { TransferType } from '@/modules/clinical/types/inpatient';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { useQueryClient } from '@tanstack/react-query';
-import { AlertTriangle, Circle, LayoutGrid, List, Plus, User } from 'lucide-react';
+import { AlertTriangle, BedDouble, LayoutGrid, List, RefreshCw, Search, SearchX, X } from 'lucide-react';
 import { getApiErrorMessage } from '@/lib/api/errors';
 
-type FilterKey = 'all' | 'occupied' | 'available' | 'cleaning' | 'maintenance';
-
-const statusOrder: FilterKey[] = ['all', 'occupied', 'available', 'cleaning', 'maintenance'];
-
-const fallRiskLabels: Record<string, string> = {
-  low: 'Low Fall Risk',
-  medium: 'Moderate Fall Risk',
-  high: 'High Fall Risk',
-};
-
-const actionLabels: Record<string, string> = {
-  TRANSFER: 'Transfer',
-  MEDS: 'Meds',
-  ORDERS: 'Orders',
-  DETAILS: 'Channel',
-  ADMIT_PATIENT: 'Admit Patient',
-  CONFIRM_DISCHARGE: 'Confirm Discharge',
-};
-
-type WardBoardBedEntry = {
-  bedId: string;
-  bedCode: string;
-  spaceName?: string;
-  wardId: string;
-  wardName: string;
-  occupancy: WardBoardOccupancy;
-  status?: string;
-  admission?: WardBoardAdmission | null;
-  actions?: WardBoardAction[];
-};
+type FilterKey = BedStatusKey | 'all';
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -71,121 +52,26 @@ const transferTypeLabels: Record<TransferType, string> = {
   [TransferType.INFECTION_CONTROL]: 'Infection control',
 };
 
-function normalizeValue(value?: string | null) {
-  return value ? value.toUpperCase() : '';
-}
-
-function getPatientInitials(name?: string) {
-  if (!name) {
-    return '??';
-  }
-  const parts = name.trim().split(' ').filter(Boolean);
-  if (parts.length === 1) {
-    return parts[0].slice(0, 2).toUpperCase();
-  }
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-}
-
-function getFlagBadges(flags?: WardBoardFlags) {
-  if (!flags) {
-    return [];
-  }
-  const badges: { label: string; className: string }[] = [];
-  if (flags.fallRisk) {
-    const fallRisk = typeof flags.fallRisk === 'string' ? flags.fallRisk : 'high';
-    const label = fallRiskLabels[fallRisk.toLowerCase()] ?? 'Fall Risk';
-    badges.push({
-      label,
-      className: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30',
-    });
-  }
-  if (flags.npo) {
-    badges.push({
-      label: 'NPO',
-      className: 'bg-rose-500/15 text-rose-200 ring-1 ring-rose-500/30',
-    });
-  }
-  if (flags.telemetry) {
-    badges.push({
-      label: 'Telemetry',
-      className: 'bg-sky-500/15 text-sky-200 ring-1 ring-sky-500/30',
-    });
-  }
-  if (flags.isolation) {
-    badges.push({
-      label: 'Isolation',
-      className: 'bg-primary/15 text-primary ring-1 ring-primary/30',
-    });
-  }
-  if (flags.allergies?.length) {
-    badges.push({
-      label: 'Allergies',
-      className: 'bg-orange-500/15 text-orange-200 ring-1 ring-orange-500/30',
-    });
-  }
-  return badges;
-}
-
-function getStatusTone(status: string) {
-  const normalized = normalizeValue(status);
-
-  if (normalized === 'AVAILABLE' || normalized === 'EMPTY') {
-    return {
-      border: 'border-slate-200',
-      accent: 'border-l-slate-300',
-      badge: 'bg-slate-100 text-slate-600 dark:bg-slate-800/70 dark:text-slate-200',
-      status: 'Available',
-    };
-  }
-
-  if (normalized === 'CLEANING') {
-    return {
-      border: 'border-amber-200',
-      accent: 'border-l-amber-400',
-      badge: 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-200',
-      status: 'Cleaning',
-    };
-  }
-
-  if (normalized === 'MAINTENANCE') {
-    return {
-      border: 'border-amber-200',
-      accent: 'border-l-amber-400',
-      badge: 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-200',
-      status: 'Maintenance',
-    };
-  }
-
-  return {
-    border: 'border-emerald-200',
-    accent: 'border-l-emerald-400',
-    badge: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-200',
-    status: 'Occupied',
-  };
-}
-
-function getOccupancyFilter(occupancy?: WardBoardOccupancy) {
-  const normalized = normalizeValue(occupancy);
-  if (normalized === 'AVAILABLE' || normalized === 'EMPTY') {
-    return 'available';
-  }
-  if (normalized === 'CLEANING') {
-    return 'cleaning';
-  }
-  if (normalized === 'MAINTENANCE') {
-    return 'maintenance';
-  }
-  return 'occupied';
-}
-
-function getBedStatus(bed: WardBoardBedEntry) {
-  return bed.status ?? bed.occupancy ?? '';
+/** True when the bed's code, room, patient name or MRN contains the search text. */
+function matchesSearch(bed: WardBoardBedEntry, query: string) {
+  if (!query) return true;
+  const haystack = [
+    bed.bedCode,
+    bed.spaceName,
+    bed.admission ? patientNameOf(bed.admission) : '',
+    bed.admission?.patientDisplay?.mrn,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  return haystack.includes(query);
 }
 
 export default function InpatientWardsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedWardIds, setSelectedWardIds] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState('');
   const [transferBed, setTransferBed] = useState<WardBoardBedEntry | null>(null);
   const [transferReason, setTransferReason] = useState('');
   const [transferType, setTransferType] = useState<TransferType>(TransferType.CLINICAL_NEED);
@@ -219,7 +105,7 @@ export default function InpatientWardsPage() {
     });
     return map;
   }, [bedBrowserQuery.data?.beds]);
-  const wardsData = multiBoardQuery.data?.wards ?? [];
+  const wardsData = useMemo(() => multiBoardQuery.data?.wards ?? [], [multiBoardQuery.data?.wards]);
   const beds = useMemo<WardBoardBedEntry[]>(
     () =>
       wardsData.flatMap((ward) =>
@@ -232,7 +118,6 @@ export default function InpatientWardsPage() {
           occupancy: bed.occupancy ?? 'empty',
           status: bedStatusById.get(bed.bed?.id ?? '') ?? bed.occupancy ?? 'empty',
           admission: bed.admission ?? null,
-          actions: bed.actions ?? [],
         }))
       ),
     [wardsData, bedStatusById]
@@ -283,43 +168,87 @@ export default function InpatientWardsPage() {
   }, [beds]);
 
   const wardOptions = useMemo(() => {
-    const unique = new Map<string, string>();
+    const unique = new Map<string, { id: string; name: string; code?: string }>();
     wardsData.forEach((ward) => {
       if (ward.ward.id && ward.ward.name) {
-        unique.set(ward.ward.id, ward.ward.name);
+        unique.set(ward.ward.id, { id: ward.ward.id, name: ward.ward.name, code: ward.ward.code });
       }
     });
-    return Array.from(unique.entries()).map(([id, name]) => ({ id, name }));
+    return Array.from(unique.values());
   }, [wardsData]);
 
-  const filteredWardIds = useMemo(() => {
-    if (selectedWardIds.length) {
-      return new Set(selectedWardIds);
-    }
-    return new Set(wardOptions.map((ward) => ward.id));
-  }, [selectedWardIds, wardOptions]);
+  const bedsByWard = useMemo(() => {
+    const map = new Map<string, WardBoardBedEntry[]>();
+    beds.forEach((bed) => {
+      const list = map.get(bed.wardId) ?? [];
+      list.push(bed);
+      map.set(bed.wardId, list);
+    });
+    return map;
+  }, [beds]);
 
   const bedsForView = useMemo(
-    () => beds.filter((bed) => filteredWardIds.size === 0 || filteredWardIds.has(bed.wardId)),
-    [beds, filteredWardIds]
+    () => (selectedWardIds.length ? beds.filter((bed) => selectedWardIds.includes(bed.wardId)) : beds),
+    [beds, selectedWardIds]
   );
 
-  const filters = useMemo(() => {
-    const totalBeds = bedsForView.length;
-    return {
-      all: totalBeds,
-      occupied: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'occupied').length,
-      available: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'available').length,
-      cleaning: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'cleaning').length,
-      maintenance: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'maintenance').length,
-    };
-  }, [bedsForView]);
+  const counts = useMemo(() => countStatuses(bedsForView), [bedsForView]);
+  const query = searchText.trim().toLowerCase();
 
-  const wardName = 'Ward Board';
-  const wardCode =
+  const visibleWards = useMemo(
+    () =>
+      wardOptions
+        .filter((ward) => selectedWardIds.length === 0 || selectedWardIds.includes(ward.id))
+        .map((ward) => {
+          const wardBeds = bedsByWard.get(ward.id) ?? [];
+          const shownBeds = wardBeds.filter(
+            (bed) =>
+              (activeFilter === 'all' || bedStatusKey(bed) === activeFilter) && matchesSearch(bed, query)
+          );
+          return { ward, wardBeds, shownBeds, counts: countStatuses(wardBeds) };
+        })
+        .filter(({ shownBeds }) => (activeFilter === 'all' && !query) || shownBeds.length > 0),
+    [wardOptions, selectedWardIds, bedsByWard, activeFilter, query]
+  );
+
+  const lastUpdated = multiBoardQuery.dataUpdatedAt
+    ? new Date(multiBoardQuery.dataUpdatedAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+    : null;
+  const subtitle = [
     selectedWardIds.length === 0
       ? 'All wards'
-      : `${selectedWardIds.length} ward${selectedWardIds.length === 1 ? '' : 's'} selected`;
+      : `${selectedWardIds.length} ward${selectedWardIds.length === 1 ? '' : 's'} selected`,
+    `${counts.all} beds`,
+    lastUpdated ? `Updated ${lastUpdated}` : '',
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
+  const toggleWard = (wardId: string) =>
+    setSelectedWardIds((prev) => (prev.includes(wardId) ? prev.filter((id) => id !== wardId) : [...prev, wardId]));
+
+  const clearFilters = () => {
+    setActiveFilter('all');
+    setSearchText('');
+    setSelectedWardIds([]);
+  };
+
+  const admitHrefFor = (bed: WardBoardBedEntry) =>
+    bed.bedId && bed.wardId
+      ? `/${locale}/inpatient/admissions/new?bedId=${encodeURIComponent(bed.bedId)}&wardId=${encodeURIComponent(bed.wardId)}`
+      : undefined;
+
+  const handleBedAction = (action: BedAction, bed: WardBoardBedEntry) => {
+    if (action === 'TRANSFER' && bed.admission?.admissionId) {
+      setTransferBed(bed);
+    } else if (action === 'MEDS') {
+      handleOpenMeds(bed);
+    } else if (action === 'ORDERS') {
+      handleOpenOrders(bed);
+    } else if (action === 'DETAILS') {
+      handleOpenDetails(bed);
+    }
+  };
 
   const resetTransferState = () => {
     setTransferBed(null);
@@ -474,472 +403,204 @@ export default function InpatientWardsPage() {
     return rtf.format(diffYears, 'year');
   };
 
+  const isLoading = multiBoardQuery.isLoading;
+  const hasFilters = activeFilter !== 'all' || Boolean(query) || selectedWardIds.length > 0;
+
   return (
     <div className="space-y-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-400">Ward Board</p>
-          <div>
-            <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{wardName}</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400">{wardCode}</p>
-          </div>
-        </div>
-        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto">
-          <div className="flex items-center rounded-full bg-white/90 p-1 text-slate-600 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900/80 dark:text-slate-300 dark:shadow-inner dark:shadow-slate-800/50 dark:ring-0">
-            <button
+      <PageHeader
+        title="Ward Board"
+        subtitle={subtitle}
+        icon={BedDouble}
+        actions={
+          <>
+            <Button
               type="button"
-              onClick={() => setViewMode('grid')}
-              className={`flex items-center gap-2 rounded-full px-3 py-2 text-xs font-medium transition ${viewMode === 'grid'
-                ? 'bg-slate-200 text-slate-900 dark:bg-slate-700 dark:text-white'
-                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
-                }`}
+              variant="outline"
+              size="sm"
+              className="h-9 gap-2 rounded-lg"
+              onClick={() => {
+                multiBoardQuery.refetch();
+                bedBrowserQuery.refetch();
+              }}
+              disabled={multiBoardQuery.isFetching}
             >
-              <LayoutGrid className="h-4 w-4" />
-              Grid
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('list')}
-              className={`flex items-center gap-2 rounded-full px-3 py-2 text-xs font-medium transition ${viewMode === 'list'
-                ? 'bg-slate-200 text-slate-900 dark:bg-slate-700 dark:text-white'
-                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
-                }`}
-            >
-              <List className="h-4 w-4" />
-              List
-            </button>
-          </div>
-        </div>
-      </header>
+              <RefreshCw className={cn('h-4 w-4', multiBoardQuery.isFetching && 'animate-spin')} />
+              Refresh
+            </Button>
+            <div className="flex items-center rounded-lg border border-border bg-card p-0.5 shadow-sm" role="group" aria-label="Layout">
+              {(['grid', 'list'] as const).map((mode) => {
+                const Icon = mode === 'grid' ? LayoutGrid : List;
+                const isActive = viewMode === mode;
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() => setViewMode(mode)}
+                    className={cn(
+                      'flex h-8 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors',
+                      isActive ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {mode === 'grid' ? 'Grid' : 'List'}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        }
+      />
 
-      <section className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-800/70 dark:bg-slate-900/50">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold text-slate-900 dark:text-slate-200">Ward Filter</p>
-            <p className="text-xs text-slate-500 dark:text-slate-500">
-              {selectedWardIds.length === 0
-                ? 'Showing all wards in the facility'
-                : 'Showing selected wards'}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              type="button"
-              variant="secondary"
-              className={`rounded-full ${selectedWardIds.length === 0
-                ? 'bg-sky-500 text-white hover:bg-sky-400'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
-                }`}
-              onClick={() => setSelectedWardIds([])}
-            >
-              All Wards
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              className="rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
-              onClick={() => setSelectedWardIds(wardOptions.map((ward) => ward.id))}
-              disabled={wardOptions.length === 0}
-            >
-              Select All
-            </Button>
-          </div>
+      {isLoading ? (
+        <WardBoardSkeleton />
+      ) : multiBoardQuery.isError && wardOptions.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-rose-200 bg-card dark:border-rose-900/60">
+          <EmptyState
+            icon={AlertTriangle}
+            title="Could not load the ward board"
+            description={getApiErrorMessage(multiBoardQuery.error, 'The bed board did not load. Try again.')}
+            action={
+              <Button type="button" variant="outline" size="sm" onClick={() => multiBoardQuery.refetch()}>
+                Try again
+              </Button>
+            }
+          />
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {multiBoardQuery.isLoading && <p className="text-xs text-slate-400">Loading wards...</p>}
-          {!multiBoardQuery.isLoading && wardOptions.length === 0 && (
-            <p className="text-xs text-slate-500 dark:text-slate-400">No wards found for this facility.</p>
-          )}
-          {!multiBoardQuery.isLoading &&
-            wardOptions.map((ward) => {
-              const isSelected = selectedWardIds.includes(ward.id);
-              const label = ward.name ?? 'Ward';
-              return (
+      ) : wardOptions.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-border bg-card">
+          <EmptyState
+            icon={BedDouble}
+            title="No wards yet"
+            description="No ward data is available for this facility. Wards and beds are set up under facility administration."
+          />
+        </div>
+      ) : (
+        <>
+          <BoardSummary counts={counts} activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+
+          <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+              <div className="relative lg:w-80 lg:shrink-0">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={searchText}
+                  onChange={(event) => setSearchText(event.target.value)}
+                  placeholder="Search patient, MRN or bed"
+                  aria-label="Search beds"
+                  className="h-10 rounded-lg pl-9 pr-9"
+                />
+                {searchText && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchText('')}
+                    aria-label="Clear search"
+                    className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+              <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 lg:flex-wrap lg:overflow-visible lg:pb-0" role="group" aria-label="Filter by ward">
                 <button
-                  key={ward.id}
                   type="button"
-                  onClick={() => {
-                    setSelectedWardIds((prev) =>
-                      prev.includes(ward.id) ? prev.filter((id) => id !== ward.id) : [...prev, ward.id]
-                    );
-                  }}
-                  className={`rounded-full px-4 py-2 text-xs font-semibold transition ${isSelected
-                    ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800'
-                    }`}
+                  aria-pressed={selectedWardIds.length === 0}
+                  onClick={() => setSelectedWardIds([])}
+                  className={cn(
+                    'shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors',
+                    selectedWardIds.length === 0
+                      ? 'border-primary bg-primary text-primary-foreground shadow-sm'
+                      : 'border-border bg-background text-muted-foreground hover:border-slate-300 hover:text-foreground'
+                  )}
                 >
-                  {label}
+                  All Wards
                 </button>
-              );
-            })}
-        </div>
-      </section>
-
-      <section className="flex flex-wrap gap-2">
-        {statusOrder.map((key) => {
-          const label =
-            key === 'all'
-              ? 'All Beds'
-              : key === 'occupied'
-                ? 'Occupied'
-                : key === 'available'
-                  ? 'Available'
-                  : key === 'cleaning'
-                    ? 'Cleaning'
-                    : 'Maintenance';
-          const count = filters[key];
-          const isActive = activeFilter === key;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setActiveFilter(key)}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${isActive
-                ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
-                : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100 dark:bg-slate-900/80 dark:text-slate-300 dark:ring-0 dark:hover:bg-slate-800'
-                }`}
-            >
-              <span>{label}</span>
-              <span
-                className={`rounded-full px-2 py-0.5 text-xs ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
-                  }`}
-              >
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </section>
-
-      {multiBoardQuery.isLoading && <p className="text-sm text-slate-500 dark:text-slate-400">Loading bed board...</p>}
-
-      {!multiBoardQuery.isLoading && bedsForView.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-slate-200 bg-white/70 p-8 text-center text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
-          No ward data available for the selected facility.
-        </div>
-      )}
-
-      {!multiBoardQuery.isLoading && bedsForView.length > 0 && (
-        <section className="space-y-8">
-          {wardOptions
-            .filter((ward) => filteredWardIds.size === 0 || filteredWardIds.has(ward.id))
-            .map((ward, wardIndex) => {
-              const wardBeds = bedsForView.filter((bed) => bed.wardId === ward.id);
-              const filteredBeds = wardBeds.filter((bed) => {
-                if (activeFilter === 'all') {
-                  return true;
-                }
-                if (activeFilter === 'occupied') {
-                    return getOccupancyFilter(getBedStatus(bed)) === 'occupied';
-                  }
-                  if (activeFilter === 'available') {
-                    return getOccupancyFilter(getBedStatus(bed)) === 'available';
-                  }
-                  if (activeFilter === 'cleaning') {
-                    return getOccupancyFilter(getBedStatus(bed)) === 'cleaning';
-                  }
-                  return getOccupancyFilter(getBedStatus(bed)) === 'maintenance';
-                });
-
-              if (activeFilter !== 'all' && filteredBeds.length === 0) {
-                return null;
-              }
-
-              const wardNameLabel = ward.name ?? 'Ward';
-              const wardCodeLabel = '';
-              return (
-                <div key={`${ward.id ?? wardIndex}`} className="space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-4">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-500">Ward</p>
-                      <p className="text-xl font-semibold text-slate-900 dark:text-white">{wardNameLabel}</p>
-                      {wardCodeLabel && <p className="text-sm text-slate-500 dark:text-slate-500">{wardCodeLabel}</p>}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-                        {wardBeds.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'occupied').length} occupied
-                      </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-                        {wardBeds.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'available').length} available
-                      </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-                        {wardBeds.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'cleaning').length} cleaning
-                      </span>
-                    </div>
-                  </div>
-
-                  {filteredBeds.length === 0 && (
-                    <div className="rounded-2xl border border-dashed border-slate-200 bg-white/70 p-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
-                      No beds match the selected filter.
-                    </div>
-                  )}
-
-                  {viewMode === 'grid' && (
-                    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                      {filteredBeds.map((bed, index) => {
-              const tone = getStatusTone(getBedStatus(bed));
-                        const patientDisplay = bed.admission?.patientDisplay;
-                        const patientName =
-                          patientDisplay?.displayName
-                          ?? [patientDisplay?.firstName, patientDisplay?.lastName].filter(Boolean).join(' ')
-                          ?? 'Unassigned';
-                        const patientMetaParts = [
-                          patientDisplay?.age ? `${patientDisplay.age}Y` : '',
-                          patientDisplay?.gender ? patientDisplay.gender : '',
-                          patientDisplay?.mrn ? `MRN ${patientDisplay.mrn}` : '',
-                        ].filter(Boolean);
-                        const patientMeta = patientMetaParts.join(' · ');
-                        const flags = getFlagBadges(bed.admission?.boardFlags);
-                        const visibleFlags = flags.slice(0, 3);
-                        const extraFlags = flags.length - visibleFlags.length;
-                        const bedCode = bed.bedCode ?? 'Bed';
-                        const roomName = bed.spaceName ?? ward.name ?? 'Ward';
-              const actions =
-                bed.actions && bed.actions.length
-                  ? Array.from(
-                      new Set([
-                        'MEDS',
-                        'ORDERS',
-                        'TRANSFER',
-                        'DETAILS',
-                        ...(getOccupancyFilter(bed.occupancy) === 'occupied' ? ['ORDERS'] : []),
-                        ...bed.actions,
-                      ])
-                    )
-                  : getOccupancyFilter(getBedStatus(bed)) === 'occupied'
-                  ? ['MEDS', 'ORDERS', 'TRANSFER', 'DETAILS']
-                  : getOccupancyFilter(getBedStatus(bed)) === 'available'
-                  ? ['ADMIT_PATIENT']
-                  : [];
-              const isEmpty = getOccupancyFilter(getBedStatus(bed)) === 'available';
-              const isCleaning = getOccupancyFilter(getBedStatus(bed)) === 'cleaning';
-
-                        return (
-                          <article
-                            key={`${bed.bedId ?? bedCode}-${index}`}
-                            className={`group relative overflow-hidden rounded-2xl border border-l-4 ${tone.accent} ${tone.border} bg-white p-5 shadow-md shadow-slate-200/70 transition hover:-translate-y-0.5 hover:border-slate-300 dark:bg-slate-900/70 dark:shadow-black/20 dark:hover:border-slate-500/70 ${isEmpty ? 'border-dashed' : ''
-                              } animate-in fade-in-0`}
-                            style={{ animationDelay: `${index * 60}ms` }}
-                          >
-                            <div className="flex items-start justify-between gap-4">
-                              <div>
-                                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-500">Bed</p>
-                                <p className="text-2xl font-semibold text-slate-900 dark:text-white">{bedCode}</p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">{roomName}</p>
-                              </div>
-                              <span className={`rounded-full px-3 py-1 text-xs font-semibold ${tone.badge}`}>{tone.status}</span>
-                            </div>
-
-                            {isEmpty || isCleaning ? (
-                              <div className="mt-6 flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center dark:border-slate-800 dark:bg-slate-950/30">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-400">
-                                  <Circle className="h-5 w-5" />
-                                </div>
-                                <div>
-                                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                                    {isCleaning ? 'Bed in Cleaning' : 'Bed Available'}
-                                  </p>
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    {isCleaning ? 'Awaiting environmental services' : 'Ready for patient admission'}
-                                  </p>
-                                </div>
-                                {actions.includes('ADMIT_PATIENT') && !isCleaning && (
-                                  <Button className="rounded-full bg-sky-500 text-white hover:bg-sky-400">
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Admit Patient
-                                  </Button>
-                                )}
-                              </div>
-                            ) : (
-                              <div className="mt-6 space-y-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                                    {getPatientInitials(patientName)}
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-semibold text-slate-900 dark:text-white">{patientName}</p>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                                      {patientMeta || (bed.admission?.admissionStatus ?? 'Currently admitted')}
-                                    </p>
-                                  </div>
-                                </div>
-
-                                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                                  <span className="flex items-center gap-2">
-                                    <User className="h-4 w-4 text-slate-500 dark:text-slate-500" />
-                                    {bed.admission ? 'Assigned team' : 'No assignment'}
-                                  </span>
-                        {getOccupancyFilter(getBedStatus(bed)) === 'maintenance' && (
-                          <span className="flex items-center gap-2 text-orange-500 dark:text-orange-200">
-                            <AlertTriangle className="h-4 w-4" />
-                            Maintenance
-                          </span>
+                {wardOptions.map((ward) => {
+                  const isSelected = selectedWardIds.includes(ward.id);
+                  const wardCounts = countStatuses(bedsByWard.get(ward.id) ?? []);
+                  return (
+                    <button
+                      key={ward.id}
+                      type="button"
+                      aria-pressed={isSelected}
+                      onClick={() => toggleWard(ward.id)}
+                      className={cn(
+                        'flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors',
+                        isSelected
+                          ? 'border-primary bg-primary text-primary-foreground shadow-sm'
+                          : 'border-border bg-background text-muted-foreground hover:border-slate-300 hover:text-foreground'
+                      )}
+                    >
+                      {ward.name}
+                      <span
+                        className={cn(
+                          'rounded-full px-1.5 py-px text-[10px] tabular-nums',
+                          isSelected ? 'bg-white/20' : 'bg-muted text-muted-foreground'
                         )}
-                                </div>
+                      >
+                        {wardCounts.occupied}/{wardCounts.all}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
 
-                                {visibleFlags.length > 0 && (
-                                  <div className="flex flex-wrap gap-2">
-                                    {visibleFlags.map((flag) => (
-                                      <span
-                                        key={flag.label}
-                                        className={`rounded-full px-3 py-1 text-[11px] font-semibold ${flag.className}`}
-                                      >
-                                        {flag.label}
-                                      </span>
-                                    ))}
-                                    {extraFlags > 0 && (
-                                      <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                                        +{extraFlags}
-                                      </span>
-                                    )}
-                                  </div>
-                                )}
-
-                                {actions.length > 0 && (
-                                  <div className="flex flex-wrap gap-2">
-                                    {actions.map((action) => {
-                                      const label = actionLabels[action] ?? action;
-                                      const isPrimary = action === 'DETAILS' || action === 'ADMIT_PATIENT';
-                                      return (
-                                        <Button
-                                          key={action}
-                                          size="sm"
-                                          className={`rounded-full px-4 ${isPrimary
-                                            ? 'bg-sky-500 text-white hover:bg-sky-400'
-                                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
-                                            }`}
-                                          variant="secondary"
-                                          onClick={() => {
-                                if (action === 'TRANSFER' && bed.admission?.admissionId) {
-                                  setTransferBed(bed);
-                                }
-                                if (action === 'MEDS') {
-                                  handleOpenMeds(bed);
-                                }
-                                if (action === 'ORDERS') {
-                                  handleOpenOrders(bed);
-                                }
-                                if (action === 'DETAILS') {
-                                  handleOpenDetails(bed);
-                                }
-                              }}
-                            >
-                              {label}
-                            </Button>
-                                      );
-                                    })}
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </article>
-                        );
-                      })}
+          {visibleWards.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-border bg-card">
+              <EmptyState
+                icon={SearchX}
+                title="No beds match"
+                description="Nothing on the board matches the current search and filters."
+                action={
+                  hasFilters ? (
+                    <Button type="button" variant="outline" size="sm" onClick={clearFilters}>
+                      Clear filters
+                    </Button>
+                  ) : undefined
+                }
+              />
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {visibleWards.map(({ ward, shownBeds, counts: wardCounts }) => (
+                <section key={ward.id} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+                  <WardSectionHeader name={ward.name} code={ward.code} counts={wardCounts} />
+                  {shownBeds.length === 0 ? (
+                    <p className="px-5 py-8 text-center text-sm text-muted-foreground">
+                      No beds in this ward match the selected filter.
+                    </p>
+                  ) : viewMode === 'grid' ? (
+                    <div className="grid gap-4 bg-muted/20 p-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                      {shownBeds.map((bed, index) => (
+                        <BedCard
+                          key={bed.bedId || `${bed.bedCode}-${index}`}
+                          bed={bed}
+                          index={index}
+                          admitHref={admitHrefFor(bed)}
+                          onAction={handleBedAction}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-border">
+                      {shownBeds.map((bed, index) => (
+                        <BedRow
+                          key={bed.bedId || `${bed.bedCode}-${index}`}
+                          bed={bed}
+                          admitHref={admitHrefFor(bed)}
+                          onAction={handleBedAction}
+                        />
+                      ))}
                     </div>
                   )}
-
-                  {viewMode === 'list' && (
-                    <div className="space-y-3">
-                      {filteredBeds.map((bed, index) => {
-                        const tone = getStatusTone(getBedStatus(bed));
-                        const patientDisplay = bed.admission?.patientDisplay;
-                        const patientName =
-                          patientDisplay?.displayName
-                          ?? [patientDisplay?.firstName, patientDisplay?.lastName].filter(Boolean).join(' ')
-                          ?? 'Unassigned';
-                        const patientMetaParts = [
-                          patientDisplay?.age ? `${patientDisplay.age}Y` : '',
-                          patientDisplay?.gender ? patientDisplay.gender : '',
-                          patientDisplay?.mrn ? `MRN ${patientDisplay.mrn}` : '',
-                        ].filter(Boolean);
-                        const patientMeta = patientMetaParts.join(' · ');
-                        const bedCode = bed.bedCode ?? 'Bed';
-                        const roomName = bed.spaceName ?? ward.name ?? 'Ward';
-                        const actions =
-                          bed.actions && bed.actions.length
-                            ? Array.from(
-                                new Set([
-                                  'MEDS',
-                                  'ORDERS',
-                                  'TRANSFER',
-                                  'DETAILS',
-                                  ...(getOccupancyFilter(bed.occupancy) === 'occupied' ? ['ORDERS'] : []),
-                                  ...bed.actions,
-                                ])
-                              )
-                            : getOccupancyFilter(getBedStatus(bed)) === 'occupied'
-                            ? ['MEDS', 'ORDERS', 'TRANSFER', 'DETAILS']
-                            : getOccupancyFilter(getBedStatus(bed)) === 'available'
-                            ? ['ADMIT_PATIENT']
-                            : [];
-                        const isEmpty = getOccupancyFilter(getBedStatus(bed)) === 'available';
-
-                        return (
-                          <div
-                            key={`${bed.bedId ?? bedCode}-${index}`}
-                            className={`flex flex-col gap-4 rounded-2xl border ${tone.border} bg-white p-4 shadow-sm shadow-slate-200/60 dark:bg-slate-900/70 dark:shadow-black/20 sm:flex-row sm:items-center ${isEmpty ? 'border-dashed' : ''
-                              }`}
-                          >
-                            <div className="flex flex-1 items-center gap-4">
-                              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-sm font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                                {getPatientInitials(patientName)}
-                              </div>
-                              <div className="space-y-1">
-                                <div className="flex items-center gap-3">
-                                  <p className="text-lg font-semibold text-slate-900 dark:text-white">{bedCode}</p>
-                                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${tone.badge}`}>
-                                    {tone.status}
-                                  </span>
-                                </div>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">{roomName}</p>
-                                <p className="text-sm text-slate-700 dark:text-slate-300">{patientName}</p>
-                                {patientMeta && (
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">{patientMeta}</p>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex flex-wrap items-center gap-2">
-                              {actions.length === 0 && (
-                                <span className="text-xs text-slate-500 dark:text-slate-400">No actions</span>
-                              )}
-                              {actions.map((action) => {
-                                const label = actionLabels[action] ?? action;
-                                const isPrimary = action === 'DETAILS' || action === 'ADMIT_PATIENT';
-                                return (
-                                  <Button
-                                    key={action}
-                                    size="sm"
-                                    className={`rounded-full px-4 ${isPrimary
-                                      ? 'bg-sky-500 text-white hover:bg-sky-400'
-                                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
-                                      }`}
-                                    variant="secondary"
-                                    onClick={() => {
-                                      if (action === 'TRANSFER' && bed.admission?.admissionId) {
-                                        setTransferBed(bed);
-                                      } else if (action === 'MEDS') {
-                                        handleOpenMeds(bed);
-                                      } else if (action === 'ORDERS') {
-                                        handleOpenOrders(bed);
-                                      } else if (action === 'DETAILS') {
-                                        handleOpenDetails(bed);
-                                      }
-                                    }}
-                                  >
-                                    {label}
-                                  </Button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-        </section>
+                </section>
+              ))}
+            </div>
+          )}
+        </>
       )}
 
       {prescriptionBed &&
