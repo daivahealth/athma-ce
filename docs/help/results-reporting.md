@@ -40,35 +40,42 @@ A report on its second or later version shows **v2**, **v3** and so on beside it
 
 ## Imaging Results
 
-**Imaging Results** (`/results/imaging`) lists every imaging report in your organisation, 20 to a page. The line above the table says how many there are, for example "Found 12 imaging results".
+**Imaging Results** (`/results/imaging`) lists every imaging report in your organisation, newest first,
+20 to a page.
 
 Each row shows:
 
-- **Order Name**: the imaging order the report is for.
-- **Patient**.
-- **Modality** and **Body Part**, or a dash when they are not recorded.
-- **Critical**: a red **Critical** badge when the report is flagged as a critical finding, otherwise a
-  dash.
+- **Patient**: the patient's initials, name, **MRN**, gender and age, for example "MRN-2025-004 ·
+  Female 55y". A part that is not recorded is left out, and a missing MRN shows as a dash.
+- **Study**: the imaging order the report is for, with the **modality** as a small badge (for example
+  **CT** or **MRI**) and the **body part** beside it, or "Body part not recorded".
+- **Impression**: the first two lines of the report's impression. A red **Critical finding** badge sits
+  above it when the report is flagged as a critical finding. A report with neither says "No impression
+  yet".
 - **Status**: the report's status badge (see [Report statuses](#report-statuses)).
-- **Reported**: when the report was last submitted as Preliminary or Final, or a dash for a report
-  still in Draft.
+- **Reported**: the date and time the report was last submitted as Preliminary or Final, or "Not
+  reported" for a report still in Draft.
 
-Press a row, or its **View** button, to open the report.
+Press a row, or select it and press Enter, to open the report.
 
-### Filtering the list
+### Searching and filtering the list
 
-Use the status filter beside the search box. Choose **All Statuses** (the default), **Draft**,
-**Preliminary**, **Final**, **Amended** or **Cancelled**. The list goes back to page 1 each time you
-change it. **Previous** and **Next** under the table move between pages when there is more than one;
-the line beside them says "Page 2 of 5" and so on.
+- Type in **Search by patient, MRN or study** to narrow the list by the patient's first or last name,
+  their MRN, or the order name. The list updates as you type and goes back to page 1.
+- The status pills beside the search box filter by status: **All** (the default), **Draft**,
+  **Preliminary**, **Final**, **Amended** or **Cancelled**. Each has a dot in its status colour. The
+  list goes back to page 1 each time you change it.
 
-The search box (**Search imaging results...**) is greyed out: it does not search yet.
+The footer under the table says which rows you are seeing, for example "Showing 1–20 of 46 results".
+**Previous** and **Next** move between pages when there is more than one, with "2 / 3" between them.
 
 **If instead:**
 
-- "No imaging results found": nothing matches the filter, or no imaging report has been started yet.
-  Reports appear here once they are created from clinical orders.
-- "Error loading imaging results": the list could not be fetched. The server's message is shown under
+- "No results match": nothing matches your search or status filter. Press **Clear filters** to see
+  everything again.
+- "No imaging results yet": no imaging report has been started. Reports appear here once they are
+  created from clinical orders.
+- "Couldn't load imaging results": the list could not be fetched. The server's message is shown under
   it, or "Please try again or contact support."
 
 ### Starting an imaging report
@@ -151,21 +158,24 @@ Once the report is **Final** (or **Amended**) the screen turns read-only and sho
 
 ## Procedure Results
 
-**Procedure Results** (`/results/procedure`) lists every procedure report in your organisation, 20 to a
-page, with "Found _n_ procedure results" above the table.
+**Procedure Results** (`/results/procedure`) lists every procedure report in your organisation, newest
+first, 20 to a page.
 
 Each row shows:
 
-- **Order Name** and **Patient**.
-- **Duration**: how long the procedure took, as "45m" or "1h 30m", or a dash.
-- **Complications**: the first 50 characters in amber, or **None**.
+- **Patient**: initials, name, **MRN**, gender and age, as on [Imaging Results](#imaging-results).
+- **Procedure**: the procedure order, with the first line of the procedure description under it.
+- **Duration**: how long the procedure took, as "45 min" or "1h 30m", or "Not recorded".
+- **Complications**: an amber **Complications** badge with the first two lines of the text; a green
+  **No complications** badge when the text says "None", "Nil", "N/A", "No complications" or
+  "Uneventful"; or "Not recorded" when the field is empty.
 - **Status** and **Reported**, as on [Imaging Results](#imaging-results).
 
-Press a row, or **View**, to open the report.
+Press a row, or select it and press Enter, to open the report.
 
-The status filter, paging and the greyed-out search box (**Search procedure results...**) work exactly
-as on [Imaging Results](#filtering-the-list). The empty and error messages read "No procedure results
-found" and "Error loading procedure results".
+Search (**Search by patient, MRN or procedure**), the status pills, paging and the empty and error
+messages work exactly as on [Imaging Results](#searching-and-filtering-the-list), reading "No procedure
+results yet" and "Couldn't load procedure results".
 
 ### Starting a procedure report
 
@@ -224,14 +234,13 @@ See [Patient access](patient-access.md) for finding a patient.
 
 ## Not live yet
 
-- **Search** on both lists is disabled.
 - **Amending, correcting, verifying or cancelling** a report cannot be done from these screens. Once a
   report is **Final** it stays read-only here; the **Amended**, **Corrected** and **Cancelled**
   statuses only appear on reports changed by other means.
 - **Critical findings** cannot be flagged, notified or acknowledged from the imaging report screen. The
   **Critical** badge and banner only show for reports flagged elsewhere.
 - **Modality**, **Body Part** and **Accession #** are not filled in when you start a report from these
-  screens, so the list shows dashes for them on new reports.
+  screens, so new reports show only the order name in the **Study** column.
 - **Complications** and **Specimens** on a procedure report have no field on the form. New reports show
-  **None** in the Complications column; write complications in the report text instead.
+  "Not recorded" in the Complications column; write complications in the report text instead.
 - **Comments** are shown when present but cannot be added here.
