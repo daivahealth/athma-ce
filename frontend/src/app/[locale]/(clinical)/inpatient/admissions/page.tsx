@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { Search, CheckCircle2, Clock, FileCheck } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,7 +17,9 @@ import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useAdmissionsSearch } from '@/modules/clinical/hooks/use-inpatient';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { AdmissionStatus } from '@/modules/clinical/types/inpatient';
-import { wardService } from '@/modules/foundation/services/ward-service';
+import { useFacilityWards } from '@/modules/foundation/hooks/use-facility-wards';
+import { getSession } from '@/lib/api/client';
+import { decodeAccessToken } from '@/lib/auth/tokens';
 
 export default function InpatientAdmissionsPage() {
   const params = useParams() as { locale: string };
@@ -103,11 +104,10 @@ export default function InpatientAdmissionsPage() {
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.total / meta.limit) || 1 : 1;
 
-  // Fetch ward list for the filter dropdown only
-  const { data: wardsData } = useQuery({
-    queryKey: ['wards', 'all'],
-    queryFn: () => wardService.getAll(),
-  });
+  // Wards of the signed-in facility, for the filter dropdown only
+  const claims = decodeAccessToken(getSession().accessToken);
+  const facilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? undefined;
+  const { data: wardsData } = useFacilityWards(facilityId);
 
   const wards = wardsData ?? [];
 

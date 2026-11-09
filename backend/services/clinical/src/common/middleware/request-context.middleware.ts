@@ -12,6 +12,7 @@ export class RequestContextMiddleware implements NestMiddleware {
     const tenantId = req.headers['x-tenant-id'] as string | undefined;
     const userId = req.headers['x-user-id'] as string | undefined;
     const facilityId = req.headers['x-facility-id'] as string | undefined;
+    const authorization = req.headers.authorization;
     const ip = req.ip || req.socket.remoteAddress;
     const userAgent = req.headers['user-agent'];
 
@@ -20,6 +21,7 @@ export class RequestContextMiddleware implements NestMiddleware {
         ...(tenantId && { tenantId }),
         ...(userId && { userId }),
         ...(facilityId && { facilityId }),
+        ...(authorization && { authorization }),
         ...(ip && { ip }),
         ...(userAgent && { userAgent }),
         path: req.path,

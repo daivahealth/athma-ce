@@ -20,6 +20,7 @@ import {
   WardBoardSummary,
 } from './dto/ward-board.dto';
 import { PatientDisplayDto } from '@zeal/contracts';
+import { forwardUserAuthorization } from '../../common/http/forward-user-authorization';
 
 interface BedMasterData {
   id: string;
@@ -52,12 +53,12 @@ export class BedBoardService {
   constructor(private readonly prisma: PrismaService) {
     const foundationServiceUrl = process.env.FOUNDATION_SERVICE_URL || 'http://localhost:3010';
 
-    this.foundationApi = axios.create({
+    this.foundationApi = forwardUserAuthorization(axios.create({
       baseURL: `${foundationServiceUrl}/api/v1`,
       timeout: 10000,
       // Service-to-service call: the internal key authenticates it (AUTH_REQUIRE_TOKEN_FOR_READS).
       headers: process.env.INTERNAL_API_KEY ? { 'x-internal-api-key': process.env.INTERNAL_API_KEY } : {},
-    });
+    }));
 
     this.logger.log(`Foundation API client initialized: ${foundationServiceUrl}`);
   }
