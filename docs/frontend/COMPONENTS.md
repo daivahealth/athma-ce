@@ -405,8 +405,11 @@ description: 'One sentence naming the screens it covers.'
 
 After editing, run `npm run help:build`. `src/lib/help/help-content.test.ts`
 fails when the bundle is stale, when a page has an unknown group or no
-description, or when a `slug.md#anchor` link points at a page or heading
-that doesn't exist.
+description, when a `slug.md#anchor` link points at a page or heading
+that doesn't exist, or when a screen (`app/[locale]/**/page.tsx`) has no
+help page whose routes match it. A new screen therefore needs its path in a
+page's `routes` (or a heading's code span) before CI passes; only the
+signed-out and legal screens listed in that test are exempt.
 
 When a change alters what a screen shows or how it behaves, update its help
 page in the same change, as with the rest of `docs/`.
