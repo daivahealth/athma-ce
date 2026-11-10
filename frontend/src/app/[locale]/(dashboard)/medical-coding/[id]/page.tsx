@@ -121,7 +121,7 @@ export default function CodingSessionDetailPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold">Session {session.id.slice(0, 8)}…</h1>
-        <Badge className="ml-auto" variant={session.status === CodingSessionStatus.IN_REVIEW ? 'default' : 'secondary'}>
+        <Badge className="ml-auto" variant={session.status === CodingSessionStatus.IN_PROGRESS ? 'default' : 'secondary'}>
           {toLabel(session.status)}
         </Badge>
       </div>
@@ -153,7 +153,7 @@ export default function CodingSessionDetailPage() {
       </Card>
 
       <div className="flex flex-wrap gap-3">
-        {session.status === CodingSessionStatus.PENDING && (
+        {session.status === CodingSessionStatus.AUTO_GENERATED && (
           <Button onClick={handleStartReview} disabled={startReview.isPending}>
             {startReview.isPending ? 'Starting…' : 'Start review'}
           </Button>

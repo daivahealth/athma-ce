@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
+import { format } from 'date-fns';
 import { Eye, Plus, Search, Banknote } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -29,34 +30,44 @@ const PAGE_SIZE = 20;
 
 const createColumns = (locale: string, router: ReturnType<typeof useRouter>): ColumnDef<Remittance>[] => [
   {
-    accessorKey: 'id',
-    header: 'Remittance ID',
+    accessorKey: 'remittanceNumber',
+    header: 'Remittance #',
     cell: ({ getValue }) => <span className="font-mono text-xs">{getValue<string>()}</span>,
   },
   {
-    accessorKey: 'payerId',
+    id: 'payer',
     header: 'Payer',
-    cell: ({ getValue }) => (
-      <p className="font-mono text-xs" title={getValue<string>()}>
-        {getValue<string>()}
-      </p>
-    ),
+    cell: ({ row }) =>
+      row.original.payer?.payerName ?? (
+        <span className="font-mono text-xs" title={row.original.payerId}>
+          {row.original.payerId.slice(0, 8)}
+        </span>
+      ),
   },
   {
-    accessorKey: 'format',
-    header: 'Format',
+    accessorKey: 'paymentDate',
+    header: 'Payment date',
+    cell: ({ getValue }) => {
+      const value = getValue<string | null | undefined>();
+      return value ? format(new Date(value), 'dd MMM yyyy') : '—';
+    },
   },
   {
-    accessorKey: 'paymentAmount',
+    accessorKey: 'paymentMethod',
+    header: 'Method',
+    cell: ({ getValue }) => getValue<string | null | undefined>() || '—',
+  },
+  {
+    accessorKey: 'totalPaid',
     header: 'Paid',
-    cell: ({ getValue }) => Number(getValue<number>()).toFixed(2),
+    cell: ({ getValue }) => Number(getValue<number | string>() ?? 0).toFixed(2),
   },
   {
     accessorKey: 'status',
     header: 'Status',
     cell: ({ getValue }) => {
       const status = getValue<RemittanceStatus>();
-      return <Badge variant="secondary">{statusLabels[status]}</Badge>;
+      return <Badge variant="secondary">{statusLabels[status] ?? status}</Badge>;
     },
   },
   {

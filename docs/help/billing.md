@@ -380,26 +380,29 @@ receipt number format.
 
 **Medical coding** (`/medical-coding`) is the coder's inbox, assignments and productivity.
 
-- Four tiles: **Total sessions**, **Pending**, **In review** and **Submitted**.
+- Four tiles: **Total sessions**, **Awaiting review**, **In progress** and **Completed**.
 - **Coder productivity**: per coder, sessions completed, diagnoses and procedures coded. "No
   productivity data." when there is none.
-- **Pending inbox**: up to six pending sessions as buttons, labelled with the patient's name;
-  click one to open it.
+- **Pending inbox**: up to six sessions that are **Awaiting review** or **In progress**, as
+  buttons labelled with the patient's name; click one to open it.
 - **Coding sessions**: the full list with **Patient** (name, MRN, gender and age, with the
   shortened encounter ID under it), **Status**, **Priority**, **Coder** (or **Unassigned**) and
-  **Updated**. Search by patient name, linked claim number, or a full session or encounter ID,
-  filter by status, or type a **Queue** name. **Review** opens the session. Sessions come 20 at a
-  time; the footer shows the count for the current filters with **Previous** and **Next**, while
-  the **Total sessions** tile counts every session.
+  **Updated**. Search by patient name, linked claim number, or a full session or encounter ID, or
+  filter by status. **Review** opens the session. Sessions come 20 at a time; the footer shows the
+  count for the current filters with **Previous** and **Next**, while the **Total sessions** tile
+  counts every session.
 
-Statuses are **New**, **Pending**, **In Review**, **Returned**, **Completed** and **Submitted**.
+A session is created as **Awaiting review** when the encounter's charges are coded automatically.
+It becomes **In progress** when a coder presses **Start review**, and **Completed** when the coder
+submits it. The status filter also offers **Submitted**.
 
 ### Coding a session
 
 Open a session (`/medical-coding/{id}`). **Session summary** shows the patient (name, MRN,
 gender and age), encounter ID, coder and last update.
 
-1. For a **Pending** session, press **Start review**. "Review started".
+1. For a session **Awaiting review**, press **Start review**. "Review started"; it moves to
+   **In progress**.
 2. **Diagnoses**: under **Add diagnosis**, enter the **Code**, **System** (ICD-10 by default) and
    **Description**, switch on **Primary diagnosis** if it is, and press **Add diagnosis**. In the
    list, **Toggle primary** flips the primary flag and **Delete** removes a code.
@@ -407,7 +410,7 @@ gender and age), encounter ID, coder and last update.
    **Description**, **Modifier** and **Units**, then **Add procedure**. **+1 unit** adds a unit;
    **Delete** removes it.
 4. **Coder notes**: type and press **Save notes** ("Session updated").
-5. Press **Submit session**. "Session submitted for claim generation".
+5. Press **Submit session**. "Session submitted for claim generation"; it moves to **Completed**.
 
 A code field left blank means the add button does nothing. The **Audit trail** at the bottom lists
 each action, who did it, notes and when.
