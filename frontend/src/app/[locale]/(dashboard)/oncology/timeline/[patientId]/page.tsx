@@ -112,6 +112,16 @@ function nodeDate(node: TimelineNode) {
   return node.kind === 'group' ? node.endDate : node.event.event_date;
 }
 
+function nodeTitle(node: TimelineNode) {
+  return node.kind === 'group'
+    ? `${node.label}${node.cycleRange ? ` · ${node.cycleRange}` : ''}`
+    : node.event.title;
+}
+
+function formatShortDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
 export default function CancerTimelinePage() {
   const params = useParams() as { locale: string; patientId: string };
   const router = useRouter();
@@ -162,16 +172,21 @@ export default function CancerTimelinePage() {
 
   const nodes = useMemo(() => groupTimelineEvents(events, 'newest-first'), [events]);
   const journey = useMemo(() => buildJourney(nodes), [nodes]);
-  // Scheduled events (e.g. an upcoming tumour board) sit above "Today"; the rest go by month below it.
+  // The feed opens at "Today" and runs newest to oldest. Anything dated today belongs to today;
+  // only events on a later day are "coming up", listed compactly in the Today row (soonest first).
   const nowIso = useMemo(() => new Date().toISOString(), []);
+  const tomorrowMs = useMemo(() => {
+    const d = new Date(nowIso);
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime();
+  }, [nowIso]);
   const upcoming = useMemo(
-    () => nodes.filter((n) => nodeDate(n) > nowIso).reverse(),
-    [nodes, nowIso],
+    () => nodes.filter((n) => Date.parse(nodeDate(n)) >= tomorrowMs).reverse(),
+    [nodes, tomorrowMs],
   );
   const months = useMemo(() => {
     const out: { key: string; label: string; nodes: TimelineNode[] }[] = [];
     for (const node of nodes) {
-      if (nodeDate(node) > nowIso) continue;
+      if (Date.parse(nodeDate(node)) >= tomorrowMs) continue;
       const key = monthKey(nodeDate(node));
       let bucket = out[out.length - 1];
       if (!bucket || bucket.key !== key) {
@@ -185,7 +200,7 @@ export default function CancerTimelinePage() {
       bucket.nodes.push(node);
     }
     return out;
-  }, [nodes, nowIso]);
+  }, [nodes, tomorrowMs]);
 
   // Patient display from first diagnosis or summary
   const firstDiag = diagnoses[0];
@@ -206,9 +221,9 @@ export default function CancerTimelinePage() {
   const latest = useMemo(
     () =>
       [...allEvents]
-        .filter((e) => e.event_date <= today)
+        .filter((e) => Date.parse(e.event_date) < tomorrowMs)
         .sort((a, b) => b.event_date.localeCompare(a.event_date))[0] ?? null,
-    [allEvents, today],
+    [allEvents, tomorrowMs],
   );
   const journeyDay = diagnosisDate ? daysSinceDiagnosis(today, diagnosisDate) : null;
   const daysSinceLatest = latest ? daysSinceDiagnosis(today, latest.event_date) : null;
@@ -551,22 +566,6 @@ export default function CancerTimelinePage() {
             aria-hidden="true"
           />
 
-          {upcoming.length > 0 && (
-            <section aria-label="Upcoming" className="mb-6">
-              <div className="relative mb-3 flex items-center gap-3">
-                <div className="hidden w-20 flex-shrink-0 sm:block" />
-                <div className="w-6 flex-shrink-0" />
-                <h3 className="rounded-full border border-dashed border-primary/40 px-3 py-1 text-xs font-semibold text-primary">
-                  Upcoming
-                  <span className="ml-1.5 font-normal text-muted-foreground">
-                    {upcoming.length} scheduled
-                  </span>
-                </h3>
-              </div>
-              <ol className="space-y-4 opacity-90">{upcoming.map(renderNode)}</ol>
-            </section>
-          )}
-
           {/* Now */}
           <div className="relative mb-6 flex items-center gap-3">
             <div className="hidden w-20 flex-shrink-0 text-right text-[11px] font-semibold uppercase tracking-wide text-primary sm:block">
@@ -590,6 +589,50 @@ export default function CancerTimelinePage() {
                   : ` · ${describeSince(daysSinceLatest)} since the latest event`)}
             </p>
           </div>
+
+          {upcoming.length > 0 && (
+            <section aria-label="Coming up" className="relative -mt-3 mb-6 flex gap-3">
+              <div className="hidden w-20 flex-shrink-0 sm:block" />
+              <div className="w-6 flex-shrink-0" />
+              <div className="min-w-0 flex-1 rounded-lg border border-dashed border-primary/40 bg-primary/5 px-3 py-2">
+                <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-primary">
+                  Coming up
+                </p>
+                <ul className="space-y-1">
+                  {upcoming.map((node) => {
+                    const anchorId = timelineAnchorId(node);
+                    const category =
+                      node.kind === 'group' ? node.category : getEventCategory(node.event);
+                    const date = node.kind === 'group' ? node.startDate : node.event.event_date;
+                    return (
+                      <li
+                        key={anchorId}
+                        id={anchorId}
+                        className={cn(
+                          'flex scroll-mt-24 items-center gap-2 rounded-md px-1 text-sm transition-colors',
+                          highlighted === anchorId && 'bg-primary/10',
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'h-2 w-2 flex-shrink-0 rounded-full',
+                            getCategoryStyle(category).swatch,
+                          )}
+                        />
+                        <span className="w-14 flex-shrink-0 text-xs font-medium tabular-nums text-muted-foreground">
+                          {formatShortDate(date)}
+                        </span>
+                        <span className="truncate">{nodeTitle(node)}</span>
+                        <span className="ml-auto flex-shrink-0 text-xs text-muted-foreground">
+                          {getCategoryStyle(category).label}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </section>
+          )}
 
           <div className="space-y-8">
             {months.map((month) => (
