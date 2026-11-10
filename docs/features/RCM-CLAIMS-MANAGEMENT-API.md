@@ -104,8 +104,15 @@ GET /claims
 | `batchId` | uuid | Filter by batch |
 | `dateFrom` | date | Service date from |
 | `dateTo` | date | Service date to |
-| `limit` | number | Page size (default: 50) |
-| `offset` | number | Pagination offset |
+| `search` | string | Claim number (case-insensitive) or patient name, max 100 chars |
+| `limit` | number | Page size (default 50, values above 200 are clamped to 200) |
+| `offset` | number | Rows to skip (default 0) |
+
+`total` is the number of claims matching the filters across all pages, so a
+client pages with `offset` until `offset + claims.length >= total`. Patient-name
+search resolves matching patients from the Clinical service (up to 200) and
+filters claims by those ids; if Clinical is unreachable only the claim number
+is matched.
 
 **Claim Status Values:**
 ```typescript
@@ -253,7 +260,9 @@ POST /batches
 GET /batches
 ```
 
-**Query Parameters:** `payerId`, `status`, `batchType`, `dateFrom`, `dateTo`, `limit`, `offset`
+**Query Parameters:** `payerId`, `status`, `batchType`, `dateFrom`, `dateTo`, `search` (batch number, submission reference or payer name), `limit` (default 50, max 200), `offset`
+
+**Response:** `{ batches: Batch[]; total: number }`, where `total` counts every matching batch.
 
 **Batch Status Values:**
 ```typescript
@@ -387,7 +396,9 @@ POST /eligibility/check
 GET /eligibility/requests
 ```
 
-**Query Parameters:** `patientId`, `payerId`, `status`, `dateFrom`, `dateTo`, `limit`, `offset`
+**Query Parameters:** `patientId`, `payerId`, `status`, `dateFrom`, `dateTo`, `search` (exact request id, payer name or patient name), `limit` (default 50, max 200), `offset`
+
+**Response:** `{ requests: EligibilityRequest[]; total: number }`, where `total` counts every matching request.
 
 ---
 
@@ -442,7 +453,9 @@ POST /preauth
 GET /preauth
 ```
 
-**Query Parameters:** `patientId`, `payerId`, `encounterId`, `status`, `dateFrom`, `dateTo`, `limit`, `offset`
+**Query Parameters:** `patientId`, `payerId`, `encounterId`, `status`, `dateFrom`, `dateTo`, `search` (internal reference, authorization number or patient name), `limit` (default 50, max 200), `offset`
+
+**Response:** `{ requests: PreAuthRequest[]; total: number }`, where `total` counts every matching request.
 
 **PreAuth Status Values:**
 ```typescript
@@ -636,7 +649,9 @@ POST /remittance
 GET /remittance
 ```
 
-**Query Parameters:** `payerId`, `status`, `dateFrom`, `dateTo`, `limit`, `offset`
+**Query Parameters:** `payerId`, `status`, `dateFrom`, `dateTo`, `search` (remittance number, payment reference, payer name or exact id), `limit` (default 50, max 200), `offset`
+
+**Response:** `{ remittances: Remittance[]; total: number }`, where `total` counts every matching remittance.
 
 **Remittance Status Values:**
 ```typescript

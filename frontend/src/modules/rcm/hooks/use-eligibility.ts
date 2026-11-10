@@ -1,11 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { eligibilityService } from '../services/eligibility-service';
 import type { CheckEligibilityInput, EligibilityFilters } from '../types/eligibility';
 
-export function useEligibilityRequests(filters?: EligibilityFilters) {
+export function useEligibilityRequests(
+  filters?: EligibilityFilters,
+  options: { keepPreviousData?: boolean } = {},
+) {
   return useQuery({
     queryKey: ['eligibility-requests', filters],
     queryFn: () => eligibilityService.list(filters),
+    // Paged list screens opt in to keep the current page visible while the next page / search loads.
+    // Off by default: patient-scoped callers must never show another patient's rows as a placeholder.
+    placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
   });
 }
 

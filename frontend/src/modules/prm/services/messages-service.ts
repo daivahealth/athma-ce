@@ -5,10 +5,20 @@ export interface MessageFilters {
   patientId?: string;
   channel?: string;
   status?: string;
+  /** Page size; the server defaults to 50 and caps at 200. */
+  limit?: number;
+  offset?: number;
+}
+
+export interface ListMessagesResponse {
+  data: Message[];
+  total: number;
+  limit: number;
+  offset: number;
 }
 
 class MessagesService {
-  async list(filters?: MessageFilters): Promise<Message[]> {
+  async list(filters?: MessageFilters): Promise<ListMessagesResponse> {
     const response = await prmClient.get('/v1/messages', { params: filters });
     return response.data;
   }

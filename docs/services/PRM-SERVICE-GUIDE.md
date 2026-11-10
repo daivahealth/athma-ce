@@ -483,8 +483,14 @@ DELETE /v1/tasks/:taskId
 
 #### List Messages
 ```http
-GET /v1/messages?patientId=uuid&channel=sms&status=delivered
+GET /v1/messages?patientId=uuid&channel=sms&status=delivered&limit=50&offset=0
 ```
+
+Newest first. `limit` is a whole number 1–200 (default 50) and `offset` is 0 or
+more (default 0). The response is `{ data, total, limit, offset }`, where
+`total` counts every message matching the filters (the same shape as
+`GET /v1/events`). Undeclared query parameters are rejected with 400. Before
+Nov 2026 this endpoint returned a bare array capped at 100 rows.
 
 #### Get Message
 ```http
@@ -527,8 +533,13 @@ POST /v1/providers/webhooks/:channel
 
 #### List Callbacks
 ```http
-GET /v1/providers/callbacks?channel=sms&processed=false
+GET /v1/providers/callbacks?channel=sms&processed=false&limit=50&offset=0
 ```
+
+`processed` must be the string `true` or `false`. `limit` (1–200, default 50)
+and `offset` page the list, newest first, and the response is
+`{ data, total, limit, offset }`. Before Nov 2026 it returned a bare array
+capped at 100 rows.
 
 ### Notifications
 

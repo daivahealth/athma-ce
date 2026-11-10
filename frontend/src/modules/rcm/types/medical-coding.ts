@@ -37,6 +37,16 @@ export interface CodingSessionFilters {
   patientId?: string;
   encounterId?: string;
   queue?: string;
+  /** Patient name, claim number, or exact session / encounter id (server-side). */
+  search?: string;
+  limit?: number;
+  offset?: number;
+}
+
+/** GET /medical-coding/sessions: one page plus the total matching the filters. */
+export interface CodingSessionListResponse {
+  sessions: CodingSession[];
+  total: number;
 }
 
 export interface CodingDiagnosis {

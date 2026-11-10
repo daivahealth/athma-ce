@@ -13,10 +13,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { CreateTemplateDialog } from './_components/create-template-dialog';
 import { useChecklistTemplates } from '@/modules/clinical/hooks/use-checklists';
-import type { ChecklistTemplate } from '@/modules/clinical/types/checklist';
+import type { ChecklistTemplate, ChecklistTemplateFilters } from '@/modules/clinical/types/checklist';
 import { ChecklistTemplateStatus, ChecklistCategory } from '@/modules/clinical/types/checklist';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination, pageOffset } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 
 const statusVariant: Record<ChecklistTemplateStatus, 'default' | 'secondary' | 'outline' | 'destructive'> = {
   [ChecklistTemplateStatus.ACTIVE]: 'default',
@@ -24,6 +26,8 @@ const statusVariant: Record<ChecklistTemplateStatus, 'default' | 'secondary' | '
   [ChecklistTemplateStatus.DEPRECATED]: 'outline',
   [ChecklistTemplateStatus.ARCHIVED]: 'outline',
 };
+
+const PAGE_SIZE = 20;
 
 const createColumns = (
   router: ReturnType<typeof useRouter>,
@@ -97,21 +101,25 @@ export default function ChecklistTemplatesPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | ChecklistTemplateStatus>('all');
   const [categoryFilter, setCategoryFilter] = useState<'all' | ChecklistCategory>('all');
   const [applicabilityFilter, setApplicabilityFilter] = useState<'all' | 'inpatient' | 'outpatient'>('all');
+  const [page, setPage] = useState(1);
+  const debouncedSearch = useDebouncedValue(search.trim(), 300);
 
   const filters = useMemo(() => {
-    const value: Record<string, unknown> = {};
+    const value: ChecklistTemplateFilters = {
+      skip: pageOffset(page, PAGE_SIZE),
+      take: PAGE_SIZE,
+    };
+    if (debouncedSearch) value.search = debouncedSearch;
     if (statusFilter !== 'all') value.status = statusFilter;
     if (categoryFilter !== 'all') value.category = categoryFilter;
     if (applicabilityFilter === 'inpatient') value.applicableToInpatient = true;
     if (applicabilityFilter === 'outpatient') value.applicableToOutpatient = true;
     return value;
-  }, [statusFilter, categoryFilter, applicabilityFilter]);
+  }, [page, debouncedSearch, statusFilter, categoryFilter, applicabilityFilter]);
 
   const { data: response, isLoading } = useChecklistTemplates(filters);
   const templates = response?.data || [];
-  const filteredTemplates = templates.filter((template) =>
-    template.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const total = response?.meta?.total ?? 0;
 
   return (
     <div className="space-y-6">
@@ -128,12 +136,18 @@ export default function ChecklistTemplatesPage() {
           <Input
             placeholder="Search templates..."
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
           />
         </div>
         <Select
           value={statusFilter}
-          onValueChange={(value) => setStatusFilter(value as 'all' | ChecklistTemplateStatus)}
+          onValueChange={(value) => {
+            setStatusFilter(value as 'all' | ChecklistTemplateStatus);
+            setPage(1);
+          }}
         >
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Status" />
@@ -149,7 +163,10 @@ export default function ChecklistTemplatesPage() {
         </Select>
         <Select
           value={categoryFilter}
-          onValueChange={(value) => setCategoryFilter(value as 'all' | ChecklistCategory)}
+          onValueChange={(value) => {
+            setCategoryFilter(value as 'all' | ChecklistCategory);
+            setPage(1);
+          }}
         >
           <SelectTrigger className="w-44">
             <SelectValue placeholder="Category" />
@@ -165,7 +182,10 @@ export default function ChecklistTemplatesPage() {
         </Select>
         <Select
           value={applicabilityFilter}
-          onValueChange={(value) => setApplicabilityFilter(value as 'all' | 'inpatient' | 'outpatient')}
+          onValueChange={(value) => {
+            setApplicabilityFilter(value as 'all' | 'inpatient' | 'outpatient');
+            setPage(1);
+          }}
         >
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Type" />
@@ -179,12 +199,21 @@ export default function ChecklistTemplatesPage() {
       </div>
 
       <ResourceTable
-        data={filteredTemplates}
+        data={templates}
         columns={createColumns(router, locale)}
         isLoading={isLoading}
         emptyState="No checklist templates found."
         cta={null}
       />
+      {!isLoading && total > 0 && (
+        <ListPagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          total={total}
+          onPageChange={setPage}
+          itemLabel="templates"
+        />
+      )}
     </div>
   );
 }

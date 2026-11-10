@@ -13,8 +13,11 @@ import { useOncologyRegistry, useRegistryCandidates } from '@/plugins/oncology/h
 import { RegistryCandidateQueue } from '@/plugins/oncology/components/RegistryCandidateQueue';
 import { LoadingState, StatusBadge, PatientCell } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
 import type { CancerDiagnosis } from '@/plugins/oncology/types';
 import { formatDayMonthYear } from '@/plugins/oncology/lib/treatment-day';
+
+const PAGE_SIZE = 20;
 
 export default function OncologyRegistryPage() {
   const params = useParams() as { locale: string };
@@ -23,6 +26,7 @@ export default function OncologyRegistryPage() {
   const [clinicalStatusFilter, setClinicalStatusFilter] = useState('');
   const [tab, setTab] = useState(useSearchParams().get('tab') === 'candidates' ? 'candidates' : 'registered');
   const [strengthFilter, setStrengthFilter] = useState('');
+  const [page, setPage] = useState(1);
 
   // Candidate queue: unregistered patients whose recent results suggest cancer.
   const { data: candidateData, isLoading: candidatesLoading } = useRegistryCandidates({
@@ -39,6 +43,8 @@ export default function OncologyRegistryPage() {
   const { data, isLoading } = useOncologyRegistry({
     search: searchQuery || undefined,
     clinicalStatus: clinicalStatusFilter || undefined,
+    page,
+    limit: PAGE_SIZE,
   });
 
   const entries: CancerDiagnosis[] = data?.data ?? [];
@@ -89,7 +95,7 @@ export default function OncologyRegistryPage() {
             placeholder="Search by patient name or MRN..."
             className="pl-9"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
           />
         </div>
         {tab === 'candidates' ? (
@@ -107,7 +113,7 @@ export default function OncologyRegistryPage() {
         ) : (
         <Select
           value={clinicalStatusFilter || 'all'}
-          onValueChange={(v) => setClinicalStatusFilter(v === 'all' ? '' : v)}
+          onValueChange={(v) => { setClinicalStatusFilter(v === 'all' ? '' : v); setPage(1); }}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Clinical status" />
@@ -225,9 +231,14 @@ export default function OncologyRegistryPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-muted-foreground">
-            {entries.length} patient{entries.length !== 1 ? 's' : ''}
-          </div>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? entries.length}
+            onPageChange={setPage}
+            itemLabel="registry entries"
+          />
         </div>
       )}
       </TabsContent>

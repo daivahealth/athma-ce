@@ -4,10 +4,11 @@
  */
 
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@zeal/shared-utils';
 import { MessagesService } from './messages.service';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
+import { ListMessagesQueryDto } from './dto/list-messages.query';
 
 @ApiTags('Patients')
 @ApiBearerAuth('bearer')
@@ -18,22 +19,22 @@ export class MessagesController {
 
   @Get()
   @ApiOperation({ summary: 'Get patient message history' })
-  @ApiQuery({ name: 'patientId', required: false, type: String })
-  @ApiQuery({ name: 'channel', required: false, type: String })
-  @ApiQuery({ name: 'status', required: false, type: String })
-  @ApiResponse({ status: 200, description: 'Messages retrieved successfully' })
-  async findAll(
-    @TenantId() tenantId: string,
-    @Query('patientId') patientId?: string,
-    @Query('channel') channel?: string,
-    @Query('status') status?: string,
-  ) {
-    const filters: any = {};
-    if (patientId) filters.patientId = patientId;
-    if (channel) filters.channel = channel;
-    if (status) filters.status = status;
+  @ApiResponse({
+    status: 200,
+    description: 'Messages retrieved successfully, as { data, total, limit, offset }',
+  })
+  async findAll(@TenantId() tenantId: string, @Query() query: ListMessagesQueryDto) {
+    const limit = query.limit ?? 50;
+    const offset = query.offset ?? 0;
+    const { data, total } = await this.messagesService.findAll(tenantId, {
+      patientId: query.patientId || undefined,
+      channel: query.channel || undefined,
+      status: query.status || undefined,
+      limit,
+      offset,
+    });
 
-    return this.messagesService.findAll(tenantId, filters);
+    return { data, total, limit, offset };
   }
 
   @Get(':messageId')

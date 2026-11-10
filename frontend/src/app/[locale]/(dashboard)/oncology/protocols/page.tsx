@@ -9,6 +9,8 @@ import { FlaskConical, Pencil, Plus, PowerOff, Search } from 'lucide-react';
 import { useProtocols, useDeactivateProtocol } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { ChemoProtocol } from '@/plugins/oncology/types';
 import { getProtocolPhases } from '@/plugins/oncology/lib/protocol-phases';
 
@@ -22,25 +24,30 @@ const EMETOGENIC_COLORS: Record<string, string> = {
   high: 'bg-destructive/10 text-destructive',
 };
 
+const PAGE_SIZE = 20;
+
 export default function ProtocolsPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [cancerTypeFilter, setCancerTypeFilter] = useState('');
   const [showInactive, setShowInactive] = useState(false);
+  const [page, setPage] = useState(1);
+  const search = useDebouncedValue(searchQuery.trim(), 300);
+  const cancerType = useDebouncedValue(cancerTypeFilter.trim(), 300);
 
-  const { data, isLoading } = useProtocols();
+  // Search, cancer type and the inactive toggle are applied server-side so they cover every page.
+  const { data, isLoading } = useProtocols({
+    search: search || undefined,
+    cancerType: cancerType || undefined,
+    includeInactive: showInactive || undefined,
+    page,
+    limit: PAGE_SIZE,
+  });
   const deactivate = useDeactivateProtocol();
 
-  const allProtocols: ChemoProtocol[] = data?.data ?? [];
-
-  const protocols = allProtocols.filter((p) => {
-    if (!showInactive && !p.is_active) return false;
-    if (cancerTypeFilter && !p.cancer_type.toLowerCase().includes(cancerTypeFilter.toLowerCase())) return false;
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return p.code.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.cancer_type.toLowerCase().includes(q);
-  });
+  const protocols: ChemoProtocol[] = data?.data ?? [];
+  const hasFilters = !!(search || cancerType);
 
   return (
     <div className="space-y-6 page-transition">
@@ -62,20 +69,20 @@ export default function ProtocolsPage() {
             placeholder="Search by code, name, or cancer type..."
             className="pl-9"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
           />
         </div>
         <Input
           placeholder="Filter by cancer type..."
           className="w-[200px]"
           value={cancerTypeFilter}
-          onChange={(e) => setCancerTypeFilter(e.target.value)}
+          onChange={(e) => { setCancerTypeFilter(e.target.value); setPage(1); }}
         />
         <label className="flex items-center gap-2 text-sm cursor-pointer">
           <input
             type="checkbox"
             checked={showInactive}
-            onChange={(e) => setShowInactive(e.target.checked)}
+            onChange={(e) => { setShowInactive(e.target.checked); setPage(1); }}
             className="rounded border-gray-300"
           />
           Show inactive
@@ -88,9 +95,9 @@ export default function ProtocolsPage() {
         <div className="flex flex-col items-center justify-center h-60 border rounded-lg bg-muted/20 space-y-4">
           <FlaskConical className="h-10 w-10 text-muted-foreground/40" />
           <p className="text-muted-foreground">
-            {allProtocols.length === 0 ? 'No protocols yet' : 'No protocols match the current filters'}
+            {hasFilters ? 'No protocols match the current filters' : 'No protocols yet'}
           </p>
-          {allProtocols.length === 0 && (
+          {!hasFilters && (
             <Button variant="outline" onClick={() => router.push(`/${params.locale}/oncology/protocols/new`)}>
               <Plus className="h-4 w-4 mr-2" />Create First Protocol
             </Button>
@@ -160,10 +167,14 @@ export default function ProtocolsPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-muted-foreground">
-            {protocols.length} protocol{protocols.length !== 1 ? 's' : ''}
-            {protocols.length !== allProtocols.length && ` (filtered from ${allProtocols.length})`}
-          </div>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? protocols.length}
+            onPageChange={setPage}
+            itemLabel="protocols"
+          />
         </div>
       )}
     </div>

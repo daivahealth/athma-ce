@@ -1,11 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { remittanceService } from '../services/remittance-service';
 import type { CreateRemittanceInput, RemittanceFilters } from '../types/remittance';
 
-export function useRemittances(filters?: RemittanceFilters) {
+export function useRemittances(
+  filters?: RemittanceFilters,
+  options: { keepPreviousData?: boolean } = {},
+) {
   return useQuery({
     queryKey: ['remittances', filters],
     queryFn: () => remittanceService.list(filters),
+    // Paged list screens opt in to keep the current page visible while the next page / search loads.
+    // Off by default: patient-scoped callers must never show another patient's rows as a placeholder.
+    placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
   });
 }
 

@@ -46,13 +46,18 @@ prior auth, and remittance workflows." Under it are five tiles, two to a row on 
 Click anywhere on a tile to open that screen. The tiles show no counts, so to see what is waiting
 you open the list itself.
 
+Every revenue-cycle list (claims, batches, eligibility, pre-auth and remittance) shows 20 rows at a
+time. The footer under the table says which rows you are looking at out of the total, with
+**Previous** and **Next** to move between pages. Search and filters look through every record, not
+just the page on screen, and changing either goes back to the first page.
+
 Refunds, credit notes and debit notes are not on this page; see [Billing](billing.md).
 
 ## Eligibility
 
 **Eligibility requests** (`/revenue-cycle/eligibility`) lists every eligibility check with its
 **Request ID**, **Patient**, **Payer** (the payer's internal ID) and **Status**. Search by request
-ID, patient name or MRN.
+ID, payer name, patient name or MRN.
 
 | Status | Meaning |
 | --- | --- |
@@ -206,7 +211,7 @@ status. **Claim overview** shows the patient, **Encounter ID**, **Payer ID** and
 ## Batches
 
 **Batches** (`/revenue-cycle/batches`) lists claim batches: **Batch #**, **Status**, **Claims**
-(how many), **Total**, **Format**. Search by batch number.
+(how many), **Total**, **Format**. Search by batch number, submission reference or payer name.
 
 | Status | Meaning |
 | --- | --- |
@@ -240,7 +245,7 @@ raw data.
 
 **Remittances** (`/revenue-cycle/remittance`) lists payment advices from payers: **Remittance ID**,
 **Payer**, **Format**, **Paid** and **Status** (**Received**, **Processing**, **Processed**,
-**Reconciled**, **Error**). Search by remittance ID.
+**Reconciled**, **Error**). Search by remittance number, payment reference or payer name.
 
 ### Recording a remittance
 

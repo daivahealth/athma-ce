@@ -7,6 +7,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { Search, Eye, FileCode2 } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
+import { ListPagination, pageOffset } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -26,6 +28,8 @@ const statusVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
   [CodingSessionStatus.COMPLETED]: 'default',
   [CodingSessionStatus.SUBMITTED]: 'default',
 };
+
+const PAGE_SIZE = 20;
 
 const statusLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
@@ -86,6 +90,8 @@ export default function MedicalCodingPage() {
   const locale = params.locale as string;
 
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search.trim(), 300);
+  const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<'all' | string>('all');
   const [queueFilter, setQueueFilter] = useState('');
 
@@ -93,29 +99,25 @@ export default function MedicalCodingPage() {
     () => ({
       status: statusFilter === 'all' ? undefined : statusFilter,
       queue: queueFilter || undefined,
+      search: debouncedSearch || undefined,
+      limit: PAGE_SIZE,
+      offset: pageOffset(page, PAGE_SIZE),
     }),
-    [statusFilter, queueFilter],
+    [statusFilter, queueFilter, debouncedSearch, page],
   );
 
-  const { data: sessions, isLoading, error } = useCodingSessions(filters);
+  const { data, isLoading, error } = useCodingSessions(filters, { keepPreviousData: true });
   const { data: pendingSessions } = usePendingCodingSessions();
   const { data: productivity } = useCoderProductivity();
   const { data: summary } = useCodingSessionSummary();
 
   const columns = useMemo(() => createColumns(locale, router), [locale, router]);
-  const sanitized = useMemo(() => sessions ?? [], [sessions]);
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return sanitized;
-    return sanitized.filter((session) =>
-      `${session.patientDisplay?.displayName ?? ''} ${session.patientDisplay?.mrn ?? ''} ${session.encounterId}`
-        .toLowerCase()
-        .includes(term),
-    );
-  }, [sanitized, search]);
+  const sessions = useMemo(() => data?.sessions ?? [], [data]);
 
   const statCards = [
-    { label: 'Total sessions', value: summary?.total ?? sanitized.length },
+    // Tenant-wide count from the summary endpoint; never the length of the loaded page.
+    // The table footer shows the count matching the current filters.
+    { label: 'Total sessions', value: summary?.total ?? '—' },
     { label: 'Pending', value: summary?.byStatus?.[CodingSessionStatus.PENDING] ?? 0 },
     { label: 'In review', value: summary?.byStatus?.[CodingSessionStatus.IN_REVIEW] ?? 0 },
     { label: 'Submitted', value: summary?.byStatus?.[CodingSessionStatus.SUBMITTED] ?? 0 },
@@ -195,13 +197,22 @@ export default function MedicalCodingPage() {
         <div className="relative flex-1 min-w-[240px] max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by patient name, MRN, or encounter..."
+            placeholder="Search by patient name, claim number, or encounter ID..."
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
             className="pl-9"
           />
         </div>
-        <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value)}>
+        <Select
+          value={statusFilter}
+          onValueChange={(value) => {
+            setStatusFilter(value);
+            setPage(1);
+          }}
+        >
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Filter status" />
           </SelectTrigger>
@@ -217,7 +228,10 @@ export default function MedicalCodingPage() {
         <Input
           placeholder="Queue"
           value={queueFilter}
-          onChange={(event) => setQueueFilter(event.target.value)}
+          onChange={(event) => {
+            setQueueFilter(event.target.value);
+            setPage(1);
+          }}
           className="w-[160px]"
         />
       </div>
@@ -227,14 +241,23 @@ export default function MedicalCodingPage() {
           Failed to load sessions: {(error as Error).message}
         </div>
       ) : (
-        <ResourceTable
-          title="Coding sessions"
-          columns={columns}
-          data={filtered}
-          isLoading={isLoading}
-          emptyState={search ? 'No sessions match your search.' : 'No sessions available.'}
-          onRowClick={(row) => router.push(`/${locale}/medical-coding/${row.id}`)}
-        />
+        <div>
+          <ResourceTable
+            title="Coding sessions"
+            columns={columns}
+            data={sessions}
+            isLoading={isLoading}
+            emptyState={debouncedSearch ? 'No sessions match your search.' : 'No sessions available.'}
+            onRowClick={(row) => router.push(`/${locale}/medical-coding/${row.id}`)}
+          />
+          <ListPagination
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.total ?? 0}
+            onPageChange={setPage}
+            itemLabel="sessions"
+          />
+        </div>
       )}
     </div>
   );

@@ -7,6 +7,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { Eye, Plus, Search, ClipboardCheck } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
+import { ListPagination, pageOffset } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,6 +28,8 @@ const statusLabels: Record<PreAuthStatus, string> = {
   cancelled: 'Cancelled',
   expired: 'Expired',
 };
+
+const PAGE_SIZE = 20;
 
 const createColumns = (locale: string, router: ReturnType<typeof useRouter>): ColumnDef<PreAuthRequest>[] => [
   {
@@ -75,19 +79,19 @@ export default function PreAuthPage() {
   const params = useParams();
   const locale = params.locale as string;
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search.trim(), 300);
+  const [page, setPage] = useState(1);
 
-  const { data, isLoading, error } = usePreAuthRequests();
+  const { data, isLoading, error } = usePreAuthRequests(
+    {
+      search: debouncedSearch || undefined,
+      limit: PAGE_SIZE,
+      offset: pageOffset(page, PAGE_SIZE),
+    },
+    { keepPreviousData: true },
+  );
   const requests = useMemo(() => data?.requests ?? [], [data]);
   const columns = useMemo(() => createColumns(locale, router), [locale, router]);
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return requests;
-    return requests.filter((request) =>
-      `${request.internalRef} ${request.patientDisplay?.displayName ?? ''} ${request.patientDisplay?.mrn ?? ''}`
-        .toLowerCase()
-        .includes(term),
-    );
-  }, [requests, search]);
 
   return (
     <div className="space-y-6">
@@ -109,9 +113,12 @@ export default function PreAuthPage() {
             <div className="relative flex-1 min-w-[240px] max-w-sm">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by pre-auth number, patient name, or MRN..."
+                placeholder="Search by internal ref, auth number, patient name or MRN..."
                 value={search}
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
                 className="pl-9"
               />
             </div>
@@ -119,13 +126,22 @@ export default function PreAuthPage() {
         </CardContent>
       </Card>
 
-      <ResourceTable
-        columns={columns}
-        data={filtered}
-        isLoading={isLoading}
-        error={error}
-        emptyMessage="No pre-auth requests found."
-      />
+      <div>
+        <ResourceTable
+          columns={columns}
+          data={requests}
+          isLoading={isLoading}
+          error={error}
+          emptyMessage="No pre-auth requests found."
+        />
+        <ListPagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          total={data?.total ?? 0}
+          onPageChange={setPage}
+          itemLabel="requests"
+        />
+      </div>
     </div>
   );
 }

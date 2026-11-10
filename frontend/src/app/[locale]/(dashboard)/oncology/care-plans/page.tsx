@@ -14,7 +14,11 @@ import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentInt
 import { ToneBadge } from '@/components/ui/tone-badge';
 import { treatmentModalityTone } from '@/plugins/oncology/lib/oncology-tone';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { OncologyCarePlan } from '@/plugins/oncology/types';
+
+const PAGE_SIZE = 20;
 
 export default function CarePlansPage() {
   const params = useParams() as { locale: string };
@@ -22,27 +26,20 @@ export default function CarePlansPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [intentFilter, setIntentFilter] = useState('');
+  const [page, setPage] = useState(1);
+  const search = useDebouncedValue(searchQuery.trim(), 300);
 
-  const { data, isLoading } = useOncologyCarePlans(
-    statusFilter || intentFilter
-      ? { status: statusFilter || undefined, treatmentIntent: intentFilter || undefined }
-      : undefined,
-  );
-
-  const allPlans: OncologyCarePlan[] = data?.data ?? [];
-
-  const plans = allPlans.filter((p) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      p.plan_number?.toLowerCase().includes(q) ||
-      p.patientDisplay?.displayName?.toLowerCase().includes(q) ||
-      p.patientDisplay?.mrn?.toLowerCase().includes(q) ||
-      p.cancer_type?.toLowerCase().includes(q) ||
-      p.primary_site?.toLowerCase().includes(q) ||
-      p.notes?.toLowerCase().includes(q)
-    );
+  // Search runs server-side (plan #, patient, MRN, cancer type, site, notes) so it covers every page.
+  const { data, isLoading } = useOncologyCarePlans({
+    status: statusFilter || undefined,
+    treatmentIntent: intentFilter || undefined,
+    search: search || undefined,
+    page,
+    limit: PAGE_SIZE,
   });
+
+  const plans: OncologyCarePlan[] = data?.data ?? [];
+  const hasFilters = !!(statusFilter || intentFilter || search);
 
   return (
     <div className="space-y-6 page-transition">
@@ -65,10 +62,10 @@ export default function CarePlansPage() {
             placeholder="Search by patient, MRN, plan number, cancer type..."
             className="pl-9"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
           />
         </div>
-        <Select value={statusFilter || 'all'} onValueChange={(v) => setStatusFilter(v === 'all' ? '' : v)}>
+        <Select value={statusFilter || 'all'} onValueChange={(v) => { setStatusFilter(v === 'all' ? '' : v); setPage(1); }}>
           <SelectTrigger className="w-[160px]"><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
@@ -80,7 +77,7 @@ export default function CarePlansPage() {
             <SelectItem value="revised">Revised</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={intentFilter || 'all'} onValueChange={(v) => setIntentFilter(v === 'all' ? '' : v)}>
+        <Select value={intentFilter || 'all'} onValueChange={(v) => { setIntentFilter(v === 'all' ? '' : v); setPage(1); }}>
           <SelectTrigger className="w-[170px]"><SelectValue placeholder="Treatment intent" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All intents</SelectItem>
@@ -100,9 +97,9 @@ export default function CarePlansPage() {
         <div className="flex flex-col items-center justify-center h-60 border rounded-lg bg-muted/20 space-y-4">
           <FileText className="h-10 w-10 text-muted-foreground/40" />
           <p className="text-muted-foreground">
-            {allPlans.length === 0 ? 'No care plans yet' : 'No plans match the current filters'}
+            {hasFilters ? 'No plans match the current filters' : 'No care plans yet'}
           </p>
-          {allPlans.length === 0 && (
+          {!hasFilters && (
             <Button variant="outline" onClick={() => router.push(`/${params.locale}/oncology/care-plans/new`)}>
               <Plus className="h-4 w-4 mr-2" />Create First Plan
             </Button>
@@ -173,10 +170,14 @@ export default function CarePlansPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-muted-foreground">
-            {plans.length} plan{plans.length !== 1 ? 's' : ''}
-            {plans.length !== allPlans.length && ` (filtered from ${allPlans.length})`}
-          </div>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? plans.length}
+            onPageChange={setPage}
+            itemLabel="plans"
+          />
         </div>
       )}
     </div>

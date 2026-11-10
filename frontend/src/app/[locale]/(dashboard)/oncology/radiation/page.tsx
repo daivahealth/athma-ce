@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/select';
 import { useRadiationPrescriptions } from '@/plugins/oncology/hooks/use-oncology';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { RadiationPrescription } from '@/plugins/oncology/types';
 import { PatientCell } from '@/plugins/oncology/components/shared';
 
@@ -22,25 +24,24 @@ const STATUS_COLORS: Record<string, string> = {
   CANCELLED: 'bg-destructive/10 text-destructive',
 };
 
+const PAGE_SIZE = 20;
+
 export default function RadiationListPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState('');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const debouncedSearch = useDebouncedValue(search.trim(), 300);
 
-  const { data, isLoading } = useRadiationPrescriptions(
-    statusFilter ? { status: statusFilter } : undefined,
-  );
-  const prescriptions: RadiationPrescription[] = data?.data ?? [];
-
-  const filtered = prescriptions.filter((rx) => {
-    if (!search) return true;
-    const q = search.toLowerCase();
-    const name = rx.patientDisplay?.displayName?.toLowerCase() ?? '';
-    const mrn = rx.patientDisplay?.mrn?.toLowerCase() ?? '';
-    const num = rx.prescription_number?.toLowerCase() ?? '';
-    return name.includes(q) || mrn.includes(q) || num.includes(q);
+  // Search (patient, MRN, Rx #) runs server-side so it covers every page.
+  const { data, isLoading } = useRadiationPrescriptions({
+    status: statusFilter || undefined,
+    search: debouncedSearch || undefined,
+    page,
+    limit: PAGE_SIZE,
   });
+  const prescriptions: RadiationPrescription[] = data?.data ?? [];
 
   return (
     <div className="space-y-6 page-transition">
@@ -60,10 +61,10 @@ export default function RadiationListPage() {
         <Input
           placeholder="Search patient or Rx #..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
           className="max-w-xs"
         />
-        <Select value={statusFilter || '__all'} onValueChange={(v) => setStatusFilter(v === '__all' ? '' : v)}>
+        <Select value={statusFilter || '__all'} onValueChange={(v) => { setStatusFilter(v === '__all' ? '' : v); setPage(1); }}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="All statuses" />
           </SelectTrigger>
@@ -96,10 +97,10 @@ export default function RadiationListPage() {
           <tbody>
             {isLoading ? (
               <tr><td colSpan={8} className="text-center py-10 text-muted-foreground">Loading...</td></tr>
-            ) : filtered.length === 0 ? (
+            ) : prescriptions.length === 0 ? (
               <tr><td colSpan={8} className="text-center py-10 text-muted-foreground">No radiation prescriptions found.</td></tr>
             ) : (
-              filtered.map((rx) => (
+              prescriptions.map((rx) => (
                 <tr
                   key={rx.id}
                   className="border-b last:border-0 hover:bg-muted/30 cursor-pointer transition-colors"
@@ -138,13 +139,17 @@ export default function RadiationListPage() {
             )}
           </tbody>
         </table>
+        {!isLoading && prescriptions.length > 0 && (
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? prescriptions.length}
+            onPageChange={setPage}
+            itemLabel="prescriptions"
+          />
+        )}
       </div>
-
-      {data?.pagination && (
-        <p className="text-xs text-muted-foreground text-right">
-          {data.pagination.total} prescription{data.pagination.total !== 1 ? 's' : ''} total
-        </p>
-      )}
     </div>
   );
 }

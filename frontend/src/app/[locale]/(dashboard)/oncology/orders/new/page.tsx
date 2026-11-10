@@ -24,7 +24,7 @@ import {
   patientFromSearch,
 } from '@/plugins/oncology/components/FormContextCards';
 import {
-  useCancerDiagnoses, useOncologyCarePlans, useProtocols, useCreateChemoOrder,
+  PICKER_LIMIT, useCancerDiagnoses, useOncologyCarePlans, useProtocols, useCreateChemoOrder,
 } from '@/plugins/oncology/hooks/use-oncology';
 import type { CancerDiagnosis, ChemoProtocol, OncologyCarePlan, DoseAdjustment, PreChemoChecklist } from '@/plugins/oncology/types';
 import { getProtocolPhases, resolveCycle } from '@/plugins/oncology/lib/protocol-phases';
@@ -78,9 +78,10 @@ export default function NewChemoOrderPage() {
     }
   }, [diagnosesLoading, diagnoses.length, cancerDiagnosisId]);
 
-  const { data: carePlansData, isLoading: carePlansLoading } = useOncologyCarePlans(
-    cancerDiagnosisId ? { cancerDiagnosisId } : undefined,
-  );
+  const { data: carePlansData, isLoading: carePlansLoading } = useOncologyCarePlans({
+    cancerDiagnosisId: cancerDiagnosisId || undefined,
+    limit: PICKER_LIMIT,
+  });
   const carePlans = carePlansData?.data ?? [];
 
   // Protocol planned on the selected care plan's chemotherapy modality
@@ -113,9 +114,10 @@ export default function NewChemoOrderPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planChemoModality?.protocolId]);
 
-  const { data: protocolsData } = useProtocols(
-    selectedDiagnosis ? { cancerType: selectedDiagnosis.cancer_type } : undefined,
-  );
+  const { data: protocolsData } = useProtocols({
+    cancerType: selectedDiagnosis?.cancer_type || undefined,
+    limit: PICKER_LIMIT,
+  });
   const filteredProtocols: ChemoProtocol[] = protocolsData?.data ?? [];
   const selectedProtocol = filteredProtocols.find((p) => p.id === protocolId);
 

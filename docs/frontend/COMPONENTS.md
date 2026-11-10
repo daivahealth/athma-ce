@@ -56,6 +56,33 @@ table. A list that sits under a hub page (e.g. the clinical catalogs) puts a
 </div>
 ```
 
+#### Paging a list: `ListPagination`
+
+List endpoints return one page at a time (usually 20–50 rows), so every list page
+must page through the server's results. Never show only the first page, and
+never count `rows.length` as the total. Use `ListPagination` from
+`@/components/ui/list-pagination` as the table footer:
+
+```tsx
+const PAGE_SIZE = 20;
+const [page, setPage] = useState(1);
+const { data } = useThings({ search, status, page, limit: PAGE_SIZE }); // or offset: pageOffset(page, PAGE_SIZE)
+
+// every filter or search change goes back to page 1
+onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+
+<ListPagination page={page} pageSize={PAGE_SIZE} total={data?.pagination.total ?? 0}
+  onPageChange={setPage} itemLabel="claims" />
+```
+
+It shows "Showing 21–40 of 132 claims", plus **Previous** / "Page n of N" /
+**Next** when there is more than one page. Put page and limit/offset in the
+react-query key and use `placeholderData: keepPreviousData` on list pages so the
+table stays put while the next page loads. Search and filters must run on the
+server: filtering the loaded rows in the browser only searches the current page.
+Dropdown pickers that need every option pass an explicit large `limit` instead
+of paging.
+
 ### Form pages
 
 A create/edit page uses the same header as a list page, with a

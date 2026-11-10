@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@zeal/database-clinical';
 import { RequestContext } from '@zeal/shared-utils';
 import { OncologyService } from './oncology.service';
+import { ilikeAny, likePattern, PATIENT_SEARCH_COLUMNS } from './pagination';
 import {
   addDays, buildDayItems, doseAdjustmentsFor, generateSchedule, resolveBsa,
   type PatientMeasures, type ProtocolSnapshot,
@@ -59,7 +60,14 @@ export class TreatmentScheduleService {
 
   // ── Plans ──────────────────────────────────────────────────────────────
 
-  async listPlans(filters: { patientId?: string; carePlanId?: string; cancerDiagnosisId?: string; status?: string } = {}) {
+  async listPlans(
+    filters: {
+      patientId?: string | undefined; carePlanId?: string | undefined; cancerDiagnosisId?: string | undefined;
+      status?: string | undefined; search?: string | undefined;
+    } = {},
+    page = 1,
+    limit = 20,
+  ) {
     const tenantId = this.getTenantId();
     const where: string[] = ['tp.tenant_id = $1::uuid'];
     const params: unknown[] = [tenantId];
@@ -68,7 +76,16 @@ export class TreatmentScheduleService {
     if (filters.carePlanId) add('tp.oncology_care_plan_id = ?::uuid', filters.carePlanId);
     if (filters.cancerDiagnosisId) add('tp.cancer_diagnosis_id = ?::uuid', filters.cancerDiagnosisId);
     if (filters.status) add('tp.status = ?', filters.status);
-    const rows = await this.prisma.$queryRawUnsafe<any[]>(
+    const search = filters.search?.trim();
+    if (search) {
+      params.push(likePattern(search));
+      where.push(ilikeAny(
+        [...PATIENT_SEARCH_COLUMNS, "tp.protocol_snapshot->>'code'", "tp.protocol_snapshot->>'name'", 'cd.cancer_type'],
+        `$${params.length}`,
+      ));
+    }
+    const filterCount = params.length;
+    const rowsQuery = this.prisma.$queryRawUnsafe<any[]>(
       `SELECT tp.id, tp.patient_id, tp.cancer_diagnosis_id, tp.oncology_care_plan_id, tp.protocol_id,
               tp.start_date, tp.bsa, tp.status, tp.created_at,
               tp.protocol_snapshot->>'code' AS protocol_code, tp.protocol_snapshot->>'name' AS protocol_name,
@@ -86,10 +103,23 @@ export class TreatmentScheduleService {
        LEFT JOIN public.patients p ON p.id = tp.patient_id
        WHERE ${where.join(' AND ')}
        ORDER BY tp.created_at DESC
-       LIMIT 200`,
+       LIMIT $${filterCount + 1} OFFSET $${filterCount + 2}`,
+      ...params, limit, (page - 1) * limit,
+    );
+    // Same joins as the list so search on patient / cancer type counts the same rows.
+    const countQuery = this.prisma.$queryRawUnsafe<[{ count: bigint }]>(
+      `SELECT COUNT(*) as count
+       FROM plugin_oncology.treatment_plans tp
+       LEFT JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = tp.cancer_diagnosis_id
+       LEFT JOIN public.patients p ON p.id = tp.patient_id
+       WHERE ${where.join(' AND ')}`,
       ...params,
     );
-    return { data: rows.map((r) => this.withPatient(r)) };
+    const [rows, total] = await Promise.all([rowsQuery, countQuery]);
+    return {
+      data: rows.map((r) => this.withPatient(r)),
+      pagination: { page, limit, total: Number(total[0]?.count ?? 0) },
+    };
   }
 
   async getPlan(id: string) {

@@ -355,7 +355,9 @@ history. Global defaults cannot be archived.
 ### Checklist Templates
 
 **Checklist Templates** (`/catalogs/checklists`) lists **Template**, **Category**, **Status**,
-**Version** and **Last updated**, filterable by status, category and **Inpatient** / **Outpatient**.
+**Version** and **Last updated**, filterable by status, category and **Inpatient** / **Outpatient**,
+and searchable by template name. Templates come 20 at a time, with **Previous** and **Next** in the
+footer; search and filters cover every template and return you to the first page.
 
 1. Press **New Template**. In **Create Checklist Template** give a **Code** (for example
    SURGERY_PRE_OP_V1), a **Name**, a **Category** (Discharge, Surgery, Pre-operative, Admission and so

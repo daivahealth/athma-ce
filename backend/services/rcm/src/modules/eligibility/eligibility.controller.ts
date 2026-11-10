@@ -38,8 +38,9 @@ export class EligibilityController {
     @ApiQuery({ name: 'status', required: false, enum: EligibilityStatus })
     @ApiQuery({ name: 'dateFrom', required: false })
     @ApiQuery({ name: 'dateTo', required: false })
-    @ApiQuery({ name: 'limit', required: false, type: Number })
+    @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Rows per page (default 50, max 200)' })
     @ApiQuery({ name: 'offset', required: false, type: Number })
+    @ApiQuery({ name: 'search', required: false, description: 'Exact request id, payer name, or patient name (via Clinical)' })
     async findAll(
         @Headers('x-tenant-id') tenantId: string,
         @Headers('authorization') authHeader: string,

@@ -4,10 +4,20 @@ import type { ProviderCallback } from '../types/provider';
 export interface ProviderCallbackFilters {
   channel?: string;
   processed?: boolean;
+  /** Page size; the server defaults to 50 and caps at 200. */
+  limit?: number;
+  offset?: number;
+}
+
+export interface ListProviderCallbacksResponse {
+  data: ProviderCallback[];
+  total: number;
+  limit: number;
+  offset: number;
 }
 
 class ProvidersService {
-  async listCallbacks(filters?: ProviderCallbackFilters): Promise<ProviderCallback[]> {
+  async listCallbacks(filters?: ProviderCallbackFilters): Promise<ListProviderCallbacksResponse> {
     const response = await prmClient.get('/v1/providers/callbacks', { params: filters });
     return response.data;
   }

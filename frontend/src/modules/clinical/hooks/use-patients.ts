@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { patientService } from '../services/patient-service';
 import type { CreatePatientDto, UpdatePatientDto, SearchPatientsDto } from '../types/patient';
 
@@ -19,12 +19,14 @@ const PATIENT_KEYS = {
  */
 export function usePatients(
   params: SearchPatientsDto = {},
-  options: { enabled?: boolean } = {}
+  options: { enabled?: boolean; keepPreviousData?: boolean } = {}
 ) {
   return useQuery({
     queryKey: PATIENT_KEYS.list(params),
     queryFn: () => patientService.searchPatients(params),
     enabled: options.enabled,
+    // Paged lists keep showing the current page while the next one loads.
+    placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
     staleTime: 30 * 1000, // 30 seconds
   });
 }

@@ -16,6 +16,7 @@ import {
   resolveInitialStatus,
 } from './chemo-order-rules';
 import { OncologySettingsService } from './oncology-settings';
+import { ilikeAny, likePattern, PATIENT_SEARCH_COLUMNS } from './pagination';
 import {
   CandidateEvidence,
   CandidateSourceType,
@@ -1201,8 +1202,22 @@ export class OncologyService {
   // Tumor Staging
   // ============================================
 
-  async listStagings(filters: { patientId?: string | undefined; cancerDiagnosisId?: string | undefined } = {}, page = 1, limit = 20) {
+  async listStagings(
+    filters: {
+      patientId?: string | undefined;
+      cancerDiagnosisId?: string | undefined;
+      stagingType?: string | undefined;
+      search?: string | undefined;
+    } = {},
+    page = 1,
+    limit = 20,
+  ) {
     const tenantId = this.getTenantId();
+    const fromClause = `
+      FROM plugin_oncology.tumor_staging ts
+      JOIN plugin_oncology.cancer_diagnoses cd ON ts.cancer_diagnosis_id = cd.id
+      LEFT JOIN public.patients p ON p.id = ts.patient_id
+      WHERE ts.tenant_id = $1::uuid`;
     let query = `
       SELECT ts.*, cd.cancer_type, cd.primary_site,
         p.mrn as patient_mrn, p.first_name as patient_first_name,
@@ -1210,33 +1225,38 @@ export class OncologyService {
         p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,
         p.phone_number as patient_phone_number, p.email as patient_email,
         p.national_id as patient_national_id, p.national_id_type as patient_national_id_type,
-        p.nationality as patient_nationality, p.preferred_language as patient_preferred_language
-      FROM plugin_oncology.tumor_staging ts
-      JOIN plugin_oncology.cancer_diagnoses cd ON ts.cancer_diagnosis_id = cd.id
-      LEFT JOIN public.patients p ON p.id = ts.patient_id
-      WHERE ts.tenant_id = $1::uuid`;
+        p.nationality as patient_nationality, p.preferred_language as patient_preferred_language` + fromClause;
     const params: unknown[] = [tenantId];
     let paramIdx = 2;
+    let filterClause = '';
 
     if (filters.patientId) {
-      query += ` AND ts.patient_id = $${paramIdx++}::uuid`;
+      filterClause += ` AND ts.patient_id = $${paramIdx++}::uuid`;
       params.push(filters.patientId);
     }
     if (filters.cancerDiagnosisId) {
-      query += ` AND ts.cancer_diagnosis_id = $${paramIdx++}::uuid`;
+      filterClause += ` AND ts.cancer_diagnosis_id = $${paramIdx++}::uuid`;
       params.push(filters.cancerDiagnosisId);
     }
+    if (filters.stagingType) {
+      filterClause += ` AND ts.staging_type = $${paramIdx++}`;
+      params.push(filters.stagingType);
+    }
+    const search = filters.search?.trim();
+    if (search) {
+      filterClause += ` AND ${ilikeAny(
+        ['cd.cancer_type', 'cd.primary_site', 'ts.stage_group', 'ts.staging_system', ...PATIENT_SEARCH_COLUMNS],
+        `$${paramIdx++}`,
+      )}`;
+      params.push(likePattern(search));
+    }
 
-    const countParts = [`SELECT COUNT(*) as count FROM plugin_oncology.tumor_staging ts WHERE ts.tenant_id = $1::uuid`];
-    if (filters.patientId) countParts.push(`AND ts.patient_id = $2::uuid`);
-    if (filters.cancerDiagnosisId) countParts.push(`AND ts.cancer_diagnosis_id = $${filters.patientId ? 3 : 2}::uuid`);
-
-    query += ` ORDER BY ts.staging_date DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
-    params.push(limit, (page - 1) * limit);
+    query += filterClause + ` ORDER BY ts.staging_date DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
+    const countQuery = `SELECT COUNT(*) as count` + fromClause + filterClause;
 
     const [rows, total] = await Promise.all([
-      this.prisma.$queryRawUnsafe<any[]>(query, ...params),
-      this.prisma.$queryRawUnsafe<[{ count: bigint }]>(countParts.join(' '), ...params.slice(0, -2)),
+      this.prisma.$queryRawUnsafe<any[]>(query, ...params, limit, (page - 1) * limit),
+      this.prisma.$queryRawUnsafe<[{ count: bigint }]>(countQuery, ...params),
     ]);
 
     const data = rows.map((row) => {
@@ -1403,51 +1423,72 @@ export class OncologyService {
   // ============================================
 
   async listCarePlans(
-    filters: { patientId?: string | undefined; status?: string | undefined; treatmentIntent?: string | undefined; cancerDiagnosisId?: string | undefined } = {},
+    filters: {
+      patientId?: string | undefined;
+      status?: string | undefined;
+      treatmentIntent?: string | undefined;
+      cancerDiagnosisId?: string | undefined;
+      search?: string | undefined;
+    } = {},
     page = 1,
     limit = 20,
   ) {
     const tenantId = this.getTenantId();
-    let query = `
-      SELECT cp.*, cd.cancer_type, cd.primary_site,
-             p.mrn AS patient_mrn, p.display_name AS patient_display_name,
-             p.first_name AS patient_first_name, p.last_name AS patient_last_name,
-             p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender
+    const fromClause = `
       FROM plugin_oncology.oncology_care_plans cp
       JOIN plugin_oncology.cancer_diagnoses cd ON cp.cancer_diagnosis_id = cd.id
       LEFT JOIN public.patients p ON p.id = cp.patient_id
       WHERE cp.tenant_id = $1::uuid`;
     const params: unknown[] = [tenantId];
     let paramIdx = 2;
+    let filterClause = '';
 
     if (filters.patientId) {
-      query += ` AND cp.patient_id = $${paramIdx++}::uuid`;
+      filterClause += ` AND cp.patient_id = $${paramIdx++}::uuid`;
       params.push(filters.patientId);
     }
     if (filters.status) {
-      query += ` AND cp.status = $${paramIdx++}`;
+      filterClause += ` AND cp.status = $${paramIdx++}`;
       params.push(filters.status);
     }
     if (filters.treatmentIntent) {
-      query += ` AND cp.treatment_intent = $${paramIdx++}`;
+      filterClause += ` AND cp.treatment_intent = $${paramIdx++}`;
       params.push(filters.treatmentIntent);
     }
     if (filters.cancerDiagnosisId) {
-      query += ` AND cp.cancer_diagnosis_id = $${paramIdx++}::uuid`;
+      filterClause += ` AND cp.cancer_diagnosis_id = $${paramIdx++}::uuid`;
       params.push(filters.cancerDiagnosisId);
     }
+    const search = filters.search?.trim();
+    if (search) {
+      // One bound parameter reused across columns; user input is never interpolated.
+      filterClause += ` AND ${ilikeAny(
+        ['cp.plan_number', ...PATIENT_SEARCH_COLUMNS, 'cd.cancer_type', 'cd.primary_site', 'cp.notes'],
+        `$${paramIdx++}`,
+      )}`;
+      params.push(likePattern(search));
+    }
 
-    query += ` ORDER BY cp.created_at DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
-    params.push(limit, (page - 1) * limit);
+    const query = `
+      SELECT cp.*, cd.cancer_type, cd.primary_site,
+             p.mrn AS patient_mrn, p.display_name AS patient_display_name,
+             p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+             p.date_of_birth AS patient_date_of_birth, p.gender AS patient_gender`
+      + fromClause + filterClause
+      + ` ORDER BY cp.created_at DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
+    const countQuery = `SELECT COUNT(*) as count` + fromClause + filterClause;
 
-    const rows = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    const [rows, total] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(query, ...params, limit, (page - 1) * limit),
+      this.prisma.$queryRawUnsafe<[{ count: bigint }]>(countQuery, ...params),
+    ]);
     const data = rows.map((row) => {
       const patientDisplay = this.buildPatientDisplay(row);
       const clean = { ...row };
       for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_') && k !== 'patient_id')) delete clean[k];
       return { ...clean, patientDisplay };
     });
-    return { data };
+    return { data, pagination: { page, limit, total: Number(total[0]?.count ?? 0) } };
   }
 
   async getCarePlan(id: string) {
@@ -1657,8 +1698,17 @@ export class OncologyService {
   // Tumor Board
   // ============================================
 
-  async listTumorBoardCases(filters: { status?: string | undefined; date?: string | undefined; patientId?: string | undefined } = {}, page = 1, limit = 20) {
+  async listTumorBoardCases(
+    filters: { status?: string | undefined; date?: string | undefined; patientId?: string | undefined; search?: string | undefined } = {},
+    page = 1,
+    limit = 20,
+  ) {
     const tenantId = this.getTenantId();
+    const fromClause = `
+      FROM plugin_oncology.tumor_board_cases tbc
+      JOIN plugin_oncology.cancer_diagnoses cd ON tbc.cancer_diagnosis_id = cd.id
+      LEFT JOIN public.patients p ON p.id = tbc.patient_id
+      WHERE tbc.tenant_id = $1::uuid`;
     let query = `
       SELECT tbc.*, cd.cancer_type, cd.primary_site,
         p.mrn as patient_mrn, p.first_name as patient_first_name,
@@ -1666,31 +1716,39 @@ export class OncologyService {
         p.gender as patient_gender, p.date_of_birth as patient_date_of_birth,
         p.phone_number as patient_phone_number, p.email as patient_email,
         p.national_id as patient_national_id, p.national_id_type as patient_national_id_type,
-        p.nationality as patient_nationality, p.preferred_language as patient_preferred_language
-      FROM plugin_oncology.tumor_board_cases tbc
-      JOIN plugin_oncology.cancer_diagnoses cd ON tbc.cancer_diagnosis_id = cd.id
-      LEFT JOIN public.patients p ON p.id = tbc.patient_id
-      WHERE tbc.tenant_id = $1::uuid`;
+        p.nationality as patient_nationality, p.preferred_language as patient_preferred_language` + fromClause;
     const params: unknown[] = [tenantId];
     let paramIdx = 2;
+    let filterClause = '';
 
     if (filters.status) {
-      query += ` AND tbc.status = $${paramIdx++}`;
+      filterClause += ` AND tbc.status = $${paramIdx++}`;
       params.push(filters.status);
     }
     if (filters.date) {
-      query += ` AND tbc.meeting_date = $${paramIdx++}::date`;
+      filterClause += ` AND tbc.meeting_date = $${paramIdx++}::date`;
       params.push(filters.date);
     }
     if (filters.patientId) {
-      query += ` AND tbc.patient_id = $${paramIdx++}::uuid`;
+      filterClause += ` AND tbc.patient_id = $${paramIdx++}::uuid`;
       params.push(filters.patientId);
     }
+    const search = filters.search?.trim();
+    if (search) {
+      filterClause += ` AND ${ilikeAny(
+        ['cd.cancer_type', 'cd.primary_site', 'tbc.mdt_recommendation', 'tbc.treatment_intent', ...PATIENT_SEARCH_COLUMNS],
+        `$${paramIdx++}`,
+      )}`;
+      params.push(likePattern(search));
+    }
 
-    query += ` ORDER BY tbc.meeting_date DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
-    params.push(limit, (page - 1) * limit);
+    query += filterClause + ` ORDER BY tbc.meeting_date DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
+    const countQuery = `SELECT COUNT(*) as count` + fromClause + filterClause;
 
-    const rows = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+    const [rows, total] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(query, ...params, limit, (page - 1) * limit),
+      this.prisma.$queryRawUnsafe<[{ count: bigint }]>(countQuery, ...params),
+    ]);
 
     const data = rows.map((row) => {
       const patientDisplay = this.buildPatientDisplay(row);
@@ -1701,7 +1759,7 @@ export class OncologyService {
       return { ...rest, patientDisplay };
     });
 
-    return { data };
+    return { data, pagination: { page, limit, total: Number(total[0]?.count ?? 0) } };
   }
 
   async getTumorBoardCase(id: string) {
@@ -1859,16 +1917,42 @@ export class OncologyService {
   // Chemo Protocols (Phase 2 — kept for backward compat)
   // ============================================
 
-  async listProtocols(cancerType?: string, page = 1, limit = 20) {
+  /** Active protocols by default; `includeInactive` lists retired ones too (protocol library screen). */
+  async listProtocols(
+    cancerType?: string,
+    page = 1,
+    limit = 20,
+    options: { search?: string | undefined; includeInactive?: boolean } = {},
+  ) {
     const tenantId = this.getTenantId();
-    const results = await this.prisma.$queryRawUnsafe<any[]>(
-      `SELECT * FROM plugin_oncology.chemo_protocols WHERE tenant_id = $1::uuid ${cancerType ? 'AND cancer_type ILIKE $2' : ''} AND is_active = true ORDER BY name LIMIT $${cancerType ? '3' : '2'} OFFSET $${cancerType ? '4' : '3'}`,
-      tenantId,
-      ...(cancerType ? [`%${cancerType}%`] : []),
-      limit,
-      (page - 1) * limit,
-    );
-    return { data: results.map(normalizeProtocolRow) };
+    const params: unknown[] = [tenantId];
+    let where = `WHERE tenant_id = $1::uuid`;
+    if (!options.includeInactive) where += ` AND is_active = true`;
+    if (cancerType) {
+      params.push(`%${cancerType}%`);
+      where += ` AND cancer_type ILIKE $${params.length}`;
+    }
+    const search = options.search?.trim();
+    if (search) {
+      params.push(likePattern(search));
+      where += ` AND ${ilikeAny(['code', 'name', 'cancer_type'], `$${params.length}`)}`;
+    }
+    const [results, total] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(
+        `SELECT * FROM plugin_oncology.chemo_protocols ${where} ORDER BY name LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+        ...params,
+        limit,
+        (page - 1) * limit,
+      ),
+      this.prisma.$queryRawUnsafe<[{ count: bigint }]>(
+        `SELECT COUNT(*) as count FROM plugin_oncology.chemo_protocols ${where}`,
+        ...params,
+      ),
+    ]);
+    return {
+      data: results.map(normalizeProtocolRow),
+      pagination: { page, limit, total: Number(total[0]?.count ?? 0) },
+    };
   }
 
   async getProtocol(id: string) {
@@ -1986,7 +2070,11 @@ export class OncologyService {
   // Chemo Orders
   // ============================================
 
-  async listChemoOrders(filters: { patientId?: string; status?: string; date?: string; cancerDiagnosisId?: string } = {}, page = 1, limit = 20) {
+  async listChemoOrders(
+    filters: { patientId?: string; status?: string; date?: string; cancerDiagnosisId?: string; search?: string } = {},
+    page = 1,
+    limit = 20,
+  ) {
     const tenantId = this.getTenantId();
     const baseJoin = `
       SELECT co.*, cp.name as protocol_name, cp.code as protocol_code,
@@ -2010,18 +2098,33 @@ export class OncologyService {
     if (filters.status) { filterClause += ` AND co.status = $${paramIdx++}`; params.push(filters.status); }
     if (filters.date) { filterClause += ` AND co.scheduled_date = $${paramIdx++}::date`; params.push(filters.date); }
     if (filters.cancerDiagnosisId) { filterClause += ` AND co.cancer_diagnosis_id = $${paramIdx++}::uuid`; params.push(filters.cancerDiagnosisId); }
+    const search = filters.search?.trim();
+    if (search) {
+      filterClause += ` AND ${ilikeAny(['cp.name', 'cp.code', 'cd.cancer_type', ...PATIENT_SEARCH_COLUMNS], `$${paramIdx++}`)}`;
+      params.push(likePattern(search));
+    }
 
     const dataQuery = baseJoin + filterClause + ` ORDER BY co.scheduled_date DESC LIMIT $${paramIdx++} OFFSET $${paramIdx++}`;
-    params.push(limit, (page - 1) * limit);
+    // Same joins and filters as the data query so the total matches what the list can page through.
+    const countQuery = `
+      SELECT COUNT(*) as count
+      FROM plugin_oncology.chemo_orders co
+      JOIN plugin_oncology.chemo_protocols cp ON co.protocol_id = cp.id
+      LEFT JOIN plugin_oncology.cancer_diagnoses cd ON cd.id = co.cancer_diagnosis_id
+      LEFT JOIN public.patients p ON p.id = co.patient_id
+      WHERE co.tenant_id = $1::uuid` + filterClause;
 
-    const rows = await this.prisma.$queryRawUnsafe<any[]>(dataQuery, ...params);
+    const [rows, total] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(dataQuery, ...params, limit, (page - 1) * limit),
+      this.prisma.$queryRawUnsafe<[{ count: bigint }]>(countQuery, ...params),
+    ]);
     const results = rows.map((r) => {
       const pd = this.buildPatientDisplay(r);
       const clean = { ...r };
       for (const k of Object.keys(clean).filter((k) => k.startsWith('patient_'))) delete clean[k];
       return { ...clean, patientDisplay: pd };
     });
-    return { data: results };
+    return { data: results, pagination: { page, limit, total: Number(total[0]?.count ?? 0) } };
   }
 
   async getChemoOrder(id: string) {
@@ -2818,7 +2921,7 @@ export class OncologyService {
   // ============================================================
 
   async listRadiationPrescriptions(
-    filters: { patientId?: string; status?: string } = {},
+    filters: { patientId?: string; status?: string; search?: string } = {},
     page = 1,
     limit = 20,
   ) {
@@ -2835,8 +2938,14 @@ export class OncologyService {
       where += ` AND rp.status = $${idx++}`;
       params.push(filters.status);
     }
+    const search = filters.search?.trim();
+    if (search) {
+      where += ` AND ${ilikeAny(['rp.prescription_number', ...PATIENT_SEARCH_COLUMNS], `$${idx++}`)}`;
+      params.push(likePattern(search));
+    }
 
-    const countQuery = `SELECT COUNT(*) as count FROM plugin_oncology.radiation_prescriptions rp ${where}`;
+    const countQuery = `SELECT COUNT(*) as count FROM plugin_oncology.radiation_prescriptions rp
+      LEFT JOIN public.patients p ON p.id = rp.patient_id ${where}`;
     const dataQuery = `
       SELECT rp.*,
         (SELECT COUNT(*)::int FROM plugin_oncology.radiation_fractions f

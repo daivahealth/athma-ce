@@ -27,13 +27,15 @@ export class ProvidersService {
   }
 
   /**
-   * Get all callbacks (with optional filters)
+   * Get one page of callbacks (newest first) with the total matching count
    */
   async findAll(
     tenantId: string,
-    filters?: {
+    filters: {
       channel?: string;
       processed?: boolean;
+      limit: number;
+      offset: number;
     },
   ) {
     const where: any = { tenantId };
@@ -46,10 +48,16 @@ export class ProvidersService {
       where.processed = filters.processed;
     }
 
-    return this.prisma.providerCallback.findMany({
-      where,
-      orderBy: { receivedAt: 'desc' },
-      take: 100,
-    });
+    const [data, total] = await Promise.all([
+      this.prisma.providerCallback.findMany({
+        where,
+        orderBy: { receivedAt: 'desc' },
+        take: filters.limit,
+        skip: filters.offset,
+      }),
+      this.prisma.providerCallback.count({ where }),
+    ]);
+
+    return { data, total };
   }
 }

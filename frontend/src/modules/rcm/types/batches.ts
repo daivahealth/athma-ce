@@ -31,6 +31,8 @@ export interface BatchFilters {
   dateTo?: string;
   limit?: number;
   offset?: number;
+  /** Server-side free-text search across all rows (not just the loaded page). */
+  search?: string;
 }
 
 export interface CreateBatchInput {

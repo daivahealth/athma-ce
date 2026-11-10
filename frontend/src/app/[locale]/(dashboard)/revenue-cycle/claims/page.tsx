@@ -9,6 +9,8 @@ import { Calendar, Eye, Plus, Search, FileCheck } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
+import { ListPagination, pageOffset } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { Card, CardContent } from '@/components/ui/card';
 import { ToneBadge } from '@/components/ui/tone-badge';
 import { Button } from '@/components/ui/button';
@@ -21,6 +23,8 @@ import type { Claim, ClaimStatus } from '@/modules/rcm/types/claims';
 import { claimStatusTone, payerTypeTone } from '@/modules/rcm/utils/billing-tone';
 import { PageHeader } from '@/components/ui/page-header';
 import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
+
+const PAGE_SIZE = 20;
 
 const statusLabels: Record<ClaimStatus, string> = {
   draft: 'Draft',
@@ -119,6 +123,8 @@ export default function ClaimsPage() {
   const locale = params.locale as string;
 
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search.trim(), 300);
+  const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<'all' | ClaimStatus>('all');
   const [dateFilter, setDateFilter] = useState<'today' | 'yesterday' | 'range'>('today');
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
@@ -172,22 +178,16 @@ export default function ClaimsPage() {
       status: statusFilter === 'all' ? undefined : statusFilter,
       dateFrom: activeRange.startDate,
       dateTo: activeRange.endDate,
+      search: debouncedSearch || undefined,
+      limit: PAGE_SIZE,
+      offset: pageOffset(page, PAGE_SIZE),
     }),
-    [statusFilter, activeRange],
+    [statusFilter, activeRange, debouncedSearch, page],
   );
 
-  const { data, isLoading, error } = useClaims(filters);
+  const { data, isLoading, error } = useClaims(filters, { keepPreviousData: true });
   const claims = useMemo(() => data?.claims ?? [], [data]);
   const columns = useMemo(() => createColumns(locale, router), [locale, router]);
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return claims;
-    return claims.filter((claim) =>
-      `${claim.claimNumber} ${claim.patientDisplay?.displayName ?? ''} ${claim.patientDisplay?.mrn ?? ''}`
-        .toLowerCase()
-        .includes(term),
-    );
-  }, [claims, search]);
 
   return (
     <div className="space-y-6">
@@ -209,15 +209,21 @@ export default function ClaimsPage() {
             <div className="relative flex-1 min-w-[240px] max-w-sm">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by claim number, patient name, or MRN..."
+                placeholder="Search by claim number, patient name or MRN..."
                 value={search}
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
                 className="pl-9"
               />
             </div>
             <Select
               value={statusFilter}
-              onValueChange={(value) => setStatusFilter(value as 'all' | ClaimStatus)}
+              onValueChange={(value) => {
+                setStatusFilter(value as 'all' | ClaimStatus);
+                setPage(1);
+              }}
             >
               <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Status" />
@@ -236,6 +242,7 @@ export default function ClaimsPage() {
               onValueChange={(value) => {
                 const next = value as 'today' | 'yesterday' | 'range';
                 setDateFilter(next);
+                setPage(1);
                 if (next === 'range' && !dateRange?.from) {
                   const now = new Date();
                   setDateRange({ from: now, to: now });
@@ -264,7 +271,10 @@ export default function ClaimsPage() {
                     mode="range"
                     numberOfMonths={2}
                     selected={dateRange}
-                    onSelect={(range) => setDateRange(range)}
+                    onSelect={(range) => {
+                      setDateRange(range);
+                      setPage(1);
+                    }}
                   />
                 </PopoverContent>
               </Popover>
@@ -273,13 +283,22 @@ export default function ClaimsPage() {
         </CardContent>
       </Card>
 
-      <ResourceTable
-        columns={columns}
-        data={filtered}
-        isLoading={isLoading}
-        error={error}
-        emptyMessage="No claims found."
-      />
+      <div>
+        <ResourceTable
+          columns={columns}
+          data={claims}
+          isLoading={isLoading}
+          error={error}
+          emptyMessage="No claims found."
+        />
+        <ListPagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          total={data?.total ?? 0}
+          onPageChange={setPage}
+          itemLabel="claims"
+        />
+      </div>
     </div>
   );
 }

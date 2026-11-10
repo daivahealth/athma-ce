@@ -3,7 +3,9 @@ import { PrismaService } from '@zeal/database-rcm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { resolveClinicalApiUrl } from '../../../common/service-urls';
-import { fetchEncounterPatientMap, PatientDisplayContext } from '../../../common/patient-display';
+import { fetchEncounterPatientMap, PatientDisplayContext, searchEncounterIds } from '../../../common/patient-display';
+import { containsInsensitive, isUuid, normalizeSearch, resolvePaging } from '../../../common/list-query';
+import type { CodingSessionQueryDto } from '../dto/medical-coding.dto';
 
 /**
  * MedicalCodingService
@@ -390,7 +392,17 @@ export class MedicalCodingService {
   /**
    * Find all coding sessions with filters
    */
-  async findAllSessions(tenantId: string, filters: any, ctx?: Omit<PatientDisplayContext, 'tenantId'>) {
+  /**
+   * One page of coding sessions plus the total matching the filters.
+   * `search` matches the patient name (via Clinical encounter search, since
+   * sessions hold only an encounter id), the linked claim number, or an exact
+   * session / encounter id.
+   */
+  async findAllSessions(
+    tenantId: string,
+    filters: CodingSessionQueryDto,
+    ctx?: Omit<PatientDisplayContext, 'tenantId'>,
+  ) {
     const where: any = { tenantId };
 
     if (filters.status) where.status = filters.status;
@@ -401,16 +413,31 @@ export class MedicalCodingService {
       if (filters.dateTo) where.createdAt.lte = new Date(filters.dateTo);
     }
 
-    const sessions = await this.prisma.codingSession.findMany({
-      where,
-      include: {
-        diagnoses: { where: { usedForBilling: true }, orderBy: { sequence: 'asc' } },
-        procedures: { orderBy: { sequence: 'asc' }, include: { billingItem: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-      take: filters.limit || 100,
-    });
-    return this.attachPatients(tenantId, sessions, ctx);
+    const search = normalizeSearch(filters.search);
+    if (search) {
+      const encounterIds = await searchEncounterIds(this.httpService, search, { tenantId, ...ctx });
+      where.OR = [
+        ...(isUuid(search) ? [{ id: search }, { encounterId: search }] : []),
+        { claim: { claimNumber: containsInsensitive(search) } },
+        ...(encounterIds.length ? [{ encounterId: { in: encounterIds } }] : []),
+      ];
+    }
+
+    const { take, skip } = resolvePaging(filters.limit, filters.offset, 100);
+    const [sessions, total] = await Promise.all([
+      this.prisma.codingSession.findMany({
+        where,
+        include: {
+          diagnoses: { where: { usedForBilling: true }, orderBy: { sequence: 'asc' } },
+          procedures: { orderBy: { sequence: 'asc' }, include: { billingItem: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        take,
+        skip,
+      }),
+      this.prisma.codingSession.count({ where }),
+    ]);
+    return { sessions: await this.attachPatients(tenantId, sessions, ctx), total };
   }
 
   /**

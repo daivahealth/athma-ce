@@ -4,10 +4,11 @@
  */
 
 import { Controller, Post, Get, Body, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@zeal/shared-utils';
 import { ProvidersService } from './providers.service';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
+import { ListProviderCallbacksQueryDto } from './dto/list-provider-callbacks.query';
 
 @ApiTags('Providers')
 @ApiBearerAuth('bearer')
@@ -32,18 +33,20 @@ export class ProvidersController {
   @Get('callbacks')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get webhook callback history' })
-  @ApiQuery({ name: 'channel', required: false, type: String })
-  @ApiQuery({ name: 'processed', required: false, type: Boolean })
-  @ApiResponse({ status: 200, description: 'Callbacks retrieved successfully' })
-  async findAll(
-    @TenantId() tenantId: string,
-    @Query('channel') channel?: string,
-    @Query('processed') processed?: string,
-  ) {
-    const filters: any = {};
-    if (channel) filters.channel = channel;
-    if (processed !== undefined) filters.processed = processed === 'true';
+  @ApiResponse({
+    status: 200,
+    description: 'Callbacks retrieved successfully, as { data, total, limit, offset }',
+  })
+  async findAll(@TenantId() tenantId: string, @Query() query: ListProviderCallbacksQueryDto) {
+    const limit = query.limit ?? 50;
+    const offset = query.offset ?? 0;
+    const { data, total } = await this.providersService.findAll(tenantId, {
+      channel: query.channel || undefined,
+      processed: query.processed === undefined ? undefined : query.processed === 'true',
+      limit,
+      offset,
+    });
 
-    return this.providersService.findAll(tenantId, filters);
+    return { data, total, limit, offset };
   }
 }

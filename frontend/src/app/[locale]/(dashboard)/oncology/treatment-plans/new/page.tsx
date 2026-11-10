@@ -13,7 +13,7 @@ import { PageHeader } from '@/components/ui/page-header';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { FIELD_CONTROL, FormActions, FormField, FormSection } from '@/components/forms/form-layout';
 import {
-  useCreateTreatmentPlan, useOncologyCarePlan, useOncologyCarePlans, useProtocol, useProtocols, useTreatmentPlans,
+  PICKER_LIMIT, useCreateTreatmentPlan, useOncologyCarePlan, useOncologyCarePlans, useProtocol, useProtocols, useTreatmentPlans,
 } from '@/plugins/oncology/hooks/use-oncology';
 import { SchedulePreview } from '@/plugins/oncology/components/protocol-builder/SchedulePreview';
 import { getProtocolPhases, totalCycles } from '@/plugins/oncology/lib/protocol-phases';
@@ -37,13 +37,13 @@ export default function NewTreatmentPlanPage() {
   const [weight, setWeight] = useState('');
   const [crcl, setCrcl] = useState('');
 
-  const { data: carePlansData } = useOncologyCarePlans({ status: 'active' });
+  const { data: carePlansData } = useOncologyCarePlans({ status: 'active', limit: PICKER_LIMIT });
   const carePlans: OncologyCarePlan[] = carePlansData?.data ?? [];
   const { data: carePlan } = useOncologyCarePlan(carePlanId);
   const { data: existing } = useTreatmentPlans(carePlanId ? { carePlanId } : undefined, !!carePlanId);
   const existingActive = (existing?.data ?? []).filter((p) => ['active', 'on_hold'].includes(p.status));
 
-  const { data: protocolsData } = useProtocols(carePlan?.cancer_type ? { cancerType: carePlan.cancer_type } : undefined);
+  const { data: protocolsData } = useProtocols({ cancerType: carePlan?.cancer_type || undefined, limit: PICKER_LIMIT });
   const protocols: ChemoProtocol[] = protocolsData?.data ?? [];
   const { data: protocol } = useProtocol(protocolId);
 

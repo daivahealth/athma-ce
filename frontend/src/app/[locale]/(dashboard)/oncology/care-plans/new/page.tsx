@@ -21,7 +21,7 @@ import {
   diagnosisFromCancerDiagnosis,
   patientFromSearch,
 } from '@/plugins/oncology/components/FormContextCards';
-import { useCancerDiagnoses, useCreateOncologyCarePlan, useProtocols } from '@/plugins/oncology/hooks/use-oncology';
+import { useCancerDiagnoses, useCreateOncologyCarePlan, PICKER_LIMIT, useProtocols } from '@/plugins/oncology/hooks/use-oncology';
 import type { CancerDiagnosis, ChemoProtocol } from '@/plugins/oncology/types';
 import {
   ModalityPlanEditor,
@@ -63,9 +63,10 @@ export default function NewCarePlanPage() {
   }, [diagnosesLoading, diagnoses.length, cancerDiagnosisId]);
 
   // Same query the ModalityPlanEditor uses — shared react-query cache
-  const { data: protocolsData } = useProtocols(
-    selectedDiagnosis ? { cancerType: selectedDiagnosis.cancer_type } : undefined,
-  );
+  const { data: protocolsData } = useProtocols({
+    cancerType: selectedDiagnosis?.cancer_type || undefined,
+    limit: PICKER_LIMIT,
+  });
   const protocols: ChemoProtocol[] = protocolsData?.data ?? [];
 
   const createPlan = useCreateOncologyCarePlan();

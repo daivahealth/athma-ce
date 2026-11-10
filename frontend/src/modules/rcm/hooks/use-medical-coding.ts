@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { medicalCodingService } from '../services/medical-coding-service';
 import type {
   CodingSessionFilters,
@@ -9,10 +9,16 @@ import type {
   UpdateProcedureInput,
 } from '../types/medical-coding';
 
-export function useCodingSessions(filters?: CodingSessionFilters) {
+export function useCodingSessions(
+  filters?: CodingSessionFilters,
+  options: { keepPreviousData?: boolean } = {},
+) {
   return useQuery({
     queryKey: ['coding-sessions', filters],
     queryFn: () => medicalCodingService.listSessions(filters),
+    // Paged list screens opt in to keep the current page visible while the next page / search loads.
+    // Off by default: patient-scoped callers must never show another patient's rows as a placeholder.
+    placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
   });
 }
 

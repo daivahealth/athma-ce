@@ -1,11 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { batchService } from '../services/batch-service';
 import type { BatchFilters, CreateBatchInput } from '../types/batches';
 
-export function useBatches(filters?: BatchFilters) {
+export function useBatches(
+  filters?: BatchFilters,
+  options: { keepPreviousData?: boolean } = {},
+) {
   return useQuery({
     queryKey: ['batches', filters],
     queryFn: () => batchService.list(filters),
+    // Paged list screens opt in to keep the current page visible while the next page / search loads.
+    // Off by default: patient-scoped callers must never show another patient's rows as a placeholder.
+    placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
   });
 }
 

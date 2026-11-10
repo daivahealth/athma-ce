@@ -9,19 +9,26 @@ import { Button } from '@/components/ui/button';
 import { useOncologyRegistry } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import type { CancerDiagnosis, OncologyPatientDisplay } from '@/plugins/oncology/types';
+import { ListPagination } from '@/components/ui/list-pagination';
+
+const PAGE_SIZE = 20;
 
 export default function CancerTimelineListPage() {
   const router = useRouter();
   const locale = useLocale();
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
 
   const { data, isLoading } = useOncologyRegistry({
     search: searchQuery || undefined,
+    page,
+    limit: PAGE_SIZE,
   });
 
   const entries: CancerDiagnosis[] = data?.data ?? [];
 
-  // Deduplicate by patient_id so each patient appears once
+  // Deduplicate by patient_id so each patient appears once on this page
+  // (the registry pages by diagnosis, so the footer counts diagnoses).
   const seen = new Set<string>();
   const patients = entries.filter((e) => {
     if (seen.has(e.patient_id)) return false;
@@ -46,7 +53,7 @@ export default function CancerTimelineListPage() {
           placeholder="Search by patient name or MRN..."
           className="pl-9"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
         />
       </div>
 
@@ -108,9 +115,14 @@ export default function CancerTimelineListPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-muted-foreground">
-            {patients.length} patient{patients.length !== 1 ? 's' : ''}
-          </div>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? entries.length}
+            onPageChange={setPage}
+            itemLabel="registry entries"
+          />
         </div>
       )}
     </div>

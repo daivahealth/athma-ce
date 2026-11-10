@@ -12,10 +12,11 @@ import type {
   UpdateCodingSessionInput,
   UpdateDiagnosisInput,
   UpdateProcedureInput,
+  CodingSessionListResponse,
 } from '../types/medical-coding';
 
 class MedicalCodingService {
-  async listSessions(filters?: CodingSessionFilters): Promise<CodingSession[]> {
+  async listSessions(filters?: CodingSessionFilters): Promise<CodingSessionListResponse> {
     const response = await rcmClient.get('/medical-coding/sessions', { params: filters });
     return response.data;
   }

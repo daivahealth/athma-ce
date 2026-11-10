@@ -9,7 +9,7 @@ import { CalendarRange, ClipboardList, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
-  usePatientCancerSummary, usePatientOncologyLabHistory, useRadiationPrescriptions, useTreatmentPlans,
+  PICKER_LIMIT, usePatientCancerSummary, usePatientOncologyLabHistory, useRadiationPrescriptions, useTreatmentPlans,
 } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, EmptyState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
@@ -56,8 +56,9 @@ export default function PatientCancerProfilePage() {
   const { data, isLoading } = usePatientCancerSummary(patientId);
   const { data: labHistory = [] } = usePatientOncologyLabHistory(patientId);
   const { data: otRequests = [] } = useOtRequests({ patientId });
-  const { data: planData } = useTreatmentPlans({ patientId }, !!patientId);
-  const { data: rxData } = useRadiationPrescriptions({ patientId });
+  // Patient-scoped: load every plan and prescription, not just the first page.
+  const { data: planData } = useTreatmentPlans({ patientId, limit: PICKER_LIMIT }, !!patientId);
+  const { data: rxData } = useRadiationPrescriptions({ patientId, limit: PICKER_LIMIT });
 
   const treatmentPlans: TreatmentPlanSummary[] = useMemo(() => planData?.data ?? [], [planData]);
   const radiation: RadiationPrescription[] = useMemo(() => rxData?.data ?? [], [rxData]);

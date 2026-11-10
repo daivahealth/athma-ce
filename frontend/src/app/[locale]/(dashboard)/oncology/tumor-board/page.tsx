@@ -12,29 +12,29 @@ import { useTumorBoardCases } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge, PatientCell } from '@/plugins/oncology/components/shared';
 import { TreatmentIntentBadge } from '@/plugins/oncology/components/TreatmentIntentBadge';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { TumorBoardCase } from '@/plugins/oncology/types';
+
+const PAGE_SIZE = 20;
 
 export default function TumorBoardPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const search = useDebouncedValue(searchQuery.trim(), 300);
 
-  const { data, isLoading } = useTumorBoardCases(statusFilter ? { status: statusFilter } : undefined);
-  const allCases: TumorBoardCase[] = data?.data ?? [];
-
-  const cases = allCases.filter((c) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      c.cancer_type?.toLowerCase().includes(q) ||
-      c.primary_site?.toLowerCase().includes(q) ||
-      c.mdt_recommendation?.toLowerCase().includes(q) ||
-      c.treatment_intent?.toLowerCase().includes(q) ||
-      c.patientDisplay?.displayName.toLowerCase().includes(q) ||
-      c.patientDisplay?.mrn.toLowerCase().includes(q)
-    );
+  // Search runs server-side so it covers every page, not just the one loaded.
+  const { data, isLoading } = useTumorBoardCases({
+    status: statusFilter || undefined,
+    search: search || undefined,
+    page,
+    limit: PAGE_SIZE,
   });
+  const cases: TumorBoardCase[] = data?.data ?? [];
+  const hasFilters = !!(statusFilter || search);
 
   return (
     <div className="space-y-6 page-transition">
@@ -57,12 +57,12 @@ export default function TumorBoardPage() {
             placeholder="Search by patient, cancer type, recommendation..."
             className="pl-9"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
           />
         </div>
         <Select
           value={statusFilter || 'all'}
-          onValueChange={(v) => setStatusFilter(v === 'all' ? '' : v)}
+          onValueChange={(v) => { setStatusFilter(v === 'all' ? '' : v); setPage(1); }}
         >
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Status" />
@@ -83,9 +83,9 @@ export default function TumorBoardPage() {
         <div className="flex flex-col items-center justify-center h-60 border rounded-lg bg-muted/20 space-y-4">
           <Users className="h-10 w-10 text-muted-foreground/40" />
           <p className="text-muted-foreground">
-            {allCases.length === 0 ? 'No tumor board cases yet' : 'No cases match the current filters'}
+            {hasFilters ? 'No cases match the current filters' : 'No tumor board cases yet'}
           </p>
-          {allCases.length === 0 && (
+          {!hasFilters && (
             <Button variant="outline" onClick={() => router.push(`/${params.locale}/oncology/tumor-board/new`)}>
               <Plus className="h-4 w-4 mr-2" />Schedule First Case
             </Button>
@@ -147,10 +147,14 @@ export default function TumorBoardPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-muted-foreground">
-            {cases.length} case{cases.length !== 1 ? 's' : ''}
-            {cases.length !== allCases.length && ` (filtered from ${allCases.length})`}
-          </div>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? cases.length}
+            onPageChange={setPage}
+            itemLabel="cases"
+          />
         </div>
       )}
     </div>

@@ -1,6 +1,9 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { providersService, type ProviderCallbackFilters } from '../services/providers-service';
-import type { ProviderCallback } from '../types/provider';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  providersService,
+  type ListProviderCallbacksResponse,
+  type ProviderCallbackFilters,
+} from '../services/providers-service';
 
 const PROVIDER_KEYS = {
   all: ['prm', 'providers'] as const,
@@ -8,9 +11,10 @@ const PROVIDER_KEYS = {
 };
 
 export function useProviderCallbacks(filters?: ProviderCallbackFilters) {
-  return useQuery<ProviderCallback[]>({
+  return useQuery<ListProviderCallbacksResponse>({
     queryKey: PROVIDER_KEYS.callbacks(filters),
     queryFn: () => providersService.listCallbacks(filters),
+    placeholderData: keepPreviousData,
   });
 }
 
