@@ -111,7 +111,9 @@ SELECT
   g.n,
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-onc-adm-' || g.n) AS admission_id,
   uuid_generate_v5('6ba7b811-9dad-11d1-80b4-00c04fd430c8'::uuid, 'demo-onc-enc-' || g.n) AS encounter_id,
-  g.day + make_interval(hours => 7 + (pg_temp.h('onc-hr' || g.n) * 13)::int,
+  -- Any hour of the day (oncology emergencies arrive overnight too), so a
+  -- morning refresh already shows some of today's admissions.
+  g.day + make_interval(hours => floor(pg_temp.h('onc-hr' || g.n) * 24)::int,
                         mins => (pg_temp.h('onc-mi' || g.n) * 59)::int) AS admitted_at,
   (SELECT p.id FROM onc_pt p
     WHERE p.rn = 1 + floor(pg_temp.h('onc-pt' || g.n)

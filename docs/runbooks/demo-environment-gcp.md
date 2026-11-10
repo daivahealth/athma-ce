@@ -317,7 +317,12 @@ so a failure keeps that script's previous rows.
 
 `/etc/cron.d/athma-demo` (source: `infrastructure/demo-gcp/cron/athma-demo`)
 runs the refresh at 00:15 IST, to roll over to the new day. It runs it again
-at 12:30 IST, so today's clinic shows the morning as done. On the 1st of each
+at 09:00 IST and at 12:30 IST, so today's admissions and clinic fill in as the
+morning passes. A refresh never creates rows later than the moment it runs:
+generated admissions are spread over all 24 hours, so right after the 00:15
+run **Admissions** shows nothing for **Today** (pick **Yesterday**), at 09:00
+it shows about a third of the day's ~10 admissions, and at 12:30 about half.
+On the 1st of each
 month, `monthly-maintenance.sh` runs at 22:00 UTC. It runs `VACUUM (FULL,
 ANALYZE)` on every database to reclaim the dead rows the refreshes leave,
 prunes Docker build cache and dangling images, and trims the journal and the
