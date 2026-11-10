@@ -18,16 +18,45 @@ export interface RemittanceLine {
   remarkCodes?: string[];
 }
 
+/** Prisma `Decimal` columns arrive over JSON as strings. */
+type DecimalValue = number | string;
+
+/** A remittance line as stored by RCM (response shape, not the create payload). */
+export interface RemittanceLineRecord {
+  id: string;
+  claimId?: string | null;
+  claimNumber: string;
+  lineNumber: number;
+  chargedAmount: DecimalValue;
+  allowedAmount?: DecimalValue | null;
+  paidAmount: DecimalValue;
+  adjustmentAmount?: DecimalValue;
+  patientResponsibility?: DecimalValue | null;
+  status?: string;
+}
+
+/**
+ * Remittance as returned by the RCM service
+ * (backend/shared/database-rcm/prisma/schema.prisma `Remittance`).
+ * On create, the request's `format` is stored as `paymentMethod`,
+ * `checkNumber` as `paymentRef` and `checkDate` as `paymentDate`.
+ */
 export interface Remittance {
   id: string;
+  remittanceNumber: string;
   payerId: string;
+  payer?: { id: string; payerName: string } | null;
   status: RemittanceStatus;
-  paymentAmount: number;
-  format: RemittanceFormat;
-  checkNumber?: string | null;
-  checkDate?: string | null;
+  paymentDate?: string | null;
+  depositDate?: string | null;
+  paymentMethod?: string | null;
+  paymentRef?: string | null;
+  totalPaid: DecimalValue;
+  totalAdjustment?: DecimalValue;
+  claimCount?: number;
   createdAt?: string;
-  lines?: RemittanceLine[];
+  _count?: { lines: number };
+  lines?: RemittanceLineRecord[];
 }
 
 export interface CreateRemittanceInput {

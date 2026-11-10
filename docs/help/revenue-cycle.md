@@ -243,9 +243,10 @@ raw data.
 
 ## Remittance
 
-**Remittances** (`/revenue-cycle/remittance`) lists payment advices from payers: **Remittance ID**,
-**Payer**, **Format**, **Paid** and **Status** (**Received**, **Processing**, **Processed**,
-**Reconciled**, **Error**). Search by remittance number, payment reference or payer name.
+**Remittances** (`/revenue-cycle/remittance`) lists payment advices from payers: **Remittance #**,
+**Payer** (name), **Payment date**, **Method** (the format chosen when it was recorded), **Paid**
+and **Status** (**Received**, **Processing**, **Processed**, **Reconciled**, **Error**). Search by
+remittance number, payment reference or payer name.
 
 ### Recording a remittance
 
@@ -269,13 +270,15 @@ to a claim by claim number. A matched claim becomes **Paid** if the line paid an
 and how many did not. A line whose claim number is not found is left unmatched. A remittance can
 be reconciled once.
 
-**Remittance details** shows the payer, format, payment amount and check number; **Lines** shows
-the lines as raw data.
+The page is headed with the remittance number. **Remittance details** shows the payer, payment
+method, total paid, payment reference (the check number) and payment date; **Lines** shows the
+lines as raw data.
 
 ## Not live yet
 
 - **Payer, claim and encounter fields** on these forms take internal IDs typed in by hand; there is
-  no payer picker. Lists show the payer's ID rather than its name, except on **Claims**.
+  no payer picker. Lists show the payer's ID rather than its name, except on **Claims** and
+  **Remittance**.
 - **Claims**: **Create claim** makes an empty draft with no lines; there is no screen to add claim
   lines. "Validation failed" says to review errors below, but the errors are not shown. Claim
   lines, diagnoses, batch claims, pre-auth services, benefits and remittance lines are shown as raw

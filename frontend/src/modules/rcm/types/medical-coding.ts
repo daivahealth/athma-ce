@@ -1,8 +1,12 @@
+/**
+ * Mirrors the RCM service's `CodingSessionStatus`
+ * (backend/services/rcm/src/modules/medical-coding/dto/medical-coding.dto.ts).
+ * Sessions are created as `auto_generated`, move to `in_progress` when a coder
+ * starts review, and to `completed` when submitted.
+ */
 export enum CodingSessionStatus {
-  NEW = 'new',
-  PENDING = 'pending',
-  IN_REVIEW = 'in_review',
-  RETURNED = 'returned',
+  AUTO_GENERATED = 'auto_generated',
+  IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
   SUBMITTED = 'submitted',
 }
@@ -36,7 +40,6 @@ export interface CodingSessionFilters {
   coderId?: string;
   patientId?: string;
   encounterId?: string;
-  queue?: string;
   /** Patient name, claim number, or exact session / encounter id (server-side). */
   search?: string;
   limit?: number;
@@ -95,6 +98,8 @@ export interface CoderProductivityStats {
 export interface CodingSessionSummaryStats {
   total: number;
   byStatus: Record<string, number>;
+  /** auto_generated + in_progress */
+  pending?: number;
 }
 
 export interface CreateDiagnosisInput {

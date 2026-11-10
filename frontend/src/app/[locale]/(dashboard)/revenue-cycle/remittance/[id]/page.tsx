@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { format } from 'date-fns';
 import { ArrowLeft, RefreshCcw } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -58,9 +59,9 @@ export default function RemittanceDetailPage() {
         </Button>
         <div className="flex-1">
           <p className="text-sm text-muted-foreground">Remittance</p>
-          <h1 className="text-3xl font-bold">{remittance.id}</h1>
+          <h1 className="text-3xl font-bold">{remittance.remittanceNumber}</h1>
         </div>
-        <Badge variant="secondary">{statusLabels[remittance.status]}</Badge>
+        <Badge variant="secondary">{statusLabels[remittance.status] ?? remittance.status}</Badge>
         <Button onClick={handleReconcile} disabled={reconcileMutation.isPending}>
           <RefreshCcw className="mr-2 h-4 w-4" /> Reconcile
         </Button>
@@ -72,20 +73,24 @@ export default function RemittanceDetailPage() {
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 text-sm">
           <div>
-            <p className="text-muted-foreground">Payer ID</p>
-            <p className="font-mono">{remittance.payerId}</p>
+            <p className="text-muted-foreground">Payer</p>
+            <p>{remittance.payer?.payerName ?? <span className="font-mono">{remittance.payerId}</span>}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Format</p>
-            <p>{remittance.format}</p>
+            <p className="text-muted-foreground">Payment method</p>
+            <p>{remittance.paymentMethod || '—'}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Payment amount</p>
-            <p>{remittance.paymentAmount.toFixed(2)}</p>
+            <p className="text-muted-foreground">Total paid</p>
+            <p>{Number(remittance.totalPaid ?? 0).toFixed(2)}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Check number</p>
-            <p>{remittance.checkNumber ?? '—'}</p>
+            <p className="text-muted-foreground">Payment reference</p>
+            <p>{remittance.paymentRef || '—'}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground">Payment date</p>
+            <p>{remittance.paymentDate ? format(new Date(remittance.paymentDate), 'dd MMM yyyy') : '—'}</p>
           </div>
         </CardContent>
       </Card>

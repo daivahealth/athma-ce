@@ -21,17 +21,23 @@ import { PageHeader } from '@/components/ui/page-header';
 import { PatientIdentity } from '@/modules/rcm/components/patient-identity';
 
 const statusVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
-  [CodingSessionStatus.NEW]: 'secondary',
-  [CodingSessionStatus.PENDING]: 'secondary',
-  [CodingSessionStatus.IN_REVIEW]: 'outline',
-  [CodingSessionStatus.RETURNED]: 'outline',
+  [CodingSessionStatus.AUTO_GENERATED]: 'secondary',
+  [CodingSessionStatus.IN_PROGRESS]: 'outline',
   [CodingSessionStatus.COMPLETED]: 'default',
   [CodingSessionStatus.SUBMITTED]: 'default',
 };
 
 const PAGE_SIZE = 20;
 
-const statusLabel = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+const STATUS_LABELS: Record<string, string> = {
+  [CodingSessionStatus.AUTO_GENERATED]: 'Awaiting review',
+  [CodingSessionStatus.IN_PROGRESS]: 'In progress',
+  [CodingSessionStatus.COMPLETED]: 'Completed',
+  [CodingSessionStatus.SUBMITTED]: 'Submitted',
+};
+
+const statusLabel = (value: string) =>
+  STATUS_LABELS[value] ?? value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
 const createColumns = (locale: string, router: ReturnType<typeof useRouter>): ColumnDef<CodingSession>[] => [
   {
@@ -93,17 +99,14 @@ export default function MedicalCodingPage() {
   const debouncedSearch = useDebouncedValue(search.trim(), 300);
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<'all' | string>('all');
-  const [queueFilter, setQueueFilter] = useState('');
-
   const filters = useMemo(
     () => ({
       status: statusFilter === 'all' ? undefined : statusFilter,
-      queue: queueFilter || undefined,
       search: debouncedSearch || undefined,
       limit: PAGE_SIZE,
       offset: pageOffset(page, PAGE_SIZE),
     }),
-    [statusFilter, queueFilter, debouncedSearch, page],
+    [statusFilter, debouncedSearch, page],
   );
 
   const { data, isLoading, error } = useCodingSessions(filters, { keepPreviousData: true });
@@ -115,12 +118,10 @@ export default function MedicalCodingPage() {
   const sessions = useMemo(() => data?.sessions ?? [], [data]);
 
   const statCards = [
-    // Tenant-wide count from the summary endpoint; never the length of the loaded page.
-    // The table footer shows the count matching the current filters.
     { label: 'Total sessions', value: summary?.total ?? '—' },
-    { label: 'Pending', value: summary?.byStatus?.[CodingSessionStatus.PENDING] ?? 0 },
-    { label: 'In review', value: summary?.byStatus?.[CodingSessionStatus.IN_REVIEW] ?? 0 },
-    { label: 'Submitted', value: summary?.byStatus?.[CodingSessionStatus.SUBMITTED] ?? 0 },
+    { label: 'Awaiting review', value: summary?.byStatus?.[CodingSessionStatus.AUTO_GENERATED] ?? 0 },
+    { label: 'In progress', value: summary?.byStatus?.[CodingSessionStatus.IN_PROGRESS] ?? 0 },
+    { label: 'Completed', value: summary?.byStatus?.[CodingSessionStatus.COMPLETED] ?? 0 },
   ];
 
   return (
@@ -225,15 +226,6 @@ export default function MedicalCodingPage() {
             ))}
           </SelectContent>
         </Select>
-        <Input
-          placeholder="Queue"
-          value={queueFilter}
-          onChange={(event) => {
-            setQueueFilter(event.target.value);
-            setPage(1);
-          }}
-          className="w-[160px]"
-        />
       </div>
 
       {error ? (
