@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { EnvironmentBanner } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
 import { getApiErrorMessage } from '@/lib/api/errors';
+import { DEMO_APP_URL, siteHref } from '@/lib/config/deployment';
 import {
   ACCESS_REQUEST_MODULES,
   ORGANISATION_TYPES,
@@ -123,7 +124,7 @@ export default function RequestAccessPage() {
               exploring the demo.
             </p>
             <Button asChild className="mt-5">
-              <Link href={`/${locale}/login`}>Explore the demo</Link>
+              <Link href={siteHref(DEMO_APP_URL, locale, '/login')}>Explore the demo</Link>
             </Button>
           </div>
         ) : (

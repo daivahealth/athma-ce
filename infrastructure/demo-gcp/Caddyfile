@@ -1,14 +1,36 @@
 # Automatic HTTPS (Let's Encrypt) for each public hostname.
 # DEMO_DOMAIN is e.g. athma-ce-demo.daiva.health or 34-100-1-2.sslip.io; the APIs
-# live on its subdomains. SITE_DOMAIN is the public address of the web app
-# (e.g. athma.daiva.health); it defaults to DEMO_DOMAIN. The web app answers on
-# SITE_DOMAIN, and DEMO_DOMAIN / app.DEMO_DOMAIN redirect there, so every visitor
-# uses one address (one browser session, one sign-in return URL).
-{$SITE_DOMAIN}, {$DEMO_DOMAIN}, app.{$DEMO_DOMAIN} {
-	@other not host {$SITE_DOMAIN}
-	redir @other https://{$SITE_DOMAIN}{uri} 308
+# live on its subdomains. SITE_DOMAIN is the public address of the demo web app
+# (e.g. demo.athma.daiva.health); it defaults to DEMO_DOMAIN, and DEMO_DOMAIN /
+# app.DEMO_DOMAIN redirect there, so every visitor has one browser session and
+# one sign-in return URL. LANDING_DOMAIN (e.g. athma.daiva.health) is the public
+# site: it serves only the landing, request-access and legal pages and sends any
+# other path to SITE_DOMAIN. It defaults to SITE_DOMAIN (no separate public site).
+# See docs/runbooks/demo-environment-gcp.md, "Public addresses".
+{$SITE_DOMAIN}, {$DEMO_DOMAIN}, app.{$DEMO_DOMAIN}, {$LANDING_DOMAIN} {
 	encode gzip
-	reverse_proxy frontend:3000
+
+	# The demo app: every page. Listed first, so it wins when LANDING_DOMAIN is SITE_DOMAIN.
+	@app host {$SITE_DOMAIN}
+	handle @app {
+		reverse_proxy frontend:3000
+	}
+
+	# The public site: landing, request access, terms, privacy and their assets.
+	@landing host {$LANDING_DOMAIN}
+	handle @landing {
+		@public path_regexp ^/(|_next/.*|[^/]+\.[A-Za-z0-9]+|icon.*|apple-icon.*|(en|ar)/?|(en|ar)/(request-access|terms|privacy)/?)$
+		handle @public {
+			reverse_proxy frontend:3000
+		}
+		handle {
+			redir https://{$SITE_DOMAIN}{uri} 308
+		}
+	}
+
+	handle {
+		redir https://{$SITE_DOMAIN}{uri} 308
+	}
 }
 
 foundation.{$DEMO_DOMAIN} {

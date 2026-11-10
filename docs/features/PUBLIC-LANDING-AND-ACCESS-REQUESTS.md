@@ -10,15 +10,27 @@ The public demo introduces Athma before anyone signs in, and lets organisations 
 |---|---|---|
 | `NEXT_PUBLIC_LANDING_PAGE` (build time; `LANDING_PAGE_ENABLED` in `frontend/src/lib/config/deployment.ts`) | `on` / `off` | `on` in `demo` mode, `off` in every other mode |
 
+### Public addresses
+
+The landing page, the demo app and the production app can each have their own address. All three are build-time origins (`https://host`, no path); anything else is ignored. Empty means "this same site", and links stay relative.
+
+| Setting (build time) | Example | Used for |
+|---|---|---|
+| `NEXT_PUBLIC_LANDING_URL` (`LANDING_URL`) | `https://athma.daiva.health` | "What it is" and "Request production access" on the login page. On any other host, `/{locale}` redirects here, so the home page has one address. |
+| `NEXT_PUBLIC_DEMO_APP_URL` (`DEMO_APP_URL`) | `https://demo.athma.daiva.health` | "Sign in" and "Explore the live demo" on the landing page, "Explore the demo" after a request is sent. All go to `{DEMO_APP_URL}/{locale}/login`. |
+| `NEXT_PUBLIC_PRODUCTION_APP_URL` (`PRODUCTION_APP_URL`) | `https://app.athma.daiva.health` | **Customer sign-in** next to "Request production access", to `{PRODUCTION_APP_URL}/{locale}/login`. Hidden while empty. |
+
+On the demo VM these come from `LANDING_DOMAIN`, `SITE_DOMAIN` and `PRODUCTION_APP_URL`, and Caddy serves only the public pages on the landing host (see the [demo runbook](../runbooks/demo-environment-gcp.md), "Public addresses"). The landing page is still part of the product frontend. When the production app launches, the public site should move to its own deployment and send access requests to production, so prospects' details are not stored in the demo database ([saas-three-surface-plan.md](../plan/saas-three-surface-plan.md)).
+
 The page (`frontend/src/components/landing/landing-page.tsx`, route `app/[locale]/(public)/page.tsx`) has:
 
 - the environment banner and a "This is a demonstration, not a live hospital system" notice (fictitious data, not for clinical use, visitors are read-only, data may be reset);
-- "Explore the live demo" (to `/{locale}/login`, where visitors use social sign-in, see [ADR-0016](../ADR/ADR-0016-external-identity-providers.md)) and "View on GitHub" (`SOURCE_REPOSITORY_URL`, the public `daivahealth/athma-ce` repository, Apache 2.0);
+- "Explore the live demo" (to `{DEMO_APP_URL}/{locale}/login`, where visitors use social sign-in, see [ADR-0016](../ADR/ADR-0016-external-identity-providers.md)) and "View on GitHub" (`SOURCE_REPOSITORY_URL`, the public `daivahealth/athma-ce` repository, Apache 2.0);
 - the modules in the demo;
-- "Open source, for anyone" and "Hosted Athma, starting in India" with "Request production access";
+- "Open source, for anyone" and "Hosted Athma, starting in India" with "Request production access" and, when `PRODUCTION_APP_URL` is set, "Customer sign-in";
 - footer with copyright (Daiva Health Systems Private Limited) and Terms / Privacy.
 
-The login page links back ("What it is", "Request production access") when the landing page is on.
+The login page links back to `LANDING_URL` ("What it is", "Request production access") when the landing page is on.
 
 ## Request production access
 
@@ -44,7 +56,9 @@ API: [ACCESS-REQUESTS-API.md](../api/ACCESS-REQUESTS-API.md).
 | File | Role |
 |---|---|
 | `frontend/src/components/landing/landing-page.tsx` | Landing page |
-| `frontend/src/app/[locale]/(public)/page.tsx` | `/{locale}`: landing page or redirect to the dashboard |
+| `frontend/src/app/[locale]/(public)/page.tsx` | `/{locale}`: landing page, redirect to `LANDING_URL` from another host, or redirect to the dashboard |
+| `frontend/src/lib/config/deployment.ts` | `LANDING_PAGE_ENABLED`, `LANDING_URL`, `DEMO_APP_URL`, `PRODUCTION_APP_URL`, `siteHref` |
+| `infrastructure/demo-gcp/Caddyfile` | Demo VM: landing-only public host, app host, redirects |
 | `frontend/src/app/[locale]/(public)/request-access/page.tsx` | Request form |
 | `frontend/src/app/[locale]/(dashboard)/access-requests/page.tsx` | Admin review page |
 | `frontend/src/modules/access-requests/api.ts` | API calls, option lists |
