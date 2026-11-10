@@ -1,7 +1,8 @@
-import { Body, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { PluginController } from '@athma/plugin-sdk';
 import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
 import { TreatmentScheduleService } from './treatment-schedule.service';
+import { InvalidPagingError, parsePaging } from './pagination';
 
 // Patient treatment schedules — guarded by the chemo order permissions.
 @PluginController('oncology')
@@ -16,8 +17,21 @@ export class TreatmentScheduleController {
     @Query('carePlanId') carePlanId?: string,
     @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
     @Query('status') status?: string,
+    @Query('search') search?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
   ) {
-    return { success: true, ...(await this.schedule.listPlans({ patientId, carePlanId, cancerDiagnosisId, status })) };
+    let paging;
+    try {
+      paging = parsePaging(page, limit);
+    } catch (e) {
+      if (e instanceof InvalidPagingError) throw new BadRequestException(e.message);
+      throw e;
+    }
+    return {
+      success: true,
+      ...(await this.schedule.listPlans({ patientId, carePlanId, cancerDiagnosisId, status, search }, paging.page, paging.limit)),
+    };
   }
 
   @Get('treatment-plans/:id')

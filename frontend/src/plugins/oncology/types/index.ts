@@ -6,6 +6,21 @@ export type MetastaticStatus = 'localized' | 'regional' | 'distant' | 'unknown';
 export type VerificationStatus = 'provisional' | 'differential' | 'confirmed' | 'refuted';
 export type CarePlanStatus = 'draft' | 'active' | 'on_hold' | 'completed' | 'cancelled' | 'revised';
 
+/** Server paging metadata returned by oncology list endpoints. */
+export interface OncologyPagination {
+  page: number;
+  limit: number;
+  /** Rows matching the filters across all pages. */
+  total: number;
+}
+
+/** A page of rows from an oncology list endpoint. */
+export interface OncologyPage<T> {
+  success?: boolean;
+  data: T[];
+  pagination: OncologyPagination;
+}
+
 export interface OncologyPatientDisplay {
   patientId: string;
   mrn: string;

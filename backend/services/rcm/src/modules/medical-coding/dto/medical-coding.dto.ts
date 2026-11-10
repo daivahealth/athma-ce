@@ -1,6 +1,7 @@
-import { IsString, IsUUID, IsEnum, IsOptional, IsBoolean, IsInt, IsDateString, ValidateNested } from 'class-validator';
+import { IsString, IsUUID, IsEnum, IsOptional, IsBoolean, IsInt, IsDateString, MaxLength, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { MAX_SEARCH_LENGTH } from '../../../common/list-query';
 
 /**
  * Coding session status values
@@ -178,10 +179,25 @@ export class CodingSessionQueryDto {
   @IsDateString()
   dateTo?: string;
 
-  @ApiPropertyOptional({ description: 'Limit results' })
+  @ApiPropertyOptional({ description: 'Rows per page (default 100, max 200)' })
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
+  @Min(1)
   limit?: number;
+
+  @ApiPropertyOptional({ description: 'Rows to skip (for paging)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  offset?: number;
+
+  @ApiPropertyOptional({ description: 'Patient name, claim number, or exact session / encounter id' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(MAX_SEARCH_LENGTH)
+  search?: string;
 }
 
 /**

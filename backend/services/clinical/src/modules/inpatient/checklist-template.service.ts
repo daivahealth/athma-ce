@@ -212,6 +212,9 @@ export class ChecklistTemplateService {
     if (filters.applicableToOutpatient !== undefined) {
       where.applicableToOutpatient = filters.applicableToOutpatient;
     }
+    if (filters.search) {
+      where.name = { contains: filters.search, mode: 'insensitive' };
+    }
 
     const skip = pagination?.skip || 0;
     const take = pagination?.take || 50; // Default limit of 50

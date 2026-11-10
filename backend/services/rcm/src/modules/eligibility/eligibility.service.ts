@@ -12,6 +12,8 @@ import { MockEligibilityConnector } from './connectors/mock.connector';
 import { NhcxEligibilityConnector } from './connectors/nhcx.connector';
 import { EligibilityConnector } from './connectors/eligibility-connector.interface';
 import { resolveClinicalApiUrl } from '../../common/service-urls';
+import { containsInsensitive, isUuid, normalizeSearch, resolvePaging } from '../../common/list-query';
+import { searchPatientIds } from '../../common/patient-display';
 
 export interface PatientDisplayDto {
     patientId: string;
@@ -284,13 +286,25 @@ export class EligibilityService {
             }
         }
 
+        // Search: exact request id, payer name, or patient name via Clinical.
+        const search = normalizeSearch(filters?.search);
+        if (search) {
+            const patientIds = await searchPatientIds(this.httpService, search, { tenantId, authHeader, facilityId, userId });
+            where.OR = [
+                ...(isUuid(search) ? [{ id: search }] : []),
+                { payer: { payerName: containsInsensitive(search) } },
+                ...(patientIds.length ? [{ patientId: { in: patientIds } }] : []),
+            ];
+        }
+
+        const { take, skip } = resolvePaging(filters?.limit, filters?.offset);
         const [requests, total] = await Promise.all([
             this.prisma.eligibilityRequest.findMany({
                 where,
                 include: { payer: true, policy: true },
                 orderBy: { createdAt: 'desc' },
-                take: filters?.limit ?? 50,
-                skip: filters?.offset ?? 0,
+                take,
+                skip,
             }),
             this.prisma.eligibilityRequest.count({ where }),
         ]);

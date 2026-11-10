@@ -35,8 +35,9 @@ Click anywhere on a row, or press Enter on it, to open the patient record.
 ### Finding a patient
 
 Type in **Search patients by name, MRN, or phone number...**. The list updates a moment after you stop
-typing. Only the first 20 matches are shown ("Showing 20 of _n_ patients"), and there is no next page,
-so if the person you want is not there, type more of the name or use the MRN.
+typing. Matches come 20 at a time: the footer says which rows you are looking at ("Showing 21–40 of
+_n_ patients"), with **Previous** and **Next** to move between pages. Changing the search goes back to
+the first page.
 
 **If instead:** the list says **No patients found**, try a different term, or press **Add Patient** to
 register them. **Error loading patients** means the list could not be fetched; the message under it is

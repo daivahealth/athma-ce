@@ -1,5 +1,6 @@
-import { Allow, IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
+import { Allow, IsArray, IsEnum, IsInt, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { MAX_SEARCH_LENGTH } from '../../../common/list-query';
 
 // PreAuth status enum
 export enum PreAuthStatus {
@@ -122,6 +123,12 @@ export class PreAuthFilterDto {
     @IsOptional() status?: PreAuthStatus;
     @IsOptional() dateFrom?: Date;
     @IsOptional() dateTo?: Date;
-    @IsOptional() limit?: number;
-    @IsOptional() offset?: number;
+    /** Rows per page; clamped server-side to MAX_LIST_LIMIT. */
+    @IsOptional() @Type(() => Number) @IsInt() @Min(1)
+    limit?: number;
+    @IsOptional() @Type(() => Number) @IsInt() @Min(0)
+    offset?: number;
+    /** Free-text search, case-insensitive. */
+    @IsOptional() @IsString() @MaxLength(MAX_SEARCH_LENGTH)
+    search?: string;
 }

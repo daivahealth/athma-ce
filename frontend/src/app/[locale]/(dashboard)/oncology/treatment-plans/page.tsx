@@ -9,16 +9,28 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { useTreatmentPlans } from '@/plugins/oncology/hooks/use-oncology';
 import { EmptyState, LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { formatDayMonthYear, formatShortDate } from '@/plugins/oncology/lib/treatment-day';
+
+const PAGE_SIZE = 20;
 
 export default function TreatmentPlansPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
   const [status, setStatus] = useState('active');
   const [query, setQuery] = useState('');
-  const { data, isLoading } = useTreatmentPlans(status ? { status } : undefined);
+  const [page, setPage] = useState(1);
+  const search = useDebouncedValue(query.trim(), 300);
+  // Search (patient, MRN, protocol, cancer type) runs server-side so it covers every page.
+  const { data, isLoading } = useTreatmentPlans({
+    status: status || undefined,
+    search: search || undefined,
+    page,
+    limit: PAGE_SIZE,
+  });
 
   // Opened from a care plan: go to its current schedule, or start one
   const carePlanId = useSearchParams().get('carePlanId');
@@ -31,12 +43,7 @@ export default function TreatmentPlansPage() {
       : `/${params.locale}/oncology/treatment-plans/new?carePlanId=${carePlanId}`);
   }, [carePlanId, forCarePlan, params.locale, router]);
 
-  const plans = (data?.data ?? []).filter((p) => {
-    if (!query) return true;
-    const q = query.toLowerCase();
-    return [p.patientDisplay?.displayName, p.patientDisplay?.mrn, p.protocol_code, p.protocol_name, p.cancer_type]
-      .some((v) => v?.toLowerCase().includes(q));
-  });
+  const plans = data?.data ?? [];
 
   return (
     <div className="space-y-6 page-transition">
@@ -59,9 +66,9 @@ export default function TreatmentPlansPage() {
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[220px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input className="pl-9" placeholder="Search patient, MRN, protocol…" value={query} onChange={(e) => setQuery(e.target.value)} aria-label="Search treatment schedules" />
+          <Input className="pl-9" placeholder="Search patient, MRN, protocol…" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }} aria-label="Search treatment schedules" />
         </div>
-        <Select value={status || '__all'} onValueChange={(v) => setStatus(v === '__all' ? '' : v)}>
+        <Select value={status || '__all'} onValueChange={(v) => { setStatus(v === '__all' ? '' : v); setPage(1); }}>
           <SelectTrigger className="w-44" aria-label="Filter by status"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="__all">All statuses</SelectItem>
@@ -74,7 +81,9 @@ export default function TreatmentPlansPage() {
       </div>
 
       {isLoading ? <LoadingState /> : plans.length === 0 ? (
-        <EmptyState message="No treatment schedules. Start one from an active care plan." />
+        <EmptyState
+          message={search ? 'No treatment schedules match the search.' : 'No treatment schedules. Start one from an active care plan.'}
+        />
       ) : (
         <div className="rounded-lg border overflow-x-auto">
           <table className="w-full text-sm">
@@ -119,6 +128,14 @@ export default function TreatmentPlansPage() {
               ))}
             </tbody>
           </table>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? plans.length}
+            onPageChange={setPage}
+            itemLabel="schedules"
+          />
         </div>
       )}
     </div>

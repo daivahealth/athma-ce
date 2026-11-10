@@ -1,7 +1,20 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { oncologyService } from '../services/oncology-service';
+
+/** Option lists (protocol / care plan pickers) ask for the server's max page so no option is cut off. */
+export const PICKER_LIMIT = 500;
+
+/** Server paging for list endpoints (1-based page). */
+type Paging = { page?: number; limit?: number };
+
+/**
+ * Paged list screens keep the previous page on screen while the next one
+ * loads. Only applied when a page is requested, so patient-scoped lookups
+ * never briefly show another patient's rows.
+ */
+const keepPageWhilePaging = (params?: Paging) => (params?.page ? keepPreviousData : undefined);
 
 const oncologyKeys = {
   all: ['oncology'] as const,
@@ -128,10 +141,11 @@ export function useDismissRegistryCandidate() {
 }
 
 // Oncology Registry
-export function useOncologyRegistry(params?: { cancerType?: string; clinicalStatus?: string; search?: string }) {
+export function useOncologyRegistry(params?: { cancerType?: string; clinicalStatus?: string; search?: string } & Paging) {
   return useQuery({
     queryKey: oncologyKeys.registryList(params),
     queryFn: () => oncologyService.listRegistry(params),
+    placeholderData: keepPageWhilePaging(params),
   });
 }
 
@@ -160,10 +174,11 @@ export function usePatientOncologyLabHistory(patientId: string) {
 }
 
 // Tumor Staging
-export function useStagings(params?: { patientId?: string; cancerDiagnosisId?: string; limit?: number }) {
+export function useStagings(params?: { patientId?: string; cancerDiagnosisId?: string; stagingType?: string; search?: string } & Paging) {
   return useQuery({
     queryKey: oncologyKeys.stagingList(params),
     queryFn: () => oncologyService.listStagings(params),
+    placeholderData: keepPageWhilePaging(params),
   });
 }
 
@@ -197,10 +212,11 @@ export function useUpdateStaging() {
 }
 
 // Tumor Board
-export function useTumorBoardCases(params?: { status?: string; date?: string; patientId?: string }) {
+export function useTumorBoardCases(params?: { status?: string; date?: string; patientId?: string; search?: string } & Paging) {
   return useQuery({
     queryKey: oncologyKeys.tumorBoardList(params),
     queryFn: () => oncologyService.listTumorBoardCases(params),
+    placeholderData: keepPageWhilePaging(params),
   });
 }
 
@@ -234,10 +250,11 @@ export function useUpdateTumorBoardCase() {
 }
 
 // Oncology Care Plans
-export function useOncologyCarePlans(params?: { patientId?: string; status?: string; treatmentIntent?: string; cancerDiagnosisId?: string }) {
+export function useOncologyCarePlans(params?: { patientId?: string; status?: string; treatmentIntent?: string; cancerDiagnosisId?: string; search?: string } & Paging) {
   return useQuery({
     queryKey: oncologyKeys.carePlanList(params),
     queryFn: () => oncologyService.listCarePlans(params),
+    placeholderData: keepPageWhilePaging(params),
   });
 }
 
@@ -281,10 +298,11 @@ export function useApproveOncologyCarePlan() {
 }
 
 // Chemo Protocols
-export function useProtocols(params?: { cancerType?: string; isActive?: boolean }) {
+export function useProtocols(params?: { cancerType?: string; search?: string; includeInactive?: boolean } & Paging) {
   return useQuery({
     queryKey: oncologyKeys.protocolList(params),
     queryFn: () => oncologyService.listProtocols(params),
+    placeholderData: keepPageWhilePaging(params),
   });
 }
 
@@ -322,10 +340,11 @@ export function useDeactivateProtocol() {
 }
 
 // Chemo Orders
-export function useChemoOrders(params?: { patientId?: string; status?: string; date?: string; cancerDiagnosisId?: string }) {
+export function useChemoOrders(params?: { patientId?: string; status?: string; date?: string; cancerDiagnosisId?: string; search?: string } & Paging) {
   return useQuery({
     queryKey: oncologyKeys.orderList(params),
     queryFn: () => oncologyService.listChemoOrders(params),
+    placeholderData: keepPageWhilePaging(params),
   });
 }
 
@@ -585,10 +604,11 @@ const radiationKeys = {
   completion: (prescriptionId: string) => [...radiationKeys.all, 'completion', prescriptionId] as const,
 };
 
-export function useRadiationPrescriptions(params?: { patientId?: string; status?: string }) {
+export function useRadiationPrescriptions(params?: { patientId?: string; status?: string; search?: string } & Paging) {
   return useQuery({
     queryKey: radiationKeys.prescriptionList(params),
     queryFn: () => oncologyService.listRadiationPrescriptions(params),
+    placeholderData: keepPageWhilePaging(params),
   });
 }
 
@@ -806,10 +826,11 @@ export function useDeleteTimelineEvent(patientId: string) {
 }
 
 // Treatment schedules
-export function useTreatmentPlans(params?: { patientId?: string; carePlanId?: string; cancerDiagnosisId?: string; status?: string }, enabled = true) {
+export function useTreatmentPlans(params?: { patientId?: string; carePlanId?: string; cancerDiagnosisId?: string; status?: string; search?: string } & Paging, enabled = true) {
   return useQuery({
     queryKey: oncologyKeys.treatmentPlanList(params),
     queryFn: () => oncologyService.listTreatmentPlans(params),
+    placeholderData: keepPageWhilePaging(params),
     enabled,
   });
 }

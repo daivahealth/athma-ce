@@ -13,6 +13,8 @@ import {
 import { ClaimGeneratorFactory } from './generators/claim-generator.factory';
 import { ClaimWithDetails } from './generators/claim-generator.interface';
 import { resolveClinicalApiUrl } from '../../common/service-urls';
+import { containsInsensitive, normalizeSearch, resolvePaging } from '../../common/list-query';
+import { searchPatientIds } from '../../common/patient-display';
 
 export interface PatientDisplayDto {
     patientId: string;
@@ -288,6 +290,17 @@ export class ClaimsService {
             }
         }
 
+        // Search: claim number here, patient name via Clinical (RCM has no patient table).
+        const search = normalizeSearch(filters?.search);
+        if (search) {
+            const patientIds = await searchPatientIds(this.httpService, search, { tenantId, authHeader, facilityId, userId });
+            where.OR = [
+                { claimNumber: containsInsensitive(search) },
+                ...(patientIds.length ? [{ patientId: { in: patientIds } }] : []),
+            ];
+        }
+
+        const { take, skip } = resolvePaging(filters?.limit, filters?.offset);
         const [claims, total] = await Promise.all([
             this.prisma.claim.findMany({
                 where,
@@ -302,8 +315,8 @@ export class ClaimsService {
                     },
                 },
                 orderBy: { createdAt: 'desc' },
-                take: filters?.limit ?? 50,
-                skip: filters?.offset ?? 0,
+                take,
+                skip,
             }),
             this.prisma.claim.count({ where }),
         ]);

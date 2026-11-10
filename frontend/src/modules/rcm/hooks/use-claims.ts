@@ -1,11 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { claimService } from '../services/claim-service';
 import type { ClaimFilters, CreateClaimInput, GenerateClaimsInput } from '../types/claims';
 
-export function useClaims(filters?: ClaimFilters) {
+export function useClaims(
+  filters?: ClaimFilters,
+  options: { keepPreviousData?: boolean } = {},
+) {
   return useQuery({
     queryKey: ['claims', filters],
     queryFn: () => claimService.list(filters),
+    // Paged list screens opt in to keep the current page visible while the next page / search loads.
+    // Off by default: patient-scoped callers must never show another patient's rows as a placeholder.
+    placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
   });
 }
 

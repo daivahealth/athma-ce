@@ -387,8 +387,10 @@ receipt number format.
   click one to open it.
 - **Coding sessions**: the full list with **Patient** (name, MRN, gender and age, with the
   shortened encounter ID under it), **Status**, **Priority**, **Coder** (or **Unassigned**) and
-  **Updated**. Search by patient name, MRN or encounter ID, filter by status, or type a **Queue**
-  name. **Review** opens the session.
+  **Updated**. Search by patient name, linked claim number, or a full session or encounter ID,
+  filter by status, or type a **Queue** name. **Review** opens the session. Sessions come 20 at a
+  time; the footer shows the count for the current filters with **Previous** and **Next**, while
+  the **Total sessions** tile counts every session.
 
 Statuses are **New**, **Pending**, **In Review**, **Returned**, **Completed** and **Submitted**.
 

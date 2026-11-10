@@ -39,8 +39,10 @@ export class MedicalCodingController {
   @ApiQuery({ name: 'patientId', required: false, type: String })
   @ApiQuery({ name: 'dateFrom', required: false, type: Date })
   @ApiQuery({ name: 'dateTo', required: false, type: Date })
-  @ApiQuery({ name: 'limit', required: false, type: Number })
-  @ApiResponse({ status: 200, description: 'Sessions retrieved' })
+  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Rows per page (default 100, max 200)' })
+  @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Rows to skip (for paging)' })
+  @ApiQuery({ name: 'search', required: false, type: String, description: 'Patient name, claim number, or exact session / encounter id' })
+  @ApiResponse({ status: 200, description: 'One page of sessions as { sessions, total }; total counts every session matching the filters' })
   async findAllSessions(
     @Headers('x-tenant-id') tenantId: string,
     @Headers('authorization') authHeader: string,
@@ -52,6 +54,8 @@ export class MedicalCodingController {
     @Query('dateFrom') dateFrom?: string,
     @Query('dateTo') dateTo?: string,
     @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+    @Query('search') search?: string,
   ) {
     const filters: CodingSessionQueryDto = {};
     if (status) filters.status = status;
@@ -59,7 +63,10 @@ export class MedicalCodingController {
     if (patientId) filters.patientId = patientId;
     if (dateFrom) filters.dateFrom = dateFrom;
     if (dateTo) filters.dateTo = dateTo;
-    if (limit) filters.limit = parseInt(limit);
+    // Non-numeric / out-of-range values fall back or clamp in the service (resolvePaging).
+    if (limit) filters.limit = parseInt(limit, 10);
+    if (offset) filters.offset = parseInt(offset, 10);
+    if (search) filters.search = search;
 
     return this.medicalCodingService.findAllSessions(tenantId, filters, { authHeader, facilityId, userId });
   }

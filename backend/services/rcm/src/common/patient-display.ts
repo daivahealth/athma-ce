@@ -21,9 +21,9 @@ export interface PatientDisplay {
 
 export interface PatientDisplayContext {
   tenantId: string;
-  authHeader?: string;
-  facilityId?: string;
-  userId?: string;
+  authHeader?: string | undefined;
+  facilityId?: string | undefined;
+  userId?: string | undefined;
 }
 
 const logger = new Logger('PatientDisplay');
@@ -127,4 +127,65 @@ export async function fetchEncounterPatientMap(
     }),
   );
   return map;
+}
+
+/** Most ids a free-text search resolves from Clinical before filtering RCM rows. */
+export const PATIENT_SEARCH_MATCH_CAP = 200;
+
+/**
+ * Ids of patients whose name / national id / phone / email match `term`,
+ * read from Clinical (GET /patients?search=). RCM has no patient table, so
+ * list endpoints use this to turn a patient-name search into a
+ * `patientId IN (...)` filter. Capped at PATIENT_SEARCH_MATCH_CAP; a failed
+ * lookup is logged and yields no ids (the list then matches only on its own
+ * columns).
+ */
+export async function searchPatientIds(
+  httpService: HttpService,
+  term: string,
+  ctx: PatientDisplayContext,
+): Promise<string[]> {
+  const search = term.trim();
+  if (!search) return [];
+  try {
+    const response = await firstValueFrom(
+      httpService.get(`${resolveClinicalApiUrl()}/patients`, {
+        headers: clinicalHeaders(ctx),
+        params: { search, page: 1, limit: PATIENT_SEARCH_MATCH_CAP },
+      }),
+    );
+    const rows: Array<{ id?: string }> = response?.data?.data ?? [];
+    return rows.map((row) => row.id).filter((id): id is string => !!id);
+  } catch (error) {
+    logger.warn(`Patient search against Clinical API failed: ${(error as Error).message}`);
+    return [];
+  }
+}
+
+/**
+ * Ids of encounters whose patient's name matches `term`, read from Clinical
+ * (GET /encounters?search=, newest first). For records that hold only an
+ * encounter id (coding sessions). Same cap and failure behaviour as
+ * searchPatientIds.
+ */
+export async function searchEncounterIds(
+  httpService: HttpService,
+  term: string,
+  ctx: PatientDisplayContext,
+): Promise<string[]> {
+  const search = term.trim();
+  if (!search) return [];
+  try {
+    const response = await firstValueFrom(
+      httpService.get(`${resolveClinicalApiUrl()}/encounters`, {
+        headers: clinicalHeaders(ctx),
+        params: { search, page: 1, limit: PATIENT_SEARCH_MATCH_CAP },
+      }),
+    );
+    const rows: Array<{ id?: string }> = response?.data?.data ?? [];
+    return rows.map((row) => row.id).filter((id): id is string => !!id);
+  } catch (error) {
+    logger.warn(`Encounter search against Clinical API failed: ${(error as Error).message}`);
+    return [];
+  }
 }

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
+import { containsInsensitive, isUuid, normalizeSearch, resolvePaging } from '../../common/list-query';
 import {
     CreateRemittanceDto,
     RemittanceLineDto,
@@ -77,6 +78,17 @@ export class RemittanceService {
             }
         }
 
+        const search = normalizeSearch(filters?.search);
+        if (search) {
+            where.OR = [
+                ...(isUuid(search) ? [{ id: search }] : []),
+                { remittanceNumber: containsInsensitive(search) },
+                { paymentRef: containsInsensitive(search) },
+                { payer: { payerName: containsInsensitive(search) } },
+            ];
+        }
+
+        const { take, skip } = resolvePaging(filters?.limit, filters?.offset);
         const [remittances, total] = await Promise.all([
             this.prisma.remittance.findMany({
                 where,
@@ -85,8 +97,8 @@ export class RemittanceService {
                     _count: { select: { lines: true } },
                 },
                 orderBy: { createdAt: 'desc' },
-                take: filters?.limit ?? 50,
-                skip: filters?.offset ?? 0,
+                take,
+                skip,
             }),
             this.prisma.remittance.count({ where }),
         ]);

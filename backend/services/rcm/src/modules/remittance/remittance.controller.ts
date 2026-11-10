@@ -37,8 +37,9 @@ export class RemittanceController {
     @ApiQuery({ name: 'status', required: false, enum: RemittanceStatus })
     @ApiQuery({ name: 'dateFrom', required: false })
     @ApiQuery({ name: 'dateTo', required: false })
-    @ApiQuery({ name: 'limit', required: false, type: Number })
+    @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Rows per page (default 50, max 200)' })
     @ApiQuery({ name: 'offset', required: false, type: Number })
+    @ApiQuery({ name: 'search', required: false, description: 'Remittance number, payment ref, payer name, or exact id' })
     async findAll(
         @Headers('x-tenant-id') tenantId: string,
         @Query() filters: RemittanceFilterDto,

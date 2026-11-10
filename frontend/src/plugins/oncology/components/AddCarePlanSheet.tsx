@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useCancerDiagnoses, useCreateOncologyCarePlan, useProtocols, useUpdateOncologyCarePlan } from '../hooks/use-oncology';
+import { useCancerDiagnoses, useCreateOncologyCarePlan, PICKER_LIMIT, useProtocols, useUpdateOncologyCarePlan } from '../hooks/use-oncology';
 import type { CancerDiagnosis, ChemoProtocol, OncologyCarePlan, OncologySubspecialty } from '../types';
 import {
   ModalityPlanEditor,
@@ -91,7 +91,7 @@ export function AddCarePlanSheet({ open, onOpenChange, carePlan }: AddCarePlanSh
   const cancerType = selectedDiagnosis?.cancer_type ?? carePlan?.cancer_type;
 
   // Same query the ModalityPlanEditor uses — shared react-query cache
-  const { data: protocolsData } = useProtocols(cancerType ? { cancerType } : undefined);
+  const { data: protocolsData } = useProtocols({ cancerType: cancerType || undefined, limit: PICKER_LIMIT });
   const protocols: ChemoProtocol[] = protocolsData?.data ?? [];
 
   const createPlan = useCreateOncologyCarePlan();

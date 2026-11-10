@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { Badge } from '@/components/ui/badge';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
 import { EmptyState } from '@/components/ui/empty-state';
 import {
   Table,
@@ -23,21 +24,28 @@ import { Search, UserPlus, User, Eye, Users, Sparkles } from 'lucide-react';
 import { CareContextEntryButton } from '@/modules/clinical/components/care-context/care-context-entry-button';
 import type { Patient } from '@/modules/clinical/types/patient';
 
+const PAGE_SIZE = 20;
+
 export default function PatientsPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebouncedValue(searchQuery, 300);
+  const [page, setPage] = useState(1);
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
+    setPage(1);
   };
 
-  const { data, isLoading, error } = usePatients({
-    search: debouncedQuery,
-    page: 1,
-    limit: 20
-  });
+  const { data, isLoading, error } = usePatients(
+    {
+      search: debouncedQuery,
+      page,
+      limit: PAGE_SIZE,
+    },
+    { keepPreviousData: true },
+  );
 
   // Debug: Log error details
   if (error) {
@@ -224,11 +232,14 @@ export default function PatientsPage() {
             </Card>
           )}
 
-          {/* Pagination Info */}
           {data.data.length > 0 && (
-            <div className="text-center text-sm text-muted-foreground">
-              Showing {data.data.length} of {data.pagination.total} patients
-            </div>
+            <ListPagination
+              page={page}
+              pageSize={PAGE_SIZE}
+              total={data.pagination.total}
+              onPageChange={setPage}
+              itemLabel="patients"
+            />
           )}
         </div>
       )}

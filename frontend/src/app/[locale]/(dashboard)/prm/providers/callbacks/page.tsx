@@ -10,23 +10,30 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useProviderCallbacks } from '@/modules/prm/hooks/use-providers';
 import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
+import type { ProviderCallbackFilters } from '@/modules/prm/services/providers-service';
+import { DEFAULT_PAGE_SIZE, ListPagination, pageOffset } from '@/components/ui/list-pagination';
 
 export default function ProviderCallbacksPage() {
   const params = useParams();
   const locale = params.locale as string;
   const [channel, setChannel] = useState('');
   const [processed, setProcessed] = useState('all');
+  const [page, setPage] = useState(1);
 
   const filters = useMemo(() => {
-    const next: { channel?: string; processed?: boolean } = {};
+    const next: ProviderCallbackFilters = {
+      limit: DEFAULT_PAGE_SIZE,
+      offset: pageOffset(page, DEFAULT_PAGE_SIZE),
+    };
     if (channel.trim()) next.channel = channel.trim();
     if (processed === 'true') next.processed = true;
     if (processed === 'false') next.processed = false;
     return next;
-  }, [channel, processed]);
+  }, [channel, processed, page]);
 
   const { data, isLoading } = useProviderCallbacks(filters);
-  const callbacks = Array.isArray(data) ? data : [];
+  const callbacks = data?.data ?? [];
+  const total = data?.total ?? 0;
 
   return (
     <div className="space-y-6">
@@ -45,7 +52,13 @@ export default function ProviderCallbacksPage() {
         <CardContent className="grid gap-4 md:grid-cols-3">
           <div className="space-y-2">
             <Label>Channel</Label>
-            <Select value={channel || 'all'} onValueChange={(value) => setChannel(value === 'all' ? '' : value)}>
+            <Select
+              value={channel || 'all'}
+              onValueChange={(value) => {
+                setChannel(value === 'all' ? '' : value);
+                setPage(1);
+              }}
+            >
               <SelectTrigger>
               <SelectValue placeholder="All" />
             </SelectTrigger>
@@ -61,7 +74,13 @@ export default function ProviderCallbacksPage() {
         </div>
           <div className="space-y-2">
             <Label>Processed</Label>
-            <Select value={processed} onValueChange={setProcessed}>
+            <Select
+              value={processed}
+              onValueChange={(value) => {
+                setProcessed(value);
+                setPage(1);
+              }}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="All" />
               </SelectTrigger>
@@ -94,6 +113,16 @@ export default function ProviderCallbacksPage() {
                 </div>
               ))}
             </div>
+          )}
+          {!isLoading && total > 0 && (
+            <ListPagination
+              page={page}
+              pageSize={DEFAULT_PAGE_SIZE}
+              total={total}
+              onPageChange={setPage}
+              itemLabel="callbacks"
+              className="px-0"
+            />
           )}
         </CardContent>
       </Card>

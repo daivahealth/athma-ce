@@ -183,12 +183,12 @@ src/
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/medical-coding/sessions` | List coding sessions |
+| GET | `/medical-coding/sessions` | List coding sessions, one page at a time: `status`, `search`, `limit` (default 100, max 200), `offset`. Returns `{ sessions, total }` (before Nov 2026 it returned a bare array) |
 | GET | `/medical-coding/sessions/pending` | Get pending sessions |
 | GET | `/medical-coding/sessions/:id` | Get session |
 | GET | `/medical-coding/sessions/encounter/:encounterId` | Get by encounter |
 
-The list, pending and single-session reads add `patientId` and `patientDisplay` (name, MRN, gender, age) to each session. Coding sessions store only an encounter id, so RCM reads `GET /encounters/:id` from Clinical, forwarding the caller's `authorization`, `x-tenant-id`, `x-facility-id` and `x-user-id`; a failed lookup leaves both `null`. The helper is `src/common/patient-display.ts`. The `patientId` query filter on the list is accepted but not applied (sessions have no patient column).
+The list, pending and single-session reads add `patientId` and `patientDisplay` (name, MRN, gender, age) to each session. Coding sessions store only an encounter id, so RCM reads `GET /encounters/:id` from Clinical, forwarding the caller's `authorization`, `x-tenant-id`, `x-facility-id` and `x-user-id`; a failed lookup leaves both `null`. The helper is `src/common/patient-display.ts`. The `patientId` query filter on the list is accepted but not applied (sessions have no patient column). `search` matches the patient name (through Clinical `GET /encounters?search=`, up to 200 encounters), the linked claim number, or an exact session or encounter id. The claims, batches, eligibility, pre-auth and remittance lists take the same `search` / `limit` / `offset` parameters; see [RCM-CLAIMS-MANAGEMENT-API.md](../../../docs/features/RCM-CLAIMS-MANAGEMENT-API.md).
 | PUT | `/medical-coding/sessions/:id/start-review` | Start review |
 | PUT | `/medical-coding/sessions/:id` | Update session |
 | POST | `/medical-coding/sessions/:id/submit` | Submit for billing |

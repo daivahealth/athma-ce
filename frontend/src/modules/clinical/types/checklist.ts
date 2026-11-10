@@ -225,6 +225,8 @@ export interface ChecklistTemplateFilters {
   status?: string;
   applicableToInpatient?: boolean;
   applicableToOutpatient?: boolean;
+  /** Case-insensitive name match, applied server-side. */
+  search?: string;
   skip?: number;
   take?: number;
 }

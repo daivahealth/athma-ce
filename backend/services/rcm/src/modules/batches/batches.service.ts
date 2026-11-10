@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
+import { containsInsensitive, normalizeSearch, resolvePaging } from '../../common/list-query';
 import {
     CreateBatchDto,
     UpdateBatchDto,
@@ -63,6 +64,16 @@ export class BatchesService {
             }
         }
 
+        const search = normalizeSearch(filters?.search);
+        if (search) {
+            where.OR = [
+                { batchNumber: containsInsensitive(search) },
+                { submissionRef: containsInsensitive(search) },
+                { payer: { payerName: containsInsensitive(search) } },
+            ];
+        }
+
+        const { take, skip } = resolvePaging(filters?.limit, filters?.offset);
         const [batches, total] = await Promise.all([
             this.prisma.claimBatch.findMany({
                 where,
@@ -71,8 +82,8 @@ export class BatchesService {
                     _count: { select: { claims: true } },
                 },
                 orderBy: { createdAt: 'desc' },
-                take: filters?.limit ?? 50,
-                skip: filters?.offset ?? 0,
+                take,
+                skip,
             }),
             this.prisma.claimBatch.count({ where }),
         ]);

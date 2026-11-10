@@ -4,7 +4,7 @@ import type {
   OncologyCancerType, OncologyPrimarySite, OncologyCancerTypeSiteMapping, OncologyHistology,
   RadiationPrescription, RadiationSimulation, RadiationTreatmentPlan, OncologyLabPoint,
   RadiationFraction, RadiationOnTreatmentReview, RadiationCompletionSummary,
-  CancerTimelineEvent, RegistryCandidate, RegistryCandidateSourceType, TreatmentPlan, TreatmentPlanSummary, WorklistDay, OncologyDashboard, OncologyPopulationHealth,
+  CancerTimelineEvent, OncologyPage, RegistryCandidate, RegistryCandidateSourceType, TreatmentPlan, TreatmentPlanSummary, WorklistDay, OncologyDashboard, OncologyPopulationHealth,
 } from '../types';
 
 const BASE_URL = '/plugins/oncology';
@@ -43,7 +43,7 @@ export const oncologyService = {
   },
 
   // Oncology Registry
-  async listRegistry(params?: { cancerType?: string; clinicalStatus?: string; search?: string; page?: number; limit?: number }) {
+  async listRegistry(params?: { cancerType?: string; clinicalStatus?: string; search?: string; page?: number; limit?: number }): Promise<OncologyPage<CancerDiagnosis>> {
     const { data } = await clinicalClient.get(`${BASE_URL}/registry`, { params });
     return data;
   },
@@ -75,7 +75,7 @@ export const oncologyService = {
   },
 
   // Tumor Staging
-  async listStagings(params?: { patientId?: string; cancerDiagnosisId?: string; page?: number; limit?: number }) {
+  async listStagings(params?: { patientId?: string; cancerDiagnosisId?: string; stagingType?: string; search?: string; page?: number; limit?: number }) {
     const { data } = await clinicalClient.get(`${BASE_URL}/staging`, { params });
     return data;
   },
@@ -96,7 +96,7 @@ export const oncologyService = {
   },
 
   // Tumor Board
-  async listTumorBoardCases(params?: { status?: string; date?: string; patientId?: string; page?: number; limit?: number }) {
+  async listTumorBoardCases(params?: { status?: string; date?: string; patientId?: string; search?: string; page?: number; limit?: number }) {
     const { data } = await clinicalClient.get(`${BASE_URL}/tumor-board`, { params });
     return data;
   },
@@ -117,7 +117,7 @@ export const oncologyService = {
   },
 
   // Oncology Care Plans
-  async listCarePlans(params?: { patientId?: string; status?: string; treatmentIntent?: string; cancerDiagnosisId?: string; page?: number; limit?: number }) {
+  async listCarePlans(params?: { patientId?: string; status?: string; treatmentIntent?: string; cancerDiagnosisId?: string; search?: string; page?: number; limit?: number }): Promise<OncologyPage<OncologyCarePlan>> {
     const { data } = await clinicalClient.get(`${BASE_URL}/care-plans`, { params });
     return data;
   },
@@ -149,7 +149,7 @@ export const oncologyService = {
   },
 
   // Chemo Protocols (Phase 2)
-  async listProtocols(params?: { cancerType?: string; isActive?: boolean; page?: number; limit?: number }) {
+  async listProtocols(params?: { cancerType?: string; search?: string; includeInactive?: boolean; page?: number; limit?: number }) {
     const { data } = await clinicalClient.get(`${BASE_URL}/protocols`, { params });
     return data;
   },
@@ -175,7 +175,7 @@ export const oncologyService = {
   },
 
   // Chemo Orders
-  async listChemoOrders(params?: { patientId?: string; status?: string; date?: string; cancerDiagnosisId?: string; page?: number; limit?: number }) {
+  async listChemoOrders(params?: { patientId?: string; status?: string; date?: string; cancerDiagnosisId?: string; search?: string; page?: number; limit?: number }) {
     const { data } = await clinicalClient.get(`${BASE_URL}/orders`, { params });
     return data;
   },
@@ -315,7 +315,7 @@ export const oncologyService = {
 
   // ── Radiation Oncology ─────────────────────────────────────
 
-  async listRadiationPrescriptions(params?: { patientId?: string; status?: string; page?: number; limit?: number }) {
+  async listRadiationPrescriptions(params?: { patientId?: string; status?: string; search?: string; page?: number; limit?: number }): Promise<OncologyPage<RadiationPrescription>> {
     const { data } = await clinicalClient.get(`${BASE_URL}/radiation/prescriptions`, { params });
     return data;
   },
@@ -440,7 +440,7 @@ export const oncologyService = {
     await clinicalClient.delete(`${BASE_URL}/timeline/${id}`);
   },
   // Treatment schedules (patient plans generated from phased protocols)
-  async listTreatmentPlans(params?: { patientId?: string; carePlanId?: string; cancerDiagnosisId?: string; status?: string }): Promise<{ data: TreatmentPlanSummary[] }> {
+  async listTreatmentPlans(params?: { patientId?: string; carePlanId?: string; cancerDiagnosisId?: string; status?: string; search?: string; page?: number; limit?: number }): Promise<OncologyPage<TreatmentPlanSummary>> {
     const { data } = await clinicalClient.get(`${BASE_URL}/treatment-plans`, { params });
     return data;
   },

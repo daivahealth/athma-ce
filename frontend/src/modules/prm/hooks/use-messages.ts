@@ -1,5 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { messagesService, type MessageFilters } from '../services/messages-service';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+  messagesService,
+  type ListMessagesResponse,
+  type MessageFilters,
+} from '../services/messages-service';
 import type { Message } from '../types/message';
 
 const MESSAGE_KEYS = {
@@ -9,9 +13,10 @@ const MESSAGE_KEYS = {
 };
 
 export function useMessages(filters?: MessageFilters) {
-  return useQuery<Message[]>({
+  return useQuery<ListMessagesResponse>({
     queryKey: MESSAGE_KEYS.list(filters),
     queryFn: () => messagesService.list(filters),
+    placeholderData: keepPreviousData,
   });
 }
 

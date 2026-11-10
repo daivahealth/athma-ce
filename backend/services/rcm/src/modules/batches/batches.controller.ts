@@ -41,8 +41,9 @@ export class BatchesController {
     @ApiQuery({ name: 'batchType', required: false, enum: BatchType })
     @ApiQuery({ name: 'dateFrom', required: false })
     @ApiQuery({ name: 'dateTo', required: false })
-    @ApiQuery({ name: 'limit', required: false, type: Number })
+    @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Rows per page (default 50, max 200)' })
     @ApiQuery({ name: 'offset', required: false, type: Number })
+    @ApiQuery({ name: 'search', required: false, description: 'Case-insensitive match on batch number, submission ref, or payer name' })
     async findAll(
         @Headers('x-tenant-id') tenantId: string,
         @Query() filters: BatchFilterDto,

@@ -1,11 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { preAuthService } from '../services/preauth-service';
 import type { CreatePreAuthInput, PreAuthFilters, UpdatePreAuthInput } from '../types/preauth';
 
-export function usePreAuthRequests(filters?: PreAuthFilters) {
+export function usePreAuthRequests(
+  filters?: PreAuthFilters,
+  options: { keepPreviousData?: boolean } = {},
+) {
   return useQuery({
     queryKey: ['preauth-requests', filters],
     queryFn: () => preAuthService.list(filters),
+    // Paged list screens opt in to keep the current page visible while the next page / search loads.
+    // Off by default: patient-scoped callers must never show another patient's rows as a placeholder.
+    placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
   });
 }
 

@@ -1,4 +1,6 @@
-import { Allow, IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Allow, IsArray, IsInt, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import { MAX_SEARCH_LENGTH } from '../../../common/list-query';
 // Remittance status enum
 export enum RemittanceStatus {
     RECEIVED = 'received',
@@ -87,12 +89,14 @@ export class RemittanceFilterDto {
     @IsOptional()
     @Allow()
     dateTo?: Date;
-    @IsOptional()
-    @IsNumber()
+    /** Rows per page; clamped server-side to MAX_LIST_LIMIT. */
+    @IsOptional() @Type(() => Number) @IsInt() @Min(1)
     limit?: number;
-    @IsOptional()
-    @IsNumber()
+    @IsOptional() @Type(() => Number) @IsInt() @Min(0)
     offset?: number;
+    /** Free-text search, case-insensitive. */
+    @IsOptional() @IsString() @MaxLength(MAX_SEARCH_LENGTH)
+    search?: string;
 }
 
 // Reconciliation result

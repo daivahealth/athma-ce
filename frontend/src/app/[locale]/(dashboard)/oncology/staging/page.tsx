@@ -11,6 +11,8 @@ import { Pencil, Plus, Search, Target } from 'lucide-react';
 import { useStagings } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, PatientCell } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { TumorStaging } from '@/plugins/oncology/types';
 
 const STAGING_TYPE_LABELS: Record<string, string> = {
@@ -24,27 +26,25 @@ const STATUS_COLORS: Record<string, string> = {
   entered_in_error: 'bg-destructive/10 text-destructive',
 };
 
+const PAGE_SIZE = 20;
+
 export default function TumorStagingPage() {
   const params = useParams() as { locale: string };
   const router = useRouter();
   const [stagingTypeFilter, setStagingTypeFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const search = useDebouncedValue(searchQuery.trim(), 300);
 
-  const { data, isLoading } = useStagings({ limit: 100 });
-  const allStagings: TumorStaging[] = data?.data ?? [];
-
-  const stagings = allStagings.filter((s) => {
-    const matchesType = !stagingTypeFilter || s.staging_type === stagingTypeFilter;
-    const matchesSearch =
-      !searchQuery ||
-      s.cancer_type?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.primary_site?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.stage_group?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.staging_system?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.patientDisplay?.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.patientDisplay?.mrn.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesType && matchesSearch;
+  // Staging type and search run server-side so they cover every page.
+  const { data, isLoading } = useStagings({
+    stagingType: stagingTypeFilter || undefined,
+    search: search || undefined,
+    page,
+    limit: PAGE_SIZE,
   });
+  const stagings: TumorStaging[] = data?.data ?? [];
+  const hasFilters = !!(stagingTypeFilter || search);
 
   return (
     <div className="space-y-6 page-transition">
@@ -67,12 +67,12 @@ export default function TumorStagingPage() {
             placeholder="Search by patient, cancer type, site, stage..."
             className="pl-9"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
           />
         </div>
         <Select
           value={stagingTypeFilter || 'all'}
-          onValueChange={(v) => setStagingTypeFilter(v === 'all' ? '' : v)}
+          onValueChange={(v) => { setStagingTypeFilter(v === 'all' ? '' : v); setPage(1); }}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Staging type" />
@@ -93,9 +93,9 @@ export default function TumorStagingPage() {
         <div className="flex flex-col items-center justify-center h-60 border rounded-lg bg-muted/20 space-y-4">
           <Target className="h-10 w-10 text-muted-foreground/40" />
           <p className="text-muted-foreground">
-            {allStagings.length === 0 ? 'No tumor staging records yet' : 'No records match the current filters'}
+            {hasFilters ? 'No records match the current filters' : 'No tumor staging records yet'}
           </p>
-          {allStagings.length === 0 && (
+          {!hasFilters && (
             <Button variant="outline" onClick={() => router.push(`/${params.locale}/oncology/staging/new`)}>
               <Plus className="h-4 w-4 mr-2" />Add First Staging
             </Button>
@@ -160,10 +160,14 @@ export default function TumorStagingPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-muted-foreground">
-            {stagings.length} record{stagings.length !== 1 ? 's' : ''}
-            {stagings.length !== allStagings.length && ` (filtered from ${allStagings.length})`}
-          </div>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? stagings.length}
+            onPageChange={setPage}
+            itemLabel="records"
+          />
         </div>
       )}
     </div>

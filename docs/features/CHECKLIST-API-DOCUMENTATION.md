@@ -40,8 +40,9 @@ Checklist templates are reusable definitions that determine what checklists get 
   status?: 'DRAFT' | 'ACTIVE' | 'DEPRECATED' | 'ARCHIVED'
   applicableToInpatient?: 'true' | 'false'
   applicableToOutpatient?: 'true' | 'false'
-  skip?: number    // Offset for pagination (default: 0)
-  take?: number    // Number of items to return (default: 50, max: 100)
+  search?: string  // Case-insensitive match on the template name
+  skip?: number    // Offset for pagination (default: 0; invalid or negative values fall back to 0)
+  take?: number    // Number of items to return (default: 50, max: 200; larger values are clamped)
 }
 ```
 

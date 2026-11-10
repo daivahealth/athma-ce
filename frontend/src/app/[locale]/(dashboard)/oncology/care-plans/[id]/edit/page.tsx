@@ -15,7 +15,7 @@ import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { FIELD_CONTROL, FormActions, FormField, FormSection } from '@/components/forms/form-layout';
 import { DiagnosisContextCard, PatientContextCard } from '@/plugins/oncology/components/FormContextCards';
 import { LoadingState } from '@/plugins/oncology/components/shared';
-import { useOncologyCarePlan, useProtocols, useUpdateOncologyCarePlan } from '@/plugins/oncology/hooks/use-oncology';
+import { useOncologyCarePlan, PICKER_LIMIT, useProtocols, useUpdateOncologyCarePlan } from '@/plugins/oncology/hooks/use-oncology';
 import type { ChemoProtocol } from '@/plugins/oncology/types';
 import {
   ModalityPlanEditor,
@@ -55,9 +55,10 @@ export default function EditCarePlanPage() {
   }, [carePlan]);
 
   // Same query the ModalityPlanEditor uses — shared react-query cache
-  const { data: protocolsData } = useProtocols(
-    carePlan?.cancer_type ? { cancerType: carePlan.cancer_type } : undefined,
-  );
+  const { data: protocolsData } = useProtocols({
+    cancerType: carePlan?.cancer_type || undefined,
+    limit: PICKER_LIMIT,
+  });
   const protocols: ChemoProtocol[] = protocolsData?.data ?? [];
 
   const isValid = treatmentIntent;

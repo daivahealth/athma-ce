@@ -7,6 +7,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { Eye, Plus, Search, Layers } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
+import { ListPagination, pageOffset } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,6 +26,8 @@ const statusLabels: Record<BatchStatus, string> = {
   rejected: 'Rejected',
   partially_processed: 'Partially processed',
 };
+
+const PAGE_SIZE = 20;
 
 const createColumns = (locale: string, router: ReturnType<typeof useRouter>): ColumnDef<Batch>[] => [
   {
@@ -73,14 +77,18 @@ export default function BatchesPage() {
   const locale = params.locale as string;
 
   const [search, setSearch] = useState('');
-  const { data, isLoading, error } = useBatches();
+  const debouncedSearch = useDebouncedValue(search.trim(), 300);
+  const [page, setPage] = useState(1);
+  const { data, isLoading, error } = useBatches(
+    {
+      search: debouncedSearch || undefined,
+      limit: PAGE_SIZE,
+      offset: pageOffset(page, PAGE_SIZE),
+    },
+    { keepPreviousData: true },
+  );
   const batches = useMemo(() => data?.batches ?? [], [data]);
   const columns = useMemo(() => createColumns(locale, router), [locale, router]);
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return batches;
-    return batches.filter((batch) => batch.batchNumber.toLowerCase().includes(term));
-  }, [batches, search]);
 
   return (
     <div className="space-y-6">
@@ -102,9 +110,12 @@ export default function BatchesPage() {
             <div className="relative flex-1 min-w-[240px] max-w-sm">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search batches by number..."
+                placeholder="Search by batch number, submission ref, or payer..."
                 value={search}
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
                 className="pl-9"
               />
             </div>
@@ -112,13 +123,22 @@ export default function BatchesPage() {
         </CardContent>
       </Card>
 
-      <ResourceTable
-        columns={columns}
-        data={filtered}
-        isLoading={isLoading}
-        error={error}
-        emptyMessage="No batches found."
-      />
+      <div>
+        <ResourceTable
+          columns={columns}
+          data={batches}
+          isLoading={isLoading}
+          error={error}
+          emptyMessage="No batches found."
+        />
+        <ListPagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          total={data?.total ?? 0}
+          onPageChange={setPage}
+          itemLabel="batches"
+        />
+      </div>
     </div>
   );
 }

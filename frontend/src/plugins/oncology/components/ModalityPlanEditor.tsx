@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Plus, Trash2 } from 'lucide-react';
-import { useProtocols } from '../hooks/use-oncology';
+import { PICKER_LIMIT, useProtocols } from '../hooks/use-oncology';
 import type { ChemoProtocol, PlannedModality, TreatmentModality } from '../types';
 
 export interface ModalityFormRow {
@@ -120,7 +120,7 @@ interface ModalityPlanEditorProps {
 
 export function ModalityPlanEditor({ rows, onChange, cancerType }: ModalityPlanEditorProps) {
   // Parents building the submit payload use the same query (shared react-query cache)
-  const { data: protocolsData } = useProtocols(cancerType ? { cancerType } : undefined);
+  const { data: protocolsData } = useProtocols({ cancerType: cancerType || undefined, limit: PICKER_LIMIT });
   const protocols: ChemoProtocol[] = protocolsData?.data ?? [];
 
   const addRow = () => onChange([...rows, emptyModalityRow(rows.length + 1)]);

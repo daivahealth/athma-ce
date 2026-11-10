@@ -355,6 +355,7 @@ export class PatientService {
     const searchTerm = options.search || options.query;
     if (searchTerm) {
       where.OR = [
+        { mrn: { contains: searchTerm, mode: 'insensitive' } },
         { firstName: { contains: searchTerm, mode: 'insensitive' } },
         { lastName: { contains: searchTerm, mode: 'insensitive' } },
         { nationalId: { contains: searchTerm, mode: 'insensitive' } },

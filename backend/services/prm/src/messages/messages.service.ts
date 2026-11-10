@@ -12,14 +12,16 @@ export class MessagesService {
   constructor(private prisma: PrismaService) {}
 
   /**
-   * Get all messages (with optional filters)
+   * Get one page of messages (newest first) with the total matching count
    */
   async findAll(
     tenantId: string,
-    filters?: {
+    filters: {
       patientId?: string;
       channel?: string;
       status?: string;
+      limit: number;
+      offset: number;
     },
   ) {
     const where: any = { tenantId };
@@ -36,11 +38,17 @@ export class MessagesService {
       where.status = filters.status;
     }
 
-    return this.prisma.patientMessage.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      take: 100,
-    });
+    const [data, total] = await Promise.all([
+      this.prisma.patientMessage.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        take: filters.limit,
+        skip: filters.offset,
+      }),
+      this.prisma.patientMessage.count({ where }),
+    ]);
+
+    return { data, total };
   }
 
   /**

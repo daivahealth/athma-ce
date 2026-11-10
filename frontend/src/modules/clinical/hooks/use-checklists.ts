@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { checklistService } from '@/modules/clinical/services/checklist-service';
 import type {
   ChecklistTemplate,
@@ -27,6 +27,7 @@ export function useChecklistTemplates(filters?: ChecklistTemplateFilters) {
   return useQuery<PaginatedChecklistTemplates>({
     queryKey: CHECKLIST_KEYS.templates(filters),
     queryFn: () => checklistService.listTemplates(filters),
+    placeholderData: keepPreviousData,
   });
 }
 

@@ -11,6 +11,8 @@ import {
     PreAuthUrgency,
 } from './dto/preauth.dto';
 import { resolveClinicalApiUrl } from '../../common/service-urls';
+import { containsInsensitive, normalizeSearch, resolvePaging } from '../../common/list-query';
+import { searchPatientIds } from '../../common/patient-display';
 
 export interface PatientDisplayDto {
     patientId: string;
@@ -315,13 +317,25 @@ export class PreAuthService {
             }
         }
 
+        // Search: internal ref / payer auth number, or patient name via Clinical.
+        const search = normalizeSearch(filters?.search);
+        if (search) {
+            const patientIds = await searchPatientIds(this.httpService, search, { tenantId, authHeader, facilityId, userId });
+            where.OR = [
+                { internalRef: containsInsensitive(search) },
+                { authNumber: containsInsensitive(search) },
+                ...(patientIds.length ? [{ patientId: { in: patientIds } }] : []),
+            ];
+        }
+
+        const { take, skip } = resolvePaging(filters?.limit, filters?.offset);
         const [requests, total] = await Promise.all([
             this.prisma.preAuthRequest.findMany({
                 where,
                 include: { payer: true, policy: true },
                 orderBy: { createdAt: 'desc' },
-                take: filters?.limit ?? 50,
-                skip: filters?.offset ?? 0,
+                take,
+                skip,
             }),
             this.prisma.preAuthRequest.count({ where }),
         ]);

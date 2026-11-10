@@ -12,10 +12,12 @@ import {
   Logger,
   HttpException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PluginController } from '@athma/plugin-sdk';
 import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
 import { OncologyService } from './oncology.service';
+import { InvalidPagingError, parsePaging } from './pagination';
 
 @PluginController('oncology')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -23,6 +25,17 @@ export class OncologyController {
   private readonly logger = new Logger(OncologyController.name);
 
   constructor(private readonly oncologyService: OncologyService) {}
+
+  /** `[page, limit]` from query strings: page >= 1, limit 1..500, non-integers rejected. */
+  private paging(page?: string, limit?: string, defaultLimit = 20): [number, number] {
+    try {
+      const p = parsePaging(page, limit, defaultLimit);
+      return [p.page, p.limit];
+    } catch (e) {
+      if (e instanceof InvalidPagingError) throw new BadRequestException(e.message);
+      throw e;
+    }
+  }
 
   // ============================================
   // Dashboard
@@ -100,8 +113,7 @@ export class OncologyController {
   ) {
     const result = await this.oncologyService.listRegistry(
       { cancerType, clinicalStatus, search },
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
+      ...this.paging(page, limit),
     );
     return { success: true, ...result };
   }
@@ -164,13 +176,13 @@ export class OncologyController {
     @Query('status') status?: string,
     @Query('treatmentIntent') treatmentIntent?: string,
     @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
+    @Query('search') search?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
     const result = await this.oncologyService.listCarePlans(
-      { patientId, status, treatmentIntent, cancerDiagnosisId },
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
+      { patientId, status, treatmentIntent, cancerDiagnosisId, search },
+      ...this.paging(page, limit),
     );
     return { success: true, ...result };
   }
@@ -216,13 +228,14 @@ export class OncologyController {
   async listStagings(
     @Query('patientId') patientId?: string,
     @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
+    @Query('stagingType') stagingType?: string,
+    @Query('search') search?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
     const result = await this.oncologyService.listStagings(
-      { patientId, cancerDiagnosisId },
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
+      { patientId, cancerDiagnosisId, stagingType, search },
+      ...this.paging(page, limit),
     );
     return { success: true, ...result };
   }
@@ -256,13 +269,13 @@ export class OncologyController {
     @Query('status') status?: string,
     @Query('date') date?: string,
     @Query('patientId') patientId?: string,
+    @Query('search') search?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
     const result = await this.oncologyService.listTumorBoardCases(
-      { status, date, patientId },
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
+      { status, date, patientId, search },
+      ...this.paging(page, limit),
     );
     return { success: true, ...result };
   }
@@ -294,13 +307,15 @@ export class OncologyController {
   @Permissions('oncology.chemo_protocol.read')
   async listProtocols(
     @Query('cancerType') cancerType?: string,
+    @Query('search') search?: string,
+    @Query('includeInactive') includeInactive?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
     const result = await this.oncologyService.listProtocols(
       cancerType,
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
+      ...this.paging(page, limit),
+      { search, includeInactive: includeInactive === 'true' },
     );
     return { success: true, ...result };
   }
@@ -341,6 +356,7 @@ export class OncologyController {
     @Query('status') status?: string,
     @Query('date') date?: string,
     @Query('cancerDiagnosisId') cancerDiagnosisId?: string,
+    @Query('search') search?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
@@ -350,9 +366,9 @@ export class OncologyController {
         ...(status !== undefined && { status }),
         ...(date !== undefined && { date }),
         ...(cancerDiagnosisId !== undefined && { cancerDiagnosisId }),
+        ...(search !== undefined && { search }),
       },
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
+      ...this.paging(page, limit),
     );
     return { success: true, ...result };
   }
@@ -610,6 +626,7 @@ export class OncologyController {
   async listRadiationPrescriptions(
     @Query('patientId') patientId?: string,
     @Query('status') status?: string,
+    @Query('search') search?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
@@ -617,9 +634,9 @@ export class OncologyController {
       {
         ...(patientId !== undefined && { patientId }),
         ...(status !== undefined && { status }),
+        ...(search !== undefined && { search }),
       },
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 20,
+      ...this.paging(page, limit),
     );
     return { success: true, ...result };
   }

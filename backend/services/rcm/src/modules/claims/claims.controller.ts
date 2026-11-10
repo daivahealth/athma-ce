@@ -52,8 +52,9 @@ export class ClaimsController {
     @ApiQuery({ name: 'batchId', required: false })
     @ApiQuery({ name: 'dateFrom', required: false })
     @ApiQuery({ name: 'dateTo', required: false })
-    @ApiQuery({ name: 'limit', required: false, type: Number })
+    @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Rows per page (default 50, max 200)' })
     @ApiQuery({ name: 'offset', required: false, type: Number })
+    @ApiQuery({ name: 'search', required: false, description: 'Case-insensitive match on claim number or patient name (via Clinical)' })
     async findAll(
         @Headers('x-tenant-id') tenantId: string,
         @Headers('authorization') authHeader: string,

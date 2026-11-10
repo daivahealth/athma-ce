@@ -144,7 +144,9 @@ Filter by:
 - **Status**: type a status exactly as the server stores it.
 
 **Message Results** shows each message's channel, subject (or **Message**) and **Status**. Press **View** to
-open it. If nothing matches you see "No messages found."
+open it. If nothing matches you see "No messages found." Results come 20 at a time; the footer shows which
+rows you are looking at out of the total, with **Previous** and **Next** to move between pages. Changing a
+filter goes back to the first page.
 
 **Message Details** (`/prm/messages/{messageId}`) shows the whole message record as JSON. It is read-only. If
 the message cannot be found it says "Message not found."
@@ -270,6 +272,7 @@ as JSON.
 **Provider Callbacks** (`/prm/providers/callbacks`) lists the delivery updates messaging providers have sent
 back, such as delivered or failed receipts. Filter by **Channel** and **Processed** (**All**, **Processed**,
 **Unprocessed**). Each callback is shown as raw JSON. If nothing matches you see "No callbacks found."
+Callbacks come 20 at a time, with **Previous** and **Next** in the footer.
 
 ## Webhook tester
 

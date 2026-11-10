@@ -11,8 +11,12 @@ import { ChevronRight, Plus, Search, Syringe } from 'lucide-react';
 import { useChemoOrders } from '@/plugins/oncology/hooks/use-oncology';
 import { LoadingState, StatusBadge } from '@/plugins/oncology/components/shared';
 import { PageHeader } from '@/components/ui/page-header';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { ChemoOrder } from '@/plugins/oncology/types';
 import { formatDayMonthYear } from '@/plugins/oncology/lib/treatment-day';
+
+const PAGE_SIZE = 20;
 
 export default function ChemoOrdersPage() {
   const params = useParams() as { locale: string };
@@ -21,21 +25,18 @@ export default function ChemoOrdersPage() {
   // ?status= lets the Oncology Dashboard deep-link to one status
   const initialStatus = useSearchParams().get('status') ?? '';
   const [statusFilter, setStatusFilter] = useState(initialStatus);
+  const [page, setPage] = useState(1);
+  const search = useDebouncedValue(searchQuery.trim(), 300);
 
-  const { data, isLoading } = useChemoOrders(statusFilter ? { status: statusFilter } : undefined);
-  const allOrders: ChemoOrder[] = data?.data ?? [];
-
-  const orders = allOrders.filter((o) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      o.protocol_name?.toLowerCase().includes(q) ||
-      o.protocol_code?.toLowerCase().includes(q) ||
-      o.patientDisplay?.displayName?.toLowerCase().includes(q) ||
-      o.patientDisplay?.mrn?.toLowerCase().includes(q) ||
-      o.cancer_type?.toLowerCase().includes(q)
-    );
+  // Search runs server-side (protocol, patient, MRN, cancer type) so it covers every page.
+  const { data, isLoading } = useChemoOrders({
+    status: statusFilter || undefined,
+    search: search || undefined,
+    page,
+    limit: PAGE_SIZE,
   });
+  const orders: ChemoOrder[] = data?.data ?? [];
+  const hasFilters = !!(statusFilter || search);
 
   return (
     <div className="space-y-6 page-transition">
@@ -57,10 +58,10 @@ export default function ChemoOrdersPage() {
             placeholder="Search by patient, protocol, cancer type..."
             className="pl-9"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
           />
         </div>
-        <Select value={statusFilter || 'all'} onValueChange={(v) => setStatusFilter(v === 'all' ? '' : v)}>
+        <Select value={statusFilter || 'all'} onValueChange={(v) => { setStatusFilter(v === 'all' ? '' : v); setPage(1); }}>
           <SelectTrigger className="w-[160px]"><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
@@ -81,9 +82,9 @@ export default function ChemoOrdersPage() {
         <div className="flex flex-col items-center justify-center h-60 border rounded-lg bg-muted/20 space-y-4">
           <Syringe className="h-10 w-10 text-muted-foreground/40" />
           <p className="text-muted-foreground">
-            {allOrders.length === 0 ? 'No chemo orders yet' : 'No orders match the current filters'}
+            {hasFilters ? 'No orders match the current filters' : 'No chemo orders yet'}
           </p>
-          {allOrders.length === 0 && (
+          {!hasFilters && (
             <Button variant="outline" onClick={() => router.push(`/${params.locale}/oncology/orders/new`)}>
               <Plus className="h-4 w-4 mr-2" />Create First Order
             </Button>
@@ -133,10 +134,14 @@ export default function ChemoOrdersPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-muted-foreground">
-            {orders.length} order{orders.length !== 1 ? 's' : ''}
-            {orders.length !== allOrders.length && ` (filtered from ${allOrders.length})`}
-          </div>
+          <ListPagination
+            className="bg-muted/20 border-t"
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={data?.pagination?.total ?? orders.length}
+            onPageChange={setPage}
+            itemLabel="orders"
+          />
         </div>
       )}
     </div>

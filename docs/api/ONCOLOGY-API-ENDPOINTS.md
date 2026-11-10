@@ -6,6 +6,20 @@
 **Required headers:** `x-tenant-id`, `x-user-id`, `x-facility-id`  
 **Plugin guard:** `feature.nav.oncology` must be `true` in `instance_configs`
 
+### List paging and search
+
+The list endpoints for registry, staging, tumor board, care plans, protocols, chemo orders,
+radiation prescriptions and treatment plans share one paging contract:
+
+- `page` (default 1) and `limit` (default 20) must be whole numbers; anything else returns `400`.
+  `page` is floored at 1 and `limit` is clamped to 1–500. Pickers ask for up to 500 rows.
+- The response is `{ "success": true, "data": [...], "pagination": { "page", "limit", "total" } }`,
+  where `total` is a `COUNT` over the same joins and filters, so clients page until
+  `page * limit >= total`.
+- `search` is a case-insensitive substring match, sent to Postgres as a bound `ILIKE` parameter.
+  `%`, `_` and `\` in the term match literally (registry search does not escape them yet).
+  Where the list joins patients, search also matches MRN, display name, and first and last name.
+
 ---
 
 ## Dashboard
@@ -317,7 +331,7 @@ GET /api/v1/plugins/oncology/staging
 ```
 **Permission:** `oncology.staging.read`
 
-**Query params:** `cancerDiagnosisId`, `patientId`, `status`, `page`, `limit`
+**Query params:** `cancerDiagnosisId`, `patientId`, `stagingType`, `search` (cancer type, primary site, stage group, staging system, patient), `page`, `limit`. Paged as described under [List paging and search](#list-paging-and-search).
 
 ---
 
@@ -355,7 +369,7 @@ GET /api/v1/plugins/oncology/tumor-board
 ```
 **Permission:** `oncology.tumor_board.read`
 
-**Query params:** `cancerDiagnosisId`, `patientId`, `status`, `page`, `limit`
+**Query params:** `cancerDiagnosisId`, `patientId`, `status`, `search` (cancer type, primary site, MDT recommendation, intent, patient), `page`, `limit`. Returns `pagination.total`; see [List paging and search](#list-paging-and-search).
 
 ---
 
@@ -395,7 +409,7 @@ GET /api/v1/plugins/oncology/care-plans
 ```
 **Permission:** `oncology.care_plan.read`
 
-**Query params:** `patientId`, `status`, `treatmentIntent`, `page`, `limit`
+**Query params:** `patientId`, `status`, `treatmentIntent`, `cancerDiagnosisId`, `search` (plan number, patient, cancer type, primary site, notes), `page`, `limit`. Returns `pagination.total`; see [List paging and search](#list-paging-and-search).
 
 Each plan carries `cancer_type`, `primary_site` and `patientDisplay`.
 
@@ -461,9 +475,12 @@ Creates a new version with incremented `version` number and sets `parent_plan_id
 
 ### List Protocols
 ```
-GET /api/v1/plugins/oncology/protocols?cancerType=&page=1&limit=20
+GET /api/v1/plugins/oncology/protocols?cancerType=&search=&includeInactive=&page=1&limit=20
 ```
 **Permission:** `oncology.chemo_protocol.read`
+
+Active protocols only unless `includeInactive=true`. `search` matches code, name and cancer type.
+Returns `pagination.total`; see [List paging and search](#list-paging-and-search).
 
 Every protocol in the response carries `phases` (see below) and `supportive_care`.
 
@@ -575,9 +592,12 @@ draft | pending | approved | verified | held → cancelled
 
 ### List Orders
 ```
-GET /api/v1/plugins/oncology/orders?patientId=&status=&date=&cancerDiagnosisId=&page=1&limit=20
+GET /api/v1/plugins/oncology/orders?patientId=&status=&date=&cancerDiagnosisId=&search=&page=1&limit=20
 ```
 **Permission:** `oncology.chemo_order.read`
+
+`search` matches protocol name or code, cancer type and patient. Returns `pagination.total`; see
+[List paging and search](#list-paging-and-search).
 
 ---
 
@@ -727,9 +747,11 @@ behaviour: [ONCOLOGY-PLUGIN — Patient treatment schedule](../features/oncology
 
 ### List Treatment Plans
 ```
-GET /api/v1/plugins/oncology/treatment-plans?patientId=&carePlanId=&cancerDiagnosisId=&status=
+GET /api/v1/plugins/oncology/treatment-plans?patientId=&carePlanId=&cancerDiagnosisId=&status=&search=&page=1&limit=20
 ```
-Summaries (max 200): protocol code/name, `start_date`, `end_date`, `next_date`, `total_cycles`,
+Paged summaries (see [List paging and search](#list-paging-and-search); before Nov 2026 this
+returned up to 200 rows with no paging). `search` matches patient, protocol code or name and
+cancer type. Each row has protocol code/name, `start_date`, `end_date`, `next_date`, `total_cycles`,
 `completed_cycles`, `current_cycle` (first cycle not yet completed, null when all are done),
 `total_days`, `given_days`, `status`, `patientDisplay`.
 

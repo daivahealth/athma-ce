@@ -31,6 +31,12 @@ step leans on the one before it:
 A patient can have more than one diagnosis (a second primary, or a recurrence tracked separately).
 Staging, tumour board cases, care plans and orders always belong to one diagnosis.
 
+The oncology lists (registry, staging, tumour board, care plans, protocols, orders, treatment schedules,
+radiation and the timeline's patient list) show 20 rows at a time. The footer under each table says which
+rows you are looking at out of the total, such as "Showing 21–40 of 132", with **Previous** and **Next**
+to move between pages. Search and the filters look through every record, not just the page on screen,
+and changing either goes back to the first page.
+
 ### Picking the patient and the diagnosis
 
 The **Add** and **Create** forms on these screens start the same way:
@@ -154,7 +160,7 @@ diagnosis, one row per diagnosis; **Candidates** lists patients the system think
 - **Care Plan**: the status of the diagnosis's care plan, or **None**.
 - A pencil at the end of the row opens the diagnosis for editing.
 
-Search by patient name or MRN, and filter by clinical status. The count of patients is under the table.
+Search by patient name or MRN, and filter by clinical status. The footer under the table shows the total number of registry entries and pages through them 20 at a time.
 
 ### Review registry candidates
 

@@ -63,7 +63,8 @@ export class ChecklistTemplateController {
   /**
    * List checklist templates with filtering and pagination
    * GET /api/v1/inpatient/checklists/templates
-   * Query params: category, status, applicableToInpatient, applicableToOutpatient, skip, take
+   * Query params: category, status, applicableToInpatient, applicableToOutpatient,
+   * search (case-insensitive name match), skip, take (default 50, max 200)
    */
   @Get()
   @Header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
@@ -75,6 +76,7 @@ export class ChecklistTemplateController {
     @Query('status') status?: ChecklistTemplateStatus,
     @Query('applicableToInpatient') applicableToInpatient?: string,
     @Query('applicableToOutpatient') applicableToOutpatient?: string,
+    @Query('search') search?: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
     @TenantId() tenantId?: string,
@@ -89,14 +91,19 @@ export class ChecklistTemplateController {
     if (applicableToOutpatient !== undefined) {
       filters.applicableToOutpatient = applicableToOutpatient === 'true';
     }
+    if (search && search.trim()) {
+      filters.search = search.trim();
+    }
 
     if (!tenantId) {
       return { data: [], meta: { total: 0, skip: 0, take: 0, hasMore: false } };
     }
 
+    const parsedSkip = parseInt(skip ?? '', 10);
+    const parsedTake = parseInt(take ?? '', 10);
     const pagination = {
-      skip: skip ? parseInt(skip, 10) : 0,
-      take: take ? parseInt(take, 10) : 50,
+      skip: Number.isFinite(parsedSkip) && parsedSkip > 0 ? parsedSkip : 0,
+      take: Number.isFinite(parsedTake) && parsedTake > 0 ? Math.min(parsedTake, 200) : 50,
     };
 
     return this.checklistTemplateService.listTemplates(filters, tenantId, pagination);

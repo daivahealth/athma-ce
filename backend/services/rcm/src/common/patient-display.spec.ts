@@ -1,5 +1,12 @@
 import { of, throwError } from 'rxjs';
-import { buildPatientDisplay, fetchEncounterPatientMap, fetchPatientDisplayMap } from './patient-display';
+import {
+  PATIENT_SEARCH_MATCH_CAP,
+  buildPatientDisplay,
+  fetchEncounterPatientMap,
+  fetchPatientDisplayMap,
+  searchEncounterIds,
+  searchPatientIds,
+} from './patient-display';
 
 const patient = {
   id: 'p1',
@@ -44,5 +51,29 @@ describe('patient-display', () => {
     expect(map.get('e1')).toMatchObject({ patientId: 'p1', patientDisplay: { displayName: 'Asha Rao' } });
     const headers = (get.mock.calls[0] as any[])[1].headers;
     expect(headers).toMatchObject({ 'x-tenant-id': 't1', authorization: 'Bearer x' });
+  });
+
+  it('resolves patient ids for a search term from Clinical, capped and tenant-scoped', async () => {
+    const get = jest.fn(() => of({ data: { data: [{ id: 'p1' }, { id: 'p2' }], pagination: { total: 2 } } }));
+    const ids = await searchPatientIds({ get } as any, '  asha ', { tenantId: 't1' });
+    expect(ids).toEqual(['p1', 'p2']);
+    const [url, config] = get.mock.calls[0] as any[];
+    expect(url).toMatch(/\/patients$/);
+    expect(config.params).toEqual({ search: 'asha', page: 1, limit: PATIENT_SEARCH_MATCH_CAP });
+    expect(config.headers).toMatchObject({ 'x-tenant-id': 't1' });
+  });
+
+  it('returns no ids for a blank term or a failed search', async () => {
+    const get = jest.fn(() => throwError(() => new Error('503')));
+    expect(await searchPatientIds({ get } as any, '  ', { tenantId: 't1' })).toEqual([]);
+    expect(get).not.toHaveBeenCalled();
+    expect(await searchPatientIds({ get } as any, 'asha', { tenantId: 't1' })).toEqual([]);
+    expect(await searchEncounterIds({ get } as any, 'asha', { tenantId: 't1' })).toEqual([]);
+  });
+
+  it('resolves encounter ids for a patient-name search', async () => {
+    const get = jest.fn(() => of({ data: { data: [{ id: 'e1' }], meta: { total: 1 } } }));
+    expect(await searchEncounterIds({ get } as any, 'rao', { tenantId: 't1' })).toEqual(['e1']);
+    expect((get.mock.calls[0] as any[])[0]).toMatch(/\/encounters$/);
   });
 });
