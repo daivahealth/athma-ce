@@ -21,7 +21,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { EnvironmentBanner } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
-import { SOURCE_REPOSITORY_URL } from '@/lib/config/deployment';
+import {
+  DEMO_APP_URL,
+  PRODUCTION_APP_URL,
+  SOURCE_REPOSITORY_URL,
+  siteHref,
+} from '@/lib/config/deployment';
 
 const MODULES = [
   {
@@ -79,11 +84,14 @@ const MODULES = [
 ] as const;
 
 /**
- * Public landing page for the demo instance (`/{locale}` when
- * LANDING_PAGE_ENABLED). See docs/features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md.
+ * Public landing page (`/{locale}` when LANDING_PAGE_ENABLED). Served on its own
+ * host (LANDING_URL), it sends visitors to the demo app at DEMO_APP_URL and, once
+ * it exists, customers to PRODUCTION_APP_URL.
+ * See docs/features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md.
  */
 export function LandingPage({ locale }: { locale: string }) {
-  const login = `/${locale}/login`;
+  const login = siteHref(DEMO_APP_URL, locale, '/login');
+  const productionLogin = PRODUCTION_APP_URL ? siteHref(PRODUCTION_APP_URL, locale, '/login') : '';
   const requestAccess = `/${locale}/request-access`;
 
   return (
@@ -232,9 +240,16 @@ export function LandingPage({ locale }: { locale: string }) {
                 The demo is open to everyone, everywhere. Want Athma in production for your
                 organisation? Tell us about it and we&apos;ll be in touch.
               </p>
-              <Button asChild className="mt-5">
-                <Link href={requestAccess}>Request production access</Link>
-              </Button>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <Button asChild>
+                  <Link href={requestAccess}>Request production access</Link>
+                </Button>
+                {productionLogin && (
+                  <Button asChild variant="outline">
+                    <Link href={productionLogin}>Customer sign-in</Link>
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </section>

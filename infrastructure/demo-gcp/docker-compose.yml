@@ -55,7 +55,8 @@ x-backend: &backend
     ACCESS_REQUEST_NOTIFY_TO: ${ACCESS_REQUEST_NOTIFY_TO:-}
     SECRETS_MASTER_KEY: ${SECRETS_MASTER_KEY}
     SECRETS_MASTER_KEY_VERSION: "1"
-    CORS_ORIGINS: https://${SITE_DOMAIN:-${DEMO_DOMAIN}},https://${DEMO_DOMAIN},https://app.${DEMO_DOMAIN}
+    # The public site (LANDING_DOMAIN) posts access requests to foundation, so it is an allowed origin too.
+    CORS_ORIGINS: https://${SITE_DOMAIN:-${DEMO_DOMAIN}},https://${DEMO_DOMAIN},https://app.${DEMO_DOMAIN},https://${LANDING_DOMAIN:-${SITE_DOMAIN:-${DEMO_DOMAIN}}}
     FOUNDATION_API_URL: http://foundation:3010/api/v1
     FOUNDATION_BASE_URL: http://foundation:3010
     FOUNDATION_SERVICE_URL: http://foundation:3010
@@ -184,6 +185,11 @@ services:
         NEXT_PUBLIC_LOGIN_EMAIL: ${LOGIN_EMAIL:-}
         NEXT_PUBLIC_LANDING_PAGE: ${LANDING_PAGE:-}
         NEXT_PUBLIC_PRIVACY_CONTACT_EMAIL: ${PRIVACY_CONTACT_EMAIL:-}
+        # Public addresses (docs/runbooks/demo-environment-gcp.md, "Public addresses").
+        # LANDING_URL stays empty without a LANDING_DOMAIN, so the landing page is served where it is.
+        NEXT_PUBLIC_LANDING_URL: ${LANDING_DOMAIN:+https://${LANDING_DOMAIN}}
+        NEXT_PUBLIC_DEMO_APP_URL: https://${SITE_DOMAIN:-${DEMO_DOMAIN}}
+        NEXT_PUBLIC_PRODUCTION_APP_URL: ${PRODUCTION_APP_URL:-}
 
   caddy:
     image: caddy:2-alpine
@@ -194,6 +200,7 @@ services:
     environment:
       DEMO_DOMAIN: ${DEMO_DOMAIN}
       SITE_DOMAIN: ${SITE_DOMAIN:-${DEMO_DOMAIN}}
+      LANDING_DOMAIN: ${LANDING_DOMAIN:-${SITE_DOMAIN:-${DEMO_DOMAIN}}}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddydata:/data

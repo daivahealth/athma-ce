@@ -139,3 +139,30 @@ export const SOURCE_REPOSITORY_URL = 'https://github.com/daivahealth/athma-ce';
  * NEXT_PUBLIC_PRIVACY_CONTACT_EMAIL; empty shows a generic pointer to daiva.health.
  */
 export const PRIVACY_CONTACT_EMAIL: string = (process.env.NEXT_PUBLIC_PRIVACY_CONTACT_EMAIL ?? '').trim();
+
+/**
+ * Normalises a public address set at build time: an http(s) origin with no
+ * trailing slash, or '' when unset or not a URL.
+ */
+export function parsePublicUrl(raw: string | undefined): string {
+  const value = raw?.trim().replace(/\/+$/, '') ?? '';
+  return /^https?:\/\/[^/\s]+$/i.test(value) ? value : '';
+}
+
+/**
+ * Public addresses of the three Athma surfaces, set at build time. Each is an
+ * origin such as https://athma.daiva.health; '' means "this same site" and
+ * links stay relative. See docs/features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md.
+ */
+// Literal process.env access so Next inlines the values into the client bundle.
+/** The public site with the landing page (NEXT_PUBLIC_LANDING_URL). */
+export const LANDING_URL: string = parsePublicUrl(process.env.NEXT_PUBLIC_LANDING_URL);
+/** The live demo app (NEXT_PUBLIC_DEMO_APP_URL). */
+export const DEMO_APP_URL: string = parsePublicUrl(process.env.NEXT_PUBLIC_DEMO_APP_URL);
+/** The production app; '' until it exists (NEXT_PUBLIC_PRODUCTION_APP_URL). */
+export const PRODUCTION_APP_URL: string = parsePublicUrl(process.env.NEXT_PUBLIC_PRODUCTION_APP_URL);
+
+/** `${origin}/${locale}${path}`, relative when origin is ''. */
+export function siteHref(origin: string, locale: string, path = ''): string {
+  return `${origin}/${locale}${path}`;
+}

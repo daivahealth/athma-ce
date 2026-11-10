@@ -253,15 +253,53 @@ sudo docker exec -i athma-demo-postgres-1 psql -U zeal_user -d zeal_foundation \
 
 Platform admins must sign out and in again to pick up the new permissions. Review requests under the gear menu, **Access requests**. No email is sent for new requests.
 
-## Public address (SITE_DOMAIN)
+## Public addresses (SITE_DOMAIN, LANDING_DOMAIN)
 
-The web app's public address is `SITE_DOMAIN` (for example `athma.daiva.health`); `DEMO_DOMAIN` and `app.DEMO_DOMAIN` redirect to it (308), so every visitor has one browser session and sign-in always returns to the same address. The APIs stay on `*.DEMO_DOMAIN`, so OAuth redirect URIs do not change. Unset, `SITE_DOMAIN` is `DEMO_DOMAIN` and nothing redirects.
+The demo VM answers on three kinds of address. The APIs stay on `*.DEMO_DOMAIN` (`foundation.athma-ce-demo.daiva.health` and so on) whatever the other two are set to, so the OAuth callback URIs registered with Google, Microsoft and GitHub never change.
 
-Order matters, or the old address redirects to one that does not resolve:
+| Variable | Example | Serves |
+|---|---|---|
+| `LANDING_DOMAIN` | `athma.daiva.health` | The public site: `/`, `/{locale}`, `/{locale}/request-access`, `/{locale}/terms`, `/{locale}/privacy` and their assets. Every other path redirects (308) to `SITE_DOMAIN` with the same path, so `https://athma.daiva.health/en/login` lands on the demo sign-in. |
+| `SITE_DOMAIN` | `demo.athma.daiva.health` | The demo web app, every page. `DEMO_DOMAIN` and `app.DEMO_DOMAIN` redirect here (308), so every visitor has one browser session and sign-in always returns to one address. Its `/{locale}` home page redirects to `LANDING_DOMAIN`. |
+| `PRODUCTION_APP_URL` | `https://app.athma.daiva.health` | Not served by this VM. When set, the landing page shows **Customer sign-in** to `{PRODUCTION_APP_URL}/{locale}/login`. |
 
-1. Add a Netlify DNS `A` record `athma` → `34.100.225.182` and wait until `dig +short athma.daiva.health` returns it.
-2. Add `SITE_DOMAIN=athma.daiva.health` to `.env`, then `sudo docker compose up -d caddy foundation` (Caddy fetches the certificate on first request).
-3. Optionally update the Google OAuth branding links (home page, privacy, terms) to the new address.
+Defaults: unset `SITE_DOMAIN` is `DEMO_DOMAIN`; unset `LANDING_DOMAIN` is `SITE_DOMAIN`, and the landing page is served on the app address as before. `LANDING_DOMAIN` and `PRODUCTION_APP_URL` are baked into the frontend build (`NEXT_PUBLIC_LANDING_URL`, `NEXT_PUBLIC_DEMO_APP_URL`, `NEXT_PUBLIC_PRODUCTION_APP_URL`, see [PUBLIC-LANDING-AND-ACCESS-REQUESTS.md](../features/PUBLIC-LANDING-AND-ACCESS-REQUESTS.md)), so changing them means rebuilding the frontend. `LANDING_DOMAIN` is also added to the backend `CORS_ORIGINS`, because the request-access form on the public site posts to foundation.
+
+### Moving to athma.daiva.health (public site) and demo.athma.daiva.health (demo app)
+
+Order matters, or an address redirects to one that does not resolve:
+
+1. In Netlify DNS add `A` records `demo.athma` → `34.100.225.182` and, if it is not there yet, `athma` → `34.100.225.182`. Wait until `dig +short demo.athma.daiva.health` and `dig +short athma.daiva.health` both return it.
+2. In `.env` set:
+
+   ```
+   SITE_DOMAIN=demo.athma.daiva.health
+   LANDING_DOMAIN=athma.daiva.health
+   ```
+
+3. Rebuild and restart the frontend, then restart Caddy and the backends (they read `OAUTH_FRONTEND_URL`, `PUBLIC_APP_URL` and `CORS_ORIGINS`):
+
+   ```bash
+   sudo docker compose build frontend
+   sudo docker compose up -d
+   ```
+
+   Caddy fetches the new certificate on the first request to each address.
+4. Check:
+
+   ```bash
+   curl -sI https://athma.daiva.health/en | head -1                      # 200, the landing page
+   curl -sI https://athma.daiva.health/en/login | grep -i '^location'    # https://demo.athma.daiva.health/en/login
+   curl -sI https://demo.athma.daiva.health/en | grep -i '^location'     # https://athma.daiva.health/en
+   curl -sI https://athma-ce-demo.daiva.health/en/login | grep -i '^location'  # https://demo.athma.daiva.health/en/login
+   ```
+
+   Then sign in with Google from the landing page and confirm you come back to `demo.athma.daiva.health`.
+5. Update the Google OAuth consent screen branding links: home page `https://athma.daiva.health/en`, privacy and terms under the same address. The authorised redirect URIs do not change.
+
+Visitors already signed in on the old app address sign in again once: the session is stored per address.
+
+When the production app exists, add `PRODUCTION_APP_URL=https://app.athma.daiva.health` and rebuild the frontend. The production app runs elsewhere, not on this VM.
 
 ## Email alerts
 

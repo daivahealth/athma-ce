@@ -1,4 +1,10 @@
-import { parseDeploymentMode, parseEmailLoginMode, parseLandingPage } from '@/lib/config/deployment';
+import {
+  parseDeploymentMode,
+  parseEmailLoginMode,
+  parseLandingPage,
+  parsePublicUrl,
+  siteHref,
+} from '@/lib/config/deployment';
 
 describe('parseEmailLoginMode', () => {
   it('collapses email sign-in on the demo by default', () => {
@@ -33,5 +39,29 @@ describe('parseLandingPage', () => {
   it('honours an explicit setting', () => {
     expect(parseLandingPage('on', 'production')).toBe(true);
     expect(parseLandingPage('off', 'demo')).toBe(false);
+  });
+});
+
+describe('parsePublicUrl', () => {
+  it('keeps an http(s) origin without a trailing slash', () => {
+    expect(parsePublicUrl(' https://demo.athma.daiva.health/ ')).toBe('https://demo.athma.daiva.health');
+    expect(parsePublicUrl('http://localhost:3000')).toBe('http://localhost:3000');
+  });
+
+  it('is empty when unset or not an origin', () => {
+    expect(parsePublicUrl(undefined)).toBe('');
+    expect(parsePublicUrl('')).toBe('');
+    expect(parsePublicUrl('demo.athma.daiva.health')).toBe('');
+    expect(parsePublicUrl('https://athma.daiva.health/en')).toBe('');
+  });
+});
+
+describe('siteHref', () => {
+  it('builds absolute links for another site and relative ones for this site', () => {
+    expect(siteHref('https://demo.athma.daiva.health', 'en', '/login')).toBe(
+      'https://demo.athma.daiva.health/en/login',
+    );
+    expect(siteHref('', 'ar', '/login')).toBe('/ar/login');
+    expect(siteHref('https://athma.daiva.health', 'en')).toBe('https://athma.daiva.health/en');
   });
 });
