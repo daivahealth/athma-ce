@@ -61,7 +61,7 @@ Uploads a new master form. Body:
 
 The `bundle` must contain `formCode`, `version`, `engine`, `dataSchema`, `uiSchema` — validated as a shape check, not full JSON-Schema-of-JSON-Schema validation. Rejects with 400 if a `FormMaster` already exists for this tenant with the same `formCode` + `formVersion` (published OpenMedForm versions are immutable; a revision must be uploaded as a new `version`).
 
-**Versioning**: after a successful upload, any other `FormMaster` for the same tenant + `formCode` that is currently `ACTIVE` is automatically set to `ARCHIVED`, so at most one version per `formCode` is ever `ACTIVE` at a time. Every consumer that filters by `status: ACTIVE` — the Form Master list's default view, the encounter charting page's "Forms" section, etc. — therefore always sees only the latest version of a form, with no extra grouping/dedup logic needed on the read side. Responses already filled against an archived version are unaffected (`FormResponse` denormalizes `formCode`/`formVersion`/`engine` at creation time, so it stays readable regardless of the master's current status).
+**Versioning**: after a successful upload, any other `FormMaster` for the same tenant + `formCode` that is currently `ACTIVE` is automatically set to `ARCHIVED`, so at most one version per `formCode` is ever `ACTIVE` at a time. Every consumer that filters by `status: ACTIVE` — the Form Master list's default view, the encounter charting page's "Forms" drawer, etc. — therefore always sees only the latest version of a form, with no extra grouping/dedup logic needed on the read side. Responses already filled against an archived version are unaffected (`FormResponse` denormalizes `formCode`/`formVersion`/`engine` at creation time, so it stays readable regardless of the master's current status).
 
 ### `GET /form-master?status=`
 
@@ -103,5 +103,5 @@ Saves response data. Body: `{ "data": {...}, "status": "DRAFT" | "FINAL" }`.
 
 - `frontend/src/modules/clinical/hooks/use-form-master.ts` — React Query hooks (`useFormMasters`, `useFormMaster`, `useCreateFormMaster`, `useUpdateFormMaster`, `useFormResponsesByEncounter`, `useFormResponsesByPatient`, `useFormResponse`, `useCreateFormResponse`, `useSaveFormResponse`).
 - `/forms/master` — admin list + upload (`/forms/master/new`).
-- Encounter charting page (`/encounters/[id]/charting`) — a "Forms" section listing active master forms available to fill and existing responses for that encounter.
+- Encounter charting page (`/encounters/[id]/charting`) — a "Forms" header button opening a side drawer listing active master forms available to fill and existing responses for that encounter.
 - `/encounters/[id]/forms/[formResponseId]` — the fill page. Renders `@openmedform/react-form-renderer/jsonforms`'s `JsonFormsRenderer` bound to `formMaster.bundle.dataSchema`/`uiSchema`, validates client-side before allowing Submit, and calls `PATCH /form-responses/:id`.
