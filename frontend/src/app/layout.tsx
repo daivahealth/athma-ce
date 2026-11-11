@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 import { DEPLOYMENT_MODE, getDeploymentModeInfo } from '@/lib/config/deployment';
 
 // Non-production instances say so in the tab title ("Login | Athma [DEMO]") and stay out of search indexes.
+// The public landing site opts out of both in app/[locale]/(public)/layout.tsx.
 const isProductionDeployment = DEPLOYMENT_MODE === 'production';
 const titleSuffix = isProductionDeployment ? '' : ` [${getDeploymentModeInfo().label}]`;
 
