@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { EnvironmentBanner } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
 import { getApiErrorMessage } from '@/lib/api/errors';
 import { DEMO_APP_URL, siteHref } from '@/lib/config/deployment';
@@ -83,7 +82,6 @@ export default function RequestAccessPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <EnvironmentBanner locale={locale} />
       <header className="border-b border-border/60">
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-4 py-3">
           <Link href={`/${locale}`} aria-label="Athma home">

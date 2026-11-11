@@ -14,12 +14,10 @@ import {
   Receipt,
   Ribbon,
   ScanLine,
-  ShieldAlert,
   Sparkles,
   Stethoscope,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { EnvironmentBanner } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
 import {
   DEMO_APP_URL,
@@ -96,8 +94,6 @@ export function LandingPage({ locale }: { locale: string }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <EnvironmentBanner locale={locale} />
-
       <header className="border-b border-border/60 bg-background/95">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link href={`/${locale}`} aria-label="Athma home" className="shrink-0">
@@ -151,7 +147,7 @@ export function LandingPage({ locale }: { locale: string }) {
             Open source · Apache License 2.0
           </p>
           <h1 className="max-w-3xl text-3xl font-semibold tracking-tight md:text-5xl">
-            A hospital information system you can explore today
+            Free and open-source HIS and EMR for every hospital, clinic and doctor
           </h1>
           <p className="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
             Athma brings patient access, clinical care, labs, theatres, wards, pharmacy, billing and
@@ -172,23 +168,6 @@ export function LandingPage({ locale }: { locale: string }) {
           <p className="mt-3 text-sm text-muted-foreground">
             Sign in with Google to look around a demo hospital, read-only. No setup needed.
           </p>
-        </section>
-
-        <section aria-labelledby="demo-notice" className="mx-auto w-full max-w-6xl px-4">
-          <div className="flex gap-3 rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm leading-relaxed md:p-5">
-            <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-warning" aria-hidden="true" />
-            <div>
-              <h2 id="demo-notice" className="font-semibold">
-                This is a demonstration, not a live hospital system
-              </h2>
-              <p className="mt-1 text-muted-foreground">
-                Every patient, doctor and record here is fictitious. The demo is not for clinical
-                use: do not enter real patient information. Visitors can look at everything but
-                cannot change the demo hospital&apos;s data, and the data may be reset at any time.
-                For a production system, request access below.
-              </p>
-            </div>
-          </div>
         </section>
 
         <section

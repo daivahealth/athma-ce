@@ -24,7 +24,7 @@ On the demo VM these come from `LANDING_DOMAIN`, `SITE_DOMAIN` and `PRODUCTION_A
 
 The page (`frontend/src/components/landing/landing-page.tsx`, route `app/[locale]/(public)/page.tsx`) has:
 
-- the environment banner and a "This is a demonstration, not a live hospital system" notice (fictitious data, not for clinical use, visitors are read-only, data may be reset);
+- no environment banner and no demo notice, so the same landing page can front a demo or a production deployment (the demo warnings live in the demo app itself: banner, login notice, Terms/Privacy);
 - "Explore the live demo" (to `{DEMO_APP_URL}/{locale}/login`, where visitors use social sign-in, see [ADR-0016](../ADR/ADR-0016-external-identity-providers.md)) and "View on GitHub" (`SOURCE_REPOSITORY_URL`, the public `daivahealth/athma-ce` repository, Apache 2.0);
 - the modules in the demo;
 - "Open source, for anyone" and "Hosted Athma, starting in India" with "Request production access" and, when `PRODUCTION_APP_URL` is set, "Customer sign-in";
@@ -34,7 +34,7 @@ The login page links back to `LANDING_URL` ("What it is", "Request production ac
 
 ## Request production access
 
-`/{locale}/request-access` (public, `app/[locale]/(public)/request-access/page.tsx`) collects organisation name and type, country, contact name, work email, optional phone, facility and bed counts, modules of interest and a message. The requester must tick consent to be stored and contacted. Signed-in demo visitors can submit too: the endpoint is exempt from read-only enforcement.
+`/{locale}/request-access` (public, `app/[locale]/(public)/request-access/page.tsx`) has no environment banner either and collects organisation name and type, country, contact name, work email, optional phone, facility and bed counts, modules of interest and a message. The requester must tick consent to be stored and contacted. Signed-in demo visitors can submit too: the endpoint is exempt from read-only enforcement.
 
 Abuse controls: a hidden honeypot field (submissions that fill it are dropped silently with the normal response), 5 requests per IP per hour and 3 per email per day (in-memory, per foundation process), and server-side validation with length limits. There is no CAPTCHA.
 
