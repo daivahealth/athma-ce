@@ -24,7 +24,7 @@ On the demo VM these come from `LANDING_DOMAIN`, `SITE_DOMAIN` and `PRODUCTION_A
 
 The page (`frontend/src/components/landing/landing-page.tsx`, route `app/[locale]/(public)/page.tsx`) has:
 
-- no environment banner and no demo notice, so the same landing page can front a demo or a production deployment (the demo warnings live in the demo app itself: banner, login notice, Terms/Privacy);
+- no environment banner, no demo notice, no `[DEMO]` tab-title suffix and no noindex (`app/[locale]/(public)/layout.tsx`), so the same landing page can front a demo or a production deployment (the demo warnings live in the demo app itself: banner, login notice, Terms/Privacy);
 - "Explore the live demo" (to `{DEMO_APP_URL}/{locale}/login`, where visitors use social sign-in, see [ADR-0016](../ADR/ADR-0016-external-identity-providers.md)) and "View on GitHub" (`SOURCE_REPOSITORY_URL`, the public `daivahealth/athma-ce` repository, Apache 2.0);
 - the modules in the demo;
 - "Open source, for anyone" and "Hosted Athma, starting in India" with "Request production access" and, when `PRODUCTION_APP_URL` is set, "Customer sign-in";
