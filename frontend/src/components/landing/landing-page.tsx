@@ -147,7 +147,7 @@ export function LandingPage({ locale }: { locale: string }) {
             Open source · Apache License 2.0
           </p>
           <h1 className="max-w-3xl text-3xl font-semibold tracking-tight md:text-5xl">
-            A hospital information system you can explore today
+            Free and open-source HIS and EMR for every hospital, clinic and doctor
           </h1>
           <p className="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
             Athma brings patient access, clinical care, labs, theatres, wards, pharmacy, billing and
