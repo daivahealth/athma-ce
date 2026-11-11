@@ -19,7 +19,6 @@ import {
   Stethoscope,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { EnvironmentBanner } from '@/components/layout/environment-banner';
 import { LegalLinks } from '@/components/legal/legal-shell';
 import {
   DEMO_APP_URL,
@@ -96,7 +95,6 @@ export function LandingPage({ locale }: { locale: string }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <EnvironmentBanner locale={locale} />
 
       <header className="border-b border-border/60 bg-background/95">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3">
