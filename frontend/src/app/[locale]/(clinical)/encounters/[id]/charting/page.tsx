@@ -134,9 +134,12 @@ export default function ChartingPage() {
   return (
     <div className="space-y-6">
       <Card className="border border-transparent bg-gradient-to-r from-primary/15 via-primary/5 to-secondary/20 dark:from-primary/30 dark:via-primary/15 dark:to-secondary/35 shadow-md">
-        <CardHeader>
-          <CardTitle>Clinical Charting</CardTitle>
-          <CardDescription>Encounter #{encounter.encounterNumber}</CardDescription>
+        <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
+          <div className="space-y-1.5">
+            <CardTitle>Clinical Charting</CardTitle>
+            <CardDescription>Encounter #{encounter.encounterNumber}</CardDescription>
+          </div>
+          <EncounterFormsSection encounterId={encounterId} patientId={encounter.patientId} />
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-6 text-sm lg:flex-row lg:items-start lg:justify-between">
@@ -200,7 +203,6 @@ export default function ChartingPage() {
         authorStaffId={encounter.primaryStaffId}
       />
 
-      <EncounterFormsSection encounterId={encounterId} patientId={encounter.patientId} />
     </div>
   );
 }
