@@ -26,116 +26,116 @@ BEGIN
     -- Revenue Metrics
     ('a1000001-0001-0001-0001-000000000001', NULL, 'total_revenue', 'Total Revenue', 'إجمالي الإيرادات',
      'Sum of all invoice net amounts', 'net_amount', 'rcm', 'invoices', 'decimal', 'SUM',
-     'rcm.reports.revenue', 'Revenue', 'currency', 1, true, NOW(), NOW()),
+     'invoice.read', 'Revenue', 'currency', 1, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000002', NULL, 'invoice_count', 'Invoice Count', 'عدد الفواتير',
      'Count of invoices', '1', 'rcm', 'invoices', 'integer', 'COUNT',
-     'rcm.reports.invoices', 'Revenue', 'number', 2, true, NOW(), NOW()),
+     'invoice.read', 'Revenue', 'number', 2, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000003', NULL, 'outstanding_balance', 'Outstanding Balance', 'الرصيد المستحق',
      'Sum of unpaid invoice amounts', 'balance_due', 'rcm', 'invoices', 'decimal', 'SUM',
-     'rcm.reports.aging', 'Revenue', 'currency', 3, true, NOW(), NOW()),
+     'invoice.read', 'Revenue', 'currency', 3, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000004', NULL, 'paid_amount', 'Paid Amount', 'المبلغ المدفوع',
      'Sum of paid amounts', 'paid_amount', 'rcm', 'invoices', 'decimal', 'SUM',
-     'rcm.reports.revenue', 'Revenue', 'currency', 4, true, NOW(), NOW()),
+     'invoice.read', 'Revenue', 'currency', 4, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000005', NULL, 'discount_amount', 'Discount Amount', 'مبلغ الخصم',
      'Sum of discounts applied', 'discount_amount', 'rcm', 'invoices', 'decimal', 'SUM',
-     'rcm.reports.revenue', 'Revenue', 'currency', 5, true, NOW(), NOW()),
+     'invoice.read', 'Revenue', 'currency', 5, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000006', NULL, 'average_invoice_amount', 'Average Invoice Amount', 'متوسط مبلغ الفاتورة',
      'Average invoice amount', 'net_amount', 'rcm', 'invoices', 'decimal', 'AVG',
-     'rcm.reports.revenue', 'Revenue', 'currency', 6, true, NOW(), NOW()),
+     'invoice.read', 'Revenue', 'currency', 6, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000007', NULL, 'invoice_amount', 'Invoice Amount', 'مبلغ الفاتورة',
      'Individual invoice net amount (use for listing invoices)', 'net_amount', 'rcm', 'invoices', 'decimal', NULL,
-     'rcm.reports.invoices', 'Revenue', 'currency', 7, true, NOW(), NOW()),
+     'invoice.read', 'Revenue', 'currency', 7, true, NOW(), NOW()),
 
     -- Clinical Metrics
     ('a1000001-0001-0001-0001-000000000010', NULL, 'patient_count', 'Patient Count', 'عدد المرضى',
      'Count of unique patients', 'id', 'clinical', 'patients', 'integer', 'COUNT_DISTINCT',
-     'clinical.reports.patients', 'Clinical', 'number', 10, true, NOW(), NOW()),
+     'patient.read', 'Clinical', 'number', 10, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000011', NULL, 'encounter_count', 'Encounter Count', 'عدد الزيارات',
      'Count of patient encounters', '1', 'clinical', 'encounters', 'integer', 'COUNT',
-     'clinical.reports.encounters', 'Clinical', 'number', 11, true, NOW(), NOW()),
+     'encounter.read', 'Clinical', 'number', 11, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000012', NULL, 'new_patient_count', 'New Patients', 'المرضى الجدد',
      'Count of newly registered patients', '1', 'clinical', 'patients', 'integer', 'COUNT',
-     'clinical.reports.patients', 'Clinical', 'number', 12, true, NOW(), NOW()),
+     'patient.read', 'Clinical', 'number', 12, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000013', NULL, 'admission_count', 'Admission Count', 'عدد الدخول',
      'Count of inpatient admissions', '1', 'clinical', 'inpatient_admissions', 'integer', 'COUNT',
-     'clinical.reports.admissions', 'Inpatient', 'number', 13, true, NOW(), NOW()),
+     'admission.read', 'Inpatient', 'number', 13, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000014', NULL, 'discharge_count', 'Discharge Count', 'عدد الخروج',
      'Count of patient discharges', '1', 'clinical', 'discharge_transactions', 'integer', 'COUNT',
-     'clinical.reports.admissions', 'Inpatient', 'number', 14, true, NOW(), NOW()),
+     'admission.read', 'Inpatient', 'number', 14, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000015', NULL, 'average_length_of_stay', 'Avg Length of Stay', 'متوسط مدة الإقامة',
      'Average length of stay in days', 'EXTRACT(EPOCH FROM (discharge_date - admission_date))/86400', 'clinical', 'inpatient_admissions', 'decimal', 'AVG',
-     'clinical.reports.admissions', 'Inpatient', 'number', 15, true, NOW(), NOW()),
+     'admission.read', 'Inpatient', 'number', 15, true, NOW(), NOW()),
 
     -- Scheduling Metrics
     ('a1000001-0001-0001-0001-000000000020', NULL, 'appointment_count', 'Appointment Count', 'عدد المواعيد',
      'Count of scheduled appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT',
-     'clinical.reports.appointments', 'Scheduling', 'number', 20, true, NOW(), NOW()),
+     'appointment.read', 'Scheduling', 'number', 20, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000021', NULL, 'completed_appointments', 'Completed Appointments', 'المواعيد المكتملة',
      'Count of completed appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT',
-     'clinical.reports.appointments', 'Scheduling', 'number', 21, true, NOW(), NOW()),
+     'appointment.read', 'Scheduling', 'number', 21, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000022', NULL, 'cancelled_appointments', 'Cancelled Appointments', 'المواعيد الملغاة',
      'Count of cancelled appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT',
-     'clinical.reports.appointments', 'Scheduling', 'number', 22, true, NOW(), NOW()),
+     'appointment.read', 'Scheduling', 'number', 22, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000023', NULL, 'no_show_count', 'No Shows', 'عدم الحضور',
      'Count of no-show appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT',
-     'clinical.reports.appointments', 'Scheduling', 'number', 23, true, NOW(), NOW()),
+     'appointment.read', 'Scheduling', 'number', 23, true, NOW(), NOW()),
 
     -- Staff Metrics
     ('a1000001-0001-0001-0001-000000000030', NULL, 'staff_count', 'Staff Count', 'عدد الموظفين',
      'Count of active staff members', '1', 'foundation', 'staff', 'integer', 'COUNT',
-     'foundation.reports.staff', 'Staff', 'number', 30, true, NOW(), NOW()),
+     'staff.read', 'Staff', 'number', 30, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000031', NULL, 'physician_count', 'Physician Count', 'عدد الأطباء',
      'Count of physicians', '1', 'foundation', 'staff', 'integer', 'COUNT',
-     'foundation.reports.staff', 'Staff', 'number', 31, true, NOW(), NOW()),
+     'staff.read', 'Staff', 'number', 31, true, NOW(), NOW()),
 
     -- Receipt Metrics
     ('a1000001-0001-0001-0001-000000000040', NULL, 'total_receipts_amount', 'Total Receipts', 'إجمالي الإيصالات',
      'Sum of all receipt amounts', 'amount', 'rcm', 'receipts', 'decimal', 'SUM',
-     'rcm.reports.receipts', 'Receipts', 'currency', 40, true, NOW(), NOW()),
+     'payment.read', 'Receipts', 'currency', 40, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000041', NULL, 'receipt_count', 'Receipt Count', 'عدد الإيصالات',
      'Count of payment receipts', '1', 'rcm', 'receipts', 'integer', 'COUNT',
-     'rcm.reports.receipts', 'Receipts', 'number', 41, true, NOW(), NOW()),
+     'payment.read', 'Receipts', 'number', 41, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000042', NULL, 'average_receipt_amount', 'Average Receipt', 'متوسط الإيصال',
      'Average receipt amount', 'amount', 'rcm', 'receipts', 'decimal', 'AVG',
-     'rcm.reports.receipts', 'Receipts', 'currency', 42, true, NOW(), NOW()),
+     'payment.read', 'Receipts', 'currency', 42, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000043', NULL, 'receipt_amount', 'Receipt Amount', 'مبلغ الإيصال',
      'Individual receipt amount (use for listing receipts)', 'amount', 'rcm', 'receipts', 'decimal', NULL,
-     'rcm.reports.receipts', 'Receipts', 'currency', 43, true, NOW(), NOW()),
+     'payment.read', 'Receipts', 'currency', 43, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000044', NULL, 'cash_receipts_total', 'Cash Receipts Total', 'إجمالي الإيصالات النقدية',
      'Sum of cash payment receipts', 'amount', 'rcm', 'receipts', 'decimal', 'SUM',
-     'rcm.reports.receipts', 'Receipts', 'currency', 44, true, NOW(), NOW()),
+     'payment.read', 'Receipts', 'currency', 44, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000045', NULL, 'card_receipts_total', 'Card Receipts Total', 'إجمالي إيصالات البطاقة',
      'Sum of card payment receipts', 'amount', 'rcm', 'receipts', 'decimal', 'SUM',
-     'rcm.reports.receipts', 'Receipts', 'currency', 45, true, NOW(), NOW()),
+     'payment.read', 'Receipts', 'currency', 45, true, NOW(), NOW()),
 
     -- Refund Metrics
     ('a1000001-0001-0001-0001-000000000050', NULL, 'total_refunds_amount', 'Total Refunds', 'إجمالي المبالغ المستردة',
      'Sum of all refund amounts', 'amount', 'rcm', 'refunds', 'decimal', 'SUM',
-     'rcm.reports.refunds', 'Refunds', 'currency', 50, true, NOW(), NOW()),
+     'payment.read', 'Refunds', 'currency', 50, true, NOW(), NOW()),
 
     ('a1000001-0001-0001-0001-000000000051', NULL, 'refund_count', 'Refund Count', 'عدد المبالغ المستردة',
      'Count of refunds', '1', 'rcm', 'refunds', 'integer', 'COUNT',
-     'rcm.reports.refunds', 'Refunds', 'number', 51, true, NOW(), NOW())
+     'payment.read', 'Refunds', 'number', 51, true, NOW(), NOW())
   ON CONFLICT (tenant_id, name) DO UPDATE SET
     display_name = EXCLUDED.display_name,
     display_name_ar = EXCLUDED.display_name_ar,

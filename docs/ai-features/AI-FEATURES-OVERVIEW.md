@@ -203,13 +203,13 @@ The catalog defines what can be queried. Stored in Foundation DB.
 
 | Metric | Description | Database | Permission |
 |--------|-------------|----------|------------|
-| `total_revenue` | Sum of invoice amounts | RCM | `rcm.reports.revenue` |
-| `invoice_count` | Count of invoices | RCM | `rcm.reports.invoices` |
-| `outstanding_balance` | Unpaid balances | RCM | `rcm.reports.aging` |
-| `patient_count` | Unique patients | Clinical | `clinical.reports.patients` |
-| `encounter_count` | Patient encounters | Clinical | `clinical.reports.encounters` |
-| `appointment_count` | Appointments | Clinical | `clinical.reports.appointments` |
-| `admission_count` | Inpatient admissions | Clinical | `clinical.reports.admissions` |
+| `total_revenue` | Sum of invoice amounts | RCM | `invoice.read` |
+| `invoice_count` | Count of invoices | RCM | `invoice.read` |
+| `outstanding_balance` | Unpaid balances | RCM | `invoice.read` |
+| `patient_count` | Unique patients | Clinical | `patient.read` |
+| `encounter_count` | Patient encounters | Clinical | `encounter.read` |
+| `appointment_count` | Appointments | Clinical | `appointment.read` |
+| `admission_count` | Inpatient admissions | Clinical | `admission.read` |
 
 #### Available Dimensions (Initial Seed)
 
@@ -656,15 +656,17 @@ const SECURITY_RULES = {
 
 ### RBAC Integration
 
-Each metric/dimension can have a `required_permission`:
+Each metric/dimension can have a `required_permission`. It must be an RBAC permission code that foundation puts in the access token (see `seed/foundation/04-permissions.sql`), such as `patient.read` or `invoice.read`. A code no role holds hides the entry from every user.
 
 ```sql
--- Only users with 'rcm.reports.revenue' can query this metric
+-- Only users with 'invoice.read' can query this metric
 INSERT INTO semantic_metrics (name, required_permission, ...)
-VALUES ('total_revenue', 'rcm.reports.revenue', ...);
+VALUES ('total_revenue', 'invoice.read', ...);
 ```
 
-The catalog service filters based on user permissions before sending to LLM.
+The catalog service filters based on user permissions before sending to LLM. ai-gateway reads those permissions from the caller's bearer token, which `TenantContextMiddleware` verifies against `JWT_SECRET`; a missing or invalid token gives an empty permission list. With `NODE_ENV=development` the filter is skipped.
+
+Existing analytics databases seeded before the permission codes were aligned need `seed/analytics/04-catalog-permission-codes.sql` (idempotent; included in `./run-seeds.sh analytics`).
 
 ### Audit Logging
 
@@ -901,9 +903,9 @@ AuthenticationError: Invalid API key
 BadRequestException: Invalid query plan: Unknown metric: xyz
 ```
 
-**Cause**: User asked for a metric not in the catalog.
+**Cause**: The plan names a metric that is not in the caller's filtered catalog. Either the user asked for something the catalog lacks, or permission filtering hid it. If every query fails (for example `Unknown metric: patient_count`, which the planner copies from its prompt example when the catalog it sees is empty), the catalog is empty for that user: the request carried no valid bearer token, or the catalog's `required_permission` values are codes no role holds.
 
-**Solution**: Check available metrics via `GET /api/v1/reports/catalog`.
+**Solution**: Check available metrics via `GET /api/v1/reports/catalog` with the user's token. If it is empty, confirm the request sends `Authorization: Bearer <token>` and run `seed/analytics/04-catalog-permission-codes.sql` against `zeal_analytics`.
 
 ### Logs
 

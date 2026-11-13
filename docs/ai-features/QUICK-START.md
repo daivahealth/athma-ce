@@ -105,10 +105,10 @@ curl -X POST http://localhost:3015/api/v1/search \
 | `P1010` database error | Check credentials in `.env.local` match docker-compose |
 | `vector extension not available` | Use `pgvector/pgvector:pg16` Docker image |
 | `Invalid API key` | Verify `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` |
-| `Unknown metric` | Run seed script: `./run-seeds.sh foundation` |
+| `Unknown metric` | Run `./run-seeds.sh analytics`; outside development, also check the request sends the user's bearer token (catalog entries are filtered by its permissions) |
 
 ## Next Steps
 
 - Read [AI-FEATURES-OVERVIEW.md](./AI-FEATURES-OVERVIEW.md) for full documentation
-- Configure additional metrics in `seed/foundation/18-semantic-catalog.sql`
+- Configure additional metrics in `seed/analytics/02-semantic-catalog.sql`
 - Set up embedding sync triggers for clinical notes

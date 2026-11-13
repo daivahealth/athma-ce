@@ -133,7 +133,7 @@ model SemanticMetric {
   format              String?   @db.VarChar(50) // 'currency' | 'percentage' | 'number'
 
   // Access control
-  requiredPermission  String?   @map("required_permission") @db.VarChar(100) // 'rcm.reports.revenue'
+  requiredPermission  String?   @map("required_permission") @db.VarChar(100) // RBAC code from foundation, e.g. 'invoice.read'
 
   // Organization
   category            String?   @db.VarChar(50) // 'Revenue' | 'Clinical' | 'Operations'
@@ -172,7 +172,7 @@ model SemanticDimension {
   lookupValues        String[]  @map("lookup_values") @db.VarChar(100) // ['unpaid', 'paid', 'cancelled']
 
   // Access control
-  requiredPermission  String?   @map("required_permission") @db.VarChar(100) // 'rcm.reports.invoices'
+  requiredPermission  String?   @map("required_permission") @db.VarChar(100) // RBAC code from foundation, e.g. 'invoice.read'
 
   // Organization
   category            String?   @db.VarChar(50) // 'Time' | 'Geography' | 'Patient'

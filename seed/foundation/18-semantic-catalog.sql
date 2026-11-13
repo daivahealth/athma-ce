@@ -11,28 +11,28 @@ BEGIN
   -- Revenue Metrics
   INSERT INTO semantic_metrics (id, tenant_id, name, display_name, display_name_ar, description, expression, database, base_table, data_type, default_aggregation, required_permission, category, format, is_active)
   VALUES
-    ('a1000001-0001-0001-0001-000000000001', NULL, 'total_revenue', 'Total Revenue', 'إجمالي الإيرادات', 'Sum of all invoice net amounts', 'net_amount', 'rcm', 'invoices', 'decimal', 'SUM', 'rcm.reports.revenue', 'Revenue', 'currency', true),
-    ('a1000001-0001-0001-0001-000000000002', NULL, 'invoice_count', 'Invoice Count', 'عدد الفواتير', 'Count of invoices', '1', 'rcm', 'invoices', 'integer', 'COUNT', 'rcm.reports.invoices', 'Revenue', 'number', true),
-    ('a1000001-0001-0001-0001-000000000003', NULL, 'outstanding_balance', 'Outstanding Balance', 'الرصيد المستحق', 'Sum of unpaid invoice amounts', 'balance_due', 'rcm', 'invoices', 'decimal', 'SUM', 'rcm.reports.aging', 'Revenue', 'currency', true),
-    ('a1000001-0001-0001-0001-000000000004', NULL, 'paid_amount', 'Paid Amount', 'المبلغ المدفوع', 'Sum of paid amounts', 'paid_amount', 'rcm', 'invoices', 'decimal', 'SUM', 'rcm.reports.revenue', 'Revenue', 'currency', true),
-    ('a1000001-0001-0001-0001-000000000005', NULL, 'discount_amount', 'Discount Amount', 'مبلغ الخصم', 'Sum of discounts applied', 'discount_amount', 'rcm', 'invoices', 'decimal', 'SUM', 'rcm.reports.revenue', 'Revenue', 'currency', true),
+    ('a1000001-0001-0001-0001-000000000001', NULL, 'total_revenue', 'Total Revenue', 'إجمالي الإيرادات', 'Sum of all invoice net amounts', 'net_amount', 'rcm', 'invoices', 'decimal', 'SUM', 'invoice.read', 'Revenue', 'currency', true),
+    ('a1000001-0001-0001-0001-000000000002', NULL, 'invoice_count', 'Invoice Count', 'عدد الفواتير', 'Count of invoices', '1', 'rcm', 'invoices', 'integer', 'COUNT', 'invoice.read', 'Revenue', 'number', true),
+    ('a1000001-0001-0001-0001-000000000003', NULL, 'outstanding_balance', 'Outstanding Balance', 'الرصيد المستحق', 'Sum of unpaid invoice amounts', 'balance_due', 'rcm', 'invoices', 'decimal', 'SUM', 'invoice.read', 'Revenue', 'currency', true),
+    ('a1000001-0001-0001-0001-000000000004', NULL, 'paid_amount', 'Paid Amount', 'المبلغ المدفوع', 'Sum of paid amounts', 'paid_amount', 'rcm', 'invoices', 'decimal', 'SUM', 'invoice.read', 'Revenue', 'currency', true),
+    ('a1000001-0001-0001-0001-000000000005', NULL, 'discount_amount', 'Discount Amount', 'مبلغ الخصم', 'Sum of discounts applied', 'discount_amount', 'rcm', 'invoices', 'decimal', 'SUM', 'invoice.read', 'Revenue', 'currency', true),
 
     -- Clinical Metrics
-    ('a1000001-0001-0001-0001-000000000010', NULL, 'patient_count', 'Patient Count', 'عدد المرضى', 'Count of unique patients', 'id', 'clinical', 'patients', 'integer', 'COUNT_DISTINCT', 'clinical.reports.patients', 'Clinical', 'number', true),
-    ('a1000001-0001-0001-0001-000000000011', NULL, 'encounter_count', 'Encounter Count', 'عدد الزيارات', 'Count of patient encounters', '1', 'clinical', 'encounters', 'integer', 'COUNT', 'clinical.reports.encounters', 'Clinical', 'number', true),
-    ('a1000001-0001-0001-0001-000000000012', NULL, 'new_patient_count', 'New Patients', 'المرضى الجدد', 'Count of newly registered patients', '1', 'clinical', 'patients', 'integer', 'COUNT', 'clinical.reports.patients', 'Clinical', 'number', true),
-    ('a1000001-0001-0001-0001-000000000013', NULL, 'admission_count', 'Admission Count', 'عدد الدخول', 'Count of inpatient admissions', '1', 'clinical', 'inpatient_admissions', 'integer', 'COUNT', 'clinical.reports.admissions', 'Inpatient', 'number', true),
-    ('a1000001-0001-0001-0001-000000000014', NULL, 'discharge_count', 'Discharge Count', 'عدد الخروج', 'Count of patient discharges', '1', 'clinical', 'discharge_transactions', 'integer', 'COUNT', 'clinical.reports.admissions', 'Inpatient', 'number', true),
+    ('a1000001-0001-0001-0001-000000000010', NULL, 'patient_count', 'Patient Count', 'عدد المرضى', 'Count of unique patients', 'id', 'clinical', 'patients', 'integer', 'COUNT_DISTINCT', 'patient.read', 'Clinical', 'number', true),
+    ('a1000001-0001-0001-0001-000000000011', NULL, 'encounter_count', 'Encounter Count', 'عدد الزيارات', 'Count of patient encounters', '1', 'clinical', 'encounters', 'integer', 'COUNT', 'encounter.read', 'Clinical', 'number', true),
+    ('a1000001-0001-0001-0001-000000000012', NULL, 'new_patient_count', 'New Patients', 'المرضى الجدد', 'Count of newly registered patients', '1', 'clinical', 'patients', 'integer', 'COUNT', 'patient.read', 'Clinical', 'number', true),
+    ('a1000001-0001-0001-0001-000000000013', NULL, 'admission_count', 'Admission Count', 'عدد الدخول', 'Count of inpatient admissions', '1', 'clinical', 'inpatient_admissions', 'integer', 'COUNT', 'admission.read', 'Inpatient', 'number', true),
+    ('a1000001-0001-0001-0001-000000000014', NULL, 'discharge_count', 'Discharge Count', 'عدد الخروج', 'Count of patient discharges', '1', 'clinical', 'discharge_transactions', 'integer', 'COUNT', 'admission.read', 'Inpatient', 'number', true),
 
     -- Scheduling Metrics
-    ('a1000001-0001-0001-0001-000000000020', NULL, 'appointment_count', 'Appointment Count', 'عدد المواعيد', 'Count of scheduled appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'clinical.reports.appointments', 'Scheduling', 'number', true),
-    ('a1000001-0001-0001-0001-000000000021', NULL, 'completed_appointments', 'Completed Appointments', 'المواعيد المكتملة', 'Count of completed appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'clinical.reports.appointments', 'Scheduling', 'number', true),
-    ('a1000001-0001-0001-0001-000000000022', NULL, 'cancelled_appointments', 'Cancelled Appointments', 'المواعيد الملغاة', 'Count of cancelled appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'clinical.reports.appointments', 'Scheduling', 'number', true),
-    ('a1000001-0001-0001-0001-000000000023', NULL, 'no_show_count', 'No Shows', 'عدم الحضور', 'Count of no-show appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'clinical.reports.appointments', 'Scheduling', 'number', true),
+    ('a1000001-0001-0001-0001-000000000020', NULL, 'appointment_count', 'Appointment Count', 'عدد المواعيد', 'Count of scheduled appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'appointment.read', 'Scheduling', 'number', true),
+    ('a1000001-0001-0001-0001-000000000021', NULL, 'completed_appointments', 'Completed Appointments', 'المواعيد المكتملة', 'Count of completed appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'appointment.read', 'Scheduling', 'number', true),
+    ('a1000001-0001-0001-0001-000000000022', NULL, 'cancelled_appointments', 'Cancelled Appointments', 'المواعيد الملغاة', 'Count of cancelled appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'appointment.read', 'Scheduling', 'number', true),
+    ('a1000001-0001-0001-0001-000000000023', NULL, 'no_show_count', 'No Shows', 'عدم الحضور', 'Count of no-show appointments', '1', 'clinical', 'appointments', 'integer', 'COUNT', 'appointment.read', 'Scheduling', 'number', true),
 
     -- Staff Metrics
-    ('a1000001-0001-0001-0001-000000000030', NULL, 'staff_count', 'Staff Count', 'عدد الموظفين', 'Count of active staff members', '1', 'foundation', 'staff', 'integer', 'COUNT', 'foundation.reports.staff', 'Staff', 'number', true),
-    ('a1000001-0001-0001-0001-000000000031', NULL, 'physician_count', 'Physician Count', 'عدد الأطباء', 'Count of physicians', '1', 'foundation', 'staff', 'integer', 'COUNT', 'foundation.reports.staff', 'Staff', 'number', true)
+    ('a1000001-0001-0001-0001-000000000030', NULL, 'staff_count', 'Staff Count', 'عدد الموظفين', 'Count of active staff members', '1', 'foundation', 'staff', 'integer', 'COUNT', 'staff.read', 'Staff', 'number', true),
+    ('a1000001-0001-0001-0001-000000000031', NULL, 'physician_count', 'Physician Count', 'عدد الأطباء', 'Count of physicians', '1', 'foundation', 'staff', 'integer', 'COUNT', 'staff.read', 'Staff', 'number', true)
   ON CONFLICT (tenant_id, name) DO UPDATE SET
     display_name = EXCLUDED.display_name,
     display_name_ar = EXCLUDED.display_name_ar,

@@ -7,6 +7,42 @@
 
 import { Injectable, NestMiddleware, BadRequestException } from '@nestjs/common';
 import { RequestContext } from '@zeal/shared-utils';
+import * as jwt from 'jsonwebtoken';
+
+interface VerifiedUser {
+  userId?: string;
+  facilityId?: string;
+  role?: string;
+  permissions: string[];
+}
+
+/**
+ * Verify the bearer token (if any) against JWT_SECRET and return the user it
+ * names. ai-gateway has no global JWT guard, so without this the request never
+ * carries the user's RBAC permissions and every permission-gated catalog
+ * entry (the report builder's metrics and dimensions) is hidden.
+ * An invalid or expired token yields no user; it never widens access.
+ */
+function verifiedUserFromBearer(req: any): VerifiedUser | null {
+  const header = req.headers?.authorization;
+  if (typeof header !== 'string') return null;
+  const [scheme, token] = header.split(' ');
+  if (scheme?.toLowerCase() !== 'bearer' || !token) return null;
+  const secret = process.env.JWT_SECRET;
+  if (!secret) return null;
+  try {
+    const payload = jwt.verify(token, secret) as Record<string, unknown>;
+    const roles = Array.isArray(payload.roles) ? (payload.roles as string[]) : [];
+    return {
+      userId: (payload.userId as string) || (payload.sub as string) || undefined,
+      facilityId: (payload.facilityId as string) || undefined,
+      role: roles[0],
+      permissions: Array.isArray(payload.permissions) ? (payload.permissions as string[]) : [],
+    };
+  } catch {
+    return null;
+  }
+}
 
 export interface TenantRequestContext {
   tenantId: string;
@@ -40,6 +76,10 @@ export class TenantContextMiddleware implements NestMiddleware {
     }
 
     // Extract user information from JWT token or headers
+    if (!req.user) {
+      const verified = verifiedUserFromBearer(req);
+      if (verified) req.user = verified;
+    }
     const userId =
       req.user?.id || req.user?.userId || (req.headers['x-user-id'] as string);
     const facilityId =
