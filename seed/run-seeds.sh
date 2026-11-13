@@ -106,6 +106,7 @@ PRM_FILES=(
 ANALYTICS_FILES=(
   "analytics/01-audit-fixtures.sql"
   "analytics/02-semantic-catalog.sql"  # AI Report Builder semantic catalog
+  "analytics/04-catalog-permission-codes.sql"  # Remap catalog permissions to RBAC codes
 )
 
 usage() {
